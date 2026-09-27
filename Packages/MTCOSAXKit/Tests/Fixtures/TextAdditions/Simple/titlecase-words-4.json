@@ -1,0 +1,30 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CAPI",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "the quick\tbrown",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "The Quick\tBrown",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "titlecase-words-4",
+  "recordedAt" : "2026-09-27T18:58:49Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "titlecase \"the quick\" & tab & \"brown\""
+}

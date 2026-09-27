@@ -1,0 +1,42 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "GPli",
+        "fields" : [
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "John is ten\nAnna is twelve\nJohn is at school\nAnna sleeps",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "key ",
+            "value" : {
+              "text" : "a",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "(",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -117
+      }
+    }
+  ],
+  "name" : "filter-invalid-regexp",
+  "recordedAt" : "2026-09-27T19:52:27Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "filter text \"(\" in \"John is ten\" & linefeed & \"Anna is twelve\" & linefeed & \"John is at school\" & linefeed & \"Anna sleeps\" key \"a\"",
+  "timeZone" : "America/New_York"
+}

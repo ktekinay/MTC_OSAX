@@ -11,14 +11,7 @@ struct DiagnosticsTests {
 	}()
 
 	private func send(_ code: String, _ parameters: [String: NSAppleEventDescriptor] = [:]) -> AppleEventReply {
-		let key = EventKey(code: code)
-		let event = NSAppleEventDescriptor.appleEvent(
-			withEventClass: key.eventClass,
-			eventID: key.eventID,
-			targetDescriptor: nil,
-			returnID: AEReturnID(kAutoGenerateReturnID),
-			transactionID: AETransactionID(kAnyTransactionID)
-		)
+		let event = NSAppleEventDescriptor.untargetedEvent(EventKey(code: code))
 		for (keyword, value) in parameters {
 			event.setParam(value, forKeyword: FourCharCode(fourCharString: keyword))
 		}

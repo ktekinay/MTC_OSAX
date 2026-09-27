@@ -1,0 +1,38 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "strp",
+        "fields" : [
+          {
+            "key" : "enco",
+            "value" : {
+              "text" : "%I:%M %p",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "04:10 PM",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "d8c37af8ffffffff",
+          "type" : "ldt "
+        }
+      }
+    }
+  ],
+  "name" : "strptime-time-only",
+  "recordedAt" : "2026-09-27T19:52:27Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "strptime \"04:10 PM\" encoding \"%I:%M %p\"",
+  "timeZone" : "America/New_York"
+}

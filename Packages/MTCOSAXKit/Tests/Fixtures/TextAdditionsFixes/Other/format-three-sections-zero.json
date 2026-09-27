@@ -1,0 +1,38 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FORM",
+        "fields" : [
+          {
+            "key" : "into",
+            "value" : {
+              "text" : "+#;-#;'zero'",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 0,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "zero",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "format-three-sections-zero",
+  "recordedAt" : "2026-09-27T19:52:28Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "format 0 into \"+#;-#;'zero'\"",
+  "timeZone" : "America/New_York"
+}

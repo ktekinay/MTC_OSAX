@@ -5,6 +5,9 @@ import Testing
 /// Event classes that belong to MTC_OSAX itself rather than being copied from Satimage.
 private let ownSuitePrefixes = ["MTCd"]
 
+/// Parameters MTC_OSAX adds to copied Satimage commands: `dollar references`.
+private let extensionParameters: Set = ["DlRf"]
+
 struct SDEFConsistencyTests {
 	@Test func everySDEFCommandHasAHandler() throws {
 		let sdef = try SDEF(contentsOf: ProjectFiles.appSDEF)
@@ -33,7 +36,7 @@ struct SDEFConsistencyTests {
 	@Test func copiedSuitesMatchSatimage() throws {
 		let ours = try SDEF(contentsOf: ProjectFiles.appSDEF)
 		let satimage = try SDEF(contentsOf: ProjectFiles.satimageSDEF)
-		let differences = ours.differences(from: satimage, ignoringCodesWithPrefixes: ownSuitePrefixes)
+		let differences = ours.differences(from: satimage, ignoringCodesWithPrefixes: ownSuitePrefixes, extensionParameters: extensionParameters)
 		#expect(differences.isEmpty, "\(differences.joined(separator: "\n"))")
 	}
 
@@ -75,6 +78,14 @@ struct SDEFComparisonTests {
 	@Test func detectsRenamedCommand() throws {
 		let ours = satimage.replacingOccurrences(of: #"name="find text""#, with: #"name="findtext""#)
 		#expect(try differences(ours).count == 1)
+	}
+
+	@Test func allowsExtensionParameters() throws {
+		let ours = satimage.replacingOccurrences(of: #"<parameter name="regexp" code="UsGR"/>"#, with: #"<parameter name="regexp" code="UsGR"/><parameter name="dollar references" code="DlRf"/>"#)
+		let sdef = try SDEF(data: Data(ours.utf8))
+		let reference = try SDEF(data: Data(satimage.utf8))
+		#expect(sdef.differences(from: reference, ignoringCodesWithPrefixes: ["MTCd"]).count == 1)
+		#expect(sdef.differences(from: reference, ignoringCodesWithPrefixes: ["MTCd"], extensionParameters: ["DlRf"]).isEmpty)
 	}
 
 	@Test func detectsChangedParameterCode() throws {

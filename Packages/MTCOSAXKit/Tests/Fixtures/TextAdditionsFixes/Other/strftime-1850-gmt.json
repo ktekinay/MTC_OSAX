@@ -1,0 +1,44 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "strf",
+        "fields" : [
+          {
+            "key" : "into",
+            "value" : {
+              "text" : "%FT%T %z %Z",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "GMT ",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "400c379bffffffff",
+              "type" : "ldt "
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "1850-06-01T16:56:02 +0000 UTC",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "strftime-1850-gmt",
+  "recordedAt" : "2026-09-27T19:52:27Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "strftime date \"Saturday, June 1, 1850 at 12:00:00 PM\" into \"%FT%T %z %Z\" with GMT",
+  "timeZone" : "America/New_York"
+}

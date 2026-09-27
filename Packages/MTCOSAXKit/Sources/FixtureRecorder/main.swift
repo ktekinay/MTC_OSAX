@@ -1,10 +1,11 @@
 // Runs AppleScript test cases against an app and records the Apple events each case sends
 // and the replies it gets, as fixture files the tests replay later.
 //
-//   fixture-recorder --app SatimageOSAX --cases Tests/Fixtures/Text/cases.json [--only name]
+//   fixture-recorder --app SatimageOSAX --cases Tests/Fixtures/Text/cases.json [--only name] [--var NAME=value …]
 //
 // cases.json is an array of {"name": "...", "script": "..."}. Each script runs with
-// `use application "<app>"` prepended. Fixtures are written next to cases.json as <name>.json.
+// `use application "<app>"` prepended, and `$NAME` replaced by each --var value. Fixtures are written
+// next to cases.json as <name>.json, with the variables' values so replays can substitute their own.
 //
 // Must run from iTerm (Scripts/iterm-run.sh): processes started from VS Code can't send Apple events.
 
@@ -26,6 +27,13 @@ let recordingSendProc: OSASendUPP = { event, reply, sendMode, _, timeout, _, _, 
 		return OSErr(paramErr)
 	}
 	let status = AESendMessage(event, reply, sendMode, Int(timeout))
+	// Skip events the script sends itself (Standard Additions such as `current date`, AppleScript internals).
+	var eventClass = DescType()
+	var size = 0
+	AEGetAttributePtr(event, AEKeyword(keyEventClassAttr), DescType(typeType), nil, &eventClass, MemoryLayout<DescType>.size, &size)
+	if ["syso", "ascr", "misc"].contains(eventClass.fourCharString) {
+		return OSErr(status)
+	}
 	var eventCopy = AEDesc()
 	var replyCopy = AEDesc()
 	AEDuplicateDesc(event, &eventCopy)
@@ -83,11 +91,17 @@ var arguments = CommandLine.arguments.dropFirst()
 var appName: String?
 var casesPath: String?
 var onlyName: String?
+var variables: [String: String] = [:]
 while let argument = arguments.popFirst() {
 	switch argument {
 	case "--app": appName = arguments.popFirst()
 	case "--cases": casesPath = arguments.popFirst()
 	case "--only": onlyName = arguments.popFirst()
+	case "--var":
+		guard let pair = arguments.popFirst(), let equals = pair.firstIndex(of: "=") else {
+			fail("--var needs NAME=value")
+		}
+		variables[String(pair[..<equals])] = String(pair[pair.index(after: equals)...])
 	default: fail("Unknown argument \(argument)")
 	}
 }
@@ -103,6 +117,15 @@ do {
 	fail("Can't read \(casesPath): \(error)")
 }
 
+// Fixture files are named after cases, and the disk is usually case-insensitive.
+var seenNames: [String: String] = [:]
+for testCase in cases {
+	if let other = seenNames[testCase.name.lowercased()] {
+		fail("Cases \"\(other)\" and \"\(testCase.name)\" would write the same file on a case-insensitive disk.")
+	}
+	seenNames[testCase.name.lowercased()] = testCase.name
+}
+
 let language = OSALanguageInstance(language: OSALanguage(forName: "AppleScript")!)
 let refCon = UnsafeMutableRawPointer.allocate(byteCount: 1, alignment: 1)
 OSASetSendProc(language.componentInstance, recordingSendProc, refCon)
@@ -110,7 +133,13 @@ OSASetSendProc(language.componentInstance, recordingSendProc, refCon)
 var failures = 0
 for testCase in cases where onlyName == nil || testCase.name == onlyName {
 	capturedExchanges = []
-	let source = "use application \"\(appName)\"\n" + testCase.script
+	var script = testCase.script
+	var used: [String: String] = [:]
+	for (variable, value) in variables where script.contains("$" + variable) {
+		script = script.replacingOccurrences(of: "$" + variable, with: value)
+		used[variable] = value
+	}
+	let source = "use application \"\(appName)\"\n" + script
 	let outcome = run(source, language: language)
 
 	if outcome.compileFailed {
@@ -129,13 +158,17 @@ for testCase in cases where onlyName == nil || testCase.name == onlyName {
 		script: testCase.script,
 		recordedFrom: appName,
 		recordedAt: Date(),
+		variables: used.isEmpty ? nil : used,
+		timeZone: TimeZone.current.identifier,
 		exchanges: capturedExchanges
 	)
 	let url = casesURL.deletingLastPathComponent().appendingPathComponent("\(testCase.name).json")
 	do {
 		try fixture.write(to: url)
 	} catch {
-		fail("Can't write \(url.path): \(error)")
+		print("✗ \(testCase.name): can't write \(url.lastPathComponent): \(error)")
+		failures += 1
+		continue
 	}
 	let replies = capturedExchanges.map(\.reply.summary).joined(separator: "; ")
 	print("✓ \(testCase.name): \(replies)")

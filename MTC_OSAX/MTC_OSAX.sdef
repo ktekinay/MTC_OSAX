@@ -9,6 +9,459 @@
 -->
 <dictionary title="MTC_OSAX Terminology">
 
+	<!-- Types that Satimage's suites refer to, defined in its other suites. -->
+	<suite name="Satimage Types" code="MTCt" description="Types used by the Satimage suites." hidden="yes">
+		<class name="alias" code="alis" hidden="yes" plural="aliases"/>
+		<class name="anything" code="****" description="any class or reference" hidden="yes"/>
+		<value-type name="CFRef" code="CFob" description="an opaque reference to a property list element. Initial CFRefs must be created with PlistNew or PlistOpen." hidden="yes"/>
+	</suite>
+
+	<!-- Copied verbatim from "SatImageOSAX SDEF/dictionary.sdef". -->
+   <suite name="Satimage Text Additions" code="SATI" description="mailto:support@satimage-software.com">
+	<record-type name="matchrecord" code="mRec" description="the record returned by &quot;find text&quot;">
+			<property name="matchPos" code="mPos" type="integer" description="offset of the first character found"/>
+			<property name="matchLen" code="mLen" type="integer" description="length of the match"/>
+			<property name="matchResult" code="mRes" description="the matched string (possibly formatted according to the &quot;using&quot; parameter)}">
+			<type type="string"/>
+<type type="string" list="yes"/>
+</property>
+	</record-type>
+    <command name="find text" code="SATIFINd" description="find text literally or using regular expression syntax.">
+	<synonym name="ufind text"/>
+      <direct-parameter type="string" description="the substring to search for"/>
+      <parameter name="in" code="$in " type="string" description="a string or an alias"/>
+      <parameter name="starting at" code="strt" type="integer" optional="yes" description="default: 0"/>
+      <parameter name="for" code="for " type="integer" optional="yes" description="length of text after starting"/>
+      <parameter name="case sensitive" code="CaSe" type="boolean" optional="yes" description="default true"/>
+       <parameter name="regexp" code="UsGR" type="boolean" optional="yes" description="use regular expression, default false"/>
+     <parameter name="backward" code="back" type="boolean" optional="yes" description="default false. Irrelevant with regexp"/>
+<parameter name="diacritic sensitive" code="DiSe" type="boolean" optional="yes" description="default true. Irrelevant with regexp"/>
+      <parameter name="whole word" code="WhWo" type="boolean" optional="yes" description="default false. Irrelevant with regexp"/>
+      <parameter name="regexpflag" code="Flag" optional="yes" description="a subset of {&quot;IGNORECASE&quot;, &quot;EXTEND&quot;, &quot;MULTILINE&quot;, &quot;SINGLELINE&quot;, &quot;FIND LONGEST&quot;, &quot;FIND NOT EMPTY&quot;, &quot;DONT CAPTURE GROUP&quot;, &quot;NOTBOL&quot;, &quot;NOTEOL&quot;, &quot;NEWLINE IN NEGATIVE CC&quot;}; default {}">
+        <type type="string" list="yes"/>
+      </parameter>
+      <parameter name="using" code="by  " optional="yes" description="the pattern to generate the string (regexp only). Useful for constructs with backward references in regexp, ex.: using &quot;name: \\1&quot;. This parameter may be an integer n (between 0 and 9). Equivalent to  &quot;\\n&quot; but matchPos and matchLen correspond to the position of the reference. using may be a list, in this case matchResult is a list of strings">
+<type type="string"/>
+<type type="integer"/>
+<type type="string" list="yes"/>
+</parameter>
+      <parameter name="all occurrences" code="WaAl" type="boolean" optional="yes" description="returns a list of all occurrences. Default: false"/>
+      <parameter name="string result" code="WaMr" type="boolean" optional="yes" description="return only the matching string instead of the whole record"/>
+	<parameter name="syntax" code="synt" type="string" optional="yes" description="the syntax for regular expressions. Relevant if regexp parameter is true. A string among (&quot;POSIX&quot; | &quot;POSIX_EXTENDED&quot; | &quot;EMACS&quot; | &quot;GREP&quot; | &quot;GNU_REGEX&quot; | &quot;JAVA&quot; | &quot;PERL&quot; | &quot;RUBY&quot;). Default: &quot;RUBY&quot;"/>
+       <parameter name="options" code="Opti" type="string" optional="yes" description="list of  shortcuts:  &apos;a&apos; for &quot;all occurrences&quot;, &apos;r&apos; for &quot;regexp&quot;, &apos;s&apos; for &quot;string result&quot;, &apos;c&apos; for &quot;not case sensitive&quot;, &apos;d&apos; for &quot;not diacritic sensitive&quot;. For instance &quot;ras&quot; stands for for &quot;with regexp, all occurrences and string result&quot;."/>
+	<!-- MTC_OSAX extension (not in Satimage): $1-style references in templates. -->
+	<parameter name="dollar references" code="DlRf" type="boolean" optional="yes" description="MTC_OSAX extension: also accept $0–$9, ${name} and $$ in templates. Default: the DollarReferences setting (off unless turned on with defaults write com.mactechnologies.mtc-osax DollarReferences -bool YES)."/>
+    <result description="according to &quot;all occurrences&quot; and &quot;string result&quot; parameters">
+<type type="matchrecord"/>
+<type type="matchrecord" list="yes"/>
+<type type="string"/>
+<type type="string" list="yes"/>
+</result>
+<documentation>
+<html>
+<div>
+<b>Discussion</b>
+<br/>
+Definitions of options of <span class="example-source">regexpflag</span>'s parameters:
+<br/>
+<br/>
+<table>
+<tr><td>SINGLELINE</td><td>'^' -> '\A', '$' -> '\z', '\Z' -> '\z'</td></tr>
+<tr><td>MULTILINE</td><td>'.' match newline</td></tr>
+<tr><td>IGNORECASE</td><td>ignore case (case-insensitive)</td></tr>
+<tr><td>EXTEND</td><td>extended pattern form: [:spaces:] are ignored if not escaped</td></tr>
+<tr><td>FIND_LONGEST</td><td>find longest match when using alternations |</td></tr>
+<tr><td>FIND_NOT_EMPTY</td><td>ignore empty match</td></tr>
+<tr><td>NEGATE_SINGLELINE</td><td>clear SINGLELINE which is default on in POSIX, POSIX_EXTENDED, PERL and JAVA syntaxes.</td></tr>
+<tr><td>DONT_CAPTURE_GROUP</td><td>only named group captured: (?&lt;name&gt;subexp)</td></tr>
+<tr><td>NOTBOL</td><td>begin of text isn't considered as begin of line</td></tr>
+<tr><td>NOTEOL</td><td>end of text isn't considered as end of line</td></tr>
+<tr><td>NEWLINE IN NEGATIVE CC</td><td>negative character classes match newline, for instance [^a-z]</td></tr>
+</table>
+<br/>
+Regular-Expressions.info maintains a complete <a target="_blank" href="http://www.regular-expressions.info/tutorial.html">tutorial</a> for regular expressions.
+<br/>
+</div>
+<div style="display:none" class="example">
+<div class="example-source">set the_str to pi as string 
+find text "3" in the_str 
+  --  {matchPos:0, matchLen:1, matchResult:"3"} 
+
+set s to "2007-12-24"
+find text "([[:digit:]]+)" in s using "\\1" with regexp, all occurrences and string result
+-- {"2007", "12", "24"}
+</div>
+</div>
+</html>
+</documentation>
+    </command>
+    <command name="change" code="SATIRPLl" description="replace all occurrences of a substring">
+	<synonym name="uchange"/>
+      <direct-parameter description="the substring(s) to search for">
+ 	<type type="string"/>
+	<type type="string" list="yes"/>
+	</direct-parameter>
+     <parameter name="into" code="by  " description="the replacement string(s). If regexp is true, it may contain backward references">
+ 	<type type="string"/>
+	<type type="string" list="yes"/>
+	</parameter>
+     <parameter name="in" code="$in "  description="">
+	<type type="string"/>
+	<type type="string" list="yes"/>
+	<type type="alias"/>
+	</parameter>
+      <parameter name="starting at" code="strt" type="integer" optional="yes" description="default: 0"/>
+      <parameter name="for" code="for " type="integer" optional="yes" description="length of text after starting"/>
+      <parameter name="case sensitive" code="CaSe" type="boolean" optional="yes" description="default true"/>
+       <parameter name="regexp" code="UsGR" type="boolean" optional="yes" description="default false"/>
+<parameter name="diacritic sensitive" code="DiSe" type="boolean" optional="yes" description="default true. Irrelevant with regexp"/>
+      <parameter name="whole word" code="WhWo" type="boolean" optional="yes" description="default false. Irrelevant with regexp"/>
+      <parameter name="regexpflag" code="Flag" optional="yes" description="see the documentation for find text">
+        <type type="string" list="yes"/>
+      </parameter>
+	<parameter name="syntax" code="synt" type="string" optional="yes" description="see the documentation for find text"/>
+	<parameter name="verbatim" code="RStr" type="boolean" optional="yes" description="default: false (regexp only). If verbatim, the replacement string (&quot;into&quot; parameter) is not interpreted"/>
+	<parameter name="only backreference" code="back" optional="yes" description="(regexp only). An integer in  (0,9) or a name corresponding to a named backreterence of the direct parameter. Default: 0, replace the matched substring  by the &quot;into&quot; parameter; otherwise replace only the provided backreference.">
+	<type type="integer"/>
+	<type type="string"/>
+	</parameter>
+         <parameter name="options" code="Opti" type="string" optional="yes" description="list of  shortcuts (see  &quot;find text&quot;)"/>
+	<!-- MTC_OSAX extension (not in Satimage): $1-style references in templates. -->
+	<parameter name="dollar references" code="DlRf" type="boolean" optional="yes" description="MTC_OSAX extension: also accept $0–$9, ${name} and $$ in templates. Default: the DollarReferences setting (off unless turned on with defaults write com.mactechnologies.mtc-osax DollarReferences -bool YES)."/>
+   <result type="anything" description="the new string if the &quot;in&quot; parameter is a string, otherwise the number of changes performed in the file"/>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">set the_str to "hello" 
+change "e" into "u" in the_str 
+  --  "hullo"
+
+change {"e", "o"} into {"E", "O"} in "hello world" 
+  --  "hEllO wOrld"
+
+change {"e.", "o."} into "O" in "hello world"  with regexp 
+  --  "hOlOwOld"
+
+change "([0-9]{1,2})/([0-9]{1,2})" into "\\2/\\1" in {"31/12/2007", "29/2/2008"} with regexp 
+  -- {"12/31/2007", "2/29/2008"}
+</div>
+</div>
+</html>
+</documentation>
+    </command>
+	<command name="re_compile" code="SATICmpi" description="check a regular expression">
+				<direct-parameter type="string" description="the regular expression"/>
+	<parameter name="syntax" code="synt" type="string" optional="yes" description="the syntax for regular expressions. Relevant if regexp parameter is true. A string among (&quot;POSIX&quot; | &quot;POSIX_EXTENDED&quot; | &quot;EMACS&quot; | &quot;GREP&quot; | &quot;GNU_REGEX&quot; | &quot;JAVA&quot; | &quot;PERL&quot; | &quot;RUBY&quot;). Default: &quot;RUBY&quot;"/>
+	</command>
+    <command name="splittext" code="SATISplt" description="split a text according to a given separator pattern. Optional matching parameters work like with the &quot;find text&quot; command">
+      <direct-parameter type="string" description="the string to split"/>
+      <parameter name="using" code="by  " type="string" description="the separator"/>
+      <parameter name="case sensitive" code="CaSe" type="boolean" optional="yes" description="default true"/>
+     <parameter name="regexp" code="UsGR" type="boolean" optional="yes" description="consider the separator pattern as a        regular expression, default false"/>
+<parameter name="diacritic sensitive" code="DiSe" type="boolean" optional="yes" description="default true. Irrelevant with regexp"/>
+      <parameter name="whole word" code="WhWo" type="boolean" optional="yes" description="consider only whole word separators. default false. Irrelevant with regexp"/>
+          <parameter name="options" code="Opti" type="string" optional="yes" description="list of  shortcuts (see  &quot;find text&quot;)"/>
+       <result description="the splitted text. If no separator found, the returned list contains one element: the original string.">
+        <type type="string" list="yes"/>
+        </result>
+    </command>
+     <command name="filter text" code="SATIGPli" description="parse a string (or a text file) into  a property list">
+      <direct-parameter type="string" description="the pattern"/>
+      <parameter name="in" code="$in " type="string" description="a string or an alias"/>
+      <parameter name="key" code="key " type="string" description="the pattern to generate the keys in the plist"/>
+      <parameter name="using" code="by  " type="string" optional="yes" description="the pattern to generate the strings of the plist. Default: &quot;\\0&quot;"/>
+      <parameter name="as" code="rtyp" type="type" optional="yes" description="list or string. Default: string, the plist contains for each key a concatenation of the matches separated by a linefeed character (or the provided separator). Otherwise the plist contains for each key an array of matches."/>
+      <parameter name="duplicates" code="Dupl" type="boolean" optional="yes" description="relevant if the &quot;as&quot; parameter is list. Without duplicates, only new strings are added. Default: true"/>
+      <parameter name="separator" code="sepa" type="string" optional="yes" description="relevant if the &quot;as&quot; parameter is string. Default: linefeed"/>
+     <parameter name="case sensitive" code="CaSe" type="boolean" optional="yes" description="default: true"/>
+      <parameter name="whole word" code="WhWo" type="boolean" hidden="yes" optional="yes" description=""/>
+      <parameter name="regexpflag" code="Flag" optional="yes" description="like in the find text command">
+        <type type="string" list="yes"/>
+      </parameter>
+	<parameter name="syntax" code="synt" type="string" optional="yes" description="like in the find text command"/>
+      <parameter name="into" code="into" optional="yes" description="the file destination for the plist or an existing plist (see the XMLLib.osax dictionary). Default: filter text returns the property list as string">
+ 	<type type="file"/>
+	<type type="CFRef"/>
+	</parameter>
+	<!-- MTC_OSAX extension (not in Satimage): $1-style references in templates. -->
+	<parameter name="dollar references" code="DlRf" type="boolean" optional="yes" description="MTC_OSAX extension: also accept $0–$9, ${name} and $$ in templates. Default: the DollarReferences setting (off unless turned on with defaults write com.mactechnologies.mtc-osax DollarReferences -bool YES)."/>
+     <result type="string" description="the XML data if the into parameter is missing"/>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">set s to "John is ten
+Anna is twelve
+John is at school
+Anna sleeps"
+filter text "^([A-z]+) is (.*)" in s key "\\1" using "\\2"  as list
+</div>
+returns a string containing a plist:
+<div class="example-source">&lt;dict&gt;
+	&lt;key&gt;Anna&lt;/key&gt;
+	&lt;array&gt;
+		&lt;string&gt;twelve&lt;/string&gt;
+	&lt;/array&gt;
+	&lt;key&gt;John&lt;/key&gt;
+	&lt;array&gt;
+		&lt;string&gt;ten&lt;/string&gt;
+		&lt;string&gt;at school&lt;/string&gt;
+	&lt;/array&gt;
+&lt;/dict&gt;
+</div>
+</div>
+</html>
+</documentation>
+    </command>
+     <command name="file offset" code="SATIFoff" description="find a string in a file and return the offset in byte.">
+      <direct-parameter type="string" description="the character(s) to find"/>
+	<parameter name="in" code="in  " type="alias"/>
+	<parameter name="starting at" code="strt" type="integer" optional="yes" description="the initial offset in byte"/>
+      <parameter name="encoding" code="enco" type="string" optional="yes" description="a IANA charset name (&quot;MACINTOSH&quot;, &quot;UTF-8&quot;, &quot;UTF-16&quot;, &quot;ISO-8859-1&quot;, &quot;windows-1252&quot;…). Default: &quot;UTF-8&quot;"/>
+	<parameter name="inclusive" code="incl" type="boolean"  optional="yes"  description="default: false. If true, the offset includes the requested string"/>
+      <result type="integer"/>
+	</command>
+   <command name="readtext" code="SATIRead" description="read a text file. readtext is aware of the presence of BOM.">
+      <direct-parameter type="alias" description="or an url"/>
+	<parameter name="for" code="for " type="integer" optional="yes" description="the maximum number of bytes to read"/>
+	<parameter name="starting at" code="strt" type="integer" optional="yes" description="the initial offset in byte"/>
+      <parameter name="encoding" code="enco" type="string" optional="yes" description="a IANA charset name (&quot;MACINTOSH&quot;, &quot;UTF-8&quot;, &quot;UTF-16&quot;, &quot;ISO-8859-1&quot;, &quot;windows-1252&quot;…)"/>
+ 	<parameter name="redirect" code="redi" type="boolean" optional="yes" description="redirects automatically (http). Default: true"/>
+ 	<parameter name="timeout" code="Time" type="real" optional="yes" description="default : 10 seconds"/>
+    <result type="string"/>
+	</command>
+     <command name="writetext" code="SATIWrit" description="write a string in a file.">
+      <direct-parameter type="string" description=""/>
+	<parameter name="to" code="to  " type="file" description="or an url"/>
+	<parameter name="append" code="appe" type="boolean" optional="yes" description="default: false. If true, append the string at the end of the file"/>
+      <parameter name="encoding" code="enco" type="string" optional="yes" description="a IANA charset name (&quot;MACINTOSH&quot;, &quot;UTF-8&quot;, &quot;UTF-16&quot;, &quot;ISO-8859-1&quot;, &quot;windows-1252&quot;…). Default: &quot;UTF-8&quot;"/>
+      <parameter name="missing char" code="Lssb" type="string" optional="yes" description="characters that cannot be converted to the specified encoding are represented with this character. Default: writetext returns an error if it encounters an untranslatable character"/>
+      <result type="string"/>
+	</command>
+			<command name="uppercase" code="SATIUPPE" description="move to uppercase.">
+				<direct-parameter description="the original string(s)">
+					<type type="string"/>
+					<type type="string" list="yes"/>
+				</direct-parameter>
+				<result description="the uppercase string(s)">
+					<type type="string"/>
+					<type type="string" list="yes"/>
+				</result>
+		</command>
+			<command name="lowercase" code="SATILOWE" description="move to lowercase.">
+				<direct-parameter description="the original string(s)">
+					<type type="string"/>
+					<type type="string" list="yes"/>
+				</direct-parameter>
+				<result description="the lowercase string(s)">
+					<type type="string"/>
+					<type type="string" list="yes"/>
+				</result>
+			</command>
+			<command name="titlecase" code="SATICAPI" description="">
+				<synonym name="capitalize"/>
+				<direct-parameter description="the original string(s)">
+					<type type="string"/>
+					<type type="string" list="yes"/>
+				</direct-parameter>
+				<result description="the capitalized string(s)">
+					<type type="string"/>
+					<type type="string" list="yes"/>
+				</result>
+			</command>
+			<command name="format" code="SATIFORM" description="format a real number using a specification string. Ex: format pi into &quot;##.##&quot;-&gt;&quot;3.14&quot;. '0' instead of '#' forces trailing zeros. '^' adds a space. &quot;+f1;-f2;f3&quot; provides formats for numbers &gt;0, &lt;0, =0. Encapsulate custom strings with &quot;'&quot;.">
+				<direct-parameter type="real" description="the number"/>
+				<parameter name="into" code="into" type="string" description="the formatting string, using #,^,O,.,%,',(,),+,-"/>
+				<parameter name="underflow test" code="ZeTe" type="boolean" optional="yes" description="switch to scientific format if the number is too small with respect to the formatting string (default: false)"/>
+				<result type="string" description="the formatted number"/>
+			</command>
+			<command name="atof" code="SATIATOF" description="convert a string into a number. Ex: atof &quot;1.5&quot;">
+				<direct-parameter description="">
+				<type type="string"/>
+				<type type="string" list="yes"/>
+				</direct-parameter>
+				<result description="">
+				<type type="real"/>
+				<type type="real" list="yes"/>
+				</result>
+			</command>
+			<command name="atoi" code="SATIATOI" description="convert a string into an integer. Ex: atoi &quot;0xa0&quot; -> 160">
+				<direct-parameter description="">
+				<type type="string"/>
+				<type type="string" list="yes"/>
+				</direct-parameter>
+				<parameter name="base" code="base" type="integer" optional="yes" description="the base value, between 2 and 36"/>
+				<result description="">
+				<type type="integer"/>
+				<type type="integer" list="yes"/>
+				</result>
+			</command>
+    <command name="encode entities" code="SATIEsEn" description="substitutes the 5 reserved XML characters found in the direct parameter with the corresponding XML entities.">
+      <direct-parameter type="string"/>
+      <result type="string"/>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">encode entities "'foo' > 'Foo'"
+-- "&amp;apos;foo&amp;apos; &amp;gt; &amp;apos;Foo&amp;apos;"
+</div>
+</div>
+</html>
+</documentation>
+    </command>
+    <command name="resolve entities" code="SATIReEn" description="substitutes the XML character entities found in the direct parameter (not the html entities such as &amp;eacute;) with the corresponding Unicode characters.">
+      <direct-parameter type="string"/>
+      <result type="string"/>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">resolve entities "&amp;apos;foo&amp;apos; &amp;gt; &amp;apos;Foo&amp;apos;"
+-- "'foo' > 'Foo'"
+</div>
+</div>
+</html>
+</documentation>
+    </command>
+    <command name="escapeURL" code="SATIAdd%" description="encode a URI by replacing each instance of certain characters by one, two, or three escape sequences representing the UTF-8 encoding of the character">
+      <direct-parameter type="string" description="a URI or a URI component"/>
+      <parameter name="escaping" code="escp" type="string" optional="yes" description="additional characters to escape. Default &quot;&quot;. To translate URI component (for a GET request for instance) into legal URI component use &quot;;,/?:@&amp;=+$&quot;"/>
+      <result type="string" description="a legal URI"/>
+    </command>
+    <command name="unescapeURL" code="SATIRem%" description="decode a URI previously encoded with &quot;escapeURL&quot;.">
+      <direct-parameter type="string"/>
+      <parameter name="keeping" code="leav" type="string" optional="yes" description="characters to leave escaped. Default &quot;&quot;."/>
+      <result type="string"/>
+    </command>
+    <command name="normalize unicode" code="SATIUnNo" description="normalize Unicode text (canonical composition or decomposition)">
+      <direct-parameter type="string" description=""/>
+     <parameter name="decomposition" code="Deco" optional="yes" type="boolean" description="want canonical decomposition. default: false. For example, HFS Plus converts all file names to decomposed Unicode, while Macintosh keyboards generally produce precomposed Unicode."/>
+      <result type="string"/>
+    </command>
+    <command name="transform unicode" code="SATIUnTr" description="transform Unicode text ">
+      <direct-parameter description="">
+	<type type="string"/>
+	<type type="string" list="yes"/>
+	</direct-parameter>
+     <parameter name="using" code="by  "  type="string" description="any valid ICU transform ID (see http://userguide.icu-project.org/transforms/general)"/>
+     <parameter name="inverse" code="inv "  type="boolean" optional="yes" description="inverse transformation requested. Default: false"/>
+      <result>
+	<type type="string"/>
+	<type type="string" list="yes"/>
+	</result>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">set res to transform unicode "éç" using "NFD; [:Nonspacing Mark:] Remove"
+--"ec"
+set res to transform unicode res using "Any-Hex/XML"
+--"&amp;#x65;&amp;#x63;"
+transform unicode res using "Any-Hex/XML" with inverse
+--"ec"
+</div>
+</div>
+</html>
+</documentation>
+    </command>
+    <command name="hash" code="SATIHASH" description="normalize (KD) and hash a string">
+      <direct-parameter type="string" description=""/>
+      <result type="integer"/>
+    </command>
+    <command name="join" code="SATIJoin" description="coerce as Unicode text">
+      <direct-parameter description="">
+		<type type="string" list="yes"/>
+	 </direct-parameter>
+     <parameter name="using" code="by  " type="string" description="the text delimiter"/>
+      <result type="string"/>
+    </command>
+    <command name="printf" code="SATIprtf" description="format a string like the C function printf.">
+      <direct-parameter type="string" description="the format string"/>
+      <parameter name="parameters" code="para" description="">
+        <type type="anything" list="yes"/>
+      </parameter>
+      <result type="string" description="the formatted string"/>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">printf "printf prints integers like %d, floats like %g, strings like \"%s\"." parameters {12, pi, "hello"}
+-- "printf prints integers like 12, floats like 3.14159, strings like \"hello\"."
+printf "escape %% with %%%% like in %2.f%%" parameters {39.12}
+-- "escape % with %% like in 39%"
+
+-- use of positional parameters:
+set params to {"car", "red"}
+printf "The %s is %s." parameters params
+-- "The car is red."
+printf "The %2$s %1$s." parameters params
+-- "The red car."
+
+-- use of list parameters:
+printf ("%.1g	%.3g" &amp; return) parameters {randomarray 4, randomarray 4}
+--"0.3	0.846
+0.1	0.348
+1	0.0174
+0.6	0.444
+"
+</div>
+</div>
+</html>
+</documentation>
+    </command>
+     <command name="strftime" code="SATIstrf" description="format a date using a specification string like in the C function strftime.">
+      <direct-parameter>
+ 		<type type="date"/>
+		<type type="date" list="yes"/>
+	</direct-parameter>
+     <parameter name="into" code="into" type="string" description="the formatting string. To obtain ISO 8601 dates, use &quot;%FT%TZ&quot; or &quot;%GW%V-%uT%TZ&quot; (using the 'with GMT' parameter)"/>
+     <parameter name="GMT" code="GMT " type="boolean" optional="yes" description="if true, output date as GMT. Default: false, the ouput date is local."/>
+      <result type="string" description="the formatted date"/>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">set d to current date
+-- some ISO 8601 formats:
+strftime d into "%FT%T%z"
+-- "2007-01-15T16:10:56+0100"
+strftime d into "%GW%V-%uT%T%z"
+-- "2007W03-1T16:10:56+0100"
+--if you need to store the date d as UTC:
+strftime d into "%FT%TZ" with GMT
+-- "2007-01-15T15:10:56Z"
+strftime d into "%a, %b %d, %Y %H:%M:%S %z"
+-- "Mon, Jan 15, 2007 16:10:56 +0100"
+</div>
+</div>
+</html>
+</documentation>
+    </command>
+    <command name="strptime" code="SATIstrp" description="Reverse of strftime.">
+      <direct-parameter description="the date string(s)">
+		<type type="string"/>
+		<type type="string" list="yes"/>
+	</direct-parameter>
+      <parameter name="encoding" code="enco" type="string" description="the format of the date corresponding to the into parameter of strftime."/>
+     <parameter name="GMT" code="GMT " type="boolean" optional="yes" description="the intput date string is GMT (if unspecified by the format). Default: false"/>
+<parameter name="as" code="rtyp" type="type" optional="yes" description="date or real (seconds since January 1 2001). Default: date"/>
+      <result description="the date">
+<type type="date"/>
+<type type="real"/>
+</result>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">strptime "2007-01-15T16:10:56+0100" encoding "%FT%T%z"
+-- date "Monday, January 15, 2007 16:10:56"
+strptime "2007-01-15T16:10:56Z" encoding "%FT%T"
+-- date "Monday, January 15, 2007 16:10:56"
+strptime "2007-01-15T16:10:56Z" encoding "%FT%T" with GMT
+-- date "Monday, January 15, 2007 17:10:56"
+strptime "Mon, Jan 15, 2007 16:25:36 +0100" encoding "%a, %b %d, %Y %H:%M:%S %z"
+-- date "Monday, January 15, 2007 16:25:36"
+</div>
+</div>
+</html>
+</documentation>
+    </command>
+  </suite>
+
 	<suite name="MTC Diagnostics" code="MTCd" description="Commands for checking that MTC_OSAX is working." hidden="yes">
 		<command name="mtc_ping" code="MTCdping" description="Returns &quot;pong&quot;." hidden="yes">
 			<result type="text" description="&quot;pong&quot;"/>

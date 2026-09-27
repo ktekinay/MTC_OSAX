@@ -1,0 +1,42 @@
+[
+ {
+  "name": "dollar-change-parameter",
+  "script": "change \"(a)(b)\" into \"[$2$1|$0|$$|${1}]\" in \"xaby\" with regexp and dollar references"
+ },
+ {
+  "name": "dollar-change-without",
+  "script": "change \"(a)(b)\" into \"[$2$1]\" in \"xaby\" with regexp without dollar references"
+ },
+ {
+  "name": "dollar-change-flag",
+  "script": "change \"(a)(b)\" into \"[$2$1]\" in \"xaby\" with regexp regexpflag {\"DOLLAR REFERENCES\"}"
+ },
+ {
+  "name": "dollar-change-named",
+  "script": "change \"(?<first>a)(b)\" into \"[${first}]\" in \"xaby\" with regexp and dollar references"
+ },
+ {
+  "name": "dollar-change-unknown-name",
+  "script": "change \"(a)\" into \"[${nope}]\" in \"xa\" with regexp and dollar references"
+ },
+ {
+  "name": "dollar-change-backslash-too",
+  "script": "change \"(a)\" into \"[\\\\1$1]\" in \"xa\" with regexp and dollar references"
+ },
+ {
+  "name": "dollar-change-literal-search",
+  "script": "change \"a\" into \"$0\" in \"xa\" with dollar references"
+ },
+ {
+  "name": "dollar-change-verbatim",
+  "script": "change \"(a)\" into \"$1\" in \"xa\" with regexp, verbatim and dollar references"
+ },
+ {
+  "name": "dollar-find-using",
+  "script": "find text \"([a-z]+)-([0-9]+)\" in \"x ab-12\" using \"$2:$1\" with regexp, string result and dollar references"
+ },
+ {
+  "name": "dollar-find-using-list",
+  "script": "find text \"([a-z]+)-([0-9]+)\" in \"x ab-12\" using {\"$2\", \"$1\"} with regexp, string result and dollar references"
+ }
+]

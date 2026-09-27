@@ -1,0 +1,51 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "prtf",
+        "fields" : [
+          {
+            "key" : "para",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 12,
+                  "type" : "long"
+                },
+                {
+                  "real" : 3.141592653589793,
+                  "type" : "doub"
+                },
+                {
+                  "text" : "hello",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "printf prints integers like %d, floats like %g, strings like \"%s\".",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "printf prints integers like 12, floats like 3.14159, strings like \"hello\".",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "printf-doc-1",
+  "recordedAt" : "2026-09-27T19:12:44Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "printf \"printf prints integers like %d, floats like %g, strings like \\\"%s\\\".\" parameters {12, pi, \"hello\"}",
+  "timeZone" : "America/New_York"
+}

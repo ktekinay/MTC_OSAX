@@ -38,6 +38,15 @@ struct SnapshotTests {
 		#expect(DescriptorSnapshot(copy) == DescriptorSnapshot(descriptor))
 	}
 
+	@Test(arguments: [Double.infinity, -Double.infinity, Double.nan])
+	func nonFiniteRealsRoundTrip(_ value: Double) throws {
+		let snapshot = DescriptorSnapshot(NSAppleEventDescriptor(double: value))
+		let decoded = try JSONDecoder().decode(DescriptorSnapshot.self, from: JSONEncoder().encode(snapshot))
+		#expect(decoded == snapshot)
+		let copy = decoded.descriptor.doubleValue
+		#expect(copy == value || (copy.isNaN && value.isNaN))
+	}
+
 	@Test func keywordRoundTrips() throws {
 		var snapshot = DescriptorSnapshot(type: "keyw")
 		snapshot.code = "by  "
@@ -45,13 +54,7 @@ struct SnapshotTests {
 	}
 
 	@Test func appleEventRoundTrips() throws {
-		let event = NSAppleEventDescriptor.appleEvent(
-			withEventClass: FourCharCode(fourCharString: "SATI"),
-			eventID: FourCharCode(fourCharString: "FINd"),
-			targetDescriptor: nil,
-			returnID: AEReturnID(kAutoGenerateReturnID),
-			transactionID: AETransactionID(kAnyTransactionID)
-		)
+		let event = NSAppleEventDescriptor.untargetedEvent(EventKey(code: "SATIFINd"))
 		event.setParam(NSAppleEventDescriptor(string: "([0-9]+)"), forKeyword: keyDirectObject)
 		event.setParam(NSAppleEventDescriptor(boolean: true), forKeyword: FourCharCode(fourCharString: "UsGR"))
 

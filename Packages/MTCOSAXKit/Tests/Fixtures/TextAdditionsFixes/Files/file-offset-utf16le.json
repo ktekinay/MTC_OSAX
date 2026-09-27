@@ -1,0 +1,48 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Foff",
+        "fields" : [
+          {
+            "key" : "in  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/utf16le-bom.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "enco",
+            "value" : {
+              "text" : "UTF-16LE",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "é",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "integer" : 14,
+          "type" : "long"
+        }
+      }
+    }
+  ],
+  "name" : "file-offset-utf16le",
+  "recordedAt" : "2026-09-27T19:52:26Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "file offset \"é\" in POSIX file \"$FILES/utf16le-bom.txt\" encoding \"UTF-16LE\"",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RPLl",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "[$2$1|$0|$$|${1}]",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "xaby",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "DlRf",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "(a)(b)",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "x[ba|ab|$|a]y",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "dollar-change-parameter",
+  "recordedAt" : "2026-09-27T18:56:37Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "change \"(a)(b)\" into \"[$2$1|$0|$$|${1}]\" in \"xaby\" with regexp and dollar references"
+}

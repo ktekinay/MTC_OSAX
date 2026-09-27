@@ -1,0 +1,594 @@
+[
+ {
+  "name": "escape-tab-newline-return",
+  "script": "find text \"a\\\\tb\\\\nc\\\\rd\" in (\"a\" & (character id 9) & \"b\" & (character id 10) & \"c\" & (character id 13) & \"d\") with regexp and all occurrences"
+ },
+ {
+  "name": "escape-formfeed-vtab-bell-escape",
+  "script": "find text \"\\\\f\\\\v\\\\a\\\\e\" in ((character id 12) & (character id 11) & (character id 7) & (character id 27)) with regexp and all occurrences"
+ },
+ {
+  "name": "escape-octal",
+  "script": "find text \"\\\\101\\\\0102\" in (\"AB\" & (character id 8) & \"2\") with regexp and all occurrences"
+ },
+ {
+  "name": "escape-hex",
+  "script": "find text \"\\\\x41\\\\x{42}\\\\x{1F600}\" in \"AB😀\" with regexp and all occurrences"
+ },
+ {
+  "name": "escape-unicode-u",
+  "script": "find text \"Aé\" in \"Aé\" with regexp and all occurrences"
+ },
+ {
+  "name": "escape-control",
+  "script": "find text \"\\\\cA\\\\C-b\" in ((character id 1) & (character id 2)) with regexp and all occurrences"
+ },
+ {
+  "name": "escape-meta-chars",
+  "script": "find text \"\\\\.\\\\*\\\\+\\\\?\\\\(\\\\)\\\\[\\\\]\\\\{\\\\}\\\\|\\\\^\\\\$\\\\\\\\\\\\/\" in \".*+?()[]{}|^$\\\\/\" with regexp and all occurrences"
+ },
+ {
+  "name": "escape-unknown-letter",
+  "script": "find text \"\\\\y\\\\q\" in \"yq\" with regexp and all occurrences"
+ },
+ {
+  "name": "dot",
+  "script": "find text \"a.c\" in (\"abc a\" & (character id 10) & \"c a😀c\") with regexp and all occurrences"
+ },
+ {
+  "name": "dot-multiline-flag",
+  "script": "find text \"a.c\" in (\"a\" & (character id 10) & \"c\") with regexp and all occurrences regexpflag {\"MULTILINE\"}"
+ },
+ {
+  "name": "type-word",
+  "script": "find text \"\\\\w+\" in \"ab_9 é ß 日本\" with regexp and all occurrences"
+ },
+ {
+  "name": "type-nonword",
+  "script": "find text \"\\\\W+\" in \"ab_9 é-ß!\" with regexp and all occurrences"
+ },
+ {
+  "name": "type-space",
+  "script": "find text \"\\\\s+\" in (\"a \" & (character id 9) & (character id 10) & (character id 13) & (character id 12) & (character id 11) & \"b c d\") with regexp and all occurrences"
+ },
+ {
+  "name": "type-nonspace",
+  "script": "find text \"\\\\S+\" in \"ab cd ef\" with regexp and all occurrences"
+ },
+ {
+  "name": "type-digit",
+  "script": "find text \"\\\\d+\" in \"12 ٣٤ ３4\" with regexp and all occurrences"
+ },
+ {
+  "name": "type-nondigit",
+  "script": "find text \"\\\\D+\" in \"a1b٣c\" with regexp and all occurrences"
+ },
+ {
+  "name": "type-hex",
+  "script": "find text \"\\\\h+\" in \"0aF xyz 9G\" with regexp and all occurrences"
+ },
+ {
+  "name": "type-nonhex",
+  "script": "find text \"\\\\H+\" in \"0aFxyz9G\" with regexp and all occurrences"
+ },
+ {
+  "name": "prop-alpha",
+  "script": "find text \"\\\\p{Alpha}+\" in \"abé1ß日\" with regexp and all occurrences"
+ },
+ {
+  "name": "prop-not-alpha",
+  "script": "find text \"\\\\p{^Alpha}+\" in \"ab12cd\" with regexp and all occurrences"
+ },
+ {
+  "name": "prop-negated-P",
+  "script": "find text \"\\\\P{Digit}+\" in \"ab12cd\" with regexp and all occurrences"
+ },
+ {
+  "name": "prop-script-greek",
+  "script": "find text \"\\\\p{Greek}+\" in \"abc αβγ Ωmega\" with regexp and all occurrences"
+ },
+ {
+  "name": "prop-script-han",
+  "script": "find text \"\\\\p{Han}+\" in \"日本語 かな\" with regexp and all occurrences"
+ },
+ {
+  "name": "prop-hiragana",
+  "script": "find text \"\\\\p{Hiragana}+\" in \"日本語 かな カナ\" with regexp and all occurrences"
+ },
+ {
+  "name": "prop-category-lu",
+  "script": "find text \"\\\\p{Lu}+\" in \"aBCdÉF\" with regexp and all occurrences"
+ },
+ {
+  "name": "prop-category-l",
+  "script": "find text \"\\\\p{L}+\" in \"ab1é日\" with regexp and all occurrences"
+ },
+ {
+  "name": "prop-category-nd",
+  "script": "find text \"\\\\p{Nd}+\" in \"a12٣b\" with regexp and all occurrences"
+ },
+ {
+  "name": "prop-category-p",
+  "script": "find text \"\\\\p{P}+\" in \"a,b.!?c\" with regexp and all occurrences"
+ },
+ {
+  "name": "prop-any",
+  "script": "find text \"\\\\p{Any}\" in \"a😀\" with regexp and all occurrences"
+ },
+ {
+  "name": "prop-ascii",
+  "script": "find text \"\\\\p{ASCII}+\" in \"abcé\" with regexp and all occurrences"
+ },
+ {
+  "name": "prop-unknown",
+  "script": "find text \"\\\\p{Nope}\" in \"a\" with regexp and all occurrences"
+ },
+ {
+  "name": "anchor-caret-dollar-lines",
+  "script": "find text \"^\\\\w+$\" in (\"one\" & (character id 10) & \"two\" & (character id 13) & \"three\" & (character id 13) & (character id 10) & \"four\") with regexp and all occurrences"
+ },
+ {
+  "name": "anchor-A-z-Z",
+  "script": "find text \"\\\\A\\\\w+|\\\\w+\\\\z|\\\\w+\\\\Z\" in (\"first mid last\" & (character id 10)) with regexp and all occurrences"
+ },
+ {
+  "name": "anchor-Z-before-newline",
+  "script": "find text \"last\\\\Z\" in (\"first last\" & (character id 10)) with regexp and all occurrences"
+ },
+ {
+  "name": "anchor-z-strict",
+  "script": "find text \"last\\\\z\" in (\"first last\" & (character id 10)) with regexp and all occurrences"
+ },
+ {
+  "name": "anchor-G",
+  "script": "find text \"\\\\Ga\" in \"aaab\" with regexp and all occurrences"
+ },
+ {
+  "name": "anchor-word-boundary",
+  "script": "find text \"\\\\bcat\\\\b\" in \"cat concat cat_ cat.\" with regexp and all occurrences"
+ },
+ {
+  "name": "anchor-nonword-boundary",
+  "script": "find text \"\\\\Bcat\\\\B\" in \"concats cat\" with regexp and all occurrences"
+ },
+ {
+  "name": "anchor-boundary-unicode",
+  "script": "find text \"\\\\b\\\\w+\\\\b\" in \"é1 café\" with regexp and all occurrences"
+ },
+ {
+  "name": "class-simple",
+  "script": "find text \"[abc]+\" in \"xabcabx\" with regexp and all occurrences"
+ },
+ {
+  "name": "class-negated",
+  "script": "find text \"[^abc]+\" in \"abxyzab\" with regexp and all occurrences"
+ },
+ {
+  "name": "class-range",
+  "script": "find text \"[a-f0-3]+\" in \"xyzabc0129\" with regexp and all occurrences"
+ },
+ {
+  "name": "class-escapes",
+  "script": "find text \"[\\\\]\\\\\\\\\\\\-^]+\" in \"a]\\\\-^b\" with regexp and all occurrences"
+ },
+ {
+  "name": "class-caret-not-first",
+  "script": "find text \"[a^]+\" in \"x^a^\" with regexp and all occurrences"
+ },
+ {
+  "name": "class-types-inside",
+  "script": "find text \"[\\\\w\\\\s]+\" in \"ab c!d\" with regexp and all occurrences"
+ },
+ {
+  "name": "class-hex-range",
+  "script": "find text \"[\\\\x41-\\\\x43]+\" in \"ABCD\" with regexp and all occurrences"
+ },
+ {
+  "name": "class-unicode-range",
+  "script": "find text \"[à-ÿ]+\" in \"aàéÿĀ\" with regexp and all occurrences"
+ },
+ {
+  "name": "class-posix-alpha",
+  "script": "find text \"[[:alpha:]]+\" in \"ab1é日\" with regexp and all occurrences"
+ },
+ {
+  "name": "class-posix-negated",
+  "script": "find text \"[[:^digit:]]+\" in \"a1b2\" with regexp and all occurrences"
+ },
+ {
+  "name": "class-posix-all",
+  "script": "find text \"[[:alnum:]][[:punct:]][[:space:]][[:upper:]][[:lower:]][[:xdigit:]][[:cntrl:]][[:print:]][[:graph:]][[:blank:]][[:word:]]\" in (\"1! Ab\" & (character id 1) & \"xy _\") with regexp and all occurrences"
+ },
+ {
+  "name": "class-intersection",
+  "script": "find text \"[a-z&&[^aeiou]]+\" in \"aeibcdo\" with regexp and all occurrences"
+ },
+ {
+  "name": "class-nested",
+  "script": "find text \"[a-c[x-z]]+\" in \"abxyzm\" with regexp and all occurrences"
+ },
+ {
+  "name": "class-property-inside",
+  "script": "find text \"[\\\\p{Greek}\\\\d]+\" in \"αβ12a\" with regexp and all occurrences"
+ },
+ {
+  "name": "class-dash-first-last",
+  "script": "find text \"[-a]+[b-]+\" in \"-a-b-\" with regexp and all occurrences"
+ },
+ {
+  "name": "class-empty-negated-newline",
+  "script": "find text \"a[^x]b\" in (\"a\" & (character id 10) & \"b a\" & (character id 13) & \"b ayb\") with regexp and all occurrences"
+ },
+ {
+  "name": "class-case-insensitive",
+  "script": "find text \"[a-c]+\" in \"ABCabc\" with regexp and all occurrences without case sensitive"
+ },
+ {
+  "name": "quant-star-plus-question",
+  "script": "find text \"ab*c+d?\" in \"ac abbcc abccd\" with regexp and all occurrences"
+ },
+ {
+  "name": "quant-exact",
+  "script": "find text \"a{3}\" in \"aaaaaaa\" with regexp and all occurrences"
+ },
+ {
+  "name": "quant-at-least",
+  "script": "find text \"a{2,}\" in \"a aa aaaa\" with regexp and all occurrences"
+ },
+ {
+  "name": "quant-at-most",
+  "script": "find text \"a{,2}\" in \"aaaa\" with regexp and all occurrences"
+ },
+ {
+  "name": "quant-range",
+  "script": "find text \"a{2,3}\" in \"aaaaaaa\" with regexp and all occurrences"
+ },
+ {
+  "name": "quant-lazy",
+  "script": "find text \"<.+?>\" in \"<a><b>\" with regexp and all occurrences"
+ },
+ {
+  "name": "quant-lazy-star-question",
+  "script": "find text \"a*?b|c??d\" in \"aab cd d\" with regexp and all occurrences"
+ },
+ {
+  "name": "quant-lazy-range",
+  "script": "find text \"a{2,4}?\" in \"aaaaa\" with regexp and all occurrences"
+ },
+ {
+  "name": "quant-possessive",
+  "script": "find text \"a++b|x*+x\" in \"aab xxx\" with regexp and all occurrences"
+ },
+ {
+  "name": "quant-possessive-question",
+  "script": "find text \"a?+a\" in \"aa a\" with regexp and all occurrences"
+ },
+ {
+  "name": "quant-brace-literal",
+  "script": "find text \"a{x}|a{\" in \"a{x} a{\" with regexp and all occurrences"
+ },
+ {
+  "name": "quant-nested",
+  "script": "find text \"(?:ab){2}(?:c|d)+\" in \"ababcd abab\" with regexp and all occurrences"
+ },
+ {
+  "name": "group-capture",
+  "script": "find text \"(\\\\w+)@(\\\\w+)\" in \"joe@example bob@host\" with regexp and all occurrences using {\"\\\\0\", \"\\\\1\", \"\\\\2\"}"
+ },
+ {
+  "name": "group-noncapture",
+  "script": "find text \"(?:a|b)(c)\" in \"ac bc\" with regexp and all occurrences using {\"\\\\0\", \"\\\\1\"}"
+ },
+ {
+  "name": "group-named",
+  "script": "find text \"(?<user>\\\\w+)@(?<host>\\\\w+)\" in \"joe@example\" with regexp and all occurrences using {\"\\\\0\", \"\\\\1\", \"\\\\2\"}"
+ },
+ {
+  "name": "group-named-quote",
+  "script": "find text \"(?'user'\\\\w+)@\" in \"joe@\" with regexp and all occurrences using {\"\\\\0\", \"\\\\1\"}"
+ },
+ {
+  "name": "group-named-and-numbered",
+  "script": "find text \"(?<n>a)(b)\" in \"ab\" with regexp and all occurrences using {\"\\\\0\", \"\\\\1\", \"\\\\2\"}"
+ },
+ {
+  "name": "group-unmatched-optional",
+  "script": "find text \"(a)?(b)\" in \"b ab\" with regexp and all occurrences using {\"\\\\0\", \"\\\\1\", \"\\\\2\"}"
+ },
+ {
+  "name": "group-repeated-last-value",
+  "script": "find text \"(\\\\w)+\" in \"abc\" with regexp and all occurrences using {\"\\\\0\", \"\\\\1\"}"
+ },
+ {
+  "name": "group-atomic",
+  "script": "find text \"(?>a+)b|(?>a+)a\" in \"aab aaa\" with regexp and all occurrences"
+ },
+ {
+  "name": "group-nested",
+  "script": "find text \"((a)(b(c)))\" in \"abc\" with regexp and all occurrences using {\"\\\\0\", \"\\\\1\", \"\\\\2\", \"\\\\3\", \"\\\\4\"}"
+ },
+ {
+  "name": "group-alternation-empty",
+  "script": "find text \"a(|b)c\" in \"ac abc\" with regexp and all occurrences using {\"\\\\0\", \"\\\\1\"}"
+ },
+ {
+  "name": "look-ahead",
+  "script": "find text \"\\\\w+(?=@)\" in \"joe@x bob\" with regexp and all occurrences"
+ },
+ {
+  "name": "look-ahead-negative",
+  "script": "find text \"\\\\b\\\\w+\\\\b(?!@)\" in \"joe@x bob\" with regexp and all occurrences"
+ },
+ {
+  "name": "look-behind",
+  "script": "find text \"(?<=\\\\$)\\\\d+\" in \"cost $42 or 7\" with regexp and all occurrences"
+ },
+ {
+  "name": "look-behind-negative",
+  "script": "find text \"(?<!\\\\$)\\\\b\\\\d+\" in \"cost $42 or 7\" with regexp and all occurrences"
+ },
+ {
+  "name": "look-behind-alternatives",
+  "script": "find text \"(?<=ab|x)c\" in \"abc xc zc\" with regexp and all occurrences"
+ },
+ {
+  "name": "look-behind-variable-error",
+  "script": "find text \"(?<=a+)b\" in \"aab\" with regexp and all occurrences"
+ },
+ {
+  "name": "look-keep-K",
+  "script": "find text \"foo\\\\Kbar\" in \"foobar\" with regexp and all occurrences"
+ },
+ {
+  "name": "backref-number",
+  "script": "find text \"(\\\\w)\\\\1\" in \"aabbcd\" with regexp and all occurrences using {\"\\\\0\", \"\\\\1\"}"
+ },
+ {
+  "name": "backref-named",
+  "script": "find text \"(?<c>\\\\w)\\\\k<c>\" in \"xxyz\" with regexp and all occurrences using {\"\\\\0\", \"\\\\1\"}"
+ },
+ {
+  "name": "backref-named-quote",
+  "script": "find text \"(?<c>\\\\w)\\\\k'c'\" in \"zzy\" with regexp and all occurrences using {\"\\\\0\", \"\\\\1\"}"
+ },
+ {
+  "name": "backref-relative",
+  "script": "find text \"(a)(b)\\\\k<-1>\\\\k<-2>\" in \"abba\" with regexp and all occurrences using {\"\\\\0\", \"\\\\1\", \"\\\\2\"}"
+ },
+ {
+  "name": "backref-case-insensitive",
+  "script": "find text \"(a)\\\\1\" in \"aA\" with regexp and all occurrences using {\"\\\\0\", \"\\\\1\"} without case sensitive"
+ },
+ {
+  "name": "backref-undefined-error",
+  "script": "find text \"(a)\\\\2\" in \"aa\" with regexp and all occurrences"
+ },
+ {
+  "name": "backref-to-unmatched",
+  "script": "find text \"(a)?b\\\\1\" in \"b ab aba\" with regexp and all occurrences"
+ },
+ {
+  "name": "call-named",
+  "script": "find text \"(?<d>\\\\d)-\\\\g<d>\" in \"1-2 3-x\" with regexp and all occurrences"
+ },
+ {
+  "name": "call-number",
+  "script": "find text \"(\\\\d)-\\\\g<1>\" in \"1-2\" with regexp and all occurrences"
+ },
+ {
+  "name": "call-recursive-parens",
+  "script": "find text \"(?<p>\\\\((?:[^()]|\\\\g<p>)*\\\\))\" in \"x(a(b)c)y()\" with regexp and all occurrences using {\"\\\\0\", \"\\\\1\"}"
+ },
+ {
+  "name": "call-whole-pattern",
+  "script": "find text \"a\\\\g<0>?b\" in \"aaabbb ab\" with regexp and all occurrences"
+ },
+ {
+  "name": "call-relative",
+  "script": "find text \"(a)\\\\g<-1>\" in \"aa\" with regexp and all occurrences"
+ },
+ {
+  "name": "cond-number",
+  "script": "find text \"(a)?(?(1)b|c)\" in \"ab c xb\" with regexp and all occurrences"
+ },
+ {
+  "name": "cond-name",
+  "script": "find text \"(?<q>\\\\\\\")?\\\\w+(?(<q>)\\\\\\\")\" in \"\\\"hi\\\" there \\\"x\" with regexp and all occurrences"
+ },
+ {
+  "name": "option-i",
+  "script": "find text \"(?i)abc\" in \"ABC aBc\" with regexp and all occurrences"
+ },
+ {
+  "name": "option-i-scoped",
+  "script": "find text \"a(?i:b)c\" in \"aBc ABC\" with regexp and all occurrences"
+ },
+ {
+  "name": "option-i-off",
+  "script": "find text \"(?i)a(?-i)b\" in \"Ab AB\" with regexp and all occurrences"
+ },
+ {
+  "name": "option-m-dotall",
+  "script": "find text \"(?m)a.b\" in (\"a\" & (character id 10) & \"b\") with regexp and all occurrences"
+ },
+ {
+  "name": "option-x",
+  "script": "find text \"(?x) a  b # comment\\\\n c\" in \"abc\" with regexp and all occurrences"
+ },
+ {
+  "name": "option-comment",
+  "script": "find text \"a(?#this is ignored)b\" in \"ab\" with regexp and all occurrences"
+ },
+ {
+  "name": "option-x-escaped-r",
+  "script": "find text \"(?x)a # c\\\\rb\" in \"ab acb\" with regexp and all occurrences"
+ },
+ {
+  "name": "option-x-escaped-t",
+  "script": "find text \"(?x)a # c\\\\tb\" in \"ab acb\" with regexp and all occurrences"
+ },
+ {
+  "name": "option-x-real-newline",
+  "script": "find text (\"(?x)a # c\" & (character id 10) & \"b\") in \"ab acb\" with regexp and all occurrences"
+ },
+ {
+  "name": "option-x-real-return",
+  "script": "find text (\"(?x)a # c\" & (character id 13) & \"b\") in \"ab acb\" with regexp and all occurrences"
+ },
+ {
+  "name": "option-x-real-nel",
+  "script": "find text (\"(?x)a # c\" & (character id 133) & \"b\") in \"ab acb\" with regexp and all occurrences"
+ },
+ {
+  "name": "option-x-real-line-separator",
+  "script": "find text (\"(?x)a # c\" & (character id 8232) & \"b\") in \"ab acb\" with regexp and all occurrences"
+ },
+ {
+  "name": "option-x-real-form-feed",
+  "script": "find text (\"(?x)a # c\" & (character id 12) & \"b\") in \"ab acb\" with regexp and all occurrences"
+ },
+ {
+  "name": "option-x-escaped-hash",
+  "script": "find text \"(?x)a\\\\#b\" in \"a#b ab\" with regexp and all occurrences"
+ },
+ {
+  "name": "option-flag-extend",
+  "script": "find text \"a b c\" in \"abc\" with regexp and all occurrences regexpflag {\"EXTEND\"}"
+ },
+ {
+  "name": "option-flag-singleline",
+  "script": "find text \"^b$\" in (\"a\" & (character id 10) & \"b\") with regexp and all occurrences regexpflag {\"SINGLELINE\"}"
+ },
+ {
+  "name": "option-flag-ignorecase",
+  "script": "find text \"straße\" in \"STRASSE Straße\" with regexp and all occurrences regexpflag {\"IGNORECASE\"}"
+ },
+ {
+  "name": "option-flag-find-longest",
+  "script": "find text \"a|ab|abc\" in \"abc\" with regexp and all occurrences regexpflag {\"FIND LONGEST\"}"
+ },
+ {
+  "name": "option-flag-dont-capture",
+  "script": "find text \"(a)(?<n>b)\" in \"ab\" with regexp and all occurrences using {\"\\\\0\", \"\\\\1\"} regexpflag {\"DONT CAPTURE GROUP\"}"
+ },
+ {
+  "name": "alternation-order",
+  "script": "find text \"a|ab|abc\" in \"abc\" with regexp and all occurrences"
+ },
+ {
+  "name": "alternation-empty-branch",
+  "script": "find text \"a|\" in \"ba\" with regexp and all occurrences"
+ },
+ {
+  "name": "fold-kelvin",
+  "script": "find text \"k\" in \"K k K\" with regexp and all occurrences without case sensitive"
+ },
+ {
+  "name": "fold-greek-sigma",
+  "script": "find text \"σ\" in \"Σ σ ς\" with regexp and all occurrences without case sensitive"
+ },
+ {
+  "name": "fold-dotless-i",
+  "script": "find text \"i\" in \"I ı İ\" with regexp and all occurrences without case sensitive"
+ },
+ {
+  "name": "perl-h-is-horizontal-space",
+  "script": "find text \"a\\\\hb\" in (\"a b a\" & (character id 9) & \"b\") with regexp and all occurrences syntax \"PERL\""
+ },
+ {
+  "name": "perl-dollar-before-final-newline",
+  "script": "find text \"b$\" in (\"a\" & (character id 10) & \"b\" & (character id 10)) with regexp and all occurrences syntax \"PERL\""
+ },
+ {
+  "name": "perl-caret-single-line",
+  "script": "find text \"^b\" in (\"a\" & (character id 10) & \"b\") with regexp and all occurrences syntax \"PERL\""
+ },
+ {
+  "name": "perl-named-P",
+  "script": "find text \"(?P<n>a)(?P=n)\" in \"aa\" with regexp and all occurrences using {\"\\\\0\", \"\\\\1\"} syntax \"PERL\""
+ },
+ {
+  "name": "perl-quote-QE",
+  "script": "find text \"\\\\Qa.b\\\\E\" in \"a.b axb\" with regexp and all occurrences syntax \"PERL\""
+ },
+ {
+  "name": "java-possessive",
+  "script": "find text \"a*+a\" in \"aaa\" with regexp and all occurrences syntax \"JAVA\""
+ },
+ {
+  "name": "java-class-intersection",
+  "script": "find text \"[a-z&&[^b]]+\" in \"abc\" with regexp and all occurrences syntax \"JAVA\""
+ },
+ {
+  "name": "gnu-word-boundaries",
+  "script": "find text \"\\\\<ab\\\\>\" in \"ab abc\" with regexp and all occurrences syntax \"GNU_REGEX\""
+ },
+ {
+  "name": "gnu-buffer-anchors",
+  "script": "find text \"\\\\`a|b\\\\'\" in \"ab\" with regexp and all occurrences syntax \"GNU_REGEX\""
+ },
+ {
+  "name": "grep-groups-and-alternation",
+  "script": "find text \"\\\\(a\\\\|b\\\\)c\" in \"ac bc cc\" with regexp and all occurrences using {\"\\\\0\", \"\\\\1\"} syntax \"GREP\""
+ },
+ {
+  "name": "grep-plus-is-literal",
+  "script": "find text \"a+\" in \"aa a+\" with regexp and all occurrences syntax \"GREP\""
+ },
+ {
+  "name": "grep-interval",
+  "script": "find text \"a\\\\{2\\\\}\" in \"aaa\" with regexp and all occurrences syntax \"GREP\""
+ },
+ {
+  "name": "emacs-groups",
+  "script": "find text \"\\\\(ab\\\\)+\" in \"ababx\" with regexp and all occurrences using {\"\\\\0\", \"\\\\1\"} syntax \"EMACS\""
+ },
+ {
+  "name": "emacs-word-boundaries",
+  "script": "find text \"\\\\bab\\\\b\" in \"ab cab\" with regexp and all occurrences syntax \"EMACS\""
+ },
+ {
+  "name": "posix-basic-interval",
+  "script": "find text \"a\\\\{1,2\\\\}b\" in \"aab ab b\" with regexp and all occurrences syntax \"POSIX\""
+ },
+ {
+  "name": "posix-basic-star-first-literal",
+  "script": "find text \"*a\" in \"*a a\" with regexp and all occurrences syntax \"POSIX\""
+ },
+ {
+  "name": "posix-extended-alternation",
+  "script": "find text \"(a|b)+c\" in \"abac\" with regexp and all occurrences using {\"\\\\0\", \"\\\\1\"} syntax \"POSIX_EXTENDED\""
+ },
+ {
+  "name": "posix-extended-no-lazy",
+  "script": "find text \"a+?\" in \"aa\" with regexp and all occurrences syntax \"POSIX_EXTENDED\""
+ },
+ {
+  "name": "empty-pattern-all",
+  "script": "find text \"\" in \"ab\" with regexp and all occurrences"
+ },
+ {
+  "name": "only-anchors",
+  "script": "find text \"^$\" in (\"a\" & (character id 10) & (character id 10) & \"b\") with regexp and all occurrences"
+ },
+ {
+  "name": "zero-width-lookahead-all",
+  "script": "find text \"(?=a)\" in \"aaa\" with regexp and all occurrences"
+ },
+ {
+  "name": "emoji-surrogates",
+  "script": "find text \"😀+\" in \"a😀😀b\" with regexp and all occurrences"
+ },
+ {
+  "name": "emoji-class",
+  "script": "find text \"[😀-😂]+\" in \"😀😁😂😃\" with regexp and all occurrences"
+ },
+ {
+  "name": "combining-mark",
+  "script": "find text \"é\" in \"café\" with regexp and all occurrences"
+ },
+ {
+  "name": "long-alternation",
+  "script": "find text \"(?:one|two|three|four|five|six|seven|eight|nine|ten)+\" in \"onetwothreexfour\" with regexp and all occurrences"
+ }
+]

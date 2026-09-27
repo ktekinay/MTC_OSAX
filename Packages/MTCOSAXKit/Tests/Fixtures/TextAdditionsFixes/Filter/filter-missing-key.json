@@ -1,0 +1,35 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "GPli",
+        "fields" : [
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "John is ten\nAnna is twelve\nJohn is at school\nAnna sleeps",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "a",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1701
+      }
+    }
+  ],
+  "name" : "filter-missing-key",
+  "recordedAt" : "2026-09-27T19:52:27Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "filter text \"a\" in \"John is ten\" & linefeed & \"Anna is twelve\" & linefeed & \"John is at school\" & linefeed & \"Anna sleeps\"",
+  "timeZone" : "America/New_York"
+}

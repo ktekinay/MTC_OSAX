@@ -9,6 +9,11 @@ public struct Fixture: Codable {
 	/// The app the fixture was recorded against, e.g. `"SatimageOSAX"`.
 	public var recordedFrom: String
 	public var recordedAt: Date
+	/// Values substituted for `$NAME` in the script when it was recorded, e.g. `FILES` → the folder of input files.
+	/// Replays swap these for their own values.
+	public var variables: [String: String]?
+	/// The time zone the app ran in when recording (e.g. "America/New_York"), since date results depend on it.
+	public var timeZone: String?
 	public var exchanges: [Exchange]
 
 	public struct Exchange: Codable {
@@ -32,6 +37,13 @@ public struct Fixture: Codable {
 			errorMessage = reply.error?.message
 		}
 
+		func replacingText(_ old: String, with new: String) -> Reply {
+			var copy = self
+			copy.result = result?.replacingText(old, with: new)
+			copy.errorMessage = errorMessage?.replacingOccurrences(of: old, with: new)
+			return copy
+		}
+
 		var normalized: Reply {
 			var copy = self
 			copy.result = result?.normalized
@@ -39,11 +51,21 @@ public struct Fixture: Codable {
 		}
 	}
 
-	public init(name: String, script: String, recordedFrom: String, recordedAt: Date, exchanges: [Exchange]) {
+	public init(
+		name: String,
+		script: String,
+		recordedFrom: String,
+		recordedAt: Date,
+		variables: [String: String]? = nil,
+		timeZone: String? = nil,
+		exchanges: [Exchange]
+	) {
 		self.name = name
 		self.script = script
 		self.recordedFrom = recordedFrom
 		self.recordedAt = recordedAt
+		self.variables = variables
+		self.timeZone = timeZone
 		self.exchanges = exchanges
 	}
 
@@ -64,15 +86,31 @@ public struct Fixture: Codable {
 
 	// MARK: Replay
 
-	/// Sends each recorded event to the dispatcher and compares the reply with the recorded one.
-	/// Returns a description of each difference; empty means the dispatcher behaves as recorded.
-	public func replay(using dispatcher: CommandDispatcher) -> [String] {
+	/// Sends each recorded event to the dispatcher, in order, and compares the reply with the recorded one.
+	/// `variables` gives this run's value for each variable the fixture was recorded with; recorded values
+	/// are replaced in the events and the expected replies. Returns a description of each difference;
+	/// empty means the dispatcher behaves as recorded.
+	public func replay(using dispatcher: CommandDispatcher, variables current: [String: String] = [:]) -> [String] {
 		guard !exchanges.isEmpty else {
 			return ["\(name): fixture has no recorded events"]
 		}
+		// Longest recorded values first, so a path isn't partly replaced by a shorter one it contains.
+		var substitutions: [(old: String, new: String)] = []
+		for (variable, recorded) in (variables ?? [:]).sorted(by: { $0.value.count > $1.value.count }) {
+			guard let value = current[variable] else {
+				return ["\(name): replay needs a value for $\(variable)"]
+			}
+			substitutions.append((recorded, value))
+		}
 		return exchanges.enumerated().compactMap { index, exchange in
-			let expected = exchange.reply.normalized
-			let actual = Reply(dispatcher.dispatch(exchange.event.descriptor)).normalized
+			var event = exchange.event
+			var reply = exchange.reply
+			for substitution in substitutions {
+				event = event.replacingText(substitution.old, with: substitution.new)
+				reply = reply.replacingText(substitution.old, with: substitution.new)
+			}
+			let expected = reply.normalized
+			let actual = Reply(dispatcher.dispatch(event.descriptor)).normalized
 			guard actual != expected else {
 				return nil
 			}

@@ -1,0 +1,262 @@
+[
+ {
+  "name": "readtext-utf8",
+  "script": "readtext POSIX file \"$FILES/utf8.txt\""
+ },
+ {
+  "name": "readtext-utf8-bom",
+  "script": "readtext POSIX file \"$FILES/utf8-bom.txt\""
+ },
+ {
+  "name": "readtext-utf16le-bom",
+  "script": "readtext POSIX file \"$FILES/utf16le-bom.txt\""
+ },
+ {
+  "name": "readtext-utf16be-bom",
+  "script": "readtext POSIX file \"$FILES/utf16be-bom.txt\""
+ },
+ {
+  "name": "readtext-macroman",
+  "script": "readtext POSIX file \"$FILES/macroman.txt\""
+ },
+ {
+  "name": "readtext-latin1",
+  "script": "readtext POSIX file \"$FILES/latin1.txt\""
+ },
+ {
+  "name": "readtext-cp1252",
+  "script": "readtext POSIX file \"$FILES/cp1252.txt\""
+ },
+ {
+  "name": "readtext-invalid-utf8",
+  "script": "readtext POSIX file \"$FILES/invalid-utf8.txt\""
+ },
+ {
+  "name": "readtext-empty",
+  "script": "readtext POSIX file \"$FILES/empty.txt\""
+ },
+ {
+  "name": "readtext-crlf",
+  "script": "readtext POSIX file \"$FILES/crlf.txt\""
+ },
+ {
+  "name": "readtext-path-string",
+  "script": "readtext \"$FILES/utf8.txt\""
+ },
+ {
+  "name": "readtext-encoding-macroman",
+  "script": "readtext POSIX file \"$FILES/macroman.txt\" encoding \"MACINTOSH\""
+ },
+ {
+  "name": "readtext-encoding-latin1",
+  "script": "readtext POSIX file \"$FILES/latin1.txt\" encoding \"ISO-8859-1\""
+ },
+ {
+  "name": "readtext-encoding-cp1252",
+  "script": "readtext POSIX file \"$FILES/cp1252.txt\" encoding \"windows-1252\""
+ },
+ {
+  "name": "readtext-encoding-utf8",
+  "script": "readtext POSIX file \"$FILES/utf8.txt\" encoding \"UTF-8\""
+ },
+ {
+  "name": "readtext-encoding-lowercase",
+  "script": "readtext POSIX file \"$FILES/latin1.txt\" encoding \"iso-8859-1\""
+ },
+ {
+  "name": "readtext-encoding-utf16-on-bom-file",
+  "script": "readtext POSIX file \"$FILES/utf16le-bom.txt\" encoding \"UTF-16\""
+ },
+ {
+  "name": "readtext-encoding-utf8-on-utf16-file",
+  "script": "readtext POSIX file \"$FILES/utf16le-bom.txt\" encoding \"UTF-8\""
+ },
+ {
+  "name": "readtext-encoding-latin1-on-utf8-bom",
+  "script": "readtext POSIX file \"$FILES/utf8-bom.txt\" encoding \"ISO-8859-1\""
+ },
+ {
+  "name": "readtext-encoding-unknown",
+  "script": "readtext POSIX file \"$FILES/utf8.txt\" encoding \"nope\""
+ },
+ {
+  "name": "readtext-for",
+  "script": "readtext POSIX file \"$FILES/utf8.txt\" for 5"
+ },
+ {
+  "name": "readtext-starting-at-for",
+  "script": "readtext POSIX file \"$FILES/utf8.txt\" starting at 6 for 2"
+ },
+ {
+  "name": "readtext-for-splits-char",
+  "script": "readtext POSIX file \"$FILES/utf8.txt\" for 7"
+ },
+ {
+  "name": "readtext-starting-past-end",
+  "script": "readtext POSIX file \"$FILES/utf8.txt\" starting at 1000"
+ },
+ {
+  "name": "readtext-for-zero",
+  "script": "readtext POSIX file \"$FILES/utf8.txt\" for 0"
+ },
+ {
+  "name": "readtext-for-past-end",
+  "script": "readtext POSIX file \"$FILES/utf8.txt\" starting at 15 for 1000"
+ },
+ {
+  "name": "readtext-utf16-for",
+  "script": "readtext POSIX file \"$FILES/utf16le-bom.txt\" for 6"
+ },
+ {
+  "name": "readtext-redirect-timeout",
+  "script": "readtext POSIX file \"$FILES/utf8.txt\" redirect false timeout 5"
+ },
+ {
+  "name": "readtext-missing-file",
+  "script": "readtext POSIX file \"$FILES/nope.txt\""
+ },
+ {
+  "name": "readtext-directory",
+  "script": "readtext POSIX file \"$FILES\""
+ },
+ {
+  "name": "readtext-missing",
+  "script": "readtext"
+ },
+ {
+  "name": "writetext-basic",
+  "script": "writetext \"Café 😀\" to POSIX file \"$TMP/w-basic.txt\"\nreadtext POSIX file \"$TMP/w-basic.txt\" encoding \"ISO-8859-1\""
+ },
+ {
+  "name": "writetext-result",
+  "script": "writetext \"abc\" to POSIX file \"$TMP/w-result.txt\""
+ },
+ {
+  "name": "writetext-append",
+  "script": "writetext \"one\" to POSIX file \"$TMP/w-append.txt\"\nwritetext \"two\" to POSIX file \"$TMP/w-append.txt\" with append\nreadtext POSIX file \"$TMP/w-append.txt\" encoding \"ISO-8859-1\""
+ },
+ {
+  "name": "writetext-append-new-file",
+  "script": "writetext \"two\" to POSIX file \"$TMP/w-append-new.txt\" with append\nreadtext POSIX file \"$TMP/w-append-new.txt\" encoding \"ISO-8859-1\""
+ },
+ {
+  "name": "writetext-overwrite-truncates",
+  "script": "writetext \"a long line\" to POSIX file \"$TMP/w-trunc.txt\"\nwritetext \"x\" to POSIX file \"$TMP/w-trunc.txt\"\nreadtext POSIX file \"$TMP/w-trunc.txt\" encoding \"ISO-8859-1\""
+ },
+ {
+  "name": "writetext-utf16",
+  "script": "writetext \"é\" to POSIX file \"$TMP/w-utf16.txt\" encoding \"UTF-16\"\nreadtext POSIX file \"$TMP/w-utf16.txt\" encoding \"ISO-8859-1\""
+ },
+ {
+  "name": "writetext-utf16le",
+  "script": "writetext \"é\" to POSIX file \"$TMP/w-utf16le.txt\" encoding \"UTF-16LE\"\nreadtext POSIX file \"$TMP/w-utf16le.txt\" encoding \"ISO-8859-1\""
+ },
+ {
+  "name": "writetext-macroman",
+  "script": "writetext \"Café\" to POSIX file \"$TMP/w-mac.txt\" encoding \"MACINTOSH\"\nreadtext POSIX file \"$TMP/w-mac.txt\" encoding \"ISO-8859-1\""
+ },
+ {
+  "name": "writetext-latin1-unrepresentable",
+  "script": "writetext \"a😀b\" to POSIX file \"$TMP/w-latin-bad.txt\" encoding \"ISO-8859-1\""
+ },
+ {
+  "name": "writetext-missing-char",
+  "script": "writetext \"a😀bé\" to POSIX file \"$TMP/w-missing.txt\" encoding \"ISO-8859-1\" missing char \"?\"\nreadtext POSIX file \"$TMP/w-missing.txt\" encoding \"ISO-8859-1\""
+ },
+ {
+  "name": "writetext-unknown-encoding",
+  "script": "writetext \"a\" to POSIX file \"$TMP/w-unknown.txt\" encoding \"nope\""
+ },
+ {
+  "name": "writetext-bad-directory",
+  "script": "writetext \"a\" to POSIX file \"$TMP/no/such/dir.txt\""
+ },
+ {
+  "name": "writetext-number",
+  "script": "writetext 12 to POSIX file \"$TMP/w-number.txt\"\nreadtext POSIX file \"$TMP/w-number.txt\" encoding \"ISO-8859-1\""
+ },
+ {
+  "name": "writetext-crlf",
+  "script": "writetext (\"a\" & return & linefeed & \"b\") to POSIX file \"$TMP/w-crlf.txt\"\nreadtext POSIX file \"$TMP/w-crlf.txt\" encoding \"ISO-8859-1\""
+ },
+ {
+  "name": "writetext-roundtrip-default",
+  "script": "writetext \"Café 😀\" to POSIX file \"$TMP/w-round.txt\"\nreadtext POSIX file \"$TMP/w-round.txt\""
+ },
+ {
+  "name": "writetext-missing-to",
+  "script": "writetext \"a\""
+ },
+ {
+  "name": "find-file-literal",
+  "script": "find text \"alpha\" in POSIX file \"$FILES/search.txt\""
+ },
+ {
+  "name": "find-file-all",
+  "script": "find text \"alpha\" in POSIX file \"$FILES/search.txt\" with all occurrences"
+ },
+ {
+  "name": "find-file-after-multibyte",
+  "script": "find text \"alpha\" in POSIX file \"$FILES/search.txt\" starting at 25"
+ },
+ {
+  "name": "find-file-regexp",
+  "script": "find text \"g(a+)mma\" in POSIX file \"$FILES/search.txt\" with regexp"
+ },
+ {
+  "name": "find-file-regexp-using",
+  "script": "find text \"é (\\\\w+)\" in POSIX file \"$FILES/search.txt\" using \"\\\\1\" with regexp and string result"
+ },
+ {
+  "name": "find-file-string-result-all",
+  "script": "find text \"a[a-z]+\" in POSIX file \"$FILES/search.txt\" with regexp, all occurrences and string result"
+ },
+ {
+  "name": "find-file-not-found",
+  "script": "find text \"zzz\" in POSIX file \"$FILES/search.txt\""
+ },
+ {
+  "name": "find-file-path-string",
+  "script": "find text \"beta\" in \"$FILES/search.txt\""
+ },
+ {
+  "name": "find-file-utf16",
+  "script": "find text \"é\" in POSIX file \"$FILES/utf16le-bom.txt\""
+ },
+ {
+  "name": "find-file-macroman",
+  "script": "find text \"Caf\" in POSIX file \"$FILES/macroman.txt\""
+ },
+ {
+  "name": "find-file-missing",
+  "script": "find text \"a\" in POSIX file \"$FILES/nope.txt\""
+ },
+ {
+  "name": "change-file-literal",
+  "script": "writetext (\"alpha beta\" & linefeed & \"gamma alpha\" & linefeed & \"é alpha\" & linefeed) to POSIX file \"$TMP/c1.txt\"\nchange \"alpha\" into \"ALPHA\" in POSIX file \"$TMP/c1.txt\"\nreadtext POSIX file \"$TMP/c1.txt\""
+ },
+ {
+  "name": "change-file-regexp",
+  "script": "writetext (\"alpha beta\" & linefeed & \"gamma alpha\" & linefeed & \"é alpha\" & linefeed) to POSIX file \"$TMP/c2.txt\"\nchange \"(\\\\w+) (alpha)\" into \"\\\\2 \\\\1\" in POSIX file \"$TMP/c2.txt\" with regexp\nreadtext POSIX file \"$TMP/c2.txt\""
+ },
+ {
+  "name": "change-file-no-match",
+  "script": "writetext (\"alpha beta\" & linefeed & \"gamma alpha\" & linefeed & \"é alpha\" & linefeed) to POSIX file \"$TMP/c3.txt\"\nchange \"zzz\" into \"y\" in POSIX file \"$TMP/c3.txt\"\nreadtext POSIX file \"$TMP/c3.txt\""
+ },
+ {
+  "name": "change-file-list",
+  "script": "writetext (\"alpha beta\" & linefeed & \"gamma alpha\" & linefeed & \"é alpha\" & linefeed) to POSIX file \"$TMP/c4.txt\"\nchange {\"alpha\", \"beta\"} into {\"1\", \"2\"} in POSIX file \"$TMP/c4.txt\"\nreadtext POSIX file \"$TMP/c4.txt\""
+ },
+ {
+  "name": "change-file-multibyte",
+  "script": "writetext (\"alpha beta\" & linefeed & \"gamma alpha\" & linefeed & \"é alpha\" & linefeed) to POSIX file \"$TMP/c5.txt\"\nchange \"é\" into \"e\" in POSIX file \"$TMP/c5.txt\"\nreadtext POSIX file \"$TMP/c5.txt\""
+ },
+ {
+  "name": "change-file-utf16",
+  "script": "writetext \"é é\" to POSIX file \"$TMP/c6.txt\" encoding \"UTF-16\"\nchange \"é\" into \"x\" in POSIX file \"$TMP/c6.txt\"\nreadtext POSIX file \"$TMP/c6.txt\" encoding \"ISO-8859-1\""
+ },
+ {
+  "name": "change-file-missing",
+  "script": "change \"a\" into \"b\" in POSIX file \"$TMP/nope.txt\""
+ }
+]

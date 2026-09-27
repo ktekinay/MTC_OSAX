@@ -1,0 +1,62 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FINd",
+        "fields" : [
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "x ab-12",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "$2:$1",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "WaMr",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "DlRf",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "([a-z]+)-([0-9]+)",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "12:ab",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "dollar-find-using",
+  "recordedAt" : "2026-09-27T18:56:37Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "find text \"([a-z]+)-([0-9]+)\" in \"x ab-12\" using \"$2:$1\" with regexp, string result and dollar references"
+}

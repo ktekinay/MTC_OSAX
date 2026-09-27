@@ -26,13 +26,25 @@ enum Fixtures {
 	static func load(_ path: String) throws -> Fixture {
 		try Fixture(contentsOf: directory.appendingPathComponent(path))
 	}
+
+	/// Replays a fixture with its variables set for this run: `FILES` is the `Input` folder next to the fixture,
+	/// `TMP` a new empty folder, removed afterwards.
+	static func replay(_ path: String, using dispatcher: CommandDispatcher) throws -> [String] {
+		let fixture = try load(path)
+		let temporary = FileManager.default.temporaryDirectory.appendingPathComponent("mtc-replay-\(UUID().uuidString)")
+		try FileManager.default.createDirectory(at: temporary, withIntermediateDirectories: true)
+		defer { try? FileManager.default.removeItem(at: temporary) }
+		let input = directory.appendingPathComponent(path).deletingLastPathComponent().appendingPathComponent("Input")
+		return fixture.replay(using: dispatcher, variables: ["FILES": input.path, "TMP": temporary.path])
+	}
 }
 
 /// Replays every recorded fixture against the app's real commands.
 struct FixtureReplayTests {
 	@Test(arguments: Fixtures.paths())
 	func replay(_ path: String) throws {
-		let differences = try Fixtures.load(path).replay(using: CommandCatalog.makeDispatcher())
+		let timeZone = try Fixtures.load(path).timeZone.flatMap(TimeZone.init(identifier:)) ?? .current
+		let differences = try Fixtures.replay(path, using: CommandCatalog.makeDispatcher(timeZone: timeZone))
 		#expect(differences.isEmpty, "\(differences.joined(separator: "\n"))")
 	}
 

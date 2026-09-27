@@ -1,0 +1,37 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Cmpi",
+        "fields" : [
+          {
+            "key" : "synt",
+            "value" : {
+              "text" : "GREP",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "\\(a\\)",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "\\(a\\)",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "re-compile-syntax-grep",
+  "recordedAt" : "2026-09-27T18:50:59Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "re_compile \"\\\\(a\\\\)\" syntax \"GREP\""
+}

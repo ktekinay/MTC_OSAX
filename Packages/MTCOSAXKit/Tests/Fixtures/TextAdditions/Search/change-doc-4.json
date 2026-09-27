@@ -1,0 +1,68 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RPLl",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "\\2/\\1",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "$in ",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "31/12/2007",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "29/2/2008",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "([0-9]{1,2})/([0-9]{1,2})",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "12/31/2007",
+              "type" : "utxt"
+            },
+            {
+              "text" : "2/29/2008",
+              "type" : "utxt"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "change-doc-4",
+  "recordedAt" : "2026-09-27T18:50:58Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "change \"([0-9]{1,2})/([0-9]{1,2})\" into \"\\\\2/\\\\1\" in {\"31/12/2007\", \"29/2/2008\"} with regexp"
+}

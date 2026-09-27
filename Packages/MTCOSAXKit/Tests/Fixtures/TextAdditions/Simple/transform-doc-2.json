@@ -1,0 +1,37 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "UnTr",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "Any-Hex/XML",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "ec",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "&#x65;&#x63;",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "transform-doc-2",
+  "recordedAt" : "2026-09-27T18:58:51Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "transform unicode \"ec\" using \"Any-Hex/XML\""
+}

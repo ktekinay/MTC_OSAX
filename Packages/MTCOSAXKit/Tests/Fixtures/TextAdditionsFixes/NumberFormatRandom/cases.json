@@ -1,0 +1,1826 @@
+[
+ {
+  "name": "random-000",
+  "script": "format 1 into \"'P'0.000\"\nformat -373631567.0 into \"^0#0E00%\""
+ },
+ {
+  "name": "random-002",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.001 into \",##00E00\""
+ },
+ {
+  "name": "random-004",
+  "script": "format 1 into \"'P'0.000\"\nformat 26476373.9 into \",.E\""
+ },
+ {
+  "name": "random-006",
+  "script": "format 1 into \"'P'0.000\"\nformat -354201.4544763641 into \"##,.###E0E\""
+ },
+ {
+  "name": "random-007",
+  "script": "format 1 into \"'P'0.000\"\nformat 9.337183148632114 into \"0,#%\""
+ },
+ {
+  "name": "random-009",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0012945644387323686 into \"(##0###\""
+ },
+ {
+  "name": "random-011",
+  "script": "format 1 into \"'P'0.000\"\nformat -2023467.115 into \"+,#0#,#.##0\""
+ },
+ {
+  "name": "random-012",
+  "script": "format 1 into \"'P'0.000\"\nformat -9.885147790416281E-7 into \"0#00.##E+0\""
+ },
+ {
+  "name": "random-013",
+  "script": "format 1 into \"'P'0.000\"\nformat -782.033675420589 into \"-,0###,.0#00)\""
+ },
+ {
+  "name": "random-014",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.1884411417348884E-5 into \"0000#E+0\""
+ },
+ {
+  "name": "random-015",
+  "script": "format 1 into \"'P'0.000\"\nformat 762279287.613284 into \",#0#.00#E\""
+ },
+ {
+  "name": "random-016",
+  "script": "format 1 into \"'P'0.000\"\nformat 2.8365980456849085E-5 into \"-#,.##x\""
+ },
+ {
+  "name": "random-018",
+  "script": "format 1 into \"'P'0.000\"\nformat -5.77025058785223E-7 into \"abc#.#0#0E\""
+ },
+ {
+  "name": "random-019",
+  "script": "format 1 into \"'P'0.000\"\nformat -612.4899530524386 into \"0#.0#0\""
+ },
+ {
+  "name": "random-020",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0036347874814669392 into \"abc##,###E00 'u'\""
+ },
+ {
+  "name": "random-021",
+  "script": "format 1 into \"'P'0.000\"\nformat 2.5 into \"%,#.#0E00 'u'\""
+ },
+ {
+  "name": "random-022",
+  "script": "format 1 into \"'P'0.000\"\nformat -37.46116634693375 into \"'x''y'0##,##.#00\""
+ },
+ {
+  "name": "random-024",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.125 into \"'$',0##.000#)\""
+ },
+ {
+  "name": "random-026",
+  "script": "format 1 into \"'P'0.000\"\nformat -5028.716 into \"0,0#,;E,#.##0\""
+ },
+ {
+  "name": "random-027",
+  "script": "format 1 into \"'P'0.000\"\nformat 30082.81 into \",#E0^\""
+ },
+ {
+  "name": "random-028",
+  "script": "format 1 into \"'P'0.000\"\nformat 98.37974340432885 into \"E0E00^\""
+ },
+ {
+  "name": "random-029",
+  "script": "format 1 into \"'P'0.000\"\nformat 2.7037060683547146E-6 into \"^,.E+00 'u'\""
+ },
+ {
+  "name": "random-030",
+  "script": "format 1 into \"'P'0.000\"\nformat 54408674944.78729 into \"(0,,0,#%\""
+ },
+ {
+  "name": "random-032",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.15 into \"(,00###.E\""
+ },
+ {
+  "name": "random-033",
+  "script": "format 1 into \"'P'0.000\"\nformat 21.597166332640395 into \"00#0.#E0^\""
+ },
+ {
+  "name": "random-035",
+  "script": "format 1 into \"'P'0.000\"\nformat -6.785558057118351E-6 into \"E000,\""
+ },
+ {
+  "name": "random-036",
+  "script": "format 1 into \"'P'0.000\"\nformat -93.86021594965466 into \"%#,0.#0#0E00 'u'\""
+ },
+ {
+  "name": "random-037",
+  "script": "format 1 into \"'P'0.000\"\nformat 580574.570393632 into \"(,#0,##.#E00%\""
+ },
+ {
+  "name": "random-039",
+  "script": "format 1 into \"'P'0.000\"\nformat 864.955723650939 into \"-,#0,#\""
+ },
+ {
+  "name": "random-040",
+  "script": "format 1 into \"'P'0.000\"\nformat 302885503.61299205 into \"'x''y'000##0x\""
+ },
+ {
+  "name": "random-041",
+  "script": "format 1 into \"'P'0.000\"\nformat 2.540826424436784E-5 into \"(.0E+0%;^0##.##0#E0%\""
+ },
+ {
+  "name": "random-042",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"'x''y'0#,E+0 'u'\""
+ },
+ {
+  "name": "random-043",
+  "script": "format 1 into \"'P'0.000\"\nformat 832268097.8108232 into \"abc###0#.#E\""
+ },
+ {
+  "name": "random-045",
+  "script": "format 1 into \"'P'0.000\"\nformat -943311.3652455824 into \"abc#.##0#E+0\""
+ },
+ {
+  "name": "random-047",
+  "script": "format 1 into \"'P'0.000\"\nformat -52681369.23363111 into \"+###.0##0\""
+ },
+ {
+  "name": "random-048",
+  "script": "format 1 into \"'P'0.000\"\nformat -71.90197147926824 into \"####.#0#^;-0%\""
+ },
+ {
+  "name": "random-049",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.05626602901929798 into \"E,#E00\""
+ },
+ {
+  "name": "random-050",
+  "script": "format 1 into \"'P'0.000\"\nformat -112289214.49 into \"'x''y'0#,.E00 'u'\""
+ },
+ {
+  "name": "random-051",
+  "script": "format 1 into \"'P'0.000\"\nformat -1.7647283361810963E-5 into \"+#,,,.#0#0)\""
+ },
+ {
+  "name": "random-052",
+  "script": "format 1 into \"'P'0.000\"\nformat -51.324 into \"+0,##.#0\""
+ },
+ {
+  "name": "random-054",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.009150019004081586 into \"abc#,^\""
+ },
+ {
+  "name": "random-057",
+  "script": "format 1 into \"'P'0.000\"\nformat 2.5733005284413087E-7 into \"x;##,#0,.####E+00 'u'\""
+ },
+ {
+  "name": "random-058",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.06480957055406833 into \"E,,.##E+00)\""
+ },
+ {
+  "name": "random-062",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.0 into \"+0#.E+00^\""
+ },
+ {
+  "name": "random-063",
+  "script": "format 1 into \"'P'0.000\"\nformat -1177863458.7406378 into \"E#00##.00 'u'\""
+ },
+ {
+  "name": "random-065",
+  "script": "format 1 into \"'P'0.000\"\nformat 280453609408.382 into \"^E+00 'u'\""
+ },
+ {
+  "name": "random-067",
+  "script": "format 1 into \"'P'0.000\"\nformat -38.34984540071065 into \"E00##0#.0000^\""
+ },
+ {
+  "name": "random-068",
+  "script": "format 1 into \"'P'0.000\"\nformat 73633.035 into \"#,%\""
+ },
+ {
+  "name": "random-069",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.125 into \"^#E+00\""
+ },
+ {
+  "name": "random-070",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.3515641904776905 into \",,#000E+00 'u'\""
+ },
+ {
+  "name": "random-071",
+  "script": "format 1 into \"'P'0.000\"\nformat 79797462.31216447 into \"'$',#,.%\""
+ },
+ {
+  "name": "random-072",
+  "script": "format 1 into \"'P'0.000\"\nformat 433788365.5589596 into \"abc.;E#,.#E0\""
+ },
+ {
+  "name": "random-073",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0990585007737306 into \"abc,,#,E+00\""
+ },
+ {
+  "name": "random-074",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.003144991561136976 into \"(.###0E00 'u'\""
+ },
+ {
+  "name": "random-075",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.05 into \"(,,#0#,.#0E0\""
+ },
+ {
+  "name": "random-076",
+  "script": "format 1 into \"'P'0.000\"\nformat -22617499643.974525 into \"##,,E+00;-0,,###.#000E00)\""
+ },
+ {
+  "name": "random-078",
+  "script": "format 1 into \"'P'0.000\"\nformat -467933978098.0798 into \"+,,#.E0\""
+ },
+ {
+  "name": "random-079",
+  "script": "format 1 into \"'P'0.000\"\nformat 8753905.552175896 into \"%##0,E0\""
+ },
+ {
+  "name": "random-082",
+  "script": "format 1 into \"'P'0.000\"\nformat -6278518.853826725 into \"abcE+00;E##.0##\""
+ },
+ {
+  "name": "random-083",
+  "script": "format 1 into \"'P'0.000\"\nformat -163960795.72204414 into \"(,#E00%\""
+ },
+ {
+  "name": "random-084",
+  "script": "format 1 into \"'P'0.000\"\nformat -77443330890.94278 into \"-#0#^\""
+ },
+ {
+  "name": "random-085",
+  "script": "format 1 into \"'P'0.000\"\nformat -366.1415427004382 into \"'x''y'00,,,.E00\""
+ },
+ {
+  "name": "random-086",
+  "script": "format 1 into \"'P'0.000\"\nformat 4.65693534990681E-7 into \"#,#.E00^\""
+ },
+ {
+  "name": "random-087",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.11767806063073438 into \"'x''y'#,00#\""
+ },
+ {
+  "name": "random-088",
+  "script": "format 1 into \"'P'0.000\"\nformat 1777807160.37361 into \"(00#0#E+00%\""
+ },
+ {
+  "name": "random-089",
+  "script": "format 1 into \"'P'0.000\"\nformat 6441.8 into \"+00###,.00E+00 'u'\""
+ },
+ {
+  "name": "random-090",
+  "script": "format 1 into \"'P'0.000\"\nformat 8.195782024156163E-7 into \"0,#\""
+ },
+ {
+  "name": "random-091",
+  "script": "format 1 into \"'P'0.000\"\nformat -6.915262375281537 into \"-0,##,.#0#\""
+ },
+ {
+  "name": "random-092",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.0 into \"E,0,###.##0#\""
+ },
+ {
+  "name": "random-095",
+  "script": "format 1 into \"'P'0.000\"\nformat 2.5 into \"-#0,,E00\""
+ },
+ {
+  "name": "random-096",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"#.###0x\""
+ },
+ {
+  "name": "random-099",
+  "script": "format 1 into \"'P'0.000\"\nformat 486646.8120714562 into \"0##.0#0#x\""
+ },
+ {
+  "name": "random-100",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.001 into \"abc#.E00x;abc.#E+00 'u'\""
+ },
+ {
+  "name": "random-103",
+  "script": "format 1 into \"'P'0.000\"\nformat -4632281.343 into \"%,,,00,.E0)\""
+ },
+ {
+  "name": "random-108",
+  "script": "format 1 into \"'P'0.000\"\nformat -5.745551063809811E-7 into \"0,0##E0;E##,##.0%\""
+ },
+ {
+  "name": "random-109",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.001 into \"+,\""
+ },
+ {
+  "name": "random-110",
+  "script": "format 1 into \"'P'0.000\"\nformat 91.72706943921034 into \"(,0,#,#.0E+00\""
+ },
+ {
+  "name": "random-112",
+  "script": "format 1 into \"'P'0.000\"\nformat -580.3036569861821 into \"%,^\""
+ },
+ {
+  "name": "random-113",
+  "script": "format 1 into \"'P'0.000\"\nformat -1103.0 into \"'$'0##00.0\""
+ },
+ {
+  "name": "random-115",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.01 into \"####.###0E+00\""
+ },
+ {
+  "name": "random-117",
+  "script": "format 1 into \"'P'0.000\"\nformat 4270.226848305265 into \"-###0,#^\""
+ },
+ {
+  "name": "random-118",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.0008170023623221068 into \",E\""
+ },
+ {
+  "name": "random-119",
+  "script": "format 1 into \"'P'0.000\"\nformat 756.01 into \"abc,.%\""
+ },
+ {
+  "name": "random-120",
+  "script": "format 1 into \"'P'0.000\"\nformat -608279046.1102505 into \"'x''y'#.##0E00x\""
+ },
+ {
+  "name": "random-121",
+  "script": "format 1 into \"'P'0.000\"\nformat -9794.057672016852 into \"-####00. 'u';^,#.0#E\""
+ },
+ {
+  "name": "random-125",
+  "script": "format 1 into \"'P'0.000\"\nformat -43597657.032428175 into \"+##0.#0E0 'u'\""
+ },
+ {
+  "name": "random-126",
+  "script": "format 1 into \"'P'0.000\"\nformat 92975269514.26459 into \"^,#.0##\""
+ },
+ {
+  "name": "random-128",
+  "script": "format 1 into \"'P'0.000\"\nformat 2.5 into \"(###E+0 'u';(,#00#.\""
+ },
+ {
+  "name": "random-129",
+  "script": "format 1 into \"'P'0.000\"\nformat -94094.85 into \"%0#,##E+00;E 'u'\""
+ },
+ {
+  "name": "random-130",
+  "script": "format 1 into \"'P'0.000\"\nformat -82013035.62671567 into \"00#,#.000E+00\""
+ },
+ {
+  "name": "random-131",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.0 into \"+,,0##.#0##E00\""
+ },
+ {
+  "name": "random-132",
+  "script": "format 1 into \"'P'0.000\"\nformat 84781035847.58286 into \"E,0,0,;E##E00x\""
+ },
+ {
+  "name": "random-133",
+  "script": "format 1 into \"'P'0.000\"\nformat -76510439211.98955 into \"E00#,.#00E\""
+ },
+ {
+  "name": "random-134",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.003 into \"(,,#.00#)\""
+ },
+ {
+  "name": "random-137",
+  "script": "format 1 into \"'P'0.000\"\nformat -4856946561.416129 into \"abc#0,.#E0 'u'\""
+ },
+ {
+  "name": "random-138",
+  "script": "format 1 into \"'P'0.000\"\nformat -2.5 into \"#,,,#.0#0E0x;###,.^\""
+ },
+ {
+  "name": "random-139",
+  "script": "format 1 into \"'P'0.000\"\nformat 2.5 into \"(#00,0,\""
+ },
+ {
+  "name": "random-140",
+  "script": "format 1 into \"'P'0.000\"\nformat 4.930514257623743 into \"-0,#,#.0#E;(00.##0E00%\""
+ },
+ {
+  "name": "random-141",
+  "script": "format 1 into \"'P'0.000\"\nformat -4617.0 into \"abc00,0#.E;^##x\""
+ },
+ {
+  "name": "random-142",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"^##.#00%\""
+ },
+ {
+  "name": "random-144",
+  "script": "format 1 into \"'P'0.000\"\nformat 114249.02619044142 into \"abc,0##.00#0E0\""
+ },
+ {
+  "name": "random-145",
+  "script": "format 1 into \"'P'0.000\"\nformat -196828618.30366337 into \",#0,##.#0#E0%\""
+ },
+ {
+  "name": "random-147",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0 into \"'$'#0,0#.0##0E+00%;+,#00,.0##0E00x\""
+ },
+ {
+  "name": "random-149",
+  "script": "format 1 into \"'P'0.000\"\nformat 879.6924177727967 into \"###,##.##00)\""
+ },
+ {
+  "name": "random-150",
+  "script": "format 1 into \"'P'0.000\"\nformat 8765432821.53 into \"##,,0.#E+0)\""
+ },
+ {
+  "name": "random-151",
+  "script": "format 1 into \"'P'0.000\"\nformat -53056206039.5 into \",.#0##E00\""
+ },
+ {
+  "name": "random-152",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0007020485496889844 into \"E,##.0000E+00%\""
+ },
+ {
+  "name": "random-153",
+  "script": "format 1 into \"'P'0.000\"\nformat -9282888804.222094 into \"-#,0.##0E00\""
+ },
+ {
+  "name": "random-154",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0036641349418676363 into \"%,###;.#0#)\""
+ },
+ {
+  "name": "random-156",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0 into \"+##.0#E+0)\""
+ },
+ {
+  "name": "random-159",
+  "script": "format 1 into \"'P'0.000\"\nformat -143294843.07659546 into \"^,,#0,0^\""
+ },
+ {
+  "name": "random-160",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.7603339023992373 into \"(##0,#E+00\""
+ },
+ {
+  "name": "random-161",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.002718377739105351 into \"E,%;%,#E+00^\""
+ },
+ {
+  "name": "random-162",
+  "script": "format 1 into \"'P'0.000\"\nformat -7.650086703621574E-7 into \"#,.##E00\""
+ },
+ {
+  "name": "random-163",
+  "script": "format 1 into \"'P'0.000\"\nformat -2.5 into \"-#,,###E0)\""
+ },
+ {
+  "name": "random-165",
+  "script": "format 1 into \"'P'0.000\"\nformat 90315863572.72621 into \"+.##0#%\""
+ },
+ {
+  "name": "random-166",
+  "script": "format 1 into \"'P'0.000\"\nformat -8258373412.6006565 into \"'x''y',#,)\""
+ },
+ {
+  "name": "random-168",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.99 into \"0#0#E00)\""
+ },
+ {
+  "name": "random-169",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0 into \"'$'#00,#.##\""
+ },
+ {
+  "name": "random-170",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.5 into \"+#0,.0##0%\""
+ },
+ {
+  "name": "random-171",
+  "script": "format 1 into \"'P'0.000\"\nformat 841303604840.2087 into \"^\""
+ },
+ {
+  "name": "random-172",
+  "script": "format 1 into \"'P'0.000\"\nformat 26022199.98119606 into \"+,#.##E0 'u'\""
+ },
+ {
+  "name": "random-174",
+  "script": "format 1 into \"'P'0.000\"\nformat -77.2 into \"##0,E;^,#0.E00\""
+ },
+ {
+  "name": "random-175",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.007948952425297355 into \"#0###0E+00)\""
+ },
+ {
+  "name": "random-176",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.08408131617449875 into \"abc, 'u'\""
+ },
+ {
+  "name": "random-177",
+  "script": "format 1 into \"'P'0.000\"\nformat -68.82911622926808 into \"#0##,.0000;%###,0.0#0^\""
+ },
+ {
+  "name": "random-178",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0 into \"abc,##,.00E00x\""
+ },
+ {
+  "name": "random-179",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.03702230057212996 into \"'x''y'0,#.#0#%\""
+ },
+ {
+  "name": "random-180",
+  "script": "format 1 into \"'P'0.000\"\nformat 2.4707363456038145 into \"###.#00)\""
+ },
+ {
+  "name": "random-181",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.3 into \"+0##,#,.###0\""
+ },
+ {
+  "name": "random-182",
+  "script": "format 1 into \"'P'0.000\"\nformat -3.2215892540318714E-7 into \"E#,0.#0##E0 'u'\""
+ },
+ {
+  "name": "random-183",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"E0#.#0E+00E\""
+ },
+ {
+  "name": "random-184",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.07 into \"E#0#.0E+00;abc#%\""
+ },
+ {
+  "name": "random-186",
+  "script": "format 1 into \"'P'0.000\"\nformat 40451938.184217885 into \"#.^\""
+ },
+ {
+  "name": "random-188",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.04023767402500671 into \"abc0,0,,.x\""
+ },
+ {
+  "name": "random-189",
+  "script": "format 1 into \"'P'0.000\"\nformat -46.01191338318387 into \"######.#0E+00;'x''y'0#0##.#0E0\""
+ },
+ {
+  "name": "random-190",
+  "script": "format 1 into \"'P'0.000\"\nformat -771829856.244884 into \"E#.#0##\""
+ },
+ {
+  "name": "random-192",
+  "script": "format 1 into \"'P'0.000\"\nformat -4646099057.442892 into \"%0#.\""
+ },
+ {
+  "name": "random-193",
+  "script": "format 1 into \"'P'0.000\"\nformat 2.5 into \"'$',#.#E00\""
+ },
+ {
+  "name": "random-194",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0 into \"(###0,,.E+00x\""
+ },
+ {
+  "name": "random-195",
+  "script": "format 1 into \"'P'0.000\"\nformat 2324675.0 into \",#,#E+00\""
+ },
+ {
+  "name": "random-196",
+  "script": "format 1 into \"'P'0.000\"\nformat 816293670.5241901 into \"'$'#,#.#00#E0)\""
+ },
+ {
+  "name": "random-197",
+  "script": "format 1 into \"'P'0.000\"\nformat 157.7 into \"^.E00E\""
+ },
+ {
+  "name": "random-200",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"'$'0#,0.0#E+0%\""
+ },
+ {
+  "name": "random-201",
+  "script": "format 1 into \"'P'0.000\"\nformat -64.90217437530458 into \"abc####,0.0##E00%;(#0#,.0E0%\""
+ },
+ {
+  "name": "random-202",
+  "script": "format 1 into \"'P'0.000\"\nformat -652994770449.2944 into \"'$'0##E0E\""
+ },
+ {
+  "name": "random-203",
+  "script": "format 1 into \"'P'0.000\"\nformat 890959.7092259869 into \"#,E+0\""
+ },
+ {
+  "name": "random-204",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.501499226549772 into \"%0#,.#0E+00%\""
+ },
+ {
+  "name": "random-205",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.007975132956846332 into \"-#0#.#0E0x;.0E+0%\""
+ },
+ {
+  "name": "random-206",
+  "script": "format 1 into \"'P'0.000\"\nformat 709.73 into \"#,E00\""
+ },
+ {
+  "name": "random-207",
+  "script": "format 1 into \"'P'0.000\"\nformat -2104.35 into \"^.##0E00\""
+ },
+ {
+  "name": "random-208",
+  "script": "format 1 into \"'P'0.000\"\nformat 79349111131.87431 into \"E#,,,E+00E\""
+ },
+ {
+  "name": "random-209",
+  "script": "format 1 into \"'P'0.000\"\nformat 86170.9 into \"(0#,\""
+ },
+ {
+  "name": "random-210",
+  "script": "format 1 into \"'P'0.000\"\nformat 26.094440889422145 into \"abc,00.0^\""
+ },
+ {
+  "name": "random-211",
+  "script": "format 1 into \"'P'0.000\"\nformat -2.5 into \"%0#00E\""
+ },
+ {
+  "name": "random-212",
+  "script": "format 1 into \"'P'0.000\"\nformat -8784213.0 into \"#### 'u';(0##0#E\""
+ },
+ {
+  "name": "random-213",
+  "script": "format 1 into \"'P'0.000\"\nformat -787350913122.585 into \"-,.;(00##.0#00)\""
+ },
+ {
+  "name": "random-216",
+  "script": "format 1 into \"'P'0.000\"\nformat -2.5 into \"E,.#E\""
+ },
+ {
+  "name": "random-217",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0 into \"'x''y'###0,,. 'u'\""
+ },
+ {
+  "name": "random-218",
+  "script": "format 1 into \"'P'0.000\"\nformat 2338675.292166528 into \",#0#.;(.E0%\""
+ },
+ {
+  "name": "random-219",
+  "script": "format 1 into \"'P'0.000\"\nformat 6.076724639102233 into \"##.#00#E0\""
+ },
+ {
+  "name": "random-220",
+  "script": "format 1 into \"'P'0.000\"\nformat 552444249357.0 into \"0##.00#^\""
+ },
+ {
+  "name": "random-221",
+  "script": "format 1 into \"'P'0.000\"\nformat 443.039431220978 into \"%.0#00 'u'\""
+ },
+ {
+  "name": "random-222",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.15 into \"abc#0##,,.E0E\""
+ },
+ {
+  "name": "random-223",
+  "script": "format 1 into \"'P'0.000\"\nformat 66001769383.56 into \"'$',#,,E+00x\""
+ },
+ {
+  "name": "random-225",
+  "script": "format 1 into \"'P'0.000\"\nformat -7.527256786813408 into \"-0#E00x\""
+ },
+ {
+  "name": "random-227",
+  "script": "format 1 into \"'P'0.000\"\nformat 546143082.0267776 into \"-,.###;abc.0000E0)\""
+ },
+ {
+  "name": "random-228",
+  "script": "format 1 into \"'P'0.000\"\nformat 6.568907366295498E-6 into \"-##,.#E0E;'$'######.0#0E0)\""
+ },
+ {
+  "name": "random-229",
+  "script": "format 1 into \"'P'0.000\"\nformat -2583634811.646 into \"%##00##E00)\""
+ },
+ {
+  "name": "random-230",
+  "script": "format 1 into \"'P'0.000\"\nformat 63178519.0 into \"E,0E00%;+#,.000%\""
+ },
+ {
+  "name": "random-233",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.6322498166090798 into \"'$'0,#0.#0#E\""
+ },
+ {
+  "name": "random-234",
+  "script": "format 1 into \"'P'0.000\"\nformat 55000853489.145 into \"^,#0,,E+00 'u'\""
+ },
+ {
+  "name": "random-235",
+  "script": "format 1 into \"'P'0.000\"\nformat 5.0 into \"(0,,#^\""
+ },
+ {
+  "name": "random-236",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0588722272924732E-7 into \"-#,##E+0);abc##0#,,.##0E+00E\""
+ },
+ {
+  "name": "random-237",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.01 into \"^#,,#.E\""
+ },
+ {
+  "name": "random-238",
+  "script": "format 1 into \"'P'0.000\"\nformat 513488397590.5484 into \"0###%\""
+ },
+ {
+  "name": "random-239",
+  "script": "format 1 into \"'P'0.000\"\nformat -108063485286.39886 into \"abc#####.##0E00E\""
+ },
+ {
+  "name": "random-240",
+  "script": "format 1 into \"'P'0.000\"\nformat -562.5390094892202 into \"+0###^\""
+ },
+ {
+  "name": "random-243",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.0 into \"##,,,.##0\""
+ },
+ {
+  "name": "random-244",
+  "script": "format 1 into \"'P'0.000\"\nformat 3527.894 into \"(#,00,.0E\""
+ },
+ {
+  "name": "random-245",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.096 into \"%,##00#E0 'u'\""
+ },
+ {
+  "name": "random-246",
+  "script": "format 1 into \"'P'0.000\"\nformat -193051591.64301088 into \"'x''y'#0#00^\""
+ },
+ {
+  "name": "random-247",
+  "script": "format 1 into \"'P'0.000\"\nformat 76.2110317089033 into \"-,###0#.#0#E00\""
+ },
+ {
+  "name": "random-248",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.000963163817170569 into \",,\""
+ },
+ {
+  "name": "random-249",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0 into \"^##,0#.\""
+ },
+ {
+  "name": "random-251",
+  "script": "format 1 into \"'P'0.000\"\nformat -4975459769.399881 into \"^,00##,.#\""
+ },
+ {
+  "name": "random-253",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0014538407212684268 into \"(,#0.0E0\""
+ },
+ {
+  "name": "random-254",
+  "script": "format 1 into \"'P'0.000\"\nformat 6.421307618567789 into \"abc.##E00 'u';-#,##.0E+00x\""
+ },
+ {
+  "name": "random-255",
+  "script": "format 1 into \"'P'0.000\"\nformat 743193447014.4548 into \"%#0#0E+00\""
+ },
+ {
+  "name": "random-257",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.001 into \"+,#,#0#E+00\""
+ },
+ {
+  "name": "random-258",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.003935803020052149 into \"#,0;E#,,###.00\""
+ },
+ {
+  "name": "random-259",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"+##,0#.# 'u';0#,#,)\""
+ },
+ {
+  "name": "random-260",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.007177173884785786 into \"E0,x;##,0%\""
+ },
+ {
+  "name": "random-261",
+  "script": "format 1 into \"'P'0.000\"\nformat -6.463293407307247 into \"E#0##.000;abc\""
+ },
+ {
+  "name": "random-262",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.006487658687762195 into \"abc00#.### 'u'\""
+ },
+ {
+  "name": "random-263",
+  "script": "format 1 into \"'P'0.000\"\nformat -854685.9228882666 into \"'$'#,##0.E0\""
+ },
+ {
+  "name": "random-264",
+  "script": "format 1 into \"'P'0.000\"\nformat -4.294544813818559E-7 into \"'$',.00##E00\""
+ },
+ {
+  "name": "random-265",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.3939320913139053E-5 into \"#,##00.0##E0 'u'\""
+ },
+ {
+  "name": "random-266",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.0025897269819436055 into \"^#0,.0#\""
+ },
+ {
+  "name": "random-267",
+  "script": "format 1 into \"'P'0.000\"\nformat 3647588.520699563 into \"%##,0E\""
+ },
+ {
+  "name": "random-268",
+  "script": "format 1 into \"'P'0.000\"\nformat -8269.888129328108 into \"abc00###.##E0%\""
+ },
+ {
+  "name": "random-269",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.001 into \"%##0,.E00;#,##0#\""
+ },
+ {
+  "name": "random-270",
+  "script": "format 1 into \"'P'0.000\"\nformat 8220930.406144538 into \"00,,0#.#0#E+0\""
+ },
+ {
+  "name": "random-271",
+  "script": "format 1 into \"'P'0.000\"\nformat -873311308.8087487 into \"'x''y'0#0#0#.0#E+0\""
+ },
+ {
+  "name": "random-272",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.008918954542885113 into \"'$'0,\""
+ },
+ {
+  "name": "random-273",
+  "script": "format 1 into \"'P'0.000\"\nformat 814091214.0908958 into \"(0###.0##0%\""
+ },
+ {
+  "name": "random-274",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \",#.#00E+00\""
+ },
+ {
+  "name": "random-275",
+  "script": "format 1 into \"'P'0.000\"\nformat -496921.85 into \"'$'#,##,0.#0\""
+ },
+ {
+  "name": "random-276",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.125 into \"%,#####E+00%;'x''y'#0#E+00\""
+ },
+ {
+  "name": "random-277",
+  "script": "format 1 into \"'P'0.000\"\nformat 6.31995164455516E-7 into \"+,#,.)\""
+ },
+ {
+  "name": "random-278",
+  "script": "format 1 into \"'P'0.000\"\nformat -29552870.0 into \"E0#00#,.##0E+0^\""
+ },
+ {
+  "name": "random-279",
+  "script": "format 1 into \"'P'0.000\"\nformat -56732369.85014782 into \"E00^\""
+ },
+ {
+  "name": "random-280",
+  "script": "format 1 into \"'P'0.000\"\nformat -7.241797048206822 into \"-#0#\""
+ },
+ {
+  "name": "random-281",
+  "script": "format 1 into \"'P'0.000\"\nformat 99.995 into \"0#0.000\""
+ },
+ {
+  "name": "random-283",
+  "script": "format 1 into \"'P'0.000\"\nformat 42506989.5 into \"+0#,.000E+00 'u';+,E\""
+ },
+ {
+  "name": "random-286",
+  "script": "format 1 into \"'P'0.000\"\nformat -305827497239.6589 into \"abc#.^\""
+ },
+ {
+  "name": "random-287",
+  "script": "format 1 into \"'P'0.000\"\nformat 99.995 into \"%#,,#.00##E+00%;abc##,E+00\""
+ },
+ {
+  "name": "random-290",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.4510009751811088 into \"'$',##,E+00x\""
+ },
+ {
+  "name": "random-291",
+  "script": "format 1 into \"'P'0.000\"\nformat 98737219181.1 into \"%,#.00E+0)\""
+ },
+ {
+  "name": "random-292",
+  "script": "format 1 into \"'P'0.000\"\nformat -294385485.40376085 into \"00.##0E+00%\""
+ },
+ {
+  "name": "random-293",
+  "script": "format 1 into \"'P'0.000\"\nformat 200.86289102541798 into \"^,###.#0#E0\""
+ },
+ {
+  "name": "random-294",
+  "script": "format 1 into \"'P'0.000\"\nformat -345273774022.0 into \"abc.0;(#E+0\""
+ },
+ {
+  "name": "random-296",
+  "script": "format 1 into \"'P'0.000\"\nformat -8313.552357652647 into \"%00#,0#.# 'u';#,#00#.00#0E00\""
+ },
+ {
+  "name": "random-297",
+  "script": "format 1 into \"'P'0.000\"\nformat 99414543.45 into \"#.0#E+0%\""
+ },
+ {
+  "name": "random-298",
+  "script": "format 1 into \"'P'0.000\"\nformat 9937413281.743357 into \"+##000,.#0#0);^#0.###E0^\""
+ },
+ {
+  "name": "random-299",
+  "script": "format 1 into \"'P'0.000\"\nformat 3.8129342204037586E-7 into \"0,,# 'u'\""
+ },
+ {
+  "name": "random-300",
+  "script": "format 1 into \"'P'0.000\"\nformat -52853423255.99285 into \",###.000#E0E\""
+ },
+ {
+  "name": "random-301",
+  "script": "format 1 into \"'P'0.000\"\nformat 36893818.464552954 into \"E.#0##E)\""
+ },
+ {
+  "name": "random-302",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.022 into \"^#0,x\""
+ },
+ {
+  "name": "random-304",
+  "script": "format 1 into \"'P'0.000\"\nformat -9.60389931177918E-7 into \"###0#,.0#0)\""
+ },
+ {
+  "name": "random-305",
+  "script": "format 1 into \"'P'0.000\"\nformat 209878.59881524916 into \"%0#0E+00;+,#\""
+ },
+ {
+  "name": "random-306",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.0038990790422379785 into \"+0#\""
+ },
+ {
+  "name": "random-307",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"+#,#E0^;-.E0^\""
+ },
+ {
+  "name": "random-308",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0006736489132484691 into \"-0,##,#.##E+00\""
+ },
+ {
+  "name": "random-309",
+  "script": "format 1 into \"'P'0.000\"\nformat -436.50614788505493 into \"%0,#.##E00's';E000.E\""
+ },
+ {
+  "name": "random-311",
+  "script": "format 1 into \"'P'0.000\"\nformat -406845.8600192182 into \"'q'0000,0.#E+00 'u';##.## 'u'\""
+ },
+ {
+  "name": "random-313",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.5 into \"'$'#0##0E00)\""
+ },
+ {
+  "name": "random-314",
+  "script": "format 1 into \"'P'0.000\"\nformat 76857309425.22893 into \"0.###0\""
+ },
+ {
+  "name": "random-315",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.001 into \"'x''y'0,.E\""
+ },
+ {
+  "name": "random-316",
+  "script": "format 1 into \"'P'0.000\"\nformat -3.976835698744021 into \"E,,#E+0's'\""
+ },
+ {
+  "name": "random-317",
+  "script": "format 1 into \"'P'0.000\"\nformat 653386230.3523993 into \"'q'###,,.#0#x;abc#E\""
+ },
+ {
+  "name": "random-319",
+  "script": "format 1 into \"'P'0.000\"\nformat -21.96576454332233 into \"'x''y'0,,.00#\""
+ },
+ {
+  "name": "random-320",
+  "script": "format 1 into \"'P'0.000\"\nformat 31873777.1 into \"%,,0#0.#\""
+ },
+ {
+  "name": "random-321",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.05 into \"E#0###x\""
+ },
+ {
+  "name": "random-322",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.02359249477051517 into \"'$'.###E00%;(.###0E\""
+ },
+ {
+  "name": "random-323",
+  "script": "format 1 into \"'P'0.000\"\nformat 56725.97004822839 into \"^0,0,.####E0\""
+ },
+ {
+  "name": "random-324",
+  "script": "format 1 into \"'P'0.000\"\nformat 143.04381911962972 into \"^#,;-0###.#0#\""
+ },
+ {
+  "name": "random-326",
+  "script": "format 1 into \"'P'0.000\"\nformat -45088442747.35926 into \"^0#,0#0E+00 'u'\""
+ },
+ {
+  "name": "random-327",
+  "script": "format 1 into \"'P'0.000\"\nformat 335622940.2885529 into \"-0,.0#0E\""
+ },
+ {
+  "name": "random-328",
+  "script": "format 1 into \"'P'0.000\"\nformat 85376416.0 into \"+,0#,#E+00's'\""
+ },
+ {
+  "name": "random-329",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.0 into \",.E00E\""
+ },
+ {
+  "name": "random-330",
+  "script": "format 1 into \"'P'0.000\"\nformat -1434.9651017517663 into \"-,0###0.#0##E+0;0.EE\""
+ },
+ {
+  "name": "random-331",
+  "script": "format 1 into \"'P'0.000\"\nformat -528681.0 into \"-0#)\""
+ },
+ {
+  "name": "random-332",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"0#);^,\""
+ },
+ {
+  "name": "random-334",
+  "script": "format 1 into \"'P'0.000\"\nformat 99.995 into \"^,0#,,.0 'u'\""
+ },
+ {
+  "name": "random-335",
+  "script": "format 1 into \"'P'0.000\"\nformat -18542350.0 into \"'x''y'#0E+00;-0,000E0)\""
+ },
+ {
+  "name": "random-336",
+  "script": "format 1 into \"'P'0.000\"\nformat 76.23954610805652 into \"+0,0.0# 'u';+,,0#0#.#E00%\""
+ },
+ {
+  "name": "random-337",
+  "script": "format 1 into \"'P'0.000\"\nformat -8351944.866738809 into \"#0#.0#0E00;00,E00%\""
+ },
+ {
+  "name": "random-338",
+  "script": "format 1 into \"'P'0.000\"\nformat -18.600511870079828 into \"%0#,.#0E+00)\""
+ },
+ {
+  "name": "random-339",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0042702682836619115 into \"E0##.#0##\""
+ },
+ {
+  "name": "random-340",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0 into \"#0##.'s';'x''y'#,#E+0)\""
+ },
+ {
+  "name": "random-341",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0 into \"'x''y'###,0.##E+0x\""
+ },
+ {
+  "name": "random-343",
+  "script": "format 1 into \"'P'0.000\"\nformat -8689.881264814305 into \"00,,,0E\""
+ },
+ {
+  "name": "random-344",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.001 into \"(00,0##x\""
+ },
+ {
+  "name": "random-345",
+  "script": "format 1 into \"'P'0.000\"\nformat -5.061176694404253E-6 into \"#0,#,\""
+ },
+ {
+  "name": "random-348",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.5 into \"^0,'s';'x''y'#0\""
+ },
+ {
+  "name": "random-349",
+  "script": "format 1 into \"'P'0.000\"\nformat 3083615.0293690446 into \"00,,0.E0 'u'\""
+ },
+ {
+  "name": "random-350",
+  "script": "format 1 into \"'P'0.000\"\nformat 6.059010537950342E-7 into \"^,#.#00#)\""
+ },
+ {
+  "name": "random-351",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.26 into \"00,#00.E0)\""
+ },
+ {
+  "name": "random-352",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.001 into \"E0#0#E+0E\""
+ },
+ {
+  "name": "random-354",
+  "script": "format 1 into \"'P'0.000\"\nformat -243169.37661128346 into \"%EE;abc,0#,,.0#0^\""
+ },
+ {
+  "name": "random-355",
+  "script": "format 1 into \"'P'0.000\"\nformat 46035.336400868386 into \"%#0##0#.####E+0;'x''y'###0#E+00's'\""
+ },
+ {
+  "name": "random-356",
+  "script": "format 1 into \"'P'0.000\"\nformat 5181.25 into \"'q'00,,.000\""
+ },
+ {
+  "name": "random-357",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0 into \"'$'#00#0#.0##E00\""
+ },
+ {
+  "name": "random-358",
+  "script": "format 1 into \"'P'0.000\"\nformat 927.0 into \"abc00#0.0E\""
+ },
+ {
+  "name": "random-359",
+  "script": "format 1 into \"'P'0.000\"\nformat 5092893457452.863 into \"%#,0.##0#E00%;E#0,0##.00#)\""
+ },
+ {
+  "name": "random-360",
+  "script": "format 1 into \"'P'0.000\"\nformat 981867785969.38 into \"E000#;'x''y',0.##0E+0 'u'\""
+ },
+ {
+  "name": "random-361",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.06692921591944592 into \"+.^\""
+ },
+ {
+  "name": "random-362",
+  "script": "format 1 into \"'P'0.000\"\nformat -65123499.57682786 into \",.0#0E+0's'\""
+ },
+ {
+  "name": "random-363",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.0 into \",,000.##0%\""
+ },
+ {
+  "name": "random-365",
+  "script": "format 1 into \"'P'0.000\"\nformat -373483504230.71716 into \"-00;abc#0.#E00)\""
+ },
+ {
+  "name": "random-366",
+  "script": "format 1 into \"'P'0.000\"\nformat 9703801503.217 into \"abc##00,# 'u'\""
+ },
+ {
+  "name": "random-367",
+  "script": "format 1 into \"'P'0.000\"\nformat 71190.5050750214 into \"0#0,.E0x\""
+ },
+ {
+  "name": "random-370",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.0 into \",#0#.0##E\""
+ },
+ {
+  "name": "random-371",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"-0#00.%\""
+ },
+ {
+  "name": "random-372",
+  "script": "format 1 into \"'P'0.000\"\nformat -18390307.576 into \"^,0,0)\""
+ },
+ {
+  "name": "random-373",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.017 into \"#0,0.0##E00^\""
+ },
+ {
+  "name": "random-374",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.0 into \"%,,0#00.E0\""
+ },
+ {
+  "name": "random-375",
+  "script": "format 1 into \"'P'0.000\"\nformat -4.743541723071099 into \"'q'0#,x\""
+ },
+ {
+  "name": "random-378",
+  "script": "format 1 into \"'P'0.000\"\nformat 816535568.9318998 into \"'q'.#00#'s'\""
+ },
+ {
+  "name": "random-379",
+  "script": "format 1 into \"'P'0.000\"\nformat 5310964570143.703 into \"'$'#0000.0#00E00%\""
+ },
+ {
+  "name": "random-381",
+  "script": "format 1 into \"'P'0.000\"\nformat -304929254.417027 into \"abc0,000^\""
+ },
+ {
+  "name": "random-382",
+  "script": "format 1 into \"'P'0.000\"\nformat -6998337.16423831 into \"%0,#000\""
+ },
+ {
+  "name": "random-383",
+  "script": "format 1 into \"'P'0.000\"\nformat 247445913296.36157 into \"0##,#,E+0\""
+ },
+ {
+  "name": "random-384",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0873103718659951 into \"0#,#E00\""
+ },
+ {
+  "name": "random-385",
+  "script": "format 1 into \"'P'0.000\"\nformat -18350941.939344168 into \"'q'0000.x;'q'000# 'u'\""
+ },
+ {
+  "name": "random-386",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0 into \"-000###.00E00\""
+ },
+ {
+  "name": "random-388",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0995 into \",#0,0#.#E+00 'u'\""
+ },
+ {
+  "name": "random-389",
+  "script": "format 1 into \"'P'0.000\"\nformat -991654572262.0 into \"%.#00E\""
+ },
+ {
+  "name": "random-390",
+  "script": "format 1 into \"'P'0.000\"\nformat -85453714.17 into \"+0#0,.Ex\""
+ },
+ {
+  "name": "random-391",
+  "script": "format 1 into \"'P'0.000\"\nformat -1.971054558015335E-5 into \"+0####.E+00x;+^\""
+ },
+ {
+  "name": "random-393",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0 into \"##.###0E^\""
+ },
+ {
+  "name": "random-394",
+  "script": "format 1 into \"'P'0.000\"\nformat 1454210.66845135 into \"E,0#.##0E+00x\""
+ },
+ {
+  "name": "random-396",
+  "script": "format 1 into \"'P'0.000\"\nformat -7.043882786129334E-7 into \"00,,.0E+0\""
+ },
+ {
+  "name": "random-397",
+  "script": "format 1 into \"'P'0.000\"\nformat -4.752475148558122E-7 into \".#00\""
+ },
+ {
+  "name": "random-398",
+  "script": "format 1 into \"'P'0.000\"\nformat -61739.0 into \"E#00#.#E+00%\""
+ },
+ {
+  "name": "random-399",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.0 into \"'$',#;00%\""
+ },
+ {
+  "name": "random-400",
+  "script": "format 1 into \"'P'0.000\"\nformat -2780.131 into \"#,#.0#0x\""
+ },
+ {
+  "name": "random-401",
+  "script": "format 1 into \"'P'0.000\"\nformat 29026.586935055886 into \"%0#,.E+00)\""
+ },
+ {
+  "name": "random-402",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0 into \"#,,0,# 'u';'q'#0,E0E\""
+ },
+ {
+  "name": "random-404",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.5 into \"abc,,0%;^#0##.0###E0\""
+ },
+ {
+  "name": "random-405",
+  "script": "format 1 into \"'P'0.000\"\nformat -9.801032672178866E-7 into \"-0,00;(#0#E0^\""
+ },
+ {
+  "name": "random-406",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.125 into \"E,#.E+0);(.0#0#E+0E\""
+ },
+ {
+  "name": "random-407",
+  "script": "format 1 into \"'P'0.000\"\nformat 2.5 into \"+#,#0#0.#000E+0\""
+ },
+ {
+  "name": "random-408",
+  "script": "format 1 into \"'P'0.000\"\nformat 2876963.44 into \"'x''y'#0#,.)\""
+ },
+ {
+  "name": "random-410",
+  "script": "format 1 into \"'P'0.000\"\nformat -72.16899285999312 into \"(,#.#E00E\""
+ },
+ {
+  "name": "random-411",
+  "script": "format 1 into \"'P'0.000\"\nformat 2.5 into \"-E+0E;'x''y'##,0,.#E+00 'u'\""
+ },
+ {
+  "name": "random-412",
+  "script": "format 1 into \"'P'0.000\"\nformat -256.08 into \"-,.#0#E+00E\""
+ },
+ {
+  "name": "random-415",
+  "script": "format 1 into \"'P'0.000\"\nformat -6.43484158093881E-5 into \"'$'0##.#E0)\""
+ },
+ {
+  "name": "random-416",
+  "script": "format 1 into \"'P'0.000\"\nformat 2465.249850622522 into \"(000#,.##00\""
+ },
+ {
+  "name": "random-417",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.8393129428108548 into \"E+00x;+##.###0E+0\""
+ },
+ {
+  "name": "random-419",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.00028728125951013394 into \"%00#.##E)\""
+ },
+ {
+  "name": "random-420",
+  "script": "format 1 into \"'P'0.000\"\nformat -963.4 into \"'q'0,,.E's'\""
+ },
+ {
+  "name": "random-422",
+  "script": "format 1 into \"'P'0.000\"\nformat -7.64972285900225 into \",#0.###E+0\""
+ },
+ {
+  "name": "random-424",
+  "script": "format 1 into \"'P'0.000\"\nformat 9.95 into \"#,.#000E\""
+ },
+ {
+  "name": "random-425",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.009694370736483146 into \"abc0#0E's'\""
+ },
+ {
+  "name": "random-427",
+  "script": "format 1 into \"'P'0.000\"\nformat -9214.895788824937 into \"0#.#E+00\""
+ },
+ {
+  "name": "random-429",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.007661730724527161 into \"^0###0\""
+ },
+ {
+  "name": "random-430",
+  "script": "format 1 into \"'P'0.000\"\nformat -70364989.71758136 into \"abc,0.####E+00;+,#,,0%\""
+ },
+ {
+  "name": "random-433",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.5 into \"abc#0#0.0E0's'\""
+ },
+ {
+  "name": "random-435",
+  "script": "format 1 into \"'P'0.000\"\nformat -2.411112588799602E-6 into \"(00,0.##E+0E\""
+ },
+ {
+  "name": "random-436",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.002338526952679405 into \"'q',,.#E+00's'\""
+ },
+ {
+  "name": "random-437",
+  "script": "format 1 into \"'P'0.000\"\nformat -24739048.412928224 into \"0,0#,.E+00 'u'\""
+ },
+ {
+  "name": "random-438",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.7666028549859403 into \"'$'0#0,.E%;'x''y',###.E\""
+ },
+ {
+  "name": "random-440",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.05 into \"0##.#0#x\""
+ },
+ {
+  "name": "random-441",
+  "script": "format 1 into \"'P'0.000\"\nformat 465967124.0 into \"(###.##0#\""
+ },
+ {
+  "name": "random-442",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.030442978762324737 into \"%##,#.E+0 'u'\""
+ },
+ {
+  "name": "random-444",
+  "script": "format 1 into \"'P'0.000\"\nformat -20.6 into \"%,0##.E%\""
+ },
+ {
+  "name": "random-445",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0 into \"0####,.##0#\""
+ },
+ {
+  "name": "random-446",
+  "script": "format 1 into \"'P'0.000\"\nformat -821833175.0 into \"%.##0E0x\""
+ },
+ {
+  "name": "random-447",
+  "script": "format 1 into \"'P'0.000\"\nformat 8454.481467341335 into \"(000#0^\""
+ },
+ {
+  "name": "random-448",
+  "script": "format 1 into \"'P'0.000\"\nformat -6.684911528225783E-8 into \"'$'.#00E+0\""
+ },
+ {
+  "name": "random-449",
+  "script": "format 1 into \"'P'0.000\"\nformat 6.61564987369897E-8 into \"^0.'s'\""
+ },
+ {
+  "name": "random-451",
+  "script": "format 1 into \"'P'0.000\"\nformat -1.0402266347090805E-8 into \"%^\""
+ },
+ {
+  "name": "random-452",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"'q'#0###.#E\""
+ },
+ {
+  "name": "random-453",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0995 into \"%#,0,00.##0#'s'\""
+ },
+ {
+  "name": "random-454",
+  "script": "format 1 into \"'P'0.000\"\nformat 1346090404518.8604 into \",%\""
+ },
+ {
+  "name": "random-455",
+  "script": "format 1 into \"'P'0.000\"\nformat 8833208796933.639 into \"0##0#0.0#00E0\""
+ },
+ {
+  "name": "random-456",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0 into \"'q'#,0###.##E00x;+0#,,.#00#E00 'u'\""
+ },
+ {
+  "name": "random-458",
+  "script": "format 1 into \"'P'0.000\"\nformat 2.417022525629802E-6 into \"%#,#,0.00#E+00\""
+ },
+ {
+  "name": "random-459",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.05 into \"E#000,0E+00^\""
+ },
+ {
+  "name": "random-460",
+  "script": "format 1 into \"'P'0.000\"\nformat 9459280104.100624 into \"(,0###0^\""
+ },
+ {
+  "name": "random-461",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.0 into \"^#,0.#0E+0\""
+ },
+ {
+  "name": "random-462",
+  "script": "format 1 into \"'P'0.000\"\nformat 8041100.974124884 into \"-,#00#0.0#%\""
+ },
+ {
+  "name": "random-463",
+  "script": "format 1 into \"'P'0.000\"\nformat -7595.585791144003 into \"000##\""
+ },
+ {
+  "name": "random-465",
+  "script": "format 1 into \"'P'0.000\"\nformat -1239.5629369841176 into \"0##,##.# 'u'\""
+ },
+ {
+  "name": "random-469",
+  "script": "format 1 into \"'P'0.000\"\nformat -9.2 into \"'$',\""
+ },
+ {
+  "name": "random-471",
+  "script": "format 1 into \"'P'0.000\"\nformat 747.8285758759589 into \"'x''y'#0##,E+0\""
+ },
+ {
+  "name": "random-472",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.0 into \"'x''y'#,#00.#E0;(,#)\""
+ },
+ {
+  "name": "random-474",
+  "script": "format 1 into \"'P'0.000\"\nformat 523.3 into \"'q'00##.###0E+0x\""
+ },
+ {
+  "name": "random-475",
+  "script": "format 1 into \"'P'0.000\"\nformat 6827371487.0 into \"^\""
+ },
+ {
+  "name": "random-477",
+  "script": "format 1 into \"'P'0.000\"\nformat -129397912723.59735 into \"+,##.#);abc#####0E 'u'\""
+ },
+ {
+  "name": "random-479",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5036611577220949 into \"0#.#E+0's'\""
+ },
+ {
+  "name": "random-480",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"+##0#,E\""
+ },
+ {
+  "name": "random-481",
+  "script": "format 1 into \"'P'0.000\"\nformat -6218536.39204903 into \",00##0E\""
+ },
+ {
+  "name": "random-482",
+  "script": "format 1 into \"'P'0.000\"\nformat -29521.276813379038 into \".#00#E+00%\""
+ },
+ {
+  "name": "random-483",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.001 into \"#0##.##E;(00#E0 'u'\""
+ },
+ {
+  "name": "random-484",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.004087170037522172 into \"00##.0E0's'\""
+ },
+ {
+  "name": "random-485",
+  "script": "format 1 into \"'P'0.000\"\nformat 91607.89435266564 into \"'$'00#.E+00%\""
+ },
+ {
+  "name": "random-486",
+  "script": "format 1 into \"'P'0.000\"\nformat 75784.29438005829 into \"-0,#.00#E+00 'u'\""
+ },
+ {
+  "name": "random-487",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.5 into \"#,#,.#0's'\""
+ },
+ {
+  "name": "random-488",
+  "script": "format 1 into \"'P'0.000\"\nformat 7.980002824713856E-7 into \"0#0.##E+00E\""
+ },
+ {
+  "name": "random-490",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0995 into \"%,0.##0E0x\""
+ },
+ {
+  "name": "random-491",
+  "script": "format 1 into \"'P'0.000\"\nformat 82538681.20974907 into \"#000.#0;.#E+0\""
+ },
+ {
+  "name": "random-493",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0 into \"'$'0,0#0.E^\""
+ },
+ {
+  "name": "random-495",
+  "script": "format 1 into \"'P'0.000\"\nformat 9.95 into \"(0.##0^\""
+ },
+ {
+  "name": "random-496",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0 into \"E#.0#E0^\""
+ },
+ {
+  "name": "random-497",
+  "script": "format 1 into \"'P'0.000\"\nformat -8.0 into \"(##0,.#E's'\""
+ },
+ {
+  "name": "random-498",
+  "script": "format 1 into \"'P'0.000\"\nformat -45336643.07993554 into \"abc0,,0#.0)\""
+ },
+ {
+  "name": "random-499",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.125 into \"0#00#.E0x\""
+ },
+ {
+  "name": "random-500",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.0 into \"'x''y'0#.E+0^;,#E+00x\""
+ },
+ {
+  "name": "random-501",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.0 into \"+0##E+0E\""
+ },
+ {
+  "name": "random-502",
+  "script": "format 1 into \"'P'0.000\"\nformat -3.930097467423544E-6 into \"#####,.);#,E+00\""
+ },
+ {
+  "name": "random-503",
+  "script": "format 1 into \"'P'0.000\"\nformat 75.11116503577746 into \"'q'00#,.#E's';^.E+0%\""
+ },
+ {
+  "name": "random-504",
+  "script": "format 1 into \"'P'0.000\"\nformat 458150933.7579361 into \"-0#0000;-#,##.E0 'u'\""
+ },
+ {
+  "name": "random-505",
+  "script": "format 1 into \"'P'0.000\"\nformat 64212955.50656536 into \"-,,.0##0);%#,#0E+00x\""
+ },
+ {
+  "name": "random-506",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.5 into \"'$',E00\""
+ },
+ {
+  "name": "random-508",
+  "script": "format 1 into \"'P'0.000\"\nformat -83.6 into \"E0#0#,;E0's'\""
+ },
+ {
+  "name": "random-510",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.02910396205457415 into \"'$',,.EE\""
+ },
+ {
+  "name": "random-511",
+  "script": "format 1 into \"'P'0.000\"\nformat 7890859011.966369 into \"'x''y'0#,,0#.#E+00%\""
+ },
+ {
+  "name": "random-513",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0075870218410206205 into \"'x''y'0,.0###E\""
+ },
+ {
+  "name": "random-514",
+  "script": "format 1 into \"'P'0.000\"\nformat 260187111487.57446 into \"E#,0.##E+00's'\""
+ },
+ {
+  "name": "random-515",
+  "script": "format 1 into \"'P'0.000\"\nformat 7.635484171975307E-5 into \"+#,###E+0's'\""
+ },
+ {
+  "name": "random-517",
+  "script": "format 1 into \"'P'0.000\"\nformat -4362147239.59 into \"00,0,#.##0#E+00\""
+ },
+ {
+  "name": "random-518",
+  "script": "format 1 into \"'P'0.000\"\nformat 2.5 into \"'q'#0,.0E00's'\""
+ },
+ {
+  "name": "random-519",
+  "script": "format 1 into \"'P'0.000\"\nformat -3.4966503961815465 into \",0#0#E\""
+ },
+ {
+  "name": "random-521",
+  "script": "format 1 into \"'P'0.000\"\nformat 5660605023.095444 into \"00#,0,E%\""
+ },
+ {
+  "name": "random-522",
+  "script": "format 1 into \"'P'0.000\"\nformat -60887365.42108008 into \"abc.^\""
+ },
+ {
+  "name": "random-523",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.5252330478236287E-7 into \"'x''y',#.#E+00's'\""
+ },
+ {
+  "name": "random-524",
+  "script": "format 1 into \"'P'0.000\"\nformat -797395570.5217259 into \"(.##0#\""
+ },
+ {
+  "name": "random-525",
+  "script": "format 1 into \"'P'0.000\"\nformat 9.1 into \"#0,#00.#0#E00%\""
+ },
+ {
+  "name": "random-526",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.001 into \"(0#Ex;(.0E+00%\""
+ },
+ {
+  "name": "random-527",
+  "script": "format 1 into \"'P'0.000\"\nformat -74.69994817863225 into \"'x''y'#0,%;(##0.\""
+ },
+ {
+  "name": "random-530",
+  "script": "format 1 into \"'P'0.000\"\nformat -816825367064.67 into \"##,0#0E00)\""
+ },
+ {
+  "name": "random-533",
+  "script": "format 1 into \"'P'0.000\"\nformat -2.6279520182600404E-5 into \"'q'#0,,,'s'\""
+ },
+ {
+  "name": "random-534",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0 into \"^,E0\""
+ },
+ {
+  "name": "random-536",
+  "script": "format 1 into \"'P'0.000\"\nformat -79730396767.14478 into \"'q'.#E0^\""
+ },
+ {
+  "name": "random-537",
+  "script": "format 1 into \"'P'0.000\"\nformat -5047115.99431823 into \"-0E00^;0#,##.##%\""
+ },
+ {
+  "name": "random-540",
+  "script": "format 1 into \"'P'0.000\"\nformat -419694448.7867413 into \"-0,,.#E00x\""
+ },
+ {
+  "name": "random-541",
+  "script": "format 1 into \"'P'0.000\"\nformat 97390.12866904051 into \"E0#0.0#00%\""
+ },
+ {
+  "name": "random-542",
+  "script": "format 1 into \"'P'0.000\"\nformat 8902.650181045099 into \"^00\""
+ },
+ {
+  "name": "random-543",
+  "script": "format 1 into \"'P'0.000\"\nformat -482797864930.913 into \"(#00,#E+00\""
+ },
+ {
+  "name": "random-546",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.044 into \"^.##E+00\""
+ },
+ {
+  "name": "random-548",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"#,.###\""
+ },
+ {
+  "name": "random-549",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.005 into \"+##0,0#.#\""
+ },
+ {
+  "name": "random-550",
+  "script": "format 1 into \"'P'0.000\"\nformat 9874494.26407844 into \"+E;'$'00.#000x\""
+ },
+ {
+  "name": "random-551",
+  "script": "format 1 into \"'P'0.000\"\nformat 75512.228 into \"abc00##0\""
+ },
+ {
+  "name": "random-552",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.0 into \"00^\""
+ },
+ {
+  "name": "random-553",
+  "script": "format 1 into \"'P'0.000\"\nformat 1141.0 into \"%E+00^;(0,.0#E%\""
+ },
+ {
+  "name": "random-554",
+  "script": "format 1 into \"'P'0.000\"\nformat 2281.5682947697915 into \"00.##0E+0x\""
+ },
+ {
+  "name": "random-555",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.05 into \",,0,#0E\""
+ },
+ {
+  "name": "random-556",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.0 into \"^#0##,,.#0E\""
+ },
+ {
+  "name": "random-557",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.089 into \"abc###,0.0E0\""
+ },
+ {
+  "name": "random-558",
+  "script": "format 1 into \"'P'0.000\"\nformat 7333818618537.687 into \"^0#, 'u'\""
+ },
+ {
+  "name": "random-560",
+  "script": "format 1 into \"'P'0.000\"\nformat -78932900.8 into \",00,0E\""
+ },
+ {
+  "name": "random-562",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"abc#0,.##E\""
+ },
+ {
+  "name": "random-564",
+  "script": "format 1 into \"'P'0.000\"\nformat -1.6853507026671253E-8 into \"-000,0.E+0x\""
+ },
+ {
+  "name": "random-565",
+  "script": "format 1 into \"'P'0.000\"\nformat -3.70360452134535E-6 into \"E00,#,E+00\""
+ },
+ {
+  "name": "random-566",
+  "script": "format 1 into \"'P'0.000\"\nformat 760802016615.7068 into \"E0,.E;%#.00#E0^\""
+ },
+ {
+  "name": "random-568",
+  "script": "format 1 into \"'P'0.000\"\nformat 4.971853361822127E-7 into \"abc.#0E\""
+ },
+ {
+  "name": "random-569",
+  "script": "format 1 into \"'P'0.000\"\nformat -467355778932.5116 into \"^0##.###EE;#0E+0\""
+ },
+ {
+  "name": "random-570",
+  "script": "format 1 into \"'P'0.000\"\nformat -7935.429080229485 into \",#00.###EE\""
+ },
+ {
+  "name": "random-571",
+  "script": "format 1 into \"'P'0.000\"\nformat -945628425.5393175 into \"'$'#.00#E0 'u'\""
+ },
+ {
+  "name": "random-572",
+  "script": "format 1 into \"'P'0.000\"\nformat 5.460907560487472E-6 into \"(0.0#0#E+0 'u'\""
+ },
+ {
+  "name": "random-574",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.0 into \"(#.0#00E\""
+ },
+ {
+  "name": "random-575",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0002712179363447085 into \"(#00#.000E0%\""
+ },
+ {
+  "name": "random-576",
+  "script": "format 1 into \"'P'0.000\"\nformat 314849404.0 into \",.##E;(E0x\""
+ },
+ {
+  "name": "random-577",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.0 into \"'$'0,.0#'s'\""
+ },
+ {
+  "name": "random-578",
+  "script": "format 1 into \"'P'0.000\"\nformat 59941434.22670355 into \"-00,\""
+ },
+ {
+  "name": "random-579",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0 into \"E0#0,#^\""
+ },
+ {
+  "name": "random-580",
+  "script": "format 1 into \"'P'0.000\"\nformat -551413507.272087 into \"^.#0#\""
+ },
+ {
+  "name": "random-581",
+  "script": "format 1 into \"'P'0.000\"\nformat -3332074208.78 into \"-00,,,#x\""
+ },
+ {
+  "name": "random-582",
+  "script": "format 1 into \"'P'0.000\"\nformat -39.98440375889236 into \".00#);%,.E0^\""
+ },
+ {
+  "name": "random-583",
+  "script": "format 1 into \"'P'0.000\"\nformat -870009787307.9496 into \"^#E0\""
+ },
+ {
+  "name": "random-584",
+  "script": "format 1 into \"'P'0.000\"\nformat -8.963015232606624E-5 into \"abc0.00##E+0;%#0,.#000\""
+ },
+ {
+  "name": "random-585",
+  "script": "format 1 into \"'P'0.000\"\nformat 966.2939530903001 into \"E0,#0#.#0E+0 'u';'x''y'.## 'u'\""
+ },
+ {
+  "name": "random-586",
+  "script": "format 1 into \"'P'0.000\"\nformat -53348884.0 into \"'x''y'0##.#0#E+0^\""
+ },
+ {
+  "name": "random-588",
+  "script": "format 1 into \"'P'0.000\"\nformat -81573665.87 into \"00##0.##E+00x\""
+ },
+ {
+  "name": "random-590",
+  "script": "format 1 into \"'P'0.000\"\nformat 58129.0 into \"^00##\""
+ },
+ {
+  "name": "random-592",
+  "script": "format 1 into \"'P'0.000\"\nformat -5316181247109.67 into \"(#.###E00^\""
+ },
+ {
+  "name": "random-593",
+  "script": "format 1 into \"'P'0.000\"\nformat 178937.27325714793 into \"+,#0#E\""
+ },
+ {
+  "name": "random-594",
+  "script": "format 1 into \"'P'0.000\"\nformat -709887.5851573652 into \"'q'00.##E+0^\""
+ },
+ {
+  "name": "random-595",
+  "script": "format 1 into \"'P'0.000\"\nformat -1493618426362.3909 into \"'q',###.#00E0E;0#.0E\""
+ },
+ {
+  "name": "random-597",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.0 into \"E0#0%\""
+ },
+ {
+  "name": "random-598",
+  "script": "format 1 into \"'P'0.000\"\nformat 2752152.0977049987 into \"abc0,0.;+0,#,.##'s'\""
+ },
+ {
+  "name": "random-599",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.006851997324813209 into \"-0##.####E00x\""
+ }
+]

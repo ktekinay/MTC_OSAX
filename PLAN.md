@@ -6,20 +6,36 @@ Source dictionary: [SatImageOSAX SDEF/dictionary.sdef](SatImageOSAX%20SDEF/dicti
 
 ## Sections
 
-Command counts include hidden commands. The XML suites share priority 5; Satimage Pool Additions is included with them because it manages the pools that `XMLOpen` and `XMLListDocuments` use.
+Command counts include hidden commands. Suites sharing a priority are done together.
 
 | Priority | Suite | Cmds | What it covers |
 |---|---|---|---|
-| 1 | Satimage Text Additions | 25 | `find text`, `change` (regex find/replace), `splittext`, `filter text`, `readtext`/`writetext`, upper/lower/titlecase, `format`, `atof`/`atoi`, entity encode/resolve, `escapeURL`/`unescapeURL`, Unicode normalize/transform, `hash`, `join`, `printf`, `strftime`/`strptime` |
-| 2 | Satimage File Additions | 14 | `navchoose …` / `navask save` dialogs, `alias description for`, `URL info for`, `absoluteURL`/`relativeURL`, `list files`, `glob`, `backup` (folder sync) |
-| 3 | Files and folders suite | 10 | `filenew`, `mkdir`, `filecopy`, `filemove`, `fileremove`, `filegetname`, `filerename`, `mkstemp`, `mkdtemp`, `chmod` |
-| 3 | Symlink suite | 3 | `create symlink`, `testsymlink`, `readlink` |
+| 1 ✓ | Satimage Text Additions ([done](Implemented/PLAN-TextAdditions.md)) | 25 | `find text`, `change` (regex find/replace), `splittext`, `filter text`, `readtext`/`writetext`, upper/lower/titlecase, `format`, `atof`/`atoi`, entity encode/resolve, `escapeURL`/`unescapeURL`, Unicode normalize/transform, `hash`, `join`, `printf`, `strftime`/`strptime` |
+| 2 | Files and folders suite | 10 | `filenew`, `mkdir`, `filecopy`, `filemove`, `fileremove`, `filegetname`, `filerename`, `mkstemp`, `mkdtemp`, `chmod` |
+| 2 | Symlink suite | 3 | `create symlink`, `testsymlink`, `readlink` |
+| 3 | Satimage File Additions | 14 | `navchoose …` / `navask save` dialogs, `alias description for`, `URL info for`, `absoluteURL`/`relativeURL`, `list files`, `glob`, `backup` (folder sync) |
 | 4 | Mathematical Functions | 27 | `abs`, trig/hyperbolic, `exp`, `ln`, `log10`, `sqrt`, `sqr`, `ceil`/`floor`/`trunc`, `erf`, `gamma`, `hypot`, … |
-| 5 | Satimage XML DOM | 39 | `XMLOpen`/`XMLClose`, node navigation, attributes, text, namespaces, `XMLFind`, `XMLDisplayXML`, … |
-| 5 | XML XPath, XSLT | 15 | `XMLXPath`, contexts, `XMLXPointer`, `XMLTransform` (XSLT), indexes/lookup |
-| 5 | XML Documents | 18 | `XMLSave`, encoding, catalogs, XInclude, canonicalization, doc IDs |
-| 5 | XML Validation | 11 | DTD / XML Schema / RelaxNG validation, ID lookup, name validity |
-| 5 | Satimage Pool Additions | 3 | Document pools shared by the XML and Plist suites |
+| 4 | Array and List Utilities | 7 | `sortlist`, `masklist`, `topological sort`, `suppress item`, `exclude items`, `keep items`, `special concat` |
+| 5 | Satimage PropertyList Additions | 29 | `PlistOpen`/`PlistNew`/`PlistSave`, get/set children, `PlistToJSON`/`PlistFromJSON`, … |
+| 5 | Satimage Pool Additions | 3 | Document pools shared by the Plist and XML suites |
+| 6 | Satimage XML DOM | 39 | `XMLOpen`/`XMLClose`, node navigation, attributes, text, namespaces, `XMLFind`, `XMLDisplayXML`, … |
+| 6 | XML XPath, XSLT | 15 | `XMLXPath`, contexts, `XMLXPointer`, `XMLTransform` (XSLT), indexes/lookup |
+| 6 | XML Documents | 18 | `XMLSave`, encoding, catalogs, XInclude, canonicalization, doc IDs |
+| 6 | XML Validation | 11 | DTD / XML Schema / RelaxNG validation, ID lookup, name validity |
+
+### Why this order
+
+- **Text first**, as agreed. It also builds the regex engine (Onigmo) and the file-text helpers (encodings, BOM) that later suites reuse.
+- **Files and folders + Symlink before File Additions.** They're the basic file operations (copy, move, rename, links). File Additions' `list files`, `glob` and `backup` build on them. File Additions also has the `navchoose` dialogs, which are the hardest part: MTC_OSAX has no UI, so it has to show a dialog while staying faceless.
+- **Math and Array/List Utilities together.** Both are small, self-contained and come from the same original module as Text. Some Array/List commands also accept Satimage's `array of real` type from the Arrays suite (not planned); those cases will return an error unless we decide otherwise then.
+- **PropertyList (with Pool) before XML.** Both come from the same original module (XMLLib.osax) and need the same machinery: open documents, references that stay valid between commands, pools and document IDs. PropertyList builds that on a suite of 29 commands instead of 86. Your scripts use PropertyList in 2 places and XML in 1. It also completes `filter text … into` a plist reference, deferred from Text.
+- **XML last.** It's the largest group and reuses everything above.
+
+## MTC_OSAX extensions
+
+Additions that Satimage never had, planned separately:
+
+- [PCRE as an alternative regex engine](PLAN-PCRE.md), selected with `syntax "PCRE"`. To be done on its own branch.
 
 ## May Do Later
 
@@ -28,14 +44,12 @@ Command counts include hidden commands. The XML suites share priority 5; Satimag
 | Applescript types (hidden, legacy text) | 6 | `find text obsolete` (`SATIFIND`) and `replace obsolete` (`SATIRPLC`), which are superseded by `find text` (`SATIFINd`) and `change` (`SATIRPLl`); `extract string` (same as `text i thru j of s`); undocumented `findxmlstag`; `gziptext`/`gunziptext` (no public equivalent). `convert to Mac` is commented out in the SDEF. |
 | Resource Suite | 3 | Read classic resource forks (`load resource`, `list resources`, `get resource name`) |
 | Arrays | 33 | `array of real` / `matrix` types: create, extract/change/insert, arithmetic on lists, `statlist`, `histogram`, `evalformula`, polynomials and fitting, binary read/write |
-| Array and List Utilities | 7 | `sortlist`, `masklist`, `topological sort`, `suppress item`, `exclude items`, `keep items`, `special concat` |
 | Linear algebra | 9 | `transpose`, `multmatrix`, `invertmatrix`, `solve linear system`, eigenvalues, LU decomposition, determinant |
 | FFT and convolution | 6 | `fft1d`, `fft2d`, `filterarray`, `convolve`, `correlate`, `interpolate` |
 | Image files | 4 | Image bounds, image → gray-level matrix, matrix → gray image, particle detection |
 | 3D array handling | 9 | `open3D`/`close3D` etc., `isosurface`, `streamline` |
 | FITS | 10 | Reading FITS astronomy data files |
 | XNF Additions | 14 | XNF bundle datasets, arrays, scales |
-| Satimage PropertyList Additions | 29 | `PlistOpen`/`PlistNew`/`PlistSave`, get/set children, `PlistToJSON`/`PlistFromJSON`, … |
 | Unnamed hidden suite (misc/obsolete) | 21 | Obsolete XML variants, `XMLCookie`, URI scheme callbacks, `PlistCopy`, `XMLGetArray`/`XMLSetArray`, … |
 
 ## Notes

@@ -1,0 +1,30 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "ReEn",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "&eacute;",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "&eacute;",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "resolve-entities-4",
+  "recordedAt" : "2026-09-27T18:58:50Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "resolve entities \"&eacute;\""
+}

@@ -1,0 +1,44 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RPLl",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "2008-03-04 12-30",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "Chat on 2008-03-04 at 12.30.ichat",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "2008-03-04 at 12.30",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "Chat on 2008-03-04 12-30.ichat",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "change-script-date-literal",
+  "recordedAt" : "2026-09-27T18:50:58Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "change \"2008-03-04 at 12.30\" into \"2008-03-04 12-30\" in \"Chat on 2008-03-04 at 12.30.ichat\""
+}

@@ -1,0 +1,149 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FINd",
+        "fields" : [
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "joe@example bob@host",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "WaAl",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "by  ",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "\\0",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "\\1",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "\\2",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "(\\w+)@(\\w+)",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "fields" : [
+                {
+                  "key" : "mPos",
+                  "value" : {
+                    "integer" : 0,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "mLen",
+                  "value" : {
+                    "integer" : 11,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "mRes",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "joe@example",
+                        "type" : "utxt"
+                      },
+                      {
+                        "text" : "joe",
+                        "type" : "utxt"
+                      },
+                      {
+                        "text" : "example",
+                        "type" : "utxt"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            },
+            {
+              "fields" : [
+                {
+                  "key" : "mPos",
+                  "value" : {
+                    "integer" : 12,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "mLen",
+                  "value" : {
+                    "integer" : 8,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "mRes",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "bob@host",
+                        "type" : "utxt"
+                      },
+                      {
+                        "text" : "bob",
+                        "type" : "utxt"
+                      },
+                      {
+                        "text" : "host",
+                        "type" : "utxt"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "group-capture",
+  "recordedAt" : "2026-09-27T20:23:39Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "find text \"(\\\\w+)@(\\\\w+)\" in \"joe@example bob@host\" with regexp and all occurrences using {\"\\\\0\", \"\\\\1\", \"\\\\2\"}",
+  "timeZone" : "America/New_York"
+}

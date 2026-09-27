@@ -1,0 +1,47 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FINd",
+        "fields" : [
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "AB😀",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "WaAl",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "\\x41\\x{42}\\x{1F600}",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -206
+      }
+    }
+  ],
+  "name" : "escape-hex",
+  "recordedAt" : "2026-09-27T20:23:38Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "find text \"\\\\x41\\\\x{42}\\\\x{1F600}\" in \"AB😀\" with regexp and all occurrences",
+  "timeZone" : "America/New_York"
+}

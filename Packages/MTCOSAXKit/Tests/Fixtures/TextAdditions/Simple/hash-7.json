@@ -1,0 +1,30 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "HASH",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "hello world, this is a longer string to hash",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "integer" : 15435566,
+          "type" : "long"
+        }
+      }
+    }
+  ],
+  "name" : "hash-7",
+  "recordedAt" : "2026-09-27T18:58:51Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "hash \"hello world, this is a longer string to hash\""
+}

@@ -1,0 +1,30 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "EsEn",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "\"q\"",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "&quot;q&quot;",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "encode-entities-2",
+  "recordedAt" : "2026-09-27T18:58:50Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "encode entities \"\\\"q\\\"\""
+}

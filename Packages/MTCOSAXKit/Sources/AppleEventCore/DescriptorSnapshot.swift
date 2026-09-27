@@ -4,7 +4,7 @@ import Foundation
 /// Used to store fixtures and to describe values for debugging.
 ///
 /// Only the properties relevant to `type` are set: text for text types, `integer` for `long`/`shor`,
-/// `real` for `doub`/`sing`, `boolean` for `bool`, `code` for `type`/`enum`/`keyw`, `items` for
+/// `real` for `doub`/`sing` (or `text` "inf", "-inf" or "nan", which JSON can't hold), `boolean` for `bool`, `code` for `type`/`enum`/`keyw`, `items` for
 /// lists, `fields` for records and Apple event parameters, and `hex` for anything else.
 public struct DescriptorSnapshot: Codable, Hashable {
 	public var type: String
@@ -46,10 +46,18 @@ public struct DescriptorSnapshot: Codable, Hashable {
 			items = (0 ..< descriptor.numberOfItems).map { DescriptorSnapshot(descriptor.atIndex($0 + 1)!) }
 		case "utxt", "ut16", "utf8", "TEXT":
 			text = descriptor.stringValue
+		case "furl":
+			// A file URL, kept readable so fixtures can swap paths.
+			text = String(decoding: descriptor.data, as: UTF8.self)
 		case "long", "shor":
 			integer = Int(descriptor.int32Value)
 		case "doub", "sing":
-			real = descriptor.doubleValue
+			let value = descriptor.doubleValue
+			if value.isFinite {
+				real = value
+			} else {
+				text = value.isNaN ? "nan" : (value < 0 ? "-inf" : "inf")
+			}
 		case "bool":
 			boolean = descriptor.booleanValue
 		case "true", "fals", "null":
@@ -85,13 +93,7 @@ public struct DescriptorSnapshot: Codable, Hashable {
 		let typeCode = FourCharCode(fourCharString: type)
 		switch type {
 		case "aevt":
-			let event = NSAppleEventDescriptor.appleEvent(
-				withEventClass: FourCharCode(fourCharString: eventClass ?? "????"),
-				eventID: FourCharCode(fourCharString: eventID ?? "????"),
-				targetDescriptor: nil,
-				returnID: AEReturnID(kAutoGenerateReturnID),
-				transactionID: AETransactionID(kAnyTransactionID)
-			)
+			let event = NSAppleEventDescriptor.untargetedEvent(EventKey(code: (eventClass ?? "????") + (eventID ?? "????")))
 			for field in fields ?? [] {
 				event.setParam(field.value.descriptor, forKeyword: FourCharCode(fourCharString: field.key))
 			}
@@ -107,7 +109,7 @@ public struct DescriptorSnapshot: Codable, Hashable {
 		case "ut16":
 			// UTF-16 with a byte-order mark, as SatimageOSAX returns text.
 			return NSAppleEventDescriptor(descriptorType: typeCode, data: (text ?? "").data(using: .utf16))!
-		case "utf8":
+		case "utf8", "furl":
 			return NSAppleEventDescriptor(descriptorType: typeCode, data: (text ?? "").data(using: .utf8))!
 		case "TEXT":
 			return NSAppleEventDescriptor(descriptorType: typeCode, data: (text ?? "").data(using: .macOSRoman))!
@@ -116,9 +118,9 @@ public struct DescriptorSnapshot: Codable, Hashable {
 		case "shor":
 			return withUnsafeBytes(of: Int16(integer ?? 0)) { NSAppleEventDescriptor(descriptorType: typeCode, data: Data($0))! }
 		case "doub":
-			return NSAppleEventDescriptor(double: real ?? 0)
+			return NSAppleEventDescriptor(double: realValue)
 		case "sing":
-			return withUnsafeBytes(of: Float(real ?? 0)) { NSAppleEventDescriptor(descriptorType: typeCode, data: Data($0))! }
+			return withUnsafeBytes(of: Float(realValue)) { NSAppleEventDescriptor(descriptorType: typeCode, data: Data($0))! }
 		case "bool":
 			return NSAppleEventDescriptor(boolean: boolean ?? false)
 		case "true", "fals":
@@ -145,6 +147,33 @@ public struct DescriptorSnapshot: Codable, Hashable {
 		}
 	}
 
+	/// `real`, or the non-finite value stored in `text`.
+	private var realValue: Double {
+		switch text {
+		case "nan": .nan
+		case "inf": .infinity
+		case "-inf": -.infinity
+		default: real ?? 0
+		}
+	}
+
+	/// The same value with `old` replaced by `new` in all text, including inside file URLs
+	/// (where paths are percent-encoded). Used to move fixtures' file paths to where the tests run.
+	public func replacingText(_ old: String, with new: String) -> DescriptorSnapshot {
+		var copy = self
+		if let text {
+			if type == "furl" {
+				let encode = { (path: String) in path.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? path }
+				copy.text = text.replacingOccurrences(of: encode(old), with: encode(new))
+			} else {
+				copy.text = text.replacingOccurrences(of: old, with: new)
+			}
+		}
+		copy.items = items?.map { $0.replacingText(old, with: new) }
+		copy.fields = fields?.map { Field(key: $0.key, value: $0.value.replacingText(old, with: new)) }
+		return copy
+	}
+
 	// MARK: Comparison and display
 
 	/// The same value with encodings that scripts can't tell apart unified, for comparing replies:
@@ -154,6 +183,8 @@ public struct DescriptorSnapshot: Codable, Hashable {
 		if type == "true" || type == "fals" {
 			copy = DescriptorSnapshot(type: "bool")
 			copy.boolean = type == "true"
+		} else if type == "sing" {
+			copy.type = "doub"
 		} else if Self.textTypes.contains(type) {
 			copy.type = "utxt"
 		}

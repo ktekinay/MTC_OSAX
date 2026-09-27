@@ -1,0 +1,56 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "strp",
+        "fields" : [
+          {
+            "key" : "enco",
+            "value" : {
+              "text" : "%Y-%m-%d",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "2007-01-15",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "2012-07-01",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "hex" : "8074d0c100000000",
+              "type" : "ldt "
+            },
+            {
+              "hex" : "804315cc00000000",
+              "type" : "ldt "
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "strptime-list",
+  "recordedAt" : "2026-09-27T19:12:45Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "strptime {\"2007-01-15\", \"2012-07-01\"} encoding \"%Y-%m-%d\"",
+  "timeZone" : "America/New_York"
+}

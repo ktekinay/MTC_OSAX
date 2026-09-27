@@ -1,0 +1,43 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "UnTr",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "Any-Upper",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "inv ",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "ABC",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "abc",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "transform-inverse-upper",
+  "recordedAt" : "2026-09-27T18:58:51Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "transform unicode \"ABC\" using \"Any-Upper\" with inverse"
+}

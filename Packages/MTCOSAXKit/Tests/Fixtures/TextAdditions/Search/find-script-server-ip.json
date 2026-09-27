@@ -1,0 +1,40 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FINd",
+        "fields" : [
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "<html><head>\n<TITLE>  Welcome &amp; Hello  </TITLE>\n<script type=\"application/ld+json\">{\"a\": 1}</script>\n<a href='page.html' title='x'>link</a><img src=\"a.jpg\"><div class=\"c\">text</div>\n<!-- Server IP: 10.0.0.1 -->\n</html>",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "<!-- Server IP: (\\d{1,3}\\.){3}\\d{1,3} -->\\s*\\Z",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -2763
+      }
+    }
+  ],
+  "name" : "find-script-server-ip",
+  "recordedAt" : "2026-09-27T18:50:56Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "find text \"<!-- Server IP: (\\\\d{1,3}\\\\.){3}\\\\d{1,3} -->\\\\s*\\\\Z\" in \"<html><head>\" & linefeed & \"<TITLE>  Welcome &amp; Hello  </TITLE>\" & linefeed & \"<script type=\\\"application/ld+json\\\">{\\\"a\\\": 1}</script>\" & linefeed & \"<a href='page.html' title='x'>link</a><img src=\\\"a.jpg\\\"><div class=\\\"c\\\">text</div>\" & linefeed & \"<!-- Server IP: 10.0.0.1 -->\" & linefeed & \"</html>\" with regexp"
+}

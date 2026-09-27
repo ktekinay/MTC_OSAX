@@ -1,0 +1,56 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RPLl",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "\\1http://root.com/\\2",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "<a href='page.html'>x</a><A HREF='http://ok.com'>y</A>",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "CaSe",
+            "value" : {
+              "type" : "fals"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "(<a\\s+[^>]*href=['\"])(?!http)([^'\"]+[\"'])",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "<a href='http://root.com/page.html'>x</a><A HREF='http://ok.com'>y</A>",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "change-script-href",
+  "recordedAt" : "2026-09-27T18:50:58Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "change \"(<a\\\\s+[^>]*href=['\\\"])(?!http)([^'\\\"]+[\\\"'])\" into (\"\\\\1\" & \"http://root.com/\" & \"\\\\2\") in \"<a href='page.html'>x</a><A HREF='http://ok.com'>y</A>\" with regexp without case sensitive"
+}

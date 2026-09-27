@@ -1,0 +1,30 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Cmpi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "a(b)c",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "a(b)c",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "re-compile-valid",
+  "recordedAt" : "2026-09-27T18:50:59Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "re_compile \"a(b)c\""
+}

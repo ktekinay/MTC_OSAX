@@ -62,8 +62,13 @@ struct SDEF {
 	}
 
 	/// Differences between this (MTC_OSAX's) SDEF and the reference (Satimage's) for everything
-	/// except the suites whose codes start with one of `ownPrefixes`.
-	func differences(from reference: SDEF, ignoringCodesWithPrefixes ownPrefixes: [String]) -> [String] {
+	/// except the suites whose codes start with one of `ownPrefixes`, and the MTC_OSAX extension
+	/// parameters in `extensionParameters` (allowed on copied commands).
+	func differences(
+		from reference: SDEF,
+		ignoringCodesWithPrefixes ownPrefixes: [String],
+		extensionParameters: Set<String> = []
+	) -> [String] {
 		func isOwn(_ code: String) -> Bool {
 			ownPrefixes.contains { code.hasPrefix($0) }
 		}
@@ -83,8 +88,9 @@ struct SDEF {
 			if command.hasDirectParameter != original.hasDirectParameter {
 				differences.append("command \"\(command.name)\" direct parameter presence differs from Satimage")
 			}
-			if command.parameters != original.parameters {
-				differences.append("command \"\(command.name)\" parameters \(command.parameters.sorted { $0.key < $1.key }); Satimage: \(original.parameters.sorted { $0.key < $1.key })")
+			let parameters = command.parameters.filter { !extensionParameters.contains($0.key) }
+			if parameters != original.parameters {
+				differences.append("command \"\(command.name)\" parameters \(parameters.sorted { $0.key < $1.key }); Satimage: \(original.parameters.sorted { $0.key < $1.key })")
 			}
 		}
 

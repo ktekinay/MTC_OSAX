@@ -22,7 +22,8 @@ extension NSAppleEventDescriptor: AppleEventEncodable {
 		NSAppleEventDescriptor(typeCode: FourCharCode(fourCharString: "msng"))
 	}
 
-	func coerced(to type: String) throws -> NSAppleEventDescriptor {
+	/// Coerces with the Apple Event Manager, as scripts would expect. Fails with -1700.
+	public func coerced(to type: String) throws -> NSAppleEventDescriptor {
 		guard let result = coerce(toDescriptorType: FourCharCode(fourCharString: type)) else {
 			throw OSAXError.coercionFailed
 		}
@@ -217,5 +218,27 @@ extension URL: AppleEventConvertible {
 		let startupVolume = try? URL(fileURLWithPath: "/").resourceValues(forKeys: [.volumeNameKey]).volumeName
 		let root = volume == startupVolume ? "" : "/Volumes/\(volume)"
 		return root + "/" + components.joined(separator: "/")
+	}
+}
+
+// MARK: - Creating events
+
+private let eventCreationLock = NSLock()
+
+extension NSAppleEventDescriptor {
+	/// Creates an Apple event with no target, e.g. to pass straight to a dispatcher.
+	///
+	/// Creation is serialized: each creation asks Launch Services about the current process, and several
+	/// threads doing that at once can hang indefinitely (seen with parallel tests under `xcodebuild test`).
+	public static func untargetedEvent(_ key: EventKey) -> NSAppleEventDescriptor {
+		eventCreationLock.withLock {
+			appleEvent(
+				withEventClass: key.eventClass,
+				eventID: key.eventID,
+				targetDescriptor: nil,
+				returnID: AEReturnID(kAutoGenerateReturnID),
+				transactionID: AETransactionID(kAnyTransactionID)
+			)
+		}
 	}
 }

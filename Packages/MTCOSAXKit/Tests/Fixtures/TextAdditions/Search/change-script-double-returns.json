@@ -1,0 +1,50 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RPLl",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "\\1\\r\\r\\3",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "line1 \r line2\r\rline3",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "([^\\r])(\\u0020*\\r\\u0020*)([^\\r]+)",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "line1\r\rline2\r\rline3",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "change-script-double-returns",
+  "recordedAt" : "2026-09-27T18:50:58Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "change \"([^\\\\r])(\\\\u0020*\\\\r\\\\u0020*)([^\\\\r]+)\" into \"\\\\1\\\\r\\\\r\\\\3\" in (\"line1 \" & return & \" line2\" & return & return & \"line3\") with regexp"
+}

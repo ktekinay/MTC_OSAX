@@ -78,7 +78,7 @@ Scripts/iterm-run.sh 'osascript -e "tell application \"MTC_OSAX\" to mtc_ping"'
 
 ### End-to-end checks
 
-`Scripts/e2e/*.applescript` send real commands to the running app:
+`Scripts/e2e/*.applescript` send real commands to the running app. Scripts that only check behavior shared with Satimage (like `text.applescript`) also work with `Scripts/parity.sh`; `*-fixes.applescript` scripts check MTC_OSAX's fixes and only pass against MTC_OSAX.
 
 ```sh
 Scripts/iterm-run.sh Scripts/run-e2e.sh            # all
@@ -104,4 +104,26 @@ While SatimageOSAX still runs, record its behavior so the tests keep working aft
    Add `--only <name>` to record a single case. Each case is saved as `<name>.json` next to `cases.json`, containing the exact Apple events sent and the replies received.
 3. Commit the fixtures. Replay tests pick them up automatically.
 
-Fixtures in `Fixtures/Examples` are replayed against a stand-in rather than the real commands; they demonstrate the mechanism. The `Diagnostics` fixtures are recorded from MTC_OSAX itself.
+Fixtures in `Fixtures/Examples` are replayed against a stand-in rather than the real commands; they demonstrate the mechanism. The `Diagnostics`, `TextAdditionsExtensions` and `TextAdditionsFixes` fixtures are recorded from MTC_OSAX itself.
+
+**Satimage's bugs aren't reproduced.** Where SatimageOSAX fails or misbehaves, MTC_OSAX follows the documentation instead. The Satimage fixture that recorded the bug is removed, and the case's script moves to a `…Fixes` folder to be recorded from MTC_OSAX. Each section's plan lists these differences.
+
+**Files and paths.** Cases can use `$FILES` (read-only inputs, the `Input` folder next to `cases.json`) and `$TMP` (a scratch folder). Pass them when recording, using copies outside `~/Documents` so neither app needs privacy permission:
+
+```sh
+rm -rf /private/tmp/mtc-fixtures && mkdir -p /private/tmp/mtc-fixtures/tmp
+cp -R Packages/MTCOSAXKit/Tests/Fixtures/TextAdditions/Files/Input /private/tmp/mtc-fixtures/files
+Scripts/iterm-run.sh "Packages/MTCOSAXKit/.build/debug/fixture-recorder --app SatimageOSAX --cases …/cases.json --var FILES=/private/tmp/mtc-fixtures/files --var TMP=/private/tmp/mtc-fixtures/tmp"
+```
+
+Fixtures store the values used, and replays substitute the checkout's `Input` folder and a fresh temporary folder. Input files are marked binary in `.gitattributes` so Git keeps their exact bytes.
+
+**Time zones.** Each fixture records the time zone it was recorded in, and replays run date commands in that zone.
+
+**State.** Commands that keep state between calls (such as `format`) are recorded with a known first call in the same script, so each fixture replays the same way on its own.
+
+**Case names** must differ by more than letter case, since the disk is usually case-insensitive; the recorder refuses names that would collide.
+
+## Third-party code
+
+- **Onigmo 6.2.0** (`Packages/MTCOSAXKit/Sources/COnigmo`), the regular expression engine Satimage used, by K.Kosako and K.Takata. BSD 2-clause license; see [COPYING](Packages/MTCOSAXKit/Sources/COnigmo/COPYING). Only the engine and the encodings it needs are included. Changes to match Satimage's build: `regparse.c` has two small patches (marked `MTC_SATIMAGE_COMPATIBILITY`) so negated classes also exclude `\r` and `(?x)` comments also end at `\r` and the escapes `\n`/`\r`; our own `mtc_encoding.c` defines Satimage's line terminators. `include/COnigmoShim.h` is also ours.

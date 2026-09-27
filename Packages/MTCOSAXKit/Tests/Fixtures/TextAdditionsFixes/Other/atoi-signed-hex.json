@@ -1,0 +1,49 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "ATOI",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "-0x10",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "+0x10",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "hex" : "f0ffffffffffffff",
+              "type" : "comp"
+            },
+            {
+              "hex" : "1000000000000000",
+              "type" : "comp"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "atoi-signed-hex",
+  "recordedAt" : "2026-09-27T19:52:28Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "atoi {\"-0x10\", \"+0x10\"}",
+  "timeZone" : "America/New_York"
+}

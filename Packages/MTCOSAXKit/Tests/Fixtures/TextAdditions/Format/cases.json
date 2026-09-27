@@ -1,0 +1,542 @@
+[
+ {
+  "name": "printf-doc-1",
+  "script": "printf \"printf prints integers like %d, floats like %g, strings like \\\"%s\\\".\" parameters {12, pi, \"hello\"}"
+ },
+ {
+  "name": "printf-doc-2",
+  "script": "printf \"escape %% with %%%% like in %2.f%%\" parameters {39.12}"
+ },
+ {
+  "name": "printf-doc-3",
+  "script": "printf \"The %s is %s.\" parameters {\"car\", \"red\"}"
+ },
+ {
+  "name": "printf-doc-4",
+  "script": "printf \"The %2$s %1$s.\" parameters {\"car\", \"red\"}"
+ },
+ {
+  "name": "printf-list-params",
+  "script": "printf (\"%.1g\" & tab & \"%.3g\" & return) parameters {{0.31, 0.12, 1}, {0.846, 0.348, 0.0174}}"
+ },
+ {
+  "name": "printf-fewer-params",
+  "script": "printf \"%d %d %d\" parameters {1, 2}"
+ },
+ {
+  "name": "printf-more-params",
+  "script": "printf \"%d\" parameters {1, 2}"
+ },
+ {
+  "name": "printf-no-params",
+  "script": "printf \"no specs\""
+ },
+ {
+  "name": "printf-no-params-with-spec",
+  "script": "printf \"%d\""
+ },
+ {
+  "name": "printf-single-param",
+  "script": "printf \"%d!\" parameters 5"
+ },
+ {
+  "name": "printf-empty-format",
+  "script": "printf \"\" parameters {1}"
+ },
+ {
+  "name": "printf-list-unequal",
+  "script": "printf \"%d-%d;\" parameters {{1, 2, 3}, {4, 5}}"
+ },
+ {
+  "name": "printf-list-and-scalar",
+  "script": "printf \"%d-%s;\" parameters {{1, 2}, \"x\"}"
+ },
+ {
+  "name": "printf-list-of-lists-single",
+  "script": "printf \"%d;\" parameters {{1, 2, 3}}"
+ },
+ {
+  "name": "printf-positional-reuse",
+  "script": "printf \"%1$s %1$s %2$s\" parameters {\"a\", \"b\"}"
+ },
+ {
+  "name": "printf-big-int",
+  "script": "printf \"%d\" parameters {3000000000}"
+ },
+ {
+  "name": "printf-unicode-format",
+  "script": "printf \"é %s ü\" parameters {\"😀\"}"
+ },
+ {
+  "name": "printf-percent-end",
+  "script": "printf \"100%\" parameters {}"
+ },
+ {
+  "name": "printf-missing-format",
+  "script": "printf parameters {1}"
+ },
+ {
+  "name": "strftime-0",
+  "script": "strftime date \"Monday, January 15, 2007 at 4:10:56 PM\" into \"%FT%T%z\""
+ },
+ {
+  "name": "strftime-1",
+  "script": "strftime date \"Monday, January 15, 2007 at 4:10:56 PM\" into \"%GW%V-%uT%T%z\""
+ },
+ {
+  "name": "strftime-2",
+  "script": "strftime date \"Monday, January 15, 2007 at 4:10:56 PM\" into \"%a, %b %d, %Y %H:%M:%S %z\""
+ },
+ {
+  "name": "strftime-3",
+  "script": "strftime date \"Monday, January 15, 2007 at 4:10:56 PM\" into \"%Y-%m-%d\""
+ },
+ {
+  "name": "strftime-4",
+  "script": "strftime date \"Monday, January 15, 2007 at 4:10:56 PM\" into \"%A %B %j %U %W %e\""
+ },
+ {
+  "name": "strftime-5",
+  "script": "strftime date \"Monday, January 15, 2007 at 4:10:56 PM\" into \"%I:%M %p\""
+ },
+ {
+  "name": "strftime-6",
+  "script": "strftime date \"Monday, January 15, 2007 at 4:10:56 PM\" into \"%Z\""
+ },
+ {
+  "name": "strftime-7",
+  "script": "strftime date \"Monday, January 15, 2007 at 4:10:56 PM\" into \"%s\""
+ },
+ {
+  "name": "strftime-8",
+  "script": "strftime date \"Monday, January 15, 2007 at 4:10:56 PM\" into \"%c\""
+ },
+ {
+  "name": "strftime-9",
+  "script": "strftime date \"Monday, January 15, 2007 at 4:10:56 PM\" into \"%x\""
+ },
+ {
+  "name": "strftime-10",
+  "script": "strftime date \"Monday, January 15, 2007 at 4:10:56 PM\" into \"%X\""
+ },
+ {
+  "name": "strftime-11",
+  "script": "strftime date \"Monday, January 15, 2007 at 4:10:56 PM\" into \"%D %R %r\""
+ },
+ {
+  "name": "strftime-12",
+  "script": "strftime date \"Monday, January 15, 2007 at 4:10:56 PM\" into \"%C %y %g %G\""
+ },
+ {
+  "name": "strftime-13",
+  "script": "strftime date \"Monday, January 15, 2007 at 4:10:56 PM\" into \"%n%t%%\""
+ },
+ {
+  "name": "strftime-14",
+  "script": "strftime date \"Monday, January 15, 2007 at 4:10:56 PM\" into \"%Q\""
+ },
+ {
+  "name": "strftime-16",
+  "script": "strftime date \"Monday, January 15, 2007 at 4:10:56 PM\" into \"%k %l\""
+ },
+ {
+  "name": "strftime-17",
+  "script": "strftime date \"Monday, January 15, 2007 at 4:10:56 PM\" into \"%h %w %u\""
+ },
+ {
+  "name": "strftime-18",
+  "script": "strftime date \"Monday, January 15, 2007 at 4:10:56 PM\" into \"%+\""
+ },
+ {
+  "name": "strftime-gmt",
+  "script": "strftime date \"Monday, January 15, 2007 at 4:10:56 PM\" into \"%FT%TZ\" with GMT"
+ },
+ {
+  "name": "strftime-gmt-z",
+  "script": "strftime date \"Monday, January 15, 2007 at 4:10:56 PM\" into \"%H %z %Z\" with GMT"
+ },
+ {
+  "name": "strftime-summer",
+  "script": "strftime date \"Sunday, July 1, 2012 at 1:02:03 AM\" into \"%FT%T%z %Z\""
+ },
+ {
+  "name": "strftime-summer-gmt",
+  "script": "strftime date \"Sunday, July 1, 2012 at 1:02:03 AM\" into \"%FT%T\" with GMT"
+ },
+ {
+  "name": "strftime-1904",
+  "script": "strftime date \"Friday, January 1, 1904 at 12:00:00 AM\" into \"%FT%T %s\""
+ },
+ {
+  "name": "strftime-2099",
+  "script": "strftime date \"Thursday, December 31, 2099 at 11:59:59 PM\" into \"%FT%T %j\""
+ },
+ {
+  "name": "strftime-list",
+  "script": "strftime {date \"Monday, January 15, 2007 at 4:10:56 PM\", date \"Sunday, July 1, 2012 at 1:02:03 AM\"} into \"%F\""
+ },
+ {
+  "name": "strftime-missing-into",
+  "script": "strftime date \"Monday, January 15, 2007 at 4:10:56 PM\""
+ },
+ {
+  "name": "strftime-string",
+  "script": "strftime \"2007-01-15\" into \"%F\""
+ },
+ {
+  "name": "strftime-number",
+  "script": "strftime 3 into \"%F\""
+ },
+ {
+  "name": "strftime-unicode-format",
+  "script": "strftime date \"Monday, January 15, 2007 at 4:10:56 PM\" into \"é %F 😀\""
+ },
+ {
+  "name": "strptime-doc-1",
+  "script": "strptime \"2007-01-15T16:10:56+0100\" encoding \"%FT%T%z\""
+ },
+ {
+  "name": "strptime-doc-2",
+  "script": "strptime \"2007-01-15T16:10:56Z\" encoding \"%FT%T\""
+ },
+ {
+  "name": "strptime-doc-3",
+  "script": "strptime \"2007-01-15T16:10:56Z\" encoding \"%FT%T\" with GMT"
+ },
+ {
+  "name": "strptime-doc-4",
+  "script": "strptime \"Mon, Jan 15, 2007 16:25:36 +0100\" encoding \"%a, %b %d, %Y %H:%M:%S %z\""
+ },
+ {
+  "name": "strptime-date-only",
+  "script": "strptime \"2007-01-15\" encoding \"%Y-%m-%d\""
+ },
+ {
+  "name": "strptime-as-real",
+  "script": "strptime \"2007-01-15T16:10:56Z\" encoding \"%FT%T\" as real"
+ },
+ {
+  "name": "strptime-as-real-gmt",
+  "script": "strptime \"2007-01-15T16:10:56Z\" encoding \"%FT%T\" as real with GMT"
+ },
+ {
+  "name": "strptime-as-date",
+  "script": "strptime \"2007-01-15\" encoding \"%Y-%m-%d\" as date"
+ },
+ {
+  "name": "strptime-as-other",
+  "script": "strptime \"2007-01-15\" encoding \"%Y-%m-%d\" as string"
+ },
+ {
+  "name": "strptime-list",
+  "script": "strptime {\"2007-01-15\", \"2012-07-01\"} encoding \"%Y-%m-%d\""
+ },
+ {
+  "name": "strptime-mismatch",
+  "script": "strptime \"not a date\" encoding \"%Y-%m-%d\""
+ },
+ {
+  "name": "strptime-partial",
+  "script": "strptime \"2007-01-15 trailing\" encoding \"%Y-%m-%d\""
+ },
+ {
+  "name": "strptime-two-digit-year",
+  "script": "strptime \"15/01/07\" encoding \"%d/%m/%y\""
+ },
+ {
+  "name": "strptime-month-name",
+  "script": "strptime \"15 January 2007\" encoding \"%d %B %Y\""
+ },
+ {
+  "name": "strptime-summer-z",
+  "script": "strptime \"2012-07-01T01:02:03-0700\" encoding \"%FT%T%z\""
+ },
+ {
+  "name": "strptime-epoch",
+  "script": "strptime \"1168877456\" encoding \"%s\""
+ },
+ {
+  "name": "strptime-julian",
+  "script": "strptime \"2007 015\" encoding \"%Y %j\""
+ },
+ {
+  "name": "strptime-missing-encoding",
+  "script": "strptime \"2007-01-15\""
+ },
+ {
+  "name": "strptime-1904",
+  "script": "strptime \"1904-01-01\" encoding \"%Y-%m-%d\""
+ },
+ {
+  "name": "printf-spec-d",
+  "script": "printf \"[%d]\" parameters {42}"
+ },
+ {
+  "name": "printf-spec-i",
+  "script": "printf \"[%i]\" parameters {-42}"
+ },
+ {
+  "name": "printf-spec-u",
+  "script": "printf \"[%u]\" parameters {42}"
+ },
+ {
+  "name": "printf-spec-x-lower",
+  "script": "printf \"[%x]\" parameters {255}"
+ },
+ {
+  "name": "printf-spec-x-upper",
+  "script": "printf \"[%X]\" parameters {255}"
+ },
+ {
+  "name": "printf-spec-o",
+  "script": "printf \"[%o]\" parameters {8}"
+ },
+ {
+  "name": "printf-spec-e-lower",
+  "script": "printf \"[%e]\" parameters {1234.5}"
+ },
+ {
+  "name": "printf-spec-e-upper",
+  "script": "printf \"[%E]\" parameters {1234.5}"
+ },
+ {
+  "name": "printf-spec-f",
+  "script": "printf \"[%f]\" parameters {1.5}"
+ },
+ {
+  "name": "printf-spec-g-small",
+  "script": "printf \"[%g]\" parameters {0.0001}"
+ },
+ {
+  "name": "printf-spec-g-tiny",
+  "script": "printf \"[%g]\" parameters {0.00001}"
+ },
+ {
+  "name": "printf-spec-g-large",
+  "script": "printf \"[%g]\" parameters {1234567}"
+ },
+ {
+  "name": "printf-spec-g-plain",
+  "script": "printf \"[%g]\" parameters {1234.5}"
+ },
+ {
+  "name": "printf-spec-g-upper",
+  "script": "printf \"[%G]\" parameters {1.0E+20}"
+ },
+ {
+  "name": "printf-spec-g-int",
+  "script": "printf \"[%g]\" parameters {3}"
+ },
+ {
+  "name": "printf-spec-s",
+  "script": "printf \"[%s]\" parameters {\"abc\"}"
+ },
+ {
+  "name": "printf-spec-width",
+  "script": "printf \"[%5d]\" parameters {42}"
+ },
+ {
+  "name": "printf-spec-left",
+  "script": "printf \"[%-5d|]\" parameters {42}"
+ },
+ {
+  "name": "printf-spec-zero-pad",
+  "script": "printf \"[%05d]\" parameters {42}"
+ },
+ {
+  "name": "printf-spec-plus",
+  "script": "printf \"[%+d]\" parameters {42}"
+ },
+ {
+  "name": "printf-spec-space",
+  "script": "printf \"[% d]\" parameters {42}"
+ },
+ {
+  "name": "printf-spec-hash-x",
+  "script": "printf \"[%#x]\" parameters {255}"
+ },
+ {
+  "name": "printf-spec-hash-x-upper",
+  "script": "printf \"[%#X]\" parameters {255}"
+ },
+ {
+  "name": "printf-spec-hash-o",
+  "script": "printf \"[%#o]\" parameters {8}"
+ },
+ {
+  "name": "printf-spec-precision",
+  "script": "printf \"[%.2f]\" parameters {3.14159}"
+ },
+ {
+  "name": "printf-spec-width-precision",
+  "script": "printf \"[%10.3f|]\" parameters {3.14159}"
+ },
+ {
+  "name": "printf-spec-left-string",
+  "script": "printf \"[%-10s|]\" parameters {\"ab\"}"
+ },
+ {
+  "name": "printf-spec-string-precision",
+  "script": "printf \"[%.2s]\" parameters {\"abcdef\"}"
+ },
+ {
+  "name": "printf-spec-star-width",
+  "script": "printf \"[%*d]\" parameters {5, 42}"
+ },
+ {
+  "name": "printf-spec-star-precision",
+  "script": "printf \"[%.*f]\" parameters {2, 3.14159}"
+ },
+ {
+  "name": "printf-spec-l",
+  "script": "printf \"[%ld]\" parameters {42}"
+ },
+ {
+  "name": "printf-spec-ll",
+  "script": "printf \"[%lld]\" parameters {42}"
+ },
+ {
+  "name": "printf-spec-h",
+  "script": "printf \"[%hd]\" parameters {70000}"
+ },
+ {
+  "name": "printf-spec-d-real",
+  "script": "printf \"[%d]\" parameters {3.7}"
+ },
+ {
+  "name": "printf-spec-d-real-half",
+  "script": "printf \"[%d]\" parameters {2.5}"
+ },
+ {
+  "name": "printf-spec-d-negative-real",
+  "script": "printf \"[%d]\" parameters {-3.7}"
+ },
+ {
+  "name": "printf-spec-x-real",
+  "script": "printf \"[%x]\" parameters {255.9}"
+ },
+ {
+  "name": "printf-spec-f-int",
+  "script": "printf \"[%f]\" parameters {3}"
+ },
+ {
+  "name": "printf-spec-s-real",
+  "script": "printf \"[%s]\" parameters {3.5}"
+ },
+ {
+  "name": "printf-spec-s-int",
+  "script": "printf \"[%s]\" parameters {12}"
+ },
+ {
+  "name": "printf-spec-s-big-real",
+  "script": "printf \"[%s]\" parameters {1.0E+20}"
+ },
+ {
+  "name": "printf-spec-d-string",
+  "script": "printf \"[%d]\" parameters {\"12\"}"
+ },
+ {
+  "name": "printf-spec-d-text",
+  "script": "printf \"[%d]\" parameters {\"abc\"}"
+ },
+ {
+  "name": "printf-spec-f-text",
+  "script": "printf \"[%f]\" parameters {\"2.5\"}"
+ },
+ {
+  "name": "printf-spec-s-bool",
+  "script": "printf \"[%s]\" parameters {true}"
+ },
+ {
+  "name": "printf-spec-d-bool",
+  "script": "printf \"[%d]\" parameters {true}"
+ },
+ {
+  "name": "printf-spec-s-missing",
+  "script": "printf \"[%s]\" parameters {missing value}"
+ },
+ {
+  "name": "printf-spec-s-list",
+  "script": "printf \"[%s]\" parameters {{1, 2}}"
+ },
+ {
+  "name": "printf-spec-at",
+  "script": "printf \"[%@]\" parameters {\"x\"}"
+ },
+ {
+  "name": "printf-spec-n",
+  "script": "printf \"[%n]\" parameters {1}"
+ },
+ {
+  "name": "printf-spec-q",
+  "script": "printf \"[%q]\" parameters {1}"
+ },
+ {
+  "name": "printf-spec-s-width-accent",
+  "script": "printf \"[%5s|]\" parameters {\"é\"}"
+ },
+ {
+  "name": "printf-spec-s-emoji",
+  "script": "printf \"[%s]\" parameters {\"😀\"}"
+ },
+ {
+  "name": "printf-spec-s-date",
+  "script": "printf \"[%s]\" parameters {date \"Monday, January 15, 2007 at 4:10:56 PM\"}"
+ },
+ {
+  "name": "printf-spec-s-record",
+  "script": "printf \"[%s]\" parameters {{a:1}}"
+ },
+ {
+  "name": "printf-spec-d-negative-zero-pad",
+  "script": "printf \"[%05d]\" parameters {-42}"
+ },
+ {
+  "name": "printf-spec-e-precision",
+  "script": "printf \"[%.2e]\" parameters {1234.5}"
+ },
+ {
+  "name": "printf-spec-x-negative",
+  "script": "printf \"[%x]\" parameters {-1}"
+ },
+ {
+  "name": "printf-missing-format-two",
+  "script": "printf parameters {1, \"a\"}"
+ },
+ {
+  "name": "strptime-2037",
+  "script": "strptime \"2037-12-31\" encoding \"%Y-%m-%d\""
+ },
+ {
+  "name": "strptime-2038-after",
+  "script": "strptime \"2038-01-20\" encoding \"%Y-%m-%d\""
+ },
+ {
+  "name": "strptime-2040",
+  "script": "strptime \"2040-01-01\" encoding \"%Y-%m-%d\""
+ },
+ {
+  "name": "strptime-1901-after",
+  "script": "strptime \"1901-12-14\" encoding \"%Y-%m-%d\""
+ },
+ {
+  "name": "strptime-1901-before",
+  "script": "strptime \"1901-12-13\" encoding \"%Y-%m-%d\""
+ },
+ {
+  "name": "strftime-2099-epoch",
+  "script": "strftime date \"Thursday, December 31, 2099 at 11:59:59 PM\" into \"%s %z\""
+ },
+ {
+  "name": "printf-mixed-positional",
+  "script": "printf \"%2$s %1$s: %05.1f\" parameters {\"car\", \"red\", 12.345}"
+ },
+ {
+  "name": "printf-positional-then-star",
+  "script": "printf \"%1$s %*d\" parameters {\"a\", 3, 4}"
+ },
+ {
+  "name": "printf-sequential-then-positional",
+  "script": "printf \"%s %1$s\" parameters {\"a\"}"
+ }
+]
