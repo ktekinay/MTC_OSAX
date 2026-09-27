@@ -1,0 +1,30 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MTCd",
+        "eventID" : "echo",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "c0b5dee600000000",
+              "type" : "ldt "
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "c0b5dee600000000",
+          "type" : "ldt "
+        }
+      }
+    }
+  ],
+  "name" : "echo-date",
+  "recordedAt" : "2026-09-27T16:03:44Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "mtc_echo (date \"Sunday, September 27, 2026 at 12:00:00 PM\")"
+}

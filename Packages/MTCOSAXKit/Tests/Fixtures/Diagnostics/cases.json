@@ -1,0 +1,11 @@
+[
+	{ "name": "ping", "script": "mtc_ping" },
+	{ "name": "echo-text", "script": "mtc_echo \"abc déf\"" },
+	{ "name": "echo-mixed-list", "script": "mtc_echo {1, 2.5, true, \"a\", {\"nested\"}, missing value}" },
+	{ "name": "echo-record", "script": "mtc_echo {name:\"x\", size:3, foo:\"user field\"}" },
+	{ "name": "echo-date", "script": "mtc_echo (date \"Sunday, September 27, 2026 at 12:00:00 PM\")" },
+	{ "name": "echo-missing-parameter", "script": "mtc_echo" },
+	{ "name": "describe-record", "script": "mtc_describe {name:\"x\", foo:1}" },
+	{ "name": "raise-error-with-message", "script": "mtc_raise_error \"boom\" number 42" },
+	{ "name": "raise-error-without-message", "script": "mtc_raise_error number -1728" }
+]

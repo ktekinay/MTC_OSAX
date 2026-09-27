@@ -1,0 +1,5 @@
+[
+	{ "name": "uppercase-text", "script": "uppercase \"abc déf\"" },
+	{ "name": "uppercase-list", "script": "uppercase {\"abc\", \"xyz\"}" },
+	{ "name": "uppercase-missing-parameter", "script": "uppercase" }
+]

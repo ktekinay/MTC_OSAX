@@ -1,0 +1,35 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MTCd",
+        "eventID" : "rais",
+        "fields" : [
+          {
+            "key" : "errn",
+            "value" : {
+              "integer" : 42,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "boom",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorMessage" : "boom",
+        "errorNumber" : 42
+      }
+    }
+  ],
+  "name" : "raise-error-with-message",
+  "recordedAt" : "2026-09-27T16:03:45Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "mtc_raise_error \"boom\" number 42"
+}

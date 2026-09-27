@@ -1,0 +1,36 @@
+import AppleEventCore
+import Foundation
+
+/// The hidden "MTC Diagnostics" suite (event class `MTCd`), for checking that the app works end to end.
+public enum Diagnostics {
+	/// - Parameter version: supplies the text `mtc_version` returns.
+	public static func commands(version: @escaping () -> String) -> [CommandDefinition] {
+		[
+			CommandDefinition("mtc_ping", code: "MTCdping") { _ in
+				"pong"
+			},
+
+			CommandDefinition("mtc_version", code: "MTCdvers") { _ in
+				version()
+			},
+
+			// Returns the direct parameter exactly as received.
+			CommandDefinition("mtc_echo", code: "MTCdecho") { request in
+				try request.requiredDirectParameter(as: AnyDescriptor.self).descriptor
+			},
+
+			// Describes the descriptor types and keys the script sent.
+			CommandDefinition("mtc_describe", code: "MTCddesc") { request in
+				request.descriptor(for: Keyword.directObject).map { DescriptorSnapshot($0).summary }
+					?? "(no direct parameter)"
+			},
+
+			// mtc_raise_error "message" number n
+			CommandDefinition("mtc_raise_error", code: "MTCdrais") { request in
+				let number = try request.requiredParameter(Keyword.errorNumber, as: Int.self)
+				let message = try request.directParameter(as: String.self)
+				throw OSAXError(number, message)
+			},
+		]
+	}
+}

@@ -1,0 +1,88 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MTCd",
+        "eventID" : "echo",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "real" : 2.5,
+                  "type" : "doub"
+                },
+                {
+                  "type" : "true"
+                },
+                {
+                  "text" : "a",
+                  "type" : "utxt"
+                },
+                {
+                  "items" : [
+                    {
+                      "text" : "nested",
+                      "type" : "utxt"
+                    }
+                  ],
+                  "type" : "list"
+                },
+                {
+                  "code" : "msng",
+                  "type" : "type"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "integer" : 1,
+              "type" : "long"
+            },
+            {
+              "real" : 2.5,
+              "type" : "doub"
+            },
+            {
+              "type" : "true"
+            },
+            {
+              "text" : "a",
+              "type" : "utxt"
+            },
+            {
+              "items" : [
+                {
+                  "text" : "nested",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            },
+            {
+              "code" : "msng",
+              "type" : "type"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "echo-mixed-list",
+  "recordedAt" : "2026-09-27T16:03:44Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "mtc_echo {1, 2.5, true, \"a\", {\"nested\"}, missing value}"
+}

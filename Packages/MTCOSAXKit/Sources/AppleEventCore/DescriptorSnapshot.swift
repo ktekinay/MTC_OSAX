@@ -1,0 +1,208 @@
+import Foundation
+
+/// A lossless, JSON-friendly copy of an Apple event descriptor, keeping every descriptor type.
+/// Used to store fixtures and to describe values for debugging.
+///
+/// Only the properties relevant to `type` are set: text for text types, `integer` for `long`/`shor`,
+/// `real` for `doub`/`sing`, `boolean` for `bool`, `code` for `type`/`enum`/`keyw`, `items` for
+/// lists, `fields` for records and Apple event parameters, and `hex` for anything else.
+public struct DescriptorSnapshot: Codable, Hashable {
+	public var type: String
+	public var text: String?
+	public var integer: Int?
+	public var real: Double?
+	public var boolean: Bool?
+	public var code: String?
+	public var items: [DescriptorSnapshot]?
+	public var fields: [Field]?
+	public var eventClass: String?
+	public var eventID: String?
+	public var hex: String?
+
+	public struct Field: Codable, Hashable {
+		public var key: String
+		public var value: DescriptorSnapshot
+
+		public init(key: String, value: DescriptorSnapshot) {
+			self.key = key
+			self.value = value
+		}
+	}
+
+	public init(type: String) {
+		self.type = type
+	}
+
+	// MARK: Descriptor → snapshot
+
+	public init(_ descriptor: NSAppleEventDescriptor) {
+		type = descriptor.descriptorType.fourCharString
+		switch type {
+		case "aevt":
+			eventClass = descriptor.eventClass.fourCharString
+			eventID = descriptor.eventID.fourCharString
+			fields = Self.fields(of: descriptor)
+		case "list":
+			items = (0 ..< descriptor.numberOfItems).map { DescriptorSnapshot(descriptor.atIndex($0 + 1)!) }
+		case "utxt", "ut16", "utf8", "TEXT":
+			text = descriptor.stringValue
+		case "long", "shor":
+			integer = Int(descriptor.int32Value)
+		case "doub", "sing":
+			real = descriptor.doubleValue
+		case "bool":
+			boolean = descriptor.booleanValue
+		case "true", "fals", "null":
+			break
+		case "type":
+			code = descriptor.typeCodeValue.fourCharString
+		case "enum":
+			code = descriptor.enumCodeValue.fourCharString
+		case "keyw":
+			code = descriptor.data.withUnsafeBytes { $0.load(as: FourCharCode.self) }.fourCharString
+		default:
+			if descriptor.isRecordDescriptor {
+				fields = Self.fields(of: descriptor)
+			} else {
+				hex = descriptor.data.map { String(format: "%02x", $0) }.joined()
+			}
+		}
+	}
+
+	private static func fields(of descriptor: NSAppleEventDescriptor) -> [Field] {
+		(0 ..< descriptor.numberOfItems).map { index in
+			Field(
+				key: descriptor.keywordForDescriptor(at: index + 1).fourCharString,
+				value: DescriptorSnapshot(descriptor.atIndex(index + 1)!)
+			)
+		}
+	}
+
+	// MARK: Snapshot → descriptor
+
+	/// Recreates the descriptor. Apple events are recreated with no target, ready to pass to a dispatcher.
+	public var descriptor: NSAppleEventDescriptor {
+		let typeCode = FourCharCode(fourCharString: type)
+		switch type {
+		case "aevt":
+			let event = NSAppleEventDescriptor.appleEvent(
+				withEventClass: FourCharCode(fourCharString: eventClass ?? "????"),
+				eventID: FourCharCode(fourCharString: eventID ?? "????"),
+				targetDescriptor: nil,
+				returnID: AEReturnID(kAutoGenerateReturnID),
+				transactionID: AETransactionID(kAnyTransactionID)
+			)
+			for field in fields ?? [] {
+				event.setParam(field.value.descriptor, forKeyword: FourCharCode(fourCharString: field.key))
+			}
+			return event
+		case "list":
+			let list = NSAppleEventDescriptor.list()
+			for (index, item) in (items ?? []).enumerated() {
+				list.insert(item.descriptor, at: index + 1)
+			}
+			return list
+		case "utxt":
+			return NSAppleEventDescriptor(string: text ?? "")
+		case "ut16":
+			// UTF-16 with a byte-order mark, as SatimageOSAX returns text.
+			return NSAppleEventDescriptor(descriptorType: typeCode, data: (text ?? "").data(using: .utf16))!
+		case "utf8":
+			return NSAppleEventDescriptor(descriptorType: typeCode, data: (text ?? "").data(using: .utf8))!
+		case "TEXT":
+			return NSAppleEventDescriptor(descriptorType: typeCode, data: (text ?? "").data(using: .macOSRoman))!
+		case "long":
+			return NSAppleEventDescriptor(int32: Int32(integer ?? 0))
+		case "shor":
+			return withUnsafeBytes(of: Int16(integer ?? 0)) { NSAppleEventDescriptor(descriptorType: typeCode, data: Data($0))! }
+		case "doub":
+			return NSAppleEventDescriptor(double: real ?? 0)
+		case "sing":
+			return withUnsafeBytes(of: Float(real ?? 0)) { NSAppleEventDescriptor(descriptorType: typeCode, data: Data($0))! }
+		case "bool":
+			return NSAppleEventDescriptor(boolean: boolean ?? false)
+		case "true", "fals":
+			return NSAppleEventDescriptor(descriptorType: typeCode, data: nil)!
+		case "null":
+			return .null()
+		case "type":
+			return NSAppleEventDescriptor(typeCode: FourCharCode(fourCharString: code ?? "????"))
+		case "enum":
+			return NSAppleEventDescriptor(enumCode: FourCharCode(fourCharString: code ?? "????"))
+		case "keyw":
+			return withUnsafeBytes(of: FourCharCode(fourCharString: code ?? "????")) {
+				NSAppleEventDescriptor(descriptorType: typeCode, data: Data($0))!
+			}
+		default:
+			if let fields {
+				let record = NSAppleEventDescriptor.record()
+				for field in fields {
+					record.setDescriptor(field.value.descriptor, forKeyword: FourCharCode(fourCharString: field.key))
+				}
+				return type == "reco" ? record : (record.coerce(toDescriptorType: typeCode) ?? record)
+			}
+			return NSAppleEventDescriptor(descriptorType: typeCode, data: Data(hexString: hex ?? ""))!
+		}
+	}
+
+	// MARK: Comparison and display
+
+	/// The same value with encodings that scripts can't tell apart unified, for comparing replies:
+	/// all text types become `utxt`, and `true`/`fals` become `bool`.
+	public var normalized: DescriptorSnapshot {
+		var copy = self
+		if type == "true" || type == "fals" {
+			copy = DescriptorSnapshot(type: "bool")
+			copy.boolean = type == "true"
+		} else if Self.textTypes.contains(type) {
+			copy.type = "utxt"
+		}
+		copy.items = items?.map(\.normalized)
+		copy.fields = fields?.map { Field(key: $0.key, value: $0.value.normalized) }
+		return copy
+	}
+
+	/// A compact one-line description, e.g. `list [utxt "abc", long 1, reco {mPos: long 2}]`.
+	public var summary: String {
+		switch type {
+		case "aevt":
+			return "aevt \(eventClass ?? "")\(eventID ?? "") {\(fieldsSummary)}"
+		case "list":
+			return "list [\((items ?? []).map(\.summary).joined(separator: ", "))]"
+		case "true", "fals", "null":
+			return type
+		default:
+			if let text { return "\(type) \(Self.quoted(text))" }
+			if let integer { return "\(type) \(integer)" }
+			if let real { return "\(type) \(real)" }
+			if let boolean { return "\(type) \(boolean)" }
+			if let code { return "\(type) '\(code)'" }
+			if fields != nil { return "\(type) {\(fieldsSummary)}" }
+			return "\(type) <\(hex ?? "")>"
+		}
+	}
+
+	private static let textTypes: Set = ["utxt", "ut16", "utf8", "TEXT"]
+
+	private var fieldsSummary: String {
+		(fields ?? []).map { "\($0.key): \($0.value.summary)" }.joined(separator: ", ")
+	}
+
+	private static func quoted(_ text: String) -> String {
+		"\"" + text.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\"") + "\""
+	}
+}
+
+extension Data {
+	init(hexString: String) {
+		var bytes: [UInt8] = []
+		var index = hexString.startIndex
+		while let next = hexString.index(index, offsetBy: 2, limitedBy: hexString.endIndex), index < next {
+			if let byte = UInt8(hexString[index ..< next], radix: 16) {
+				bytes.append(byte)
+			}
+			index = next
+		}
+		self.init(bytes)
+	}
+}

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
+<!--
+ MTC_OSAX terminology.
+
+ Satimage suites are copied verbatim from "SatImageOSAX SDEF/dictionary.sdef" as each section is
+ implemented: names and codes must not change, so existing scripts keep compiling and running.
+ SDEFConsistencyTests checks this, and that every command here has a handler.
+-->
+<dictionary title="MTC_OSAX Terminology">
+
+	<suite name="MTC Diagnostics" code="MTCd" description="Commands for checking that MTC_OSAX is working." hidden="yes">
+		<command name="mtc_ping" code="MTCdping" description="Returns &quot;pong&quot;." hidden="yes">
+			<result type="text" description="&quot;pong&quot;"/>
+		</command>
+		<command name="mtc_version" code="MTCdvers" description="Returns the name and version of the running MTC_OSAX." hidden="yes">
+			<result type="text" description="e.g. &quot;MTC_OSAX 0.1 (1)&quot;"/>
+		</command>
+		<command name="mtc_echo" code="MTCdecho" description="Returns the direct parameter unchanged." hidden="yes">
+			<direct-parameter type="any" description="any value"/>
+			<result type="any" description="the same value"/>
+		</command>
+		<command name="mtc_describe" code="MTCddesc" description="Describes the Apple event descriptor received as the direct parameter." hidden="yes">
+			<direct-parameter type="any" optional="yes" description="any value"/>
+			<result type="text" description="the descriptor types, keys and values received"/>
+		</command>
+		<command name="mtc_raise_error" code="MTCdrais" description="Raises an error, like AppleScript's error command." hidden="yes">
+			<direct-parameter type="text" optional="yes" description="the error message"/>
+			<parameter name="number" code="errn" type="integer" description="the error number"/>
+		</command>
+	</suite>
+
+</dictionary>
