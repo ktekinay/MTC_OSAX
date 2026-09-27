@@ -49,6 +49,14 @@ public struct DescriptorSnapshot: Codable, Hashable {
 		case "furl":
 			// A file URL, kept readable so fixtures can swap paths.
 			text = String(decoding: descriptor.data, as: UTF8.self)
+		case "alis":
+			// An alias holds its absolute path in binary form; keep the POSIX path instead, so fixtures can swap
+			// paths. It's recreated as a file URL, which commands accept the same way.
+			if let url = descriptor.coerce(toDescriptorType: typeFileURL)?.fileURLValue {
+				text = url.path
+			} else {
+				hex = descriptor.data.map { String(format: "%02x", $0) }.joined()
+			}
 		case "long", "shor":
 			integer = Int(descriptor.int32Value)
 		case "doub", "sing":
@@ -111,6 +119,9 @@ public struct DescriptorSnapshot: Codable, Hashable {
 			return NSAppleEventDescriptor(descriptorType: typeCode, data: (text ?? "").data(using: .utf16))!
 		case "utf8", "furl":
 			return NSAppleEventDescriptor(descriptorType: typeCode, data: (text ?? "").data(using: .utf8))!
+		case "alis" where text != nil:
+			// Aliases can't be created in-process; a file URL to the same path stands in for it.
+			return NSAppleEventDescriptor(fileURL: URL(fileURLWithPath: text!))
 		case "TEXT":
 			return NSAppleEventDescriptor(descriptorType: typeCode, data: (text ?? "").data(using: .macOSRoman))!
 		case "long":
@@ -214,6 +225,34 @@ public struct DescriptorSnapshot: Codable, Hashable {
 	}
 
 	private static let textTypes: Set = ["utxt", "ut16", "utf8", "TEXT"]
+
+	/// Whether `actual` equals this expected value, where `{{random:N}}` in expected text stands for any N letters
+	/// or digits (used for `mkstemp` and `mkdtemp` names). Compare normalized snapshots.
+	public func matches(_ actual: DescriptorSnapshot) -> Bool {
+		guard let text, text.contains("{{random:"), let actualText = actual.text, type == actual.type else {
+			guard type == actual.type, (items ?? []).count == (actual.items ?? []).count,
+			      (fields ?? []).count == (actual.fields ?? []).count
+			else {
+				return self == actual
+			}
+			var copy = self
+			copy.items = actual.items
+			copy.fields = actual.fields
+			return copy == actual
+				&& zip(items ?? [], actual.items ?? []).allSatisfy { $0.matches($1) }
+				&& zip(fields ?? [], actual.fields ?? []).allSatisfy { $0.key == $1.key && $0.value.matches($1.value) }
+		}
+		var pattern = "^"
+		var rest = Substring(text)
+		while let start = rest.range(of: "{{random:"), let end = rest[start.upperBound...].range(of: "}}"),
+		      let length = Int(rest[start.upperBound ..< end.lowerBound])
+		{
+			pattern += NSRegularExpression.escapedPattern(for: String(rest[..<start.lowerBound])) + "[A-Za-z0-9]{\(length)}"
+			rest = rest[end.upperBound...]
+		}
+		pattern += NSRegularExpression.escapedPattern(for: String(rest)) + "$"
+		return actualText.range(of: pattern, options: .regularExpression) != nil
+	}
 
 	private var fieldsSummary: String {
 		(fields ?? []).map { "\($0.key): \($0.value.summary)" }.joined(separator: ", ")

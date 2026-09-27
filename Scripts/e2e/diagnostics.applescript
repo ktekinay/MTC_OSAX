@@ -50,4 +50,11 @@ on error number n
 	check("raise_error standard number", n, -1728)
 end try
 
+-- A variable in POSIX file makes AppleScript ask the app to evaluate it (core/getd), which Cocoa Scripting handles.
+-- That must not replace MTC_OSAX's own command handlers.
+set folderPath to "/private/tmp"
+set folderText to (POSIX file folderPath) as text
+check("POSIX file of a variable", folderText contains "private:tmp", true)
+check("commands still work after Cocoa Scripting handled an event", mtc_ping, "pong")
+
 "OK: " & checks & " checks passed"

@@ -1,0 +1,136 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/remove-filesonly-after",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/remove-filesonly-after/",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/remove-filesonly-after/d",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/remove-filesonly-after/d/",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/remove-filesonly-after/d/a.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "Remo",
+        "fields" : [
+          {
+            "key" : "FOnl",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "afte",
+            "value" : {
+              "hex" : "00f492b400000000",
+              "type" : "ldt "
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/remove-filesonly-after/d",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "integer" : 1,
+          "type" : "long"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Read",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/remove-filesonly-after/d/a.txt",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -43
+      }
+    }
+  ],
+  "name" : "remove-filesonly-after",
+  "recordedAt" : "2026-09-27T20:44:55Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "mkdir (POSIX file \"$TMP/remove-filesonly-after\")\nmkdir (POSIX file \"$TMP/remove-filesonly-after/d\")\nwritetext \"x\" to (POSIX file \"$TMP/remove-filesonly-after/d/a.txt\")\nfileremove (POSIX file \"$TMP/remove-filesonly-after/d\") with filesonly after date \"Saturday, January 1, 2000 at 12:00:00 AM\"\nreadtext (POSIX file \"$TMP/remove-filesonly-after/d/a.txt\")",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

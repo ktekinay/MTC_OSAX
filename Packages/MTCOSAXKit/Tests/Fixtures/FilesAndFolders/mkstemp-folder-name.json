@@ -1,0 +1,70 @@
+{
+  "exchanges": [
+    {
+      "event": {
+        "eventClass": "Quom",
+        "eventID": "MkDi",
+        "fields": [
+          {
+            "key": "----",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/mkstemp-folder-name",
+              "type": "furl"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {
+        "result": {
+          "text": "/private/tmp/mtc-fixtures/tmp/mkstemp-folder-name/",
+          "type": "ut16"
+        }
+      }
+    },
+    {
+      "event": {
+        "eventClass": "Quom",
+        "eventID": "mkst",
+        "fields": [
+          {
+            "key": "pnam",
+            "value": {
+              "text": "tmp.txt",
+              "type": "utxt"
+            }
+          },
+          {
+            "key": "suff",
+            "value": {
+              "integer": 4,
+              "type": "long"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/mkstemp-folder-name/",
+              "type": "furl"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {
+        "result": {
+          "text": "/private/tmp/mtc-fixtures/tmp/mkstemp-folder-name/tmp{{random:6}}.txt",
+          "type": "utf8"
+        }
+      }
+    }
+  ],
+  "name": "mkstemp-folder-name",
+  "recordedAt": "2026-09-27T20:40:42Z",
+  "recordedFrom": "SatimageOSAX",
+  "script": "mkdir (POSIX file \"$TMP/mkstemp-folder-name\")\nmkstemp (POSIX file \"$TMP/mkstemp-folder-name/\") name \"tmp.txt\" suffix 4",
+  "timeZone": "America/New_York",
+  "variables": {
+    "TMP": "/private/tmp/mtc-fixtures/tmp"
+  }
+}

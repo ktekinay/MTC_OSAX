@@ -44,6 +44,17 @@ public struct Fixture: Codable {
 			return copy
 		}
 
+		func matches(_ actual: Reply) -> Bool {
+			guard errorNumber == actual.errorNumber, errorMessage == actual.errorMessage else {
+				return false
+			}
+			switch (result, actual.result) {
+			case (nil, nil): return true
+			case let (expected?, actual?): return expected.matches(actual)
+			default: return false
+			}
+		}
+
 		var normalized: Reply {
 			var copy = self
 			copy.result = result?.normalized
@@ -111,7 +122,7 @@ public struct Fixture: Codable {
 			}
 			let expected = reply.normalized
 			let actual = Reply(dispatcher.dispatch(event.descriptor)).normalized
-			guard actual != expected else {
+			guard !expected.matches(actual) else {
 				return nil
 			}
 			return """

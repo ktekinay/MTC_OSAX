@@ -1,0 +1,112 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/move-existing",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/move-existing/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/move-existing/a.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/move-existing/b.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "y",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "Move",
+        "fields" : [
+          {
+            "key" : "into",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/move-existing/b.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/move-existing/a.txt",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -48
+      }
+    }
+  ],
+  "name" : "move-existing",
+  "recordedAt" : "2026-09-27T20:40:42Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "mkdir (POSIX file \"$TMP/move-existing\")\nwritetext \"x\" to (POSIX file \"$TMP/move-existing/a.txt\")\nwritetext \"y\" to (POSIX file \"$TMP/move-existing/b.txt\")\nfilemove (POSIX file \"$TMP/move-existing/a.txt\") filepath (POSIX file \"$TMP/move-existing/b.txt\")\nreadtext (POSIX file \"$TMP/move-existing/b.txt\")",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

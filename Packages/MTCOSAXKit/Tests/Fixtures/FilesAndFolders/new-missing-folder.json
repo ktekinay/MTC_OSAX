@@ -1,0 +1,56 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/new-missing-folder",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/new-missing-folder/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "NewF",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/new-missing-folder/a/b/n.txt",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/new-missing-folder/a/b/n.txt",
+          "type" : "utf8"
+        }
+      }
+    }
+  ],
+  "name" : "new-missing-folder",
+  "recordedAt" : "2026-09-27T20:40:40Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "mkdir (POSIX file \"$TMP/new-missing-folder\")\nfilenew (POSIX file \"$TMP/new-missing-folder/a/b/n.txt\")",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

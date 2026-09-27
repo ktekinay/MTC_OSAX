@@ -1,0 +1,52 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/new-no-parameter",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/new-no-parameter/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "NewF",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "type" : "null"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1701
+      }
+    }
+  ],
+  "name" : "new-no-parameter",
+  "recordedAt" : "2026-09-27T20:40:40Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "mkdir (POSIX file \"$TMP/new-no-parameter\")\nfilenew",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

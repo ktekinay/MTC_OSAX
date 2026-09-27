@@ -1,0 +1,85 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/rename-folder",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/rename-folder/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/rename-folder/d",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/rename-folder/d/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "RenF",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "e",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/rename-folder/d",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/rename-folder/e",
+          "type" : "utf8"
+        }
+      }
+    }
+  ],
+  "name" : "rename-folder",
+  "recordedAt" : "2026-09-27T20:40:41Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "mkdir (POSIX file \"$TMP/rename-folder\")\nmkdir (POSIX file \"$TMP/rename-folder/d\")\nfilerename (POSIX file \"$TMP/rename-folder/d\") to \"e\"",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

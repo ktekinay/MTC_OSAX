@@ -1,0 +1,56 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/getname-missing-file",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/getname-missing-file/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "GFNa",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "/private/tmp/mtc-fixtures/tmp/getname-missing-file/nope.txt",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "nope.txt",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "getname-missing-file",
+  "recordedAt" : "2026-09-27T20:40:40Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "mkdir (POSIX file \"$TMP/getname-missing-file\")\nfilegetname \"$TMP/getname-missing-file/nope.txt\"",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

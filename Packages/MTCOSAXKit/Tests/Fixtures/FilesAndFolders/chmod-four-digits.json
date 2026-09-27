@@ -1,0 +1,111 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/chmod-four-digits",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/chmod-four-digits/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/chmod-four-digits/a.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "chmd",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "1755",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/chmod-four-digits/a.txt",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "644",
+          "type" : "TEXT"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "chmd",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/chmod-four-digits/a.txt",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "755",
+          "type" : "TEXT"
+        }
+      }
+    }
+  ],
+  "name" : "chmod-four-digits",
+  "recordedAt" : "2026-09-27T20:40:41Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "mkdir (POSIX file \"$TMP/chmod-four-digits\")\nwritetext \"x\" to (POSIX file \"$TMP/chmod-four-digits/a.txt\")\nchmod (POSIX file \"$TMP/chmod-four-digits/a.txt\") to \"1755\"\nchmod (POSIX file \"$TMP/chmod-four-digits/a.txt\")",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

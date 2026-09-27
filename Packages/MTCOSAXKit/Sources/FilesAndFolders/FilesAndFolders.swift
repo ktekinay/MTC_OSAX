@@ -1,0 +1,387 @@
+import AppleEventCore
+import Darwin
+import Foundation
+
+/// Satimage's "Files and folders suite" and "Symlink suite" (event class `Quom`, from its Files.osax).
+/// Behavior recorded from SatimageOSAX in `Fixtures/FilesAndFolders`; where Satimage was broken, MTC_OSAX follows
+/// the dictionary (`Fixtures/FilesAndFoldersFixes`, listed in Implemented/PLAN-FilesAndFolders.md).
+///
+/// Files can be given as aliases, file references, POSIX paths (with `~`), `file://` URLs or HFS paths. Results are
+/// POSIX paths as text, with a trailing `/` for folders, as Satimage returns them.
+public enum FilesAndFolders {
+	public static func commands() -> [CommandDefinition] {
+		[
+			CommandDefinition("filegetname", code: "QuomGFNa") { request in
+				try Paths(request, keyword: Keyword.directObject).map { $0.lastPathComponent }
+			},
+			CommandDefinition("filenew", code: "QuomNewF", handler: fileNew),
+			CommandDefinition("mkdir", code: "QuomMkDi", handler: makeDirectory),
+			CommandDefinition("filerename", code: "QuomRenF", handler: rename),
+			CommandDefinition("chmod", code: "Quomchmd", handler: changeMode),
+			CommandDefinition("filecopy", code: "QuomCopy") { try copyOrMove($0, move: false) },
+			CommandDefinition("filemove", code: "QuomMove") { try copyOrMove($0, move: true) },
+			CommandDefinition("fileremove", code: "QuomRemo", handler: remove),
+			CommandDefinition("mkstemp", code: "Quommkst") { try makeTemporary($0, folder: false) },
+			CommandDefinition("mkdtemp", code: "Quommkdt") { try makeTemporary($0, folder: true) },
+			CommandDefinition("create symlink", code: "QuomSymL", handler: createSymlink),
+			CommandDefinition("testsymlink", code: "QuomIsSy") { request in
+				isSymlink(try request.requiredDirectParameter(as: URL.self))
+			},
+			CommandDefinition("readlink", code: "Quomrdsy") { request in
+				let url = try request.requiredDirectParameter(as: URL.self)
+				guard let destination = try? FileManager.default.destinationOfSymbolicLink(atPath: url.path) else {
+					throw invalidInput
+				}
+				return destination
+			},
+		]
+	}
+
+	// MARK: Errors (numbers recorded from SatimageOSAX)
+
+	static let notFound = OSAXError(-43) // fnfErr
+	static let alreadyExists = OSAXError(-48) // dupFNErr
+	static let invalidInput = OSAXError(-1)
+	static let notAllowedTogether = OSAXError(-50) // paramErr
+
+	/// A POSIX error number as Satimage returned it for `mkdir` (e.g. 17 for EEXIST).
+	static func posixError(_ code: Int32) -> OSAXError {
+		OSAXError(Int(code))
+	}
+
+	// MARK: Paths
+
+	/// The text Satimage returns for an item: its POSIX path, with a trailing `/` for a folder.
+	static func result(_ url: URL, folder: Bool? = nil) -> String {
+		let isFolder = folder ?? isDirectory(url)
+		return url.path + (isFolder && url.path != "/" ? "/" : "")
+	}
+
+	static func isDirectory(_ url: URL) -> Bool {
+		var directory: ObjCBool = false
+		return FileManager.default.fileExists(atPath: url.path, isDirectory: &directory) && directory.boolValue
+	}
+
+	static func exists(_ url: URL) -> Bool {
+		(try? url.checkResourceIsReachable()) == true || isSymlink(url)
+	}
+
+	static func isSymlink(_ url: URL) -> Bool {
+		var status = stat()
+		return lstat(url.path, &status) == 0 && (status.st_mode & S_IFMT) == S_IFLNK
+	}
+
+	/// The file for `directory`, or `directory/name` when `name` is given.
+	static func destination(_ request: AppleEventRequest) throws -> URL {
+		let base = try request.requiredDirectParameter(as: URL.self)
+		guard let name = try request.parameter("pnam", as: String.self) else {
+			return base
+		}
+		return base.appendingPathComponent(name)
+	}
+
+	// MARK: filenew, mkdir, filerename
+
+	/// Creates an empty file. Missing folders on the way are always created (Satimage ignored `recursively`).
+	/// An existing item: -48.
+	static func fileNew(_ request: AppleEventRequest) throws -> (any AppleEventEncodable)? {
+		let url = try destination(request)
+		_ = try request.parameter("RECU", default: false)
+		guard !exists(url) else {
+			throw alreadyExists
+		}
+		do {
+			try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
+		} catch {
+			throw notFound
+		}
+		guard FileManager.default.createFile(atPath: url.path, contents: nil) else {
+			throw invalidInput
+		}
+		return result(url, folder: false)
+	}
+
+	/// Creates a folder (and missing folders on the way unless `recursively` is false). Errors are POSIX numbers,
+	/// as in Satimage: 17 if it exists, 2 if a folder on the way is missing.
+	static func makeDirectory(_ request: AppleEventRequest) throws -> (any AppleEventEncodable)? {
+		let url = try destination(request)
+		let recursively = try request.parameter("RECU", default: true)
+		guard !exists(url) else {
+			throw posixError(EEXIST)
+		}
+		if recursively {
+			do {
+				try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+			} catch {
+				throw posixError(isDirectory(url.deletingLastPathComponent()) ? EACCES : ENOTDIR)
+			}
+		} else if Darwin.mkdir(url.path, 0o777) != 0 {
+			throw posixError(errno)
+		}
+		return result(url, folder: true)
+	}
+
+	/// Renames in place. The new name can't contain `/` (-1); an existing item with that name: -48.
+	static func rename(_ request: AppleEventRequest) throws -> (any AppleEventEncodable)? {
+		let url = try request.requiredDirectParameter(as: URL.self)
+		let name = try request.requiredParameter("to  ", as: String.self)
+		guard !name.contains("/"), !name.isEmpty else {
+			throw invalidInput
+		}
+		guard exists(url) else {
+			throw notFound
+		}
+		let renamed = url.deletingLastPathComponent().appendingPathComponent(name)
+		guard !exists(renamed) else {
+			throw alreadyExists
+		}
+		do {
+			try FileManager.default.moveItem(at: url, to: renamed)
+		} catch {
+			throw invalidInput
+		}
+		// Satimage returns a renamed folder's path without a trailing slash.
+		return result(renamed, folder: false)
+	}
+
+	// MARK: chmod
+
+	/// Returns the permissions before any change, as octal text ("644"). `to` sets them from octal text ("0755" and
+	/// "1755" are accepted; only the permission bits are shown). Invalid text or a missing item: -1.
+	static func changeMode(_ request: AppleEventRequest) throws -> (any AppleEventEncodable)? {
+		let url = try request.requiredDirectParameter(as: URL.self)
+		var status = stat()
+		guard stat(url.path, &status) == 0 else {
+			throw invalidInput
+		}
+		let previous = String(status.st_mode & 0o777, radix: 8)
+		if let text = try request.parameter("to  ", as: String.self) {
+			guard let mode = mode_t(text, radix: 8), mode <= 0o7777, Darwin.chmod(url.path, mode) == 0 else {
+				throw invalidInput
+			}
+		}
+		return previous
+	}
+
+	// MARK: filecopy, filemove
+
+	static func copyOrMove(_ request: AppleEventRequest, move: Bool) throws -> (any AppleEventEncodable)? {
+		let sources = try Paths(request, keyword: Keyword.directObject)
+		let replacing = try request.parameter("Repl", default: false)
+		_ = try request.parameter("full", default: false) // FileManager copies attributes either way.
+		let filePath = try request.parameter("into", as: URL.self) ?? request.parameter("intO", as: URL.self)
+		let folder = try request.parameter("to  ", as: URL.self)
+		let name = try request.parameter("pnam", as: String.self)
+
+		if case .list = sources, filePath != nil || name != nil {
+			throw notAllowedTogether // name and filepath are only for one item
+		}
+		guard filePath != nil || folder != nil else {
+			throw OSAXError.missingParameter
+		}
+
+		return try sources.map { source -> String in
+			guard exists(source) else {
+				throw notFound
+			}
+			let target = filePath ?? folder!.appendingPathComponent(name ?? source.lastPathComponent)
+			guard isDirectory(target.deletingLastPathComponent()) else {
+				throw notFound
+			}
+			if exists(target) {
+				guard replacing else {
+					throw alreadyExists
+				}
+				try? FileManager.default.removeItem(at: target)
+			}
+			let isFolder = isDirectory(source)
+			do {
+				if move {
+					try FileManager.default.moveItem(at: source, to: target)
+				} else {
+					try FileManager.default.copyItem(at: source, to: target)
+				}
+			} catch {
+				throw invalidInput
+			}
+			return result(target, folder: isFolder)
+		}
+	}
+
+	// MARK: fileremove
+
+	/// Deletes permanently and returns how many items were deleted. With `filesonly`, a folder stands for the files
+	/// directly in it (subfolders and their contents stay), optionally only those modified `after` or `before` a
+	/// date (dates need `filesonly`: -1). Locked files are unlocked first unless `locked files` is false.
+	/// (Satimage always reported 0 with `filesonly`.)
+	static func remove(_ request: AppleEventRequest) throws -> (any AppleEventEncodable)? {
+		let items = try Paths(request, keyword: Keyword.directObject)
+		let filesOnly = try request.parameter("FOnl", default: false)
+		let after = try request.parameter("afte", as: Date.self)
+		let before = try request.parameter("befo", as: Date.self)
+		let lockedFiles = try request.parameter("CUnl", default: true)
+		_ = try request.parameter("BUnl", default: true) // Unlinking a busy file works anyway on macOS.
+		guard filesOnly || (after == nil && before == nil) else {
+			throw invalidInput
+		}
+
+		var urls: [URL]
+		switch items {
+		case let .single(url): urls = [url]
+		case let .list(list): urls = list
+		}
+		guard urls.allSatisfy(exists) else {
+			throw notFound
+		}
+		if filesOnly {
+			urls = urls.flatMap { url -> [URL] in
+				guard isDirectory(url) else { return [url] }
+				let contents = (try? FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil)) ?? []
+				return contents.filter { !isDirectory($0) }
+			}
+			urls = urls.filter { url in
+				let modified = (try? url.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate) ?? .distantPast
+				return (after.map { modified > $0 } ?? true) && (before.map { modified < $0 } ?? true)
+			}
+		}
+		var removed = 0
+		for url in urls {
+			if lockedFiles {
+				unlock(url)
+			}
+			do {
+				try FileManager.default.removeItem(at: url)
+				removed += 1
+			} catch {
+				throw invalidInput
+			}
+		}
+		return removed
+	}
+
+	/// Clears the user and system immutable flags (a Finder-locked file), recursively for folders.
+	private static func unlock(_ url: URL) {
+		let paths = [url.path] + (FileManager.default.enumerator(atPath: url.path)?.compactMap {
+			($0 as? String).map { url.appendingPathComponent($0).path }
+		} ?? [])
+		for path in paths {
+			var status = stat()
+			if lstat(path, &status) == 0, status.st_flags & UInt32(UF_IMMUTABLE) != 0 {
+				chflags(path, status.st_flags & ~UInt32(UF_IMMUTABLE))
+			}
+		}
+	}
+
+	// MARK: mkstemp, mkdtemp
+
+	/// A new file (mkstemp) or folder (mkdtemp) named prefix + random letters and digits + suffix. The template is
+	/// `name` in the folder given, or the path given. `suffix` (files only) is how many of the name's last
+	/// characters follow the random part; `wildcards` (default 6) how many random characters; `mode` octal text
+	/// (default "666" for files, "777" for folders, less the umask). (Satimage ignored `wildcards` for folders.)
+	static func makeTemporary(_ request: AppleEventRequest, folder: Bool) throws -> (any AppleEventEncodable)? {
+		let base = try request.requiredDirectParameter(as: URL.self)
+		let name = try request.parameter("pnam", as: String.self)
+		let template = name.map { base.appendingPathComponent($0) } ?? base
+		let suffixLength = folder ? 0 : try request.parameter("suff", default: 0)
+		let wildcards = try request.parameter("wild", default: 6)
+		let modeText = try request.parameter("Mode", default: folder ? "777" : "666")
+		guard let mode = mode_t(modeText, radix: 8), mode <= 0o7777, wildcards >= 0 else {
+			throw invalidInput
+		}
+
+		let fullName = template.lastPathComponent
+		guard suffixLength >= 0, suffixLength <= fullName.count else {
+			throw invalidInput
+		}
+		let prefix = String(fullName.dropLast(suffixLength))
+		let suffix = String(fullName.suffix(suffixLength))
+		var path = Array(template.deletingLastPathComponent().appendingPathComponent(prefix + String(repeating: "X", count: wildcards) + suffix).path.utf8CString)
+
+		if folder {
+			guard mkdtemp(&path) != nil else {
+				throw posixError(errno)
+			}
+		} else {
+			let descriptor = mkstemps(&path, Int32(suffixLength))
+			guard descriptor >= 0 else {
+				throw posixError(errno)
+			}
+			close(descriptor)
+		}
+		let created = String(decoding: path.prefix { $0 != 0 }.map { UInt8(bitPattern: $0) }, as: UTF8.self)
+		let mask = umask(0)
+		umask(mask)
+		Darwin.chmod(created, mode & ~mask)
+		return result(URL(fileURLWithPath: created), folder: folder)
+	}
+
+	// MARK: create symlink
+
+	/// Creates a symbolic link in the `in` folder, named `name` or after the target. A target given as text is kept
+	/// as written (so relative targets stay relative); a file reference or alias becomes its absolute path.
+	/// An existing link is replaced unless `replacing` is false (-48); any other existing item: -48.
+	static func createSymlink(_ request: AppleEventRequest) throws -> (any AppleEventEncodable)? {
+		let targetDescriptor = try request.requiredDirectParameter(as: AnyDescriptor.self).descriptor
+		let target: String
+		if let text = try? String(appleEventDescriptor: targetDescriptor), !text.hasPrefix("file://"),
+		   targetDescriptor.descriptorType != typeFileURL, targetDescriptor.descriptorType != typeAlias
+		{
+			target = text.hasPrefix("~") ? (text as NSString).expandingTildeInPath : text
+		} else {
+			target = try URL(appleEventDescriptor: targetDescriptor).path
+		}
+		let folder = try request.requiredParameter("in  ", as: URL.self)
+		let name = try request.parameter("pnam", as: String.self) ?? (target as NSString).lastPathComponent
+		let replacing = try request.parameter("Repl", default: true)
+		let link = folder.appendingPathComponent(name)
+
+		if exists(link) {
+			guard isSymlink(link), replacing else {
+				throw alreadyExists
+			}
+			try? FileManager.default.removeItem(at: link)
+		}
+		do {
+			try FileManager.default.createSymbolicLink(atPath: link.path, withDestinationPath: target)
+		} catch {
+			throw notFound
+		}
+		return nil
+	}
+}
+
+/// One file or a list of files, from a parameter; relative paths are resolved against the `from` parameter.
+enum Paths {
+	case single(URL)
+	case list([URL])
+
+	init(_ request: AppleEventRequest, keyword: String) throws {
+		guard let descriptor = request.descriptor(for: keyword) else {
+			throw OSAXError.missingParameter
+		}
+		let base = try request.parameter("from", as: URL.self)
+		func url(_ item: NSAppleEventDescriptor) throws -> URL {
+			if let base, let text = try? String(appleEventDescriptor: item),
+			   !text.hasPrefix("/"), !text.hasPrefix("~"), !text.hasPrefix("file://"), !text.contains(":")
+			{
+				return base.appendingPathComponent(text)
+			}
+			return try URL(appleEventDescriptor: item)
+		}
+		if descriptor.descriptorType == typeAEList {
+			self = .list(try (0 ..< descriptor.numberOfItems).map { try url(descriptor.atIndex($0 + 1)!) })
+		} else {
+			self = .single(try url(descriptor))
+		}
+	}
+
+	/// One result per path: a single value, or a list.
+	func map(_ transform: (URL) throws -> String) throws -> NSAppleEventDescriptor {
+		switch self {
+		case let .single(url):
+			return try transform(url).appleEventDescriptor
+		case let .list(urls):
+			return try urls.map(transform).appleEventDescriptor
+		}
+	}
+}

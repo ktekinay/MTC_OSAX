@@ -1,0 +1,84 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/new-recursively",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/new-recursively/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "NewF",
+        "fields" : [
+          {
+            "key" : "RECU",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/new-recursively/a/b/n.txt",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/new-recursively/a/b/n.txt",
+          "type" : "utf8"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Read",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/new-recursively/a/b/n.txt",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "new-recursively",
+  "recordedAt" : "2026-09-27T20:40:40Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "mkdir (POSIX file \"$TMP/new-recursively\")\nfilenew (POSIX file \"$TMP/new-recursively/a/b/n.txt\") with recursively\nreadtext (POSIX file \"$TMP/new-recursively/a/b/n.txt\")",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

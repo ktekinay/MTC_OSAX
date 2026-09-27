@@ -1,0 +1,86 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/remove-after-without-filesonly",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/remove-after-without-filesonly/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/remove-after-without-filesonly/a.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "Remo",
+        "fields" : [
+          {
+            "key" : "afte",
+            "value" : {
+              "hex" : "00f492b400000000",
+              "type" : "ldt "
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/remove-after-without-filesonly/a.txt",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1
+      }
+    }
+  ],
+  "name" : "remove-after-without-filesonly",
+  "recordedAt" : "2026-09-27T20:40:42Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "mkdir (POSIX file \"$TMP/remove-after-without-filesonly\")\nwritetext \"x\" to (POSIX file \"$TMP/remove-after-without-filesonly/a.txt\")\nfileremove (POSIX file \"$TMP/remove-after-without-filesonly/a.txt\") after date \"Saturday, January 1, 2000 at 12:00:00 AM\"",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

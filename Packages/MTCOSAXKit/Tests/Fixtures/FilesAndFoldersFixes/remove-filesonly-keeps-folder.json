@@ -1,0 +1,177 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/remove-filesonly-keeps-folder",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/remove-filesonly-keeps-folder/",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/remove-filesonly-keeps-folder/d",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/remove-filesonly-keeps-folder/d/",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/remove-filesonly-keeps-folder/d/a.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/remove-filesonly-keeps-folder/d/e",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/remove-filesonly-keeps-folder/d/e/",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/remove-filesonly-keeps-folder/d/e/b.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "Remo",
+        "fields" : [
+          {
+            "key" : "FOnl",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/remove-filesonly-keeps-folder/d",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "integer" : 1,
+          "type" : "long"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/remove-filesonly-keeps-folder/d",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : 17
+      }
+    }
+  ],
+  "name" : "remove-filesonly-keeps-folder",
+  "recordedAt" : "2026-09-27T20:44:55Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "mkdir (POSIX file \"$TMP/remove-filesonly-keeps-folder\")\nmkdir (POSIX file \"$TMP/remove-filesonly-keeps-folder/d\")\nwritetext \"x\" to (POSIX file \"$TMP/remove-filesonly-keeps-folder/d/a.txt\")\nmkdir (POSIX file \"$TMP/remove-filesonly-keeps-folder/d/e\")\nwritetext \"x\" to (POSIX file \"$TMP/remove-filesonly-keeps-folder/d/e/b.txt\")\nfileremove (POSIX file \"$TMP/remove-filesonly-keeps-folder/d\") with filesonly\nmkdir (POSIX file \"$TMP/remove-filesonly-keeps-folder/d\")",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

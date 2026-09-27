@@ -65,6 +65,16 @@ struct SnapshotTests {
 		#expect(copy.paramDescriptor(forKeyword: FourCharCode(fourCharString: "UsGR"))?.booleanValue == true)
 	}
 
+	/// An alias snapshot holds a path; it's recreated as a file URL, since aliases can't be created in-process.
+	@Test func aliasIsStoredAsPath() throws {
+		var snapshot = DescriptorSnapshot(type: "alis")
+		snapshot.text = "/private/tmp/some file.txt"
+		let descriptor = snapshot.descriptor
+		#expect(descriptor.descriptorType == typeFileURL)
+		#expect(descriptor.fileURLValue?.path == "/private/tmp/some file.txt")
+		#expect(snapshot.replacingText("/private/tmp", with: "/var/x").text == "/var/x/some file.txt")
+	}
+
 	@Test func textIsStoredReadably() {
 		let snapshot = DescriptorSnapshot(NSAppleEventDescriptor(descriptorType: FourCharCode(fourCharString: "ut16"), data: "Hé".data(using: .utf16))!)
 		#expect(snapshot.text == "Hé")

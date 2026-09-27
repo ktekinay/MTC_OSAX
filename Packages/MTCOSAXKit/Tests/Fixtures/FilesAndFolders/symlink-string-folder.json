@@ -1,0 +1,115 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/symlink-string-folder",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/symlink-string-folder/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/symlink-string-folder/a.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "SymL",
+        "fields" : [
+          {
+            "key" : "in  ",
+            "value" : {
+              "text" : "/private/tmp/mtc-fixtures/tmp/symlink-string-folder/",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "pnam",
+            "value" : {
+              "text" : "l",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "a.txt",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "rdsy",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "/private/tmp/mtc-fixtures/tmp/symlink-string-folder/l",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "a.txt",
+          "type" : "utf8"
+        }
+      }
+    }
+  ],
+  "name" : "symlink-string-folder",
+  "recordedAt" : "2026-09-27T20:40:42Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "mkdir (POSIX file \"$TMP/symlink-string-folder\")\nwritetext \"x\" to (POSIX file \"$TMP/symlink-string-folder/a.txt\")\ncreate symlink \"a.txt\" in \"$TMP/symlink-string-folder/\" name \"l\"\nreadlink \"$TMP/symlink-string-folder/l\"",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

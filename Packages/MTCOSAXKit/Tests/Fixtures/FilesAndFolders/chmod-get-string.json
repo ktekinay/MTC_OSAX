@@ -1,0 +1,111 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/chmod-get-string",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/chmod-get-string/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/chmod-get-string/a.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "chmd",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "640",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/chmod-get-string/a.txt",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "644",
+          "type" : "TEXT"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "chmd",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "/private/tmp/mtc-fixtures/tmp/chmod-get-string/a.txt",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "640",
+          "type" : "TEXT"
+        }
+      }
+    }
+  ],
+  "name" : "chmod-get-string",
+  "recordedAt" : "2026-09-27T20:40:41Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "mkdir (POSIX file \"$TMP/chmod-get-string\")\nwritetext \"x\" to (POSIX file \"$TMP/chmod-get-string/a.txt\")\nchmod (POSIX file \"$TMP/chmod-get-string/a.txt\") to \"640\"\nchmod \"$TMP/chmod-get-string/a.txt\"",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

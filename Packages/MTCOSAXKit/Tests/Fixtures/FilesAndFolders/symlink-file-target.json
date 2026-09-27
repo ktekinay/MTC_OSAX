@@ -1,0 +1,115 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/symlink-file-target",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/symlink-file-target/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/symlink-file-target/a.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "SymL",
+        "fields" : [
+          {
+            "key" : "in  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/symlink-file-target/",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "pnam",
+            "value" : {
+              "text" : "l",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/symlink-file-target/a.txt",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "rdsy",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "/private/tmp/mtc-fixtures/tmp/symlink-file-target/l",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/symlink-file-target/a.txt",
+          "type" : "utf8"
+        }
+      }
+    }
+  ],
+  "name" : "symlink-file-target",
+  "recordedAt" : "2026-09-27T20:40:42Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "mkdir (POSIX file \"$TMP/symlink-file-target\")\nwritetext \"x\" to (POSIX file \"$TMP/symlink-file-target/a.txt\")\ncreate symlink (POSIX file \"$TMP/symlink-file-target/a.txt\") in (POSIX file \"$TMP/symlink-file-target/\") name \"l\"\nreadlink \"$TMP/symlink-file-target/l\"",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

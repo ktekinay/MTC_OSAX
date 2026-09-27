@@ -1,0 +1,174 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/symlink-replacing-default",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/symlink-replacing-default/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/symlink-replacing-default/a.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/symlink-replacing-default/b.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "SymL",
+        "fields" : [
+          {
+            "key" : "in  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/symlink-replacing-default/",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "pnam",
+            "value" : {
+              "text" : "l",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "a.txt",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "SymL",
+        "fields" : [
+          {
+            "key" : "in  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/symlink-replacing-default/",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "pnam",
+            "value" : {
+              "text" : "l",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "b.txt",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "rdsy",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "/private/tmp/mtc-fixtures/tmp/symlink-replacing-default/l",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "b.txt",
+          "type" : "utf8"
+        }
+      }
+    }
+  ],
+  "name" : "symlink-replacing-default",
+  "recordedAt" : "2026-09-27T20:40:43Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "mkdir (POSIX file \"$TMP/symlink-replacing-default\")\nwritetext \"x\" to (POSIX file \"$TMP/symlink-replacing-default/a.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/symlink-replacing-default/b.txt\")\ncreate symlink \"a.txt\" in (POSIX file \"$TMP/symlink-replacing-default/\") name \"l\"\ncreate symlink \"b.txt\" in (POSIX file \"$TMP/symlink-replacing-default/\") name \"l\"\nreadlink \"$TMP/symlink-replacing-default/l\"",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

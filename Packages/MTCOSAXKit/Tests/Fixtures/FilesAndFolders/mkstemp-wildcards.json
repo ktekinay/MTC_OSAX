@@ -1,0 +1,70 @@
+{
+  "exchanges": [
+    {
+      "event": {
+        "eventClass": "Quom",
+        "eventID": "MkDi",
+        "fields": [
+          {
+            "key": "----",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/mkstemp-wildcards",
+              "type": "furl"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {
+        "result": {
+          "text": "/private/tmp/mtc-fixtures/tmp/mkstemp-wildcards/",
+          "type": "ut16"
+        }
+      }
+    },
+    {
+      "event": {
+        "eventClass": "Quom",
+        "eventID": "mkst",
+        "fields": [
+          {
+            "key": "pnam",
+            "value": {
+              "text": "t",
+              "type": "utxt"
+            }
+          },
+          {
+            "key": "wild",
+            "value": {
+              "integer": 3,
+              "type": "long"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/mkstemp-wildcards/",
+              "type": "furl"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {
+        "result": {
+          "text": "/private/tmp/mtc-fixtures/tmp/mkstemp-wildcards/t{{random:3}}",
+          "type": "utf8"
+        }
+      }
+    }
+  ],
+  "name": "mkstemp-wildcards",
+  "recordedAt": "2026-09-27T20:40:42Z",
+  "recordedFrom": "SatimageOSAX",
+  "script": "mkdir (POSIX file \"$TMP/mkstemp-wildcards\")\nmkstemp (POSIX file \"$TMP/mkstemp-wildcards/\") name \"t\" wildcards 3",
+  "timeZone": "America/New_York",
+  "variables": {
+    "TMP": "/private/tmp/mtc-fixtures/tmp"
+  }
+}

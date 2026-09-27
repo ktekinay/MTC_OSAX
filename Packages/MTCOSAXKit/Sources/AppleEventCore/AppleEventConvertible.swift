@@ -176,8 +176,7 @@ public struct AppleEventRecord: AppleEventEncodable {
 // MARK: - Files
 
 extension URL: AppleEventConvertible {
-	/// Accepts file references (`furl`, `alis`, `fsrf`, `bmrk`, …) and path strings.
-	/// Strings starting with `/` or `~` are POSIX paths; other strings containing `:` are HFS paths.
+	/// Accepts file references (`furl`, `alis`, `fsrf`, `bmrk`, …) and path strings (see `init(scriptPath:)`).
 	public init(appleEventDescriptor descriptor: NSAppleEventDescriptor) throws {
 		if descriptor.descriptorType == typeUnicodeText || descriptor.descriptorType == typeUTF8Text
 			|| descriptor.descriptorType == typeChar
@@ -195,9 +194,15 @@ extension URL: AppleEventConvertible {
 		NSAppleEventDescriptor(fileURL: self)
 	}
 
-	/// Interprets a path string given by a script.
+	/// Interprets a path string given by a script: a POSIX path (`/…` or `~…`), a `file://` URL, or an HFS path
+	/// (`Volume:folder:file`).
 	public init(scriptPath path: String) throws {
-		if path.hasPrefix("/") || path.hasPrefix("~") {
+		if path.hasPrefix("file://") {
+			guard let url = URL(string: path), url.isFileURL, !url.path.isEmpty else {
+				throw OSAXError.coercionFailed
+			}
+			self = url
+		} else if path.hasPrefix("/") || path.hasPrefix("~") {
 			self = URL(fileURLWithPath: (path as NSString).expandingTildeInPath)
 		} else if path.contains(":") {
 			self = URL(fileURLWithPath: URL.posixPath(fromHFSPath: path))

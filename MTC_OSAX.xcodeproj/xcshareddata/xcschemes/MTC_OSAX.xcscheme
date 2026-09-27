@@ -72,6 +72,16 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "FilesAndFoldersTests"
+               BuildableName = "FilesAndFoldersTests"
+               BlueprintName = "FilesAndFoldersTests"
+               ReferencedContainer = "container:Packages/MTCOSAXKit">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "SDEFConsistencyTests"
                BuildableName = "SDEFConsistencyTests"
                BlueprintName = "SDEFConsistencyTests"

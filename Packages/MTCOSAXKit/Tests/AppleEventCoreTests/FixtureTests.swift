@@ -48,6 +48,22 @@ struct FixtureTests {
 		#expect(!fixture.replay(using: dispatcher()).isEmpty)
 	}
 
+	@Test func randomWildcards() {
+		var expected = DescriptorSnapshot(type: "utxt")
+		expected.text = "/tmp/dir{{random:6}}/"
+		var actual = DescriptorSnapshot(type: "utxt")
+		actual.text = "/tmp/dirAb3Xy9/"
+		#expect(expected.matches(actual))
+		actual.text = "/tmp/dirAb3Xy/"
+		#expect(!expected.matches(actual))
+		actual.text = "/tmp/xyzAb3Xy9/"
+		#expect(!expected.matches(actual))
+		let list = DescriptorSnapshot(["/tmp/dirAb3Xy9/"].appleEventDescriptor)
+		var expectedList = DescriptorSnapshot(type: "list")
+		expectedList.items = [expected]
+		#expect(expectedList.normalized.matches(list.normalized))
+	}
+
 	@Test func writesAndReads() throws {
 		let url = FileManager.default.temporaryDirectory.appendingPathComponent("fixture-\(UUID()).json")
 		defer { try? FileManager.default.removeItem(at: url) }

@@ -1,0 +1,70 @@
+{
+  "exchanges": [
+    {
+      "event": {
+        "eventClass": "Quom",
+        "eventID": "MkDi",
+        "fields": [
+          {
+            "key": "----",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/mkdtemp-wildcards",
+              "type": "furl"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {
+        "result": {
+          "text": "/private/tmp/mtc-fixtures/tmp/mkdtemp-wildcards/",
+          "type": "utxt"
+        }
+      }
+    },
+    {
+      "event": {
+        "eventClass": "Quom",
+        "eventID": "mkdt",
+        "fields": [
+          {
+            "key": "pnam",
+            "value": {
+              "text": "d",
+              "type": "utxt"
+            }
+          },
+          {
+            "key": "wild",
+            "value": {
+              "integer": 8,
+              "type": "long"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/mkdtemp-wildcards/",
+              "type": "furl"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {
+        "result": {
+          "text": "/private/tmp/mtc-fixtures/tmp/mkdtemp-wildcards/d{{random:8}}/",
+          "type": "utxt"
+        }
+      }
+    }
+  ],
+  "name": "mkdtemp-wildcards",
+  "recordedAt": "2026-09-27T20:44:55Z",
+  "recordedFrom": "MTC_OSAX",
+  "script": "mkdir (POSIX file \"$TMP/mkdtemp-wildcards\")\nmkdtemp (POSIX file \"$TMP/mkdtemp-wildcards/\") name \"d\" wildcards 8",
+  "timeZone": "America/New_York",
+  "variables": {
+    "TMP": "/private/tmp/mtc-fixtures/tmp"
+  }
+}

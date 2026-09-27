@@ -1,0 +1,510 @@
+[
+ {
+  "name": "getname-file",
+  "script": "mkdir (POSIX file \"$TMP/getname-file\")\nwritetext \"x\" to (POSIX file \"$TMP/getname-file/a.txt\")\nfilegetname (POSIX file \"$TMP/getname-file/a.txt\")"
+ },
+ {
+  "name": "getname-alias",
+  "script": "mkdir (POSIX file \"$TMP/getname-alias\")\nwritetext \"x\" to (POSIX file \"$TMP/getname-alias/a.txt\")\nfilegetname (POSIX file \"$TMP/getname-alias/a.txt\" as alias)"
+ },
+ {
+  "name": "getname-string",
+  "script": "mkdir (POSIX file \"$TMP/getname-string\")\nwritetext \"x\" to (POSIX file \"$TMP/getname-string/a.txt\")\nfilegetname \"$TMP/getname-string/a.txt\""
+ },
+ {
+  "name": "getname-url",
+  "script": "mkdir (POSIX file \"$TMP/getname-url\")\nwritetext \"x\" to (POSIX file \"$TMP/getname-url/a.txt\")\nfilegetname \"file://$TMP/getname-url/a.txt\""
+ },
+ {
+  "name": "getname-folder",
+  "script": "mkdir (POSIX file \"$TMP/getname-folder\")\nmkdir (POSIX file \"$TMP/getname-folder/sub\")\nfilegetname (POSIX file \"$TMP/getname-folder/sub\")"
+ },
+ {
+  "name": "getname-folder-slash",
+  "script": "mkdir (POSIX file \"$TMP/getname-folder-slash\")\nmkdir (POSIX file \"$TMP/getname-folder-slash/sub\")\nfilegetname \"$TMP/getname-folder-slash/sub/\""
+ },
+ {
+  "name": "getname-list",
+  "script": "mkdir (POSIX file \"$TMP/getname-list\")\nwritetext \"x\" to (POSIX file \"$TMP/getname-list/a.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/getname-list/b.txt\")\nfilegetname {(POSIX file \"$TMP/getname-list/a.txt\"), \"$TMP/getname-list/b.txt\"}"
+ },
+ {
+  "name": "getname-missing-file",
+  "script": "mkdir (POSIX file \"$TMP/getname-missing-file\")\nfilegetname \"$TMP/getname-missing-file/nope.txt\""
+ },
+ {
+  "name": "getname-no-parameter",
+  "script": "mkdir (POSIX file \"$TMP/getname-no-parameter\")\nfilegetname"
+ },
+ {
+  "name": "getname-tilde",
+  "script": "mkdir (POSIX file \"$TMP/getname-tilde\")\nfilegetname \"~/Library\""
+ },
+ {
+  "name": "new-file",
+  "script": "mkdir (POSIX file \"$TMP/new-file\")\nfilenew (POSIX file \"$TMP/new-file/n.txt\")\nreadtext (POSIX file \"$TMP/new-file/n.txt\")"
+ },
+ {
+  "name": "new-string",
+  "script": "mkdir (POSIX file \"$TMP/new-string\")\nfilenew \"$TMP/new-string/n.txt\""
+ },
+ {
+  "name": "new-alias-folder-name",
+  "script": "mkdir (POSIX file \"$TMP/new-alias-folder-name\")\nfilenew (POSIX file \"$TMP/new-alias-folder-name/\" as alias) name \"n.txt\"\nreadtext (POSIX file \"$TMP/new-alias-folder-name/n.txt\")"
+ },
+ {
+  "name": "new-string-folder-name",
+  "script": "mkdir (POSIX file \"$TMP/new-string-folder-name\")\nfilenew \"$TMP/new-string-folder-name/\" name \"n.txt\""
+ },
+ {
+  "name": "new-file-folder-name",
+  "script": "mkdir (POSIX file \"$TMP/new-file-folder-name\")\nfilenew (POSIX file \"$TMP/new-file-folder-name/\") name \"n.txt\"\nreadtext (POSIX file \"$TMP/new-file-folder-name/n.txt\")"
+ },
+ {
+  "name": "new-existing",
+  "script": "mkdir (POSIX file \"$TMP/new-existing\")\nwritetext \"x\" to (POSIX file \"$TMP/new-existing/n.txt\")\nfilenew (POSIX file \"$TMP/new-existing/n.txt\")"
+ },
+ {
+  "name": "new-missing-folder",
+  "script": "mkdir (POSIX file \"$TMP/new-missing-folder\")\nfilenew (POSIX file \"$TMP/new-missing-folder/a/b/n.txt\")"
+ },
+ {
+  "name": "new-recursively",
+  "script": "mkdir (POSIX file \"$TMP/new-recursively\")\nfilenew (POSIX file \"$TMP/new-recursively/a/b/n.txt\") with recursively\nreadtext (POSIX file \"$TMP/new-recursively/a/b/n.txt\")"
+ },
+ {
+  "name": "new-recursively-false",
+  "script": "mkdir (POSIX file \"$TMP/new-recursively-false\")\nfilenew (POSIX file \"$TMP/new-recursively-false/a/n.txt\") without recursively"
+ },
+ {
+  "name": "new-no-parameter",
+  "script": "mkdir (POSIX file \"$TMP/new-no-parameter\")\nfilenew"
+ },
+ {
+  "name": "mkdir-file",
+  "script": "mkdir (POSIX file \"$TMP/mkdir-file\")\nmkdir (POSIX file \"$TMP/mkdir-file/d\")\nfilegetname (POSIX file \"$TMP/mkdir-file/d\")"
+ },
+ {
+  "name": "mkdir-string",
+  "script": "mkdir (POSIX file \"$TMP/mkdir-string\")\nmkdir \"$TMP/mkdir-string/d\""
+ },
+ {
+  "name": "mkdir-alias-parent-name",
+  "script": "mkdir (POSIX file \"$TMP/mkdir-alias-parent-name\")\nmkdir (POSIX file \"$TMP/mkdir-alias-parent-name/\" as alias) name \"d\""
+ },
+ {
+  "name": "mkdir-string-parent-name",
+  "script": "mkdir (POSIX file \"$TMP/mkdir-string-parent-name\")\nmkdir \"$TMP/mkdir-string-parent-name/\" name \"d\""
+ },
+ {
+  "name": "mkdir-existing",
+  "script": "mkdir (POSIX file \"$TMP/mkdir-existing\")\nmkdir (POSIX file \"$TMP/mkdir-existing/d\")\nmkdir (POSIX file \"$TMP/mkdir-existing/d\")"
+ },
+ {
+  "name": "mkdir-nested-default",
+  "script": "mkdir (POSIX file \"$TMP/mkdir-nested-default\")\nmkdir (POSIX file \"$TMP/mkdir-nested-default/a/b/c\")"
+ },
+ {
+  "name": "mkdir-nested-not-recursive",
+  "script": "mkdir (POSIX file \"$TMP/mkdir-nested-not-recursive\")\nmkdir (POSIX file \"$TMP/mkdir-nested-not-recursive/a/b/c\") without recursively"
+ },
+ {
+  "name": "mkdir-existing-nested",
+  "script": "mkdir (POSIX file \"$TMP/mkdir-existing-nested\")\nmkdir (POSIX file \"$TMP/mkdir-existing-nested/a/b\")\nmkdir (POSIX file \"$TMP/mkdir-existing-nested/a/b\")"
+ },
+ {
+  "name": "mkdir-existing-nested-deep",
+  "script": "mkdir (POSIX file \"$TMP/mkdir-existing-nested-deep\")\nmkdir (POSIX file \"$TMP/mkdir-existing-nested-deep/a/b/c\")\nmkdir (POSIX file \"$TMP/mkdir-existing-nested-deep/a/b/c\")"
+ },
+ {
+  "name": "mkdir-existing-nested-not-recursive",
+  "script": "mkdir (POSIX file \"$TMP/mkdir-existing-nested-not-recursive\")\nmkdir (POSIX file \"$TMP/mkdir-existing-nested-not-recursive/a/b\")\nmkdir (POSIX file \"$TMP/mkdir-existing-nested-not-recursive/a/b\") without recursively"
+ },
+ {
+  "name": "mkdir-existing-not-recursive",
+  "script": "mkdir (POSIX file \"$TMP/mkdir-existing-not-recursive\")\nmkdir (POSIX file \"$TMP/mkdir-existing-not-recursive/a\")\nmkdir (POSIX file \"$TMP/mkdir-existing-not-recursive/a\") without recursively"
+ },
+ {
+  "name": "mkdir-existing-string",
+  "script": "mkdir (POSIX file \"$TMP/mkdir-existing-string\")\nmkdir (POSIX file \"$TMP/mkdir-existing-string/a\")\nmkdir \"$TMP/mkdir-existing-string/a\""
+ },
+ {
+  "name": "mkdir-existing-name",
+  "script": "mkdir (POSIX file \"$TMP/mkdir-existing-name\")\nmkdir (POSIX file \"$TMP/mkdir-existing-name/a\")\nmkdir (POSIX file \"$TMP/mkdir-existing-name/\") name \"a\""
+ },
+ {
+  "name": "mkdir-over-file",
+  "script": "mkdir (POSIX file \"$TMP/mkdir-over-file\")\nwritetext \"x\" to (POSIX file \"$TMP/mkdir-over-file/f\")\nmkdir (POSIX file \"$TMP/mkdir-over-file/f\")"
+ },
+ {
+  "name": "rename-file",
+  "script": "mkdir (POSIX file \"$TMP/rename-file\")\nwritetext \"x\" to (POSIX file \"$TMP/rename-file/a.txt\")\nfilerename (POSIX file \"$TMP/rename-file/a.txt\") to \"b.txt\"\nreadtext (POSIX file \"$TMP/rename-file/b.txt\")"
+ },
+ {
+  "name": "rename-string",
+  "script": "mkdir (POSIX file \"$TMP/rename-string\")\nwritetext \"x\" to (POSIX file \"$TMP/rename-string/a.txt\")\nfilerename \"$TMP/rename-string/a.txt\" to \"b.txt\""
+ },
+ {
+  "name": "rename-alias",
+  "script": "mkdir (POSIX file \"$TMP/rename-alias\")\nwritetext \"x\" to (POSIX file \"$TMP/rename-alias/a.txt\")\nfilerename (POSIX file \"$TMP/rename-alias/a.txt\" as alias) to \"b.txt\""
+ },
+ {
+  "name": "rename-folder",
+  "script": "mkdir (POSIX file \"$TMP/rename-folder\")\nmkdir (POSIX file \"$TMP/rename-folder/d\")\nfilerename (POSIX file \"$TMP/rename-folder/d\") to \"e\""
+ },
+ {
+  "name": "rename-existing-target",
+  "script": "mkdir (POSIX file \"$TMP/rename-existing-target\")\nwritetext \"x\" to (POSIX file \"$TMP/rename-existing-target/a.txt\")\nwritetext \"y\" to (POSIX file \"$TMP/rename-existing-target/b.txt\")\nfilerename (POSIX file \"$TMP/rename-existing-target/a.txt\") to \"b.txt\"\nreadtext (POSIX file \"$TMP/rename-existing-target/b.txt\")"
+ },
+ {
+  "name": "rename-missing",
+  "script": "mkdir (POSIX file \"$TMP/rename-missing\")\nfilerename (POSIX file \"$TMP/rename-missing/nope.txt\") to \"b.txt\""
+ },
+ {
+  "name": "rename-slash-in-name",
+  "script": "mkdir (POSIX file \"$TMP/rename-slash-in-name\")\nwritetext \"x\" to (POSIX file \"$TMP/rename-slash-in-name/a.txt\")\nfilerename (POSIX file \"$TMP/rename-slash-in-name/a.txt\") to \"x/y.txt\""
+ },
+ {
+  "name": "rename-no-to",
+  "script": "mkdir (POSIX file \"$TMP/rename-no-to\")\nwritetext \"x\" to (POSIX file \"$TMP/rename-no-to/a.txt\")\nfilerename (POSIX file \"$TMP/rename-no-to/a.txt\")"
+ },
+ {
+  "name": "chmod-get",
+  "script": "mkdir (POSIX file \"$TMP/chmod-get\")\nwritetext \"x\" to (POSIX file \"$TMP/chmod-get/a.txt\")\nchmod (POSIX file \"$TMP/chmod-get/a.txt\") to \"644\"\nchmod (POSIX file \"$TMP/chmod-get/a.txt\")"
+ },
+ {
+  "name": "chmod-get-string",
+  "script": "mkdir (POSIX file \"$TMP/chmod-get-string\")\nwritetext \"x\" to (POSIX file \"$TMP/chmod-get-string/a.txt\")\nchmod (POSIX file \"$TMP/chmod-get-string/a.txt\") to \"640\"\nchmod \"$TMP/chmod-get-string/a.txt\""
+ },
+ {
+  "name": "chmod-set-returns-previous",
+  "script": "mkdir (POSIX file \"$TMP/chmod-set-returns-previous\")\nwritetext \"x\" to (POSIX file \"$TMP/chmod-set-returns-previous/a.txt\")\nchmod (POSIX file \"$TMP/chmod-set-returns-previous/a.txt\") to \"644\"\nchmod (POSIX file \"$TMP/chmod-set-returns-previous/a.txt\") to \"600\"\nchmod (POSIX file \"$TMP/chmod-set-returns-previous/a.txt\")"
+ },
+ {
+  "name": "chmod-leading-zero",
+  "script": "mkdir (POSIX file \"$TMP/chmod-leading-zero\")\nwritetext \"x\" to (POSIX file \"$TMP/chmod-leading-zero/a.txt\")\nchmod (POSIX file \"$TMP/chmod-leading-zero/a.txt\") to \"0755\"\nchmod (POSIX file \"$TMP/chmod-leading-zero/a.txt\")"
+ },
+ {
+  "name": "chmod-four-digits",
+  "script": "mkdir (POSIX file \"$TMP/chmod-four-digits\")\nwritetext \"x\" to (POSIX file \"$TMP/chmod-four-digits/a.txt\")\nchmod (POSIX file \"$TMP/chmod-four-digits/a.txt\") to \"1755\"\nchmod (POSIX file \"$TMP/chmod-four-digits/a.txt\")"
+ },
+ {
+  "name": "chmod-invalid-text",
+  "script": "mkdir (POSIX file \"$TMP/chmod-invalid-text\")\nwritetext \"x\" to (POSIX file \"$TMP/chmod-invalid-text/a.txt\")\nchmod (POSIX file \"$TMP/chmod-invalid-text/a.txt\") to \"abc\""
+ },
+ {
+  "name": "chmod-invalid-digit",
+  "script": "mkdir (POSIX file \"$TMP/chmod-invalid-digit\")\nwritetext \"x\" to (POSIX file \"$TMP/chmod-invalid-digit/a.txt\")\nchmod (POSIX file \"$TMP/chmod-invalid-digit/a.txt\") to \"999\""
+ },
+ {
+  "name": "chmod-folder",
+  "script": "mkdir (POSIX file \"$TMP/chmod-folder\")\nmkdir (POSIX file \"$TMP/chmod-folder/d\")\nchmod (POSIX file \"$TMP/chmod-folder/d\") to \"755\"\nchmod (POSIX file \"$TMP/chmod-folder/d\")"
+ },
+ {
+  "name": "chmod-missing",
+  "script": "mkdir (POSIX file \"$TMP/chmod-missing\")\nchmod (POSIX file \"$TMP/chmod-missing/nope.txt\")"
+ },
+ {
+  "name": "chmod-alias",
+  "script": "mkdir (POSIX file \"$TMP/chmod-alias\")\nwritetext \"x\" to (POSIX file \"$TMP/chmod-alias/a.txt\")\nchmod (POSIX file \"$TMP/chmod-alias/a.txt\") to \"644\"\nchmod (POSIX file \"$TMP/chmod-alias/a.txt\" as alias)"
+ },
+ {
+  "name": "copy-to-folder",
+  "script": "mkdir (POSIX file \"$TMP/copy-to-folder\")\nwritetext \"x\" to (POSIX file \"$TMP/copy-to-folder/a.txt\")\nmkdir (POSIX file \"$TMP/copy-to-folder/d\")\nfilecopy (POSIX file \"$TMP/copy-to-folder/a.txt\") to (POSIX file \"$TMP/copy-to-folder/d\")\nreadtext (POSIX file \"$TMP/copy-to-folder/d/a.txt\")"
+ },
+ {
+  "name": "copy-string-to-string",
+  "script": "mkdir (POSIX file \"$TMP/copy-string-to-string\")\nwritetext \"x\" to (POSIX file \"$TMP/copy-string-to-string/a.txt\")\nmkdir (POSIX file \"$TMP/copy-string-to-string/d\")\nfilecopy \"$TMP/copy-string-to-string/a.txt\" to \"$TMP/copy-string-to-string/d/\""
+ },
+ {
+  "name": "copy-to-folder-no-slash",
+  "script": "mkdir (POSIX file \"$TMP/copy-to-folder-no-slash\")\nwritetext \"x\" to (POSIX file \"$TMP/copy-to-folder-no-slash/a.txt\")\nmkdir (POSIX file \"$TMP/copy-to-folder-no-slash/d\")\nfilecopy \"$TMP/copy-to-folder-no-slash/a.txt\" to \"$TMP/copy-to-folder-no-slash/d\""
+ },
+ {
+  "name": "copy-name",
+  "script": "mkdir (POSIX file \"$TMP/copy-name\")\nwritetext \"x\" to (POSIX file \"$TMP/copy-name/a.txt\")\nmkdir (POSIX file \"$TMP/copy-name/d\")\nfilecopy (POSIX file \"$TMP/copy-name/a.txt\") to (POSIX file \"$TMP/copy-name/d\") name \"b.txt\"\nreadtext (POSIX file \"$TMP/copy-name/d/b.txt\")"
+ },
+ {
+  "name": "copy-filepath",
+  "script": "mkdir (POSIX file \"$TMP/copy-filepath\")\nwritetext \"x\" to (POSIX file \"$TMP/copy-filepath/a.txt\")\nfilecopy (POSIX file \"$TMP/copy-filepath/a.txt\") filepath (POSIX file \"$TMP/copy-filepath/b.txt\")\nreadtext (POSIX file \"$TMP/copy-filepath/b.txt\")"
+ },
+ {
+  "name": "copy-into-legacy",
+  "script": "mkdir (POSIX file \"$TMP/copy-into-legacy\")\nwritetext \"x\" to (POSIX file \"$TMP/copy-into-legacy/a.txt\")\nfilecopy (POSIX file \"$TMP/copy-into-legacy/a.txt\") into (POSIX file \"$TMP/copy-into-legacy/b.txt\")\nreadtext (POSIX file \"$TMP/copy-into-legacy/b.txt\")"
+ },
+ {
+  "name": "copy-existing",
+  "script": "mkdir (POSIX file \"$TMP/copy-existing\")\nwritetext \"x\" to (POSIX file \"$TMP/copy-existing/a.txt\")\nwritetext \"y\" to (POSIX file \"$TMP/copy-existing/b.txt\")\nfilecopy (POSIX file \"$TMP/copy-existing/a.txt\") filepath (POSIX file \"$TMP/copy-existing/b.txt\")\nreadtext (POSIX file \"$TMP/copy-existing/b.txt\")"
+ },
+ {
+  "name": "copy-replacing",
+  "script": "mkdir (POSIX file \"$TMP/copy-replacing\")\nwritetext \"x\" to (POSIX file \"$TMP/copy-replacing/a.txt\")\nwritetext \"y\" to (POSIX file \"$TMP/copy-replacing/b.txt\")\nfilecopy (POSIX file \"$TMP/copy-replacing/a.txt\") filepath (POSIX file \"$TMP/copy-replacing/b.txt\") with replacing\nreadtext (POSIX file \"$TMP/copy-replacing/b.txt\")"
+ },
+ {
+  "name": "copy-list",
+  "script": "mkdir (POSIX file \"$TMP/copy-list\")\nwritetext \"x\" to (POSIX file \"$TMP/copy-list/a.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/copy-list/b.txt\")\nmkdir (POSIX file \"$TMP/copy-list/d\")\nfilecopy {(POSIX file \"$TMP/copy-list/a.txt\"), (POSIX file \"$TMP/copy-list/b.txt\")} to (POSIX file \"$TMP/copy-list/d\")"
+ },
+ {
+  "name": "copy-list-with-name",
+  "script": "mkdir (POSIX file \"$TMP/copy-list-with-name\")\nwritetext \"x\" to (POSIX file \"$TMP/copy-list-with-name/a.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/copy-list-with-name/b.txt\")\nmkdir (POSIX file \"$TMP/copy-list-with-name/d\")\nfilecopy {(POSIX file \"$TMP/copy-list-with-name/a.txt\"), (POSIX file \"$TMP/copy-list-with-name/b.txt\")} to (POSIX file \"$TMP/copy-list-with-name/d\") name \"c.txt\""
+ },
+ {
+  "name": "copy-from-relative",
+  "script": "mkdir (POSIX file \"$TMP/copy-from-relative\")\nwritetext \"x\" to (POSIX file \"$TMP/copy-from-relative/a.txt\")\nmkdir (POSIX file \"$TMP/copy-from-relative/d\")\nfilecopy \"a.txt\" from (POSIX file \"$TMP/copy-from-relative/\") to (POSIX file \"$TMP/copy-from-relative/d\")"
+ },
+ {
+  "name": "copy-from-relative-list",
+  "script": "mkdir (POSIX file \"$TMP/copy-from-relative-list\")\nwritetext \"x\" to (POSIX file \"$TMP/copy-from-relative-list/a.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/copy-from-relative-list/b.txt\")\nmkdir (POSIX file \"$TMP/copy-from-relative-list/d\")\nfilecopy {\"a.txt\", \"b.txt\"} from (POSIX file \"$TMP/copy-from-relative-list/\") to (POSIX file \"$TMP/copy-from-relative-list/d\")"
+ },
+ {
+  "name": "copy-folder",
+  "script": "mkdir (POSIX file \"$TMP/copy-folder\")\nmkdir (POSIX file \"$TMP/copy-folder/s\")\nwritetext \"x\" to (POSIX file \"$TMP/copy-folder/s/a.txt\")\nmkdir (POSIX file \"$TMP/copy-folder/d\")\nfilecopy (POSIX file \"$TMP/copy-folder/s\") to (POSIX file \"$TMP/copy-folder/d\")\nreadtext (POSIX file \"$TMP/copy-folder/d/s/a.txt\")"
+ },
+ {
+  "name": "copy-full-copy",
+  "script": "mkdir (POSIX file \"$TMP/copy-full-copy\")\nwritetext \"x\" to (POSIX file \"$TMP/copy-full-copy/a.txt\")\nfilecopy (POSIX file \"$TMP/copy-full-copy/a.txt\") filepath (POSIX file \"$TMP/copy-full-copy/b.txt\") with full copy\nreadtext (POSIX file \"$TMP/copy-full-copy/b.txt\")"
+ },
+ {
+  "name": "copy-missing-source",
+  "script": "mkdir (POSIX file \"$TMP/copy-missing-source\")\nmkdir (POSIX file \"$TMP/copy-missing-source/d\")\nfilecopy (POSIX file \"$TMP/copy-missing-source/nope.txt\") to (POSIX file \"$TMP/copy-missing-source/d\")"
+ },
+ {
+  "name": "copy-missing-destination",
+  "script": "mkdir (POSIX file \"$TMP/copy-missing-destination\")\nwritetext \"x\" to (POSIX file \"$TMP/copy-missing-destination/a.txt\")\nfilecopy (POSIX file \"$TMP/copy-missing-destination/a.txt\") to (POSIX file \"$TMP/copy-missing-destination/nope\")"
+ },
+ {
+  "name": "copy-no-destination",
+  "script": "mkdir (POSIX file \"$TMP/copy-no-destination\")\nwritetext \"x\" to (POSIX file \"$TMP/copy-no-destination/a.txt\")\nfilecopy (POSIX file \"$TMP/copy-no-destination/a.txt\")"
+ },
+ {
+  "name": "copy-alias",
+  "script": "mkdir (POSIX file \"$TMP/copy-alias\")\nwritetext \"x\" to (POSIX file \"$TMP/copy-alias/a.txt\")\nmkdir (POSIX file \"$TMP/copy-alias/d\")\nfilecopy (POSIX file \"$TMP/copy-alias/a.txt\" as alias) to (POSIX file \"$TMP/copy-alias/d\" as alias)"
+ },
+ {
+  "name": "move-to-folder",
+  "script": "mkdir (POSIX file \"$TMP/move-to-folder\")\nwritetext \"x\" to (POSIX file \"$TMP/move-to-folder/a.txt\")\nmkdir (POSIX file \"$TMP/move-to-folder/d\")\nfilemove (POSIX file \"$TMP/move-to-folder/a.txt\") to (POSIX file \"$TMP/move-to-folder/d\")\nreadtext (POSIX file \"$TMP/move-to-folder/d/a.txt\")\nreadtext (POSIX file \"$TMP/move-to-folder/a.txt\")"
+ },
+ {
+  "name": "move-name",
+  "script": "mkdir (POSIX file \"$TMP/move-name\")\nwritetext \"x\" to (POSIX file \"$TMP/move-name/a.txt\")\nmkdir (POSIX file \"$TMP/move-name/d\")\nfilemove (POSIX file \"$TMP/move-name/a.txt\") to (POSIX file \"$TMP/move-name/d\") name \"b.txt\"\nreadtext (POSIX file \"$TMP/move-name/d/b.txt\")"
+ },
+ {
+  "name": "move-filepath",
+  "script": "mkdir (POSIX file \"$TMP/move-filepath\")\nwritetext \"x\" to (POSIX file \"$TMP/move-filepath/a.txt\")\nfilemove (POSIX file \"$TMP/move-filepath/a.txt\") filepath (POSIX file \"$TMP/move-filepath/b.txt\")\nreadtext (POSIX file \"$TMP/move-filepath/b.txt\")"
+ },
+ {
+  "name": "move-string",
+  "script": "mkdir (POSIX file \"$TMP/move-string\")\nwritetext \"x\" to (POSIX file \"$TMP/move-string/a.txt\")\nmkdir (POSIX file \"$TMP/move-string/d\")\nfilemove \"$TMP/move-string/a.txt\" to \"$TMP/move-string/d/\""
+ },
+ {
+  "name": "move-existing",
+  "script": "mkdir (POSIX file \"$TMP/move-existing\")\nwritetext \"x\" to (POSIX file \"$TMP/move-existing/a.txt\")\nwritetext \"y\" to (POSIX file \"$TMP/move-existing/b.txt\")\nfilemove (POSIX file \"$TMP/move-existing/a.txt\") filepath (POSIX file \"$TMP/move-existing/b.txt\")\nreadtext (POSIX file \"$TMP/move-existing/b.txt\")"
+ },
+ {
+  "name": "move-replacing",
+  "script": "mkdir (POSIX file \"$TMP/move-replacing\")\nwritetext \"x\" to (POSIX file \"$TMP/move-replacing/a.txt\")\nwritetext \"y\" to (POSIX file \"$TMP/move-replacing/b.txt\")\nfilemove (POSIX file \"$TMP/move-replacing/a.txt\") filepath (POSIX file \"$TMP/move-replacing/b.txt\") with replacing\nreadtext (POSIX file \"$TMP/move-replacing/b.txt\")"
+ },
+ {
+  "name": "move-list",
+  "script": "mkdir (POSIX file \"$TMP/move-list\")\nwritetext \"x\" to (POSIX file \"$TMP/move-list/a.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/move-list/b.txt\")\nmkdir (POSIX file \"$TMP/move-list/d\")\nfilemove {(POSIX file \"$TMP/move-list/a.txt\"), (POSIX file \"$TMP/move-list/b.txt\")} to (POSIX file \"$TMP/move-list/d\")"
+ },
+ {
+  "name": "move-from-relative",
+  "script": "mkdir (POSIX file \"$TMP/move-from-relative\")\nwritetext \"x\" to (POSIX file \"$TMP/move-from-relative/a.txt\")\nmkdir (POSIX file \"$TMP/move-from-relative/d\")\nfilemove \"a.txt\" from (POSIX file \"$TMP/move-from-relative/\") to (POSIX file \"$TMP/move-from-relative/d\")"
+ },
+ {
+  "name": "move-folder",
+  "script": "mkdir (POSIX file \"$TMP/move-folder\")\nmkdir (POSIX file \"$TMP/move-folder/s\")\nwritetext \"x\" to (POSIX file \"$TMP/move-folder/s/a.txt\")\nmkdir (POSIX file \"$TMP/move-folder/d\")\nfilemove (POSIX file \"$TMP/move-folder/s\") to (POSIX file \"$TMP/move-folder/d\")\nreadtext (POSIX file \"$TMP/move-folder/d/s/a.txt\")"
+ },
+ {
+  "name": "move-missing-source",
+  "script": "mkdir (POSIX file \"$TMP/move-missing-source\")\nmkdir (POSIX file \"$TMP/move-missing-source/d\")\nfilemove (POSIX file \"$TMP/move-missing-source/nope.txt\") to (POSIX file \"$TMP/move-missing-source/d\")"
+ },
+ {
+  "name": "remove-file",
+  "script": "mkdir (POSIX file \"$TMP/remove-file\")\nwritetext \"x\" to (POSIX file \"$TMP/remove-file/a.txt\")\nfileremove (POSIX file \"$TMP/remove-file/a.txt\")\nreadtext (POSIX file \"$TMP/remove-file/a.txt\")"
+ },
+ {
+  "name": "remove-string",
+  "script": "mkdir (POSIX file \"$TMP/remove-string\")\nwritetext \"x\" to (POSIX file \"$TMP/remove-string/a.txt\")\nfileremove \"$TMP/remove-string/a.txt\"\nreadtext (POSIX file \"$TMP/remove-string/a.txt\")"
+ },
+ {
+  "name": "remove-list",
+  "script": "mkdir (POSIX file \"$TMP/remove-list\")\nwritetext \"x\" to (POSIX file \"$TMP/remove-list/a.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/remove-list/b.txt\")\nfileremove {(POSIX file \"$TMP/remove-list/a.txt\"), (POSIX file \"$TMP/remove-list/b.txt\")}\nreadtext (POSIX file \"$TMP/remove-list/b.txt\")"
+ },
+ {
+  "name": "remove-from-relative",
+  "script": "mkdir (POSIX file \"$TMP/remove-from-relative\")\nwritetext \"x\" to (POSIX file \"$TMP/remove-from-relative/a.txt\")\nfileremove \"a.txt\" from (POSIX file \"$TMP/remove-from-relative/\")\nreadtext (POSIX file \"$TMP/remove-from-relative/a.txt\")"
+ },
+ {
+  "name": "remove-folder",
+  "script": "mkdir (POSIX file \"$TMP/remove-folder\")\nmkdir (POSIX file \"$TMP/remove-folder/d\")\nwritetext \"x\" to (POSIX file \"$TMP/remove-folder/d/a.txt\")\nfileremove (POSIX file \"$TMP/remove-folder/d\")\nfilegetname (POSIX file \"$TMP/remove-folder/d\")\nreadtext (POSIX file \"$TMP/remove-folder/d/a.txt\")"
+ },
+ {
+  "name": "remove-filesonly-file",
+  "script": "mkdir (POSIX file \"$TMP/remove-filesonly-file\")\nwritetext \"x\" to (POSIX file \"$TMP/remove-filesonly-file/a.txt\")\nfileremove (POSIX file \"$TMP/remove-filesonly-file/a.txt\") with filesonly\nreadtext (POSIX file \"$TMP/remove-filesonly-file/a.txt\")"
+ },
+ {
+  "name": "remove-folder-gone",
+  "script": "mkdir (POSIX file \"$TMP/remove-folder-gone\")\nmkdir (POSIX file \"$TMP/remove-folder-gone/d\")\nwritetext \"x\" to (POSIX file \"$TMP/remove-folder-gone/d/a.txt\")\nfileremove (POSIX file \"$TMP/remove-folder-gone/d\")\nmkdir (POSIX file \"$TMP/remove-folder-gone/d\")"
+ },
+ {
+  "name": "remove-filesonly-before",
+  "script": "mkdir (POSIX file \"$TMP/remove-filesonly-before\")\nmkdir (POSIX file \"$TMP/remove-filesonly-before/d\")\nwritetext \"x\" to (POSIX file \"$TMP/remove-filesonly-before/d/a.txt\")\nfileremove (POSIX file \"$TMP/remove-filesonly-before/d\") with filesonly before date \"Saturday, January 1, 2000 at 12:00:00 AM\"\nreadtext (POSIX file \"$TMP/remove-filesonly-before/d/a.txt\")"
+ },
+ {
+  "name": "remove-after-without-filesonly",
+  "script": "mkdir (POSIX file \"$TMP/remove-after-without-filesonly\")\nwritetext \"x\" to (POSIX file \"$TMP/remove-after-without-filesonly/a.txt\")\nfileremove (POSIX file \"$TMP/remove-after-without-filesonly/a.txt\") after date \"Saturday, January 1, 2000 at 12:00:00 AM\""
+ },
+ {
+  "name": "remove-missing",
+  "script": "mkdir (POSIX file \"$TMP/remove-missing\")\nfileremove (POSIX file \"$TMP/remove-missing/nope.txt\")"
+ },
+ {
+  "name": "remove-no-parameter",
+  "script": "mkdir (POSIX file \"$TMP/remove-no-parameter\")\nfileremove"
+ },
+ {
+  "name": "mkstemp-folder-name",
+  "script": "mkdir (POSIX file \"$TMP/mkstemp-folder-name\")\nmkstemp (POSIX file \"$TMP/mkstemp-folder-name/\") name \"tmp.txt\" suffix 4",
+  "random": {
+   "prefix": "tmp",
+   "length": 6,
+   "suffix": ".txt"
+  }
+ },
+ {
+  "name": "mkstemp-string",
+  "script": "mkdir (POSIX file \"$TMP/mkstemp-string\")\nmkstemp \"$TMP/mkstemp-string/\" name \"tmp.txt\" suffix 4",
+  "random": {
+   "prefix": "tmp",
+   "length": 6,
+   "suffix": ".txt"
+  }
+ },
+ {
+  "name": "mkstemp-path",
+  "script": "mkdir (POSIX file \"$TMP/mkstemp-path\")\nmkstemp (POSIX file \"$TMP/mkstemp-path/tmp\")",
+  "random": {
+   "prefix": "tmp",
+   "length": 6,
+   "suffix": ""
+  }
+ },
+ {
+  "name": "mkstemp-wildcards",
+  "script": "mkdir (POSIX file \"$TMP/mkstemp-wildcards\")\nmkstemp (POSIX file \"$TMP/mkstemp-wildcards/\") name \"t\" wildcards 3",
+  "random": {
+   "prefix": "t",
+   "length": 3,
+   "suffix": ""
+  }
+ },
+ {
+  "name": "mkstemp-mode",
+  "script": "mkdir (POSIX file \"$TMP/mkstemp-mode\")\nmkstemp (POSIX file \"$TMP/mkstemp-mode/\") name \"t\" mode \"600\"",
+  "random": {
+   "prefix": "t",
+   "length": 6,
+   "suffix": ""
+  }
+ },
+ {
+  "name": "mkdtemp-folder-name",
+  "script": "mkdir (POSIX file \"$TMP/mkdtemp-folder-name\")\nmkdtemp (POSIX file \"$TMP/mkdtemp-folder-name/\") name \"dir\"",
+  "random": {
+   "prefix": "dir",
+   "length": 6,
+   "suffix": "/"
+  }
+ },
+ {
+  "name": "mkdtemp-string",
+  "script": "mkdir (POSIX file \"$TMP/mkdtemp-string\")\nmkdtemp \"$TMP/mkdtemp-string/\" name \"dir\"",
+  "random": {
+   "prefix": "dir",
+   "length": 6,
+   "suffix": "/"
+  }
+ },
+ {
+  "name": "mkdtemp-path",
+  "script": "mkdir (POSIX file \"$TMP/mkdtemp-path\")\nmkdtemp (POSIX file \"$TMP/mkdtemp-path/dir\")",
+  "random": {
+   "prefix": "dir",
+   "length": 6,
+   "suffix": "/"
+  }
+ },
+ {
+  "name": "symlink-absolute",
+  "script": "mkdir (POSIX file \"$TMP/symlink-absolute\")\nwritetext \"x\" to (POSIX file \"$TMP/symlink-absolute/a.txt\")\ncreate symlink \"$TMP/symlink-absolute/a.txt\" in (POSIX file \"$TMP/symlink-absolute/\") name \"l\"\nreadlink \"$TMP/symlink-absolute/l\"\ntestsymlink \"$TMP/symlink-absolute/l\""
+ },
+ {
+  "name": "symlink-relative",
+  "script": "mkdir (POSIX file \"$TMP/symlink-relative\")\nwritetext \"x\" to (POSIX file \"$TMP/symlink-relative/a.txt\")\ncreate symlink \"a.txt\" in (POSIX file \"$TMP/symlink-relative/\") name \"l\"\nreadlink \"$TMP/symlink-relative/l\""
+ },
+ {
+  "name": "symlink-default-name",
+  "script": "mkdir (POSIX file \"$TMP/symlink-default-name\")\nmkdir (POSIX file \"$TMP/symlink-default-name/d\")\nwritetext \"x\" to (POSIX file \"$TMP/symlink-default-name/a.txt\")\ncreate symlink \"$TMP/symlink-default-name/a.txt\" in (POSIX file \"$TMP/symlink-default-name/d\")\nreadlink \"$TMP/symlink-default-name/d/a.txt\""
+ },
+ {
+  "name": "symlink-file-target",
+  "script": "mkdir (POSIX file \"$TMP/symlink-file-target\")\nwritetext \"x\" to (POSIX file \"$TMP/symlink-file-target/a.txt\")\ncreate symlink (POSIX file \"$TMP/symlink-file-target/a.txt\") in (POSIX file \"$TMP/symlink-file-target/\") name \"l\"\nreadlink \"$TMP/symlink-file-target/l\""
+ },
+ {
+  "name": "symlink-alias-target",
+  "script": "mkdir (POSIX file \"$TMP/symlink-alias-target\")\nwritetext \"x\" to (POSIX file \"$TMP/symlink-alias-target/a.txt\")\ncreate symlink (POSIX file \"$TMP/symlink-alias-target/a.txt\" as alias) in (POSIX file \"$TMP/symlink-alias-target/\") name \"l\"\nreadlink \"$TMP/symlink-alias-target/l\""
+ },
+ {
+  "name": "symlink-string-folder",
+  "script": "mkdir (POSIX file \"$TMP/symlink-string-folder\")\nwritetext \"x\" to (POSIX file \"$TMP/symlink-string-folder/a.txt\")\ncreate symlink \"a.txt\" in \"$TMP/symlink-string-folder/\" name \"l\"\nreadlink \"$TMP/symlink-string-folder/l\""
+ },
+ {
+  "name": "symlink-replacing-default",
+  "script": "mkdir (POSIX file \"$TMP/symlink-replacing-default\")\nwritetext \"x\" to (POSIX file \"$TMP/symlink-replacing-default/a.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/symlink-replacing-default/b.txt\")\ncreate symlink \"a.txt\" in (POSIX file \"$TMP/symlink-replacing-default/\") name \"l\"\ncreate symlink \"b.txt\" in (POSIX file \"$TMP/symlink-replacing-default/\") name \"l\"\nreadlink \"$TMP/symlink-replacing-default/l\""
+ },
+ {
+  "name": "symlink-not-replacing",
+  "script": "mkdir (POSIX file \"$TMP/symlink-not-replacing\")\nwritetext \"x\" to (POSIX file \"$TMP/symlink-not-replacing/a.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/symlink-not-replacing/b.txt\")\ncreate symlink \"a.txt\" in (POSIX file \"$TMP/symlink-not-replacing/\") name \"l\"\ncreate symlink \"b.txt\" in (POSIX file \"$TMP/symlink-not-replacing/\") name \"l\" without replacing"
+ },
+ {
+  "name": "symlink-over-file",
+  "script": "mkdir (POSIX file \"$TMP/symlink-over-file\")\nwritetext \"x\" to (POSIX file \"$TMP/symlink-over-file/a.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/symlink-over-file/l\")\ncreate symlink \"a.txt\" in (POSIX file \"$TMP/symlink-over-file/\") name \"l\""
+ },
+ {
+  "name": "symlink-dangling",
+  "script": "mkdir (POSIX file \"$TMP/symlink-dangling\")\ncreate symlink \"nope.txt\" in (POSIX file \"$TMP/symlink-dangling/\") name \"l\"\nreadlink \"$TMP/symlink-dangling/l\"\ntestsymlink \"$TMP/symlink-dangling/l\""
+ },
+ {
+  "name": "testsymlink-file",
+  "script": "mkdir (POSIX file \"$TMP/testsymlink-file\")\nwritetext \"x\" to (POSIX file \"$TMP/testsymlink-file/a.txt\")\ntestsymlink \"$TMP/testsymlink-file/a.txt\""
+ },
+ {
+  "name": "testsymlink-folder",
+  "script": "mkdir (POSIX file \"$TMP/testsymlink-folder\")\nmkdir (POSIX file \"$TMP/testsymlink-folder/d\")\ntestsymlink \"$TMP/testsymlink-folder/d\""
+ },
+ {
+  "name": "testsymlink-missing",
+  "script": "mkdir (POSIX file \"$TMP/testsymlink-missing\")\ntestsymlink \"$TMP/testsymlink-missing/nope\""
+ },
+ {
+  "name": "testsymlink-url",
+  "script": "mkdir (POSIX file \"$TMP/testsymlink-url\")\nwritetext \"x\" to (POSIX file \"$TMP/testsymlink-url/a.txt\")\ncreate symlink \"a.txt\" in (POSIX file \"$TMP/testsymlink-url/\") name \"l\"\ntestsymlink \"file://$TMP/testsymlink-url/l\""
+ },
+ {
+  "name": "testsymlink-file-reference",
+  "script": "mkdir (POSIX file \"$TMP/testsymlink-file-reference\")\nwritetext \"x\" to (POSIX file \"$TMP/testsymlink-file-reference/a.txt\")\ncreate symlink \"a.txt\" in (POSIX file \"$TMP/testsymlink-file-reference/\") name \"l\"\ntestsymlink (POSIX file \"$TMP/testsymlink-file-reference/l\")"
+ },
+ {
+  "name": "readlink-not-a-link",
+  "script": "mkdir (POSIX file \"$TMP/readlink-not-a-link\")\nwritetext \"x\" to (POSIX file \"$TMP/readlink-not-a-link/a.txt\")\nreadlink \"$TMP/readlink-not-a-link/a.txt\""
+ },
+ {
+  "name": "readlink-missing",
+  "script": "mkdir (POSIX file \"$TMP/readlink-missing\")\nreadlink \"$TMP/readlink-missing/nope\""
+ },
+ {
+  "name": "readlink-folder-link",
+  "script": "mkdir (POSIX file \"$TMP/readlink-folder-link\")\nmkdir (POSIX file \"$TMP/readlink-folder-link/d\")\ncreate symlink \"d\" in (POSIX file \"$TMP/readlink-folder-link/\") name \"l\"\nreadlink \"$TMP/readlink-folder-link/l\""
+ }
+]

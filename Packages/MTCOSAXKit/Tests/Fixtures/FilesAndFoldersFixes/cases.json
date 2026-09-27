@@ -1,0 +1,35 @@
+[
+ {
+  "name": "getname-hfs",
+  "script": "mkdir (POSIX file \"$TMP/getname-hfs\")\nwritetext \"x\" to (POSIX file \"$TMP/getname-hfs/a.txt\")\nfilegetname ((POSIX file \"$TMP/getname-hfs/a.txt\") as text)"
+ },
+ {
+  "name": "remove-filesonly",
+  "script": "mkdir (POSIX file \"$TMP/remove-filesonly\")\nmkdir (POSIX file \"$TMP/remove-filesonly/d\")\nwritetext \"x\" to (POSIX file \"$TMP/remove-filesonly/d/a.txt\")\nmkdir (POSIX file \"$TMP/remove-filesonly/d/e\")\nwritetext \"x\" to (POSIX file \"$TMP/remove-filesonly/d/e/b.txt\")\nfileremove (POSIX file \"$TMP/remove-filesonly/d\") with filesonly\nreadtext (POSIX file \"$TMP/remove-filesonly/d/a.txt\")\nreadtext (POSIX file \"$TMP/remove-filesonly/d/e/b.txt\")\nfilegetname (POSIX file \"$TMP/remove-filesonly/d/e\")"
+ },
+ {
+  "name": "remove-filesonly-subfolder-file",
+  "script": "mkdir (POSIX file \"$TMP/remove-filesonly-subfolder-file\")\nmkdir (POSIX file \"$TMP/remove-filesonly-subfolder-file/d\")\nwritetext \"x\" to (POSIX file \"$TMP/remove-filesonly-subfolder-file/d/a.txt\")\nmkdir (POSIX file \"$TMP/remove-filesonly-subfolder-file/d/e\")\nwritetext \"x\" to (POSIX file \"$TMP/remove-filesonly-subfolder-file/d/e/b.txt\")\nfileremove (POSIX file \"$TMP/remove-filesonly-subfolder-file/d\") with filesonly\nreadtext (POSIX file \"$TMP/remove-filesonly-subfolder-file/d/e/b.txt\")"
+ },
+ {
+  "name": "remove-filesonly-keeps-subfolder",
+  "script": "mkdir (POSIX file \"$TMP/remove-filesonly-keeps-subfolder\")\nmkdir (POSIX file \"$TMP/remove-filesonly-keeps-subfolder/d\")\nwritetext \"x\" to (POSIX file \"$TMP/remove-filesonly-keeps-subfolder/d/a.txt\")\nmkdir (POSIX file \"$TMP/remove-filesonly-keeps-subfolder/d/e\")\nwritetext \"x\" to (POSIX file \"$TMP/remove-filesonly-keeps-subfolder/d/e/b.txt\")\nfileremove (POSIX file \"$TMP/remove-filesonly-keeps-subfolder/d\") with filesonly\nmkdir (POSIX file \"$TMP/remove-filesonly-keeps-subfolder/d/e\")"
+ },
+ {
+  "name": "remove-filesonly-keeps-folder",
+  "script": "mkdir (POSIX file \"$TMP/remove-filesonly-keeps-folder\")\nmkdir (POSIX file \"$TMP/remove-filesonly-keeps-folder/d\")\nwritetext \"x\" to (POSIX file \"$TMP/remove-filesonly-keeps-folder/d/a.txt\")\nmkdir (POSIX file \"$TMP/remove-filesonly-keeps-folder/d/e\")\nwritetext \"x\" to (POSIX file \"$TMP/remove-filesonly-keeps-folder/d/e/b.txt\")\nfileremove (POSIX file \"$TMP/remove-filesonly-keeps-folder/d\") with filesonly\nmkdir (POSIX file \"$TMP/remove-filesonly-keeps-folder/d\")"
+ },
+ {
+  "name": "remove-filesonly-after",
+  "script": "mkdir (POSIX file \"$TMP/remove-filesonly-after\")\nmkdir (POSIX file \"$TMP/remove-filesonly-after/d\")\nwritetext \"x\" to (POSIX file \"$TMP/remove-filesonly-after/d/a.txt\")\nfileremove (POSIX file \"$TMP/remove-filesonly-after/d\") with filesonly after date \"Saturday, January 1, 2000 at 12:00:00 AM\"\nreadtext (POSIX file \"$TMP/remove-filesonly-after/d/a.txt\")"
+ },
+ {
+  "name": "mkdtemp-wildcards",
+  "script": "mkdir (POSIX file \"$TMP/mkdtemp-wildcards\")\nmkdtemp (POSIX file \"$TMP/mkdtemp-wildcards/\") name \"d\" wildcards 8",
+  "random": {
+   "prefix": "d",
+   "length": 8,
+   "suffix": "/"
+  }
+ }
+]

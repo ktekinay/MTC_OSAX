@@ -82,6 +82,11 @@ struct DecodingTests {
 		#expect(try URL(scriptPath: "Backup Disk:folder:file").path == "/Volumes/Backup Disk/folder/file")
 	}
 
+	@Test func urlFromFileURLString() throws {
+		#expect(try URL(scriptPath: "file:///tmp/a%20b.txt").path == "/tmp/a b.txt")
+		#expect(throws: OSAXError.coercionFailed) { try URL(scriptPath: "file://") }
+	}
+
 	@Test func urlRejectsRelativePath() {
 		#expect(throws: OSAXError.coercionFailed) {
 			try URL(scriptPath: "file.txt")

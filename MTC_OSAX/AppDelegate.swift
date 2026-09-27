@@ -13,6 +13,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 	private var idleMonitor: IdleMonitor?
 
 	func applicationWillFinishLaunching(_ notification: Notification) {
+		// Cocoa Scripting loads the dictionary the first time it handles an event itself (e.g. `get` of an object
+		// specifier such as `POSIX file (someVariable)`), and then installs its own handlers for every command,
+		// replacing ours. Loading it now means ours are installed after it and stay.
+		_ = NSScriptSuiteRegistry.shared()
 		let idleMonitor = IdleMonitor(timeout: Self.idleTimeout()) {
 			NSApplication.shared.terminate(nil)
 		}

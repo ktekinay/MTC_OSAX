@@ -34,9 +34,10 @@ let package = Package(
 		// Suites. Each implemented Satimage section gets its own module.
 		.target(name: "Diagnostics", dependencies: ["AppleEventCore"]),
 		.target(name: "TextAdditions", dependencies: ["AppleEventCore", "TextMatching"]),
+		.target(name: "FilesAndFolders", dependencies: ["AppleEventCore"]),
 
 		// Registers every suite with a dispatcher; the app links only this.
-		.target(name: "MTCOSAX", dependencies: ["AppleEventCore", "Diagnostics", "TextAdditions"]),
+		.target(name: "MTCOSAX", dependencies: ["AppleEventCore", "Diagnostics", "TextAdditions", "FilesAndFolders"]),
 
 		.executableTarget(name: "FixtureRecorder", dependencies: ["AppleEventCore"]),
 
@@ -44,6 +45,7 @@ let package = Package(
 		.testTarget(name: "DiagnosticsTests", dependencies: ["Diagnostics"]),
 		.testTarget(name: "TextMatchingTests", dependencies: ["TextMatching"]),
 		.testTarget(name: "TextAdditionsTests", dependencies: ["TextAdditions"]),
+		.testTarget(name: "FilesAndFoldersTests", dependencies: ["FilesAndFolders"]),
 		.testTarget(name: "SDEFConsistencyTests", dependencies: ["MTCOSAX"]),
 		.testTarget(name: "FixtureReplayTests", dependencies: ["MTCOSAX"]),
 	]

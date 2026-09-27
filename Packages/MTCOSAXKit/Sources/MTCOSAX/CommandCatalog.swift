@@ -1,5 +1,6 @@
 @_exported import AppleEventCore
 import Diagnostics
+import FilesAndFolders
 import TextAdditions
 import Foundation
 
@@ -10,6 +11,7 @@ public enum CommandCatalog {
 		let dispatcher = CommandDispatcher()
 		dispatcher.register(Diagnostics.commands(version: version))
 		dispatcher.register(TextAdditions.commands(timeZone: timeZone))
+		dispatcher.register(FilesAndFolders.commands())
 		return dispatcher
 	}
 

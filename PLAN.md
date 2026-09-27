@@ -11,8 +11,8 @@ Command counts include hidden commands. Suites sharing a priority are done toget
 | Priority | Suite | Cmds | What it covers |
 |---|---|---|---|
 | 1 ✓ | Satimage Text Additions ([done](Implemented/PLAN-TextAdditions.md)) | 25 | `find text`, `change` (regex find/replace), `splittext`, `filter text`, `readtext`/`writetext`, upper/lower/titlecase, `format`, `atof`/`atoi`, entity encode/resolve, `escapeURL`/`unescapeURL`, Unicode normalize/transform, `hash`, `join`, `printf`, `strftime`/`strptime` |
-| 2 | Files and folders suite | 10 | `filenew`, `mkdir`, `filecopy`, `filemove`, `fileremove`, `filegetname`, `filerename`, `mkstemp`, `mkdtemp`, `chmod` |
-| 2 | Symlink suite | 3 | `create symlink`, `testsymlink`, `readlink` |
+| 2 ✓ | Files and folders suite ([done](Implemented/PLAN-FilesAndFolders.md)) | 10 | `filenew`, `mkdir`, `filecopy`, `filemove`, `fileremove`, `filegetname`, `filerename`, `mkstemp`, `mkdtemp`, `chmod` |
+| 2 ✓ | Symlink suite | 3 | `create symlink`, `testsymlink`, `readlink` |
 | 3 | Satimage File Additions | 14 | `navchoose …` / `navask save` dialogs, `alias description for`, `URL info for`, `absoluteURL`/`relativeURL`, `list files`, `glob`, `backup` (folder sync) |
 | 4 | Mathematical Functions | 27 | `abs`, trig/hyperbolic, `exp`, `ln`, `log10`, `sqrt`, `sqr`, `ceil`/`floor`/`trunc`, `erf`, `gamma`, `hypot`, … |
 | 4 | Array and List Utilities | 7 | `sortlist`, `masklist`, `topological sort`, `suppress item`, `exclude items`, `keep items`, `special concat` |
