@@ -11,6 +11,10 @@ enum Fixtures {
 	/// Folders that aren't replayed against the full catalog.
 	static let excludedFolders: Set = ["Examples"]
 
+	/// Folders whose reals may differ from SatimageOSAX's by a few units in the last place: Intel's and Apple
+	/// silicon's math libraries differ slightly (up to 15 units for `lgamma` near its roots).
+	static let realTolerances = ["MathFunctions": 16, "MathFunctionsFixes": 16]
+
 	/// Paths relative to the Fixtures folder, e.g. "Diagnostics/ping.json". `cases.json` files are inputs, not fixtures.
 	static func paths(in folder: String? = nil) -> [String] {
 		let root = folder.map { directory.appendingPathComponent($0) } ?? directory
@@ -40,7 +44,8 @@ enum Fixtures {
 		}
 		defer { try? FileManager.default.removeItem(at: temporary) }
 		let input = directory.appendingPathComponent(path).deletingLastPathComponent().appendingPathComponent("Input")
-		return fixture.replay(using: dispatcher, variables: ["FILES": input.path, "TMP": temporary.path])
+		let folder = String(path.prefix { $0 != "/" })
+		return fixture.replay(using: dispatcher, variables: ["FILES": input.path, "TMP": temporary.path], realTolerance: realTolerances[folder] ?? 0)
 	}
 }
 

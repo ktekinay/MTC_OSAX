@@ -1,0 +1,59 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Sort",
+        "fields" : [
+          {
+            "key" : "Uniq",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "code" : "msng",
+                  "type" : "type"
+                },
+                {
+                  "code" : "msng",
+                  "type" : "type"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "integer" : 1,
+              "type" : "long"
+            },
+            {
+              "code" : "msng",
+              "type" : "type"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "sortlist-remove-duplicates-missing",
+  "recordedAt" : "2026-09-28T04:39:42Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "sortlist {1, missing value, missing value} with remove duplicates",
+  "timeZone" : "America/New_York"
+}

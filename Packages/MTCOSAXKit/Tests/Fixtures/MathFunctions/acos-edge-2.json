@@ -1,0 +1,28 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "ACOS",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "real" : 1.0000001,
+              "type" : "doub"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -50
+      }
+    }
+  ],
+  "name" : "acos-edge-2",
+  "recordedAt" : "2026-09-28T04:29:07Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "acos 1.0000001",
+  "timeZone" : "America/New_York"
+}

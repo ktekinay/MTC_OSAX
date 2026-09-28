@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "ERFC",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 28,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 0,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "erfc-edge-2",
+  "recordedAt" : "2026-09-28T04:29:09Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "erfc 28",
+  "timeZone" : "America/New_York"
+}

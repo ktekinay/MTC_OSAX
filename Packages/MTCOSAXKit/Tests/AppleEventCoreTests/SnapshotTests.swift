@@ -109,6 +109,31 @@ struct SnapshotTests {
 		#expect(!expected.matches(actual))
 	}
 
+	@Test func arrayOfRealIsStoredAsNumbers() throws {
+		// createarray 3, as SatimageOSAX returns it.
+		let recorded = Data(hexString: "4e6f742061207265636f726462756f640000000000000000000000000000f03f0000000000000040")
+		let descriptor = try #require(NSAppleEventDescriptor(descriptorType: FourCharCode(fourCharString: "Lido"), data: recorded))
+		#expect(try ArrayOfReal(appleEventDescriptor: descriptor).values == [0, 1, 2])
+		#expect(ArrayOfReal([0, 1, 2]).appleEventDescriptor.data == recorded)
+		let snapshot = DescriptorSnapshot(descriptor)
+		#expect(snapshot.items?.map(\.real) == [0, 1, 2])
+		#expect(snapshot.descriptor.data == recorded)
+		let withNaN = DescriptorSnapshot(ArrayOfReal([.nan, 1]).appleEventDescriptor)
+		#expect(withNaN.items?.first?.text == "nan")
+		#expect(try roundTrip(withNaN.descriptor).data == ArrayOfReal([.nan, 1]).appleEventDescriptor.data)
+		#expect(throws: OSAXError.coercionFailed) { try ArrayOfReal(appleEventDescriptor: NSAppleEventDescriptor(string: "x")) }
+	}
+
+	@Test func realTolerance() {
+		let expected = DescriptorSnapshot([NSAppleEventDescriptor(double: 1.0)].appleEventDescriptor)
+		let close = DescriptorSnapshot([NSAppleEventDescriptor(double: 1.0.nextUp.nextUp)].appleEventDescriptor)
+		#expect(!expected.matches(close))
+		#expect(expected.matches(close, realTolerance: 2))
+		#expect(!expected.matches(close, realTolerance: 1))
+		#expect(DescriptorSnapshot.unitsInTheLastPlace(between: 0, and: -0.0) == 0)
+		#expect(DescriptorSnapshot.unitsInTheLastPlace(between: 1, and: -1) == .max)
+	}
+
 	@Test func textIsStoredReadably() {
 		let snapshot = DescriptorSnapshot(NSAppleEventDescriptor(descriptorType: FourCharCode(fourCharString: "ut16"), data: "Hé".data(using: .utf16))!)
 		#expect(snapshot.text == "Hé")

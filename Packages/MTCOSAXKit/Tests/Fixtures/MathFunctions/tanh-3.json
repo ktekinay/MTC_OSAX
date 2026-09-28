@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "TANH",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : -1,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : -0.7615941559557649,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "tanh-3",
+  "recordedAt" : "2026-09-28T04:29:08Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "tanh -1",
+  "timeZone" : "America/New_York"
+}

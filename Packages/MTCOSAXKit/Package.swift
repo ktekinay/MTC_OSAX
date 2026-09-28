@@ -39,9 +39,15 @@ let package = Package(
 		.target(name: "TextAdditions", dependencies: ["AppleEventCore", "TextMatching"]),
 		.target(name: "FilesAndFolders", dependencies: ["AppleEventCore"]),
 		.target(name: "FileAdditions", dependencies: ["AppleEventCore"]),
+		.target(name: "MathFunctions", dependencies: ["AppleEventCore", "Numerics"]),
+		.target(name: "ListUtilities", dependencies: ["AppleEventCore", "Numerics"]),
+		.target(name: "Arrays", dependencies: ["AppleEventCore", "Numerics"]),
+
+		// Numbers from scripts: numbers, lists and Satimage's `array of real`. Shared by Math, List Utilities and Arrays.
+		.target(name: "Numerics", dependencies: ["AppleEventCore"]),
 
 		// Registers every suite with a dispatcher; the app links only this.
-		.target(name: "MTCOSAX", dependencies: ["AppleEventCore", "Diagnostics", "TextAdditions", "FilesAndFolders", "FileAdditions"]),
+		.target(name: "MTCOSAX", dependencies: ["AppleEventCore", "Diagnostics", "TextAdditions", "FilesAndFolders", "FileAdditions", "MathFunctions", "ListUtilities", "Arrays"]),
 
 		.executableTarget(name: "FixtureRecorder", dependencies: ["AppleEventCore"]),
 
@@ -51,6 +57,10 @@ let package = Package(
 		.testTarget(name: "TextAdditionsTests", dependencies: ["TextAdditions"]),
 		.testTarget(name: "FilesAndFoldersTests", dependencies: ["FilesAndFolders"]),
 		.testTarget(name: "FileAdditionsTests", dependencies: ["FileAdditions"]),
+		.testTarget(name: "NumericsTests", dependencies: ["Numerics"]),
+		.testTarget(name: "MathFunctionsTests", dependencies: ["MathFunctions"]),
+		.testTarget(name: "ListUtilitiesTests", dependencies: ["ListUtilities"]),
+		.testTarget(name: "ArraysTests", dependencies: ["Arrays"]),
 		.testTarget(name: "SDEFConsistencyTests", dependencies: ["MTCOSAX"]),
 		.testTarget(name: "FixtureReplayTests", dependencies: ["MTCOSAX"]),
 	]

@@ -1,0 +1,61 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "EIFL",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "text" : "1",
+                  "type" : "utxt"
+                },
+                {
+                  "integer" : 2,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "1",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "integer" : 2,
+              "type" : "long"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "exclude-numbers-text",
+  "recordedAt" : "2026-09-28T04:34:15Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "exclude items {\"1\"} from {1, \"1\", 2}",
+  "timeZone" : "America/New_York"
+}

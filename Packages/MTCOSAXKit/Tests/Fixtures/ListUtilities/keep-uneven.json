@@ -1,0 +1,93 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "KIFL",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "items" : [
+                {
+                  "items" : [
+                    {
+                      "text" : "a",
+                      "type" : "utxt"
+                    },
+                    {
+                      "text" : "b",
+                      "type" : "utxt"
+                    },
+                    {
+                      "text" : "c",
+                      "type" : "utxt"
+                    }
+                  ],
+                  "type" : "list"
+                },
+                {
+                  "items" : [
+                    {
+                      "integer" : 1,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 2,
+                      "type" : "long"
+                    }
+                  ],
+                  "type" : "list"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "a",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "items" : [
+                {
+                  "text" : "a",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            },
+            {
+              "items" : [
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "keep-uneven",
+  "recordedAt" : "2026-09-28T04:34:16Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "keep items {\"a\"} from {{\"a\", \"b\", \"c\"}, {1, 2}}",
+  "timeZone" : "America/New_York"
+}

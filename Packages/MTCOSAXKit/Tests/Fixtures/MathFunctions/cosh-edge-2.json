@@ -1,0 +1,28 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "COSH",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 711,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -50
+      }
+    }
+  ],
+  "name" : "cosh-edge-2",
+  "recordedAt" : "2026-09-28T04:29:08Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "cosh 711",
+  "timeZone" : "America/New_York"
+}

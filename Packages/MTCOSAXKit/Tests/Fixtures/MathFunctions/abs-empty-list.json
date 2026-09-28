@@ -1,0 +1,35 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "ABS ",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "abs-empty-list",
+  "recordedAt" : "2026-09-28T04:29:09Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "abs {}",
+  "timeZone" : "America/New_York"
+}

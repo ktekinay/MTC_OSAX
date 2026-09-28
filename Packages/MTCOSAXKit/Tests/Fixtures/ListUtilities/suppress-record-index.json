@@ -1,0 +1,60 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "DLKY",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "a",
+                        "type" : "utxt"
+                      },
+                      {
+                        "integer" : 1,
+                        "type" : "long"
+                      },
+                      {
+                        "text" : "b",
+                        "type" : "utxt"
+                      },
+                      {
+                        "integer" : 2,
+                        "type" : "long"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1719
+      }
+    }
+  ],
+  "name" : "suppress-record-index",
+  "recordedAt" : "2026-09-28T04:34:15Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "suppress item 1 from {a:1, b:2}",
+  "timeZone" : "America/New_York"
+}

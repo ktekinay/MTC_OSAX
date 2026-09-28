@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "SINH",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 1.1752011936438014,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "sinh-2",
+  "recordedAt" : "2026-09-28T04:29:08Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "sinh 1",
+  "timeZone" : "America/New_York"
+}

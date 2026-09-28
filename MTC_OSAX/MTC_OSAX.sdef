@@ -854,6 +854,334 @@ after ((get current date) - 3600) without recursively
 			</command>
   </suite>
 
+	<suite name="Mathematical Functions" code="MATH" description="Some mathematical functions. Most functions support as their direct parameter (and return) a list or an array of real. Notice: you may need more parentheses than is intuitive. Ex: cos(a) - b returns cos(a - b), so you may want to write (cos(a)) - b.">
+			<command name="abs" code="MATHABS " description="absolute value of direct parameter ">
+				<direct-parameter type="real"/>
+				<result type="real"/>
+			</command>
+			<command name="acos" code="MATHACOS" description="arc cosine of direct parameter ">
+				<direct-parameter type="real" description="-1 &lt;= x &lt;= 1"/>
+				<result type="real" description="in radians"/>
+			</command>
+			<command name="acosh" code="MATHACOH" description="hyperbolic arc cosine of direct parameter">
+				<direct-parameter type="real" description="a positive number"/>
+				<result type="real"/>
+			</command>
+			<command name="asin" code="MATHASIN" description="arc sine of direct parameter">
+				<direct-parameter type="real" description="-1 &lt;= x &lt;= 1"/>
+				<result type="real" description="in radians"/>
+			</command>
+			<command name="asinh" code="MATHASIH" description="hyperbolic arc sine of direct parameter">
+				<direct-parameter type="real"/>
+				<result type="real"/>
+			</command>
+			<command name="atan" code="MATHATAN" description="arc tangent of direct parameter">
+				<direct-parameter type="real"/>
+				<result type="real" description="in radians"/>
+			</command>
+			<command name="atan2" code="MATHATA2" description="the angle of the line whose direction is the vector (x , y)">
+				<direct-parameter type="list of real" description="2 real numbers : y (ordinate) and x (abscissa)"/>
+				<result type="real" description="in radians"/>
+			</command>
+			<command name="atanh" code="MATHATAH" description="hyperbolic arc tangent of direct parameter">
+				<direct-parameter type="real" description="-1 &lt; x &lt; 1"/>
+				<result type="real"/>
+			</command>
+			<command name="ceil" code="MATHCEIL" description="round up">
+				<direct-parameter type="real"/>
+				<result type="real"/>
+			</command>
+			<command name="cosh" code="MATHCOSH" description="hyperbolic cosine of direct parameter">
+				<direct-parameter type="real"/>
+				<result type="real"/>
+			</command>
+			<command name="cos" code="MATHCOSI" description="cosine of direct parameter">
+				<direct-parameter type="real" description="the angle (in radians). If the angle is in degrees, multiply it by pi / 180 before taking the cosine."/>
+				<result type="real"/>
+			</command>
+			<command name="erf" code="MATHERF " description="the error function">
+				<direct-parameter type="real"/>
+				<result type="real"/>
+			</command>
+			<command name="erfc" code="MATHERFC" description="the complementary error function">
+				<direct-parameter type="real"/>
+				<result type="real"/>
+			</command>
+			<command name="exp" code="MATHEXP " description="exponential of direct parameter">
+				<direct-parameter type="real"/>
+				<result type="real"/>
+			</command>
+			<command name="floor" code="MATHFLOO"  description="round down">
+				<direct-parameter type="real"/>
+				<result type="real"/>
+			</command>
+			<command name="gamma" code="MATHGAMM" description="the gamma function">
+				<direct-parameter type="real" description="a positive number"/>
+				<result type="real"/>
+			</command>
+			<command name="hypot" code="MATHHYPO" description="the square root of the sum of the squares of its arguments">
+				<direct-parameter type="list of real" description="2 real numbers"/>
+				<result type="real"/>
+			</command>
+			<command name="lgamma" code="MATHLGAM" description="base-e logarithm of the absolute value of gamma">
+				<direct-parameter type="real" description="a positive number"/>
+				<result type="real"/>
+			</command>
+			<command name="ln" code="MATHLN  " description="base-e logarithm of direct parameter">
+				<direct-parameter type="real" description="a positive real"/>
+				<result type="real"/>
+			</command>
+			<command name="log10" code="MATHLOG " description="decimal logarithm of direct parameter">
+				<direct-parameter type="real" description="a positive real"/>
+				<result type="real"/>
+			</command>
+			<command name="sin" code="MATHSINE" description="sine of direct parameter">
+				<direct-parameter type="real" description="the angle (in radians)"/>
+				<result type="real"/>
+			</command>
+			<command name="sinh" code="MATHSINH" description="hyperbolic sine of direct parameter">
+				<direct-parameter type="real"/>
+				<result type="real"/>
+			</command>
+			<command name="sqr" code="MATHSQR " description="square of direct parameter">
+				<direct-parameter type="real"/>
+				<result type="real"/>
+			</command>
+			<command name="sqrt" code="MATHSQRT" description="square root of direct parameter">
+				<direct-parameter type="real" description="a positive number"/>
+				<result type="real"/>
+			</command>
+			<command name="tan" code="MATHTANG" description="tangent of direct parameter">
+				<direct-parameter type="real" description="the angle (in radians)"/>
+				<result type="real"/>
+			</command>
+			<command name="tanh" code="MATHTANH" description="hyperbolic tangent of direct parameter">
+				<direct-parameter type="real"/>
+				<result type="real"/>
+			</command>
+			<command name="trunc" code="MATHTRUN"  description="round toward zero">
+				<direct-parameter type="real"/>
+				<result type="real"/>
+			</command>
+	</suite>
+
+	<suite name="Array and List Utilities" code="RESO" description="">
+			<command name="sortlist" code="SATISort" description="sort a list of numbers (or an array of real) or a list of strings or a list of dates. Missing values of the input list are always returned at the end of the resulting list. Can also sort a list of lists: lists are sorted either asynchronously or synchronously if the 'with respect to' parameter is specified. Sortlist is stable.">
+				<synonym name="sortarray"/>
+				<direct-parameter description="the list to sort (or a list of lists)"><type type="anything" list="yes"/></direct-parameter>
+				<parameter name="with respect to" code="from" type="integer" optional="yes" description="index of the list used as the sort criterion. Relevant only if the direct parameter is a list of lists: requests a synchronous sort. If this parameter is not specified, each list is sorted separately. This parameter may be a list of integer corresponding to a list of criteria in decreasing priority order. Of course, the lists that does not correspond to a criterium are reordered and do not need to be homogeneous"/>
+				<parameter name="ascending" code="Asce" type="boolean" optional="yes" description="default true. May be a list if &quot;with respect to&quot; is already a list."/>
+				<parameter name="remove duplicates" code="Uniq" type="boolean" optional="yes" description="if true, remove duplicate values. Default false"/>
+				<parameter name="comparison" code="Cfla" type="integer" optional="yes" description="only relevant for list of string. 1 case insensitive, 2 compare numerically, 1+4 force ordering ('A'&lt;'a'&lt;'B'). Default 0"/>
+				<result description="the sorted list (or lists)"><type type="anything" list="yes"/></result>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">
+sortlist (randomarray 10)
+-- «data Lido4E6F74206120...»
+(sortlist {2, 5, 1, 3} without ascending) as list of real
+-- {5.0, 3.0, 2.0, 1.0}
+sortlist {"abc", "ABC", "xyz", "123"}
+-- {"123", "ABC", "abc", "xyz"}
+sortlist {{1, 2, 3, 4}, {"abc", "ABC", "xyz", "123"}, createarray 4, {{a:1}, "b", 3, {1, 2, 3}}} with respect to 2
+-- {{4, 2, 1, 3}, {"123", "ABC", "abc", "xyz"}, «data Lido4E6F74206120...», {{1, 2, 3}, "b", {a:1}, 3}}
+-- compare numerically:
+sortlist {"a1", "a10", "a2", "1b", "10b", "2b"}
+-- {"10b", "1b", "2b", "a1", "a10", "a2"}
+sortlist {"a1", "a10", "a2", "1b", "10b", "2b"} comparison 2
+-- {"1b", "2b", "10b", "a1", "a2", "a10"}
+</div>
+</div>
+</html>
+</documentation>
+			</command>
+			<command name="masklist" code="SATIMASk" description="suppress items out of a list (or replace items) with respect to a mask of 0's and 1's. See also 'suppress item'">
+				<direct-parameter type="list of any" description="the list to be filtered."/>
+				<parameter name="with" code="with" type="array of real" description="the filter: an array of real, or a list of integers, 0's mean that the corresponding items are to be deleted (or replaced if substitute is present) in the direct object(s)."/>
+				<parameter name="substitute" code="Subs" optional="yes" type="any" description=""/>
+				<result type="list of any" description="the resulting list"/>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">
+masklist {"abc", {a:1}, "b", 3, {1, 2, 3}} with {1, 0, 1, 1, 0}
+-- {"abc", "b", 3}
+</div>
+</div>
+</html>
+</documentation>
+			</command>
+			<command name="topological sort" code="SATITSrt" description="given a list of vertices and partial ordering providing provided by either the parameter edges or the parameter dependencies, topological sort returns a ordered list or an error if the ordering is not suitable">
+				<direct-parameter optional="yes" description="the vertices. Optional with the edges parameter"><type type="integer" list="yes"/></direct-parameter>
+				<parameter name="edges" code="edge" description="{{v1,v2},{v3,v4},..}. Each ordered pair corresponds to an oriented edge (that is v1&gt;v2). This parameter can also be provided as a list {v1,v2v3,v4,,..}" optional="yes" >
+				<type type="list" list="yes"/> 
+				</parameter>
+				<parameter name="dependencies" code="depe" optional="yes" description="if there are n vertices, dependencies is a list of n list of vertices. The ith list contains the vertices known as larger that the ith vertex">
+				<type type="list" list="yes"/> 
+				</parameter>
+				<result description="a ordered list of vertices {v1,v2,...}"><type type="integer" list="yes"/></result>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">topological sort edges {{13, 2}, {1, 13}, {24, 1}}
+-- {24, 1, 13, 2}
+</div>
+</div>
+</html>
+</documentation>
+			</command>
+			<command name="suppress item" code="SATIDLKY" description="delete a list of items from a list or a record. ">
+				<direct-parameter type="anything" description="a list of indices or a list of keywords. Use quotes around custom properties, and also around 4-characters codes. (If you don't know what this means, you don't need it)."/>
+				<parameter name="from" code="from">
+					<type type="list"/>
+					<type type="record"/>
+				</parameter>
+				<result description="according to the &quot;from&quot; parameter">
+					<type type="list"/>
+					<type type="record"/>
+				</result>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">
+suppress item 2 from {"abc", {a:1}, "b", 3}
+-- {"abc", "b", 3}
+
+suppress item name from {path name:1, name:"abc"}
+-- {path name:1}
+
+suppress item {2, 3} from {"abc", {a:1}, "b", 3}
+-- {"abc", 3}
+</div>
+</div>
+</html>
+</documentation>
+			</command>
+    <command name="exclude items" code="SATIEIFL" description="remove strings from a list of strings. A list equivalent of the set difference.">
+      <direct-parameter description="the list of strings to remove from the input list">
+         <type type="string" list="yes"/>
+      </direct-parameter>
+      <parameter name="from" code="from" description="the input list">
+         <type type="string" list="yes"/>
+      </parameter>
+      <parameter name="with respect to" code="With" type="integer" optional="yes" description="rank of the list (of string) used for the filter process. Other input lists may be lists of anything. Relevant only if the 'from' parameter is a list of lists. Default: 1"/>
+	<parameter name="case sensitive" code="CaSe" type="boolean" optional="yes" description="default true"/>
+      <result type="list" description="the cleaned input list, or a list of cleaned lists if the 'from' parameter is a list of lists."/>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">
+exclude items {"r", "t", "z"} from {"a", "z", "e", "r", "t", "y"}
+  --  {"a", "e", "y"}
+
+exclude items {"r", "t", "z"} from {{"a", "z", "e", "r", "t", "y"}, {1, 2, 3, 4, 5, 6}, {"one", "two", "three", "four", "five", "six"}}
+  --  {{"a", "e", "y"}, {1, 3, 6}, {"one", "three", "six"}}
+</div>
+</div>
+</html>
+</documentation>
+    </command>
+    <command name="keep items" code="SATIKIFL" description="remove strings from a list of strings. A list equivalent of the set intersection.">
+      <direct-parameter description="the list of the strings to keep">
+         <type type="string" list="yes"/>
+      </direct-parameter>
+      <parameter name="from" code="from" description="(or list of list). The input list">
+         <type type="string" list="yes"/>
+      </parameter>
+      <parameter name="with respect to" code="With" type="integer" optional="yes" description="rank of the list (of string) used for the filter process. Other input lists may be lists of anything. Relevant only if the 'from' parameter is a list of lists. Default: 1"/>
+	<parameter name="case sensitive" code="CaSe" type="boolean" optional="yes" description="default true"/>
+      <result type="list" description="the cleaned input list, or a list of cleaned lists if the 'from' parameter is a list of lists."/>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">
+keep items {"r", "t", "z"} from {"a", "z", "e", "r", "t", "y"}
+  --  {"z", "r", "t"}
+
+keep items {"r", "t", "z"} from {{"a", "z", "e", "r", "t", "y"}, {1, 2, 3, 4, 5, 6}, {"one", "two", "three", "four", "five", "six"}}
+  --  {{"z", "r", "t"}, {2, 4, 5}, {"two", "four", "five"}}
+</div>
+</div>
+</html>
+</documentation>
+    </command>
+			<command name="special concat" code="SATICONC" description="concatenate {a_ppty:X, …} and {a_ppty:Y, …} into {a_ppty:Z, …}, where Z is X &amp; Y (resp. X + Y) if X,Y are lists (resp. numbers). Also merges tabulated string arrays side to side (in other terms, adds columns).">
+				<direct-parameter type="record" description="the record"/>
+				<parameter name="with" code="with" type="record" description="the additional data"/>
+				<result type="record"/>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">
+special concat {a:1, b:{1}, c:"A", d:0} with {a:2, b:{2}, c:"B"}
+-- {a:3.0, b:{1, 2}, c:"A", d:0}
+
+special concat ("1" &amp; tab &amp; "2" &amp; return &amp; "A" &amp; tab &amp; "B") with ("3" &amp; return &amp; "C")
+-- "1	2	3
+A	B	C
+"
+</div>
+</div>
+</html>
+</documentation>
+			</command>
+  </suite>
+
+	<!-- Only what Mathematical Functions and Array and List Utilities need from Satimage's Arrays suite. -->
+	<suite name="Arrays" code="ARRA" description="">
+		<value-type name="array of real" code="Lido" plural="arrays of real" description="a packed list of real. Can be coerced to an AppleScript list with &quot;as list of real&quot; or &quot;as list of integer&quot;. Conversely, a list of real may be translated using &quot;as array of real&quot; for fast computation.">
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">
+set a to {1,2,3} as array of real
+-- «data Lido4E6F74206120...»
+
+a as list of real
+-- {1.0, 2.0, 3.0}
+</div>
+</div>
+</html>
+</documentation>
+		</value-type>
+		<value-type name="list of real" code="LiDo" description="an abstract type provided to coerce arrays of real into list of real" plural="list of real"/>
+		<value-type name="list of integer" code="LiIn" description="an abstract type provided to coerce arrays of real into list of integer" plural="list of integer"/>
+		<command name="createarray" code="SATICRAR" description="create an array of real ">
+				<direct-parameter type="integer" description="the requested size of the array"/>
+				<parameter name="range" code="rang" type="list of real"  optional="yes" description="{min,max}"/>
+				<result type="array of real"/>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">
+set x to createarray 10 range {2, 3}
+-- «data Lido4E6F74206120...»
+
+</div>
+</div>
+</html>
+</documentation>
+			</command>
+		<command name="randomarray" code="SATICRRA" description="create a random array of real">
+				<direct-parameter type="integer" description="the requested size of the array"/>
+				<parameter name="range" code="rang" type="list of real"  optional="yes" description="{min,max}"/>
+				<parameter name="seed" code="seed" type="integer"  optional="yes"/>
+				<result type="array of real"/>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">
+set x to randomarray 10 range {2, 3} seed 12345
+-- «data Lido4E6F74206120...»
+
+</div>
+</div>
+</html>
+</documentation>
+			</command>
+	</suite>
+
 	<suite name="MTC Diagnostics" code="MTCd" description="Commands for checking that MTC_OSAX is working." hidden="yes">
 		<command name="mtc_ping" code="MTCdping" description="Returns &quot;pong&quot;." hidden="yes">
 			<result type="text" description="&quot;pong&quot;"/>

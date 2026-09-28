@@ -1,0 +1,40 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "HYPO",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 3,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 4,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 5,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "hypot-4",
+  "recordedAt" : "2026-09-28T04:29:10Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "hypot {3, 4}",
+  "timeZone" : "America/New_York"
+}

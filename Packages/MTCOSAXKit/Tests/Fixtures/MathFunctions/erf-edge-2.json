@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "ERF ",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : -6,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : -1,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "erf-edge-2",
+  "recordedAt" : "2026-09-28T04:29:09Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "erf -6",
+  "timeZone" : "America/New_York"
+}

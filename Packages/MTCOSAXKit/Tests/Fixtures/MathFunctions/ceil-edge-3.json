@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "CEIL",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "real" : 1e+17,
+              "type" : "doub"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 1e+17,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "ceil-edge-3",
+  "recordedAt" : "2026-09-28T04:29:06Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "ceil 1E+17",
+  "timeZone" : "America/New_York"
+}

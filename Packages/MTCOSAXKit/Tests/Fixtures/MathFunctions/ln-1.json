@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "LN  ",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "real" : 2.718281828459045,
+              "type" : "doub"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 1,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "ln-1",
+  "recordedAt" : "2026-09-28T04:29:06Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "ln 2.718281828459045",
+  "timeZone" : "America/New_York"
+}

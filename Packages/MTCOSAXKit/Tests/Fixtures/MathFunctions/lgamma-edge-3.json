@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "LGAM",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "real" : -1.5,
+              "type" : "doub"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 0.860047015376481,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "lgamma-edge-3",
+  "recordedAt" : "2026-09-28T04:29:09Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "lgamma -1.5",
+  "timeZone" : "America/New_York"
+}

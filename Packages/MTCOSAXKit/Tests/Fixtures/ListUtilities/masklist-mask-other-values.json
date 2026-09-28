@@ -1,0 +1,93 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "MASk",
+        "fields" : [
+          {
+            "key" : "with",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 2,
+                  "type" : "long"
+                },
+                {
+                  "integer" : -1,
+                  "type" : "long"
+                },
+                {
+                  "real" : 0.5,
+                  "type" : "doub"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 2,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 3,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 4,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 5,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "integer" : 1,
+              "type" : "long"
+            },
+            {
+              "integer" : 2,
+              "type" : "long"
+            },
+            {
+              "integer" : 3,
+              "type" : "long"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "masklist-mask-other-values",
+  "recordedAt" : "2026-09-28T04:34:14Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "masklist {1, 2, 3, 4, 5} with {2, -1, 0.5, 0, 0.0}",
+  "timeZone" : "America/New_York"
+}

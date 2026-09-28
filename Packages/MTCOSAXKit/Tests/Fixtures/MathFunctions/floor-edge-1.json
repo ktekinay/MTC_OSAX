@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "FLOO",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "real" : 0.9999999,
+              "type" : "doub"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 0,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "floor-edge-1",
+  "recordedAt" : "2026-09-28T04:29:06Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "floor 0.9999999",
+  "timeZone" : "America/New_York"
+}

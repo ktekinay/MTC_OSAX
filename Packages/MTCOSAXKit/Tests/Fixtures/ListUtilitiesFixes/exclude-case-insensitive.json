@@ -1,0 +1,72 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "EIFL",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "a",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "A",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "b",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "B",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "CaSe",
+            "value" : {
+              "type" : "fals"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "A",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "b",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "exclude-case-insensitive",
+  "recordedAt" : "2026-09-28T04:39:43Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "exclude items {\"A\", \"b\"} from {\"a\", \"A\", \"b\", \"B\"} without case sensitive",
+  "timeZone" : "America/New_York"
+}

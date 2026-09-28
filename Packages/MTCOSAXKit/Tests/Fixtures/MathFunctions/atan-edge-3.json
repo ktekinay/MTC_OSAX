@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "ATAN",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "real" : 1e-10,
+              "type" : "doub"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 1e-10,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "atan-edge-3",
+  "recordedAt" : "2026-09-28T04:29:08Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "atan 1E-10",
+  "timeZone" : "America/New_York"
+}

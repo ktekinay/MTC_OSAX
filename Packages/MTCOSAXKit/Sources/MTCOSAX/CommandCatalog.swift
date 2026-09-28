@@ -1,6 +1,9 @@
 @_exported import AppleEventCore
 import Diagnostics
 @_exported import FileAdditions
+import Arrays
+import ListUtilities
+import MathFunctions
 import FilesAndFolders
 import TextAdditions
 import Foundation
@@ -20,6 +23,9 @@ public enum CommandCatalog {
 		dispatcher.register(TextAdditions.commands(timeZone: timeZone))
 		dispatcher.register(FilesAndFolders.commands())
 		dispatcher.register(FileAdditions.commands(dialogs: dialogs))
+		dispatcher.register(MathFunctions.commands())
+		dispatcher.register(ListUtilities.commands())
+		dispatcher.register(Arrays.commands())
 		return dispatcher
 	}
 

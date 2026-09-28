@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "SQRT",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "real" : 1e+308,
+              "type" : "doub"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 1e+154,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "sqrt-edge-3",
+  "recordedAt" : "2026-09-28T04:29:06Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "sqrt 1E+308",
+  "timeZone" : "America/New_York"
+}

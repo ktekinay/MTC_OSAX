@@ -92,6 +92,46 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "NumericsTests"
+               BuildableName = "NumericsTests"
+               BlueprintName = "NumericsTests"
+               ReferencedContainer = "container:Packages/MTCOSAXKit">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "MathFunctionsTests"
+               BuildableName = "MathFunctionsTests"
+               BlueprintName = "MathFunctionsTests"
+               ReferencedContainer = "container:Packages/MTCOSAXKit">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "ListUtilitiesTests"
+               BuildableName = "ListUtilitiesTests"
+               BlueprintName = "ListUtilitiesTests"
+               ReferencedContainer = "container:Packages/MTCOSAXKit">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "ArraysTests"
+               BuildableName = "ArraysTests"
+               BlueprintName = "ArraysTests"
+               ReferencedContainer = "container:Packages/MTCOSAXKit">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "SDEFConsistencyTests"
                BuildableName = "SDEFConsistencyTests"
                BlueprintName = "SDEFConsistencyTests"

@@ -1,0 +1,88 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Sort",
+        "fields" : [
+          {
+            "key" : "Cfla",
+            "value" : {
+              "integer" : 2,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "a1",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "a10",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "a2",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "1b",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "10b",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "2b",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "1b",
+              "type" : "ut16"
+            },
+            {
+              "text" : "2b",
+              "type" : "ut16"
+            },
+            {
+              "text" : "10b",
+              "type" : "ut16"
+            },
+            {
+              "text" : "a1",
+              "type" : "ut16"
+            },
+            {
+              "text" : "a2",
+              "type" : "ut16"
+            },
+            {
+              "text" : "a10",
+              "type" : "ut16"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "sortlist-comparison-2",
+  "recordedAt" : "2026-09-28T04:34:13Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "sortlist {\"a1\", \"a10\", \"a2\", \"1b\", \"10b\", \"2b\"} comparison 2",
+  "timeZone" : "America/New_York"
+}

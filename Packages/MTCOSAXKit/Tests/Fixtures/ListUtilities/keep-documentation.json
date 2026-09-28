@@ -1,0 +1,89 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "KIFL",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "a",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "z",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "e",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "r",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "t",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "y",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "r",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "t",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "z",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "z",
+              "type" : "utxt"
+            },
+            {
+              "text" : "r",
+              "type" : "utxt"
+            },
+            {
+              "text" : "t",
+              "type" : "utxt"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "keep-documentation",
+  "recordedAt" : "2026-09-28T04:34:15Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "keep items {\"r\", \"t\", \"z\"} from {\"a\", \"z\", \"e\", \"r\", \"t\", \"y\"}",
+  "timeZone" : "America/New_York"
+}

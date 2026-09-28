@@ -1,0 +1,71 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "TSrt",
+        "fields" : [
+          {
+            "key" : "edge",
+            "value" : {
+              "items" : [
+                {
+                  "items" : [
+                    {
+                      "integer" : -1,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 0,
+                      "type" : "long"
+                    }
+                  ],
+                  "type" : "list"
+                },
+                {
+                  "items" : [
+                    {
+                      "integer" : 0,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 5,
+                      "type" : "long"
+                    }
+                  ],
+                  "type" : "list"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "integer" : -1,
+              "type" : "long"
+            },
+            {
+              "integer" : 0,
+              "type" : "long"
+            },
+            {
+              "integer" : 5,
+              "type" : "long"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "toposort-negative",
+  "recordedAt" : "2026-09-28T04:39:43Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "topological sort edges {{-1, 0}, {0, 5}}",
+  "timeZone" : "America/New_York"
+}

@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "EXP ",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 709,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 8.218407461554972e+307,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "exp-edge-1",
+  "recordedAt" : "2026-09-28T04:29:06Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "exp 709",
+  "timeZone" : "America/New_York"
+}

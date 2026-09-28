@@ -1,0 +1,71 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Sort",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "fields" : [
+                    {
+                      "key" : "usrf",
+                      "value" : {
+                        "items" : [
+                          {
+                            "text" : "a",
+                            "type" : "utxt"
+                          },
+                          {
+                            "integer" : 2,
+                            "type" : "long"
+                          }
+                        ],
+                        "type" : "list"
+                      }
+                    }
+                  ],
+                  "type" : "reco"
+                },
+                {
+                  "fields" : [
+                    {
+                      "key" : "usrf",
+                      "value" : {
+                        "items" : [
+                          {
+                            "text" : "a",
+                            "type" : "utxt"
+                          },
+                          {
+                            "integer" : 1,
+                            "type" : "long"
+                          }
+                        ],
+                        "type" : "list"
+                      }
+                    }
+                  ],
+                  "type" : "reco"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1700
+      }
+    }
+  ],
+  "name" : "sortlist-records",
+  "recordedAt" : "2026-09-28T04:34:13Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "sortlist {{a:2}, {a:1}}",
+  "timeZone" : "America/New_York"
+}

@@ -1,0 +1,132 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CRAR",
+        "fields" : [
+          {
+            "key" : "rang",
+            "value" : {
+              "items" : [
+                {
+                  "real" : -5,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 5,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 5,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : -5,
+              "type" : "doub"
+            },
+            {
+              "real" : -2.5,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 2.5,
+              "type" : "doub"
+            },
+            {
+              "real" : 5,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "SINH",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "real" : -5,
+                  "type" : "doub"
+                },
+                {
+                  "real" : -2.5,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 2.5,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 5,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "Lido"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : -74.20321057778875,
+              "type" : "doub"
+            },
+            {
+              "real" : -6.0502044810397875,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 6.0502044810397875,
+              "type" : "doub"
+            },
+            {
+              "real" : 74.20321057778875,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    }
+  ],
+  "name" : "sinh-array",
+  "recordedAt" : "2026-09-28T04:29:08Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "sinh (createarray 5 range {-5.0, 5.0})",
+  "timeZone" : "America/New_York"
+}

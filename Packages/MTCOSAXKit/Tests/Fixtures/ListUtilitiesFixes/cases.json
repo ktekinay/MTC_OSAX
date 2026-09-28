@@ -1,0 +1,154 @@
+[
+ {
+  "name": "sortlist-missing-values",
+  "script": "sortlist {3, missing value, 1, missing value, 2}"
+ },
+ {
+  "name": "sortlist-missing-values-descending",
+  "script": "sortlist {3, missing value, 1, 2} without ascending"
+ },
+ {
+  "name": "sortlist-remove-duplicates-missing",
+  "script": "sortlist {1, missing value, missing value} with remove duplicates"
+ },
+ {
+  "name": "sortlist-number",
+  "script": "sortlist 5"
+ },
+ {
+  "name": "sortlist-string",
+  "script": "sortlist \"abc\""
+ },
+ {
+  "name": "sortlist-no-parameter",
+  "script": "sortlist"
+ },
+ {
+  "name": "toposort-documentation",
+  "script": "topological sort edges {{13, 2}, {1, 13}, {24, 1}}"
+ },
+ {
+  "name": "toposort-flat-edges",
+  "script": "topological sort edges {13, 2, 1, 13, 24, 1}"
+ },
+ {
+  "name": "toposort-choices",
+  "script": "topological sort edges {{1, 2}, {1, 3}, {2, 4}, {3, 4}}"
+ },
+ {
+  "name": "toposort-choices-reversed",
+  "script": "topological sort edges {{3, 4}, {2, 4}, {1, 3}, {1, 2}}"
+ },
+ {
+  "name": "toposort-vertices",
+  "script": "topological sort {1, 2, 3, 4} edges {{3, 1}}"
+ },
+ {
+  "name": "toposort-vertices-order",
+  "script": "topological sort {4, 3, 2, 1} edges {{3, 1}}"
+ },
+ {
+  "name": "toposort-vertices-not-in-edges",
+  "script": "topological sort {1, 2} edges {{3, 4}}"
+ },
+ {
+  "name": "toposort-vertices-only",
+  "script": "topological sort {3, 1, 2}"
+ },
+ {
+  "name": "toposort-dependencies",
+  "script": "topological sort {1, 2, 3} dependencies {{2}, {3}, {}}"
+ },
+ {
+  "name": "toposort-dependencies-no-vertices",
+  "script": "topological sort dependencies {{2}, {3}, {}}"
+ },
+ {
+  "name": "toposort-dependencies-several",
+  "script": "topological sort {1, 2, 3, 4} dependencies {{2, 3}, {4}, {4}, {}}"
+ },
+ {
+  "name": "toposort-dependencies-labels",
+  "script": "topological sort {10, 20, 30} dependencies {{20}, {30}, {}}"
+ },
+ {
+  "name": "toposort-cycle",
+  "script": "topological sort edges {{1, 2}, {2, 1}}"
+ },
+ {
+  "name": "toposort-self-loop",
+  "script": "topological sort edges {{1, 1}}"
+ },
+ {
+  "name": "toposort-cycle-long",
+  "script": "topological sort edges {{1, 2}, {2, 3}, {3, 1}}"
+ },
+ {
+  "name": "toposort-duplicate-edges",
+  "script": "topological sort edges {{1, 2}, {1, 2}}"
+ },
+ {
+  "name": "toposort-empty-edges",
+  "script": "topological sort edges {}"
+ },
+ {
+  "name": "toposort-edges-and-dependencies",
+  "script": "topological sort {1, 2} edges {{1, 2}} dependencies {{}, {1}}"
+ },
+ {
+  "name": "toposort-odd-flat-edges",
+  "script": "topological sort edges {1, 2, 3}"
+ },
+ {
+  "name": "toposort-strings",
+  "script": "topological sort edges {{\"a\", \"b\"}}"
+ },
+ {
+  "name": "toposort-reals",
+  "script": "topological sort edges {{1.5, 2}}"
+ },
+ {
+  "name": "toposort-negative",
+  "script": "topological sort edges {{-1, 0}, {0, 5}}"
+ },
+ {
+  "name": "toposort-no-parameter",
+  "script": "topological sort"
+ },
+ {
+  "name": "suppress-documentation-index",
+  "script": "suppress item 2 from {\"abc\", {a:1}, \"b\", 3}"
+ },
+ {
+  "name": "suppress-negative",
+  "script": "suppress item -1 from {1, 2, 3}"
+ },
+ {
+  "name": "exclude-case-insensitive",
+  "script": "exclude items {\"A\", \"b\"} from {\"a\", \"A\", \"b\", \"B\"} without case sensitive"
+ },
+ {
+  "name": "exclude-case-insensitive-accents",
+  "script": "exclude items {\"É\"} from {\"é\", \"e\", \"É\"} without case sensitive"
+ },
+ {
+  "name": "keep-case-insensitive",
+  "script": "keep items {\"A\", \"b\"} from {\"a\", \"A\", \"b\", \"B\"} without case sensitive"
+ },
+ {
+  "name": "keep-case-insensitive-accents",
+  "script": "keep items {\"É\"} from {\"é\", \"e\", \"É\"} without case sensitive"
+ },
+ {
+  "name": "keep-empty-filter",
+  "script": "keep items {} from {\"a\", \"b\"}"
+ },
+ {
+  "name": "concat-text-empty",
+  "script": "special concat \"\" with \"b\""
+ },
+ {
+  "name": "concat-text-and-record",
+  "script": "special concat \"a\" with {a:1}"
+ }
+]

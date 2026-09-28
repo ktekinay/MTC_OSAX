@@ -5,7 +5,8 @@ import Foundation
 ///
 /// Only the properties relevant to `type` are set: text for text types, `integer` for `long`/`shor`,
 /// `real` for `doub`/`sing` (or `text` "inf", "-inf" or "nan", which JSON can't hold), `boolean` for `bool`, `code` for `type`/`enum`/`keyw`, `items` for
-/// lists, `fields` for records and Apple event parameters, and `hex` for anything else.
+/// lists and for Satimage's `array of real` (`Lido`, as `doub` items), `fields` for records and Apple event parameters, and `hex` for anything
+/// else.
 public struct DescriptorSnapshot: Codable, Hashable {
 	public var type: String
 	public var text: String?
@@ -44,6 +45,8 @@ public struct DescriptorSnapshot: Codable, Hashable {
 			fields = Self.fields(of: descriptor)
 		case "list":
 			items = (0 ..< descriptor.numberOfItems).map { DescriptorSnapshot(descriptor.atIndex($0 + 1)!) }
+		case "Lido" where ArrayOfReal.values(of: descriptor) != nil:
+			items = ArrayOfReal.values(of: descriptor)!.map { DescriptorSnapshot(NSAppleEventDescriptor(double: $0)) }
 		case "utxt", "ut16", "utf8", "TEXT":
 			text = descriptor.stringValue
 		case "furl":
@@ -119,6 +122,8 @@ public struct DescriptorSnapshot: Codable, Hashable {
 				list.insert(item.descriptor, at: index + 1)
 			}
 			return list
+		case "Lido" where items != nil:
+			return ArrayOfReal(items!.map(\.realValue)).appleEventDescriptor
 		case "utxt":
 			return NSAppleEventDescriptor(string: text ?? "")
 		case "ut16":
@@ -239,10 +244,14 @@ public struct DescriptorSnapshot: Codable, Hashable {
 
 	/// Whether `actual` equals this expected value, where `{{random:N}}` in expected text stands for any N letters
 	/// or digits (used for `mkstemp` and `mkdtemp` names), and an expected value of type `any` matches any value
-	/// (used for dates and applications that depend on the machine). Compare normalized snapshots.
-	public func matches(_ actual: DescriptorSnapshot) -> Bool {
+	/// (used for dates and applications that depend on the machine). Reals may differ by `realTolerance` units in the
+	/// last place. Compare normalized snapshots.
+	public func matches(_ actual: DescriptorSnapshot, realTolerance: Int = 0) -> Bool {
 		if type == "any" {
 			return true
+		}
+		if realTolerance > 0, type == "doub", actual.type == "doub", let expected = real, let other = actual.real {
+			return Self.unitsInTheLastPlace(between: expected, and: other) <= realTolerance
 		}
 		guard let text, text.contains("{{random:"), let actualText = actual.text, type == actual.type else {
 			guard type == actual.type, (items ?? []).count == (actual.items ?? []).count,
@@ -254,8 +263,8 @@ public struct DescriptorSnapshot: Codable, Hashable {
 			copy.items = actual.items
 			copy.fields = actual.fields
 			return copy == actual
-				&& zip(items ?? [], actual.items ?? []).allSatisfy { $0.matches($1) }
-				&& zip(fields ?? [], actual.fields ?? []).allSatisfy { $0.key == $1.key && $0.value.matches($1.value) }
+				&& zip(items ?? [], actual.items ?? []).allSatisfy { $0.matches($1, realTolerance: realTolerance) }
+				&& zip(fields ?? [], actual.fields ?? []).allSatisfy { $0.key == $1.key && $0.value.matches($1.value, realTolerance: realTolerance) }
 		}
 		var pattern = "^"
 		var rest = Substring(text)
@@ -267,6 +276,18 @@ public struct DescriptorSnapshot: Codable, Hashable {
 		}
 		pattern += NSRegularExpression.escapedPattern(for: String(rest)) + "$"
 		return actualText.range(of: pattern, options: .regularExpression) != nil
+	}
+
+	/// How many representable doubles apart two numbers are (0 for equal numbers, including 0 and -0).
+	static func unitsInTheLastPlace(between a: Double, and b: Double) -> Int {
+		if a == b {
+			return 0
+		}
+		guard a.isFinite, b.isFinite, a.sign == b.sign else {
+			return .max
+		}
+		let distance = Int64(bitPattern: a.magnitude.bitPattern) - Int64(bitPattern: b.magnitude.bitPattern)
+		return distance.magnitude > UInt64(Int.max) ? .max : Int(distance.magnitude)
 	}
 
 	private var fieldsSummary: String {

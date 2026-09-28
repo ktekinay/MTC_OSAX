@@ -1,0 +1,92 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CRAR",
+        "fields" : [
+          {
+            "key" : "rang",
+            "value" : {
+              "items" : [
+                {
+                  "real" : -10000000000,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 10000000000,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 11,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : -10000000000,
+              "type" : "doub"
+            },
+            {
+              "real" : -8000000000,
+              "type" : "doub"
+            },
+            {
+              "real" : -6000000000,
+              "type" : "doub"
+            },
+            {
+              "real" : -4000000000,
+              "type" : "doub"
+            },
+            {
+              "real" : -2000000000,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 2000000000,
+              "type" : "doub"
+            },
+            {
+              "real" : 4000000000,
+              "type" : "doub"
+            },
+            {
+              "real" : 6000000000,
+              "type" : "doub"
+            },
+            {
+              "real" : 8000000000,
+              "type" : "doub"
+            },
+            {
+              "real" : 10000000000,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    }
+  ],
+  "name" : "createarray-range-large",
+  "recordedAt" : "2026-09-28T04:32:11Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "createarray 11 range {-1.0E+10, 1.0E+10}",
+  "timeZone" : "America/New_York"
+}

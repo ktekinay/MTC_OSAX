@@ -1,0 +1,73 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "KIFL",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "a",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "A",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "b",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "B",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "A",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "b",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "A",
+              "type" : "utxt"
+            },
+            {
+              "text" : "b",
+              "type" : "utxt"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "keep-case-sensitive",
+  "recordedAt" : "2026-09-28T04:34:15Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "keep items {\"A\", \"b\"} from {\"a\", \"A\", \"b\", \"B\"}",
+  "timeZone" : "America/New_York"
+}

@@ -1,0 +1,33 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "KIFL",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "a",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1701
+      }
+    }
+  ],
+  "name" : "keep-no-from",
+  "recordedAt" : "2026-09-28T04:34:16Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "keep items {\"a\"}",
+  "timeZone" : "America/New_York"
+}

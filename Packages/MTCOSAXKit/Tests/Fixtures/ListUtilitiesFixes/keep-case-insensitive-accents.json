@@ -1,0 +1,71 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "KIFL",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "é",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "e",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "É",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "CaSe",
+            "value" : {
+              "type" : "fals"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "É",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "é",
+              "type" : "utxt"
+            },
+            {
+              "text" : "É",
+              "type" : "utxt"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "keep-case-insensitive-accents",
+  "recordedAt" : "2026-09-28T04:39:43Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "keep items {\"É\"} from {\"é\", \"e\", \"É\"} without case sensitive",
+  "timeZone" : "America/New_York"
+}

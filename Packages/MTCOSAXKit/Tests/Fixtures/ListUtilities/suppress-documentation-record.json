@@ -1,0 +1,107 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "DLKY",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "pnam",
+                  "value" : {
+                    "text" : "abc",
+                    "type" : "utxt"
+                  }
+                },
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "b",
+                        "type" : "utxt"
+                      },
+                      {
+                        "integer" : 1,
+                        "type" : "long"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "form",
+                  "value" : {
+                    "code" : "prop",
+                    "type" : "enum"
+                  }
+                },
+                {
+                  "key" : "want",
+                  "value" : {
+                    "code" : "prop",
+                    "type" : "type"
+                  }
+                },
+                {
+                  "key" : "seld",
+                  "value" : {
+                    "code" : "pnam",
+                    "type" : "type"
+                  }
+                },
+                {
+                  "key" : "from",
+                  "value" : {
+                    "type" : "null"
+                  }
+                }
+              ],
+              "type" : "obj "
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "usrf",
+              "value" : {
+                "items" : [
+                  {
+                    "text" : "b",
+                    "type" : "utxt"
+                  },
+                  {
+                    "integer" : 1,
+                    "type" : "long"
+                  }
+                ],
+                "type" : "list"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    }
+  ],
+  "name" : "suppress-documentation-record",
+  "recordedAt" : "2026-09-28T04:35:46Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "suppress item name from {b:1, name:\"abc\"}",
+  "timeZone" : "America/New_York"
+}

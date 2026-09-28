@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "SQRT",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 2,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 1.4142135623730951,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "sqrt-2",
+  "recordedAt" : "2026-09-28T04:29:06Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "sqrt 2",
+  "timeZone" : "America/New_York"
+}

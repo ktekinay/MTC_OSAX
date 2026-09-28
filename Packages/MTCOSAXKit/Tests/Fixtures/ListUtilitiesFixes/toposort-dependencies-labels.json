@@ -1,0 +1,89 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "TSrt",
+        "fields" : [
+          {
+            "key" : "depe",
+            "value" : {
+              "items" : [
+                {
+                  "items" : [
+                    {
+                      "integer" : 20,
+                      "type" : "long"
+                    }
+                  ],
+                  "type" : "list"
+                },
+                {
+                  "items" : [
+                    {
+                      "integer" : 30,
+                      "type" : "long"
+                    }
+                  ],
+                  "type" : "list"
+                },
+                {
+                  "items" : [
+
+                  ],
+                  "type" : "list"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 10,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 20,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 30,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "integer" : 30,
+              "type" : "long"
+            },
+            {
+              "integer" : 20,
+              "type" : "long"
+            },
+            {
+              "integer" : 10,
+              "type" : "long"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "toposort-dependencies-labels",
+  "recordedAt" : "2026-09-28T04:39:42Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "topological sort {10, 20, 30} dependencies {{20}, {30}, {}}",
+  "timeZone" : "America/New_York"
+}

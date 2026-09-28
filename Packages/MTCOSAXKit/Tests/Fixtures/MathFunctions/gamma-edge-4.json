@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "GAMM",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 171,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 7.257415615307999e+306,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "gamma-edge-4",
+  "recordedAt" : "2026-09-28T04:29:09Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "gamma 171",
+  "timeZone" : "America/New_York"
+}

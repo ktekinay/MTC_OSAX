@@ -1,0 +1,307 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CRAR",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 4,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 2,
+              "type" : "doub"
+            },
+            {
+              "real" : 3,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Sort",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "integer" : 2,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "items" : [
+                    {
+                      "integer" : 1,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 2,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 3,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 4,
+                      "type" : "long"
+                    }
+                  ],
+                  "type" : "list"
+                },
+                {
+                  "items" : [
+                    {
+                      "text" : "abc",
+                      "type" : "utxt"
+                    },
+                    {
+                      "text" : "ABC",
+                      "type" : "utxt"
+                    },
+                    {
+                      "text" : "xyz",
+                      "type" : "utxt"
+                    },
+                    {
+                      "text" : "123",
+                      "type" : "utxt"
+                    }
+                  ],
+                  "type" : "list"
+                },
+                {
+                  "items" : [
+                    {
+                      "real" : 0,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 2,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 3,
+                      "type" : "doub"
+                    }
+                  ],
+                  "type" : "Lido"
+                },
+                {
+                  "items" : [
+                    {
+                      "fields" : [
+                        {
+                          "key" : "usrf",
+                          "value" : {
+                            "items" : [
+                              {
+                                "text" : "a",
+                                "type" : "utxt"
+                              },
+                              {
+                                "integer" : 1,
+                                "type" : "long"
+                              }
+                            ],
+                            "type" : "list"
+                          }
+                        }
+                      ],
+                      "type" : "reco"
+                    },
+                    {
+                      "text" : "b",
+                      "type" : "utxt"
+                    },
+                    {
+                      "integer" : 3,
+                      "type" : "long"
+                    },
+                    {
+                      "items" : [
+                        {
+                          "integer" : 1,
+                          "type" : "long"
+                        },
+                        {
+                          "integer" : 2,
+                          "type" : "long"
+                        },
+                        {
+                          "integer" : 3,
+                          "type" : "long"
+                        }
+                      ],
+                      "type" : "list"
+                    }
+                  ],
+                  "type" : "list"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "items" : [
+                {
+                  "integer" : 4,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 2,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 3,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            },
+            {
+              "items" : [
+                {
+                  "text" : "123",
+                  "type" : "ut16"
+                },
+                {
+                  "text" : "ABC",
+                  "type" : "ut16"
+                },
+                {
+                  "text" : "abc",
+                  "type" : "ut16"
+                },
+                {
+                  "text" : "xyz",
+                  "type" : "ut16"
+                }
+              ],
+              "type" : "list"
+            },
+            {
+              "items" : [
+                {
+                  "real" : 3,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 1,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 2,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "Lido"
+            },
+            {
+              "items" : [
+                {
+                  "items" : [
+                    {
+                      "integer" : 1,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 2,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 3,
+                      "type" : "long"
+                    }
+                  ],
+                  "type" : "list"
+                },
+                {
+                  "text" : "b",
+                  "type" : "utxt"
+                },
+                {
+                  "fields" : [
+                    {
+                      "key" : "usrf",
+                      "value" : {
+                        "items" : [
+                          {
+                            "text" : "a",
+                            "type" : "utxt"
+                          },
+                          {
+                            "integer" : 1,
+                            "type" : "long"
+                          }
+                        ],
+                        "type" : "list"
+                      }
+                    }
+                  ],
+                  "type" : "reco"
+                },
+                {
+                  "integer" : 3,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "sortlist-documentation-respect",
+  "recordedAt" : "2026-09-28T04:34:14Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "sortlist {{1, 2, 3, 4}, {\"abc\", \"ABC\", \"xyz\", \"123\"}, (createarray 4), {{a:1}, \"b\", 3, {1, 2, 3}}} with respect to 2",
+  "timeZone" : "America/New_York"
+}

@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "LGAM",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 5,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 3.1780538303479453,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "lgamma-2",
+  "recordedAt" : "2026-09-28T04:29:09Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "lgamma 5",
+  "timeZone" : "America/New_York"
+}

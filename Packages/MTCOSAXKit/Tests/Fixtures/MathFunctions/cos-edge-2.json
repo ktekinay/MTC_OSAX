@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "COSI",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "real" : -1e-10,
+              "type" : "doub"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 1,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "cos-edge-2",
+  "recordedAt" : "2026-09-28T04:29:07Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "cos -1E-10",
+  "timeZone" : "America/New_York"
+}

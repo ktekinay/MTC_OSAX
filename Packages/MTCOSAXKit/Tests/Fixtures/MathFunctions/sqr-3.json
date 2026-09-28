@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "SQR ",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 0,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 0,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "sqr-3",
+  "recordedAt" : "2026-09-28T04:29:06Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "sqr 0",
+  "timeZone" : "America/New_York"
+}

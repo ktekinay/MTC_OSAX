@@ -1,0 +1,84 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "MASk",
+        "fields" : [
+          {
+            "key" : "with",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "Subs",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 2,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 3,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "x",
+              "type" : "utxt"
+            },
+            {
+              "integer" : 2,
+              "type" : "long"
+            },
+            {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "masklist-substitute-text",
+  "recordedAt" : "2026-09-28T04:34:14Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "masklist {1, 2, 3} with {0, 1, 0} substitute \"x\"",
+  "timeZone" : "America/New_York"
+}
