@@ -177,6 +177,10 @@ enum FileText {
 		guard FileManager.default.fileExists(atPath: directory, isDirectory: &isDirectory), isDirectory.boolValue else {
 			throw OSAXError(-43)
 		}
+		// A folder can't be written as text: EISDIR, as in SatimageOSAX (it was -54).
+		guard !(FileManager.default.fileExists(atPath: url.path, isDirectory: &isDirectory) && isDirectory.boolValue) else {
+			throw OSAXError(Int(EISDIR))
+		}
 		do {
 			if append, let handle = try? FileHandle(forWritingTo: url) {
 				defer { try? handle.close() }

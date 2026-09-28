@@ -258,5 +258,9 @@
  {
   "name": "change-file-missing",
   "script": "change \"a\" into \"b\" in POSIX file \"$TMP/nope.txt\""
+ },
+ {
+  "name": "writetext-to-folder",
+  "script": "writetext \"x\" to (POSIX file \"$TMP\")"
  }
 ]
