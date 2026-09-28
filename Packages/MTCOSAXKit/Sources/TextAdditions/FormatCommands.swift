@@ -69,8 +69,11 @@ extension TextAdditions {
 /// - `%c` is a character: a number is its code point, text gives its first character (Satimage failed with error 10).
 /// - `%n`, `%@`, the `h` length, a trailing `%`, a missing parameter, a sequential parameter after a positional one,
 ///   and booleans for numbers, `missing value`, dates and records are error 10.
+/// - A width or precision over a million is error 10 (`%2000000000d` would build gigabytes). From `*`, a negative
+///   width means left-justified and a negative precision none, as in C.
 enum Printf {
 	static let error = OSAXError(10)
+	static let maximumWidth = 1_000_000
 
 	/// The top-level parameters: a list's items, or a single value.
 	static func arguments(from descriptor: NSAppleEventDescriptor) -> [NSAppleEventDescriptor] {
@@ -115,10 +118,18 @@ enum Printf {
 			if position == nil { nextArgument += 1 }
 			return arguments[index]
 		}
-		func number(_ characters: inout Substring) -> Int? {
+		func number(_ characters: inout Substring) throws -> Int? {
 			let digits = characters.prefix { $0.isASCII && $0.isNumber }
 			characters = characters.dropFirst(digits.count)
-			return digits.isEmpty ? nil : Int(digits)
+			guard !digits.isEmpty else { return nil }
+			// Too many digits for an Int used to drop the width silently.
+			guard let value = Int(digits), value <= maximumWidth else { throw error }
+			return value
+		}
+		func starValue() throws -> Int {
+			let value = try Int(appleEventDescriptor: takeArgument(nil))
+			guard abs(value) <= maximumWidth else { throw error }
+			return value
 		}
 
 		while let percent = characters.firstIndex(of: "%") {
@@ -136,27 +147,32 @@ enum Printf {
 			// %[position$][flags][width][.precision][length]conversion
 			var position: Int?
 			var lookahead = characters
-			if let value = number(&lookahead), lookahead.first == "$" {
+			if let value = try? number(&lookahead), lookahead.first == "$" {
 				position = value
 				characters = lookahead.dropFirst()
 			}
-			let flags = String(characters.prefix { "-+ #0".contains($0) })
+			var flags = String(characters.prefix { "-+ #0".contains($0) })
 			characters = characters.dropFirst(flags.count)
 			var width: Int?
 			if characters.first == "*" {
-				width = try Int(appleEventDescriptor: takeArgument(nil))
+				width = try starValue()
 				characters = characters.dropFirst()
+				if let value = width, value < 0 {
+					flags += "-"
+					width = -value
+				}
 			} else {
-				width = number(&characters)
+				width = try number(&characters)
 			}
 			var precision: Int?
 			if characters.first == "." {
 				characters = characters.dropFirst()
 				if characters.first == "*" {
-					precision = try Int(appleEventDescriptor: takeArgument(nil))
+					let value = try starValue()
+					precision = value < 0 ? nil : value
 					characters = characters.dropFirst()
 				} else {
-					precision = number(&characters) ?? 0
+					precision = try number(&characters) ?? 0
 				}
 			}
 			let length = String(characters.prefix { "hlqLjzt".contains($0) })
@@ -178,17 +194,27 @@ enum Printf {
 			switch conversion! {
 			case "d", "i", "u", "x", "X", "o":
 				let value = try integer(argument)
-				result += String(format: spec + "ll" + String(conversion!), value)
+				result += cFormat(spec + "ll" + String(conversion!), value)
 			case "s":
 				result += pad(try truncate(text(of: argument), to: precision), to: width, left: flags.contains("-"))
 			case "c":
 				result += pad(try character(argument), to: width, left: flags.contains("-"))
 			default:
-				result += String(format: spec + String(conversion!), try real(argument))
+				result += cFormat(spec + String(conversion!), try real(argument))
 			}
 		}
 		result += characters
 		return result
+	}
+
+	/// One C conversion with C's own formatting (`String(format:)`, like SatimageOSAX, cut the output of a
+	/// conversion at 512 characters).
+	private static func cFormat(_ spec: String, _ value: any CVarArg) -> String {
+		let length = withVaList([value]) { vsnprintf(nil, 0, spec, $0) }
+		guard length > 0 else { return "" }
+		var buffer = [CChar](repeating: 0, count: Int(length) + 1)
+		_ = withVaList([value]) { vsnprintf(&buffer, buffer.count, spec, $0) }
+		return String(cString: buffer)
 	}
 
 	/// An argument as text, for `%s` and a missing format.

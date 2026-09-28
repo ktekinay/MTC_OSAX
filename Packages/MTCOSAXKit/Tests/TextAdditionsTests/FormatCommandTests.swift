@@ -44,6 +44,18 @@ struct PrintfTests {
 		#expect(try printf("[%*d][%.*f]", [5, 42, 2, 3.14159]) == "[   42][3.14]")
 	}
 
+	/// Negative `*` values as in C; widths and precisions over a million are error 10 (they used to build gigabytes,
+	/// or be dropped silently when too long for an Int).
+	@Test func widthLimits() throws {
+		#expect(try printf("[%*d][%.*f][%*s]", [-5, 42, -2, 3.14159, -4, "ab"]) == "[42   ][3.141590][ab  ]")
+		#expect(try printf("[%1000000d]", [1]).count == 1_000_002)
+		for format in ["%1000001d", "%.2000000000f", "%99999999999999999999d", "%.99999999999999999999s"] {
+			#expect(throws: OSAXError(10), "\(format)") { try printf(format, [1]) }
+		}
+		#expect(throws: OSAXError(10)) { try printf("%*d", [2_000_000_000, 1]) }
+		#expect(throws: OSAXError(10)) { try printf("%.*f", [-2_000_000_000, 1]) }
+	}
+
 	@Test func characters() throws {
 		#expect(try printf("[%c][%c][%3c]", [65, "Bé", 0x1F600]) == "[A][B][  😀]")
 	}

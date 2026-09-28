@@ -538,5 +538,9 @@
  {
   "name": "printf-sequential-then-positional",
   "script": "printf \"%s %1$s\" parameters {\"a\"}"
+ },
+ {
+  "name": "printf-negative-star",
+  "script": "printf \"[%*d][%.*f]\" parameters {-5, 42, -2, 3.14159}"
  }
 ]

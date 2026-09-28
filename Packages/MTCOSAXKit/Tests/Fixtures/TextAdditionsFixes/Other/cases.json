@@ -102,5 +102,17 @@
  {
   "name": "change-template-plus-group",
   "script": "change \"(a)\" into \"\\\\k<+1>\" in \"a\" with regexp"
+ },
+ {
+  "name": "printf-negative-star-string",
+  "script": "printf \"[%*s]\" parameters {-4, \"ab\"}"
+ },
+ {
+  "name": "printf-wide",
+  "script": "length of (printf \"[%600d][%.600f]\" parameters {1, 1})"
+ },
+ {
+  "name": "printf-width-too-large",
+  "script": "printf \"[%99999999999999999999d]\" parameters {1}"
  }
 ]
