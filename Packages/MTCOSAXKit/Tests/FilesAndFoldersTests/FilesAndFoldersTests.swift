@@ -284,6 +284,19 @@ struct RemoveTests {
 		#expect(send(remove, ["----": locked]).result?.int32Value == 1)
 		#expect(!sandbox.exists("locked.txt"))
 	}
+
+	/// Removing a link to a locked file used to unlock the file (chflags follows links); the link goes, the file
+	/// stays locked.
+	@Test func linkToLockedFile() throws {
+		let sandbox = try Sandbox()
+		let locked = try sandbox.file("locked.txt")
+		chflags(locked.path, UInt32(UF_IMMUTABLE))
+		try FileManager.default.createSymbolicLink(atPath: sandbox.path("link"), withDestinationPath: locked.path)
+		#expect(send(remove, ["----": sandbox.path("link")]).result?.int32Value == 1)
+		#expect(!sandbox.exists("link"))
+		var status = stat()
+		#expect(stat(locked.path, &status) == 0 && status.st_flags & UInt32(UF_IMMUTABLE) != 0)
+	}
 }
 
 struct TemporaryTests {

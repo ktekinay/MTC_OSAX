@@ -325,15 +325,18 @@ public enum FilesAndFolders {
 		return removed
 	}
 
-	/// Clears the user and system immutable flags (a Finder-locked file), recursively for folders.
+	/// Clears the user and system immutable flags (a Finder-locked file), recursively for folders. A link's own
+	/// flags are changed (chflags would unlock what it points to, which isn't being removed); the system flag needs
+	/// root, so without it only the user flag is cleared.
 	private static func unlock(_ url: URL) {
 		let paths = [url.path] + (FileManager.default.enumerator(atPath: url.path)?.compactMap {
 			($0 as? String).map { url.appendingPathComponent($0).path }
 		} ?? [])
+		let locks = UInt32(UF_IMMUTABLE | SF_IMMUTABLE)
 		for path in paths {
 			var status = stat()
-			if lstat(path, &status) == 0, status.st_flags & UInt32(UF_IMMUTABLE) != 0 {
-				chflags(path, status.st_flags & ~UInt32(UF_IMMUTABLE))
+			if lstat(path, &status) == 0, status.st_flags & locks != 0, lchflags(path, status.st_flags & ~locks) != 0 {
+				lchflags(path, status.st_flags & ~UInt32(UF_IMMUTABLE))
 			}
 		}
 	}
