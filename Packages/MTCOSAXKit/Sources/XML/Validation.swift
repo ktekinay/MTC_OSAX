@@ -213,12 +213,13 @@ enum Validation {
 			? try XMLCommands.text(descriptor) : nil
 	}
 
-	/// A path or URL as a URL for libxml2.
+	/// A path or URL as a URL for libxml2: a URL with `://` other than a file URL as it is, or a path as scripts give
+	/// them (POSIX, `~`, a file URL, HFS; anything else relative to the working folder).
 	static func url(_ text: String) -> String {
-		if let url = URL(string: text), let scheme = url.scheme, scheme.count > 1 {
+		if text.contains("://"), !text.lowercased().hasPrefix("file://") {
 			return text
 		}
-		return URL(fileURLWithPath: text).absoluteString
+		return ((try? URL(scriptPath: text)) ?? URL(fileURLWithPath: text)).absoluteString
 	}
 
 	/// A DTD from a file (alias, file, path or URL) or its text. Error: libxml2's number for the first problem

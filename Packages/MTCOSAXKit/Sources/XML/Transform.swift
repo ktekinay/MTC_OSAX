@@ -144,8 +144,9 @@ enum Stylesheets {
 			data = Data(text.utf8)
 		} else {
 			if let text {
-				let remote = try Network.location(descriptor)
-				url = !remote.isFileURL ? remote : text.hasPrefix("file:") ? URL(string: text) : URL(fileURLWithPath: text)
+				// An http(s) URL, or a path as scripts give them (POSIX, `~`, a file URL, HFS); anything else is
+				// relative to the working folder. (The path used to be rebuilt from the text, so `~` was a folder.)
+				url = (try? Network.location(descriptor)) ?? URL(fileURLWithPath: text)
 			} else {
 				url = try URL(appleEventDescriptor: descriptor)
 			}

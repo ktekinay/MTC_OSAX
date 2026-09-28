@@ -250,6 +250,23 @@ struct XSLTTests {
 		#expect(xml.send("XML xslt", ["----": harmless, "rtyp": type("utxt")]).result?.stringValue?.contains("<r/>") == true)
 	}
 
+	/// `~` and HFS paths: a stylesheet's path was rebuilt from the text, and a schema's never understood them.
+	@Test func scriptPaths() throws {
+		let home = FileManager.default.homeDirectoryForCurrentUser.path
+		#expect(Validation.url("~/x.xsd") == URL(fileURLWithPath: home + "/x.xsd").absoluteString)
+		#expect(Validation.url("http://example.com/x.xsd") == "http://example.com/x.xsd")
+		#expect(Validation.url("/tmp/a b.xsd") == "file:///tmp/a%20b.xsd")
+		let volume = try #require(try URL(fileURLWithPath: "/").resourceValues(forKeys: [.volumeNameKey]).volumeName)
+		#expect(Validation.url("\(volume):tmp:x.xsd") == "file:///tmp/x.xsd")
+		let file = FileManager.default.temporaryDirectory.appendingPathComponent("style-\(UUID().uuidString).xsl").resolvingSymlinksInPath()
+		try Data(text.utf8).write(to: file)
+		defer { try? FileManager.default.removeItem(at: file) }
+		let hfs = volume + file.path.replacingOccurrences(of: "/", with: ":")
+		let xml = XMLs()
+		let d = try xml.open(library)
+		#expect(xml.send("XML xslt", ["----": d, "with": hfs, "rtyp": type("utxt")]).result?.stringValue == "Moby-Dick;Les Misérables;")
+	}
+
 	@Test func parameters() throws {
 		let xml = XMLs()
 		let d = try xml.open(library)
