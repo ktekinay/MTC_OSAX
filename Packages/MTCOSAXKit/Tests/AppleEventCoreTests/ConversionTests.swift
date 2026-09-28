@@ -129,3 +129,29 @@ struct CLengthTests {
 		#expect((#expect(throws: OSAXError.self) { try Int32(length: Int(Int32.max) + 1) })?.number == -50)
 	}
 }
+
+struct WriteReplacingTests {
+	/// Saves used to write in place, so a failure part way left a cut-short file.
+	@Test func replacesInOneStep() throws {
+		let folder = FileManager.default.temporaryDirectory.appendingPathComponent("replace-\(UUID().uuidString)")
+		try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+		defer { try? FileManager.default.removeItem(at: folder) }
+		let file = folder.appendingPathComponent("a.txt")
+		try Data("new file".utf8).writeReplacing(file)
+		#expect(try String(contentsOf: file, encoding: .utf8) == "new file")
+		// Permissions are kept.
+		chmod(file.path, 0o600)
+		try Data("second".utf8).writeReplacing(file)
+		#expect(try String(contentsOf: file, encoding: .utf8) == "second")
+		#expect((try FileManager.default.attributesOfItem(atPath: file.path)[.posixPermissions] as? Int) == 0o600)
+		// A link's target is replaced, not the link.
+		let link = folder.appendingPathComponent("link.txt")
+		try FileManager.default.createSymbolicLink(at: link, withDestinationURL: file)
+		try Data("through the link".utf8).writeReplacing(link)
+		#expect(try FileManager.default.destinationOfSymbolicLink(atPath: link.path) == file.path)
+		#expect(try String(contentsOf: file, encoding: .utf8) == "through the link")
+		// Nothing is left behind, and a missing folder is an error.
+		#expect(try FileManager.default.contentsOfDirectory(atPath: folder.path).sorted() == ["a.txt", "link.txt"])
+		#expect(throws: (any Error).self) { try Data().writeReplacing(folder.appendingPathComponent("nope/b.txt")) }
+	}
+}

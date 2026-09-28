@@ -46,7 +46,18 @@ extension XMLCommands {
 
 		if let file = try request.parameter("kfil", as: URL.self) {
 			defer { xmlFreeDoc(output) }
-			guard Output.withIndentString(settings.indentString, { xsltSaveResultToFilename(file.path, output, style.pointer, 0) }) >= 0 else { throw OSAXError(1524) }
+			var memory: UnsafeMutablePointer<xmlChar>?
+			var length: Int32 = 0
+			guard Output.withIndentString(settings.indentString, { xsltSaveResultToString(&memory, &length, output, style.pointer) }) >= 0 else {
+				throw OSAXError(1524)
+			}
+			defer { xmlRelease(memory) }
+			do {
+				try Data(memory.map { UnsafeBufferPointer(start: $0, count: Int(length)) } ?? UnsafeBufferPointer(start: nil, count: 0))
+					.writeReplacing(file)
+			} catch {
+				throw OSAXError(1524)
+			}
 			return nil
 		}
 		switch request.descriptor(for: "rtyp")?.typeCodeValue.fourCharString {

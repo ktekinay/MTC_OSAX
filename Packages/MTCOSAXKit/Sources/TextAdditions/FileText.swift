@@ -182,7 +182,7 @@ enum FileText {
 				try handle.seekToEnd()
 				try handle.write(contentsOf: data)
 			} else {
-				try data.write(to: url)
+				try data.writeReplacing(url)
 			}
 		} catch {
 			throw OSAXError(-54)

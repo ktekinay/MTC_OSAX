@@ -212,7 +212,7 @@ struct Commands {
 			throw OSAXError.missingParameter
 		}
 		do {
-			try PropertyLists.serialized(document.root, binary: binary).write(to: url)
+			try PropertyLists.serialized(document.root, binary: binary).writeReplacing(url)
 		} catch {
 			throw PropertyLists.invalid
 		}
@@ -514,7 +514,7 @@ struct Commands {
 			return NSAppleEventDescriptor(string: text)
 		}
 		do {
-			try Data(text.utf8).write(to: file, options: .atomic)
+			try Data(text.utf8).writeReplacing(file)
 		} catch {
 			throw PropertyLists.invalid
 		}

@@ -114,6 +114,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 - `XMLChild` of a DTD gives its declarations (SatimageOSAX gave -2763); they can be read but not changed or removed (-50). `XMLNewChild` at a text node is error -1700, as at an attribute (SatimageOSAX did nothing).
 - `XMLTransform` with a stylesheet the script gives (`with`) can write files with `exsl:document`, as the script itself could (SatimageOSAX's sandbox refused, error 1535). A stylesheet the document chooses with its `xml-stylesheet` instruction is the document's code, so it can't write files, make folders or write to the network (1535).
 - `XMLXInclude` includes local files (relative to the document, or any `file:` URL) but nothing from the network.
+- `XMLSave`, `XMLc14n … in`, `XMLTransform … in`, `PlistSave`, `PlistTo… in` and `writetext` (except when appending) replace the file in one step, so a failure part way never leaves it cut short. A symbolic link's target is replaced and the file keeps its permissions, but, being a new file, not its extended attributes or other hard links to it.
 - Math results can differ from SatimageOSAX's Intel math library in the last digits (up to 15 units in the last place for `lgamma` near its roots).
 
 ## Layout

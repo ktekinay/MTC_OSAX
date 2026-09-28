@@ -145,7 +145,7 @@ extension XMLCommands {
 		guard let root = document.node(number: 0) else { throw XML.noSuchNode }
 		let bytes = try Output.serialize(root, options: outputOptions(request))
 		do {
-			try bytes.write(to: url)
+			try bytes.writeReplacing(url)
 		} catch {
 			throw OSAXError(1524) // XML_IO_ENOENT, as SatimageOSAX replied
 		}
@@ -180,7 +180,7 @@ extension XMLCommands {
 		}
 		if let file = try request.parameter("in  ", as: URL.self) {
 			do {
-				try data.write(to: file)
+				try data.writeReplacing(file)
 			} catch {
 				throw OSAXError(1524)
 			}
