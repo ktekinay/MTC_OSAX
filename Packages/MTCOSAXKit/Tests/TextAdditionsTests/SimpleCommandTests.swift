@@ -69,6 +69,15 @@ struct EntityTests {
 		#expect(TextAdditions.resolveEntities("&#;&#xZZ;&#0;&#1114112;&#12a;") == "&#;&#xZZ;&#0;&#1114112;&#12a;")
 	}
 
+	/// Each `&` used to scan to the end of the text for a `;`.
+	@Test func manyAmpersandsAreQuick() {
+		let text = String(repeating: "&", count: 200_000) + ";"
+		let start = Date()
+		#expect(TextAdditions.resolveEntities(text) == text)
+		#expect(Date().timeIntervalSince(start) < 2)
+		#expect(TextAdditions.resolveEntities("&" + String(repeating: "x", count: 40) + ";&lt;") == "&" + String(repeating: "x", count: 40) + ";<")
+	}
+
 	@Test func uppercaseHexReference() {
 		#expect(TextAdditions.resolveEntities("&#X42;") == "B")
 	}

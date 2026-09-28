@@ -138,12 +138,15 @@ extension TextAdditions {
 	/// Resolves the five XML entities (exact case) and numeric references `&#65;`, `&#x41;` or `&#X41;`, in one pass.
 	/// Anything else, including HTML entities and numeric references that aren't a valid character (`&#;`,
 	/// `&#xZZ;`, `&#0;`, above U+10FFFF), is left alone. (Satimage turned those into U+0000 or U+FFFD.)
+	/// Only the next 32 characters are looked at for the `;` (the longest reference that resolves is far shorter), so
+	/// text full of `&`s doesn't take time proportional to its length squared.
 	static func resolveEntities(_ string: String) -> String {
 		let units = Array(string.utf16)
 		var result: [UInt16] = []
 		var index = 0
 		while index < units.count {
-			guard units[index] == 0x26, let semicolon = units[(index + 1)...].firstIndex(of: 0x3B) else { // & … ;
+			let window = (index + 1) ..< min(index + 33, units.count)
+			guard units[index] == 0x26, let semicolon = units[window].firstIndex(of: 0x3B) else { // & … ;
 				result.append(units[index])
 				index += 1
 				continue
