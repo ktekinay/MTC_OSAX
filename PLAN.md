@@ -37,6 +37,7 @@ Additions that Satimage never had, planned separately:
 
 - [PCRE as an alternative regex engine](PLAN-PCRE.md), selected with `syntax "PCRE"`. To be done on its own branch.
 - **YAML for property lists** (noted 2026-09-28): explore commands like `PlistToYAML`/`PlistFromYAML`, alongside Satimage's existing `PlistToJSON`/`PlistFromJSON` (which cover JSON), once the PropertyList suite (priority 5) is done.
+- **Settings from AppleScript** (noted 2026-09-28): explore commands in the hidden "MTC Diagnostics" suite to read and change MTC_OSAX's preferences (`IdleTimeoutSeconds`, `DollarReferences`), instead of `do shell script "defaults …"`: `mtc_get setting`, `mtc_set setting … to …` (with `missing value` to go back to the default), and something like `mtc_list settings` returning each setting that can be changed with its current value (and perhaps its default and a description). Commands rather than application properties, to keep Cocoa Scripting's object model out of the app.
 
 ## May Do Later
 
