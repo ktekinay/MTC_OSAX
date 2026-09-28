@@ -95,7 +95,9 @@ enum Output {
 
 	/// Canonical XML of a document: with or without comments, exclusive (with `inclusive prefixes`) or not; or its
 	/// SHA1 or MD5 digest (base64 unless written to a file). Other digests are -1.
-	static func canonical(_ doc: xmlDocPtr, comments: Bool, exclusive: Bool, prefixes: [String], digest: String?) throws -> Data {
+	static func canonical(_ doc: xmlDocPtr, nodes: xmlNodeSetPtr? = nil, comments: Bool, exclusive: Bool, prefixes: [String],
+	                      digest: String?) throws -> Data
+	{
 		var memory: UnsafeMutablePointer<xmlChar>?
 		let mode = Int32(exclusive ? XML_C14N_EXCLUSIVE_1_0.rawValue : XML_C14N_1_0.rawValue)
 		var cStrings = prefixes.map { strdup($0) }
@@ -104,7 +106,7 @@ enum Output {
 		let size = cStrings.withUnsafeMutableBufferPointer { buffer -> Int32 in
 			let list = exclusive && prefixes.count > 0
 				? UnsafeMutableRawPointer(buffer.baseAddress!).assumingMemoryBound(to: UnsafeMutablePointer<xmlChar>?.self) : nil
-			return xmlC14NDocDumpMemory(doc, nil, mode, list, comments ? 1 : 0, &memory)
+			return xmlC14NDocDumpMemory(doc, nodes, mode, list, comments ? 1 : 0, &memory)
 		}
 		guard size >= 0, let memory else {
 			throw OSAXError(-1)

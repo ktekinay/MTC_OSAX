@@ -1,0 +1,30 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "c14n",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1700
+      }
+    }
+  ],
+  "name" : "c14n-empty-list",
+  "recordedAt" : "2026-09-28T21:11:33Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "XMLc14n {}",
+  "timeZone" : "America/New_York"
+}

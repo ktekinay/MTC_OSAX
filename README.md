@@ -89,6 +89,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 - `XMLXPath` of nodes in two documents with `xpath variables` works.
 - `XMLValidate` of an element with ID attributes works (SatimageOSAX reported every ID as already defined).
 - `XMLValidName` and `XMLValidNCName` return false for an invalid name instead of error 1821.
+- `XMLc14n … nodelist` canonicalizes only those nodes (SatimageOSAX ignored it and output the whole document).
 
 ### New features
 

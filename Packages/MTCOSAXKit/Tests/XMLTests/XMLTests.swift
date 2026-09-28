@@ -253,6 +253,31 @@ struct XMLDocumentTests {
 		#expect(xml.send("XML c14n", ["----": d, "Meth": "SHA256"]).error == OSAXError(-1))
 	}
 
+	/// Document subsets, as recorded from SatimageOSAX (which ignored `nodelist`); an empty list used to trap.
+	@Test func canonicalSubsets() throws {
+		let xml = XMLs()
+		let d = try xml.open("<a><b x='1'>t<!--c--><i/></b><c/></a>")
+		func nodes(_ path: String) throws -> NSAppleEventDescriptor {
+			try #require(xml.send("XML path", ["----": d, "with": path]).result)
+		}
+		func c14n(_ parameters: [String: any AppleEventEncodable]) -> String? {
+			xml.send("XML c14n", parameters).result?.stringValue
+		}
+		let b = try #require(try nodes("//b").atIndex(1))
+		let whole = "<a><b x=\"1\">t<!--c--><i></i></b><c></c></a>"
+		#expect(c14n(["----": try nodes("//b")]) == "<b></b>")
+		#expect(c14n(["----": try nodes("//b/descendant-or-self::node()|//b//@*")]) == "<b x=\"1\">t<!--c--><i></i></b>")
+		#expect(c14n(["----": try nodes("//b|//b/@x|//i")]) == "<b x=\"1\"><i></i></b>")
+		let xpathRef = RecordFields([(.code("XMLR"), b), (.code("xpat"), NSAppleEventDescriptor(string: "descendant-or-self::node()|.//@*"))])
+		#expect(c14n(["----": xpathRef.appleEventDescriptor]) == "<b x=\"1\">t<!--c--><i></i></b>")
+		#expect(c14n(["----": b]) == whole)
+		#expect(c14n(["----": d, "Nset": try nodes("//i")]) == "<i></i>")
+		#expect(c14n(["----": d, "Nset": xpathRef.appleEventDescriptor, "comm": false]) == "<b x=\"1\">t<i></i></b>")
+		#expect(xml.send("XML c14n", ["----": AppleEventList([Int]())]).error == .coercionFailed)
+		let other = try xml.open("<z/>")
+		#expect(xml.send("XML c14n", ["----": d, "Nset": try xml.root(other)]).error?.number == -50)
+	}
+
 	@Test func documentsPoolsAndIdentifiers() throws {
 		let xml = XMLs()
 		let d = try #require(xml.send("XML open", ["from": "<a/>", "pool": "p"]).result)

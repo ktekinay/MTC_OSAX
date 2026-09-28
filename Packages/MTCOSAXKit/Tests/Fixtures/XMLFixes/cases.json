@@ -42,5 +42,9 @@
  {
   "name": "doc-xinclude",
   "script": "set d to XMLOpen (POSIX file \"$FILES/include.xml\")\nXMLXInclude d\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "c14n-nodelist",
+  "script": "set d to XMLOpen from string \"<a><b x='1'>t<!--c--><i/></b><c/></a>\"\nXMLc14n d nodelist (XMLXPath d with \"//i\")\nXMLClose d"
  }
 ]

@@ -1,0 +1,138 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "text" : "<a><b x='1'>t<!--c--><i/></b><c/></a>",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "0400000046e300000000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "root",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "0400000046e300000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "0400000046e300008080850300600000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "chld",
+        "fields" : [
+          {
+            "key" : "indx",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "0400000046e300008080850300600000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "0400000046e300000086850300600000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "c14n",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "XMLR",
+                  "value" : {
+                    "hex" : "0400000046e300000086850300600000",
+                    "type" : "XMLR"
+                  }
+                },
+                {
+                  "key" : "xpat",
+                  "value" : {
+                    "text" : "descendant-or-self::node()|.//@*",
+                    "type" : "utxt"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "<b x=\"1\">t<!--c--><i></i></b>",
+          "type" : "utf8"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "0400000046e300000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "c14n-subset-xpathref",
+  "recordedAt" : "2026-09-28T21:11:32Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set d to XMLOpen from string \"<a><b x='1'>t<!--c--><i/></b><c/></a>\"\nXMLc14n {XMLRef:(XMLChild (XMLRoot d) index 1), xpath pattern:\"descendant-or-self::node()|.//@*\"}\nXMLClose d",
+  "timeZone" : "America/New_York"
+}

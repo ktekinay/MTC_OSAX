@@ -912,15 +912,23 @@
   "script": "set d to XMLOpen from string \"<?xml version=\\\"1.0\\\"?><!-- c --><a xmlns:u=\\\"urn:unused\\\" b=\\\"2\\\" a=\\\"1\\\"><x   y=\\\"z\\\"/><!-- inner --></a>\"\nXMLc14n (XMLRoot d)\nXMLClose d"
  },
  {
-  "name": "c14n-nodelist",
-  "script": "set d to XMLOpen from string \"<?xml version=\\\"1.0\\\"?><!-- c --><a xmlns:u=\\\"urn:unused\\\" b=\\\"2\\\" a=\\\"1\\\"><x   y=\\\"z\\\"/><!-- inner --></a>\"\nXMLc14n d nodelist {XMLChild (XMLRoot d) index 1}\nXMLClose d"
- },
- {
   "name": "pool-get",
   "script": "set d to XMLOpen from string \"<a/>\" in pool \"mtc-x5\"\nGetPool d\nGetPool (XMLRoot d)\nXMLClose d"
  },
  {
   "name": "pool-delete",
   "script": "set d to XMLOpen from string \"<a/>\" in pool \"mtc-x6\"\nDeletePool \"mtc-x6\"\nXMLRoot d"
+ },
+ {
+  "name": "c14n-subset-list",
+  "script": "set d to XMLOpen from string \"<a><b x='1'>t<!--c--><i/></b><c/></a>\"\nXMLc14n (XMLXPath d with \"//b|//b/@x|//i\")\nXMLClose d"
+ },
+ {
+  "name": "c14n-subset-xpathref",
+  "script": "set d to XMLOpen from string \"<a><b x='1'>t<!--c--><i/></b><c/></a>\"\nXMLc14n {XMLRef:(XMLChild (XMLRoot d) index 1), xpath pattern:\"descendant-or-self::node()|.//@*\"}\nXMLClose d"
+ },
+ {
+  "name": "c14n-empty-list",
+  "script": "XMLc14n {}"
  }
 ]

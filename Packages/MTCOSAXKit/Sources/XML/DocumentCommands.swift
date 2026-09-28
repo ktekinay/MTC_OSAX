@@ -151,15 +151,31 @@ extension XMLCommands {
 		return nil
 	}
 
-	/// Canonical XML of the document, as text, a SHA1 or MD5 digest (base64), or written to `in`.
+	/// Canonical XML, as text, a SHA1 or MD5 digest (base64), or written to `in`. An XMLRef stands for its whole
+	/// document; a list of XMLRefs or an `XPathRef` record is a document subset (only those nodes, as xml-c14n11
+	/// defines it), and so is `nodelist`, which SatimageOSAX ignored. An empty list is -1700, as in SatimageOSAX.
 	func canonical(_ request: AppleEventRequest) throws -> NSAppleEventDescriptor? {
 		let descriptor = try request.requiredDirectParameter(as: AnyDescriptor.self).descriptor
-		let (document, _) = try resolve(XMLCommands.items(descriptor)[0])
-		guard let doc = document.doc else { throw XML.noSuchNode }
 		let prefixes = try request.descriptor(for: "Incl").map { try XMLCommands.items($0).map(XMLCommands.text) } ?? []
 		let digest = try request.parameter("Meth", as: String.self)
-		let data = try Output.canonical(doc, comments: request.parameter("comm", default: true),
-		                                exclusive: request.parameter("Excl", default: false), prefixes: prefixes, digest: digest)
+		let comments = try request.parameter("comm", default: true)
+		let exclusive = try request.parameter("Excl", default: false)
+		let whole = XMLReferences.isReference(descriptor) ? try resolve(descriptor).0 : nil
+		let data: Data
+		if let subset = request.descriptor(for: "Nset") ?? (whole == nil ? descriptor : nil) {
+			data = try withNodeSet(subset) { document, nodes in
+				let document = whole ?? document
+				guard let doc = document?.doc else { throw XML.noSuchNode }
+				// (A namespace node is an xmlNs, which has no `doc`.)
+				guard XPath.nodes(nodes).allSatisfy({ $0.pointee.type == XML_NAMESPACE_DECL || $0.pointee.doc == doc }) else {
+					throw OSAXError(-50, "The nodes must all be in the same document.")
+				}
+				return try Output.canonical(doc, nodes: nodes, comments: comments, exclusive: exclusive, prefixes: prefixes, digest: digest)
+			}
+		} else {
+			guard let doc = whole?.doc else { throw XML.noSuchNode }
+			data = try Output.canonical(doc, comments: comments, exclusive: exclusive, prefixes: prefixes, digest: digest)
+		}
 		if let file = try request.parameter("in  ", as: URL.self) {
 			do {
 				try data.write(to: file)

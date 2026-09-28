@@ -78,6 +78,39 @@ extension XMLCommands {
 		return isList ? results.appleEventDescriptor : results[0]
 	}
 
+	/// Runs `body` with the node set `descriptor` defines, and the document of its first node (nil if it's empty):
+	/// an XMLRef, a list of them (-1700 if empty), or an `XPathRef` record `{XMLRef:…, xpath pattern:…}` with an
+	/// optional `namespace` and `xpath variables` (used only for this expression).
+	func withNodeSet<T>(_ descriptor: NSAppleEventDescriptor, _ body: (XMLDocument?, xmlNodeSetPtr) throws -> T) throws -> T {
+		if let fields = RecordFields(descriptor), let start = fields[.code("XMLR")] {
+			let (document, node) = try resolve(start)
+			let expression = try fields[.code("xpat")].map(XMLCommands.text) ?? "."
+			let namespaces = XPath.merged(document.namespaces.map { ($0.prefix, $0.uri) }, try XPath.namespaces(fields[.code("nsls")])) { $0.isEmpty }
+			let variables = XPath.merged(document.variables.map { ($0.name, $0.value) }, try XPath.variables(fields[.code("vars")]),
+			                             isRemoval: XMLCommands.isMissingValue)
+			return try XPath.withContext(document.doc, node: node, namespaces: namespaces.map { (prefix: $0.0, uri: $0.1) },
+			                             variables: variables.map { (name: $0.0, value: $0.1) }, references: references) { context in
+				let object = try XPath.evaluate(expression, in: context)
+				defer { xmlXPathFreeObject(object) }
+				guard object.pointee.type == XPATH_NODESET else { throw OSAXError.coercionFailed }
+				// The object keeps any namespace nodes XPath made alive until the body is done.
+				guard let set = object.pointee.nodesetval ?? xmlXPathNodeSetCreate(nil) else { throw XML.invalid }
+				defer { if set != object.pointee.nodesetval { xmlXPathFreeNodeSet(set) } }
+				let first = XPath.nodes(set).first { $0.pointee.type != XML_NAMESPACE_DECL }
+				return try body(first.flatMap(XMLDocument.owner) ?? document, set)
+			}
+		}
+		let items = XMLCommands.items(descriptor)
+		guard !items.isEmpty else { throw OSAXError.coercionFailed }
+		let nodes = try items.map(resolve)
+		guard let set = xmlXPathNodeSetCreate(nil) else { throw XML.invalid }
+		defer { xmlXPathFreeNodeSet(set) }
+		for (_, node) in nodes {
+			xmlXPathNodeSetAdd(set, node)
+		}
+		return try body(nodes[0].0, set)
+	}
+
 	/// Changes the document's context: a namespace with an empty URL, or a variable set to `missing value`, is
 	/// removed (SatimageOSAX kept such namespaces).
 	func setContext(_ request: AppleEventRequest) throws -> NSAppleEventDescriptor? {
