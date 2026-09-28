@@ -13,6 +13,9 @@ private let extensionParameters: Set = ["DlRf"]
 /// and `in` on `PlistToJSON` (writing a file, like MTC_OSAX's YAML and TOML commands).
 private let commandExtensions: [String: Set<String>] = ["SATISplt": ["synt"], "PLSTJSON": ["kfil"]]
 
+/// Commands whose direct parameter takes more than Satimage's: `PlistFromJSON` also takes a file.
+private let directParameterExtensions: Set = ["PLSTNOSJ"]
+
 struct SDEFConsistencyTests {
 	@Test func everySDEFCommandHasAHandler() throws {
 		let sdef = try SDEF(contentsOf: ProjectFiles.appSDEF)
@@ -42,8 +45,18 @@ struct SDEFConsistencyTests {
 		let ours = try SDEF(contentsOf: ProjectFiles.appSDEF)
 		let satimage = try SDEF(contentsOf: ProjectFiles.satimageSDEF)
 		let differences = ours.differences(from: satimage, ignoringCodesWithPrefixes: ownSuitePrefixes, extensionParameters: extensionParameters,
-		                                   commandExtensions: commandExtensions)
+		                                   commandExtensions: commandExtensions, directParameterExtensions: directParameterExtensions)
 		#expect(differences.isEmpty, "\(differences.joined(separator: "\n"))")
+	}
+
+	/// A code used twice would send one command's events (or one parameter) to another; the comparison with
+	/// Satimage, which looks codes up, wouldn't notice.
+	@Test func codesAreUnique() throws {
+		let ours = try SDEF(contentsOf: ProjectFiles.appSDEF)
+		#expect(ours.repeatedCommandCodes.isEmpty, "\(ours.repeatedCommandCodes)")
+		for command in ours.commands {
+			#expect(command.repeatedParameterCodes.isEmpty, "\(command.name): \(command.repeatedParameterCodes)")
+		}
 	}
 
 	@Test func satimageSDEFParses() throws {
@@ -96,7 +109,22 @@ struct SDEFComparisonTests {
 
 	@Test func detectsChangedParameterCode() throws {
 		let ours = satimage.replacingOccurrences(of: #"code="UsGR""#, with: #"code="UsRE""#)
-		#expect(try differences(ours).count == 1)
+		// Satimage's parameter is missing, and there's one it doesn't have.
+		#expect(try differences(ours).count == 2)
+	}
+
+	@Test func detectsChangedTypesAndOptionality() throws {
+		#expect(try differences(satimage.replacingOccurrences(of: #"<direct-parameter type="text"/>"#, with: #"<direct-parameter type="file"/>"#)).count == 1)
+		#expect(try differences(satimage.replacingOccurrences(of: #"code="UsGR"/>"#, with: #"code="UsGR" type="boolean"/>"#)).count == 1)
+		#expect(try differences(satimage.replacingOccurrences(of: #"code="$in "/>"#, with: #"code="$in " optional="yes"/>"#)).count == 1)
+		#expect(try differences(satimage.replacingOccurrences(of: #"code="SATIFINd">"#, with: #"code="SATIFINd" hidden="yes">"#)).count == 1)
+	}
+
+	@Test func findsRepeatedCodes() throws {
+		let sdef = try SDEF(data: Data(satimage.replacingOccurrences(of: #"code="UsGR""#, with: #"code="$in ""#).utf8))
+		#expect(sdef.commands.first?.repeatedParameterCodes == ["$in "])
+		let twice = try SDEF(data: Data(#"<dictionary><command name="a" code="XXXXaaaa"/><command name="b" code="XXXXaaaa"/></dictionary>"#.utf8))
+		#expect(twice.repeatedCommandCodes == ["XXXXaaaa"])
 	}
 
 	@Test func detectsMissingSynonym() throws {

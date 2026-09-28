@@ -2,13 +2,32 @@ import Foundation
 
 /// The parts of an SDEF that must match Satimage's for existing scripts to keep working.
 struct SDEF {
+	/// A parameter, the direct parameter or a result: what scripts see of it.
+	struct Parameter: Equatable, CustomStringConvertible {
+		var name: String
+		/// The `type` attribute, or the `<type>` elements (with `list="yes"` as `list of`), joined with " | ".
+		var type: String
+		var optional: Bool
+		var hidden: Bool
+
+		var description: String {
+			"\(name.isEmpty ? "" : name + ": ")\(type)\(optional ? " (optional)" : "")\(hidden ? " (hidden)" : "")"
+		}
+	}
+
 	struct Command: Equatable {
 		var name: String
 		var code: String
 		var synonyms: Set<String>
-		var hasDirectParameter: Bool
-		/// Parameter code → name.
-		var parameters: [String: String]
+		var hidden: Bool
+		var directParameter: Parameter?
+		var result: Parameter?
+		/// Parameter code → parameter.
+		var parameters: [String: Parameter]
+		/// Codes used by more than one of its parameters (the dictionary above keeps the first).
+		var repeatedParameterCodes: [String]
+
+		var hasDirectParameter: Bool { directParameter != nil }
 	}
 
 	/// A record type or enumeration: its name and its properties' or enumerators' code → name.
@@ -19,6 +38,10 @@ struct SDEF {
 	}
 
 	var commands: [Command] = []
+	/// Codes used by more than one command.
+	var repeatedCommandCodes: [String] {
+		Dictionary(grouping: commands, by: \.code).filter { $0.value.count > 1 }.keys.sorted()
+	}
 	var recordTypes: [NamedCodes] = []
 	var enumerations: [NamedCodes] = []
 
@@ -32,12 +55,18 @@ struct SDEF {
 			guard let element = node as? XMLElement, let code = element.attributeValue("code") else {
 				return nil
 			}
+			let parameters = element.elements(forName: "parameter")
+			let codes = parameters.compactMap { $0.attributeValue("code") }
 			return Command(
 				name: element.attributeValue("name") ?? "",
 				code: code,
 				synonyms: Set(element.elements(forName: "synonym").compactMap { $0.attributeValue("name") }),
-				hasDirectParameter: !element.elements(forName: "direct-parameter").isEmpty,
-				parameters: Self.codes(element.elements(forName: "parameter"))
+				hidden: element.attributeValue("hidden") == "yes",
+				directParameter: element.elements(forName: "direct-parameter").first.map(Self.parameter),
+				result: element.elements(forName: "result").first.map(Self.parameter),
+				parameters: Dictionary(parameters.compactMap { element in element.attributeValue("code").map { ($0, Self.parameter(element)) } },
+				                       uniquingKeysWith: { first, _ in first }),
+				repeatedParameterCodes: Dictionary(grouping: codes, by: { $0 }).filter { $0.value.count > 1 }.keys.sorted()
 			)
 		}
 		recordTypes = try document.nodes(forXPath: "//record-type").compactMap { node in
@@ -46,6 +75,17 @@ struct SDEF {
 		enumerations = try document.nodes(forXPath: "//enumeration").compactMap { node in
 			(node as? XMLElement).flatMap { Self.namedCodes($0, members: "enumerator") }
 		}
+	}
+
+	private static func parameter(_ element: XMLElement) -> Parameter {
+		let types = element.attributeValue("type").map { [$0] }
+			?? element.elements(forName: "type").map { ($0.attributeValue("list") == "yes" ? "list of " : "") + ($0.attributeValue("type") ?? "") }
+		return Parameter(
+			name: element.attributeValue("name") ?? "",
+			type: types.joined(separator: " | "),
+			optional: element.attributeValue("optional") == "yes",
+			hidden: element.attributeValue("hidden") == "yes"
+		)
 	}
 
 	private static func namedCodes(_ element: XMLElement, members: String) -> NamedCodes? {
@@ -64,12 +104,14 @@ struct SDEF {
 	/// Differences between this (MTC_OSAX's) SDEF and the reference (Satimage's) for everything
 	/// except the suites whose codes start with one of `ownPrefixes`, and the MTC_OSAX extension
 	/// parameters in `extensionParameters` (allowed on copied commands) and `commandExtensions` (allowed on the
-	/// command with that code).
+	/// command with that code), and the commands in `directParameterExtensions`, whose direct parameter takes
+	/// more than Satimage's. Parameters are compared by name, type, optional and hidden.
 	func differences(
 		from reference: SDEF,
 		ignoringCodesWithPrefixes ownPrefixes: [String],
 		extensionParameters: Set<String> = [],
-		commandExtensions: [String: Set<String>] = [:]
+		commandExtensions: [String: Set<String>] = [:],
+		directParameterExtensions: Set<String> = []
 	) -> [String] {
 		func isOwn(_ code: String) -> Bool {
 			ownPrefixes.contains { code.hasPrefix($0) }
@@ -89,11 +131,19 @@ struct SDEF {
 			}
 			if command.hasDirectParameter != original.hasDirectParameter {
 				differences.append("command \"\(command.name)\" direct parameter presence differs from Satimage")
+			} else if command.directParameter != original.directParameter, !directParameterExtensions.contains(command.code) {
+				differences.append("command \"\(command.name)\" direct parameter \(command.directParameter!); Satimage: \(original.directParameter!)")
+			}
+			if command.result != original.result {
+				differences.append("command \"\(command.name)\" result \(command.result.map(String.init(describing:)) ?? "none"); Satimage: \(original.result.map(String.init(describing:)) ?? "none")")
+			}
+			if command.hidden != original.hidden {
+				differences.append("command \"\(command.name)\" is\(command.hidden ? "" : "n't") hidden; in Satimage it is\(original.hidden ? "" : "n't")")
 			}
 			let allowed = extensionParameters.union(commandExtensions[command.code] ?? [])
 			let parameters = command.parameters.filter { !allowed.contains($0.key) }
-			if parameters != original.parameters {
-				differences.append("command \"\(command.name)\" parameters \(parameters.sorted { $0.key < $1.key }); Satimage: \(original.parameters.sorted { $0.key < $1.key })")
+			for code in Set(parameters.keys).union(original.parameters.keys).sorted() where parameters[code] != original.parameters[code] {
+				differences.append("command \"\(command.name)\" parameter \(code): \(parameters[code].map(String.init(describing:)) ?? "missing"); Satimage: \(original.parameters[code].map(String.init(describing:)) ?? "missing")")
 			}
 		}
 
