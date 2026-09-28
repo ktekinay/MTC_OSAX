@@ -7,6 +7,8 @@ import JavaScriptCore
 enum JSON {
 	/// Dates become ISO 8601 text and data base64 text (JSON has neither; SatimageOSAX returned nothing).
 	/// `formatted` indents with tabs (SatimageOSAX added no returns). A `replacer` that isn't a JavaScript function is -1.
+	/// The replacer is the script's own code and runs with no time limit (JavaScriptCore's public API has none), so
+	/// `function(){for(;;){}}` blocks the app, and every script using it, until the app is quit.
 	static func stringify(_ object: Any, formatted: Bool, replacer: String?) throws -> String {
 		let context = JSContext()!
 		let value = JSValue(object: jsonReady(object), in: context)!
