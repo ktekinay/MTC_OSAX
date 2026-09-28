@@ -133,6 +133,17 @@ struct XMLCommands {
 		xmlFreeNode(node)
 	}
 
+	/// The node an `xmlAddChild`, `xmlAddNextSibling` or `xmlAddPrevSibling` call left in the tree. libxml2 merges a
+	/// text node into an adjacent text node and frees it, returning the node it merged into; that one is then the
+	/// node to refer to (and to insert after). -1 if it wasn't added (it's freed).
+	static func added(_ node: xmlNodePtr, _ result: xmlNodePtr?) throws -> xmlNodePtr {
+		guard let result else {
+			xmlFreeNode(node)
+			throw XML.invalid
+		}
+		return result
+	}
+
 	/// Copies a node (and what's in it) into a document, for inserting a clone.
 	static func copy(_ node: xmlNodePtr, into document: XMLDocument) -> xmlNodePtr? {
 		let copy = xmlDocCopyNode(node, document.doc, 1)

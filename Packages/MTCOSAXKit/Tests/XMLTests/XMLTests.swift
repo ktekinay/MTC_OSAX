@@ -176,6 +176,33 @@ struct XMLChangeTests {
 		#expect(xml.send("XML Exis", ["----": [a, b]]).result?.booleanValue == false)
 	}
 
+	/// libxml2 merges new text into adjacent text and frees the new node; the references returned used to point at
+	/// freed memory. They now refer to the node the text was merged into.
+	@Test func mergedTextNodes() throws {
+		let xml = XMLs()
+		let d = try xml.open("<a>hello</a>")
+		let a = try xml.root(d)
+		let added = try #require(xml.send("XML addc", ["----": "!", "at  ": a]).result)
+		#expect(xml.send("XML gttx", ["----": added]).result?.stringValue == "hello!")
+		let hello = try #require(xml.send("XML chld", ["----": a, "indx": 1]).result)
+		let siblings = try #require(xml.send("XML adds", ["----": "x<i/>y", "afte": hello]).result)
+		#expect(xml.send("XML disx", ["----": a, "smar": false]).result?.stringValue == "<a>hello!x<i/>y</a>")
+		#expect(xml.send("XML gttx", ["----": siblings]).result?.stringValue == "hello!x")
+		xml.send("XML adds", ["----": "<j/>z", "befo": try #require(xml.send("XML chld", ["----": a, "indx": 3]).result)])
+		#expect(xml.send("XML disx", ["----": a, "smar": false]).result?.stringValue == "<a>hello!x<i/><j/>zy</a>")
+		// Clones of text nodes merge too.
+		let clones = try #require(xml.send("XML addc", ["----": AppleEventList([hello, hello]), "at  ": a]).result)
+		#expect(clones.numberOfItems == 2)
+		#expect(xml.send("XML gttx", ["----": try #require(clones.atIndex(2))]).result?.stringValue == "zyhello!xhello!x")
+		// XMLSetXML of a text node next to text.
+		let t = try xml.root(xml.open("<t><b/>one<!---->two</t>"))
+		let one = try #require(xml.send("XML chld", ["----": t, "indx": 2]).result)
+		xml.send("XML remo", ["----": try #require(xml.send("XML chld", ["----": t, "indx": 3]).result)])
+		let set = try #require(xml.send("XML stxm", ["----": one, "to  ": "1"]).result)
+		#expect(xml.send("XML gttx", ["----": set]).result?.stringValue == "1two")
+		#expect(xml.send("XML disx", ["----": t, "smar": false]).result?.stringValue == "<t><b/>1two</t>")
+	}
+
 	@Test func setXMLOfTextNode() throws {
 		let xml = XMLs()
 		let a = try xml.root(xml.open("<a>one<b/>two</a>"))

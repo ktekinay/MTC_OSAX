@@ -296,12 +296,13 @@ extension XMLCommands {
 		let (nodes, isList) = try newNodes(request, context: parent, document: document)
 		guard !nodes.isEmpty else { throw XML.invalid }
 		modified(document)
-		for node in nodes {
-			xmlAddChild(parent, node)
+		let added = try nodes.map { node in
+			let added = try XMLCommands.added(node, xmlAddChild(parent, node))
 			// Only parsed XML is cleaned; clones keep their declarations, as in SatimageOSAX.
-			if nsclean, !isClone { XMLCommands.cleanNamespaces(node) }
+			if nsclean, !isClone, added == node { XMLCommands.cleanNamespaces(node) }
+			return added
 		}
-		let references = nodes.map { reference($0, document) }
+		let references = added.map { reference($0, document) }
 		return isList ? references.appleEventDescriptor : references[0]
 	}
 
@@ -315,15 +316,14 @@ extension XMLCommands {
 		guard !nodes.isEmpty else { throw XML.invalid }
 		modified(document)
 		var position = anchor
-		for node in nodes {
+		let added = try nodes.map { node in
 			if after != nil {
-				xmlAddNextSibling(position, node)
-				position = node
-			} else {
-				xmlAddPrevSibling(anchor, node)
+				position = try XMLCommands.added(node, xmlAddNextSibling(position, node))
+				return position
 			}
+			return try XMLCommands.added(node, xmlAddPrevSibling(anchor, node))
 		}
-		let references = nodes.map { reference($0, document) }
+		let references = added.map { reference($0, document) }
 		return isList ? references.appleEventDescriptor : references[0]
 	}
 
@@ -340,14 +340,17 @@ extension XMLCommands {
 			// Unlinked first: libxml2 merges a new text node into an adjacent one.
 			let next = node.pointee.next
 			XMLCommands.remove(node)
-			for new in nodes {
-				if let next { xmlAddPrevSibling(next, new) } else { xmlAddChild(context, new) }
+			let added = try nodes.map { new in
+				if let next {
+					return try XMLCommands.added(new, xmlAddPrevSibling(next, new))
+				}
+				return try XMLCommands.added(new, xmlAddChild(context, new))
 			}
-		} else {
-			for child in XMLCommands.children(of: node, allNodes: true) { XMLCommands.remove(child) }
-			for new in nodes { xmlAddChild(node, new) }
+			return added.first.map { reference($0, document) }
 		}
-		return nodes.first.map { reference($0, document) }
+		for child in XMLCommands.children(of: node, allNodes: true) { XMLCommands.remove(child) }
+		let added = try nodes.map { new in try XMLCommands.added(new, xmlAddChild(node, new)) }
+		return added.first.map { reference($0, document) }
 	}
 
 	// MARK: Text
