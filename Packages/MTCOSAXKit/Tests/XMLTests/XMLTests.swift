@@ -380,6 +380,10 @@ struct XMLDocumentTests {
 		#expect(try Data(contentsOf: file).contains(0xE9))
 		#expect(xml.send("XML senc", ["----": d, "to  ": "nonsense"]).error == .parameterError)
 		#expect(xml.send("XML save", ["----": d, "kfil": folder.appendingPathComponent("nope/a.xml")]).error == OSAXError(1524))
+		// An unknown encoding used to write an empty file.
+		let unknown = folder.appendingPathComponent("unknown.xml")
+		#expect(xml.send("XML save", ["----": d, "kfil": unknown, "enco": "nonsense"]).error?.number == -50)
+		#expect(!FileManager.default.fileExists(atPath: unknown.path))
 	}
 
 	@Test func displayOptions() throws {

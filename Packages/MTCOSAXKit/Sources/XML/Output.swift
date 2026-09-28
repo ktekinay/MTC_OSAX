@@ -28,9 +28,10 @@ enum Output {
 		return String(data: bytes, encoding: encoding) ?? String(decoding: bytes, as: UTF8.self)
 	}
 
-	/// The bytes of a node in its (or the given) encoding.
+	/// The bytes of a node in its (or the given) encoding; -50 for an encoding libxml2 doesn't know (it used to give
+	/// nothing, and `XMLSave` wrote an empty file).
 	static func serialize(_ node: xmlNodePtr, options: Options) throws -> Data {
-		withIndentString(options.indent) {
+		try withIndentString(options.indent) {
 			let isDocument = node.pointee.type == XML_DOCUMENT_NODE || node.pointee.type == XML_HTML_DOCUMENT_NODE
 			// An HTML document as HTML: libxml2's HTML writer (named entities, no added <meta>), as SatimageOSAX wrote it.
 			if isDocument, options.html, node.pointee.type == XML_HTML_DOCUMENT_NODE {
@@ -51,7 +52,9 @@ enum Output {
 			// A document without an encoding is written as UTF-8, with the encoding in its declaration.
 			let doc = node.pointee.doc
 			let encoding = options.encoding ?? doc?.pointee.encoding.map { String(cString: $0) } ?? "UTF-8"
-			let context = xmlSaveToBuffer(buffer, encoding, saveOptions)
+			guard let context = xmlSaveToBuffer(buffer, encoding, saveOptions) else {
+				throw OSAXError(-50, "“\(encoding)” isn’t an encoding MTC_OSAX knows.")
+			}
 			if isDocument {
 				xmlSaveDoc(context, UnsafeMutableRawPointer(node).assumingMemoryBound(to: xmlDoc.self))
 			} else if options.nsclean, node.pointee.type == XML_ELEMENT_NODE {
