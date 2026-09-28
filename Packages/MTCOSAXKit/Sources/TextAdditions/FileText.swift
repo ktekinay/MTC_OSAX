@@ -27,17 +27,10 @@ enum FileText {
 	/// `start` and `length` are in bytes (a `length` of 0 or none reads to the end; Satimage failed with -1 for a
 	/// `start` without a `length`). A `start` past the end is error -39.
 	static func read(_ url: URL, start: Int? = nil, length: Int? = nil, encoding: String.Encoding? = nil) throws -> Contents {
-		var data = try readData(url)
 		let start = start ?? 0
 		let length = (length ?? 0) > 0 ? length : nil
 		let partial = start > 0 || length != nil
-		if partial {
-			guard start <= data.count else {
-				throw OSAXError(-39) // eofErr
-			}
-			let lower = max(start, 0)
-			data = data.subdata(in: lower ..< min(length.map { lower + $0 } ?? data.count, data.count))
-		}
+		let data = try readData(url, from: max(start, 0), length: length)
 		if let encoding {
 			guard let text = String(data: data, encoding: encoding) else {
 				throw OSAXError(-1409)
@@ -47,16 +40,30 @@ enum FileText {
 		return decode(data, trimIncompleteEnd: partial)
 	}
 
-	private static func readData(_ url: URL) throws -> Data {
-		var isDirectory: ObjCBool = false
-		guard FileManager.default.fileExists(atPath: url.path, isDirectory: &isDirectory) else {
+	/// The bytes from `start`, `length` of them or to the end; only those are read. Only regular files: a device
+	/// such as /dev/zero would be read until memory ran out, and a named pipe would wait forever (-50).
+	private static func readData(_ url: URL, from start: Int, length: Int?) throws -> Data {
+		var status = stat()
+		guard stat(url.path, &status) == 0 else {
 			throw OSAXError(-43) // fnfErr
 		}
-		guard !isDirectory.boolValue else {
+		switch status.st_mode & S_IFMT {
+		case S_IFDIR:
 			throw OSAXError(1)
+		case S_IFREG:
+			break
+		default:
+			throw OSAXError(-50, "“\(url.lastPathComponent)” isn’t a file that can be read as text (it’s a device, a pipe or a socket).")
+		}
+		let size = Int(status.st_size)
+		guard start <= size else {
+			throw OSAXError(-39) // eofErr
 		}
 		do {
-			return try Data(contentsOf: url)
+			let handle = try FileHandle(forReadingFrom: url)
+			defer { try? handle.close() }
+			try handle.seek(toOffset: UInt64(start))
+			return try handle.read(upToCount: min(length ?? size, size - start)) ?? Data()
 		} catch {
 			throw OSAXError(-54) // permErr
 		}
@@ -115,7 +122,7 @@ enum FileText {
 	/// (generic UTF-16 follows the file's byte-order mark). `inclusive` gives the offset just after it.
 	/// Not found (or empty `text`): error -2763, like `find text`.
 	static func offset(of text: String, in url: URL, from start: Int, encoding: String.Encoding, inclusive: Bool) throws -> Int {
-		let data = try readData(url)
+		let data = try readData(url, from: 0, length: nil)
 		guard start <= data.count else {
 			throw OSAXError(-39)
 		}

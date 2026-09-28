@@ -126,3 +126,32 @@ struct ReadTextURLTests {
 		#expect(read(web).error?.number == -1700)
 	}
 }
+
+struct ReadTextSpecialFileTests {
+	/// /dev/zero was read until memory ran out, and a named pipe waited forever.
+	@Test func onlyRegularFiles() throws {
+		#expect((#expect(throws: OSAXError.self) { try FileText.read(URL(fileURLWithPath: "/dev/zero")) })?.number == -50)
+		let fifo = FileManager.default.temporaryDirectory.appendingPathComponent("fifo-\(UUID().uuidString)")
+		#expect(mkfifo(fifo.path, 0o600) == 0)
+		defer { try? FileManager.default.removeItem(at: fifo) }
+		#expect((#expect(throws: OSAXError.self) { try FileText.read(fifo) })?.number == -50)
+		#expect((#expect(throws: OSAXError.self) { try FileText.read(URL(fileURLWithPath: "/nonexistent")) })?.number == -43)
+	}
+
+	/// A part is read without reading the whole file first.
+	@Test func partialReads() throws {
+		let file = FileManager.default.temporaryDirectory.appendingPathComponent("part-\(UUID().uuidString).txt")
+		try Data("0123456789".utf8).write(to: file)
+		defer { try? FileManager.default.removeItem(at: file) }
+		#expect(try FileText.read(file, start: 2, length: 3).text == "234")
+		#expect(try FileText.read(file, start: 8).text == "89")
+		#expect(try FileText.read(file, start: 5, length: 100).text == "56789")
+		#expect(try FileText.read(file, start: 10).text == "")
+		#expect((#expect(throws: OSAXError.self) { try FileText.read(file, start: 11) })?.number == -39)
+		// A symbolic link is followed.
+		let link = file.deletingLastPathComponent().appendingPathComponent("link-\(UUID().uuidString)")
+		try FileManager.default.createSymbolicLink(at: link, withDestinationURL: file)
+		defer { try? FileManager.default.removeItem(at: link) }
+		#expect(try FileText.read(link).text == "0123456789")
+	}
+}
