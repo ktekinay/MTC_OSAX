@@ -35,6 +35,19 @@ public struct OSAXError: Error, Equatable, CustomStringConvertible {
 	}
 }
 
+extension OSAXError {
+	/// A file operation that failed: `what` couldn't be done, and why, with the POSIX number underneath (13 for
+	/// permission, and so on; -43 for a missing item, as the file commands give) or else `fallback`.
+	public static func file(_ error: Error, _ what: String, fallback: Int = -1) -> OSAXError {
+		let nsError = error as NSError
+		let posix = [nsError, nsError.userInfo[NSUnderlyingErrorKey] as? NSError].compactMap { $0 }
+			.first { $0.domain == NSPOSIXErrorDomain }
+		let reason = (posix ?? nsError).localizedDescription
+		let number = posix.map { $0.code == Int(ENOENT) ? -43 : $0.code } ?? fallback
+		return OSAXError(number, "Couldn’t \(what): \(reason)")
+	}
+}
+
 extension Int32 {
 	/// A length for a C function that takes an `int`: error -50 for 2 GB or more, which `Int32(_:)` would trap on.
 	public init(length: Int) throws {

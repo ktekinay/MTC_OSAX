@@ -231,7 +231,13 @@ extension FileAdditions {
 			.creationDateKey, .contentModificationDateKey, .isDirectoryKey, .isPackageKey, .isHiddenKey,
 			.hasHiddenExtensionKey, .isAliasFileKey, .localizedTypeDescriptionKey, .contentTypeKey, .isUserImmutableKey,
 		]
-		let values = try item.resourceValues(forKeys: keys)
+		// (Foundation's errors would reach the script as -2700 with Foundation's English text.)
+		let values: URLResourceValues
+		do {
+			values = try item.resourceValues(forKeys: keys)
+		} catch {
+			throw OSAXError.file(error, "read the information of “\(item.lastPathComponent)”")
+		}
 		let isDirectory = values.isDirectory == true
 		let isPackage = values.isPackage == true
 		let name = item.lastPathComponent

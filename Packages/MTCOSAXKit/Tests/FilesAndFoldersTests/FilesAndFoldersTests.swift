@@ -279,7 +279,7 @@ struct RemoveTests {
 		let sandbox = try Sandbox()
 		let locked = try sandbox.file("locked.txt")
 		chflags(locked.path, UInt32(UF_IMMUTABLE))
-		#expect(send(remove, ["----": locked, "CUnl": false]).error == OSAXError(-1))
+		#expect(send(remove, ["----": locked, "CUnl": false]).error?.number == -1)
 		#expect(sandbox.exists("locked.txt"))
 		#expect(send(remove, ["----": locked]).result?.int32Value == 1)
 		#expect(!sandbox.exists("locked.txt"))
@@ -346,6 +346,34 @@ struct TemporaryTests {
 		let path = try #require(reply.result?.stringValue)
 		#expect(path.hasSuffix("/"))
 		#expect(try name(reply).count == 9)
+	}
+}
+
+/// Failures part way say what failed and why, with POSIX numbers where they help.
+struct FailureTests {
+	@Test func removingAListPartWay() throws {
+		let sandbox = try Sandbox()
+		let first = try sandbox.file("a.txt")
+		let blocked = try sandbox.file("ro/b.txt")
+		let last = try sandbox.file("c.txt")
+		chmod(sandbox.path("ro"), 0o555)
+		defer { chmod(sandbox.path("ro"), 0o755) }
+		let error = send(remove, ["----": [first.path, blocked.path, last.path]]).error
+		#expect(error?.number == -1)
+		#expect(error?.message?.contains("“b.txt”") == true)
+		#expect(error?.message?.contains("1 of the 3 items were deleted") == true)
+		#expect(!sandbox.exists("a.txt") && sandbox.exists("ro/b.txt") && sandbox.exists("c.txt"))
+	}
+
+	@Test func linksAndNewFiles() throws {
+		let sandbox = try Sandbox()
+		try FileManager.default.createDirectory(at: sandbox.url.appendingPathComponent("ro"), withIntermediateDirectories: false)
+		chmod(sandbox.path("ro"), 0o555)
+		defer { chmod(sandbox.path("ro"), 0o755) }
+		// No permission used to be -43, like a missing folder.
+		#expect(send(createSymlink, ["----": "/etc/hosts", "in  ": sandbox.path("ro"), "pnam": "l"]).error?.number == Int(EACCES))
+		#expect(send(createSymlink, ["----": "/etc/hosts", "in  ": sandbox.path("nope"), "pnam": "l"]).error?.number == -43)
+		#expect(send(fileNew, ["----": sandbox.path("ro/sub"), "pnam": "x.txt"]).error?.number == Int(EACCES))
 	}
 }
 

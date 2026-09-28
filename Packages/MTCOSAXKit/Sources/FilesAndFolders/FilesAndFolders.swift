@@ -91,7 +91,7 @@ public enum FilesAndFolders {
 		do {
 			try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
 		} catch {
-			throw notFound
+			throw OSAXError.file(error, "make the folders for “\(url.lastPathComponent)”", fallback: notFound.number)
 		}
 		guard FileManager.default.createFile(atPath: url.path, contents: nil) else {
 			throw invalidInput
@@ -211,7 +211,7 @@ public enum FilesAndFolders {
 						try FileManager.default.copyItem(at: source, to: target)
 					}
 				} catch {
-					throw invalidInput
+					throw OSAXError(-1, OSAXError.file(error, "\(move ? "move" : "copy") “\(source.lastPathComponent)”").message)
 				}
 				return result(target, folder: isFolder)
 			}
@@ -297,7 +297,9 @@ public enum FilesAndFolders {
 				try FileManager.default.removeItem(at: url)
 				removed += 1
 			} catch {
-				throw invalidInput
+				// Still -1, but saying which item, why, and how many were already deleted (the count was lost).
+				let reason = OSAXError.file(error, "delete “\(url.lastPathComponent)”").message ?? ""
+				throw OSAXError(-1, urls.count > 1 ? "\(reason) \(removed) of the \(urls.count) items were deleted before it." : reason)
 			}
 		}
 		return removed
@@ -404,7 +406,8 @@ public enum FilesAndFolders {
 		do {
 			try FileManager.default.createSymbolicLink(atPath: link.path, withDestinationPath: target)
 		} catch {
-			throw notFound
+			// A missing folder is still -43; anything else (no permission, …) its own number, not -43.
+			throw OSAXError.file(error, "make the link “\(link.lastPathComponent)”", fallback: notFound.number)
 		}
 		return nil
 	}
