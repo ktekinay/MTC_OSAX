@@ -84,6 +84,10 @@ struct XMLOpenTests {
 		#expect(xml.send("XML disp", ["----": html]).result.flatMap(RecordFields.init)?[.code("kind")]?.stringValue == "HTML_DOCUMENT_NODE")
 		let bypassed = try #require(xml.send("XML open", ["from": "<a xmlns=\"urn:x\"><b/></a>", "bpns": true]).result)
 		#expect(xml.send("XML gtn1", ["----": try xml.root(bypassed)]).error == OSAXError(-2763))
+		// Descendants pointed at the freed declaration (AddressSanitizer reported it here).
+		let child = try #require(xml.send("XML chld", ["----": try xml.root(bypassed), "indx": 1]).result)
+		#expect(xml.send("XML gtn1", ["----": child]).error == OSAXError(-2763))
+		#expect(xml.send("XML disx", ["----": try xml.root(bypassed), "smar": false]).result?.stringValue == "<a><b/></a>")
 	}
 
 	@Test func queryIsEncoded() throws {

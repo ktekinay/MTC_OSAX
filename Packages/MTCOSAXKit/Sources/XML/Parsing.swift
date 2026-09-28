@@ -106,7 +106,10 @@ enum Parsing {
 	}
 
 	/// `bypassing namespace`: removes default namespace declarations, and the default namespace from elements.
+	/// The declarations are freed only after the whole walk, since descendants visited later still point at them.
 	private static func removeDefaultNamespaces(_ root: xmlNodePtr?) {
+		var removed: [xmlNsPtr] = []
+		defer { removed.forEach { xmlFreeNs($0) } }
 		walk(root) { node in
 			guard node.pointee.type == XML_ELEMENT_NODE else { return }
 			if let ns = node.pointee.ns, ns.pointee.prefix == nil {
@@ -119,7 +122,7 @@ enum Parsing {
 				if ns.pointee.prefix == nil {
 					if let previous { previous.pointee.next = next } else { node.pointee.nsDef = next }
 					ns.pointee.next = nil
-					xmlFreeNs(ns)
+					removed.append(ns)
 				} else {
 					previous = ns
 				}
