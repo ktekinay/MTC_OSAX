@@ -938,5 +938,13 @@
  {
   "name": "delete-pool-retained",
   "script": "set p to PlistNew {a:1} in pool \"kept\"\nPlistRetain p\nDeletePool \"kept\"\nset r to {PlistGet p key \"a\", GetPool p}\nPlistClose p\ntry\nPlistGet p key \"a\"\non error number n\nset end of r to n\nend try\nr"
+ },
+ {
+  "name": "set-keys-one-value",
+  "script": "set p to PlistNew {a:0}\nPlistSet p key {\"a\", \"b\"} to 5\nset r to PlistGet p\nPlistClose p\nr"
+ },
+ {
+  "name": "set-keys-too-few-values",
+  "script": "set p to PlistNew {a:0}\ntry\nPlistSet p key {\"a\", \"b\"} to {1}\non error number n\nPlistClose p\nerror number n\nend try"
  }
 ]

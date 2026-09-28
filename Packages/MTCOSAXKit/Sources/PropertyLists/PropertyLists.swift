@@ -346,9 +346,9 @@ struct Commands {
 		}
 	}
 
-	/// Sets a key (creating it) or an index (1 to count + 1); with a list of keys, each to the matching item of `to`,
-	/// where `missing value` removes the key unless `suppressing` is false (then it's stored, which SatimageOSAX
-	/// didn't do).
+	/// Sets a key (creating it) or an index (1 to count + 1); with a list of keys, each to the matching item of `to`
+	/// (-1 if the lists differ in length), or each to `to` when it's a single value, as SatimageOSAX did; there
+	/// `missing value` removes the key unless `suppressing` is false (then it's stored, which SatimageOSAX didn't do).
 	func set(_ request: AppleEventRequest) throws -> NSAppleEventDescriptor? {
 		let container = try node(request)
 		let value = try request.requiredParameter("to  ", as: AnyDescriptor.self).descriptor
@@ -358,10 +358,14 @@ struct Commands {
 		let targets = try target(container, selector)
 		var values = [value]
 		if case .keys = selector {
-			guard value.descriptorType == typeAEList, value.numberOfItems == targets.count else {
-				throw PropertyLists.invalid
+			if value.descriptorType == typeAEList {
+				guard value.numberOfItems == targets.count else {
+					throw PropertyLists.invalid
+				}
+				values = (0 ..< value.numberOfItems).map { value.atIndex($0 + 1)! }
+			} else {
+				values = Array(repeating: value, count: targets.count)
 			}
-			values = (0 ..< value.numberOfItems).map { value.atIndex($0 + 1)! }
 		}
 		for ((parent, step), value) in zip(targets, values) {
 			if case .keys = selector, suppressing, value.descriptorType == typeType, value.typeCodeValue.fourCharString == "msng" {

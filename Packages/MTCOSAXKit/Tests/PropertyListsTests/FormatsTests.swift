@@ -425,3 +425,49 @@ struct FormatFileTests {
 		}
 	}
 }
+
+/// Cases the audit listed as untested.
+struct FormatEdgeTests {
+	@Test func yamlEdges() throws {
+		let object = try #require(try YAML.read("""
+		base: &base {a: 1, b: 2}
+		merged:
+		  <<: *base
+		  b: 3
+		tagged: !!int "5"
+		stamp: 2026-09-28T10:30:00.25Z
+		1: numeric key
+		""", timeZone: TimeZone(identifier: "UTC")!) as? NSDictionary)
+		// A key of the mapping wins over a merged one.
+		#expect((object["merged"] as? NSDictionary)?["b"] as? Int == 3)
+		#expect((object["merged"] as? NSDictionary)?["a"] as? Int == 1)
+		#expect((object["tagged"] as? NSNumber)?.intValue == 5)
+		#expect((object["stamp"] as? Date)?.timeIntervalSince1970 == 1_790_591_400.25)
+		#expect(object["1"] as? String == "numeric key")
+	}
+
+	@Test func tomlEdges() throws {
+		let object = try #require(try TOML.read("""
+		"" = "empty key"
+		big = inf
+		small = -inf
+		odd = nan
+		point = { x = 1, inner = { y = 2 } }
+		[[p]]
+		name = "first"
+		[p.sub]
+		deep = true
+		[[p]]
+		name = "second"
+		""") as? NSDictionary)
+		#expect(object[""] as? String == "empty key")
+		#expect((object["big"] as? NSNumber)?.doubleValue == .infinity)
+		#expect((object["small"] as? NSNumber)?.doubleValue == -.infinity)
+		#expect((object["odd"] as? NSNumber)?.doubleValue.isNaN == true)
+		#expect(((object["point"] as? NSDictionary)?["inner"] as? NSDictionary)?["y"] as? Int == 2)
+		let p = try #require(object["p"] as? NSArray)
+		#expect(p.count == 2)
+		#expect(((p[0] as? NSDictionary)?["sub"] as? NSDictionary)?["deep"] as? Bool == true)
+		#expect((p[1] as? NSDictionary)?["name"] as? String == "second")
+	}
+}
