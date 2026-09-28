@@ -306,6 +306,17 @@ struct FilterIntoTests {
 	}
 }
 
+struct IntegerTests {
+	/// 64-bit integers used to be stored as 0.
+	@Test func sixtyFourBits() throws {
+		let plists = Plists()
+		var value: Int64 = 1 << 40
+		let big = try #require(NSAppleEventDescriptor(descriptorType: typeSInt64, bytes: &value, length: 8))
+		let p = try plists.new(AppleEventList([big]))
+		#expect(plists.xml(p) == "<array><integer>1099511627776</integer></array>")
+	}
+}
+
 struct FlattenedDescriptorTests {
 	private func bytes(_ hex: String) -> Data {
 		Data(stride(from: 0, to: hex.count, by: 2).map { UInt8(hex.dropFirst($0).prefix(2), radix: 16)! })

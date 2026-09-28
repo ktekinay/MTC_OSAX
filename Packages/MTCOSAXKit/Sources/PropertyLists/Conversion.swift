@@ -64,8 +64,11 @@ extension PropertyLists {
 		switch descriptor.descriptorType {
 		case typeUnicodeText, typeUTF8Text, typeChar, FourCharCode(fourCharString: "ut16"):
 			return .string(descriptor.stringValue ?? "")
-		case typeSInt16, typeSInt32, typeSInt64:
+		case typeSInt16, typeSInt32:
 			return .integer(Int64(descriptor.int32Value))
+		case typeSInt64 where descriptor.data.count == 8:
+			// int32Value is 0 for a 64-bit integer (AppleScript sends reals, but other senders can send these).
+			return .integer(descriptor.data.withUnsafeBytes { $0.loadUnaligned(as: Int64.self) })
 		case typeIEEE32BitFloatingPoint, typeIEEE64BitFloatingPoint:
 			return .real(descriptor.doubleValue)
 		case typeTrue, typeFalse, typeBoolean:
