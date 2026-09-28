@@ -60,6 +60,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 - `mkdtemp` honors `wildcards`; `fileremove … with filesonly` reports the real count.
 - `glob "…/.*"` doesn't return `.` and `..`; `glob … not conforming to "public.folder"` excludes folders.
 - `~` is your home folder, not SatimageOSAX's sandbox container.
+- `backup` onto a folder inside the source backs up everything but that folder (SatimageOSAX created it and then gave -50); onto the source itself is -50.
 
 **Math and list utilities**
 

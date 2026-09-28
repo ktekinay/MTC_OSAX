@@ -124,6 +124,21 @@ struct BackupTests {
 		#expect(files(folder, in: "new/deeper").count == 5)
 	}
 
+	/// A destination inside the source used to be backed up into itself, deeper each time, until paths were too long.
+	@Test func destinationInsideTheSource() throws {
+		let folder = try source()
+		defer { folder.remove() }
+		#expect(report(backup(folder, ["Repo": 2], onto: "src/Backup"), folder)?.count == 1)
+		#expect(files(folder, in: "src/Backup") == ["a.txt", "b.md", "pkg.app/Contents/Info.plist", "skip/e.txt", "sub/c.txt"])
+		// Again, now that it exists; and reporting only.
+		try folder.file("src/new.txt")
+		#expect(backup(folder, ["Repo": 1], onto: "src/Backup").result?.stringValue == "OK")
+		#expect(files(folder, in: "src/Backup").count == 6)
+		#expect(backup(folder, ["Repo": 0], onto: "src/Backup").result?.stringValue == "OK")
+		#expect(send("SATISYNC", ["----": folder.url.appendingPathComponent("src"), "onto": folder.url.appendingPathComponent("src/sub/../")])
+			.error?.number == -50)
+	}
+
 	@Test func parameterErrors() throws {
 		let folder = try source()
 		defer { folder.remove() }

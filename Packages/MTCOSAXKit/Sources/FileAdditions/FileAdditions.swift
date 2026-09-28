@@ -99,6 +99,23 @@ enum FileItem {
 		return lstat(url.path, &status) == 0 ? status : nil
 	}
 
+	/// An item's device and inode, which tell whether two paths are the same item.
+	struct Identity: Equatable {
+		let device: dev_t
+		let inode: ino_t
+
+		init(_ status: stat) {
+			device = status.st_dev
+			inode = status.st_ino
+		}
+	}
+
+	/// The identity of what a path leads to, following links; nil if nothing's there.
+	static func identity(_ url: URL) -> Identity? {
+		var status = stat()
+		return stat(url.path, &status) == 0 ? Identity(status) : nil
+	}
+
 	static func isDirectory(_ url: URL) -> Bool {
 		var directory: ObjCBool = false
 		return FileManager.default.fileExists(atPath: url.path, isDirectory: &directory) && directory.boolValue

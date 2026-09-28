@@ -11,6 +11,8 @@ import Foundation
 ///   the dot) apply to files and packages.
 /// - Level 0 reports what would change, listing a missing folder once rather than its contents; level 1 syncs and
 ///   returns "OK"; level 2 syncs and reports each file. "OK" also means there was nothing to report.
+/// - A destination inside the source is left out of the walk (SatimageOSAX gave -50 after creating it); the
+///   source itself as the destination is -50.
 extension FileAdditions {
 	static func backup(_ request: AppleEventRequest) throws -> String {
 		let source = try request.requiredDirectParameter(as: URL.self)
@@ -26,9 +28,14 @@ extension FileAdditions {
 			exceptExtensions: Set(try request.parameter("fext", default: [String]())),
 			onlyExtensions: try request.parameter("oext", as: [String].self).map(Set.init)
 		)
+		let sourceIdentity = FileItem.identity(source)
+		if FileItem.identity(destination) == sourceIdentity {
+			throw OSAXError(-50, "The destination is the folder being backed up.")
+		}
 		if sync.level != 0 {
 			try? FileManager.default.createDirectory(at: destination, withIntermediateDirectories: true)
 		}
+		sync.destinationIdentity = FileItem.identity(destination)
 		sync.run(source, onto: destination)
 		return sync.report
 	}
@@ -41,6 +48,9 @@ struct Backup {
 	var exceptFolders: Set<String>
 	var exceptExtensions: Set<String>
 	var onlyExtensions: Set<String>?
+	/// The destination folder, which is skipped if it's inside the source (it would otherwise be backed up into
+	/// itself, deeper each time, until paths got too long).
+	var destinationIdentity: FileItem.Identity?
 
 	private var updated: [String] = []
 	private var created: [String] = []
@@ -66,7 +76,7 @@ struct Backup {
 			}
 			let isDirectory = (status.st_mode & S_IFMT) == S_IFDIR
 			if isDirectory && !FileItem.isPackage(from) {
-				guard recursively, !exceptFolders.contains(name) else {
+				guard recursively, !exceptFolders.contains(name), FileItem.Identity(status) != destinationIdentity else {
 					continue
 				}
 				if FileItem.status(to) == nil {
