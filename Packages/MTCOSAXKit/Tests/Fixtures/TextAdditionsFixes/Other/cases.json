@@ -90,5 +90,17 @@
  {
   "name": "format-missing-into",
   "script": "format 12.5"
+ },
+ {
+  "name": "change-only-backreference-negative",
+  "script": "change \"(a)\" into \"x\" in \"a\" with regexp only backreference -1"
+ },
+ {
+  "name": "change-template-negative-group",
+  "script": "change \"(a)\" into \"\\\\k<-1>\" in \"a\" with regexp"
+ },
+ {
+  "name": "change-template-plus-group",
+  "script": "change \"(a)\" into \"\\\\k<+1>\" in \"a\" with regexp"
  }
 ]

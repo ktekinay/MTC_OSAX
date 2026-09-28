@@ -86,7 +86,7 @@ struct Template {
 					}
 					flushLiteral()
 					let name = String(decoding: units[(index + 3) ..< close], as: UTF16.self)
-					if let number = Int(name), name.allSatisfy(\.isASCII) {
+					if let number = Self.groupNumber(name) {
 						parts.append(.group(number))
 					} else {
 						parts.append(.namedGroup(name))
@@ -109,7 +109,7 @@ struct Template {
 					flushLiteral()
 					let name = String(decoding: units[(index + 2) ..< close], as: UTF16.self)
 					// `${12}` is a group number (the only way to reach groups above 9), anything else a name.
-					if let number = Int(name), name.allSatisfy(\.isASCII) {
+					if let number = Self.groupNumber(name) {
 						parts.append(.group(number))
 					} else {
 						parts.append(.namedGroup(name))
@@ -126,6 +126,12 @@ struct Template {
 		}
 		flushLiteral()
 		self.parts = parts
+	}
+
+	/// The group number a reference names, when it's all ASCII digits (`12`, not `-1` or `+1`).
+	static func groupNumber(_ name: String) -> Int? {
+		guard !name.isEmpty, name.allSatisfy({ $0.isASCII && $0.isNumber }) else { return nil }
+		return Int(name)
 	}
 
 	/// The template's text for one match.

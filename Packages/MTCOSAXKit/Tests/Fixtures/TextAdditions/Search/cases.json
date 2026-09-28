@@ -962,5 +962,9 @@
  {
   "name": "line-end-multiline-dot-cr",
   "script": "find text \"a.b\" in (\"a\" & return & \"b\") with regexp regexpflag {\"MULTILINE\"}"
+ },
+ {
+  "name": "find-using-negative-group",
+  "script": "find text \"(a)\" in \"a\" using -1 with regexp"
  }
 ]

@@ -16,7 +16,7 @@ struct TextMatch {
 	var range: Range<Int> { groups[0]! }
 
 	func range(ofGroup number: Int) -> Range<Int>? {
-		number < groups.count ? groups[number] : nil
+		groups.indices.contains(number) ? groups[number] : nil
 	}
 
 	func text(ofGroup number: Int, in text: UTF16Text) -> String {

@@ -46,7 +46,11 @@ extension TextAdditions {
 					try Template($0, dollarReferences: options.dollarReferences)
 				})
 			} else if using.descriptorType == typeSInt32 || using.descriptorType == typeSInt16 {
-				result = .group(try Int(appleEventDescriptor: using))
+				let number = try Int(appleEventDescriptor: using)
+				guard number >= 0 else {
+					throw Template.invalidBackreference
+				}
+				result = .group(number)
 			} else {
 				result = .template(try Template(try String(appleEventDescriptor: using), dollarReferences: options.dollarReferences))
 			}
@@ -179,7 +183,11 @@ extension TextAdditions {
 		var groupNumbers = [0]
 		if let onlyGroup, options.regexp {
 			if onlyGroup.descriptorType == typeSInt32 || onlyGroup.descriptorType == typeSInt16 {
-				groupNumbers = [try Int(appleEventDescriptor: onlyGroup)]
+				let number = try Int(appleEventDescriptor: onlyGroup)
+				guard number >= 0 else {
+					throw Template.invalidBackreference
+				}
+				groupNumbers = [number]
 			} else {
 				groupNumbers = searcher.namedGroups[try String(appleEventDescriptor: onlyGroup)] ?? []
 			}

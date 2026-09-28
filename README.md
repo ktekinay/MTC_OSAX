@@ -49,7 +49,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 - `readtext … starting at` without `for` reads to the end; `writetext` accepts a POSIX path string.
 - `strftime` and `strptime` work for dates before 1900.
 - `printf %c` gives a character.
-- `change`: `only backreference` naming a group that didn't match leaves that match unchanged; `change {} into {}` returns the text unchanged; `\k<name>` inserts the named group, not the whole match.
+- `change`: `only backreference` naming a group that didn't match leaves that match unchanged; `change {} into {}` returns the text unchanged; `\k<name>` inserts the named group, not the whole match (so `\k<-1>` is an unknown name, error -217); `only backreference -1` is error -208, as `find text … using -1` is.
 - `resolve entities` leaves malformed numeric entities unchanged and accepts `&#X42;`.
 - `atoi "-0x10"` gives -16.
 

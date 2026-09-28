@@ -79,6 +79,18 @@ struct TemplateTests {
 		#expect(try expand(#"\1-$1"#, pattern: "(a)", in: "a", dollarReferences: true) == "a-a")
 	}
 
+	/// A sign isn't a group number (these used to index before the groups and crash); it's an unknown name.
+	@Test(arguments: [#"\k<-1>"#, #"\k<+1>"#, "${-1}", "${+1}"])
+	func signedGroupNumbers(_ template: String) {
+		#expect(throws: OSAXError(-217)) {
+			try expand(template, pattern: "(a)", in: "a", dollarReferences: true)
+		}
+	}
+
+	@Test func negativeGroupHasNoRange() {
+		#expect(TextMatch(groups: [0 ..< 1, 0 ..< 1]).range(ofGroup: -1) == nil)
+	}
+
 	@Test func unknownNamedGroup() {
 		#expect(throws: OSAXError(-217)) {
 			try expand("${nope}", pattern: "(a)", in: "a", dollarReferences: true)
