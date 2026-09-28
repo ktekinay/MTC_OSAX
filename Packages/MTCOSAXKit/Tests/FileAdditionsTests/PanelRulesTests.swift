@@ -58,6 +58,9 @@ struct PanelRulesTests {
 			#expect(opened.shouldEnable(package))
 			#expect(PanelRules.enclosingPackage(inside)?.lastPathComponent == "Tool.app")
 			#expect(PanelRules.enclosingPackage(folder) == nil)
+			// These never finished.
+			#expect(PanelRules.enclosingPackage(URL(string: "relative/x")!) == nil)
+			#expect(PanelRules.enclosingPackage(URL(string: "file:")!) == nil)
 		}
 	}
 

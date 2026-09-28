@@ -93,15 +93,18 @@ final class PanelDialogs: FileDialogs {
 		}
 	}
 
-	/// Shows a dialog in front of other apps, then returns the app to the background.
+	/// Shows a dialog in front of other apps, then returns the app to how it was: the background, or, for a dialog
+	/// asked for while another is open (a second script's command), the outer dialog's state, so that one isn't
+	/// left under a faceless app.
 	@MainActor
 	private static func runInFront(_ run: () -> NSApplication.ModalResponse) -> NSApplication.ModalResponse {
 		let application = NSApplication.shared
+		let previous = application.activationPolicy()
 		application.setActivationPolicy(.accessory)
 		// A faceless app asking to become active is otherwise only a request, which macOS may not grant; the dialog
 		// would then show without taking keystrokes (Return, Escape, typing).
 		application.activate(ignoringOtherApps: true)
-		defer { application.setActivationPolicy(.prohibited) }
+		defer { application.setActivationPolicy(previous) }
 		return run()
 	}
 }

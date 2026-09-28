@@ -27,11 +27,15 @@ public struct PanelRules: Sendable {
 	/// Whether there's anything to filter; without a filter the panel's own behavior is used.
 	public var isNeeded: Bool { hidesPackages || volumesOnly || allowedTypes != nil || allowedExtensions != nil }
 
-	/// The outermost package containing `url` (or `url` itself), if any.
+	/// The outermost package containing `url` (or `url` itself), if any. (Only for an absolute path: going up from a
+	/// relative or empty one never reached `/`.)
 	static func enclosingPackage(_ url: URL) -> URL? {
+		guard url.isFileURL, url.path.hasPrefix("/") else {
+			return nil
+		}
 		var package: URL?
 		var current = url.standardizedFileURL
-		while current.path != "/" {
+		while current.path != "/", !current.path.isEmpty {
 			if (try? current.resourceValues(forKeys: [.isPackageKey]))?.isPackage == true {
 				package = current
 			}
