@@ -280,6 +280,10 @@ struct JSONTests {
 		#expect(plists.send("PLSTToJa", ["----": p]).result?.stringValue == #"{"a":1, "l":["x", "y"], "d":{"e":1}}"#)
 		let dated = try plists.new(record(["w": Date(timeIntervalSince1970: 0), "b": NSAppleEventDescriptor.missingValue]))
 		#expect(plists.send("PLSTJSON", ["----": dated]).result?.stringValue?.contains(#""w":"1970-01-01T00:00:00Z""#) == true)
+		// missing value used to be written as base64 of its flattened descriptor.
+		#expect(plists.send("PLSTJSON", ["----": dated]).result?.stringValue?.contains(#""b":null"#) == true)
+		let back = try #require(plists.send("PLSTNOSJ", ["----": #"{"n":null,"l":[1,null]}"#]).result)
+		#expect(plists.send("PLSTJSON", ["----": back]).result?.stringValue == #"{"n":null,"l":[1,null]}"#)
 	}
 
 	@Test func fromJSON() throws {

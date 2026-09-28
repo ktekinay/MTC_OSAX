@@ -81,7 +81,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 - Integers beyond 32 bits come back as reals instead of 0.
 - A removed element's reference is error -1728, as for a closed document.
 - `PlistSave … in` a POSIX path works.
-- `PlistToJSON` writes dates as ISO 8601 text and data as base64; `PlistFromJSON` reads `null` as `missing value`.
+- `PlistToJSON` writes dates as ISO 8601 text and data as base64; `PlistFromJSON` reads `null` as `missing value`, and `PlistToJSON` writes it back as `null`.
 - `PlistSet` with a list of keys stores `missing value` `without suppressing`; `PlistNew … without typed` stores raw bytes, as `PlistSet` does.
 
 **XML**

@@ -65,8 +65,12 @@ enum JSON {
 		return dictionary
 	}
 
-	/// Replaces what JSON can't hold: dates with ISO 8601 text, data with base64 text.
+	/// Replaces what JSON can't hold: dates with ISO 8601 text, data with base64 text; `missing value` (which
+	/// `PlistFromJSON` makes of `null`) is `null` again.
 	static func jsonReady(_ object: Any) -> Any {
+		if isMissingValue(object) {
+			return NSNull()
+		}
 		switch object {
 		case let dictionary as NSDictionary:
 			return dictionary.mappingValues(jsonReady)
