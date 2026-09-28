@@ -23,8 +23,13 @@ extension FileAdditions {
 		guard FileItem.isDirectory(source) else {
 			throw parameterError
 		}
+		let level = try request.parameter("Repo", default: 0)
+		// (SatimageOSAX took any other level as a report that still created the destination folder.)
+		guard (0 ... 2).contains(level) else {
+			throw OSAXError(-50, "The level is 0 (report only), 1 (synchronize) or 2 (synchronize and report).")
+		}
 		var sync = Backup(
-			level: try request.parameter("Repo", default: 0),
+			level: level,
 			after: try request.parameter("afte", as: Date.self),
 			recursively: try request.parameter("RECU", default: true),
 			exceptFolders: Set(try request.parameter("fnam", default: [String]())),
@@ -87,9 +92,12 @@ struct Backup {
 						created.append(to.path)
 						continue
 					}
-					guard mkdir(to.path, 0o777) == 0 else {
+					// With the source folder's permissions (mkdir's are less the umask). A folder that can't be made
+					// isn't listed itself, as in SatimageOSAX's reports (the files under it are, where they fail).
+					guard mkdir(to.path, 0o700) == 0 else {
 						continue
 					}
+					chmod(to.path, status.st_mode & 0o7777)
 				}
 				run(from, onto: to)
 			} else {

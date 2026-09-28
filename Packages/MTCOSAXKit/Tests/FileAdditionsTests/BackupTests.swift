@@ -196,6 +196,18 @@ struct BackupTests {
 		#expect(files(folder).contains("pkg.app/Contents/New.txt"))
 	}
 
+	/// Folders used to be made with 0o777 less the umask, and other levels acted as 2.
+	@Test func folderPermissionsAndLevels() throws {
+		let folder = try source()
+		defer { folder.remove() }
+		chmod(folder.path("src/sub"), 0o750)
+		_ = backup(folder, ["Repo": 1])
+		#expect((try FileManager.default.attributesOfItem(atPath: folder.path("dst/sub"))[.posixPermissions] as? Int) == 0o750)
+		for level in [3, -1] {
+			#expect(backup(folder, ["Repo": level]).error?.number == -50)
+		}
+	}
+
 	@Test func parameterErrors() throws {
 		let folder = try source()
 		defer { folder.remove() }
