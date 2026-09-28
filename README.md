@@ -6,9 +6,101 @@ A native, faceless scriptable app that replaces the Intel-only `SatimageOSAX.app
 use application "MTC_OSAX" -- was: use application "SatimageOSAX"
 ```
 
+MTC_OSAX is a rough clone of SatimageOSAX: [Mark Alldritt](https://github.com/alldritt/SatimageOSAX)'s (Late Night Software) app that hosts the free scripting additions by [Satimage](https://www.satimage.fr) of Paris ([download page](https://www.satimage.fr/software/en/downloads/downloads_companion_osaxen.html)). It's written from their dictionary and from recordings of what SatimageOSAX actually does. It isn't a complete copy: some suites aren't implemented, some of SatimageOSAX's bugs are fixed rather than reproduced, and a few features are new. [Differences from SatimageOSAX](#differences-from-satimageosax) lists them all.
+
 Commands, parameters and codes are copied exactly from Satimage's dictionary ([SatImageOSAX SDEF/dictionary.sdef](SatImageOSAX%20SDEF/dictionary.sdef)). See [PLAN.md](PLAN.md) for which sections are planned and their order, and `PLAN-<Section>.md` for each section's plan. Plans that have been fully implemented are moved into `Implemented/`.
 
 Requires macOS 26.6 on Apple silicon.
+
+## Differences from SatimageOSAX
+
+This section is kept up to date as sections are added. Each implemented section's plan in `Implemented/` has the details, and the `…Fixes` fixture folders and `Scripts/e2e/*-fixes.applescript` scripts check them.
+
+### Not implemented
+
+These suites aren't implemented and aren't in MTC_OSAX's dictionary, so a script that uses them doesn't compile (an already compiled one gets error -1708):
+
+- Arrays, except the `array of real` type, `createarray` and `randomarray`
+- Linear algebra, FFT and convolution
+- Image files, 3D array handling, FITS, XNF Additions
+- Resource Suite
+- The hidden legacy text commands (`find text obsolete`, `replace obsolete`, `extract string`, `findxmlstag`, `gziptext`, `gunziptext`)
+- The unnamed hidden suite of obsolete commands (old XML variants, `XMLCookie`, `PlistCopy`, `XMLGetArray`/`XMLSetArray`, …)
+
+Within the implemented suites:
+
+- `readtext` of an http or https URL returns an error instead of downloading it.
+- XPath functions written as AppleScript handlers (the `http://satimage.fr/software/xpath-functions-applescript` namespace) aren't supported: an app can't reach the handlers of the script that sent the command. They didn't work in SatimageOSAX's app either (error -3); MTC_OSAX gives 3, an unknown function.
+
+### Fixes
+
+Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary describes.
+
+**Commands that never worked in SatimageOSAX** (they replied -1708 or an error for every input) and now do:
+
+- `file offset`, `filter text` (including `into` a property list reference)
+- The `navchoose …` dialogs, `navnew folder` and `navask save`
+- `topological sort`
+- `XMLOpen` of an http or https URL (with `query`, POST and extra headers)
+
+**Text Additions**
+
+- `format`: an invalid format is error -50 instead of silently reusing the previous one; `into` is required; the three sections `f1;f2;f3` (positive, negative, zero) work, each with its own layout; `^` is a space; `underflow test` works; decimals follow the placeholders.
+- `readtext … starting at` without `for` reads to the end; `writetext` accepts a POSIX path string.
+- `strftime` and `strptime` work for dates before 1900.
+- `printf %c` gives a character.
+- `change`: `only backreference` naming a group that didn't match leaves that match unchanged; `change {} into {}` returns the text unchanged; `\k<name>` inserts the named group, not the whole match.
+- `resolve entities` leaves malformed numeric entities unchanged and accepts `&#X42;`.
+- `atoi "-0x10"` gives -16.
+
+**Files and folders, File Additions**
+
+- HFS paths are accepted wherever a file or folder is.
+- `mkdir` and `filenew` of a path string directly inside a system folder such as `/private/tmp` work.
+- `mkdtemp` honors `wildcards`; `fileremove … with filesonly` reports the real count.
+- `glob "…/.*"` doesn't return `.` and `..`; `glob … not conforming to "public.folder"` excludes folders.
+- `~` is your home folder, not SatimageOSAX's sandbox container.
+
+**Math and list utilities**
+
+- `sortlist` of a single value gives a list of it; without a parameter it's error -1701; `missing value` sorts last and stays `missing value` (SatimageOSAX turned every number into a real).
+- `suppress item` with a single index works (including the dictionary's example).
+- `exclude items` and `keep items` `without case sensitive` ignore case; `keep items {}` gives `{}`.
+- `special concat` of text with a record is error -1700 instead of garbage; empty text gives empty cells.
+- `randomarray … seed` beyond 32 bits uses the seed's low 32 bits instead of ignoring it.
+
+**Property lists**
+
+- A `using` path ending in `/` works (in SatimageOSAX it broke every later property list command).
+- Integers beyond 32 bits come back as reals instead of 0.
+- A removed element's reference is error -1728, as for a closed document.
+- `PlistSave … in` a POSIX path works.
+- `PlistToJSON` writes dates as ISO 8601 text and data as base64; `PlistFromJSON` reads `null` as `missing value`.
+- `PlistSet` with a list of keys stores `missing value` `without suppressing`; `PlistNew … without typed` stores raw bytes, as `PlistSet` does.
+
+**XML**
+
+- `XMLExists` of a removed node or closed document is false instead of error -1728.
+- `XMLAppendText` to an element with mixed content works (it crashed SatimageOSAX); `XMLSetXML` of a text node replaces it (SatimageOSAX left the document unreadable).
+- `XMLError` after a command without problems is `""` instead of stale text; `XMLSave … in` a POSIX path works.
+- `XMLSetContext` with `nsurl ""` removes the namespace; `str:replace` works in XPath.
+- `XMLGetNodePath … from` works from any ancestor, without a leading space; `XMLGetXPointer … suffix` adds the suffix as a further step.
+- `XMLXPointer` works in documents opened `from string` and for relative `xpointer(…)` links from an element.
+- `XMLXPath` of nodes in two documents with `xpath variables` works.
+- `XMLValidate` of an element with ID attributes works (SatimageOSAX reported every ID as already defined).
+- `XMLValidName` and `XMLValidNCName` return false for an invalid name instead of error 1821.
+
+### New features
+
+- **Native on Apple silicon**, so it keeps working after Rosetta is removed.
+- **Dollar references** in replacement templates (`$1`, `${12}`, `${name}`, `$$`), opt-in: `with dollar references` on `change`, `find text` and `filter text`, the `"DOLLAR REFERENCES"` regexp flag, or `defaults write com.mactechnologies.mtc-osax DollarReferences -bool YES`.
+- **Idle quit** is a preference (`IdleTimeoutSeconds`; see [Building](#building)), and the app doesn't quit while property list or XML documents are open.
+- **Diagnostic commands** (`mtc_ping` and others; see [Diagnostic commands](#diagnostic-commands)).
+
+### Other differences
+
+- MTC_OSAX uses macOS's libxml2 (2.9.13) and libxslt, newer than SatimageOSAX's. HTML output has no line break after `<br>`, XInclude leaves no blank lines for its markers, and `XMLError` has a second message when a schema file can't be loaded. The content is otherwise the same.
+- Math results can differ from SatimageOSAX's Intel math library in the last digits (up to 15 units in the last place for `lgamma` near its roots).
 
 ## Layout
 
@@ -116,7 +208,7 @@ While SatimageOSAX still runs, record its behavior so the tests keep working aft
 
 Fixtures in `Fixtures/Examples` are replayed against a stand-in rather than the real commands; they demonstrate the mechanism. The `Diagnostics`, `TextAdditionsExtensions` and `TextAdditionsFixes` fixtures are recorded from MTC_OSAX itself.
 
-**Satimage's bugs aren't reproduced.** Where SatimageOSAX fails or misbehaves, MTC_OSAX follows the documentation instead. The Satimage fixture that recorded the bug is removed, and the case's script moves to a `…Fixes` folder to be recorded from MTC_OSAX. Each section's plan lists these differences.
+**Satimage's bugs aren't reproduced.** Where SatimageOSAX fails or misbehaves, MTC_OSAX follows the documentation instead. The Satimage fixture that recorded the bug is removed, and the case's script moves to a `…Fixes` folder to be recorded from MTC_OSAX. Each section's plan lists these differences, and [Differences from SatimageOSAX](#differences-from-satimageosax) summarizes them.
 
 **Files and paths.** Cases can use `$FILES` (read-only inputs, the `Input` folder next to `cases.json`) and `$TMP` (a scratch folder). Pass them when recording, using copies outside `~/Documents` so neither app needs privacy permission:
 
