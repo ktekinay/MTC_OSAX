@@ -55,6 +55,7 @@ final class XMLDocument: StoredDocument {
 		if UnsafeMutableRawPointer(node) == UnsafeMutableRawPointer(doc) {
 			return 0
 		}
+		assert(node.pointee.doc == doc, "a node numbered in another document's table")
 		if let existing = node.pointee._private {
 			return Int(bitPattern: existing)
 		}
@@ -142,6 +143,11 @@ struct XMLReferences {
 		data.append(contentsOf: Array("MTCx".utf8))
 		withUnsafeBytes(of: UInt64(document.number(of: node)).littleEndian) { data.append(contentsOf: $0) }
 		return NSAppleEventDescriptor(descriptorType: Self.type, data: data)!
+	}
+
+	/// The open XML document with that number.
+	func document(number: Int) -> XMLDocument? {
+		store.allDocuments.first { $0.number == number } as? XMLDocument
 	}
 
 	func reference(_ document: XMLDocument) -> NSAppleEventDescriptor {

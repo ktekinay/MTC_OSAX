@@ -304,6 +304,21 @@ struct IndexTests {
 		#expect(xml.send("XML idoc", ["----": d]).error == nil)
 	}
 
+	/// Nodes of another document (through `xpath variables`) used to be numbered in this document's table.
+	@Test func indexOfAnotherDocumentsNodes() throws {
+		let xml = XMLs()
+		let a = try xml.open("<a/>")
+		let b = try xml.open("<b><c n='x'/><d/></b>")
+		let c = try #require(xml.send("XML path", ["----": b, "with": "//c"]).result)
+		xml.send("XML NKey", ["----": "k", "matc": "$other", "use ": "@n", "at  ": a, "vars": AppleEventList(["other", c])])
+		let found = try #require(xml.send("XML GKey", ["----": "x", "by  ": "k", "at  ": a]).result?.atIndex(1))
+		#expect(xml.send("XML gtag", ["----": found]).result?.stringValue == "c")
+		#expect(xml.send("XML path", ["----": b, "with": "name(//d)"]).result?.stringValue == "d")
+		#expect(xml.send("XML gtag", ["----": try #require(xml.send("XML path", ["----": b, "with": "//d"]).result?.atIndex(1))]).result?.stringValue == "d")
+		xml.send("XML clos", ["----": b])
+		#expect(xml.send("XML GKey", ["----": "x", "by  ": "k", "at  ": a]).result?.numberOfItems == 0)
+	}
+
 	@Test func hashOrder() {
 		func order(_ keys: [String]) -> [String] {
 			var order = HashOrder()

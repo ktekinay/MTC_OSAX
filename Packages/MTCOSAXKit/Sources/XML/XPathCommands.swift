@@ -30,7 +30,10 @@ extension XMLCommands {
 				let key = try request.requiredDirectParameter(as: String.self)
 				let (document, _) = try resolve(request.requiredParameter("at  ", as: AnyDescriptor.self).descriptor)
 				guard let index = document.indexes[try request.requiredParameter("by  ", as: String.self)] else { throw XML.invalid }
-				return (index.nodes[key] ?? []).compactMap { document.node(number: $0).map { reference($0, document) } }.appleEventDescriptor
+				return (index.nodes[key] ?? []).compactMap { entry in
+					let owner = entry.document == document.number ? document : references.document(number: entry.document)
+					return owner.flatMap { owner in owner.node(number: entry.node).map { reference($0, owner) } }
+				}.appleEventDescriptor
 			},
 			CommandDefinition("XMLEntries", code: "XML LKey") { request in
 				let (document, _) = try resolve(request.requiredParameter("at  ", as: AnyDescriptor.self).descriptor)
@@ -292,7 +295,9 @@ extension XMLCommands {
 				context.pointee.node = item
 				let key = try XPath.evaluate(use, in: context)
 				defer { xmlXPathFreeObject(key) }
-				index.add(XPath.string(key), document.number(of: item))
+				// Numbered by the document the node is in.
+				guard let owner = XMLDocument.owner(of: item) else { continue }
+				index.add(XPath.string(key), .init(document: owner.number, node: owner.number(of: item)))
 			}
 		}
 		guard !index.nodes.isEmpty else { throw XPath.failed }
@@ -352,12 +357,18 @@ extension XMLCommands {
 	}
 }
 
-/// An `XMLNewIndex` index: keys to the numbers of their nodes, in document order.
+/// An `XMLNewIndex` index: keys to their nodes, in document order. A node is its document's number and its own,
+/// since `xpath variables` can bring in nodes of other documents.
 final class XMLIndex {
-	var nodes: [String: [Int]] = [:]
+	struct Entry: Equatable {
+		let document: Int
+		let node: Int
+	}
+
+	var nodes: [String: [Entry]] = [:]
 	var order = HashOrder()
 
-	func add(_ key: String, _ node: Int) {
+	func add(_ key: String, _ node: Entry) {
 		order.insert(key)
 		nodes[key, default: []].append(node)
 	}
