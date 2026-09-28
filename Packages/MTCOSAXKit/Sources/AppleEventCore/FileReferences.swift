@@ -26,6 +26,6 @@ extension NSAppleEventDescriptor {
 		}
 		var path = [CChar](repeating: 0, count: Int(PATH_MAX) + 1)
 		let status = data.withUnsafeBytes { mtc_path_from_fsref($0.bindMemory(to: UInt8.self).baseAddress!, &path, path.count) }
-		return status == 0 ? String(cString: path) : nil
+		return status == 0 ? String(decoding: path.prefix { $0 != 0 }.map { UInt8(bitPattern: $0) }, as: UTF8.self) : nil
 	}
 }

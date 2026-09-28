@@ -214,7 +214,7 @@ enum Printf {
 		guard length > 0 else { return "" }
 		var buffer = [CChar](repeating: 0, count: Int(length) + 1)
 		_ = withVaList([value]) { vsnprintf(&buffer, buffer.count, spec, $0) }
-		return String(cString: buffer)
+		return String(decoding: buffer.prefix(Int(length)).map { UInt8(bitPattern: $0) }, as: UTF8.self)
 	}
 
 	/// An argument as text, for `%s` and a missing format.

@@ -1,5 +1,6 @@
 import CLibXML
 import CommonCrypto
+import CryptoKit
 import Foundation
 
 extension XPath {
@@ -110,7 +111,11 @@ extension XPath {
 			push(context, Data(result).base64EncodedString())
 		}
 
-		private static let md5: xmlXPathFunction = { digest($0, $1, length: CC_MD5_DIGEST_LENGTH, CC_MD5) }
+		// MD5 from CryptoKit: CommonCrypto's is deprecated (the same bytes; it's for Satimage's crypto:md5).
+		private static let md5: xmlXPathFunction = { context, count in
+			guard let values = arguments(context, count, 1 ... 1) else { return }
+			push(context, Data(Insecure.MD5.hash(data: Data(values[0].utf8))).base64EncodedString())
+		}
 		private static let sha1: xmlXPathFunction = { digest($0, $1, length: CC_SHA1_DIGEST_LENGTH, CC_SHA1) }
 		private static let sha224: xmlXPathFunction = { digest($0, $1, length: CC_SHA224_DIGEST_LENGTH, CC_SHA224) }
 		private static let sha256: xmlXPathFunction = { digest($0, $1, length: CC_SHA256_DIGEST_LENGTH, CC_SHA256) }

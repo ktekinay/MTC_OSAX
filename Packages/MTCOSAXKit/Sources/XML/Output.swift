@@ -1,6 +1,7 @@
 import AppleEventCore
 import CLibXML
 import CommonCrypto
+import CryptoKit
 import Foundation
 
 /// Writing XML: `XMLDisplayXML`, `XMLSave` and `XMLc14n`.
@@ -125,9 +126,8 @@ enum Output {
 			data.withUnsafeBytes { _ = CC_SHA1($0.baseAddress, CC_LONG(data.count), &hash) }
 			return Data(hash)
 		case "MD5":
-			var hash = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
-			data.withUnsafeBytes { _ = CC_MD5($0.baseAddress, CC_LONG(data.count), &hash) }
-			return Data(hash)
+			// CryptoKit's MD5: CommonCrypto's is deprecated.
+			return Data(Insecure.MD5.hash(data: data))
 		default:
 			throw OSAXError(-1)
 		}

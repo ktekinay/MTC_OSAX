@@ -30,7 +30,7 @@ enum Sorting {
 			flags: try request.parameter("Cfla", default: 0),
 			removeDuplicates: try request.parameter("Uniq", default: false)
 		)
-		let ascending = try request.descriptor(for: "Asce").map { ListUtilities.items($0) ?? [$0] }?.map(\.booleanValue) ?? []
+		let ascending = request.descriptor(for: "Asce").map { ListUtilities.items($0) ?? [$0] }?.map(\.booleanValue) ?? []
 
 		if let values = ArrayOfReal.values(of: descriptor) {
 			return ArrayOfReal(sortedNumbers(values, ascending: ascending.first ?? true, options: options)).appleEventDescriptor
