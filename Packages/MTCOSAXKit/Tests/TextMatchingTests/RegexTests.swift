@@ -264,3 +264,43 @@ struct RegexLimitTests {
 		#expect(error?.message.contains("limit") == true)
 	}
 }
+
+/// Text from a script can hold a lone surrogate. Onigmo's UTF-16 read the pair's second half anyway, past the end
+/// of the text (AddressSanitizer caught it in a case-insensitive search).
+struct LoneSurrogateTests {
+	@Test(arguments: [[UInt16(0xD800)], [0xD800, 0x61], [0x61, 0xDC00], [0xD83D, 0xDE00, 0xD800]])
+	func caseInsensitiveSearch(_ units: [UInt16]) throws {
+		let text = UTF16Text(units: units)
+		#expect(try CompiledRegex("b", flags: .ignoreCase).firstMatch(in: text) == nil)
+		#expect(try CompiledRegex("x+", flags: .ignoreCase).allMatches(in: text).isEmpty)
+	}
+
+	@Test func loneSurrogatesAreOneUnit() throws {
+		let text = UTF16Text(units: [0x61, 0xD800, 0x62])
+		#expect(try CompiledRegex("a.b").firstMatch(in: text)?.range == 0 ..< 3)
+		#expect(try CompiledRegex("A", flags: .ignoreCase).firstMatch(in: UTF16Text(units: [0xD800, 0x61]))?.range == 1 ..< 2)
+	}
+}
+
+/// A text character that folds to more than is left of the pattern's text (ß is ss) made Onigmo read past the
+/// pattern (AddressSanitizer caught it).
+struct CaseFoldingTests {
+	@Test func foldsLongerThanThePattern() throws {
+		#expect(try CompiledRegex("s", flags: .ignoreCase).firstMatch(in: UTF16Text("ß")) == nil)
+		#expect(try CompiledRegex("xs", flags: .ignoreCase).firstMatch(in: UTF16Text("xßy")) == nil)
+		#expect(try CompiledRegex("ss", flags: .ignoreCase).firstMatch(in: UTF16Text("aßb"))?.range == 1 ..< 2)
+		// The find-text fixture fold-dotless-i: İ folds to i and a combining dot.
+		let dotted = try CompiledRegex("i", flags: .ignoreCase).allMatches(in: UTF16Text("I ı İ")).map(\.range)
+		#expect(dotted == [0 ..< 1])
+	}
+}
+
+/// Onigmo peeked at the character after the end of the text when a greedy repeat of anything was followed by a
+/// literal, as in the find-script-ldjson fixture (AddressSanitizer caught it).
+struct PeekAtEndTests {
+	@Test func greedyRepeatBeforeALiteral() throws {
+		let regex = try CompiledRegex(#"<s>([\s\S]*)</s>"#)
+		#expect(try regex.firstMatch(in: UTF16Text("<s>a</s> b"))?.range == 0 ..< 8)
+		#expect(try regex.firstMatch(in: UTF16Text("<s>a b")) == nil)
+	}
+}

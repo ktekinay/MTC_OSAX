@@ -2871,7 +2871,8 @@ match_at(regex_t* reg, const UChar* str, const UChar* end,
 #ifdef USE_OP_PUSH_OR_JUMP_EXACT
     CASE(OP_PUSH_OR_JUMP_EXACT1)  MOP_IN(OP_PUSH_OR_JUMP_EXACT1);
       GET_RELADDR_INC(addr, p);
-      if (*p == *s && DATA_ENSURE_CHECK1) {
+      /* MTC_OSAX patch: check there's text left before reading it (the check came second). */
+      if (DATA_ENSURE_CHECK1 && *p == *s) {
 	p++;
 	STACK_PUSH_ALT(p + addr, s, sprev, pkeep);
 	MOP_OUT;
@@ -2884,7 +2885,9 @@ match_at(regex_t* reg, const UChar* str, const UChar* end,
 
     CASE(OP_PUSH_IF_PEEK_NEXT)  MOP_IN(OP_PUSH_IF_PEEK_NEXT);
       GET_RELADDR_INC(addr, p);
-      if (*p == *s) {
+      /* MTC_OSAX patch: at the end of the text there's nothing to peek at (it read past the text; AddressSanitizer
+         found it). */
+      if (DATA_ENSURE_CHECK1 && *p == *s) {
 	p++;
 	STACK_PUSH_ALT(p + addr, s, sprev, pkeep);
 	MOP_OUT;
@@ -3239,6 +3242,9 @@ str_lower_case_match(OnigEncoding enc, int case_fold_flag,
     lowlen = ONIGENC_MBC_CASE_FOLD(enc, case_fold_flag, &p, end, lowbuf);
     q = lowbuf;
     while (lowlen > 0) {
+      /* MTC_OSAX patch: a character can fold to more than is left of the pattern's text (ß to ss against s);
+         that's no match, rather than reading past the pattern's text. AddressSanitizer found it. */
+      if (t >= tend) return 0;
       if (*t++ != *q++)	return 0;
       lowlen--;
     }
