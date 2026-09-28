@@ -40,7 +40,8 @@ func record(_ fields: KeyValuePairs<String, any AppleEventEncodable>) -> NSApple
 
 struct PropertyListsCommandTests {
 	@Test func everyCommandIsRegistered() {
-		#expect(PropertyLists.commands().count == 32)
+		// Satimage's 29 PropertyList and 3 Pool commands, and MTC_OSAX's 4 for YAML and TOML.
+		#expect(PropertyLists.commands().count == 36)
 	}
 }
 

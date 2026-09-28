@@ -36,7 +36,7 @@ Command counts include hidden commands. Suites sharing a priority are done toget
 Additions that Satimage never had, planned separately:
 
 - ✓ [PCRE as an alternative regex engine](Implemented/PLAN-PCRE.md), selected with `syntax "PCRE"` or the `RegexSyntax` setting.
-- **YAML and TOML for property lists** (noted 2026-09-28; TOML added the same day): explore commands like `PlistToYAML`/`PlistFromYAML` and `PlistToTOML`/`PlistFromTOML`, alongside Satimage's existing `PlistToJSON`/`PlistFromJSON` (which cover JSON), once the PropertyList suite (priority 5) is done. Decided for TOML: a top level that isn't a table is an error; a `missing value` in a table is written as a comment, `# key = NULL`, and in an array is an error; `PlistFromTOML` ignores comments, like any TOML reader, so such a key is simply absent when read back; data is base64 text, as in `PlistToJSON`; dates are written in UTC with whole seconds (`2026-09-28T14:30:00Z`, as `PlistToJSON` writes them); a local date-time or local date is read in the Mac's time zone (a date alone is midnight); a local time is read as text (`"14:30:00"`).
+- ✓ **YAML and TOML for property lists** ([done](Implemented/PLAN-YAMLTOML.md)): `PlistToYAML`, `PlistFromYAML`, `PlistToTOML` and `PlistFromTOML`, and files for these and Satimage's JSON pair.
 - ✓ **Settings from AppleScript** ([done](Implemented/PLAN-Settings.md)): `mtc_get`, `mtc_set` and `mtc_reset` in their own visible "MTC_OSAX Settings" suite, for `idle_timeout`, `dollar_references` and `regex_syntax`.
 
 ## May Do Later

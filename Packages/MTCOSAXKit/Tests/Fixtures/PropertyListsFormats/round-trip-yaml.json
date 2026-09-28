@@ -1,0 +1,210 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "make",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "person",
+                        "type" : "utxt"
+                      },
+                      {
+                        "text" : "Ann",
+                        "type" : "utxt"
+                      },
+                      {
+                        "text" : "n",
+                        "type" : "utxt"
+                      },
+                      {
+                        "code" : "msng",
+                        "type" : "type"
+                      },
+                      {
+                        "text" : "sample",
+                        "type" : "utxt"
+                      },
+                      {
+                        "items" : [
+                          {
+                            "integer" : 1,
+                            "type" : "long"
+                          },
+                          {
+                            "fields" : [
+                              {
+                                "key" : "usrf",
+                                "value" : {
+                                  "items" : [
+                                    {
+                                      "text" : "k",
+                                      "type" : "utxt"
+                                    },
+                                    {
+                                      "text" : "v",
+                                      "type" : "utxt"
+                                    }
+                                  ],
+                                  "type" : "list"
+                                }
+                              }
+                            ],
+                            "type" : "reco"
+                          },
+                          {
+                            "items" : [
+                              {
+                                "text" : "deep",
+                                "type" : "utxt"
+                              }
+                            ],
+                            "type" : "list"
+                          }
+                        ],
+                        "type" : "list"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "190000004d5443700900000000000000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "MTCp",
+        "eventID" : "TYML",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "190000004d5443700900000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "\"n\": null\nsample:\n- 1\n- k: v\n- - deep\nperson: Ann\n",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "MTCp",
+        "eventID" : "FYML",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "\"n\": null\nsample:\n- 1\n- k: v\n- - deep\nperson: Ann\n",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "1a0000004d5443700900000000000000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "equa",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "hex" : "1a0000004d5443700900000000000000",
+              "type" : "CFob"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "190000004d5443700900000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "boolean" : true,
+          "type" : "bool"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "1a0000004d5443700900000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "190000004d5443700900000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "round-trip-yaml",
+  "recordedAt" : "2026-09-28T19:23:11Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "set p to PlistNew {person:\"Ann\", n:missing value, sample:{1, {k:\"v\"}, {\"deep\"}}}\nset q to PlistFromYAML (PlistToYAML p)\nPlistEqual p to q\nPlistClose q\nPlistClose p",
+  "timeZone" : "America/New_York"
+}

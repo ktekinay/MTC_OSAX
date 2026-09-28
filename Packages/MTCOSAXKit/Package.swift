@@ -46,6 +46,23 @@ let package = Package(
 			]
 		),
 
+		// libyaml 0.2.5 (https://github.com/yaml/libyaml), for PlistFromYAML. MIT; see License. Only src and include.
+		.target(
+			name: "CYAML",
+			exclude: ["License"],
+			cSettings: [
+				.define("YAML_VERSION_MAJOR", to: "0"),
+				.define("YAML_VERSION_MINOR", to: "2"),
+				.define("YAML_VERSION_PATCH", to: "5"),
+				.define("YAML_VERSION_STRING", to: "\"0.2.5\""),
+				.define("YAML_DECLARE_STATIC"),
+				.unsafeFlags(["-w"]),
+			]
+		),
+
+		// tomlc17 R260821 (https://github.com/cktan/tomlc17, commit e0e8868), for PlistFromTOML. MIT; see LICENSE.
+		.target(name: "CTOML", exclude: ["LICENSE"], cSettings: [.unsafeFlags(["-w"])]),
+
 		// Regex (Onigmo, or PCRE2 when asked) and literal text search, shared by every suite that searches text.
 		.target(name: "TextMatching", dependencies: ["COnigmo", "CPCRE2"]),
 
@@ -57,7 +74,7 @@ let package = Package(
 		.target(name: "MathFunctions", dependencies: ["AppleEventCore", "Numerics"]),
 		.target(name: "ListUtilities", dependencies: ["AppleEventCore", "Numerics"]),
 		.target(name: "Arrays", dependencies: ["AppleEventCore", "Numerics"]),
-		.target(name: "PropertyLists", dependencies: ["AppleEventCore"]),
+		.target(name: "PropertyLists", dependencies: ["AppleEventCore", "CYAML", "CTOML"]),
 		.target(name: "XML", dependencies: ["AppleEventCore", "CLibXML", "PropertyLists"]),
 
 		// MTC_OSAX's settings and the commands that read and change them (an MTC_OSAX extension).

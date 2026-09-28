@@ -62,6 +62,11 @@ public enum PropertyLists {
 				JSON.javaScript(object(of: try commands.node(request)))
 			},
 			CommandDefinition("PlistFromJSON", code: "PLSTNOSJ", handler: commands.fromJSON),
+			// MTC_OSAX extensions: YAML and TOML, in their own suite (event class MTCp).
+			CommandDefinition("PlistToYAML", code: "MTCpTYML") { try commands.output(YAML.write(object(of: commands.node($0))), $0) },
+			CommandDefinition("PlistFromYAML", code: "MTCpFYML") { try commands.newDocument($0, from: YAML.read) },
+			CommandDefinition("PlistToTOML", code: "MTCpTTML") { try commands.output(TOML.write(object(of: commands.node($0))), $0) },
+			CommandDefinition("PlistFromTOML", code: "MTCpFTML") { try commands.newDocument($0, from: TOML.read) },
 			CommandDefinition("PlistSetDocID", code: "PLSTSDbK") { request in
 				let document = try commands.node(request).document
 				let previous = document.identifier
@@ -489,18 +494,59 @@ struct Commands {
 
 	// MARK: JSON
 
-	func toJSON(_ request: AppleEventRequest) throws -> String {
+	/// The JSON text, or with `in` (an MTC_OSAX extension), written to that file.
+	func toJSON(_ request: AppleEventRequest) throws -> NSAppleEventDescriptor? {
 		let node = try node(request)
-		return try JSON.stringify(
+		return try output(JSON.stringify(
 			PropertyLists.object(of: node),
 			formatted: request.parameter("smar", default: false),
 			replacer: request.parameter("rplc", as: String.self)
-		)
+		), request)
 	}
 
+	// MARK: Files (MTC_OSAX extension)
+
+	/// The text a `PlistTo…` command made: returned, or with `in` (a file or POSIX path) written there in UTF-8,
+	/// returning nothing. A folder that doesn't exist is -1, as for `PlistSave`.
+	func output(_ text: String, _ request: AppleEventRequest) throws -> NSAppleEventDescriptor? {
+		guard let file = try request.parameter("kfil", as: URL.self) else {
+			return NSAppleEventDescriptor(string: text)
+		}
+		do {
+			try Data(text.utf8).write(to: file, options: .atomic)
+		} catch {
+			throw PropertyLists.invalid
+		}
+		return nil
+	}
+
+	/// The direct parameter of a `PlistFrom…` command: a file reference is read (UTF-8; -43 if it's missing, -1 if
+	/// it isn't UTF-8); text is the document itself, never a path, as in Satimage's `PlistFromJSON`.
+	func input(_ request: AppleEventRequest) throws -> String {
+		let descriptor = try request.requiredDirectParameter(as: AnyDescriptor.self).descriptor
+		guard ["alis", "furl", "fsrf", "bmrk", "fss "].contains(descriptor.descriptorType.fourCharString) else {
+			return try String(appleEventDescriptor: descriptor)
+		}
+		guard let data = try? Data(contentsOf: URL(appleEventDescriptor: descriptor)) else {
+			throw OSAXError(-43)
+		}
+		guard let text = String(data: data, encoding: .utf8) else {
+			throw PropertyLists.invalid
+		}
+		return text.hasPrefix("\u{FEFF}") ? String(text.dropFirst()) : text
+	}
+
+	/// A new document from text in another format (`PlistFromYAML`, `PlistFromTOML`), `in pool`.
+	func newDocument(_ request: AppleEventRequest, from read: (String, TimeZone) throws -> Any) throws -> NSAppleEventDescriptor {
+		let object = try read(input(request), .current)
+		let document = store.newDocument(pool: try request.parameter("pool", as: String.self))
+		document.root = PropertyLists.node(from: object, in: document)
+		return store.reference(document.root)
+	}
+
+	/// JSON text, or (an MTC_OSAX extension) a JSON file.
 	func fromJSON(_ request: AppleEventRequest) throws -> NSAppleEventDescriptor {
-		let text = try request.requiredDirectParameter(as: String.self)
-		let object = try JSON.parse(text)
+		let object = try JSON.parse(input(request))
 		let document = store.newDocument(pool: try request.parameter("pool", as: String.self))
 		document.root = PropertyLists.node(from: object, in: document)
 		return store.reference(document.root)

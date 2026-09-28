@@ -1,0 +1,29 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MTCp",
+        "eventID" : "FYML",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "a: 1\n---\nb: 2",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorMessage" : "The YAML has several documents; PlistFromYAML reads one.",
+        "errorNumber" : -50
+      }
+    }
+  ],
+  "name" : "from-yaml-documents",
+  "recordedAt" : "2026-09-28T19:22:41Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "try\nPlistFromYAML \"a: 1\n---\nb: 2\"\nend try",
+  "timeZone" : "America/New_York"
+}

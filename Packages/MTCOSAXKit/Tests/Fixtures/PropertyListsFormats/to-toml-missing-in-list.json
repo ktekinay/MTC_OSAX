@@ -1,0 +1,96 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "make",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "l",
+                        "type" : "utxt"
+                      },
+                      {
+                        "items" : [
+                          {
+                            "integer" : 1,
+                            "type" : "long"
+                          },
+                          {
+                            "code" : "msng",
+                            "type" : "type"
+                          }
+                        ],
+                        "type" : "list"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "070000004d5443700400000000000000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "MTCp",
+        "eventID" : "TTML",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "070000004d5443700400000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorMessage" : "TOML has no null: the missing value in l can only be written as a table's key.",
+        "errorNumber" : -50
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "070000004d5443700400000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "to-toml-missing-in-list",
+  "recordedAt" : "2026-09-28T19:22:41Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "set p to PlistNew {l:{1, missing value}}\ntry\nPlistToTOML p\nend try\nPlistClose p",
+  "timeZone" : "America/New_York"
+}

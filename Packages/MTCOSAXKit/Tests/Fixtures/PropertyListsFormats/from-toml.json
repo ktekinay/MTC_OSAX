@@ -1,0 +1,147 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MTCp",
+        "eventID" : "FTML",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "# comment\nname = \"Ann\"\nn = 12\ntags = [\"a\", \"b\"]\ntime = 14:30:00\n[address]\ncity = \"Paris\"",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "0d0000004d5443700900000000000000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "0d0000004d5443700900000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "usrf",
+              "value" : {
+                "items" : [
+                  {
+                    "text" : "tags",
+                    "type" : "utxt"
+                  },
+                  {
+                    "items" : [
+                      {
+                        "text" : "a",
+                        "type" : "utxt"
+                      },
+                      {
+                        "text" : "b",
+                        "type" : "utxt"
+                      }
+                    ],
+                    "type" : "list"
+                  },
+                  {
+                    "text" : "n",
+                    "type" : "utxt"
+                  },
+                  {
+                    "integer" : 12,
+                    "type" : "long"
+                  },
+                  {
+                    "text" : "name",
+                    "type" : "utxt"
+                  },
+                  {
+                    "text" : "Ann",
+                    "type" : "utxt"
+                  },
+                  {
+                    "text" : "time",
+                    "type" : "utxt"
+                  },
+                  {
+                    "text" : "14:30:00",
+                    "type" : "utxt"
+                  },
+                  {
+                    "text" : "address",
+                    "type" : "utxt"
+                  },
+                  {
+                    "fields" : [
+                      {
+                        "key" : "usrf",
+                        "value" : {
+                          "items" : [
+                            {
+                              "text" : "city",
+                              "type" : "utxt"
+                            },
+                            {
+                              "text" : "Paris",
+                              "type" : "utxt"
+                            }
+                          ],
+                          "type" : "list"
+                        }
+                      }
+                    ],
+                    "type" : "reco"
+                  }
+                ],
+                "type" : "list"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "0d0000004d5443700900000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "from-toml",
+  "recordedAt" : "2026-09-28T19:22:41Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "set p to PlistFromTOML \"# comment\nname = \\\"Ann\\\"\nn = 12\ntags = [\\\"a\\\", \\\"b\\\"]\ntime = 14:30:00\n[address]\ncity = \\\"Paris\\\"\"\nPlistGet p\nPlistClose p",
+  "timeZone" : "America/New_York"
+}

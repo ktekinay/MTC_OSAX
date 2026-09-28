@@ -2667,7 +2667,9 @@ arrays contain ordered elements that you reference by index.
       <direct-parameter type="CFRef" description=""/>
       <parameter name="formatting" code="smar" type="boolean" optional="yes" description="add returns and tabs for legibility. Default: false."/>   
      <parameter name="replacer" code="rplc" type="string" optional="yes" description="a JavaScript function for the optional callback of JSON.stringify."/>   
-	<result type="string"/>
+	<!-- MTC_OSAX extension (not in Satimage): write the JSON to a file. -->
+	<parameter name="in" code="kfil" type="file specification" optional="yes" description="MTC_OSAX extension: a file (or POSIX path) to write the JSON to, in UTF-8, instead of returning it"/>
+	<result type="string" description="the JSON, or nothing with in"/>
       <documentation>
         <html>
           <div style="display:none" class="example">
@@ -2687,7 +2689,11 @@ PlistClose p
       <result type="string"/>
     </command>
   <command name="PlistFromJSON" code="PLSTNOSJ" description="transform a JSON into a plist">
-      <direct-parameter type="string" description="the JSON"/>
+      <!-- MTC_OSAX extension: a file is accepted too (SatimageOSAX took only text). -->
+      <direct-parameter description="the JSON, or (MTC_OSAX extension) a file holding it, read as UTF-8. Text is always the JSON itself, never a path.">
+        <type type="string"/>
+        <type type="file"/>
+      </direct-parameter>
        <parameter name="in pool" code="pool" type="string" optional="yes" description="the name of the group where the plist document is created. Default: the current pool."/>
      <result type="CFRef"/>
      </command>
@@ -2745,6 +2751,36 @@ PlistClose p
 			<parameter name="number" code="errn" type="integer" description="the error number"/>
 		</command>
 	</suite>
+	<!-- MTC_OSAX extension (not in Satimage): property lists as YAML and TOML. -->
+	<suite name="MTC_OSAX Property List Formats" code="MTCp" description="Property lists as YAML and TOML, like PlistToJSON and PlistFromJSON (MTC_OSAX extension).">
+		<command name="PlistToYAML" code="MTCpTYML" description="transform a plist into YAML. Dates are written in UTC (2026-09-28T14:30:00Z), data as !!binary, missing value as null.">
+			<direct-parameter type="CFRef" description="the plist, or an element of one"/>
+			<parameter name="in" code="kfil" type="file specification" optional="yes" description="a file (or POSIX path) to write the YAML to, in UTF-8, instead of returning it"/>
+			<result type="text" description="the YAML, or nothing with in"/>
+		</command>
+		<command name="PlistFromYAML" code="MTCpFYML" description="transform YAML into a plist, with YAML 1.2's rules (only true and false are booleans, so yes and no stay text). An unquoted timestamp is a date (without a zone, in the Mac's time zone); null is missing value; !!binary is data. The text must hold one document.">
+<direct-parameter description="the YAML, or a file holding it (read as UTF-8). Text is always the YAML itself, never a path.">
+				<type type="text"/>
+				<type type="file"/>
+			</direct-parameter>
+			<parameter name="in pool" code="pool" type="text" optional="yes" description="the name of the group where the plist document is created. Default: the current pool."/>
+			<result type="CFRef"/>
+		</command>
+		<command name="PlistToTOML" code="MTCpTTML" description="transform a plist into TOML. The plist must be a dictionary. Dates are written in UTC (2026-09-28T14:30:00Z), data as base64 text; a missing value in a dictionary is written as the comment # key = NULL, and in a list is an error.">
+			<direct-parameter type="CFRef" description="the plist, or an element of one: a dictionary"/>
+			<parameter name="in" code="kfil" type="file specification" optional="yes" description="a file (or POSIX path) to write the TOML to, in UTF-8, instead of returning it"/>
+			<result type="text" description="the TOML, or nothing with in"/>
+		</command>
+		<command name="PlistFromTOML" code="MTCpFTML" description="transform TOML into a plist. A date and time with an offset is that moment; a local date and time, or a date, is in the Mac's time zone (a date alone is midnight); a local time is text. Comments are ignored.">
+<direct-parameter description="the TOML, or a file holding it (read as UTF-8). Text is always the TOML itself, never a path.">
+				<type type="text"/>
+				<type type="file"/>
+			</direct-parameter>
+			<parameter name="in pool" code="pool" type="text" optional="yes" description="the name of the group where the plist document is created. Default: the current pool."/>
+			<result type="CFRef"/>
+		</command>
+	</suite>
+
 	<!-- MTC_OSAX extension (not in Satimage): reading and changing MTC_OSAX's settings. -->
 	<suite name="MTC_OSAX Settings" code="MTCs" description="Read and change MTC_OSAX's settings (MTC_OSAX extension). Settings are global and permanent: a change affects every script that uses MTC_OSAX, including scripts run later and after MTC_OSAX or the Mac restarts, until it's changed again or reset. A change applies from the next command. To change how one command behaves, use its own parameter instead (syntax, dollar references). Settings are kept in MTC_OSAX's defaults (com.mactechnologies.mtc-osax).">
 		<enumeration name="setting" code="MTst" description="An MTC_OSAX setting. A setting can also be named with text: its friendly name (&quot;regex syntax&quot;), its defaults key (&quot;RegexSyntax&quot;) or the constant's name, ignoring case, spaces and underscores.">

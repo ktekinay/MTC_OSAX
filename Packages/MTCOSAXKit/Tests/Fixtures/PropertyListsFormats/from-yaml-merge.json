@@ -1,0 +1,147 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MTCp",
+        "eventID" : "FYML",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "base: &b\n  a: 1\n  b: 2\nderived:\n  <<: *b\n  b: 3",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "0b0000004d5443700700000000000000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "0b0000004d5443700700000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "usrf",
+              "value" : {
+                "items" : [
+                  {
+                    "text" : "base",
+                    "type" : "utxt"
+                  },
+                  {
+                    "fields" : [
+                      {
+                        "key" : "usrf",
+                        "value" : {
+                          "items" : [
+                            {
+                              "text" : "a",
+                              "type" : "utxt"
+                            },
+                            {
+                              "integer" : 1,
+                              "type" : "long"
+                            },
+                            {
+                              "text" : "b",
+                              "type" : "utxt"
+                            },
+                            {
+                              "integer" : 2,
+                              "type" : "long"
+                            }
+                          ],
+                          "type" : "list"
+                        }
+                      }
+                    ],
+                    "type" : "reco"
+                  },
+                  {
+                    "text" : "derived",
+                    "type" : "utxt"
+                  },
+                  {
+                    "fields" : [
+                      {
+                        "key" : "usrf",
+                        "value" : {
+                          "items" : [
+                            {
+                              "text" : "b",
+                              "type" : "utxt"
+                            },
+                            {
+                              "integer" : 3,
+                              "type" : "long"
+                            },
+                            {
+                              "text" : "a",
+                              "type" : "utxt"
+                            },
+                            {
+                              "integer" : 1,
+                              "type" : "long"
+                            }
+                          ],
+                          "type" : "list"
+                        }
+                      }
+                    ],
+                    "type" : "reco"
+                  }
+                ],
+                "type" : "list"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "0b0000004d5443700700000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "from-yaml-merge",
+  "recordedAt" : "2026-09-28T19:22:41Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "set p to PlistFromYAML \"base: &b\n  a: 1\n  b: 2\nderived:\n  <<: *b\n  b: 3\"\nPlistGet p\nPlistClose p",
+  "timeZone" : "America/New_York"
+}

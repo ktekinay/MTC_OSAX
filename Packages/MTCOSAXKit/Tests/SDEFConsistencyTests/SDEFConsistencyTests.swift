@@ -2,15 +2,16 @@ import Foundation
 import MTCOSAX
 import Testing
 
-/// Codes that belong to MTC_OSAX itself rather than being copied from Satimage: the diagnostics and settings suites'
-/// event classes, and the settings suite's enumeration and record type (`MTs…`).
-private let ownSuitePrefixes = ["MTCd", "MTCs", "MTs"]
+/// Codes that belong to MTC_OSAX itself rather than being copied from Satimage: the diagnostics, settings and
+/// property list formats suites' event classes, and the settings suite's enumeration and record type (`MTs…`).
+private let ownSuitePrefixes = ["MTCd", "MTCs", "MTs", "MTCp"]
 
 /// Parameters MTC_OSAX adds to copied Satimage commands: `dollar references`.
 private let extensionParameters: Set = ["DlRf"]
 
-/// Parameters MTC_OSAX adds to one command: `syntax` on `splittext` (for PCRE; Satimage's other regex commands had it).
-private let commandExtensions: [String: Set<String>] = ["SATISplt": ["synt"]]
+/// Parameters MTC_OSAX adds to one command: `syntax` on `splittext` (for PCRE; Satimage's other regex commands had it),
+/// and `in` on `PlistToJSON` (writing a file, like MTC_OSAX's YAML and TOML commands).
+private let commandExtensions: [String: Set<String>] = ["SATISplt": ["synt"], "PLSTJSON": ["kfil"]]
 
 struct SDEFConsistencyTests {
 	@Test func everySDEFCommandHasAHandler() throws {

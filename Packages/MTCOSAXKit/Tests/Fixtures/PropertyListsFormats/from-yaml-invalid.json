@@ -1,0 +1,29 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MTCp",
+        "eventID" : "FYML",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "a: [1, 2",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorMessage" : "Not YAML: while parsing a flow sequence did not find expected ',' or ']' at line 2, column 1",
+        "errorNumber" : -1
+      }
+    }
+  ],
+  "name" : "from-yaml-invalid",
+  "recordedAt" : "2026-09-28T19:22:41Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "try\nPlistFromYAML \"a: [1, 2\"\nend try",
+  "timeZone" : "America/New_York"
+}

@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MTCp",
+        "eventID" : "FTML",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/nope.toml",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -43
+      }
+    }
+  ],
+  "name" : "file-missing",
+  "recordedAt" : "2026-09-28T19:41:25Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "try\nPlistFromTOML (POSIX file \"$TMP/nope.toml\")\nend try",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}
