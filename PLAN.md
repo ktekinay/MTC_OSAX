@@ -36,6 +36,7 @@ Command counts include hidden commands. Suites sharing a priority are done toget
 Additions that Satimage never had, planned separately:
 
 - [PCRE as an alternative regex engine](PLAN-PCRE.md), selected with `syntax "PCRE"`. To be done on its own branch.
+- **YAML for property lists** (noted 2026-09-28): explore commands like `PlistToYAML`/`PlistFromYAML`, alongside Satimage's existing `PlistToJSON`/`PlistFromJSON` (which cover JSON), once the PropertyList suite (priority 5) is done.
 
 ## May Do Later
 
