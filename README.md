@@ -72,6 +72,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 - `suppress item` with a single index works (including the dictionary's example).
 - `exclude items` and `keep items` `without case sensitive` ignore case; `keep items {}` gives `{}`.
 - `special concat` of text with a record is error -1700 instead of garbage; empty text gives empty cells.
+- `createarray` and `randomarray` make at most 100,000,000 items (-50 for more), instead of trying to allocate tens of gigabytes.
 - `randomarray … seed` beyond 32 bits uses the seed's low 32 bits instead of ignoring it.
 
 **Property lists**

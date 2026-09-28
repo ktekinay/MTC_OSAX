@@ -35,6 +35,9 @@ struct CreateArrayTests {
 		#expect(send("SATICRAR", ["----": 0]).error == .parameterError)
 		#expect(send("SATICRAR", ["----": -2]).error == .parameterError)
 		#expect(send("SATICRAR", [:]).error == .missingParameter)
+		// Two billion items used to be allowed (32 GB).
+		#expect(send("SATICRAR", ["----": 100_000_001]).error?.number == -50)
+		#expect(send("SATICRRA", ["----": 2_000_000_000]).error?.number == -50)
 	}
 }
 

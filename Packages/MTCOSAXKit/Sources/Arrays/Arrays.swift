@@ -26,15 +26,21 @@ public enum Arrays {
 	}
 
 	/// The size: a positive number (or a list starting with one), rounded half to even as SatimageOSAX did
-	/// (2.5 makes 2 items, 2.7 makes 3); error -50 otherwise.
+	/// (2.5 makes 2 items, 2.7 makes 3), up to `maximumSize`; error -50 otherwise.
 	static func size(_ request: AppleEventRequest) throws -> Int {
 		let value = try firstNumber(request.requiredDirectParameter(as: AnyDescriptor.self).descriptor)
 		let rounded = value.rounded(.toNearestOrEven)
-		guard rounded >= 1, rounded <= Double(Int32.max) else {
+		guard rounded >= 1 else {
 			throw OSAXError.parameterError
+		}
+		guard rounded <= Double(maximumSize) else {
+			throw OSAXError(-50, "An array can have at most 100,000,000 items.")
 		}
 		return Int(rounded)
 	}
+
+	/// 800 MB of reals, and as much again for the reply (two billion made 32 GB).
+	static let maximumSize = 100_000_000
 
 	/// The seed rounded half to even, reduced to its low 32 bits however large it is (a double beyond 2^53 is a
 	/// whole number, and `fmod` is exact); error -50 for infinity or NaN.
