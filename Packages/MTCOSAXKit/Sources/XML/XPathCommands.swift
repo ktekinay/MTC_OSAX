@@ -266,9 +266,11 @@ extension XMLCommands {
 		return document
 	}
 
+	/// Whether two URLs are the same document: for files, the same path once `.`, `..` and links are resolved (so
+	/// `/tmp/a.xml` is `/private/tmp/a.xml`); XMLDocument and XMLXPointer both use this.
 	static func sameLocation(_ a: URL, _ b: URL) -> Bool {
 		if a.isFileURL, b.isFileURL {
-			return a.standardizedFileURL.path == b.standardizedFileURL.path
+			return a.standardizedFileURL.resolvingSymlinksInPath().path == b.standardizedFileURL.resolvingSymlinksInPath().path
 		}
 		return a.absoluteString == b.absoluteString
 	}

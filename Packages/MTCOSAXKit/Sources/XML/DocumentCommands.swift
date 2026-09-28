@@ -30,7 +30,9 @@ extension XMLCommands {
 				// The open documents of a file in the pool: one, or a list when it was opened more than once.
 				let file = try request.requiredDirectParameter(as: URL.self)
 				let pool = try request.parameter("pool", as: String.self) ?? store.currentPool
-				let found = references.documents.filter { $0.pool == pool && $0.url?.isFileURL == true && $0.url?.path == file.path }
+				let found = references.documents.filter { document in
+					document.pool == pool && document.url.map { $0.isFileURL && XMLCommands.sameLocation($0, file) } == true
+				}
 				guard !found.isEmpty else { throw XML.notFound }
 				let result = found.map { references.reference($0) }
 				return found.count == 1 ? result[0] : result.appleEventDescriptor

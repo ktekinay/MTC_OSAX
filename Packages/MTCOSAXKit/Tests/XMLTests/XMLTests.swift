@@ -447,6 +447,18 @@ struct XMLDocumentTests {
 		#expect(xml.send("XML lErr").result?.stringValue?.contains("network") == true)
 	}
 
+	/// XMLDocument compared paths as given, so `/tmp/x/../a.xml` or `/tmp` for `/private/tmp` found nothing.
+	@Test func documentByEquivalentPath() throws {
+		let file = URL(fileURLWithPath: "/private/tmp/xml-doc-\(UUID().uuidString).xml")
+		try Data("<a/>".utf8).write(to: file)
+		defer { try? FileManager.default.removeItem(at: file) }
+		let xml = XMLs()
+		let d = try #require(xml.send("XML open", ["----": file]).result)
+		for path in [file.path, "/tmp/" + file.lastPathComponent, "/private/tmp/sub/../" + file.lastPathComponent] {
+			#expect(xml.send("XML gfur", ["----": URL(fileURLWithPath: path)]).result == d, "\(path)")
+		}
+	}
+
 	@Test func documentsPoolsAndIdentifiers() throws {
 		let xml = XMLs()
 		let d = try #require(xml.send("XML open", ["from": "<a/>", "pool": "p"]).result)
