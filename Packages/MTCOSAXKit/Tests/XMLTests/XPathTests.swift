@@ -267,6 +267,20 @@ struct XSLTTests {
 		#expect(xml.send("XML xslt", ["----": d, "with": hfs, "rtyp": type("utxt")]).result?.stringValue == "Moby-Dick;Les Misérables;")
 	}
 
+	/// EXSLT was registered by the first XMLTransform, so a stylesheet compiled before that missed its
+	/// `func:function` definitions.
+	@Test func compiledStylesheetWithFunctions() throws {
+		let xml = XMLs()
+		let style = try xml.open("""
+		<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:func="http://exslt.org/functions" \
+		xmlns:my="urn:my" extension-element-prefixes="func"><xsl:output method="text"/>\
+		<func:function name="my:twice"><xsl:param name="x"/><func:result select="$x * 2"/></func:function>\
+		<xsl:template match="/"><xsl:value-of select="my:twice(21)"/></xsl:template></xsl:stylesheet>
+		""")
+		#expect(xml.send("XML pxsl", ["----": style]).error == nil)
+		#expect(xml.send("XML xslt", ["----": try xml.open("<a/>"), "with": style, "rtyp": type("utxt")]).result?.stringValue == "42")
+	}
+
 	@Test func parameters() throws {
 		let xml = XMLs()
 		let d = try xml.open(library)

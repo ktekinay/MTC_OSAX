@@ -30,7 +30,6 @@ extension XMLCommands {
 	func transform(_ request: AppleEventRequest) throws -> NSAppleEventDescriptor? {
 		let (document, node) = try direct(request)
 		guard let doc = document.doc else { throw XML.noSuchNode }
-		Stylesheets.registerEXSLT()
 		let target = XMLCommands.isDocument(node) ? nil : node
 		let style = try stylesheet(request, document: document, node: target)
 		defer { if style.owned { xsltFreeStylesheet(style.pointer) } }
@@ -119,7 +118,8 @@ enum Stylesheets {
 	static let parseOptions = Int32(XML_PARSE_NOENT.rawValue | XML_PARSE_DTDLOAD.rawValue | XML_PARSE_DTDATTR.rawValue | XML_PARSE_NOCDATA.rawValue)
 	static let namespace = "http://www.w3.org/1999/XSL/Transform"
 
-	/// EXSLT's functions and elements, for every transformation (registering is global and done once).
+	/// EXSLT's functions and elements, for every stylesheet (registering is global and done once, when the commands
+	/// are made: XMLCompile needs them too, or `func:function` definitions are missed).
 	static func registerEXSLT() {
 		_ = registration
 	}

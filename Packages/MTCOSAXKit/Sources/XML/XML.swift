@@ -18,6 +18,7 @@ public enum XML {
 	public static func commands(store: DocumentStore = DocumentStore()) -> [CommandDefinition] {
 		let commands = XMLCommands(store: store, settings: XMLSettings())
 		NetworkInput.install()
+		Stylesheets.registerEXSLT()
 		store.addResolver { descriptor in
 			XMLReferences.isReference(descriptor) ? try commands.references.resolve(descriptor).0 : nil
 		}
