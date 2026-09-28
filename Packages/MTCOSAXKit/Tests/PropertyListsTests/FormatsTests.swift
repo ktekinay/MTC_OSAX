@@ -128,6 +128,15 @@ struct TOMLTests {
 }
 
 struct YAMLTests {
+	/// Empty text used to hand libyaml a pointer to a temporary array.
+	@Test func emptyTextHasNoDocument() {
+		for text in ["", "# only a comment\n"] {
+			let error = #expect(throws: OSAXError.self) { try YAML.read(text) }
+			#expect(error?.number == -1)
+			#expect(error?.message == "Not YAML: there's no document.")
+		}
+	}
+
 	@Test func writing() {
 		#expect(YAML.write(dictionary(["name": "Ann"])) == "name: Ann\n")
 		#expect(YAML.write(dictionary(["tags": ["a", "b"] as NSArray])) == "tags:\n- a\n- b\n")

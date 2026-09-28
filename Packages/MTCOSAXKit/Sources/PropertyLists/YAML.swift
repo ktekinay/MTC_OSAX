@@ -224,17 +224,20 @@ enum YAML {
 	/// YAML or has no document; -50 for several documents, a mapping or sequence used as a key, or an alias that
 	/// contains itself.
 	static func read(_ text: String, timeZone: TimeZone = .current) throws -> Any {
+		let noDocument = OSAXError(-1, "Not YAML: there's no document.")
+		// (Empty text has no buffer to hand libyaml.)
+		guard !text.isEmpty else { throw noDocument }
 		var parser = yaml_parser_t()
 		guard yaml_parser_initialize(&parser) == 1 else { throw OSAXError(-1, "YAML reader unavailable") }
 		defer { yaml_parser_delete(&parser) }
 		let bytes = Array(text.utf8)
 		return try bytes.withUnsafeBufferPointer { buffer in
-			yaml_parser_set_input_string(&parser, buffer.baseAddress ?? UnsafePointer([0]), buffer.count)
+			yaml_parser_set_input_string(&parser, buffer.baseAddress!, buffer.count)
 			var document = yaml_document_t()
 			guard yaml_parser_load(&parser, &document) == 1 else { throw error(parser) }
 			defer { yaml_document_delete(&document) }
 			guard let root = yaml_document_get_root_node(&document) else {
-				throw OSAXError(-1, "Not YAML: there's no document.")
+				throw noDocument
 			}
 			var next = yaml_document_t()
 			guard yaml_parser_load(&parser, &next) == 1 else { throw error(parser) }
