@@ -223,6 +223,14 @@ swift test --package-path Packages/MTCOSAXKit
 xcodebuild -project MTC_OSAX.xcodeproj -scheme MTC_OSAX -derivedDataPath build/DerivedData test
 ```
 
+Run them with AddressSanitizer too before committing a change to code that uses C (libxml2, libxslt, Onigmo, PCRE2, libyaml, tomlc17, the Apple Event Manager): it catches memory errors that pass unnoticed otherwise, such as reading a freed libxml2 node.
+
+```sh
+swift test --package-path Packages/MTCOSAXKit --sanitize=address
+```
+
+`AppleEventCoreTests` sometimes crashes (signal 10) while it loads AppleScript for its coercions: the Apple Event Manager recurses until the stack runs out, about one run in ten, on `develop` before the audit fixes too. It doesn't happen in the app, which loads AppleScript once on its main thread; run the tests again if it does.
+
 - **SDEF consistency** checks that every command in `MTC_OSAX.sdef` has a handler (and the reverse), and that everything copied from Satimage keeps its names and codes.
 - **Fixture replay** sends each recorded Apple event to the app's commands and compares the reply with the recorded one. Text encodings (`utxt`, `ut16`, …) and boolean encodings (`true`, `fals`, `bool`) count as equal, since scripts can't tell them apart.
 
