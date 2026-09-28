@@ -82,10 +82,22 @@ public enum FilesAndFolders {
 	/// The file for `directory`, or `directory/name` when `name` is given.
 	static func destination(_ request: AppleEventRequest) throws -> URL {
 		let base = try request.requiredDirectParameter(as: URL.self)
-		guard let name = try request.parameter("pnam", as: String.self) else {
+		guard let name = try nameParameter(request) else {
 			return base
 		}
 		return base.appendingPathComponent(name)
+	}
+
+	/// The `name` parameter: one name, not a path, so a name that comes from a document can't reach outside the
+	/// folder. -1 with a message otherwise (SatimageOSAX took `sub/file` as a path).
+	static func nameParameter(_ request: AppleEventRequest) throws -> String? {
+		guard let name = try request.parameter("pnam", as: String.self) else {
+			return nil
+		}
+		guard !name.isEmpty, !name.contains("/"), name != ".", name != ".." else {
+			throw OSAXError(-1, "A name can’t be empty, contain “/” or be “.” or “..”. To use a subfolder, give its path as the folder instead.")
+		}
+		return name
 	}
 
 	// MARK: filenew, mkdir, filerename
@@ -184,7 +196,7 @@ public enum FilesAndFolders {
 		_ = try request.parameter("full", default: false) // FileManager copies attributes either way.
 		let filePath = try request.parameter("into", as: URL.self) ?? request.parameter("intO", as: URL.self)
 		let folder = try request.parameter("to  ", as: URL.self)
-		let name = try request.parameter("pnam", as: String.self)
+		let name = try nameParameter(request)
 
 		if case .list = sources, filePath != nil || name != nil {
 			throw notAllowedTogether // name and filepath are only for one item
@@ -334,7 +346,7 @@ public enum FilesAndFolders {
 	/// (default "666" for files, "777" for folders, less the umask). (Satimage ignored `wildcards` for folders.)
 	static func makeTemporary(_ request: AppleEventRequest, folder: Bool) throws -> (any AppleEventEncodable)? {
 		let base = try request.requiredDirectParameter(as: URL.self)
-		let name = try request.parameter("pnam", as: String.self)
+		let name = try nameParameter(request)
 		let template = name.map { base.appendingPathComponent($0) } ?? base
 		let suffixLength = folder ? 0 : try request.parameter("suff", default: 0)
 		let wildcards = try request.parameter("wild", default: 6)
@@ -385,7 +397,7 @@ public enum FilesAndFolders {
 			target = try URL(appleEventDescriptor: targetDescriptor).path
 		}
 		let folder = try request.requiredParameter("in  ", as: URL.self)
-		let name = try request.parameter("pnam", as: String.self) ?? (target as NSString).lastPathComponent
+		let name = try nameParameter(request) ?? (target as NSString).lastPathComponent
 		let replacing = try request.parameter("Repl", default: true)
 		let link = folder.appendingPathComponent(name)
 

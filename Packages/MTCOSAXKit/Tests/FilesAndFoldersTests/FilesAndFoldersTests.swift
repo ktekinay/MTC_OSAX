@@ -349,6 +349,27 @@ struct SymlinkTests {
 	}
 }
 
+/// A `name` from an untrusted source could write outside the folder (`../escaped`).
+struct NameTests {
+	@Test(arguments: ["../escaped", "sub/file", "..", ".", ""])
+	func namesArePlainNames(_ name: String) throws {
+		let sandbox = try Sandbox()
+		let file = try sandbox.file("f/a.txt")
+		let folder = sandbox.path("f")
+		for (command, parameters) in [
+			(fileNew, ["----": folder]), (makeDirectory, ["----": folder]), (copy, ["----": file.path, "to  ": folder]),
+			(move, ["----": file.path, "to  ": folder]), (makeTemporaryFile, ["----": folder]), (makeTemporaryFolder, ["----": folder]),
+			(createSymlink, ["----": "/etc/hosts", "in  ": folder]),
+		] as [(String, [String: any AppleEventEncodable])] {
+			let error = send(command, parameters.merging(["pnam": name]) { $1 }).error
+			#expect(error?.number == -1, "\(command)")
+			#expect(error?.message?.contains("subfolder") == true, "\(command)")
+		}
+		#expect(try FileManager.default.contentsOfDirectory(atPath: sandbox.url.path) == ["f"])
+		#expect(try FileManager.default.contentsOfDirectory(atPath: folder) == ["a.txt"])
+	}
+}
+
 struct RegistrationTests {
 	@Test func allCommandsRegistered() {
 		#expect(FilesAndFolders.commands().count == 13)

@@ -1,0 +1,61 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/name-with-slash/sub",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/name-with-slash/sub/",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "NewF",
+        "fields" : [
+          {
+            "key" : "pnam",
+            "value" : {
+              "text" : "sub/new.txt",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/name-with-slash",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorMessage" : "A name can’t be empty, contain “/” or be “.” or “..”. To use a subfolder, give its path as the folder instead.",
+        "errorNumber" : -1
+      }
+    }
+  ],
+  "name" : "name-with-slash",
+  "recordedAt" : "2026-09-28T22:05:48Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "mkdir (POSIX file \"$TMP/name-with-slash/sub\")\nfilenew (POSIX file \"$TMP/name-with-slash\") name \"sub/new.txt\"",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

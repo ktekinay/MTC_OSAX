@@ -39,5 +39,13 @@
  {
   "name": "filerename-case-only",
   "script": "mkdir (POSIX file \"$TMP/filerename-case-only\")\nwritetext \"keep\" to (POSIX file \"$TMP/filerename-case-only/a.txt\")\nfilerename (POSIX file \"$TMP/filerename-case-only/a.txt\") to \"A.txt\""
+ },
+ {
+  "name": "name-with-slash",
+  "script": "mkdir (POSIX file \"$TMP/name-with-slash/sub\")\nfilenew (POSIX file \"$TMP/name-with-slash\") name \"sub/new.txt\""
+ },
+ {
+  "name": "name-parent",
+  "script": "mkdir (POSIX file \"$TMP/name-parent/f\")\nmkdir (POSIX file \"$TMP/name-parent/f\") name \"../escaped\""
  }
 ]
