@@ -307,6 +307,27 @@ struct FilterIntoTests {
 	}
 }
 
+struct PlistKeyTests {
+	@Test func codeKeys() {
+		#expect(RecordFields.Key(plistKey: "«class pnam»") == .code("pnam"))
+		#expect(RecordFields.Key(plistKey: "«class ab»") == .user("«class ab»"))
+		// This crashed the app when the record was made.
+		#expect(RecordFields.Key(plistKey: "«class 😀😀😀😀»") == .user("«class 😀😀😀😀»"))
+	}
+
+	/// A property list file with such a key.
+	@Test func fileWithOddClassKey() throws {
+		let plists = Plists()
+		let text = "<plist version=\"1.0\"><dict><key>«class 😀😀😀😀»</key><integer>1</integer></dict></plist>"
+		let file = FileManager.default.temporaryDirectory.appendingPathComponent("key-\(UUID().uuidString).plist")
+		try Data(text.utf8).write(to: file)
+		defer { try? FileManager.default.removeItem(at: file) }
+		let p = try #require(plists.send("PLSTopen", ["----": file]).result)
+		let value = try #require(plists.send("PLSTdisx", ["----": p]).result)
+		#expect(RecordFields(value)?[.user("«class 😀😀😀😀»")]?.int32Value == 1)
+	}
+}
+
 struct ElementTableTests {
 	/// Every element ever made kept an entry in its document's table.
 	@Test func tableStaysSmall() throws {

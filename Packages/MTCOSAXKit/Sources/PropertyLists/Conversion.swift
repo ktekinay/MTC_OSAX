@@ -225,9 +225,13 @@ extension RecordFields.Key {
 		}
 	}
 
+	/// `«class xxxx»` is a keyword only when `xxxx` is a four-character code (four Mac OS Roman characters); any
+	/// other key, from a file too, is a user property. (Four emoji passed the old check and then trapped when the
+	/// record was made.)
 	init(plistKey key: String) {
-		if key.hasPrefix("«class "), key.hasSuffix("»"), key.count == 12 {
-			self = .code(String(key.dropFirst(7).dropLast()))
+		let code = String(key.dropFirst(7).dropLast())
+		if key.hasPrefix("«class "), key.hasSuffix("»"), code.data(using: .macOSRoman)?.count == 4 {
+			self = .code(code)
 		} else {
 			self = .user(key)
 		}
