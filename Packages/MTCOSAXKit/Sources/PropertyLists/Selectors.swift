@@ -54,7 +54,10 @@ enum Selector {
 			steps.append(.key(String(name)))
 			var rest = part[bracket...]
 			while !rest.isEmpty {
-				guard rest.first == "[", let close = rest.firstIndex(of: "]"), let index = Int(rest[rest.index(after: rest.startIndex) ..< close]) else {
+				// A whole number (Int(_:) alone also takes "+1").
+				guard rest.first == "[", let close = rest.firstIndex(of: "]"), rest[rest.index(after: rest.startIndex)] != "+",
+				      let index = Int(rest[rest.index(after: rest.startIndex) ..< close])
+				else {
 					throw PropertyLists.invalid
 				}
 				steps.append(.index(index))

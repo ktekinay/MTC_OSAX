@@ -228,7 +228,8 @@ extension TextAdditions {
 		var runStart = 0
 		while index < bytes.count {
 			if bytes[index] == UInt8(ascii: "%") {
-				guard index + 2 < bytes.count,
+				// Two hex digits: UInt8(_:radix:) alone takes "+4".
+				guard index + 2 < bytes.count, bytes[(index + 1) ... (index + 2)].allSatisfy({ Character(Unicode.Scalar($0)).isHexDigit }),
 				      let byte = UInt8(String(decoding: bytes[(index + 1) ... (index + 2)], as: UTF8.self), radix: 16)
 				else {
 					throw invalidOptionError

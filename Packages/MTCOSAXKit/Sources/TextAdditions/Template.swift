@@ -70,7 +70,8 @@ struct Template {
 				case "\\": literal.append(ascii("\\"))
 				case "u":
 					let hex = (index + 2 ..< index + 6).compactMap { unit(at: $0) }
-					guard hex.count == 4,
+					// Four hex digits: UInt16(_:radix:) alone takes "+FFF".
+					guard hex.count == 4, hex.allSatisfy({ $0 < 0x80 && Character(Unicode.Scalar($0)!).isHexDigit }),
 					      let value = UInt16(String(decoding: hex, as: UTF16.self), radix: 16)
 					else {
 						throw Self.invalidBackreference

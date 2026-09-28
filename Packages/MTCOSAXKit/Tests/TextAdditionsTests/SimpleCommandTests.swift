@@ -104,7 +104,8 @@ struct URLEscapingTests {
 		#expect(try TextAdditions.unescapeURL("a%2Fb%20c%2f", keeping: "/") == "a%2Fb c%2f")
 	}
 
-	@Test(arguments: ["%zz", "100%", "%E9"])
+	/// "%+4" used to decode as byte 4.
+	@Test(arguments: ["%zz", "100%", "%E9", "%+4", "%-4"])
 	func invalid(_ text: String) {
 		#expect(throws: OSAXError(-1)) { try TextAdditions.unescapeURL(text, keeping: "") }
 	}

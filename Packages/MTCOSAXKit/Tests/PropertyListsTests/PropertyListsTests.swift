@@ -193,6 +193,7 @@ struct SelectorTests {
 		#expect(try Selector.steps("a/b[2][3]/c") == [.key("a"), .key("b"), .index(2), .index(3), .key("c")])
 		#expect(try Selector.steps("/a/") == [.key("a")])
 		#expect(throws: OSAXError(-1)) { try Selector.steps("[1]") }
+		#expect(throws: OSAXError(-1)) { try Selector.steps("a[+1]") }
 		#expect(throws: OSAXError(-1)) { try Selector.steps("a[x") }
 		#expect(throws: OSAXError(-1)) { try Selector.steps("") }
 	}
