@@ -28,8 +28,10 @@ struct ParseOptions {
 	var bypassingNamespace = false
 	var encoding: String?
 
+	/// Without `XML_PARSE_HUGE` (as in SatimageOSAX), so libxml2's limits hold: 10 MB text nodes, nesting depth,
+	/// and the check that stops entities expanding without end ("billion laughs").
 	var libxmlOptions: Int32 {
-		var options = XML_PARSE_HUGE.rawValue
+		var options: UInt32 = 0
 		if !keepBlanks { options |= XML_PARSE_NOBLANKS.rawValue }
 		if loadExternalDTD { options |= XML_PARSE_DTDLOAD.rawValue }
 		if substituteEntities { options |= XML_PARSE_NOENT.rawValue }

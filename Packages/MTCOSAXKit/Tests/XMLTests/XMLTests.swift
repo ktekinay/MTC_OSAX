@@ -101,6 +101,22 @@ struct XMLOpenTests {
 		#expect(reply.error == OSAXError(1549))
 	}
 
+	/// libxml2's limits hold: entities that expand without end, and text nodes over 10 MB, are errors.
+	@Test func limits() throws {
+		let xml = XMLs()
+		var entities = "<!ENTITY a0 'xxxxxxxxxx'>"
+		for level in 1 ... 12 {
+			entities += "<!ENTITY a\(level) '" + String(repeating: "&a\(level - 1);", count: 10) + "'>"
+		}
+		let laughs = "<!DOCTYPE r [\(entities)]><r>&a12;</r>"
+		#expect(xml.send("XML open", ["from": laughs, "SuEn": true]).error != nil)
+		// Also without substituting, so XMLGetText can't expand the references later.
+		#expect(xml.send("XML open", ["from": laughs]).error != nil)
+		#expect(xml.send("XML lErr").result?.stringValue?.contains("entity") == true)
+		#expect(xml.send("XML open", ["from": "<a>" + String(repeating: "x", count: 11_000_000) + "</a>"]).error != nil)
+		#expect(xml.send("XML lErr").result?.stringValue?.lowercased().contains("huge") == true)
+	}
+
 	@Test func extendedCharacters() throws {
 		let xml = XMLs()
 		let d = try xml.open("<a>x&#1;y</a>")
