@@ -262,7 +262,8 @@ public final class DocumentStore: @unchecked Sendable {
 		}
 		let document = data[0 ..< 4].withUnsafeBytes { UInt32(littleEndian: $0.loadUnaligned(as: UInt32.self)) }
 		let element = data[8 ..< 16].withUnsafeBytes { UInt64(littleEndian: $0.loadUnaligned(as: UInt64.self)) }
-		guard let node = self.document(number: Int(document))?.element(Int(element)) else {
+		// A forged or corrupted number beyond Int's range is just an element that doesn't exist.
+		guard let element = Int(exactly: element), let node = self.document(number: Int(document))?.element(element) else {
 			throw PropertyLists.noSuchElement
 		}
 		return node

@@ -59,6 +59,20 @@ struct DocumentTests {
 		#expect(plists.send("PLSTdisx", ["----": "text"]).error == .coercionFailed)
 	}
 
+	/// An element number beyond Int's range used to trap.
+	@Test func forgedReferences() throws {
+		let plists = Plists()
+		_ = try plists.new(record(["a": 1]))
+		func reference(_ hex: String) -> NSAppleEventDescriptor {
+			let bytes = stride(from: 0, to: hex.count, by: 2).map {
+				UInt8(hex.dropFirst($0).prefix(2), radix: 16)!
+			}
+			return NSAppleEventDescriptor(descriptorType: DocumentStore.referenceType, data: Data(bytes))!
+		}
+		#expect(plists.send("PLSTdisx", ["----": reference("010000004D544370FFFFFFFFFFFFFFFF")]).error == OSAXError(-1728))
+		#expect(plists.send("PLSTdisx", ["----": reference("010000004D544370FFFFFFFFFFFFFF")]).error == OSAXError(-1728))
+	}
+
 	@Test func retainNeedsASecondClose() throws {
 		let plists = Plists()
 		let p = try plists.new(record(["a": 1]))

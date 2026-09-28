@@ -150,8 +150,10 @@ struct XMLReferences {
 			throw XML.noSuchNode
 		}
 		let number = data[0 ..< 4].withUnsafeBytes { Int(UInt32(littleEndian: $0.loadUnaligned(as: UInt32.self))) }
-		let nodeNumber = data[8 ..< 16].withUnsafeBytes { Int(UInt64(littleEndian: $0.loadUnaligned(as: UInt64.self))) }
-		guard let document = store.allDocuments.first(where: { $0.number == number }) as? XMLDocument,
+		let nodeNumber = data[8 ..< 16].withUnsafeBytes { UInt64(littleEndian: $0.loadUnaligned(as: UInt64.self)) }
+		// A forged or corrupted number beyond Int's range is just a node that doesn't exist.
+		guard let nodeNumber = Int(exactly: nodeNumber),
+		      let document = store.allDocuments.first(where: { $0.number == number }) as? XMLDocument,
 		      let node = document.node(number: nodeNumber)
 		else {
 			throw XML.noSuchNode

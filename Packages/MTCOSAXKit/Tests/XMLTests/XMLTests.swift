@@ -47,6 +47,16 @@ struct XMLCommandTests {
 		#expect(xml.send("XML gtag", ["----": c]).error == OSAXError(-1728))
 		#expect(xml.send("XML Exis", ["----": c]).result?.booleanValue == false)
 	}
+
+	/// A node number beyond Int's range used to trap.
+	@Test func forgedReference() throws {
+		let xml = XMLs()
+		let root = try xml.root(xml.open("<a/>"))
+		var data = root.data
+		data.replaceSubrange(8 ..< 16, with: [UInt8](repeating: 0xFF, count: 8))
+		let forged = try #require(NSAppleEventDescriptor(descriptorType: root.descriptorType, data: data))
+		#expect(xml.send("XML gtag", ["----": forged]).error == OSAXError(-1728))
+	}
 }
 
 struct XMLOpenTests {
