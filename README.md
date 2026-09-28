@@ -57,6 +57,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 
 - HFS paths are accepted wherever a file or folder is.
 - `mkdir` and `filenew` of a path string directly inside a system folder such as `/private/tmp` work.
+- `filemove` to the same name in another case renames the item (SatimageOSAX gave -48).
 - `mkdtemp` honors `wildcards`; `fileremove … with filesonly` reports the real count.
 - `glob "…/.*"` doesn't return `.` and `..`; `glob … not conforming to "public.folder"` excludes folders.
 - `~` is your home folder, not SatimageOSAX's sandbox container.

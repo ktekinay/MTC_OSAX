@@ -181,6 +181,43 @@ struct CopyMoveTests {
 		#expect(send(copy, ["----": sandbox.path("a.txt")]).error == .missingParameter)
 	}
 
+	/// `with replacing` onto the item itself removed the "existing" target, which was the source, and then failed.
+	@Test func ontoItself() throws {
+		let sandbox = try Sandbox()
+		let file = try sandbox.file("a.txt", "keep")
+		for command in [copy, move] {
+			#expect(send(command, ["----": file, "to  ": sandbox.url]).error == OSAXError(-48))
+			#expect(send(command, ["----": file, "to  ": sandbox.url, "Repl": true]).result?.stringValue == sandbox.path("a.txt"))
+			#expect(send(command, ["----": file, "into": URL(fileURLWithPath: sandbox.path("A.TXT")), "Repl": true]).error == nil)
+			#expect(try String(contentsOfFile: sandbox.path("a.txt"), encoding: .utf8) == "keep")
+		}
+		// Moving to another spelling renames (the volume is case-insensitive).
+		#expect(send(move, ["----": file, "to  ": sandbox.url, "pnam": "A.txt"]).result?.stringValue == sandbox.path("A.txt"))
+		#expect(try FileManager.default.contentsOfDirectory(atPath: sandbox.url.path) == ["A.txt"])
+	}
+
+	/// The new item is made first, so a failure leaves the old one (and the source of a move).
+	@Test func replacingKeepsTheOldItemOnFailure() throws {
+		let sandbox = try Sandbox()
+		let source = try sandbox.file("s/a.txt", "new")
+		_ = try sandbox.file("d/a.txt", "old")
+		chmod(sandbox.path("s/a.txt"), 0)
+		defer { chmod(sandbox.path("s/a.txt"), 0o644) }
+		#expect(send(copy, ["----": source, "to  ": sandbox.path("d"), "Repl": true]).error?.number == -1)
+		#expect(try String(contentsOfFile: sandbox.path("d/a.txt"), encoding: .utf8) == "old")
+		#expect(try FileManager.default.contentsOfDirectory(atPath: sandbox.path("d")) == ["a.txt"])
+		chmod(sandbox.path("s/a.txt"), 0o644)
+		// A locked old item can't be removed: the moved source goes back.
+		chflags(sandbox.path("d/a.txt"), UInt32(UF_IMMUTABLE))
+		#expect(send(move, ["----": source, "to  ": sandbox.path("d"), "Repl": true]).error?.number == -1)
+		#expect(try String(contentsOfFile: sandbox.path("s/a.txt"), encoding: .utf8) == "new")
+		#expect(try String(contentsOfFile: sandbox.path("d/a.txt"), encoding: .utf8) == "old")
+		chflags(sandbox.path("d/a.txt"), 0)
+		#expect(send(move, ["----": source, "to  ": sandbox.path("d"), "Repl": true]).error == nil)
+		#expect(try String(contentsOfFile: sandbox.path("d/a.txt"), encoding: .utf8) == "new")
+		#expect(!sandbox.exists("s/a.txt"))
+	}
+
 	@Test func moveFolder() throws {
 		let sandbox = try Sandbox()
 		_ = try sandbox.file("s/a.txt")

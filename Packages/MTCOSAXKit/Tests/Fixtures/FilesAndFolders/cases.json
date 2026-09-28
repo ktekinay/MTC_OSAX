@@ -506,5 +506,21 @@
  {
   "name": "readlink-folder-link",
   "script": "mkdir (POSIX file \"$TMP/readlink-folder-link\")\nmkdir (POSIX file \"$TMP/readlink-folder-link/d\")\ncreate symlink \"d\" in (POSIX file \"$TMP/readlink-folder-link/\") name \"l\"\nreadlink \"$TMP/readlink-folder-link/l\""
+ },
+ {
+  "name": "filemove-onto-itself",
+  "script": "mkdir (POSIX file \"$TMP/filemove-onto-itself\")\nwritetext \"keep\" to (POSIX file \"$TMP/filemove-onto-itself/a.txt\")\nset r to filemove (POSIX file \"$TMP/filemove-onto-itself/a.txt\") to (POSIX file \"$TMP/filemove-onto-itself\")\n{r, readtext (POSIX file \"$TMP/filemove-onto-itself/a.txt\")}"
+ },
+ {
+  "name": "filemove-onto-itself-replacing",
+  "script": "mkdir (POSIX file \"$TMP/filemove-onto-itself-replacing\")\nwritetext \"keep\" to (POSIX file \"$TMP/filemove-onto-itself-replacing/a.txt\")\nset r to filemove (POSIX file \"$TMP/filemove-onto-itself-replacing/a.txt\") to (POSIX file \"$TMP/filemove-onto-itself-replacing\") with replacing\n{r, readtext (POSIX file \"$TMP/filemove-onto-itself-replacing/a.txt\")}"
+ },
+ {
+  "name": "filecopy-onto-itself",
+  "script": "mkdir (POSIX file \"$TMP/filecopy-onto-itself\")\nwritetext \"keep\" to (POSIX file \"$TMP/filecopy-onto-itself/a.txt\")\nset r to filecopy (POSIX file \"$TMP/filecopy-onto-itself/a.txt\") to (POSIX file \"$TMP/filecopy-onto-itself\")\n{r, readtext (POSIX file \"$TMP/filecopy-onto-itself/a.txt\")}"
+ },
+ {
+  "name": "filecopy-onto-itself-replacing",
+  "script": "mkdir (POSIX file \"$TMP/filecopy-onto-itself-replacing\")\nwritetext \"keep\" to (POSIX file \"$TMP/filecopy-onto-itself-replacing/a.txt\")\nset r to filecopy (POSIX file \"$TMP/filecopy-onto-itself-replacing/a.txt\") to (POSIX file \"$TMP/filecopy-onto-itself-replacing\") with replacing\n{r, readtext (POSIX file \"$TMP/filecopy-onto-itself-replacing/a.txt\")}"
  }
 ]

@@ -66,6 +66,14 @@ public enum FilesAndFolders {
 		(try? url.checkResourceIsReachable()) == true || isSymlink(url)
 	}
 
+	/// Whether two paths are the same item (a case variant on a case-insensitive volume, or a hard link), by device
+	/// and inode, without following links.
+	static func isSameItem(_ a: URL, _ b: URL) -> Bool {
+		var first = stat()
+		var second = stat()
+		return lstat(a.path, &first) == 0 && lstat(b.path, &second) == 0 && first.st_dev == second.st_dev && first.st_ino == second.st_ino
+	}
+
 	static func isSymlink(_ url: URL) -> Bool {
 		var status = stat()
 		return lstat(url.path, &status) == 0 && (status.st_mode & S_IFMT) == S_IFLNK
@@ -188,23 +196,64 @@ public enum FilesAndFolders {
 			guard isDirectory(target.deletingLastPathComponent()) else {
 				throw notFound
 			}
-			if exists(target) {
-				guard replacing else {
-					throw alreadyExists
-				}
-				try? FileManager.default.removeItem(at: target)
-			}
 			let isFolder = isDirectory(source)
-			do {
-				if move {
-					try FileManager.default.moveItem(at: source, to: target)
-				} else {
-					try FileManager.default.copyItem(at: source, to: target)
+			// The target is the source itself (the same path, or a case variant): removing the "existing" target
+			// would delete the source. Moving to another spelling renames it (SatimageOSAX gave -48); otherwise it's
+			// -48 without `replacing` and left as it is with it, as in SatimageOSAX.
+			if exists(target), isSameItem(source, target) {
+				if move, source.path != target.path {
+					guard Darwin.rename(source.path, target.path) == 0 else { throw posixError(errno) }
+					return result(target, folder: isFolder)
 				}
-			} catch {
-				throw invalidInput
+				guard replacing else { throw alreadyExists }
+				return result(source, folder: isFolder)
 			}
+			guard exists(target) else {
+				do {
+					if move {
+						try FileManager.default.moveItem(at: source, to: target)
+					} else {
+						try FileManager.default.copyItem(at: source, to: target)
+					}
+				} catch {
+					throw invalidInput
+				}
+				return result(target, folder: isFolder)
+			}
+			guard replacing else {
+				throw alreadyExists
+			}
+			try replace(target, from: source, move: move)
 			return result(target, folder: isFolder)
+		}
+	}
+
+	/// `with replacing`: the new item is made under a temporary name next to the old one first, so if the copy or
+	/// move fails, or the old item can't be removed, the old item (and for a move, the source) is left as it was.
+	static func replace(_ target: URL, from source: URL, move: Bool) throws {
+		let manager = FileManager.default
+		let temporary = target.deletingLastPathComponent().appendingPathComponent(".\(target.lastPathComponent).mtc-\(UUID().uuidString)")
+		do {
+			if move {
+				try manager.moveItem(at: source, to: temporary)
+			} else {
+				try manager.copyItem(at: source, to: temporary)
+			}
+		} catch {
+			throw OSAXError(-1, "Couldn’t \(move ? "move" : "copy") “\(source.lastPathComponent)”: \(error.localizedDescription)")
+		}
+		do {
+			try manager.removeItem(at: target)
+		} catch {
+			if move {
+				try? manager.moveItem(at: temporary, to: source)
+			} else {
+				try? manager.removeItem(at: temporary)
+			}
+			throw OSAXError(-1, "Couldn’t replace “\(target.lastPathComponent)”: \(error.localizedDescription)")
+		}
+		guard Darwin.rename(temporary.path, target.path) == 0 else {
+			throw OSAXError(-1, "Couldn’t name the new item “\(target.lastPathComponent)”; it’s at \(temporary.path).")
 		}
 	}
 
