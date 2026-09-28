@@ -112,12 +112,14 @@ extension PropertyLists {
 		return Data(buffer.prefix(written))
 	}
 
+	/// The descriptor flattened in `data`, or nil if it isn't one. The length inside the data isn't trusted (data
+	/// from a file can claim more than it holds; `AEUnflattenDesc` would read past the end).
 	static func unflatten(_ data: Data) -> NSAppleEventDescriptor? {
 		guard data.starts(with: Array("dle2".utf8)) else {
 			return nil
 		}
 		var desc = AEDesc()
-		let status = data.withUnsafeBytes { AEUnflattenDesc($0.baseAddress!, &desc) }
+		let status = data.withUnsafeBytes { AEUnflattenDescFromBytes($0.baseAddress!, $0.count, &desc) }
 		guard status == noErr else {
 			return nil
 		}

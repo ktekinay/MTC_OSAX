@@ -301,3 +301,23 @@ struct FilterIntoTests {
 		#expect(throws: OSAXError(-1)) { try PropertyLists.add([("a", "1")], to: try plists.new(["x"]), store: plists.store) }
 	}
 }
+
+struct FlattenedDescriptorTests {
+	private func bytes(_ hex: String) -> Data {
+		Data(stride(from: 0, to: hex.count, by: 2).map { UInt8(hex.dropFirst($0).prefix(2), radix: 16)! })
+	}
+
+	@Test func roundTrip() {
+		let flat = PropertyLists.flatten(NSAppleEventDescriptor(string: "hi"))
+		#expect(flat == bytes("646C653200000000757478740000000400680069"))
+		#expect(PropertyLists.unflatten(flat)?.stringValue == "hi")
+	}
+
+	/// Data from a file can claim more bytes than it has; AEUnflattenDesc read past the end (returning heap memory,
+	/// or crashing), so such data is now just data.
+	@Test func lengthBeyondTheData() {
+		#expect(PropertyLists.unflatten(bytes("646C653200000000757478740010000000680069")) == nil)
+		#expect(PropertyLists.unflatten(bytes("646C6532000000007574787400000004006800")) == nil)
+		#expect(PropertyLists.unflatten(bytes("646C6532")) == nil)
+	}
+}
