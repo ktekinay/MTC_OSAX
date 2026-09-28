@@ -934,5 +934,9 @@
  {
   "name": "close-child",
   "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistClose (PlistChild p key \"d\")\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "delete-pool-retained",
+  "script": "set p to PlistNew {a:1} in pool \"kept\"\nPlistRetain p\nDeletePool \"kept\"\nset r to {PlistGet p key \"a\", GetPool p}\nPlistClose p\ntry\nPlistGet p key \"a\"\non error number n\nset end of r to n\nend try\nr"
  }
 ]

@@ -131,6 +131,18 @@ struct DocumentTests {
 		#expect(plists.send("PLSTdisx", ["----": p]).error == OSAXError(-1728))
 		#expect(plists.send("POOLpool", ["----": ""]).result?.stringValue == "work")
 	}
+
+	/// DeletePool releases each document once, as SatimageOSAX did: a retained one stays until its last close.
+	@Test func deletePoolRespectsRetain() throws {
+		let plists = Plists()
+		let p = try #require(plists.send("PLSTmake", ["----": record(["a": 1]), "pool": "kept"]).result)
+		plists.send("PLSTReta", ["----": p])
+		plists.send("POOLdpoo", ["----": "kept"])
+		#expect(plists.send("PLSTdisx", ["----": p, "key ": "a"]).result?.int32Value == 1)
+		#expect(plists.send("POOLgpoo", ["----": p]).result?.stringValue == "kept")
+		plists.send("PLSTclos", ["----": p])
+		#expect(plists.send("PLSTdisx", ["----": p, "key ": "a"]).error == OSAXError(-1728))
+	}
 }
 
 struct ValueTests {

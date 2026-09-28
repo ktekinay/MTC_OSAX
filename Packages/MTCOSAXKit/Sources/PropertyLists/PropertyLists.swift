@@ -93,9 +93,15 @@ public enum PropertyLists {
 				commands.store.currentPool = try request.requiredDirectParameter(as: String.self)
 				return previous
 			},
+			// Releases each document once, as PlistClose does, so one kept with PlistRetain stays open until its last
+			// close, as in SatimageOSAX (MTC_OSAX closed it regardless).
 			CommandDefinition("DeletePool", code: "POOLdpoo") { request in
 				let pool = try request.directParameter(as: String.self) ?? commands.store.currentPool
 				for document in commands.store.allDocuments where document.pool == pool {
+					if let plist = document as? Document {
+						plist.retainCount -= 1
+						guard plist.retainCount <= 0 else { continue }
+					}
 					commands.store.close(document)
 				}
 				return nil
@@ -108,7 +114,8 @@ public enum PropertyLists {
 }
 
 extension PropertyLists {
-	/// Opens a property list from its data (XML or binary) in `pool`: its CFRef. -1 if it isn't one.
+	/// Opens a property list from its data (XML, binary, or the old OpenStep text, which PropertyListSerialization
+	/// also reads) in `pool`: its CFRef. -1 if it isn't one.
 	public static func open(_ data: Data, pool: String?, store: DocumentStore) throws -> NSAppleEventDescriptor {
 		store.reference(try document(data, pool: pool, store: store).root)
 	}
