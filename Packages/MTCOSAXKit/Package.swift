@@ -91,20 +91,23 @@ let package = Package(
 
 		.executableTarget(name: "FixtureRecorder", dependencies: ["AppleEventCore"]),
 
-		.testTarget(name: "AppleEventCoreTests", dependencies: ["AppleEventCore"]),
+		// For tests: defaults kept in memory.
+		.target(name: "TestSupport"),
+
+		.testTarget(name: "AppleEventCoreTests", dependencies: ["AppleEventCore", "TestSupport"]),
 		.testTarget(name: "DiagnosticsTests", dependencies: ["Diagnostics"]),
 		.testTarget(name: "TextMatchingTests", dependencies: ["TextMatching", "CPCRE2"]),
-		.testTarget(name: "TextAdditionsTests", dependencies: ["TextAdditions"]),
+		.testTarget(name: "TextAdditionsTests", dependencies: ["TextAdditions", "TestSupport"]),
 		.testTarget(name: "FilesAndFoldersTests", dependencies: ["FilesAndFolders"]),
-		.testTarget(name: "FileAdditionsTests", dependencies: ["FileAdditions"]),
+		.testTarget(name: "FileAdditionsTests", dependencies: ["FileAdditions", "TestSupport"]),
 		.testTarget(name: "NumericsTests", dependencies: ["Numerics"]),
 		.testTarget(name: "MathFunctionsTests", dependencies: ["MathFunctions"]),
 		.testTarget(name: "ListUtilitiesTests", dependencies: ["ListUtilities"]),
 		.testTarget(name: "ArraysTests", dependencies: ["Arrays"]),
 		.testTarget(name: "PropertyListsTests", dependencies: ["PropertyLists"]),
 		.testTarget(name: "XMLTests", dependencies: ["XML"]),
-		.testTarget(name: "SettingsTests", dependencies: ["Settings", "TextAdditions"]),
+		.testTarget(name: "SettingsTests", dependencies: ["Settings", "TextAdditions", "TestSupport"]),
 		.testTarget(name: "SDEFConsistencyTests", dependencies: ["MTCOSAX"]),
-		.testTarget(name: "FixtureReplayTests", dependencies: ["MTCOSAX"]),
+		.testTarget(name: "FixtureReplayTests", dependencies: ["MTCOSAX", "TestSupport"]),
 	]
 )

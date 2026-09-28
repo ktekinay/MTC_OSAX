@@ -1,6 +1,7 @@
 import Foundation
 import MTCOSAX
 import Testing
+import TestSupport
 
 enum Fixtures {
 	static let directory = URL(fileURLWithPath: #filePath)
@@ -69,8 +70,7 @@ struct FixtureReplayTests {
 	func replay(_ path: String) throws {
 		let timeZone = try Fixtures.load(path).timeZone.flatMap(TimeZone.init(identifier:)) ?? .current
 		// Settings of their own: fixtures don't read or change the machine's.
-		let settings = UserDefaults(suiteName: "mtc-osax-replay-\(UUID().uuidString)")!
-		let differences = try Fixtures.replay(path, using: CommandCatalog.makeDispatcher(timeZone: timeZone, settings: settings))
+		let differences = try Fixtures.replay(path, using: CommandCatalog.makeDispatcher(timeZone: timeZone, settings: MemoryDefaults.make()))
 		#expect(differences.isEmpty, "\(differences.joined(separator: "\n"))")
 	}
 

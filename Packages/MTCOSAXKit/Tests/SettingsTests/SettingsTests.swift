@@ -1,12 +1,13 @@
 import AppleEventCore
 import Foundation
 import Testing
+import TestSupport
 @testable import Settings
 import TextAdditions
 
 /// The settings commands with a defaults suite of their own, so tests never read or change the app's settings.
 private final class SettingsCommands {
-	let defaults = UserDefaults(suiteName: "mtc-osax-settings-tests-\(UUID().uuidString)")!
+	let defaults = MemoryDefaults.make()
 	private let dispatcher = CommandDispatcher()
 
 	init() {

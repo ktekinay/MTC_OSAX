@@ -78,7 +78,7 @@ struct Setting: @unchecked Sendable {
 			case let number as NSNumber:
 				return NSAppleEventDescriptor(boolean: number.boolValue)
 			case let text as String where ["yes", "no", "true", "false", "1", "0"].contains(text.lowercased()):
-				return NSAppleEventDescriptor(boolean: defaults.bool(forKey: "DollarReferences"))
+				return NSAppleEventDescriptor(boolean: ["yes", "true", "1"].contains(text.lowercased()))
 			default:
 				return nil
 			}

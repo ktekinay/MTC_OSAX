@@ -1,5 +1,6 @@
 import Foundation
 import Testing
+import TestSupport
 @testable import AppleEventCore
 
 @MainActor
@@ -64,7 +65,7 @@ struct IdleMonitorTests {
 	}
 
 	@Test func timeoutPreference() throws {
-		let defaults = try #require(UserDefaults(suiteName: "mtc-idle-tests-\(UUID().uuidString)"))
+		let defaults = MemoryDefaults.make()
 		let key = "IdleTimeoutSeconds"
 		#expect(IdleMonitor.timeout(in: defaults, key: key, default: .seconds(3600)) == .seconds(3600))
 		defaults.set(0, forKey: key)

@@ -1,6 +1,7 @@
 import AppleEventCore
 import Foundation
 import Testing
+import TestSupport
 import TextMatching
 @testable import TextAdditions
 import Settings
@@ -95,7 +96,7 @@ struct PCRECommandTests {
 	}
 
 	@Test func defaultReadsTheSetting() throws {
-		let defaults = try #require(UserDefaults(suiteName: "mtc-osax-tests-\(UUID().uuidString)"))
+		let defaults = MemoryDefaults.make()
 		#expect(Settings.regexSyntax(in: defaults) == .ruby)
 		defaults.set("pcre", forKey: "RegexSyntax")
 		#expect(Settings.regexSyntax(in: defaults) == .pcre)

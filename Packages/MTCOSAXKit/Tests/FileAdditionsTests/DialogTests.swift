@@ -1,6 +1,7 @@
 import AppleEventCore
 import Foundation
 import Testing
+import TestSupport
 import UniformTypeIdentifiers
 @testable import FileAdditions
 
@@ -38,7 +39,7 @@ final class FakeDialogs: FileDialogs, @unchecked Sendable {
 
 struct DialogTests {
 	private let dialogs = FakeDialogs()
-	private let defaults = UserDefaults(suiteName: "mtc-dialog-tests-\(UUID().uuidString)")!
+	private let defaults = MemoryDefaults.make()
 
 	private func send(_ code: String, _ parameters: [String: any AppleEventEncodable] = [:]) -> AppleEventReply {
 		FileAdditionsTests.send(code, parameters, commands: FileAdditions.dialogCommands(dialogs, defaults: defaults))
