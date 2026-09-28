@@ -109,6 +109,16 @@ struct FileTextReadWriteTests {
 	}
 }
 
+struct ByteSearchTests {
+	/// Generic UTF-32 was always little-endian, while UTF-16 followed the byte-order mark.
+	@Test func byteOrderMarks() {
+		#expect(FileText.bytes(of: "A", encoding: .utf32, fileStart: Data([0x00, 0x00, 0xFE, 0xFF])) == Data([0, 0, 0, 0x41]))
+		#expect(FileText.bytes(of: "A", encoding: .utf32, fileStart: Data([0xFF, 0xFE, 0x00, 0x00])) == Data([0x41, 0, 0, 0]))
+		#expect(FileText.bytes(of: "A", encoding: .utf16, fileStart: Data([0xFE, 0xFF, 0x00, 0x41])) == Data([0, 0x41]))
+		#expect(FileText.bytes(of: "A", encoding: .utf16, fileStart: Data()) == Data([0x41, 0]))
+	}
+}
+
 struct ReadTextURLTests {
 	private func read(_ source: any AppleEventEncodable) -> AppleEventReply {
 		let dispatcher = CommandDispatcher()

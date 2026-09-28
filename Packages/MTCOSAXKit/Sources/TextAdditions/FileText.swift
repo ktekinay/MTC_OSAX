@@ -126,7 +126,7 @@ enum FileText {
 		guard start <= data.count else {
 			throw OSAXError(-39)
 		}
-		guard let needle = bytes(of: text, encoding: encoding, fileStart: data.prefix(2)), !needle.isEmpty,
+		guard let needle = bytes(of: text, encoding: encoding, fileStart: data.prefix(4)), !needle.isEmpty,
 		      let found = data.range(of: needle, in: max(start, 0) ..< data.count)
 		else {
 			throw notFoundError
@@ -134,13 +134,14 @@ enum FileText {
 		return inclusive ? found.upperBound : found.lowerBound
 	}
 
-	/// `text` encoded for searching, without a byte-order mark.
-	private static func bytes(of text: String, encoding: String.Encoding, fileStart: Data) -> Data? {
+	/// `text` encoded for searching, without a byte-order mark. Generic UTF-16 and UTF-32 take the file's byte order
+	/// from its byte-order mark (little-endian without one); UTF-32 used to be little-endian regardless.
+	static func bytes(of text: String, encoding: String.Encoding, fileStart: Data) -> Data? {
 		var encoding = encoding
 		if encoding == .utf16 {
-			encoding = fileStart == Data([0xFE, 0xFF]) ? .utf16BigEndian : .utf16LittleEndian
+			encoding = fileStart.starts(with: [0xFE, 0xFF]) ? .utf16BigEndian : .utf16LittleEndian
 		} else if encoding == .utf32 {
-			encoding = .utf32LittleEndian
+			encoding = fileStart.starts(with: [0x00, 0x00, 0xFE, 0xFF]) ? .utf32BigEndian : .utf32LittleEndian
 		}
 		return text.data(using: encoding)
 	}
