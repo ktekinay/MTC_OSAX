@@ -76,6 +76,17 @@ struct XMLOpenTests {
 		#expect(xml.send("XML gtn1", ["----": try xml.root(bypassed)]).error == OSAXError(-2763))
 	}
 
+	@Test func queryIsEncoded() throws {
+		let base = try #require(URL(string: "http://example.com/x?a=1"))
+		#expect(Network.appending(query: "name=hello world", to: base).absoluteString == "http://example.com/x?a=1&name=hello%20world")
+		#expect(Network.appending(query: "q=<\"{é}\">&p=50%25&r=%zz", to: base).absoluteString
+			== "http://example.com/x?a=1&q=%3C%22%7B%C3%A9%7D%22%3E&p=50%25&r=%25zz")
+		// A query with spaces used to abort the app; now it's only a failed fetch (nothing listens on port 9).
+		let xml = XMLs()
+		let reply = xml.send("XML open", ["----": "http://127.0.0.1:9/", "qury": "name=hello world"])
+		#expect(reply.error == OSAXError(1549))
+	}
+
 	@Test func extendedCharacters() throws {
 		let xml = XMLs()
 		let d = try xml.open("<a>x&#1;y</a>")

@@ -41,7 +41,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 - `file offset`, `filter text` (including `into` a property list reference)
 - The `navchoose …` dialogs, `navnew folder` and `navask save`
 - `topological sort`
-- `XMLOpen` of an http or https URL (with `query`, POST and extra headers)
+- `XMLOpen` of an http or https URL (with `query`, POST and extra headers; characters a URL can't hold in `query` are percent-encoded)
 
 **Text Additions**
 

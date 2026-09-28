@@ -188,9 +188,8 @@ enum Network {
 	/// from a record. Error 1549 (libxml2's "failed to load") if it can't be fetched or the status isn't a success.
 	static func fetch(_ url: URL, post: Bool, query: String?, headers: NSAppleEventDescriptor?) throws -> Data {
 		var target = url
-		if let query, !post, var components = URLComponents(url: url, resolvingAgainstBaseURL: false) {
-			components.percentEncodedQuery = [components.percentEncodedQuery, query].compactMap { $0 }.joined(separator: "&")
-			target = components.url ?? url
+		if let query, !post {
+			target = appending(query: query, to: url)
 		}
 		var request = URLRequest(url: target)
 		if post {
@@ -209,6 +208,29 @@ enum Network {
 			throw OSAXError(1549)
 		}
 		return data
+	}
+
+	/// `url` with `query` added to its query. Characters a query can't hold (spaces, quotes, non-ASCII, a `%` that
+	/// doesn't start an escape) are percent-encoded; escapes already in `query` are kept.
+	static func appending(query: String, to url: URL) -> URL {
+		guard var components = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return url }
+		var allowed = CharacterSet.urlQueryAllowed
+		allowed.remove("%")
+		var encoded = ""
+		let characters = Array(query)
+		func isHexDigit(_ index: Int) -> Bool {
+			index < characters.count && characters[index].isASCII && characters[index].isHexDigit
+		}
+		for (index, character) in characters.enumerated() {
+			let isEscape = character == "%" && isHexDigit(index + 1) && isHexDigit(index + 2)
+			if isEscape || character.unicodeScalars.allSatisfy(allowed.contains) {
+				encoded.append(character)
+			} else {
+				encoded += String(character).addingPercentEncoding(withAllowedCharacters: allowed) ?? ""
+			}
+		}
+		components.percentEncodedQuery = [components.percentEncodedQuery, encoded].compactMap { $0 }.joined(separator: "&")
+		return components.url ?? url
 	}
 }
 
