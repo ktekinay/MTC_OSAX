@@ -11,11 +11,11 @@ final class PanelDialogs: FileDialogs {
 	func choose(_ options: ChooseOptions) throws -> [URL] {
 		try MainActor.assumeIsolated {
 			let panel = NSOpenPanel()
-			let filter = PanelFilter(showsPackages: options.showsPackages, opensPackages: options.opensPackages, volumesOnly: options.kind == .volumes)
-			filter.allowedTypes = options.allowedTypes
-			filter.allowedExtensions = options.allowedExtensions
+			let filter = PanelFilter(PanelRules(showsPackages: options.showsPackages, opensPackages: options.opensPackages,
+			                                    volumesOnly: options.kind == .volumes, allowedTypes: options.allowedTypes,
+			                                    allowedExtensions: options.allowedExtensions))
 			// With a delegate, open panels let packages be opened like folders, so only filter when needed.
-			if filter.isNeeded {
+			if filter.rules.isNeeded {
 				panel.delegate = filter
 			}
 			panel.canChooseFiles = options.kind == .files || options.kind == .filesAndFolders
@@ -26,7 +26,8 @@ final class PanelDialogs: FileDialogs {
 			panel.canCreateDirectories = options.kind != .volumes
 			panel.message = options.prompt ?? ""
 			panel.directoryURL = options.startingAt ?? (options.kind == .volumes ? URL(fileURLWithPath: "/Volumes") : nil)
-			let response = Self.runInFront { panel.runModal() }
+			// The delegate is weak; the filter must outlive the panel's run.
+			let response = withExtendedLifetime(filter) { Self.runInFront { panel.runModal() } }
 			guard response == .OK else {
 				throw OSAXError(-128)
 			}
@@ -38,8 +39,8 @@ final class PanelDialogs: FileDialogs {
 	func chooseNewItem(_ options: NewItemOptions) throws -> URL {
 		try MainActor.assumeIsolated {
 			let panel = NSSavePanel()
-			let filter = PanelFilter(showsPackages: options.showsPackages, opensPackages: options.opensPackages, volumesOnly: false)
-			if filter.isNeeded {
+			let filter = PanelFilter(PanelRules(showsPackages: options.showsPackages, opensPackages: options.opensPackages, volumesOnly: false))
+			if filter.rules.isNeeded {
 				panel.delegate = filter
 			}
 			panel.message = options.prompt ?? ""
@@ -56,7 +57,7 @@ final class PanelDialogs: FileDialogs {
 				menu.sizeToFit()
 				panel.accessoryView = menu
 			}
-			let response = Self.runInFront { panel.runModal() }
+			let response = withExtendedLifetime(filter) { Self.runInFront { panel.runModal() } }
 			guard response == .OK, let url = panel.url else {
 				throw OSAXError(-128)
 			}
@@ -105,87 +106,29 @@ final class PanelDialogs: FileDialogs {
 	}
 }
 
-/// Which items a panel enables: files of the allowed types or extensions, packages unless hidden
-/// (`show packages` false and not opened), and only volumes in the volume dialog. Folders stay enabled so they
-/// can be opened.
-///
-/// Open panels can't hide items, and they let the user open a disabled package like a folder. So a hidden package
-/// is shown greyed out, the panel is moved back out of it if the user opens it, and choosing it is refused.
+/// Hands the panel's questions to `PanelRules`. `NSSavePanel.delegate` is weak: whoever sets it keeps it alive until
+/// the panel is done.
 private final class PanelFilter: NSObject, NSOpenSavePanelDelegate {
-	let showsPackages: Bool
-	let opensPackages: Bool
-	let volumesOnly: Bool
-	var allowedTypes: [UTType]?
-	var allowedExtensions: [String]?
+	let rules: PanelRules
 
-	init(showsPackages: Bool, opensPackages: Bool, volumesOnly: Bool) {
-		self.showsPackages = showsPackages
-		self.opensPackages = opensPackages
-		self.volumesOnly = volumesOnly
-	}
-
-	private var hidesPackages: Bool { !showsPackages && !opensPackages }
-
-	/// Whether there's anything to filter; without a filter the panel's own behavior is used.
-	var isNeeded: Bool { hidesPackages || volumesOnly || allowedTypes != nil || allowedExtensions != nil }
-
-	/// The outermost package containing `url` (or `url` itself), if any.
-	private func enclosingPackage(_ url: URL) -> URL? {
-		var package: URL?
-		var current = url.standardizedFileURL
-		while current.path != "/" {
-			if (try? current.resourceValues(forKeys: [.isPackageKey]))?.isPackage == true {
-				package = current
-			}
-			current = current.deletingLastPathComponent()
-		}
-		return package
+	init(_ rules: PanelRules) {
+		self.rules = rules
 	}
 
 	func panel(_ sender: Any, didChangeToDirectoryURL url: URL?) {
-		guard hidesPackages, let url, let package = enclosingPackage(url), let panel = sender as? NSSavePanel else {
+		guard let url, let directory = rules.directory(replacing: url), let panel = sender as? NSSavePanel else {
 			return
 		}
-		panel.directoryURL = package.deletingLastPathComponent()
-	}
-
-	/// Whether `url` is a volume, following links (the startup disk is a link to `/` in /Volumes).
-	static func isVolume(_ url: URL) -> Bool {
-		(try? url.resolvingSymlinksInPath().resourceValues(forKeys: [.isVolumeKey]))?.isVolume == true
+		panel.directoryURL = directory
 	}
 
 	func panel(_ sender: Any, validate url: URL) throws {
-		// Choose with nothing selected chooses the folder being shown, such as /Volumes.
-		if volumesOnly, !Self.isVolume(url) {
-			throw CocoaError(.userCancelled, userInfo: [NSLocalizedDescriptionKey: "Choose a volume."])
-		}
-		if hidesPackages, enclosingPackage(url) != nil {
-			throw CocoaError(.userCancelled, userInfo: [NSLocalizedDescriptionKey: "Packages can’t be chosen here."])
+		if let refusal = rules.refusal(of: url) {
+			throw CocoaError(.userCancelled, userInfo: [NSLocalizedDescriptionKey: refusal])
 		}
 	}
 
 	func panel(_ sender: Any, shouldEnable url: URL) -> Bool {
-		let values = try? url.resourceValues(forKeys: [.isDirectoryKey, .isPackageKey, .isVolumeKey, .contentTypeKey])
-		if volumesOnly {
-			return Self.isVolume(url)
-		}
-		let isPackage = values?.isPackage == true && !opensPackages
-		if isPackage && !showsPackages {
-			return false
-		}
-		if values?.isDirectory == true && !isPackage {
-			return true
-		}
-		guard allowedTypes != nil || allowedExtensions != nil else {
-			return true
-		}
-		let pathExtension = url.pathExtension.lowercased()
-		if allowedExtensions?.contains(where: { $0.lowercased() == pathExtension }) == true {
-			return true
-		}
-		guard let type = values?.contentType else {
-			return false
-		}
-		return allowedTypes?.contains { type.conforms(to: $0) } == true
+		rules.shouldEnable(url)
 	}
 }
