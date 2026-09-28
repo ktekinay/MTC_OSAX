@@ -18,7 +18,8 @@ enum TopologicalSort {
 
 		// A vertex given twice counts once, at its first place.
 		var vertices: [Int] = []
-		for vertex in given ?? [] where !vertices.contains(vertex) {
+		var known: Set<Int> = []
+		for vertex in given ?? [] where known.insert(vertex).inserted {
 			vertices.append(vertex)
 		}
 		var edges: [(Int, Int)] = []
@@ -29,6 +30,7 @@ enum TopologicalSort {
 			let lists = ListUtilities.items(dependenciesDescriptor) ?? [dependenciesDescriptor]
 			if given == nil {
 				vertices = Array(1 ..< lists.count + 1)
+				known = Set(vertices)
 			}
 			guard lists.count == vertices.count else {
 				throw OSAXError.parameterError
@@ -40,34 +42,72 @@ enum TopologicalSort {
 			}
 		}
 		for (from, to) in edges {
-			for vertex in [from, to] where !vertices.contains(vertex) {
+			for vertex in [from, to] where known.insert(vertex).inserted {
 				vertices.append(vertex)
 			}
 		}
 		return try order(vertices, edges)
 	}
 
-	/// Kahn's algorithm, taking the earliest given vertex among those that can come next.
+	/// Kahn's algorithm, taking the earliest given vertex among those that can come next: those are kept in a heap
+	/// by their place, so it takes time in proportion to E + V log V (it used to look through them all each time).
 	static func order(_ vertices: [Int], _ edges: [(Int, Int)]) throws -> [Int] {
-		var incoming = Dictionary(uniqueKeysWithValues: vertices.map { ($0, 0) })
-		var outgoing: [Int: [Int]] = [:]
+		let place = Dictionary(uniqueKeysWithValues: vertices.enumerated().map { ($1, $0) })
+		var incoming = [Int](repeating: 0, count: vertices.count)
+		var outgoing = [[Int]](repeating: [], count: vertices.count)
 		for (from, to) in edges {
-			incoming[to, default: 0] += 1
-			outgoing[from, default: []].append(to)
+			incoming[place[to]!] += 1
+			outgoing[place[from]!].append(place[to]!)
 		}
-		var remaining = vertices
+		var ready = MinHeap(incoming.indices.filter { incoming[$0] == 0 })
 		var result: [Int] = []
-		while let index = remaining.firstIndex(where: { incoming[$0] == 0 }) {
-			let vertex = remaining.remove(at: index)
-			result.append(vertex)
-			for next in outgoing[vertex] ?? [] {
-				incoming[next]! -= 1
+		while let next = ready.pop() {
+			result.append(vertices[next])
+			for after in outgoing[next] {
+				incoming[after] -= 1
+				if incoming[after] == 0 {
+					ready.push(after)
+				}
 			}
 		}
-		guard remaining.isEmpty else {
+		guard result.count == vertices.count else {
 			throw OSAXError.general("The ordering has a cycle.")
 		}
 		return result
+	}
+
+	/// A binary heap of integers, smallest first.
+	struct MinHeap {
+		private var items: [Int] = []
+
+		init(_ items: [Int]) {
+			items.forEach { push($0) }
+		}
+
+		mutating func push(_ item: Int) {
+			items.append(item)
+			var child = items.count - 1
+			while child > 0, items[(child - 1) / 2] > items[child] {
+				items.swapAt(child, (child - 1) / 2)
+				child = (child - 1) / 2
+			}
+		}
+
+		mutating func pop() -> Int? {
+			guard let first = items.first else { return nil }
+			items.swapAt(0, items.count - 1)
+			items.removeLast()
+			var parent = 0
+			while true {
+				let left = 2 * parent + 1, right = left + 1
+				var smallest = parent
+				if left < items.count, items[left] < items[smallest] { smallest = left }
+				if right < items.count, items[right] < items[smallest] { smallest = right }
+				guard smallest != parent else { return first }
+				items.swapAt(parent, smallest)
+				parent = smallest
+			}
+		}
 	}
 
 	/// Pairs `{{v1, v2}, …}` or a flat list `{v1, v2, v3, v4, …}`.

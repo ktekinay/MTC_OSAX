@@ -126,6 +126,18 @@ struct TopologicalSortTests {
 		#expect(order(["----": [1, 1, 2], "edge": [[2, 1]]]) == [2, 1])
 	}
 
+	/// A long chain used to take time in proportion to its length squared.
+	@Test func largeGraphs() throws {
+		let chain = (1 ..< 20_000).flatMap { [$0 + 1, $0] }
+		let start = Date()
+		let result = try #require(order(["edge": chain]))
+		#expect(result.count == 20_000)
+		#expect(result.first == AnyHashable(20_000) && result.last == AnyHashable(1))
+		#expect(Date().timeIntervalSince(start) < 5)
+		var heap = TopologicalSort.MinHeap([5, 1, 4, 1, 3])
+		#expect([heap.pop(), heap.pop(), heap.pop(), heap.pop(), heap.pop(), heap.pop()] == [1, 1, 3, 4, 5, nil])
+	}
+
 	@Test func errors() {
 		#expect(send("SATITSrt", ["edge": [[1, 2], [2, 1]]]).error?.number == -2700)
 		#expect(send("SATITSrt", ["edge": [1, 2, 3]]).error == .parameterError)
