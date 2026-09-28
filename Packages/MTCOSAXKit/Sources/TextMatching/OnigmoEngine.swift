@@ -62,10 +62,14 @@ final class OnigmoEngine: RegexEngine {
 	/// of the whole text, so lookbehind and `^` see what comes before `bounds.lowerBound`.
 	func search(_ text: UTF16Text, bounds: Range<Int>, start: Int, limit: Int) throws(RegexError) -> RegexMatch? {
 		Self.setLimits()
-		let region = onig_region_new()!
+		guard let region = onig_region_new() else {
+			throw RegexError(code: Int(ONIGERR_MEMORY), message: "out of memory")
+		}
 		defer { onig_region_free(region, 1) }
 
 		let position = text.units.withUnsafeBytes { bytes -> OnigPosition in
+			// Empty text has no buffer. Any non-null address will do: with the start equal to the end, Onigmo reads
+			// nothing there (it points empty subjects at an address of its own).
 			let base = bytes.baseAddress?.assumingMemoryBound(to: OnigUChar.self) ?? UnsafePointer(bitPattern: 1)!
 			return onig_search(
 				regex,
