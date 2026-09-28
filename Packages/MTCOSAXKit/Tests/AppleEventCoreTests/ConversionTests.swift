@@ -63,6 +63,12 @@ struct DecodingTests {
 		#expect(try URL(appleEventDescriptor: NSAppleEventDescriptor(fileURL: url)).path == "/tmp/x.txt")
 	}
 
+	/// A `furl` holding an http URL used to be read from the network by every file parameter.
+	@Test func urlRejectsNonFileURLs() throws {
+		let web = try #require(NSAppleEventDescriptor(descriptorType: typeFileURL, data: Data("http://example.com/x.plist".utf8)))
+		#expect((#expect(throws: OSAXError.self) { try URL(appleEventDescriptor: web) })?.number == -1700)
+	}
+
 	@Test func urlFromPOSIXPath() throws {
 		#expect(try URL(appleEventDescriptor: NSAppleEventDescriptor(string: "/tmp/x.txt")).path == "/tmp/x.txt")
 	}

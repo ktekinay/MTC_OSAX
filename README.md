@@ -29,7 +29,7 @@ These suites aren't implemented and aren't in MTC_OSAX's dictionary, so a script
 
 Within the implemented suites:
 
-- `readtext` of an http or https URL returns an error instead of downloading it.
+- `readtext` of an http or https URL returns an error instead of downloading it. More generally, a file parameter given a URL value that isn't a file's (`"http://…" as URL`) is error -1700 rather than being fetched; `XMLOpen` fetches http and https URLs given either way.
 - XPath functions written as AppleScript handlers (the `http://satimage.fr/software/xpath-functions-applescript` namespace) aren't supported: an app can't reach the handlers of the script that sent the command. They didn't work in SatimageOSAX's app either (error -3); MTC_OSAX gives 3, an unknown function.
 
 ### Fixes

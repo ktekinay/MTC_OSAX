@@ -7,7 +7,7 @@ extension TextAdditions {
 		[
 			CommandDefinition("readtext", code: "SATIRead") { request in
 				let source = try request.requiredDirectParameter(as: AnyDescriptor.self).descriptor
-				if let string = try? String(appleEventDescriptor: source), string.hasPrefix("http://") || string.hasPrefix("https://") {
+				if let string = try? String(appleEventDescriptor: source), ["http://", "https://"].contains(where: string.lowercased().hasPrefix) {
 					throw OSAXError(-1708, "Reading URLs isn't implemented in MTC_OSAX yet.")
 				}
 				let url = try URL(appleEventDescriptor: source)

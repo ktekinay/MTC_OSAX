@@ -108,3 +108,21 @@ struct FileTextReadWriteTests {
 		}
 	}
 }
+
+struct ReadTextURLTests {
+	private func read(_ source: any AppleEventEncodable) -> AppleEventReply {
+		let dispatcher = CommandDispatcher()
+		dispatcher.register(TextAdditions.commands(context: TextContext(dollarReferencesDefault: { false }, regexSyntaxDefault: { .ruby })))
+		let event = NSAppleEventDescriptor.untargetedEvent(EventKey(code: "SATIRead"))
+		event.setParam(source.appleEventDescriptor, forKeyword: keyDirectObject)
+		return dispatcher.dispatch(event)
+	}
+
+	/// Only lowercase http:// and https:// text was refused, and a `furl` holding a URL was read from the network.
+	@Test func urlsAreRefused() throws {
+		#expect(read("HTTPS://example.com/x.txt").error?.number == -1708)
+		#expect(read("http://example.com/x.txt").error?.number == -1708)
+		let web = try #require(NSAppleEventDescriptor(descriptorType: typeFileURL, data: Data("http://example.com/x.txt".utf8)))
+		#expect(read(web).error?.number == -1700)
+	}
+}

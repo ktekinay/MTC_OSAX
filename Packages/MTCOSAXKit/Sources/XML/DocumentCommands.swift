@@ -199,6 +199,12 @@ enum Network {
 		{
 			return url
 		}
+		// A URL value (a `furl`) can hold an http URL too.
+		if descriptor.descriptorType == typeFileURL, let url = descriptor.fileURLValue,
+		   let scheme = url.scheme?.lowercased(), ["http", "https"].contains(scheme)
+		{
+			return url
+		}
 		return try URL(appleEventDescriptor: descriptor)
 	}
 

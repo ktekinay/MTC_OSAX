@@ -176,7 +176,9 @@ public struct AppleEventRecord: AppleEventEncodable {
 // MARK: - Files
 
 extension URL: AppleEventConvertible {
-	/// Accepts file references (`furl`, `alis`, `fsrf`, `bmrk`, …) and path strings (see `init(scriptPath:)`).
+	/// Accepts file references (`furl`, `alis`, `fsrf`, `bmrk`, …) and path strings (see `init(scriptPath:)`). A
+	/// `furl` holding a URL that isn't a file's (`http://…`) is -1700: files are read and written with APIs that
+	/// would otherwise fetch it from the network.
 	public init(appleEventDescriptor descriptor: NSAppleEventDescriptor) throws {
 		if descriptor.descriptorType == typeUnicodeText || descriptor.descriptorType == typeUTF8Text
 			|| descriptor.descriptorType == typeChar
@@ -186,6 +188,9 @@ extension URL: AppleEventConvertible {
 		}
 		guard let url = try descriptor.coerced(to: "furl").fileURLValue else {
 			throw OSAXError.coercionFailed
+		}
+		guard url.isFileURL else {
+			throw OSAXError(-1700, "\(url.absoluteString) isn’t a file.")
 		}
 		self = url
 	}
