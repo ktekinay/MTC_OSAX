@@ -162,6 +162,40 @@ struct BackupTests {
 		#expect(try manager.destinationOfSymbolicLink(atPath: folder.path("dst/filelink")) == "../other")
 	}
 
+	/// A newer file used to replace a folder of the same name, and everything in it; and an update removed the old
+	/// item before copying, so a failed copy left nothing.
+	@Test func nothingIsDeleted() throws {
+		let folder = try source()
+		defer { folder.remove() }
+		_ = backup(folder, ["Repo": 1])
+		let later = Date().addingTimeInterval(60)
+		// A file where the destination has a folder, and a package where it has a file.
+		try FileManager.default.removeItem(atPath: folder.path("src/skip"))
+		try folder.file("src/skip", modified: later)
+		try FileManager.default.removeItem(atPath: folder.path("dst/pkg.app"))
+		try folder.file("dst/pkg.app")
+		try FileManager.default.setAttributes([.modificationDate: Date.distantPast], ofItemAtPath: folder.path("dst/pkg.app"))
+		let text = backup(folder, ["Repo": 2]).result?.stringValue
+		#expect(text?.contains(folder.path("dst/skip") + "  Error : 21 \n") == true)
+		#expect(text?.contains(folder.path("dst/pkg.app") + "  Error : 20 \n") == true)
+		#expect(files(folder).contains("skip/e.txt"))
+		// A copy that fails leaves the old file.
+		try folder.file("src/a.txt", "new", modified: later)
+		try FileManager.default.setAttributes([.posixPermissions: 0], ofItemAtPath: folder.path("src/a.txt"))
+		defer { try? FileManager.default.setAttributes([.posixPermissions: 0o644], ofItemAtPath: folder.path("src/a.txt")) }
+		#expect(backup(folder, ["Repo": 2]).result?.stringValue?.contains(folder.path("dst/a.txt") + "  Error : 13 \n") == true)
+		#expect(try String(contentsOfFile: folder.path("dst/a.txt"), encoding: .utf8) == "x")
+		#expect(try FileManager.default.contentsOfDirectory(atPath: folder.path("dst")).allSatisfy { !$0.contains("mtc-backup") })
+		// An update of a package replaces it whole.
+		try FileManager.default.setAttributes([.posixPermissions: 0o644], ofItemAtPath: folder.path("src/a.txt"))
+		try FileManager.default.removeItem(atPath: folder.path("dst/pkg.app"))
+		_ = backup(folder, ["Repo": 1])
+		try folder.file("src/pkg.app/Contents/New.txt")
+		try FileManager.default.setAttributes([.modificationDate: later], ofItemAtPath: folder.path("src/pkg.app"))
+		#expect(report(backup(folder, ["Repo": 2]), folder)?.first == "Items updated : pkg.app")
+		#expect(files(folder).contains("pkg.app/Contents/New.txt"))
+	}
+
 	@Test func parameterErrors() throws {
 		let folder = try source()
 		defer { folder.remove() }

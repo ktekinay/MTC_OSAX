@@ -5,7 +5,9 @@ import Foundation
 /// `backup`: copies what's new or newer in a folder onto another, as SatimageOSAX did.
 ///
 /// - Files and packages are copied when missing from the destination, or updated when the source was modified
-///   later. Nothing is ever deleted from the destination.
+///   later. Nothing is ever deleted from the destination: an update is copied under a temporary name and then
+///   swapped in, so a failed copy leaves the old item, and a file never replaces a folder (or a package a file);
+///   such a pair is an error (21 or 20). SatimageOSAX replaced a folder, and everything in it, with the file.
 /// - Folders are created as needed; `except folders` skips folders (not packages) by name at any depth.
 /// - Symbolic links are copied as links, never followed (SatimageOSAX made an empty folder for each).
 /// - Invisible items are skipped. `after`, `only extensions` and `except extensions` (case-sensitive, without
@@ -115,14 +117,37 @@ struct Backup {
 
 	/// Copies (or, for a report, lists) a new or newer file, package or link.
 	private mutating func copy(_ from: URL, _ to: URL, isNew: Bool, isLink: Bool) {
+		let isFolder = !isLink && FileItem.isDirectory(from)
+		if !isNew, let existing = FileItem.status(to), ((existing.st_mode & S_IFMT) == S_IFDIR) != isFolder {
+			errors.append((to.path, isFolder ? ENOTDIR : EISDIR))
+			return
+		}
 		if !reportOnly {
-			if !isNew {
-				try? FileManager.default.removeItem(at: to)
-			}
-			let flags = copyfile_flags_t(COPYFILE_ALL | (isLink ? COPYFILE_NOFOLLOW : FileItem.isDirectory(from) ? COPYFILE_RECURSIVE : 0))
-			guard copyfile(from.path, to.path, nil, flags) == 0 else {
-				errors.append((to.path, errno))
+			let flags = copyfile_flags_t(COPYFILE_ALL | (isLink ? COPYFILE_NOFOLLOW : isFolder ? COPYFILE_RECURSIVE : 0))
+			let target = isNew ? to : to.deletingLastPathComponent().appendingPathComponent(".\(to.lastPathComponent).mtc-backup-\(UUID().uuidString)")
+			guard copyfile(from.path, target.path, nil, flags) == 0 else {
+				let code = errno
+				if !isNew { try? FileManager.default.removeItem(at: target) }
+				errors.append((to.path, code))
 				return
+			}
+			if !isNew {
+				// rename replaces a file or link in one step; a package (a folder) is swapped by FileManager.
+				var code: Int32 = 0
+				if !isFolder {
+					code = rename(target.path, to.path) == 0 ? 0 : errno
+				} else {
+					do {
+						_ = try FileManager.default.replaceItemAt(to, withItemAt: target, options: .usingNewMetadataOnly)
+					} catch {
+						code = Int32(((error as NSError).userInfo[NSUnderlyingErrorKey] as? NSError)?.code ?? Int(EIO))
+					}
+				}
+				if code != 0 {
+					try? FileManager.default.removeItem(at: target)
+					errors.append((to.path, code))
+					return
+				}
 			}
 		}
 		if isNew {
