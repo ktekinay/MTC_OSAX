@@ -33,10 +33,12 @@ enum JSON {
 		guard let value = parse.call(withArguments: [text]), context.exception == nil else {
 			throw PropertyLists.invalid
 		}
-		return foundation(value)
+		return try foundation(value)
 	}
 
-	private static func foundation(_ value: JSValue) -> Any {
+	/// -50 past `PropertyLists.maximumDepth` (JavaScriptCore itself takes a million levels).
+	private static func foundation(_ value: JSValue, depth: Int = 0) throws -> Any {
+		guard depth <= PropertyLists.maximumDepth else { throw PropertyLists.tooDeep }
 		if value.isNull || value.isUndefined {
 			return NSNull()
 		}
@@ -51,12 +53,12 @@ enum JSON {
 		}
 		if value.isArray {
 			let count = Int(value.objectForKeyedSubscript("length").toInt32())
-			return (0 ..< count).map { foundation(value.objectAtIndexedSubscript($0)) } as NSArray
+			return try (0 ..< count).map { try foundation(value.objectAtIndexedSubscript($0), depth: depth + 1) } as NSArray
 		}
 		let dictionary = NSMutableDictionary()
 		let keys = value.context.objectForKeyedSubscript("Object").objectForKeyedSubscript("keys").call(withArguments: [value])
 		for key in (keys?.toArray() as? [String]) ?? [] {
-			dictionary[key] = foundation(value.objectForKeyedSubscript(key))
+			dictionary[key] = try foundation(value.objectForKeyedSubscript(key), depth: depth + 1)
 		}
 		return dictionary
 	}

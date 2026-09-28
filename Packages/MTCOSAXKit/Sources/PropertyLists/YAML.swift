@@ -289,6 +289,11 @@ enum YAML {
 			guard active.insert(identity).inserted else {
 				throw OSAXError(-50, "The YAML has an alias inside what it refers to, which can't be a property list.")
 			}
+			// The nodes being read are the ones this one is inside.
+			guard active.count <= PropertyLists.maximumDepth else {
+				active.remove(identity)
+				throw PropertyLists.tooDeep
+			}
 			defer { active.remove(identity) }
 			let before = total
 			try add(1)

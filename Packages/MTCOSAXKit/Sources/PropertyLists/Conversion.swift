@@ -12,22 +12,43 @@ import Foundation
 ///   `PlistGet` turns back into the value.
 /// - A CFRef stands for a copy of the element it refers to.
 extension PropertyLists {
+	/// How deeply lists and records (or arrays and dictionaries) may nest: the recursion that converts them would
+	/// otherwise run out of stack and crash the app (a JSON file of a million `[`s did).
+	static let maximumDepth = 512
+	static let tooDeep = OSAXError(-50, "The value is nested more than \(maximumDepth) levels deep.")
+
+	/// -50 for Foundation objects (a parsed file) nested more than `maximumDepth` levels deep.
+	static func checkDepth(_ object: Any, depth: Int = 0) throws {
+		guard depth <= maximumDepth else { throw tooDeep }
+		switch object {
+		case let dictionary as NSDictionary:
+			for value in dictionary.allValues { try checkDepth(value, depth: depth + 1) }
+		case let array as NSArray:
+			for value in array { try checkDepth(value, depth: depth + 1) }
+		default:
+			break
+		}
+	}
+
 	/// An element made from an AppleScript value. `typed` false stores a single value (not a list or record) as its
 	/// raw bytes, as `PlistSet … without typed` does.
-	static func node(from descriptor: NSAppleEventDescriptor, in document: Document, store: DocumentStore, typed: Bool = true) throws -> Node {
+	static func node(from descriptor: NSAppleEventDescriptor, in document: Document, store: DocumentStore, typed: Bool = true,
+	                 depth: Int = 0) throws -> Node
+	{
+		guard depth <= maximumDepth else { throw tooDeep }
 		if DocumentStore.isReference(descriptor) {
 			return try store.node(descriptor).copy(in: document)
 		}
 		if descriptor.descriptorType == typeAEList {
 			let items = try (0 ..< descriptor.numberOfItems).map {
-				try node(from: descriptor.atIndex($0 + 1)!, in: document, store: store, typed: typed)
+				try node(from: descriptor.atIndex($0 + 1)!, in: document, store: store, typed: typed, depth: depth + 1)
 			}
 			return Node(.array(items), in: document)
 		}
 		if let record = RecordFields(descriptor) {
 			let dictionary = NSMutableDictionary()
 			for (key, value) in record.fields {
-				dictionary[key.plistKey] = try node(from: value, in: document, store: store, typed: typed)
+				dictionary[key.plistKey] = try node(from: value, in: document, store: store, typed: typed, depth: depth + 1)
 			}
 			return Node(.dictionary(dictionary), in: document)
 		}
@@ -144,7 +165,7 @@ extension PropertyLists {
 		}
 	}
 
-	/// An element from Foundation objects (a parsed file). Dictionaries keep their key order.
+	/// An element from Foundation objects (a parsed file, checked with `checkDepth`). Dictionaries keep their key order.
 	static func node(from object: Any, in document: Document) -> Node {
 		switch object {
 		case let dictionary as NSDictionary:

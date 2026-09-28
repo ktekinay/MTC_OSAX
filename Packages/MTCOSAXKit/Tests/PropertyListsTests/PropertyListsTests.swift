@@ -321,3 +321,61 @@ struct FlattenedDescriptorTests {
 		#expect(PropertyLists.unflatten(bytes("646C6532")) == nil)
 	}
 }
+
+/// Runs `body` on a thread with the main thread's 8 MB stack, where the app runs commands (tests run on threads
+/// with much smaller stacks).
+func onMainSizedStack(_ body: @escaping @Sendable () -> Void) {
+	let done = DispatchSemaphore(value: 0)
+	let thread = Thread {
+		body()
+		done.signal()
+	}
+	thread.stackSize = 8 << 20
+	thread.start()
+	done.wait()
+}
+
+/// Deep nesting used to recurse until the stack ran out (a JSON file of a million `[`s crashed the app).
+struct NestingTests {
+	@Test func tooDeepIsAnError() {
+		onMainSizedStack {
+			do {
+				try checkNesting()
+			} catch {
+				Issue.record(error)
+			}
+		}
+	}
+
+	private func checkNesting() throws {
+		let plists = Plists()
+		func nested(_ depth: Int) -> String { String(repeating: "[", count: depth) + String(repeating: "]", count: depth) }
+		#expect(plists.send("PLSTNOSJ", ["----": nested(100)]).error == nil)
+		#expect(plists.send("PLSTNOSJ", ["----": nested(1000)]).error?.number == -50)
+		#expect(plists.send("PLSTNOSJ", ["----": nested(1_000_000)]).error?.number == -50)
+		#expect(plists.send("MTCpFYML", ["----": "a: " + nested(1000)]).error?.number == -50)
+		#expect(plists.send("MTCpFYML", ["----": "a: " + nested(100)]).error == nil)
+		// Nothing is left open after the error.
+		let before = plists.store.allDocuments.count
+		#expect(plists.send("PLSTNOSJ", ["----": nested(1000)]).error?.number == -50)
+		#expect(plists.store.allDocuments.count == before)
+		// Property list files: Apple's reader stops at about 512 levels itself (-1).
+		func open(_ depth: Int) throws -> AppleEventReply {
+			let text = "<plist version=\"1.0\">" + String(repeating: "<array>", count: depth) + String(repeating: "</array>", count: depth) + "</plist>"
+			let file = FileManager.default.temporaryDirectory.appendingPathComponent("deep-\(UUID().uuidString).plist")
+			try Data(text.utf8).write(to: file)
+			defer { try? FileManager.default.removeItem(at: file) }
+			return plists.send("PLSTopen", ["----": file])
+		}
+		#expect(try open(500).error == nil)
+		#expect(try open(600).error?.number == -1)
+		// AppleScript values too.
+		var list = NSAppleEventDescriptor.list()
+		for _ in 0 ..< 600 {
+			let outer = NSAppleEventDescriptor.list()
+			outer.insert(list, at: 1)
+			list = outer
+		}
+		#expect(plists.send("PLSTmake", ["----": list]).error?.number == -50)
+	}
+}
