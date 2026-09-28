@@ -179,6 +179,8 @@ defaults write com.mactechnologies.mtc-osax RegexSyntax PCRE
 defaults delete com.mactechnologies.mtc-osax RegexSyntax              # back to the default
 ```
 
+A value the settings commands wouldn't accept (such as an `IdleTimeoutSeconds` that isn't a whole number from 0 to 2147483647, or `-bool YES` for it) counts as not set, so the default applies.
+
 ## Untrusted documents
 
 A script is trusted: it can already do anything you can. The files it opens (XML, stylesheets, property lists, JSON, YAML, TOML, text) and the text it takes from them often aren't, so MTC_OSAX limits what a document can make happen on its own:

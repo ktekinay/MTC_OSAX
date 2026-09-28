@@ -77,5 +77,12 @@ struct IdleMonitorTests {
 		#expect(IdleMonitor.timeout(in: defaults, key: key, default: .seconds(3600)) == .seconds(3600))
 		defaults.set("abc", forKey: key)
 		#expect(IdleMonitor.timeout(in: defaults, key: key, default: .seconds(3600)) == .seconds(3600))
+		// These crashed the app at launch (Duration overflows), or meant one second.
+		for value in [1e30, Double(Int32.max) + 1] as [Any] + ["1e30", true] {
+			defaults.set(value, forKey: key)
+			#expect(IdleMonitor.timeout(in: defaults, key: key, default: .seconds(3600)) == .seconds(3600), "\(value)")
+		}
+		defaults.set(Double(Int32.max), forKey: key)
+		#expect(IdleMonitor.timeout(in: defaults, key: key, default: .seconds(3600)) == .seconds(Int(Int32.max)))
 	}
 }

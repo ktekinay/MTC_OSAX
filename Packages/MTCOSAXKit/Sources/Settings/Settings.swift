@@ -52,11 +52,8 @@ struct Setting: @unchecked Sendable {
 		description: "Seconds without commands before MTC_OSAX quits; 0 means never. It doesn't quit while property lists or XML documents are open.",
 		defaultValue: NSAppleEventDescriptor(int32: Int32(defaultIdleTimeout)),
 		stored: { defaults in
-			// The rule IdleMonitor.timeout follows: a number (or numeric text), 0 or more.
-			let raw = (defaults.object(forKey: "IdleTimeoutSeconds") as? NSNumber)?.doubleValue
-				?? defaults.string(forKey: "IdleTimeoutSeconds").flatMap(Double.init)
-			guard let raw, raw.isFinite, raw >= 0 else { return nil }
-			return number(raw)
+			// The rule IdleMonitor.timeout follows.
+			IdleMonitor.seconds(in: defaults, key: "IdleTimeoutSeconds").map(number)
 		},
 		normalize: { value in
 			guard ["long", "shor", "comp", "magn", "doub", "sing", "ldbl"].contains(value.descriptorType.fourCharString),

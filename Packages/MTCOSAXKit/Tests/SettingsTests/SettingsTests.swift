@@ -127,6 +127,12 @@ struct SettingsTests {
 		#expect(settings.get(idleTimeout).result?.int32Value == 120)
 		settings.defaults.set(-5, forKey: "IdleTimeoutSeconds")
 		#expect(settings.get(idleTimeout).result?.int32Value == 3600)
+		// What the app uses too: these crashed it at launch, or meant one second.
+		for value in [1e30, true, "1e30"] as [Any] {
+			settings.defaults.set(value, forKey: "IdleTimeoutSeconds")
+			#expect(settings.get(idleTimeout).result?.int32Value == 3600, "\(value)")
+			#expect(Settings.idleTimeout(in: settings.defaults) == .seconds(3600), "\(value)")
+		}
 		settings.defaults.set("YES", forKey: "DollarReferences")
 		#expect(settings.get(dollarReferences).result?.booleanValue == true)
 		settings.defaults.set("bogus", forKey: "RegexSyntax")

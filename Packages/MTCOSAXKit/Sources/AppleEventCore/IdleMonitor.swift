@@ -19,15 +19,29 @@ public final class IdleMonitor {
 		self.init(timeout: { timeout }, onIdle: onIdle)
 	}
 
-	/// The timeout set in `defaults` under `key`, in seconds: 0 means never; missing, negative or not a number
-	/// means `defaultTimeout`.
+	/// The timeout set in `defaults` under `key`, in seconds: 0 means never; anything `seconds(in:key:)` doesn't
+	/// accept means `defaultTimeout`.
 	public nonisolated static func timeout(in defaults: UserDefaults, key: String, default defaultTimeout: Duration) -> Duration? {
-		guard let seconds = (defaults.object(forKey: key) as? NSNumber)?.doubleValue ?? (defaults.string(forKey: key)).flatMap(Double.init),
-		      seconds.isFinite, seconds >= 0
-		else {
+		guard let seconds = seconds(in: defaults, key: key) else {
 			return defaultTimeout
 		}
 		return seconds == 0 ? nil : .seconds(seconds)
+	}
+
+	/// The seconds stored under `key`: a number, or numeric text, from 0 to `Int32.max` (what `mtc_set` allows);
+	/// nil otherwise. `defaults write` can store anything: 1e30 overflowed `Duration` and crashed the app at every
+	/// launch, and `-bool YES` is a number 1.
+	public nonisolated static func seconds(in defaults: UserDefaults, key: String) -> Double? {
+		let object = defaults.object(forKey: key)
+		let seconds: Double? = switch object {
+		case let number as NSNumber where CFGetTypeID(number) != CFBooleanGetTypeID(): number.doubleValue
+		case let text as String: Double(text)
+		default: nil
+		}
+		guard let seconds, seconds.isFinite, seconds >= 0, seconds <= Double(Int32.max) else {
+			return nil
+		}
+		return seconds
 	}
 
 	/// Starts the countdown.
