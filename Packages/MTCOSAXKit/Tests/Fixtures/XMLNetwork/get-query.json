@@ -1,0 +1,97 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "http://127.0.0.1:8765/echo?a=1",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "050000004d5443780000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "root",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "050000004d5443780000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "050000004d5443780100000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "050000004d5443780100000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "<request method=\"GET\" query=\"a=1\" body=\"\"/>",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "050000004d5443780000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "get-query",
+  "recordedAt" : "2026-09-28T14:28:50Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "set d to XMLOpen \"$HTTP/echo?a=1\"\nXMLDisplayXML (XMLRoot d)\nXMLClose d",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "HTTP" : "http://127.0.0.1:8765"
+  }
+}

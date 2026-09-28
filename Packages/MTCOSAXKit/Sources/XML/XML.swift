@@ -1,0 +1,160 @@
+import AppleEventCore
+import CLibXML
+import Foundation
+import PropertyLists
+
+/// Satimage's four XML suites (event class `XML `): XML DOM, XPath and XSLT, Documents, and Validation, built on
+/// macOS's libxml2 and libxslt as SatimageOSAX's were.
+/// Behavior recorded from SatimageOSAX in `Fixtures/XML`; where Satimage was broken, MTC_OSAX follows the
+/// dictionary (`Fixtures/XMLFixes`, listed in PLAN-XML.md).
+public enum XML {
+	// Error numbers recorded from SatimageOSAX (libxml2's own numbers are passed through as they are).
+	static let noSuchNode = OSAXError(-1728) // errAENoSuchObject
+	static let notFound = OSAXError(-2763)
+	static let invalid = OSAXError(-1)
+	static let badIndex = OSAXError(-1719) // errAEIllegalIndex
+
+	/// - Parameter store: the open documents, shared with the PropertyList suite and its pools.
+	public static func commands(store: DocumentStore = DocumentStore()) -> [CommandDefinition] {
+		let commands = XMLCommands(store: store, settings: XMLSettings())
+		store.addResolver { descriptor in
+			XMLReferences.isReference(descriptor) ? try commands.references.resolve(descriptor).0 : nil
+		}
+		// libxml2's callbacks are per thread; the app runs every command on the main thread, tests on several.
+		return (commands.dom + commands.documents + stageTwoAndThree).map { command in
+			CommandDefinition(command.name, code: command.key.code) { request in
+				XMLDocument.installCallbacks()
+				return try command.handler(request)
+			}
+		}
+	}
+
+	/// XPath, XSLT and Validation: stages 2 and 3 of PLAN-XML.md, not implemented yet.
+	private static var stageTwoAndThree: [CommandDefinition] { [
+		("XMLXPath", "XML path"), ("XMLSetContext", "XML xpns"), ("XMLGetContext", "XML xpNS"), ("XMLGetNodePath", "XML NoPa"),
+		("XMLXPointer", "XML xptr"), ("XMLEscapeXPointer", "XML ExXp"), ("XMLGetXPointer", "XML gxpt"), ("XMLTransform", "XML xslt"),
+		("XMLCompile", "XML pxsl"), ("XMLNewIndex", "XML NKey"), ("XMLLookup", "XML GKey"), ("XMLEntries", "XML LKey"),
+		("XMLIndexDocument", "XML idoc"), ("XMLStrings", "XML DCon"), ("XMLLocalize", "XML LoCo"),
+		("XMLValidate", "XML vali"), ("XMLSchema", "XML Schm"), ("XMLRelaxNG", "XML rlax"), ("XMLCheckDTD", "XML Pdtd"),
+		("XMLGetByID", "XML geti"), ("XMLGetxmlID", "XML geID"), ("XMLValidName", "XML Isnm"), ("XMLValidNCName", "XML Isnc"),
+		("XMLDu", "XML du  "),
+	].map { name, code in CommandDefinition(name, code: code) { _ in throw OSAXError.eventNotHandled } } }
+
+	/// The libxml2 version in use, e.g. "20913".
+	static var libxmlVersion: String {
+		String(cString: __xmlParserVersion().pointee!)
+	}
+}
+
+/// The handlers, sharing the document store.
+struct XMLCommands {
+	let store: DocumentStore
+	let settings: XMLSettings
+	var references: XMLReferences { XMLReferences(store: store) }
+
+	// MARK: Parameters
+
+	func resolve(_ descriptor: NSAppleEventDescriptor) throws -> (XMLDocument, xmlNodePtr) {
+		try references.resolve(descriptor)
+	}
+
+	func direct(_ request: AppleEventRequest) throws -> (XMLDocument, xmlNodePtr) {
+		try resolve(request.requiredDirectParameter(as: AnyDescriptor.self).descriptor)
+	}
+
+	/// The direct parameter's nodes: one, or a list. Commands that take lists answer with lists.
+	func directNodes(_ request: AppleEventRequest) throws -> (nodes: [(XMLDocument, xmlNodePtr)], isList: Bool) {
+		let descriptor = try request.requiredDirectParameter(as: AnyDescriptor.self).descriptor
+		if descriptor.descriptorType == typeAEList {
+			return (try (0 ..< descriptor.numberOfItems).map { try resolve(descriptor.atIndex($0 + 1)!) }, true)
+		}
+		return ([try resolve(descriptor)], false)
+	}
+
+	func reference(_ node: xmlNodePtr, _ document: XMLDocument) -> NSAppleEventDescriptor {
+		references.reference(node, in: document)
+	}
+
+	/// One result per node, as a list if the direct parameter was one.
+	func each(_ request: AppleEventRequest, _ transform: (XMLDocument, xmlNodePtr) throws -> NSAppleEventDescriptor) throws -> NSAppleEventDescriptor {
+		let (nodes, isList) = try directNodes(request)
+		let results = try nodes.map(transform)
+		return isList ? results.appleEventDescriptor : results[0]
+	}
+
+	static func text(_ descriptor: NSAppleEventDescriptor) throws -> String {
+		if [typeUnicodeText, typeUTF8Text, typeChar, FourCharCode(fourCharString: "ut16")].contains(descriptor.descriptorType) {
+			return descriptor.stringValue ?? ""
+		}
+		guard let text = descriptor.coerce(toDescriptorType: typeUnicodeText)?.stringValue else {
+			throw OSAXError.coercionFailed
+		}
+		return text
+	}
+
+	static func isMissingValue(_ descriptor: NSAppleEventDescriptor) -> Bool {
+		descriptor.descriptorType == typeType && descriptor.typeCodeValue.fourCharString == "msng"
+	}
+
+	static func items(_ descriptor: NSAppleEventDescriptor) -> [NSAppleEventDescriptor] {
+		descriptor.descriptorType == typeAEList ? (0 ..< descriptor.numberOfItems).map { descriptor.atIndex($0 + 1)! } : [descriptor]
+	}
+
+	// MARK: Tree
+
+	static func isElement(_ node: xmlNodePtr) -> Bool {
+		node.pointee.type == XML_ELEMENT_NODE
+	}
+
+	static func isDocument(_ node: xmlNodePtr) -> Bool {
+		node.pointee.type == XML_DOCUMENT_NODE || node.pointee.type == XML_HTML_DOCUMENT_NODE
+	}
+
+	/// Children, with or without the nodes that aren't elements (`all nodes`).
+	static func children(of node: xmlNodePtr, allNodes: Bool) -> [xmlNodePtr] {
+		var result: [xmlNodePtr] = []
+		var current = node.pointee.children
+		while let child = current {
+			if allNodes || isElement(child) {
+				result.append(child)
+			}
+			current = child.pointee.next
+		}
+		return result
+	}
+
+	static func sibling(of node: xmlNodePtr, next: Bool, allNodes: Bool) -> xmlNodePtr? {
+		var current = next ? node.pointee.next : node.pointee.prev
+		while let sibling = current {
+			if allNodes || isElement(sibling) {
+				return sibling
+			}
+			current = next ? sibling.pointee.next : sibling.pointee.prev
+		}
+		return nil
+	}
+
+	func modified(_ document: XMLDocument) {
+		document.isModified = true
+	}
+
+	/// Unlinks and frees nodes (their references then give -1728).
+	static func remove(_ node: xmlNodePtr) {
+		xmlUnlinkNode(node)
+		xmlFreeNode(node)
+	}
+
+	/// Copies a node (and what's in it) into a document, for inserting a clone.
+	static func copy(_ node: xmlNodePtr, into document: XMLDocument) -> xmlNodePtr? {
+		let copy = xmlDocCopyNode(node, document.doc, 1)
+		XMLDocument.clearNumbers(copy)
+		return copy
+	}
+
+	/// Removes namespace declarations of new nodes that an ancestor already declares (`nsclean`).
+	static func cleanNamespaces(_ node: xmlNodePtr) {
+		guard isElement(node), let context = xmlDOMWrapNewCtxt() else { return }
+		defer { xmlDOMWrapFreeCtxt(context) }
+		xmlDOMWrapReconcileNamespaces(context, node, 1) // XML_DOM_RECONNS_REMOVEREDUND (private to tree.c)
+	}
+}

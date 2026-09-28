@@ -1,0 +1,70 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "disp",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "/private/tmp/mtc-fixtures/files/dtd.xml",
+              "type" : "alis"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "kind",
+              "value" : {
+                "text" : "DOCUMENT_TYPE_NODE",
+                "type" : "TEXT"
+              }
+            },
+            {
+              "key" : "pnam",
+              "value" : {
+                "text" : "people",
+                "type" : "utf8"
+              }
+            },
+            {
+              "key" : "stnd",
+              "value" : {
+                "boolean" : true,
+                "type" : "bool"
+              }
+            },
+            {
+              "key" : "hdtd",
+              "value" : {
+                "boolean" : true,
+                "type" : "bool"
+              }
+            },
+            {
+              "key" : "cpar",
+              "value" : {
+                "integer" : 2,
+                "type" : "long"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    }
+  ],
+  "name" : "info-file-alias-dtd",
+  "recordedAt" : "2026-09-28T15:01:57Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "XMLNodeInfo ((POSIX file \"$FILES/dtd.xml\") as alias)",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

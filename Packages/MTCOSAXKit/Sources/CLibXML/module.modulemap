@@ -1,0 +1,8 @@
+// macOS's libxml2 and libxslt (with EXSLT), from the SDK.
+module CLibXML [system] {
+	header "shim.h"
+	link "xml2"
+	link "xslt"
+	link "exslt"
+	export *
+}

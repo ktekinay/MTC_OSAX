@@ -1,0 +1,114 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/simple.xml",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "330000000a1401000000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "save",
+        "fields" : [
+          {
+            "key" : "kfil",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/save-options.xml",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "smar",
+            "value" : {
+              "type" : "fals"
+            }
+          },
+          {
+            "key" : "XmlH",
+            "value" : {
+              "type" : "fals"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "330000000a1401000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "330000000a1401000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Read",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/save-options.xml",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "<!-- a comment before the root -->\n<?app setting=\"1\"?>\n<library xmlns:dc=\"http://purl.org/dc/elements/1.1/\" version=\"2\"><book id=\"b1\" lang=\"en\"><title>Moby-Dick</title><dc:creator>Herman Melville</dc:creator><year>1851</year><price currency=\"USD\">9.99</price></book><book id=\"b2\" lang=\"fr\"><title>Les Misérables</title><dc:creator>Victor Hugo</dc:creator><year>1862</year><!-- no price --></book><note>Mixed <em>content</em> with &amp; entities &lt;here&gt; and a <![CDATA[<cdata> section]]>.</note><empty/><spaces>   padded   </spaces></library>\n",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "doc-save-options",
+  "recordedAt" : "2026-09-28T14:10:06Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLSave d in (POSIX file \"$TMP/save-options.xml\") without formatting and xml declaration\nXMLClose d\nreadtext (POSIX file \"$TMP/save-options.xml\")",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files",
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

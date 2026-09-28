@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document>
+	<name>Places</name>
+	<Placemark>
+		<name>Home</name>
+		<description>Where I live</description>
+		<styleUrl>#icon</styleUrl>
+		<Point>
+			<coordinates>-73.9857,40.7484,0</coordinates>
+		</Point>
+	</Placemark>
+	<Placemark>
+		<name>Work</name>
+		<description><![CDATA[The <b>office</b>]]></description>
+		<styleUrl>#icon</styleUrl>
+		<Point>
+			<coordinates>-74.0060,40.7128,0</coordinates>
+		</Point>
+	</Placemark>
+</Document>
+</kml>

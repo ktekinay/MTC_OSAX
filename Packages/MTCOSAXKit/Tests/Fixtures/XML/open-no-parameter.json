@@ -1,0 +1,22 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1701
+      }
+    }
+  ],
+  "name" : "open-no-parameter",
+  "recordedAt" : "2026-09-28T14:10:00Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "XMLOpen",
+  "timeZone" : "America/New_York"
+}

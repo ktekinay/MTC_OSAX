@@ -1,0 +1,50 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "text" : "<doc xmlns:xi=\"http://www.w3.org/2001/XInclude\"><xi:include href=\"nope.xml\"/></doc>",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "470000000a1401000000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Xinc",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "470000000a1401000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : 1549
+      }
+    }
+  ],
+  "name" : "doc-xinclude-missing",
+  "recordedAt" : "2026-09-28T14:10:06Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set d to XMLOpen from string \"<doc xmlns:xi=\\\"http://www.w3.org/2001/XInclude\\\"><xi:include href=\\\"nope.xml\\\"/></doc>\"\nXMLXInclude d\nXMLClose d",
+  "timeZone" : "America/New_York"
+}

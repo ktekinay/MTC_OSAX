@@ -1,0 +1,38 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "gfur",
+        "fields" : [
+          {
+            "key" : "pool",
+            "value" : {
+              "text" : "mtc-x9",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/latin1.xml",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -2763
+      }
+    }
+  ],
+  "name" : "doc-document-not-open",
+  "recordedAt" : "2026-09-28T14:12:29Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "XMLDocument (POSIX file \"$FILES/latin1.xml\") in pool \"mtc-x9\"",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "ErLe",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "integer" : 2,
+          "type" : "long"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "text" : "<?xml version=\"1.0\" encoding=\"nonsense\"?><a/>",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : 32
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "lErr",
+        "fields" : [
+
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "line 1\nUnsupported encoding nonsense\n\n",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "ErLe",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 2,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "integer" : 1,
+          "type" : "long"
+        }
+      }
+    }
+  ],
+  "name" : "error-level-1-warning",
+  "recordedAt" : "2026-09-28T14:10:06Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set old to XMLErrorLevel 1\ntry\nset d to XMLOpen from string \"<?xml version=\\\"1.0\\\" encoding=\\\"nonsense\\\"?><a/>\"\nXMLClose d\nend try\nXMLError\nXMLErrorLevel old",
+  "timeZone" : "America/New_York"
+}

@@ -1,0 +1,34 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "text" : "<!DOCTYPE a [<!ELEMENT a (b)><!ELEMENT b EMPTY>]><a><c/></a>",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "Vali",
+            "value" : {
+              "type" : "true"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : 534
+      }
+    }
+  ],
+  "name" : "open-validate-invalid",
+  "recordedAt" : "2026-09-28T14:10:00Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set d to XMLOpen from string \"<!DOCTYPE a [<!ELEMENT a (b)><!ELEMENT b EMPTY>]><a><c/></a>\" with validate",
+  "timeZone" : "America/New_York"
+}

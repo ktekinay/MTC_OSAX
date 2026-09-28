@@ -1,0 +1,40 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "text" : "<html><body><script>if (a < b) x();</script></body></html>",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "HTML",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "xscp",
+            "value" : {
+              "type" : "true"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : 68
+      }
+    }
+  ],
+  "name" : "open-html-script",
+  "recordedAt" : "2026-09-28T14:10:00Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set d to XMLOpen from string \"<html><body><script>if (a < b) x();</script></body></html>\" with html4 and xmlscript\nXMLDisplayXML d\nXMLClose d",
+  "timeZone" : "America/New_York"
+}

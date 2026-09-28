@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<root xmlns="urn:default" xmlns:a="urn:a" xmlns:b="urn:b">
+	<a:item b:attr="1">first</a:item>
+	<item>second</item>
+	<b:item xmlns:c="urn:c"><c:inner>third</c:inner></b:item>
+</root>

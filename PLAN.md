@@ -18,7 +18,7 @@ Command counts include hidden commands. Suites sharing a priority are done toget
 | 4 ✓ | Array and List Utilities | 7 | `sortlist`, `masklist`, `topological sort`, `suppress item`, `exclude items`, `keep items`, `special concat` |
 | 5 ✓ | Satimage PropertyList Additions ([done](Implemented/PLAN-PropertyLists.md)) | 29 | `PlistOpen`/`PlistNew`/`PlistSave`, get/set children, `PlistToJSON`/`PlistFromJSON`, … |
 | 5 ✓ | Satimage Pool Additions | 3 | Document pools shared by the Plist and XML suites |
-| 6 | Satimage XML DOM | 39 | `XMLOpen`/`XMLClose`, node navigation, attributes, text, namespaces, `XMLFind`, `XMLDisplayXML`, … |
+| 6 | Satimage XML DOM ([plan](PLAN-XML.md)) | 39 | `XMLOpen`/`XMLClose`, node navigation, attributes, text, namespaces, `XMLFind`, `XMLDisplayXML`, … |
 | 6 | XML XPath, XSLT | 15 | `XMLXPath`, contexts, `XMLXPointer`, `XMLTransform` (XSLT), indexes/lookup |
 | 6 | XML Documents | 18 | `XMLSave`, encoding, catalogs, XInclude, canonicalization, doc IDs |
 | 6 | XML Validation | 11 | DTD / XML Schema / RelaxNG validation, ID lookup, name validity |

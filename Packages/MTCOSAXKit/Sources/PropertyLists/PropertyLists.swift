@@ -90,12 +90,14 @@ public enum PropertyLists {
 			},
 			CommandDefinition("DeletePool", code: "POOLdpoo") { request in
 				let pool = try request.directParameter(as: String.self) ?? commands.store.currentPool
-				for document in commands.store.documents where document.pool == pool {
+				for document in commands.store.allDocuments where document.pool == pool {
 					commands.store.close(document)
 				}
 				return nil
 			},
-			CommandDefinition("GetPool", code: "POOLgpoo") { try commands.node($0).document.pool },
+			CommandDefinition("GetPool", code: "POOLgpoo") { request in
+				try commands.store.storedDocument(request.requiredDirectParameter(as: AnyDescriptor.self).descriptor).pool
+			},
 		]
 	}
 }

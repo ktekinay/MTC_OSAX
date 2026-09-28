@@ -132,8 +132,16 @@ struct WeakNode {
 	}
 }
 
+/// An open document of any kind (a property list, an XML document), as the store and pools see it.
+public protocol StoredDocument: AnyObject {
+	var number: Int { get }
+	var pool: String { get }
+	/// Called when the document is closed (by its own command or `DeletePool`), to release what it holds.
+	func didClose()
+}
+
 /// An open property list: its tree, where it came from, and its pool.
-final class Document {
+final class Document: StoredDocument {
 	let number: Int
 	var pool: String
 	var root: Node!
@@ -151,6 +159,10 @@ final class Document {
 		self.pool = pool
 	}
 
+	func didClose() {
+		isOpen = false
+	}
+
 	fileprivate func register() -> Int {
 		defer { nextElement += 1 }
 		return nextElement
@@ -164,34 +176,65 @@ final class Document {
 	}
 }
 
-/// The open documents, in the order they were opened, and the pools they're in. One per app.
+/// The open documents of every kind, in the order they were opened, and the pools they're in. One per app.
 public final class DocumentStore: @unchecked Sendable {
-	private(set) var documents: [Document] = []
+	public private(set) var allDocuments: [any StoredDocument] = []
 	/// The pool new documents go into (`SetPool`); "" at launch.
-	var currentPool = ""
+	public var currentPool = ""
 	private var nextDocument = 1
+	/// Finds the document an XMLRef (or another kind of reference) belongs to, for `GetPool`; nil if it isn't
+	/// that kind of reference.
+	private var resolvers: [(NSAppleEventDescriptor) throws -> (any StoredDocument)?] = []
 
 	public init() {}
 
 	/// Whether any document is open; the app doesn't quit for being idle while one is.
 	public var hasOpenDocuments: Bool {
-		!documents.isEmpty
+		!allDocuments.isEmpty
 	}
 
-	func newDocument(pool: String?) -> Document {
-		let document = Document(number: nextDocument, pool: pool ?? currentPool)
+	/// The open property lists.
+	var documents: [Document] {
+		allDocuments.compactMap { $0 as? Document }
+	}
+
+	/// Adds a new document, numbered and in `pool` (default: the current pool).
+	public func add<T: StoredDocument>(pool: String?, _ make: (_ number: Int, _ pool: String) -> T) -> T {
+		let document = make(nextDocument, pool ?? currentPool)
 		nextDocument += 1
-		documents.append(document)
+		allDocuments.append(document)
 		return document
 	}
 
-	func close(_ document: Document) {
-		document.isOpen = false
-		documents.removeAll { $0 === document }
+	func newDocument(pool: String?) -> Document {
+		add(pool: pool) { Document(number: $0, pool: $1) }
+	}
+
+	public func close(_ document: any StoredDocument) {
+		allDocuments.removeAll { $0 === document }
+		document.didClose()
 	}
 
 	func document(number: Int) -> Document? {
 		documents.first { $0.number == number }
+	}
+
+	/// Lets `GetPool` find the documents of another kind of reference.
+	public func addResolver(_ resolver: @escaping (NSAppleEventDescriptor) throws -> (any StoredDocument)?) {
+		resolvers.append(resolver)
+	}
+
+	/// The document of a CFRef or of another kind of reference; error -1700 if it's neither.
+	func storedDocument(_ descriptor: NSAppleEventDescriptor) throws -> any StoredDocument {
+		if Self.isReference(descriptor) {
+			return try node(descriptor).document
+		}
+		for resolver in resolvers {
+			if let document = try resolver(descriptor) {
+				return document
+			}
+		}
+		throw OSAXError.coercionFailed
 	}
 
 	// MARK: References

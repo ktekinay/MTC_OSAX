@@ -9,7 +9,8 @@ enum Fixtures {
 		.appendingPathComponent("Fixtures")
 
 	/// Folders that aren't replayed against the full catalog.
-	static let excludedFolders: Set = ["Examples"]
+	/// Examples replay against a stub; XMLNetwork needs the test server (NetworkFixtureTests).
+	static let excludedFolders: Set = ["Examples", "XMLNetwork"]
 
 	/// Folders whose reals may differ from SatimageOSAX's by a few units in the last place: Intel's and Apple
 	/// silicon's math libraries differ slightly (up to 15 units for `lgamma` near its roots).
@@ -53,7 +54,12 @@ enum Fixtures {
 				.appendingPathComponent("Input")
 		}
 		let folder = String(path.prefix { $0 != "/" })
-		return fixture.replay(using: dispatcher, variables: ["FILES": input.path, "TMP": temporary.path], realTolerance: realTolerances[folder] ?? 0)
+		// A copy of the inputs in the temporary folder, whose path has no spaces (URLs in replies stay as recorded).
+		let files = temporary.appendingPathComponent("files")
+		if FileManager.default.fileExists(atPath: input.path) {
+			try FileManager.default.copyItem(at: input, to: files)
+		}
+		return fixture.replay(using: dispatcher, variables: ["FILES": files.path, "TMP": temporary.path], realTolerance: realTolerances[folder] ?? 0)
 	}
 }
 
@@ -68,6 +74,19 @@ struct FixtureReplayTests {
 
 	@Test func fixturesExist() {
 		#expect(!Fixtures.paths().isEmpty)
+	}
+}
+
+/// XMLOpen of http URLs, replayed against the test server they were recorded with (`$HTTP`), with the XML
+/// fixtures' input files.
+struct NetworkFixtureTests {
+	@Test(arguments: Fixtures.paths(in: "XMLNetwork"))
+	func replay(_ path: String) throws {
+		let files = Fixtures.directory.appendingPathComponent("XML/Input")
+		let server = try NetworkFixtureServer(folder: files)
+		let fixture = try Fixtures.load(path)
+		let differences = fixture.replay(using: CommandCatalog.makeDispatcher(), variables: ["HTTP": server.address, "FILES": files.path])
+		#expect(differences.isEmpty, "\(differences.joined(separator: "\n"))")
 	}
 }
 

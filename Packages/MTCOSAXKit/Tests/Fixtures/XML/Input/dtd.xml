@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!DOCTYPE people [
+	<!ELEMENT people (person*)>
+	<!ELEMENT person (#PCDATA)>
+	<!ATTLIST person id ID #REQUIRED>
+	<!ENTITY company "Example Corp">
+]>
+<people>
+	<person id="p1">Ann of &company;</person>
+	<person id="p2">Bob</person>
+</people>

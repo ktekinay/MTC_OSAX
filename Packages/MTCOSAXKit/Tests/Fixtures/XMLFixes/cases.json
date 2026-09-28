@@ -1,0 +1,46 @@
+[
+ {
+  "name": "open-html",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/page.html\") with html4\nXMLNodeInfo d\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "exists",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLExists r\nXMLExists {d, r}\nXMLClose d\nXMLExists r"
+ },
+ {
+  "name": "exists-removed",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLRemove b\nXMLExists b\nXMLClose d"
+ },
+ {
+  "name": "display-html4",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLDisplayXML d with html4\nXMLClose d"
+ },
+ {
+  "name": "display-html-document",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/page.html\") with html4\nXMLDisplayXML d\nXMLDisplayXML d with html4\nXMLClose d"
+ },
+ {
+  "name": "change-set-xml-text-node",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset n to XMLChild (XMLFind r name \"note\") index 1\nXMLSetXML n to \"<i>replaced</i> text\"\nXMLCount (XMLFind r name \"note\")\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-append-text-mixed",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLAppendText \" end\" at (XMLFind r name \"note\")\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "error-none",
+  "script": "set d to XMLOpen from string \"<a/>\"\nXMLError\nXMLClose d"
+ },
+ {
+  "name": "doc-save-html",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/page.html\") with html4\nXMLSave d in (POSIX file \"$TMP/save.html\") with html4\nXMLClose d\nreadtext (POSIX file \"$TMP/save.html\")"
+ },
+ {
+  "name": "doc-save-string-path",
+  "script": "set d to XMLOpen from string \"<a/>\"\nXMLSave d in \"$TMP/string-path.xml\"\nXMLClose d\nreadtext (POSIX file \"$TMP/string-path.xml\")"
+ },
+ {
+  "name": "doc-xinclude",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/include.xml\")\nXMLXInclude d\nXMLDisplayXML d\nXMLClose d"
+ }
+]

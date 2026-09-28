@@ -4,6 +4,7 @@ import Diagnostics
 import Arrays
 import ListUtilities
 import MathFunctions
+import XML
 @_exported import PropertyLists
 import FilesAndFolders
 import TextAdditions
@@ -32,6 +33,7 @@ public enum CommandCatalog {
 		dispatcher.register(ListUtilities.commands())
 		dispatcher.register(Arrays.commands())
 		dispatcher.register(PropertyLists.commands(store: documents))
+		dispatcher.register(XML.commands(store: documents))
 		return dispatcher
 	}
 

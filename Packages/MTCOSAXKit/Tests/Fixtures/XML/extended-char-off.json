@@ -1,0 +1,49 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Vr11",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "type" : "fals"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "boolean" : true,
+          "type" : "bool"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "text" : "<a>x&#1;y</a>",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : 9
+      }
+    }
+  ],
+  "name" : "extended-char-off",
+  "recordedAt" : "2026-09-28T14:10:06Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set old to XMLExtendedChar false\nset d to XMLOpen from string \"<a>x&#1;y</a>\"\nXMLExtendedChar old",
+  "timeZone" : "America/New_York"
+}

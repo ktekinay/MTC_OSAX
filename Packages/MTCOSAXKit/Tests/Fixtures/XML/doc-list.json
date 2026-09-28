@@ -1,0 +1,182 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "pool",
+            "value" : {
+              "text" : "mtc-x3",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/simple.xml",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "480000000a1401000000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "text" : "<a/>",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "pool",
+            "value" : {
+              "text" : "mtc-x3",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "490000000a1401000000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "List",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "mtc-x3",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "hex" : "480000000a1401000000000000000000",
+              "type" : "XMLR"
+            },
+            {
+              "hex" : "490000000a1401000000000000000000",
+              "type" : "XMLR"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "List",
+        "fields" : [
+          {
+            "key" : "as  ",
+            "value" : {
+              "code" : "TEXT",
+              "type" : "type"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "mtc-x3",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "file:///private/tmp/mtc-fixtures/files/simple.xml",
+              "type" : "ut16"
+            },
+            {
+              "text" : "",
+              "type" : "utf8"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "POOL",
+        "eventID" : "dpoo",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "mtc-x3",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "List",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "mtc-x3",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "doc-list",
+  "recordedAt" : "2026-09-28T14:10:06Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set d to XMLOpen (POSIX file \"$FILES/simple.xml\") in pool \"mtc-x3\"\nset e to XMLOpen from string \"<a/>\" in pool \"mtc-x3\"\nXMLListDocuments \"mtc-x3\"\nXMLListDocuments \"mtc-x3\" as string\nDeletePool \"mtc-x3\"\nXMLListDocuments \"mtc-x3\"",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

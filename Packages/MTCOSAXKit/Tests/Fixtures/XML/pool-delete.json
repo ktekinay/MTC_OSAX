@@ -1,0 +1,76 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "text" : "<a/>",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "pool",
+            "value" : {
+              "text" : "mtc-x6",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "5c0000000a1401000000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "POOL",
+        "eventID" : "dpoo",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "mtc-x6",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "root",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "5c0000000a1401000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1728
+      }
+    }
+  ],
+  "name" : "pool-delete",
+  "recordedAt" : "2026-09-28T14:10:07Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set d to XMLOpen from string \"<a/>\" in pool \"mtc-x6\"\nDeletePool \"mtc-x6\"\nXMLRoot d",
+  "timeZone" : "America/New_York"
+}

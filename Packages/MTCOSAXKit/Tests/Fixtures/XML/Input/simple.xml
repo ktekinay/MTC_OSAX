@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- a comment before the root -->
+<?app setting="1"?>
+<library xmlns:dc="http://purl.org/dc/elements/1.1/" version="2">
+	<book id="b1" lang="en">
+		<title>Moby-Dick</title>
+		<dc:creator>Herman Melville</dc:creator>
+		<year>1851</year>
+		<price currency="USD">9.99</price>
+	</book>
+	<book id="b2" lang="fr">
+		<title>Les Misérables</title>
+		<dc:creator>Victor Hugo</dc:creator>
+		<year>1862</year>
+		<!-- no price -->
+	</book>
+	<note>Mixed <em>content</em> with &amp; entities &lt;here&gt; and a <![CDATA[<cdata> section]]>.</note>
+	<empty/>
+	<spaces>   padded   </spaces>
+</library>

@@ -43,12 +43,16 @@ let package = Package(
 		.target(name: "ListUtilities", dependencies: ["AppleEventCore", "Numerics"]),
 		.target(name: "Arrays", dependencies: ["AppleEventCore", "Numerics"]),
 		.target(name: "PropertyLists", dependencies: ["AppleEventCore"]),
+		.target(name: "XML", dependencies: ["AppleEventCore", "CLibXML", "PropertyLists"]),
+
+		// macOS's libxml2 and libxslt, which SatimageOSAX's XML suites were built on.
+		.systemLibrary(name: "CLibXML"),
 
 		// Numbers from scripts: numbers, lists and Satimage's `array of real`. Shared by Math, List Utilities and Arrays.
 		.target(name: "Numerics", dependencies: ["AppleEventCore"]),
 
 		// Registers every suite with a dispatcher; the app links only this.
-		.target(name: "MTCOSAX", dependencies: ["AppleEventCore", "Diagnostics", "TextAdditions", "FilesAndFolders", "FileAdditions", "MathFunctions", "ListUtilities", "Arrays", "PropertyLists"]),
+		.target(name: "MTCOSAX", dependencies: ["AppleEventCore", "Diagnostics", "TextAdditions", "FilesAndFolders", "FileAdditions", "MathFunctions", "ListUtilities", "Arrays", "PropertyLists", "XML"]),
 
 		.executableTarget(name: "FixtureRecorder", dependencies: ["AppleEventCore"]),
 
@@ -63,6 +67,7 @@ let package = Package(
 		.testTarget(name: "ListUtilitiesTests", dependencies: ["ListUtilities"]),
 		.testTarget(name: "ArraysTests", dependencies: ["Arrays"]),
 		.testTarget(name: "PropertyListsTests", dependencies: ["PropertyLists"]),
+		.testTarget(name: "XMLTests", dependencies: ["XML"]),
 		.testTarget(name: "SDEFConsistencyTests", dependencies: ["MTCOSAX"]),
 		.testTarget(name: "FixtureReplayTests", dependencies: ["MTCOSAX"]),
 	]

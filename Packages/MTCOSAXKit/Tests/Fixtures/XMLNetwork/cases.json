@@ -1,0 +1,58 @@
+[
+ {
+  "name": "get",
+  "script": "set d to XMLOpen \"$HTTP/files/simple.xml\"\nXMLTagName (XMLRoot d)\nXMLURL d\nXMLURL d with parent\nXMLClose d"
+ },
+ {
+  "name": "get-base",
+  "script": "set d to XMLOpen \"$HTTP/files/simple.xml\"\nXMLBase d\nXMLAbsoluteURL \"other.xml\" from d\nXMLClose d"
+ },
+ {
+  "name": "get-latin1",
+  "script": "set d to XMLOpen \"$HTTP/files/latin1.xml\"\nXMLGetText (XMLRoot d)\nXMLClose d"
+ },
+ {
+  "name": "get-html",
+  "script": "set d to XMLOpen \"$HTTP/files/page.html\" with html4\nXMLNodeInfo d\nXMLClose d"
+ },
+ {
+  "name": "get-invalid",
+  "script": "XMLOpen \"$HTTP/files/invalid.xml\""
+ },
+ {
+  "name": "get-missing",
+  "script": "XMLOpen \"$HTTP/files/nope.xml\""
+ },
+ {
+  "name": "get-query",
+  "script": "set d to XMLOpen \"$HTTP/echo?a=1\"\nXMLDisplayXML (XMLRoot d)\nXMLClose d"
+ },
+ {
+  "name": "get-query-parameter",
+  "script": "set d to XMLOpen \"$HTTP/echo\" query \"b=2&c=3\"\nXMLDisplayXML (XMLRoot d)\nXMLClose d"
+ },
+ {
+  "name": "get-query-both",
+  "script": "set d to XMLOpen \"$HTTP/echo?a=1\" query \"b=2\"\nXMLDisplayXML (XMLRoot d)\nXMLClose d"
+ },
+ {
+  "name": "get-headers",
+  "script": "set d to XMLOpen \"$HTTP/echo\" header {|X-Test|:\"hello\", |X-Other|:\"2\"}\nXMLDisplayXML (XMLRoot d)\nXMLClose d"
+ },
+ {
+  "name": "post",
+  "script": "set d to XMLOpen \"$HTTP/echo\" query \"b=2&c=3\" with POST\nXMLDisplayXML (XMLRoot d)\nXMLClose d"
+ },
+ {
+  "name": "post-no-query",
+  "script": "set d to XMLOpen \"$HTTP/echo\" with POST\nXMLDisplayXML (XMLRoot d)\nXMLClose d"
+ },
+ {
+  "name": "post-headers",
+  "script": "set d to XMLOpen \"$HTTP/echo\" query \"x=1\" header {|X-Test|:\"hello\"} with POST\nXMLDisplayXML (XMLRoot d)\nXMLClose d"
+ },
+ {
+  "name": "unreachable",
+  "script": "XMLOpen \"http://127.0.0.1:1/nothing.xml\""
+ }
+]

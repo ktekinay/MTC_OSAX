@@ -1,0 +1,86 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "text" : "<?xml version=\"1.0\"?><!-- c --><a xmlns:u=\"urn:unused\" b=\"2\" a=\"1\"><x   y=\"z\"/><!-- inner --></a>",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "650000000a1401000000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "c14n",
+        "fields" : [
+          {
+            "key" : "in  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/digest.bin",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "Meth",
+            "value" : {
+              "text" : "SHA1",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "650000000a1401000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "650000000a1401000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "c14n-digest-in-file",
+  "recordedAt" : "2026-09-28T14:12:30Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set d to XMLOpen from string \"<?xml version=\\\"1.0\\\"?><!-- c --><a xmlns:u=\\\"urn:unused\\\" b=\\\"2\\\" a=\\\"1\\\"><x   y=\\\"z\\\"/><!-- inner --></a>\"\nXMLc14n d in (POSIX file \"$TMP/digest.bin\") digest \"SHA1\"\nXMLClose d",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

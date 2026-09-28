@@ -1,0 +1,146 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "HTML",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/page.html",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "010000004d5443780000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "disp",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "010000004d5443780000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "kind",
+              "value" : {
+                "text" : "HTML_DOCUMENT_NODE",
+                "type" : "TEXT"
+              }
+            },
+            {
+              "key" : "ExID",
+              "value" : {
+                "text" : "-//W3C//DTD HTML 4.0 Transitional//EN",
+                "type" : "utxt"
+              }
+            },
+            {
+              "key" : "SyID",
+              "value" : {
+                "text" : "http://www.w3.org/TR/REC-html40/loose.dtd",
+                "type" : "utxt"
+              }
+            },
+            {
+              "key" : "hdtd",
+              "value" : {
+                "boolean" : true,
+                "type" : "bool"
+              }
+            },
+            {
+              "key" : "stnd",
+              "value" : {
+                "boolean" : true,
+                "type" : "bool"
+              }
+            },
+            {
+              "key" : "imod",
+              "value" : {
+                "boolean" : false,
+                "type" : "bool"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "010000004d5443780000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">\n<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n<title>Page</title>\n</head>\n<body>\n<p class=\"intro\">Hello <b>world</b><br></p>\n<p>Second paragraph   © 2026</p>\n</body>\n</html>\n",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "010000004d5443780000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "open-html",
+  "recordedAt" : "2026-09-28T14:26:14Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "set d to XMLOpen (POSIX file \"$FILES/page.html\") with html4\nXMLNodeInfo d\nXMLDisplayXML d\nXMLClose d",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

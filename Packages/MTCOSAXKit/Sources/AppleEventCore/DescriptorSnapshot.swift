@@ -230,10 +230,13 @@ public struct DescriptorSnapshot: Codable, Hashable {
 		return copy
 	}
 
-	/// Replaces the recorded CFRefs (`CFob`, Satimage's property list references) in `self` with the ones the app
-	/// returned in their place, as `references` maps them (by their recorded bytes).
+	/// Opaque references to documents and their parts: the PropertyList suite's CFRefs and the XML suites' XMLRefs.
+	static let referenceTypes: Set = ["CFob", "XMLR"]
+
+	/// Replaces the recorded references (CFRefs, XMLRefs) in `self` with the ones the app returned in their place,
+	/// as `references` maps them (by their recorded bytes).
 	public func replacingReferences(_ references: [String: DescriptorSnapshot]) -> DescriptorSnapshot {
-		if type == "CFob", let hex, let replacement = references[hex] {
+		if Self.referenceTypes.contains(type), let hex, let replacement = references[hex] {
 			return replacement
 		}
 		var copy = self
@@ -245,7 +248,7 @@ public struct DescriptorSnapshot: Codable, Hashable {
 	/// Pairs each recorded CFRef in `self` (an expected reply) with the CFRef at the same place in `actual`, adding
 	/// new pairs to `references`.
 	public func collectReferences(from actual: DescriptorSnapshot, into references: inout [String: DescriptorSnapshot]) {
-		if type == "CFob", actual.type == "CFob", let hex {
+		if Self.referenceTypes.contains(type), actual.type == type, let hex {
 			if references[hex] == nil {
 				references[hex] = actual
 			}
@@ -286,8 +289,8 @@ public struct DescriptorSnapshot: Codable, Hashable {
 	/// (used for dates and applications that depend on the machine). Reals may differ by `realTolerance` units in the
 	/// last place. Compare normalized snapshots.
 	public func matches(_ actual: DescriptorSnapshot, realTolerance: Int = 0) -> Bool {
-		// Property list references (CFRefs) are opaque, and SatimageOSAX gave equal small numbers the same one.
-		if type == "any" || (type == "CFob" && actual.type == "CFob") {
+		// References (CFRefs, XMLRefs) are opaque, and SatimageOSAX gave equal small numbers the same CFRef.
+		if type == "any" || (Self.referenceTypes.contains(type) && actual.type == type) {
 			return true
 		}
 		if realTolerance > 0, type == "doub", actual.type == "doub", let expected = real, let other = actual.real {

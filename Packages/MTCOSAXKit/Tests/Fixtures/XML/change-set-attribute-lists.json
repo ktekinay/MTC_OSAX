@@ -1,0 +1,177 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/simple.xml",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "5f000000df0501000000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "root",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "5f000000df0501000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "5f000000df05010000ce890300600000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "chld",
+        "fields" : [
+          {
+            "key" : "indx",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "5f000000df05010000ce890300600000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "5f000000df05010080ce890300600000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "seta",
+        "fields" : [
+          {
+            "key" : "pnam",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "a1",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "a2",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "to  ",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "1",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "2",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "5f000000df05010080ce890300600000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "5f000000df0501000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- a comment before the root -->\n<?app setting=\"1\"?>\n<library xmlns:dc=\"http://purl.org/dc/elements/1.1/\" version=\"2\">\n\t<book id=\"b1\" lang=\"en\" a1=\"1\" a2=\"2\">\n\t\t<title>Moby-Dick</title>\n\t\t<dc:creator>Herman Melville</dc:creator>\n\t\t<year>1851</year>\n\t\t<price currency=\"USD\">9.99</price>\n\t</book>\n\t<book id=\"b2\" lang=\"fr\">\n\t\t<title>Les Misérables</title>\n\t\t<dc:creator>Victor Hugo</dc:creator>\n\t\t<year>1862</year>\n\t\t<!-- no price -->\n\t</book>\n\t<note>Mixed <em>content</em> with &amp; entities &lt;here&gt; and a <![CDATA[<cdata> section]]>.</note>\n\t<empty/>\n\t<spaces>   padded   </spaces>\n</library>\n",
+          "type" : "utf8"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "5f000000df0501000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "change-set-attribute-lists",
+  "recordedAt" : "2026-09-28T14:10:02Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLSetAttribute b name {\"a1\", \"a2\"} to {\"1\", \"2\"}\nXMLDisplayXML d\nXMLClose d",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}
