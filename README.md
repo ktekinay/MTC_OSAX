@@ -55,7 +55,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 
 **Files and folders, File Additions**
 
-- HFS paths are accepted wherever a file or folder is.
+- HFS paths are accepted wherever a file or folder is, with `::` for the parent folder as in HFS (`..` is an error, and the startup disk's name matches in any case). A `file://` URL naming another computer, or any other kind of URL, is error -1700 where a file is expected; so is `absoluteURL … as file` of a web address (SatimageOSAX made it a file on the startup disk).
 - `mkdir` and `filenew` of a path string directly inside a system folder such as `/private/tmp` work.
 - A `name` parameter (`filenew`, `mkdir`, `filecopy`, `filemove`, `mkstemp`, `mkdtemp`, `create symlink`) is one name: `/`, `.` and `..` are error -1 with a message, so a name taken from a document can't reach outside the folder. (SatimageOSAX took `name "sub/file"` as a path.)
 - `filemove` to the same name in another case, and `filerename` to another case, rename the item (SatimageOSAX gave -48).

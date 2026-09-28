@@ -50,6 +50,8 @@ struct AbsoluteURLTests {
 		#expect(alias.result?.descriptorType == typeAlias)
 		#expect(send(absoluteURL, ["----": "nope.md", "from": folder.url, "rtyp": type("alis")]).error == OSAXError(-43))
 		#expect(send(absoluteURL, ["----": "d.md", "from": folder.url, "rtyp": type("file")]).result?.descriptorType == typeFileURL)
+		// A web page isn't a file (this used to be a file URL holding http://).
+		#expect(send(absoluteURL, ["----": "b", "from": "http://x.com/a/", "rtyp": type("file")]).error?.number == -1700)
 	}
 
 	@Test func errors() {

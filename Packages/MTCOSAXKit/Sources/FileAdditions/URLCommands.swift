@@ -48,6 +48,10 @@ extension FileAdditions {
 			}
 			return try form.descriptor(for: url, isDirectory: url.hasDirectoryPath)
 		case .fileURL:
+			// A file can't be a web page (SatimageOSAX made `http://x.com/a` a file `a` on the startup disk).
+			guard url.isFileURL else {
+				throw OSAXError(-1700, "\(url.absoluteString) isn’t a file.")
+			}
 			return NSAppleEventDescriptor(descriptorType: typeFileURL, data: Data(url.absoluteString.utf8))!
 		}
 	}

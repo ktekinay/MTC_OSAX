@@ -93,6 +93,24 @@ struct DecodingTests {
 		#expect(throws: OSAXError.coercionFailed) { try URL(scriptPath: "file://") }
 	}
 
+	/// Edge cases that used to slip through: another Mac's file URL, schemes in capitals, `..` in HFS paths, no
+	/// volume name, and the startup volume's name in another case.
+	@Test func urlEdgeCases() throws {
+		func number(_ path: String) -> Int? {
+			(#expect(throws: OSAXError.self) { try URL(scriptPath: path) })?.number
+		}
+		#expect(number("file://host/etc/passwd") == -1700)
+		#expect(try URL(scriptPath: "file://localhost/tmp/x").path == "/tmp/x")
+		#expect(try URL(scriptPath: "FILE:///tmp/x").path == "/tmp/x")
+		#expect(number("HTTP://example.com/x") == -1700)
+		#expect(number("Vol:private:tmp:..:etc:passwd") == -1700)
+		#expect(number(":folder:file") == -1700)
+		#expect(number("Vol:a:::b") == -1700)
+		#expect(try URL(scriptPath: "Backup:a:b::c").path == "/Volumes/Backup/a/c")
+		let volume = try #require(try URL(fileURLWithPath: "/").resourceValues(forKeys: [.volumeNameKey]).volumeName)
+		#expect(try URL(scriptPath: "\(volume.uppercased()):Users").path == "/Users")
+	}
+
 	@Test func urlRejectsRelativePath() {
 		#expect(throws: OSAXError.coercionFailed) {
 			try URL(scriptPath: "file.txt")

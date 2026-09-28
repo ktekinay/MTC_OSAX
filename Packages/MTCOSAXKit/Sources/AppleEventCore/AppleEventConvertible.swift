@@ -199,25 +199,32 @@ extension URL: AppleEventConvertible {
 		NSAppleEventDescriptor(fileURL: self)
 	}
 
-	/// Interprets a path string given by a script: a POSIX path (`/…` or `~…`), a `file://` URL, or an HFS path
-	/// (`Volume:folder:file`).
+	/// Interprets a path string given by a script: a POSIX path (`/…` or `~…`), a `file://` URL (on this Mac:
+	/// no host, or `localhost`), or an HFS path (`Volume:folder:file`). Anything else, including other URLs
+	/// (`http://…`), is -1700.
 	public init(scriptPath path: String) throws {
-		if path.hasPrefix("file://") {
-			guard let url = URL(string: path), url.isFileURL, !url.path.isEmpty else {
+		if path.lowercased().hasPrefix("file://") {
+			guard let url = URL(string: path), url.isFileURL, !url.path.isEmpty,
+			      url.host.map({ $0.isEmpty || $0.lowercased() == "localhost" }) ?? true
+			else {
 				throw OSAXError.coercionFailed
 			}
-			self = url
+			self = URL(fileURLWithPath: url.path)
 		} else if path.hasPrefix("/") || path.hasPrefix("~") {
 			self = URL(fileURLWithPath: (path as NSString).expandingTildeInPath)
+		} else if path.contains("://") {
+			throw OSAXError(-1700, "\(path) isn’t a file.")
 		} else if path.contains(":") {
-			self = URL(fileURLWithPath: URL.posixPath(fromHFSPath: path))
+			self = URL(fileURLWithPath: try URL.posixPath(fromHFSPath: path))
 		} else {
 			throw OSAXError.coercionFailed
 		}
 	}
 
-	/// Converts `"Volume:folder:file"` to `"/folder/file"` (startup volume) or `"/Volumes/Volume/folder/file"`.
-	static func posixPath(fromHFSPath hfsPath: String) -> String {
+	/// Converts `"Volume:folder:file"` to `"/folder/file"` (startup volume) or `"/Volumes/Volume/folder/file"`. As
+	/// in HFS, `::` is the parent folder (`Volume:a::b` is `b` on the volume); `.` and `..` are names, not folders
+	/// (-1700), and so is a missing volume name.
+	static func posixPath(fromHFSPath hfsPath: String) throws -> String {
 		var components = hfsPath.split(separator: ":", omittingEmptySubsequences: false).map {
 			$0.replacingOccurrences(of: "/", with: ":")
 		}
@@ -225,9 +232,25 @@ extension URL: AppleEventConvertible {
 			components.removeLast()
 		}
 		let volume = components.removeFirst()
+		guard !volume.isEmpty else {
+			throw OSAXError(-1700, "An HFS path starts with the volume’s name.")
+		}
+		var folders: [String] = []
+		for component in components {
+			if component.isEmpty {
+				// `a::b`: each extra colon goes up one folder.
+				guard !folders.isEmpty else { throw OSAXError(-1700, "\(hfsPath) goes above its volume.") }
+				folders.removeLast()
+			} else if component == "." || component == ".." {
+				throw OSAXError(-1700, "HFS paths go up a folder with “::”, not “..”.")
+			} else {
+				folders.append(component)
+			}
+		}
 		let startupVolume = try? URL(fileURLWithPath: "/").resourceValues(forKeys: [.volumeNameKey]).volumeName
-		let root = volume == startupVolume ? "" : "/Volumes/\(volume)"
-		return root + "/" + components.joined(separator: "/")
+		let isStartup = startupVolume.map { volume.caseInsensitiveCompare($0) == .orderedSame } ?? false
+		let root = isStartup ? "" : "/Volumes/\(volume)"
+		return root + "/" + folders.joined(separator: "/")
 	}
 }
 
