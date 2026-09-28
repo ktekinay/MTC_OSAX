@@ -35,6 +35,13 @@ struct PCRECommandTests {
 		#expect(send("SATIFINd", anchored).error == OSAXError(-2763))
 	}
 
+	/// A group captured inside a lookbehind can start before the previous replacement ended; that used to build a
+	/// reversed range and trap. Such a match is left as it is.
+	@Test func onlyBackreferenceBehindThePreviousMatch() {
+		let parameters: [String: any AppleEventEncodable] = ["----": "(?<=(a)b?)[bc]", "by  ": "X", "$in ": "abc", "UsGR": true, "synt": "PCRE", "back": 1]
+		#expect(send("SATIRPLl", parameters).result?.stringValue == "Xbc")
+	}
+
 	@Test func change() {
 		let parameters: [String: any AppleEventEncodable] = ["----": #"(?<word>\w+)@(\w+)"#, "by  ": "\\2 at \\k<word>", "$in ": "me@home", "UsGR": true, "synt": "PCRE"]
 		#expect(send("SATIRPLl", parameters).result?.stringValue == "home at me")

@@ -198,7 +198,10 @@ extension TextAdditions {
 		var count = 0
 		for match in matches {
 			// A group that didn't take part leaves this match as it is (Satimage returned no result at all).
-			guard let target = groupNumbers.last(where: { match.range(ofGroup: $0) != nil }).flatMap(match.range(ofGroup:)) else {
+			// So does a group before the end of the previous replacement (a capture inside a lookbehind can be).
+			guard let target = groupNumbers.last(where: { match.range(ofGroup: $0) != nil }).flatMap(match.range(ofGroup:)),
+			      target.lowerBound >= position
+			else {
 				continue
 			}
 			count += 1
