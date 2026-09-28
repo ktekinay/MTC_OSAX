@@ -171,13 +171,14 @@ extension TextAdditions {
 		verbatim: Bool,
 		onlyGroup: NSAppleEventDescriptor?
 	) throws -> (text: String, count: Int) {
+		// The template is checked even when nothing matches, as SatimageOSAX did (-208 for "\\q" either way).
+		let options = searcher.options
+		let template = options.regexp && !verbatim ? try Template(replacement, dollarReferences: options.dollarReferences) : nil
 		let text = UTF16Text(string)
 		let matches = try searcher.allMatches(in: text)
 		guard !matches.isEmpty else {
 			return (string, 0)
 		}
-		let options = searcher.options
-		let template = options.regexp && !verbatim ? try Template(replacement, dollarReferences: options.dollarReferences) : nil
 
 		// `only backreference`: a group number, or a group name.
 		var groupNumbers = [0]

@@ -966,5 +966,9 @@
  {
   "name": "find-using-negative-group",
   "script": "find text \"(a)\" in \"a\" using -1 with regexp"
+ },
+ {
+  "name": "change-invalid-template-no-match",
+  "script": "change \"x\" into \"\\\\q\" in \"abc\" with regexp"
  }
 ]
