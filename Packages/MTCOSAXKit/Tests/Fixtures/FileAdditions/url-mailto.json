@@ -1,0 +1,113 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/url-mailto",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/url-mailto/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "IURL",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "mailto:a@b.com",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "pusc",
+              "value" : {
+                "text" : "mailto",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "pnam",
+              "value" : {
+                "text" : "",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "nmxt",
+              "value" : {
+                "code" : "msng",
+                "type" : "type"
+              }
+            },
+            {
+              "key" : "asty",
+              "value" : {
+                "text" : "",
+                "type" : "TEXT"
+              }
+            },
+            {
+              "key" : "asct",
+              "value" : {
+                "text" : "",
+                "type" : "TEXT"
+              }
+            },
+            {
+              "key" : "asdr",
+              "value" : {
+                "boolean" : false,
+                "type" : "bool"
+              }
+            },
+            {
+              "key" : "ispk",
+              "value" : {
+                "boolean" : false,
+                "type" : "bool"
+              }
+            },
+            {
+              "key" : "alis",
+              "value" : {
+                "boolean" : false,
+                "type" : "bool"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    }
+  ],
+  "name" : "url-mailto",
+  "recordedAt" : "2026-09-28T00:07:48Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "mkdir (POSIX file \"$TMP/url-mailto\")\nURL info for \"mailto:a@b.com\"",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

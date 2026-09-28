@@ -1,0 +1,111 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/aliasdesc-folder-symlink",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/aliasdesc-folder-symlink/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/aliasdesc-folder-symlink/d",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/aliasdesc-folder-symlink/d/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "SymL",
+        "fields" : [
+          {
+            "key" : "in  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/aliasdesc-folder-symlink/",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "pnam",
+            "value" : {
+              "text" : "l",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "d",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "ALIS",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "/private/tmp/mtc-fixtures/tmp/aliasdesc-folder-symlink/l",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/aliasdesc-folder-symlink/d/",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "aliasdesc-folder-symlink",
+  "recordedAt" : "2026-09-28T00:14:42Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "mkdir (POSIX file \"$TMP/aliasdesc-folder-symlink\")\nmkdir (POSIX file \"$TMP/aliasdesc-folder-symlink/d\")\ncreate symlink \"d\" in (POSIX file \"$TMP/aliasdesc-folder-symlink/\") name \"l\"\nalias description for \"$TMP/aliasdesc-folder-symlink/l\"",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

@@ -1,0 +1,422 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/glob-as-unicode-text",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/glob-as-unicode-text/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/glob-as-unicode-text/sub/deep",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/glob-as-unicode-text/sub/deep/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/glob-as-unicode-text/pkg.app/Contents",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/glob-as-unicode-text/pkg.app/Contents/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/glob-as-unicode-text/Empty",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/glob-as-unicode-text/Empty/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/glob-as-unicode-text/a.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/glob-as-unicode-text/B.TXT",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/glob-as-unicode-text/.hidden",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/glob-as-unicode-text/img.png",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/glob-as-unicode-text/sub/c.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/glob-as-unicode-text/sub/deep/d.md",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/glob-as-unicode-text/pkg.app/Contents/Info.plist",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/glob-as-unicode-text/zeta.TXT",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/glob-as-unicode-text/Apple.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/glob-as-unicode-text/sub/.dot.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Glob",
+        "fields" : [
+          {
+            "key" : "rtyp",
+            "value" : {
+              "code" : "utxt",
+              "type" : "type"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "/private/tmp/mtc-fixtures/tmp/glob-as-unicode-text/*",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/glob-as-unicode-text/Empty/",
+              "type" : "ut16"
+            },
+            {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/glob-as-unicode-text/img.png",
+              "type" : "ut16"
+            },
+            {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/glob-as-unicode-text/pkg.app/",
+              "type" : "ut16"
+            },
+            {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/glob-as-unicode-text/zeta.TXT",
+              "type" : "ut16"
+            },
+            {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/glob-as-unicode-text/B.TXT",
+              "type" : "ut16"
+            },
+            {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/glob-as-unicode-text/sub/",
+              "type" : "ut16"
+            },
+            {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/glob-as-unicode-text/a.txt",
+              "type" : "ut16"
+            },
+            {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/glob-as-unicode-text/Apple.txt",
+              "type" : "ut16"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "glob-as-unicode-text",
+  "recordedAt" : "2026-09-27T23:55:21Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "mkdir (POSIX file \"$TMP/glob-as-unicode-text\")\nmkdir (POSIX file \"$TMP/glob-as-unicode-text/sub/deep\")\nmkdir (POSIX file \"$TMP/glob-as-unicode-text/pkg.app/Contents\")\nmkdir (POSIX file \"$TMP/glob-as-unicode-text/Empty\")\nwritetext \"x\" to (POSIX file \"$TMP/glob-as-unicode-text/a.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/glob-as-unicode-text/B.TXT\")\nwritetext \"x\" to (POSIX file \"$TMP/glob-as-unicode-text/.hidden\")\nwritetext \"x\" to (POSIX file \"$TMP/glob-as-unicode-text/img.png\")\nwritetext \"x\" to (POSIX file \"$TMP/glob-as-unicode-text/sub/c.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/glob-as-unicode-text/sub/deep/d.md\")\nwritetext \"x\" to (POSIX file \"$TMP/glob-as-unicode-text/pkg.app/Contents/Info.plist\")\nwritetext \"x\" to (POSIX file \"$TMP/glob-as-unicode-text/zeta.TXT\")\nwritetext \"x\" to (POSIX file \"$TMP/glob-as-unicode-text/Apple.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/glob-as-unicode-text/sub/.dot.txt\")\nglob \"$TMP/glob-as-unicode-text/*\" as Unicode text",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

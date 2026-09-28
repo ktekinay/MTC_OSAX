@@ -1,0 +1,545 @@
+{
+  "exchanges": [
+    {
+      "event": {
+        "eventClass": "Quom",
+        "eventID": "MkDi",
+        "fields": [
+          {
+            "key": "----",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-space-in-name",
+              "type": "furl"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {
+        "result": {
+          "text": "/private/tmp/mtc-fixtures/tmp/url-space-in-name/",
+          "type": "ut16"
+        }
+      }
+    },
+    {
+      "event": {
+        "eventClass": "Quom",
+        "eventID": "MkDi",
+        "fields": [
+          {
+            "key": "----",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-space-in-name/sub/deep",
+              "type": "furl"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {
+        "result": {
+          "text": "/private/tmp/mtc-fixtures/tmp/url-space-in-name/sub/deep/",
+          "type": "ut16"
+        }
+      }
+    },
+    {
+      "event": {
+        "eventClass": "Quom",
+        "eventID": "MkDi",
+        "fields": [
+          {
+            "key": "----",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-space-in-name/pkg.app/Contents",
+              "type": "furl"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {
+        "result": {
+          "text": "/private/tmp/mtc-fixtures/tmp/url-space-in-name/pkg.app/Contents/",
+          "type": "ut16"
+        }
+      }
+    },
+    {
+      "event": {
+        "eventClass": "Quom",
+        "eventID": "MkDi",
+        "fields": [
+          {
+            "key": "----",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-space-in-name/Empty",
+              "type": "furl"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {
+        "result": {
+          "text": "/private/tmp/mtc-fixtures/tmp/url-space-in-name/Empty/",
+          "type": "ut16"
+        }
+      }
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-space-in-name/a.txt",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-space-in-name/B.TXT",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-space-in-name/.hidden",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-space-in-name/img.png",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-space-in-name/sub/c.txt",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-space-in-name/sub/deep/d.md",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-space-in-name/pkg.app/Contents/Info.plist",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-space-in-name/zeta.TXT",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-space-in-name/Apple.txt",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-space-in-name/sub/.dot.txt",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-space-in-name/a%20b.txt",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "IURL",
+        "fields": [
+          {
+            "key": "----",
+            "value": {
+              "text": "/private/tmp/mtc-fixtures/tmp/url-space-in-name/a b.txt",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {
+        "result": {
+          "fields": [
+            {
+              "key": "pnam",
+              "value": {
+                "text": "a b.txt",
+                "type": "utxt"
+              }
+            },
+            {
+              "key": "ascd",
+              "value": {
+                "type": "any"
+              }
+            },
+            {
+              "key": "asmo",
+              "value": {
+                "type": "any"
+              }
+            },
+            {
+              "key": "ptsz",
+              "value": {
+                "code": "msng",
+                "type": "type"
+              }
+            },
+            {
+              "key": "asdr",
+              "value": {
+                "boolean": false,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "alis",
+              "value": {
+                "boolean": false,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "ispk",
+              "value": {
+                "boolean": false,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "pvis",
+              "value": {
+                "boolean": true,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "hidx",
+              "value": {
+                "boolean": false,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "nmxt",
+              "value": {
+                "text": "txt",
+                "type": "utxt"
+              }
+            },
+            {
+              "key": "dnam",
+              "value": {
+                "text": "a b.txt",
+                "type": "utxt"
+              }
+            },
+            {
+              "key": "asda",
+              "value": {
+                "type": "any"
+              }
+            },
+            {
+              "key": "kind",
+              "value": {
+                "text": "text",
+                "type": "utxt"
+              }
+            },
+            {
+              "key": "asty",
+              "value": {
+                "text": "\u0000\u0000\u0000\u0000",
+                "type": "TEXT"
+              }
+            },
+            {
+              "key": "asct",
+              "value": {
+                "text": "\u0000\u0000\u0000\u0000",
+                "type": "TEXT"
+              }
+            },
+            {
+              "key": "utid",
+              "value": {
+                "text": "public.plain-text",
+                "type": "utxt"
+              }
+            },
+            {
+              "key": "aslk",
+              "value": {
+                "boolean": false,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "bzst",
+              "value": {
+                "boolean": false,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "assv",
+              "value": {
+                "text": "",
+                "type": "TEXT"
+              }
+            },
+            {
+              "key": "aslv",
+              "value": {
+                "text": "",
+                "type": "TEXT"
+              }
+            },
+            {
+              "key": "pusc",
+              "value": {
+                "text": "file",
+                "type": "ut16"
+              }
+            },
+            {
+              "key": "psxP",
+              "value": {
+                "text": "/private/tmp/mtc-fixtures/tmp/url-space-in-name/a b.txt",
+                "type": "ut16"
+              }
+            },
+            {
+              "key": "FTPc",
+              "value": {
+                "text": "/private/tmp/mtc-fixtures/tmp/url-space-in-name/a%20b.txt",
+                "type": "ut16"
+              }
+            }
+          ],
+          "type": "reco"
+        }
+      }
+    }
+  ],
+  "name": "url-space-in-name",
+  "recordedAt": "2026-09-27T23:55:22Z",
+  "recordedFrom": "SatimageOSAX",
+  "script": "mkdir (POSIX file \"$TMP/url-space-in-name\")\nmkdir (POSIX file \"$TMP/url-space-in-name/sub/deep\")\nmkdir (POSIX file \"$TMP/url-space-in-name/pkg.app/Contents\")\nmkdir (POSIX file \"$TMP/url-space-in-name/Empty\")\nwritetext \"x\" to (POSIX file \"$TMP/url-space-in-name/a.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/url-space-in-name/B.TXT\")\nwritetext \"x\" to (POSIX file \"$TMP/url-space-in-name/.hidden\")\nwritetext \"x\" to (POSIX file \"$TMP/url-space-in-name/img.png\")\nwritetext \"x\" to (POSIX file \"$TMP/url-space-in-name/sub/c.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/url-space-in-name/sub/deep/d.md\")\nwritetext \"x\" to (POSIX file \"$TMP/url-space-in-name/pkg.app/Contents/Info.plist\")\nwritetext \"x\" to (POSIX file \"$TMP/url-space-in-name/zeta.TXT\")\nwritetext \"x\" to (POSIX file \"$TMP/url-space-in-name/Apple.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/url-space-in-name/sub/.dot.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/url-space-in-name/a b.txt\")\nURL info for \"$TMP/url-space-in-name/a b.txt\"",
+  "timeZone": "America/New_York",
+  "variables": {
+    "TMP": "/private/tmp/mtc-fixtures/tmp"
+  }
+}

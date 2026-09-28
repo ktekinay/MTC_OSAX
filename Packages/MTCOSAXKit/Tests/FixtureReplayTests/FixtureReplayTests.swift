@@ -28,11 +28,16 @@ enum Fixtures {
 	}
 
 	/// Replays a fixture with its variables set for this run: `FILES` is the `Input` folder next to the fixture,
-	/// `TMP` a new empty folder, removed afterwards.
+	/// `TMP` a new empty folder, removed afterwards. `TMP` is a real path (`/private/var/…`, not `/var/…`), as
+	/// recorded, since file references and aliases in results resolve symbolic links.
 	static func replay(_ path: String, using dispatcher: CommandDispatcher) throws -> [String] {
 		let fixture = try load(path)
-		let temporary = FileManager.default.temporaryDirectory.appendingPathComponent("mtc-replay-\(UUID().uuidString)")
+		var temporary = FileManager.default.temporaryDirectory.appendingPathComponent("mtc-replay-\(UUID().uuidString)")
 		try FileManager.default.createDirectory(at: temporary, withIntermediateDirectories: true)
+		if let real = realpath(temporary.path, nil) {
+			temporary = URL(fileURLWithPath: String(cString: real), isDirectory: true)
+			free(real)
+		}
 		defer { try? FileManager.default.removeItem(at: temporary) }
 		let input = directory.appendingPathComponent(path).deletingLastPathComponent().appendingPathComponent("Input")
 		return fixture.replay(using: dispatcher, variables: ["FILES": input.path, "TMP": temporary.path])

@@ -1,0 +1,545 @@
+{
+  "exchanges": [
+    {
+      "event": {
+        "eventClass": "Quom",
+        "eventID": "MkDi",
+        "fields": [
+          {
+            "key": "----",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-no-extension",
+              "type": "furl"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {
+        "result": {
+          "text": "/private/tmp/mtc-fixtures/tmp/url-no-extension/",
+          "type": "ut16"
+        }
+      }
+    },
+    {
+      "event": {
+        "eventClass": "Quom",
+        "eventID": "MkDi",
+        "fields": [
+          {
+            "key": "----",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-no-extension/sub/deep",
+              "type": "furl"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {
+        "result": {
+          "text": "/private/tmp/mtc-fixtures/tmp/url-no-extension/sub/deep/",
+          "type": "ut16"
+        }
+      }
+    },
+    {
+      "event": {
+        "eventClass": "Quom",
+        "eventID": "MkDi",
+        "fields": [
+          {
+            "key": "----",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-no-extension/pkg.app/Contents",
+              "type": "furl"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {
+        "result": {
+          "text": "/private/tmp/mtc-fixtures/tmp/url-no-extension/pkg.app/Contents/",
+          "type": "ut16"
+        }
+      }
+    },
+    {
+      "event": {
+        "eventClass": "Quom",
+        "eventID": "MkDi",
+        "fields": [
+          {
+            "key": "----",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-no-extension/Empty",
+              "type": "furl"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {
+        "result": {
+          "text": "/private/tmp/mtc-fixtures/tmp/url-no-extension/Empty/",
+          "type": "ut16"
+        }
+      }
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-no-extension/a.txt",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-no-extension/B.TXT",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-no-extension/.hidden",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-no-extension/img.png",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-no-extension/sub/c.txt",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-no-extension/sub/deep/d.md",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-no-extension/pkg.app/Contents/Info.plist",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-no-extension/zeta.TXT",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-no-extension/Apple.txt",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-no-extension/sub/.dot.txt",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-no-extension/noext",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "IURL",
+        "fields": [
+          {
+            "key": "----",
+            "value": {
+              "text": "/private/tmp/mtc-fixtures/tmp/url-no-extension/noext",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {
+        "result": {
+          "fields": [
+            {
+              "key": "pnam",
+              "value": {
+                "text": "noext",
+                "type": "utxt"
+              }
+            },
+            {
+              "key": "ascd",
+              "value": {
+                "type": "any"
+              }
+            },
+            {
+              "key": "asmo",
+              "value": {
+                "type": "any"
+              }
+            },
+            {
+              "key": "ptsz",
+              "value": {
+                "code": "msng",
+                "type": "type"
+              }
+            },
+            {
+              "key": "asdr",
+              "value": {
+                "boolean": false,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "alis",
+              "value": {
+                "boolean": false,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "ispk",
+              "value": {
+                "boolean": false,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "pvis",
+              "value": {
+                "boolean": true,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "hidx",
+              "value": {
+                "boolean": false,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "nmxt",
+              "value": {
+                "code": "msng",
+                "type": "type"
+              }
+            },
+            {
+              "key": "dnam",
+              "value": {
+                "text": "noext",
+                "type": "utxt"
+              }
+            },
+            {
+              "key": "asda",
+              "value": {
+                "type": "any"
+              }
+            },
+            {
+              "key": "kind",
+              "value": {
+                "text": "Document",
+                "type": "utxt"
+              }
+            },
+            {
+              "key": "asty",
+              "value": {
+                "text": "\u0000\u0000\u0000\u0000",
+                "type": "TEXT"
+              }
+            },
+            {
+              "key": "asct",
+              "value": {
+                "text": "\u0000\u0000\u0000\u0000",
+                "type": "TEXT"
+              }
+            },
+            {
+              "key": "utid",
+              "value": {
+                "text": "public.data",
+                "type": "utxt"
+              }
+            },
+            {
+              "key": "aslk",
+              "value": {
+                "boolean": false,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "bzst",
+              "value": {
+                "boolean": false,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "assv",
+              "value": {
+                "text": "",
+                "type": "TEXT"
+              }
+            },
+            {
+              "key": "aslv",
+              "value": {
+                "text": "",
+                "type": "TEXT"
+              }
+            },
+            {
+              "key": "pusc",
+              "value": {
+                "text": "file",
+                "type": "ut16"
+              }
+            },
+            {
+              "key": "psxP",
+              "value": {
+                "text": "/private/tmp/mtc-fixtures/tmp/url-no-extension/noext",
+                "type": "ut16"
+              }
+            },
+            {
+              "key": "FTPc",
+              "value": {
+                "text": "/private/tmp/mtc-fixtures/tmp/url-no-extension/noext",
+                "type": "ut16"
+              }
+            }
+          ],
+          "type": "reco"
+        }
+      }
+    }
+  ],
+  "name": "url-no-extension",
+  "recordedAt": "2026-09-27T23:55:22Z",
+  "recordedFrom": "SatimageOSAX",
+  "script": "mkdir (POSIX file \"$TMP/url-no-extension\")\nmkdir (POSIX file \"$TMP/url-no-extension/sub/deep\")\nmkdir (POSIX file \"$TMP/url-no-extension/pkg.app/Contents\")\nmkdir (POSIX file \"$TMP/url-no-extension/Empty\")\nwritetext \"x\" to (POSIX file \"$TMP/url-no-extension/a.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/url-no-extension/B.TXT\")\nwritetext \"x\" to (POSIX file \"$TMP/url-no-extension/.hidden\")\nwritetext \"x\" to (POSIX file \"$TMP/url-no-extension/img.png\")\nwritetext \"x\" to (POSIX file \"$TMP/url-no-extension/sub/c.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/url-no-extension/sub/deep/d.md\")\nwritetext \"x\" to (POSIX file \"$TMP/url-no-extension/pkg.app/Contents/Info.plist\")\nwritetext \"x\" to (POSIX file \"$TMP/url-no-extension/zeta.TXT\")\nwritetext \"x\" to (POSIX file \"$TMP/url-no-extension/Apple.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/url-no-extension/sub/.dot.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/url-no-extension/noext\")\nURL info for \"$TMP/url-no-extension/noext\"",
+  "timeZone": "America/New_York",
+  "variables": {
+    "TMP": "/private/tmp/mtc-fixtures/tmp"
+  }
+}

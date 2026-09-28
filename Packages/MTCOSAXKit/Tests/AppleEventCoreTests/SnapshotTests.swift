@@ -75,6 +75,40 @@ struct SnapshotTests {
 		#expect(snapshot.replacingText("/private/tmp", with: "/var/x").text == "/var/x/some file.txt")
 	}
 
+	/// An FSRef snapshot holds a path, and is recreated as an FSRef when the item exists.
+	@Test func fileReferenceIsStoredAsPath() throws {
+		let folder = URL(fileURLWithPath: "/private/tmp")
+		let reference = try #require(NSAppleEventDescriptor.fileReference(folder))
+		#expect(reference.descriptorType == typeFSRef)
+		let snapshot = DescriptorSnapshot(reference)
+		#expect(snapshot.text == folder.path)
+		#expect(snapshot.descriptor.descriptorType == typeFSRef)
+		#expect(snapshot.descriptor.fileReferencePath == folder.path)
+
+		var missing = DescriptorSnapshot(type: "fsrf")
+		missing.text = "/nonexistent/file.txt"
+		#expect(missing.descriptor.fileURLValue?.path == "/nonexistent/file.txt")
+	}
+
+	@Test func fileReferencesCoerce() throws {
+		let folder = URL(fileURLWithPath: "/private/tmp")
+		#expect(NSAppleEventDescriptor.fileReference(URL(fileURLWithPath: "/nonexistent")) == nil)
+		let alias = try #require(NSAppleEventDescriptor.alias(folder))
+		#expect(alias.descriptorType == typeAlias)
+		#expect(alias.coerce(toDescriptorType: typeFileURL)?.fileURLValue?.path == folder.path)
+		#expect(try URL(appleEventDescriptor: #require(NSAppleEventDescriptor.fileReference(folder))).path == folder.path)
+	}
+
+	@Test func anyMatchesEveryValue() {
+		var expected = DescriptorSnapshot(type: "reco")
+		expected.fields = [.init(key: "pnam", value: DescriptorSnapshot(NSAppleEventDescriptor(string: "a"))), .init(key: "asmo", value: DescriptorSnapshot(type: "any"))]
+		var actual = expected
+		actual.fields![1].value = DescriptorSnapshot(NSAppleEventDescriptor(date: Date()))
+		#expect(expected.matches(actual))
+		actual.fields![0].value = DescriptorSnapshot(NSAppleEventDescriptor(string: "b"))
+		#expect(!expected.matches(actual))
+	}
+
 	@Test func textIsStoredReadably() {
 		let snapshot = DescriptorSnapshot(NSAppleEventDescriptor(descriptorType: FourCharCode(fourCharString: "ut16"), data: "Hé".data(using: .utf16))!)
 		#expect(snapshot.text == "Hé")

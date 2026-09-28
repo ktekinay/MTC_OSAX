@@ -57,6 +57,13 @@ public struct DescriptorSnapshot: Codable, Hashable {
 			} else {
 				hex = descriptor.data.map { String(format: "%02x", $0) }.joined()
 			}
+		case "fsrf":
+			// An FSRef identifies an item by volume and node; keep its POSIX path instead, like an alias.
+			if let path = descriptor.fileReferencePath {
+				text = path
+			} else {
+				hex = descriptor.data.map { String(format: "%02x", $0) }.joined()
+			}
 		case "long", "shor":
 			integer = Int(descriptor.int32Value)
 		case "doub", "sing":
@@ -122,6 +129,10 @@ public struct DescriptorSnapshot: Codable, Hashable {
 		case "alis" where text != nil:
 			// Aliases can't be created in-process; a file URL to the same path stands in for it.
 			return NSAppleEventDescriptor(fileURL: URL(fileURLWithPath: text!))
+		case "fsrf" where text != nil:
+			// An FSRef needs an existing item; a file URL stands in for a missing one.
+			let url = URL(fileURLWithPath: text!)
+			return .fileReference(url) ?? NSAppleEventDescriptor(fileURL: url)
 		case "TEXT":
 			return NSAppleEventDescriptor(descriptorType: typeCode, data: (text ?? "").data(using: .macOSRoman))!
 		case "long":
@@ -227,8 +238,12 @@ public struct DescriptorSnapshot: Codable, Hashable {
 	private static let textTypes: Set = ["utxt", "ut16", "utf8", "TEXT"]
 
 	/// Whether `actual` equals this expected value, where `{{random:N}}` in expected text stands for any N letters
-	/// or digits (used for `mkstemp` and `mkdtemp` names). Compare normalized snapshots.
+	/// or digits (used for `mkstemp` and `mkdtemp` names), and an expected value of type `any` matches any value
+	/// (used for dates and applications that depend on the machine). Compare normalized snapshots.
 	public func matches(_ actual: DescriptorSnapshot) -> Bool {
+		if type == "any" {
+			return true
+		}
 		guard let text, text.contains("{{random:"), let actualText = actual.text, type == actual.type else {
 			guard type == actual.type, (items ?? []).count == (actual.items ?? []).count,
 			      (fields ?? []).count == (actual.fields ?? []).count

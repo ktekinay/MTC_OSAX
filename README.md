@@ -85,6 +85,8 @@ Scripts/iterm-run.sh Scripts/run-e2e.sh            # all
 Scripts/iterm-run.sh Scripts/run-e2e.sh diagnostics
 ```
 
+Dialogs need a person: `Scripts/manual/dialogs.sh [MTC_OSAX|SatimageOSAX]` opens each `navchoose` dialog and the `navask save` alert in turn (each prompt says what to do) and prints the results, to check them by hand. (SatimageOSAX's dialogs never worked; they all reply -1708.) Run it in iTerm or Terminal.
+
 ### Recording fixtures
 
 While SatimageOSAX still runs, record its behavior so the tests keep working after it's gone (it's Intel-only and will stop working once Rosetta is removed).

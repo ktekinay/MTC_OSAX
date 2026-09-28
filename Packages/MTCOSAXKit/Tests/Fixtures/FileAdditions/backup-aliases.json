@@ -1,0 +1,428 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-aliases",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/backup-aliases/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-aliases/src/sub/deep",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/backup-aliases/src/sub/deep/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-aliases/src/skip",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/backup-aliases/src/skip/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-aliases/src/pkg.app/Contents",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/backup-aliases/src/pkg.app/Contents/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-aliases/dst",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/backup-aliases/dst/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-aliases/src/a.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-aliases/src/b.md",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-aliases/src/.hidden",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-aliases/src/sub/c.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-aliases/src/sub/deep/d.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-aliases/src/skip/e.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-aliases/src/pkg.app/Contents/Info.plist",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "SYNC",
+        "fields" : [
+          {
+            "key" : "onto",
+            "value" : {
+              "text" : "/private/tmp/mtc-fixtures/tmp/backup-aliases/dst",
+              "type" : "alis"
+            }
+          },
+          {
+            "key" : "Repo",
+            "value" : {
+              "integer" : 2,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "/private/tmp/mtc-fixtures/tmp/backup-aliases/src",
+              "type" : "alis"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "Items created : \r\t/private/tmp/mtc-fixtures/tmp/backup-aliases/dst/b.md\n\t/private/tmp/mtc-fixtures/tmp/backup-aliases/dst/pkg.app\n\t/private/tmp/mtc-fixtures/tmp/backup-aliases/dst/skip/e.txt\n\t/private/tmp/mtc-fixtures/tmp/backup-aliases/dst/sub/deep/d.txt\n\t/private/tmp/mtc-fixtures/tmp/backup-aliases/dst/sub/c.txt\n\t/private/tmp/mtc-fixtures/tmp/backup-aliases/dst/a.txt\n",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "lsfl",
+        "fields" : [
+          {
+            "key" : "invi",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "rtyp",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "form",
+                  "value" : {
+                    "code" : "prop",
+                    "type" : "enum"
+                  }
+                },
+                {
+                  "key" : "want",
+                  "value" : {
+                    "code" : "prop",
+                    "type" : "type"
+                  }
+                },
+                {
+                  "key" : "seld",
+                  "value" : {
+                    "code" : "psxP",
+                    "type" : "type"
+                  }
+                },
+                {
+                  "key" : "from",
+                  "value" : {
+                    "type" : "null"
+                  }
+                }
+              ],
+              "type" : "obj "
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-aliases/dst",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "/private/tmp/mtc-fixtures/tmp/backup-aliases/dst/b.md",
+              "type" : "ut16"
+            },
+            {
+              "text" : "/private/tmp/mtc-fixtures/tmp/backup-aliases/dst/pkg.app/",
+              "type" : "ut16"
+            },
+            {
+              "text" : "/private/tmp/mtc-fixtures/tmp/backup-aliases/dst/skip/e.txt",
+              "type" : "ut16"
+            },
+            {
+              "text" : "/private/tmp/mtc-fixtures/tmp/backup-aliases/dst/sub/deep/d.txt",
+              "type" : "ut16"
+            },
+            {
+              "text" : "/private/tmp/mtc-fixtures/tmp/backup-aliases/dst/sub/c.txt",
+              "type" : "ut16"
+            },
+            {
+              "text" : "/private/tmp/mtc-fixtures/tmp/backup-aliases/dst/a.txt",
+              "type" : "ut16"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "backup-aliases",
+  "recordedAt" : "2026-09-27T23:55:27Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "mkdir (POSIX file \"$TMP/backup-aliases\")\nmkdir (POSIX file \"$TMP/backup-aliases/src/sub/deep\")\nmkdir (POSIX file \"$TMP/backup-aliases/src/skip\")\nmkdir (POSIX file \"$TMP/backup-aliases/src/pkg.app/Contents\")\nmkdir (POSIX file \"$TMP/backup-aliases/dst\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-aliases/src/a.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-aliases/src/b.md\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-aliases/src/.hidden\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-aliases/src/sub/c.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-aliases/src/sub/deep/d.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-aliases/src/skip/e.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-aliases/src/pkg.app/Contents/Info.plist\")\nbackup (POSIX file \"$TMP/backup-aliases/src\" as alias) onto (POSIX file \"$TMP/backup-aliases/dst\" as alias) level 2\nlist files (POSIX file \"$TMP/backup-aliases/dst\") with invisibles as unix path",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

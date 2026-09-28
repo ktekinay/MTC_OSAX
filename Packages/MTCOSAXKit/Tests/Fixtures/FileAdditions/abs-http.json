@@ -1,0 +1,63 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/abs-http",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/abs-http/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "aURL",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "text" : "http://www.satimage-software.com",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "en/smile/index.html#top",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "http://www.satimage-software.com/en/smile/index.html#top",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "abs-http",
+  "recordedAt" : "2026-09-27T23:55:24Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "mkdir (POSIX file \"$TMP/abs-http\")\nabsoluteURL \"en/smile/index.html#top\" from \"http://www.satimage-software.com\"",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

@@ -623,6 +623,237 @@ testsymlink "file://localhost/Users/alexis/Desktop/b"
 		</command>
 	</suite>
 
+	<suite name="Satimage File Additions" code="SATI">
+			<class name="URL information" code="URLI" description="Reply record for the ‘URL info for’ command">
+				<property name="scheme" code="pusc" type="Unicode text" description="the access scheme"/>
+				<property name="host" code="HOST" type="Unicode text" description="the host specified by this URL"/>
+				<property name="path" code="FTPc" type="Unicode text" description="the (escaped) location of the target on the host"/>
+				<property name="unix path" code="psxP" type="Unicode text" description="the (unescaped) location of the target on the host"/>
+				<property name="name" code="pnam" type="Unicode text" description="the name of the item"/>
+				<property name="user name" code="RAun" type="Unicode text" description="the user name by which to access this URL"/>
+				<property name="password" code="RApw" type="Unicode text" description="the password by which to access this URL"/>
+				<property name="name extension" code="nmxt" type="Unicode text" description="the name extension of the URL"/>
+				<property name="url parameters" code="Upar" type="Unicode text"/>
+				<property name="url query" code="Quer" type="Unicode text"/>
+				<property name="url fragment" code="Ufra" type="Unicode text"/>
+				<property name="type identifier" code="utid" type="Unicode text" description="the item’s type identifier"/>
+				</class>
+		<!--command name="alias description for" code="SATIALIS" description="provide info needed to refer to a remote item">
+				<direct-parameter type="alias" description="the remote item"/>
+				<result description="{the AppleTalk zone name, the server machine name, the server volume name, folder name, […], item name}">
+		<type type="string" list="yes"/>
+	</result>
+			</command-->
+		<command name="alias description for" code="SATIALIS" description="resolve the alias file">
+				<direct-parameter type="alias" description=""/>
+				<result description="the original item">
+		<type type="string" />
+	</result>
+			</command>
+			<command name="navchoose file" code="SATIstdf" description="choose file with navigation services">
+				<parameter name="with prompt" code="prmp" type="string" optional="yes" description="a prompt to be displayed in the file chooser"/>
+				<parameter name="of type" code="ftyp" optional="yes" description="restrict the files shown to only these file types">
+					<type type="string" list="yes"/>
+				</parameter>
+				<parameter name="starting at" code="from" type="alias" optional="yes" description="the default file or folder"/>
+				<parameter name="multiple files" code="mlfl" type="boolean" optional="yes" description="allow multiple files selection (default true)"/>
+				<parameter name="show packages" code="vipa" type="boolean" optional="yes" description="(default true)"/>
+				<parameter name="open packages" code="oppa" type="boolean" optional="yes" description="(default false)"/>
+				<parameter name="of extension" code="Nmxt" optional="yes" description="list of allowed file extensions">
+					<type type="string" list="yes"/>
+				</parameter>
+			<parameter name="invisibles" code="lfiv" type="boolean" optional="yes" description="Show invisible files and folders? (default is false)"/>
+				<parameter name="key" code="key " type="integer" optional="yes" description="associate a key to the folder that the user will select. If no 'starting at' parameter is provided, assume the corresponding folder as the default folder."/>
+				<result description="the chosen files">
+					<type type="alias" list="yes"/>
+				</result>
+			</command>
+			<command name="navchoose folder" code="SATIstfl" description="choose folder with navigation services">
+				<parameter name="with prompt" code="prmp" type="string" optional="yes" description="a prompt to be displayed in the folder chooser"/>
+				<parameter name="starting at" code="from" type="alias" optional="yes" description="the default folder"/>
+				<parameter name="multiple files" code="mlfl" type="boolean" optional="yes" description="allow multiple folders selection (default true)"/>
+				<parameter name="open packages" code="oppa" type="boolean" optional="yes" description="(default false)"/>
+				<parameter name="key" code="key " type="integer" optional="yes" description="associate a key to the folder that the user will select. If no 'starting at' parameter is provided, assume the corresponding folder as the default folder."/>
+				<result description="the chosen folders">
+					<type type="alias" list="yes"/>
+				</result>
+			</command>
+			<command name="navchoose object" code="SATIstob" description="choose file or folder with navigation services">
+				<parameter name="with prompt" code="prmp" type="string" optional="yes" description="a prompt to be displayed in the folder chooser"/>
+				<parameter name="starting at" code="from" type="alias" optional="yes" description="the default folder"/>
+				<parameter name="multiple files" code="mlfl" type="boolean" optional="yes" description="allow multiple objects selection (default true)"/>
+				<parameter name="show packages" code="vipa" type="boolean" optional="yes" description="(default true)"/>
+				<parameter name="open packages" code="oppa" type="boolean" optional="yes" description="(default false)"/>
+				<parameter name="key" code="key " type="integer" optional="yes" description="associate a key to the folder that the user will select. If no 'starting at' parameter is provided, assume the corresponding folder as the default folder."/>
+				<result description="the chosen objects">
+					<type type="alias" list="yes"/>
+				</result>
+			</command>
+			<command name="navchoose volume" code="SATIstvo" description="choose volume with navigation services">
+				<parameter name="with prompt" code="prmp" type="string" optional="yes" description="a prompt to be displayed in the folder chooser"/>
+				<parameter name="starting at" code="from" type="alias" optional="yes" description="the default folder"/>
+				<result description="the chosen folders">
+					<type type="alias" list="yes"/>
+				</result>
+			</command>
+			<command name="navask save" code="SATInask" description="prompt for save">
+				<parameter name="file name" code="fnam" type="string" optional="yes" description="name of the file"/>
+				<parameter name="action" code="acti" type="integer" optional="yes" description="1 = before closing, 2 = before quitting, 0 = none"/>
+				<result type="integer" description="1 save, 2 cancel, 3 don't save"/>
+			</command>
+			<command name="navchoose file name" code="SATInwfl" description="Get a new file specification from the user, without creating the file. Uses navigation services">
+				<parameter name="with prompt" code="prmt" type="string" optional="yes" description="the text to display in the file creation dialog box"/>
+				<parameter name="default name" code="dfnm" type="string" optional="yes" description="the default name for the new file"/>
+				<parameter name="with menu" code="wmnu" optional="yes" description="list of menu items">
+					<type type="string" list="yes"/>
+				</parameter>
+
+				<parameter name="menu index" code="PInd" type="integer" optional="yes" description="index of the menu item to display"/>
+				<parameter name="starting at" code="from" type="alias" optional="yes" description="the default folder"/>
+				<parameter name="show packages" code="vipa" type="boolean" optional="yes" description="(default true)"/>
+				<parameter name="open packages" code="oppa" type="boolean" optional="yes" description="(default false)"/>
+				<parameter name="key" code="key " type="integer" optional="yes" description="associate a key to the folder that the user will select, and assume the corresponding folder as the default folder."/>
+				<result type="file specification" description="the file the user specified"/>
+			</command>
+			<command name="navnew folder" code="SATIstnf" description="Get a new folder specification from the user. Uses navigation services">
+				<parameter name="with prompt" code="prmt" type="string" optional="yes" description="the text to display in the file creation dialog box"/>
+				<parameter name="starting at" code="from" type="alias" optional="yes" description="the default folder"/>
+				<parameter name="open packages" code="oppa" type="boolean" optional="yes" description="(default false)"/>
+				<parameter name="key" code="key " type="integer" optional="yes" description="associate a key to the folder that the user will select, and assume the corresponding folder as the default folder."/>
+				<result type="file specification" description="the folder the user specified"/>
+			</command>
+			<command name="URL info for" code="SATIIURL" description="Parse an URL and returns an URL information record">
+				<direct-parameter type="string" description="an URL or an alias"/>
+				<parameter name="size" code="ptsz" type="boolean" optional="yes" description="Return the size of the file or folder? (default is false)"/>
+				<result type="URL information"/>
+			</command>
+    <command name="absoluteURL" code="SATIaURL" description="resolve a relative URL using a base URL or coerce an alias, a posix path or a URL.">
+      <direct-parameter description="a relative URL or  an alias, a posix path (starting with / or ~) (Or a list of such.)">
+	<type type="string"/>
+	<type type="alias"/>
+	</direct-parameter>
+      <parameter name="from" code="from" optional="yes" description="the base URL ">
+	<type type="string"/>
+	<type type="alias"/>
+	</parameter>
+      <parameter name="as" code="rtyp" optional="yes" type="type" description="Unicode text, alias, unix path, path..."/>
+      <result description="">
+	<type  type="string"/>
+	<type  type="alias"/>
+	</result>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">set f to path to library folder from local domain
+absoluteURL f
+--"file://localhost/Library/"
+absoluteURL "Application%20Support" from f
+--"file://localhost/Library/Application%20Support"
+absoluteURL "Application%20Support" from f as unix path
+--"/Library/Application Support"
+absoluteURL "/Library/Application Support"
+--"file://localhost/Library/Application%20Support"
+absoluteURL "Application%20Support" from f as alias
+
+absoluteURL "en/smile/index.html#top" from "http://www.satimage-software.com"
+"http://www.satimage-software.com/en/smile/index.html#top"
+</div>
+</div>
+</html>
+</documentation>
+    </command>
+    <command name="relativeURL" code="SATIrURL" description="translate an URL into the most suitable relative URL with respect to a given base.">
+      <direct-parameter description="an absolute URL">
+	<type type="string"/>
+	<type type="alias"/>
+	</direct-parameter>
+      <parameter name="from" code="from" description="the base URL">
+	<type type="string"/>
+	<type type="alias"/>
+	</parameter>
+      <result type="string" description="a relative or absolute URL"/>
+    </command>
+			<command name="list files" code="SATIlsfl" description="make a list of the files contained in the folder">
+				<direct-parameter description="a folder">
+				<type type="alias"/>
+				<type type="string"/>
+				<type type="alias" list="yes"/>
+				<type type="string" list="yes"/>
+				</direct-parameter>
+				<parameter name="recursively" code="recu" type="boolean" optional="yes" description="default: true. If false, list files and folders."/>
+				<parameter name="invisibles" code="invi" type="boolean" optional="yes" description="default: false"/>
+				<parameter name="of extension" code="Nmxt" optional="yes" description="the required file extension(s)">
+					<type type="string" list="yes"/>
+				</parameter>
+				<parameter name="conforming to" code="yUTI" optional="yes" description="the requested Universal Type Identifier(s) (UTI)">
+					<type type="string" list="yes"/>
+				</parameter>
+				<parameter name="not conforming to" code="nUTI" optional="yes" description="the forbidden Universal Type Identifier(s) (UTI)">
+					<type type="string" list="yes"/>
+				</parameter>
+				<parameter name="starting with" code="Strw" optional="yes" type="string" description=""/>
+				<parameter name="ignoring packages" code="inBu" optional="yes" type="boolean" description="consider packages as folders. Default: false"/>
+				<parameter name="after" code="afte" type="date" optional="yes" description="list only files whose modification date is after the after date parameter"/>
+				<parameter name="before" code="befo" type="date" optional="yes" description="list only files whose modification date is before the before date parameter"/>
+				<parameter name="names only" code="namo" type="boolean" optional="yes" description="default: false"/>
+				<parameter name="as" code="rtyp" optional="yes" type="type" description="string (URL), alias, unix path, path..."/>
+				<result>
+				<type type="string" list="yes"/>
+				<type type="alias" list="yes"/>
+				</result>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">
+set {f} to navchoose folder
+set x to list files f not conforming to {"public.image", "public.movie", "public.archive"} ¬
+after ((get current date) - 3600) without recursively
+</div>
+</div>
+</html>
+</documentation>
+			</command>
+			<command name="glob" code="SATIGlob" description="list  the files or the folders matching a unix pathname pattern">
+				<direct-parameter description="the pattern">
+				<type type="string"/>
+				<type type="string" list="yes"/>
+				</direct-parameter>
+				<parameter name="from" code="from" type="alias" optional="yes" description="the working directory. By default, the direct parameter must be a full posix path pattern"/>
+				<parameter name="invisibles" code="invi" type="boolean" optional="yes" description="default: false"/>
+				<parameter name="of extension" code="Nmxt" optional="yes" description="the required file extension(s)">
+					<type type="string" list="yes"/>
+				</parameter>
+				<parameter name="not conforming to" code="nUTI" optional="yes" description="the forbidden Universal Type Identifier(s) (UTI)">
+					<type type="string" list="yes"/>
+				</parameter>
+				<parameter name="after" code="afte" type="date" optional="yes" description="list only items whose modification date is after the after date parameter"/>
+				<parameter name="before" code="befo" type="date" optional="yes" description="list only items whose modification date is before the before date parameter"/>
+				<parameter name="names only" code="namo" type="boolean" optional="yes" description="default: false"/>
+				<parameter name="as" code="rtyp" optional="yes" type="type" description="string (URL), alias, unix path, path..."/>
+				<result>
+				<type type="string" list="yes"/>
+				<type type="alias" list="yes"/>
+				</result>
+			</command>
+			<command name="backup" code="SATISYNC" description="synchronizes 2 folders">
+				<direct-parameter type="file specification" description="the source folder"/>
+				<parameter name="onto" code="onto" type="file specification" description="the destination folder"/>
+				<parameter name="level" code="Repo" type="integer" optional="yes" description="0: report only, 1: synchronize folders, 2 : synchronize and report. Default 0. "/>
+				<parameter name="after" code="afte" type="date" optional="yes" description="files older than this date are not considered."/>
+				<parameter name="recursively" code="RECU" type="boolean" optional="yes" description="recursively synchronize subfolders. Default true."/>
+				<parameter name="except folders" code="fnam" optional="yes" description="names of folders to be omitted">
+				<type type="string" list="yes"/>
+				</parameter>
+				<parameter name="except extensions" code="fext" optional="yes" description="file extensions to be omitted">
+				<type type="string" list="yes"/>
+				</parameter>
+				<parameter name="only extensions" code="oext" optional="yes" description="consider only these file extensions">
+				<type type="string" list="yes"/>
+				</parameter>
+				<result type="string" description="the (optional) report"/>
+			</command>
+  </suite>
+
 	<suite name="MTC Diagnostics" code="MTCd" description="Commands for checking that MTC_OSAX is working." hidden="yes">
 		<command name="mtc_ping" code="MTCdping" description="Returns &quot;pong&quot;." hidden="yes">
 			<result type="text" description="&quot;pong&quot;"/>

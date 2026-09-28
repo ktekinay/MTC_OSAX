@@ -20,7 +20,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 		let idleMonitor = IdleMonitor(timeout: Self.idleTimeout()) {
 			NSApplication.shared.terminate(nil)
 		}
-		let installer = AppleEventHandlerInstaller(dispatcher: CommandCatalog.makeDispatcher(), idleMonitor: idleMonitor)
+		let installer = AppleEventHandlerInstaller(dispatcher: CommandCatalog.makeDispatcher(dialogs: PanelDialogs()), idleMonitor: idleMonitor)
 		installer.install()
 		self.installer = installer
 		self.idleMonitor = idleMonitor

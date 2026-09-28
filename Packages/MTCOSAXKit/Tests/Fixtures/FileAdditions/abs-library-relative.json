@@ -1,0 +1,63 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/abs-library-relative",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/abs-library-relative/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "aURL",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "text" : "/Library",
+              "type" : "alis"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "Application%20Support",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "file:///Library/Application%20Support",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "abs-library-relative",
+  "recordedAt" : "2026-09-27T23:55:39Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "mkdir (POSIX file \"$TMP/abs-library-relative\")\nabsoluteURL \"Application%20Support\" from (POSIX file \"/Library/\" as alias)",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

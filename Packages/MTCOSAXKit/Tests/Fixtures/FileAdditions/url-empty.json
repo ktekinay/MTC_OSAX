@@ -1,0 +1,106 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/url-empty",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/url-empty/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "IURL",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "pnam",
+              "value" : {
+                "text" : "",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "nmxt",
+              "value" : {
+                "code" : "msng",
+                "type" : "type"
+              }
+            },
+            {
+              "key" : "asty",
+              "value" : {
+                "text" : "",
+                "type" : "TEXT"
+              }
+            },
+            {
+              "key" : "asct",
+              "value" : {
+                "text" : "",
+                "type" : "TEXT"
+              }
+            },
+            {
+              "key" : "asdr",
+              "value" : {
+                "boolean" : false,
+                "type" : "bool"
+              }
+            },
+            {
+              "key" : "ispk",
+              "value" : {
+                "boolean" : false,
+                "type" : "bool"
+              }
+            },
+            {
+              "key" : "alis",
+              "value" : {
+                "boolean" : false,
+                "type" : "bool"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    }
+  ],
+  "name" : "url-empty",
+  "recordedAt" : "2026-09-27T23:55:22Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "mkdir (POSIX file \"$TMP/url-empty\")\nURL info for \"\"",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

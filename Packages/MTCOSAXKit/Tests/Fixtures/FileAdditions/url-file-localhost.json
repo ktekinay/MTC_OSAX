@@ -1,0 +1,187 @@
+{
+  "exchanges": [
+    {
+      "event": {
+        "eventClass": "Quom",
+        "eventID": "MkDi",
+        "fields": [
+          {
+            "key": "----",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-file-localhost",
+              "type": "furl"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {
+        "result": {
+          "text": "/private/tmp/mtc-fixtures/tmp/url-file-localhost/",
+          "type": "ut16"
+        }
+      }
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "IURL",
+        "fields": [
+          {
+            "key": "----",
+            "value": {
+              "text": "file://localhost/Library/",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {
+        "result": {
+          "fields": [
+            {
+              "key": "pnam",
+              "value": {
+                "text": "Library",
+                "type": "utxt"
+              }
+            },
+            {
+              "key": "ascd",
+              "value": {
+                "type": "any"
+              }
+            },
+            {
+              "key": "asmo",
+              "value": {
+                "type": "any"
+              }
+            },
+            {
+              "key": "ptsz",
+              "value": {
+                "code": "msng",
+                "type": "type"
+              }
+            },
+            {
+              "key": "asdr",
+              "value": {
+                "boolean": true,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "alis",
+              "value": {
+                "boolean": false,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "ispk",
+              "value": {
+                "boolean": false,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "pvis",
+              "value": {
+                "boolean": true,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "hidx",
+              "value": {
+                "boolean": false,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "nmxt",
+              "value": {
+                "code": "msng",
+                "type": "type"
+              }
+            },
+            {
+              "key": "dnam",
+              "value": {
+                "text": "Library",
+                "type": "utxt"
+              }
+            },
+            {
+              "key": "asda",
+              "value": {
+                "type": "any"
+              }
+            },
+            {
+              "key": "kind",
+              "value": {
+                "text": "Folder",
+                "type": "utxt"
+              }
+            },
+            {
+              "key": "asfw",
+              "value": {
+                "hex": "0000000000000000",
+                "type": "qdrt"
+              }
+            },
+            {
+              "key": "asty",
+              "value": {
+                "text": "\u0000\u0000\u0000\u0000",
+                "type": "TEXT"
+              }
+            },
+            {
+              "key": "asct",
+              "value": {
+                "text": "\u0000\u0000\u0000\u0000",
+                "type": "TEXT"
+              }
+            },
+            {
+              "key": "pusc",
+              "value": {
+                "text": "file",
+                "type": "ut16"
+              }
+            },
+            {
+              "key": "psxP",
+              "value": {
+                "text": "/Library",
+                "type": "ut16"
+              }
+            },
+            {
+              "key": "FTPc",
+              "value": {
+                "text": "/Library/",
+                "type": "ut16"
+              }
+            }
+          ],
+          "type": "reco"
+        }
+      }
+    }
+  ],
+  "name": "url-file-localhost",
+  "recordedAt": "2026-09-27T23:57:54Z",
+  "recordedFrom": "SatimageOSAX",
+  "script": "mkdir (POSIX file \"$TMP/url-file-localhost\")\nURL info for \"file://localhost/Library/\"",
+  "timeZone": "America/New_York",
+  "variables": {
+    "TMP": "/private/tmp/mtc-fixtures/tmp"
+  }
+}

@@ -1,0 +1,176 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/url-http-user",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/url-http-user/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "IURL",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "http://user:pw@www.example.com:8080/dir/file.html;p=1?q=2&r=3#frag",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "pusc",
+              "value" : {
+                "text" : "http",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "HOST",
+              "value" : {
+                "text" : "www.example.com",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "RAun",
+              "value" : {
+                "text" : "user",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "RApw",
+              "value" : {
+                "text" : "pw",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "psxP",
+              "value" : {
+                "text" : "/dir/file.html",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "FTPc",
+              "value" : {
+                "text" : "/dir/file.html",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "Upar",
+              "value" : {
+                "text" : "p=1",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "Quer",
+              "value" : {
+                "text" : "q=2&r=3",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "Ufra",
+              "value" : {
+                "text" : "frag",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "pnam",
+              "value" : {
+                "text" : "file.html",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "nmxt",
+              "value" : {
+                "text" : "html",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "utid",
+              "value" : {
+                "text" : "public.html",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "asty",
+              "value" : {
+                "text" : "",
+                "type" : "TEXT"
+              }
+            },
+            {
+              "key" : "asct",
+              "value" : {
+                "text" : "",
+                "type" : "TEXT"
+              }
+            },
+            {
+              "key" : "asdr",
+              "value" : {
+                "boolean" : false,
+                "type" : "bool"
+              }
+            },
+            {
+              "key" : "ispk",
+              "value" : {
+                "boolean" : false,
+                "type" : "bool"
+              }
+            },
+            {
+              "key" : "alis",
+              "value" : {
+                "boolean" : false,
+                "type" : "bool"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    }
+  ],
+  "name" : "url-http-user",
+  "recordedAt" : "2026-09-28T00:07:56Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "mkdir (POSIX file \"$TMP/url-http-user\")\nURL info for \"http://user:pw@www.example.com:8080/dir/file.html;p=1?q=2&r=3#frag\"",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}
