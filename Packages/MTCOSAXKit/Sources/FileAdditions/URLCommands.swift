@@ -170,7 +170,8 @@ extension FileAdditions {
 		var original = url
 		let isLink = FileItem.status(url).map { ($0.st_mode & S_IFMT) == S_IFLNK } == true
 		if isLink || (try? url.resourceValues(forKeys: [.isAliasFileKey]))?.isAliasFile == true,
-		   let resolved = try? URL(resolvingAliasFileAt: url)
+		   // Never a dialog (the app is faceless) or mounting a server volume the alias points to.
+		   let resolved = try? URL(resolvingAliasFileAt: url, options: [.withoutUI, .withoutMounting])
 		{
 			original = resolved
 			isDirectory = FileItem.isDirectory(resolved)
