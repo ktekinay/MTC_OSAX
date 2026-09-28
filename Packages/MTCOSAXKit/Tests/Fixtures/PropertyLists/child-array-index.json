@@ -1,0 +1,133 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/simple.plist",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "4e00000075a60000e0c9210000600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "chld",
+        "fields" : [
+          {
+            "key" : "key ",
+            "value" : {
+              "text" : "list",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "4e00000075a60000e0c9210000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "4e00000075a60000800dc10000600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "chld",
+        "fields" : [
+          {
+            "key" : "indx",
+            "value" : {
+              "integer" : 2,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "4e00000075a60000800dc10000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "4e00000075a600005781cf6d9759532f",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "4e00000075a600005781cf6d9759532f",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "integer" : 1,
+          "type" : "long"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "4e00000075a60000e0c9210000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "child-array-index",
+  "recordedAt" : "2026-09-28T13:15:21Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nset c to PlistChild (PlistChild p key \"list\") index 2\nPlistGet c\nPlistClose p",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

@@ -1,0 +1,193 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "make",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "a",
+                        "type" : "utxt"
+                      },
+                      {
+                        "integer" : 1,
+                        "type" : "long"
+                      },
+                      {
+                        "text" : "l",
+                        "type" : "utxt"
+                      },
+                      {
+                        "items" : [
+                          {
+                            "text" : "x",
+                            "type" : "utxt"
+                          },
+                          {
+                            "text" : "y",
+                            "type" : "utxt"
+                          }
+                        ],
+                        "type" : "list"
+                      },
+                      {
+                        "text" : "d",
+                        "type" : "utxt"
+                      },
+                      {
+                        "fields" : [
+                          {
+                            "key" : "usrf",
+                            "value" : {
+                              "items" : [
+                                {
+                                  "text" : "e",
+                                  "type" : "utxt"
+                                },
+                                {
+                                  "integer" : 1,
+                                  "type" : "long"
+                                }
+                              ],
+                              "type" : "list"
+                            }
+                          }
+                        ],
+                        "type" : "reco"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "6e00000075a60000403b210000600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "chld",
+        "fields" : [
+          {
+            "key" : "key ",
+            "value" : {
+              "text" : "l",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "6e00000075a60000403b210000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "6e00000075a600008099c00000600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "seta",
+        "fields" : [
+          {
+            "key" : "indx",
+            "value" : {
+              "integer" : 2,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "z",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "6e00000075a600008099c00000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "DISP",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "6e00000075a60000403b210000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n<plist version=\"1.0\">\n<dict>\n\t<key>a</key>\n\t<integer>1</integer>\n\t<key>d</key>\n\t<dict>\n\t\t<key>e</key>\n\t\t<integer>1</integer>\n\t</dict>\n\t<key>l</key>\n\t<array>\n\t\t<string>x</string>\n\t\t<string>z</string>\n\t</array>\n</dict>\n</plist>\n",
+          "type" : "utf8"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "6e00000075a60000403b210000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "set-index",
+  "recordedAt" : "2026-09-28T13:15:22Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSet (PlistChild p key \"l\") index 2 to \"z\"\nPlistGetXML p\nPlistClose p",
+  "timeZone" : "America/New_York"
+}

@@ -16,8 +16,8 @@ Command counts include hidden commands. Suites sharing a priority are done toget
 | 3 ✓ | Satimage File Additions ([done](Implemented/PLAN-FileAdditions.md)) | 14 | `navchoose …` / `navask save` dialogs, `alias description for`, `URL info for`, `absoluteURL`/`relativeURL`, `list files`, `glob`, `backup` (folder sync) |
 | 4 ✓ | Mathematical Functions ([done](Implemented/PLAN-MathAndLists.md)) | 27 | `abs`, trig/hyperbolic, `exp`, `ln`, `log10`, `sqrt`, `sqr`, `ceil`/`floor`/`trunc`, `erf`, `gamma`, `hypot`, … |
 | 4 ✓ | Array and List Utilities | 7 | `sortlist`, `masklist`, `topological sort`, `suppress item`, `exclude items`, `keep items`, `special concat` |
-| 5 | Satimage PropertyList Additions | 29 | `PlistOpen`/`PlistNew`/`PlistSave`, get/set children, `PlistToJSON`/`PlistFromJSON`, … |
-| 5 | Satimage Pool Additions | 3 | Document pools shared by the Plist and XML suites |
+| 5 ✓ | Satimage PropertyList Additions ([done](Implemented/PLAN-PropertyLists.md)) | 29 | `PlistOpen`/`PlistNew`/`PlistSave`, get/set children, `PlistToJSON`/`PlistFromJSON`, … |
+| 5 ✓ | Satimage Pool Additions | 3 | Document pools shared by the Plist and XML suites |
 | 6 | Satimage XML DOM | 39 | `XMLOpen`/`XMLClose`, node navigation, attributes, text, namespaces, `XMLFind`, `XMLDisplayXML`, … |
 | 6 | XML XPath, XSLT | 15 | `XMLXPath`, contexts, `XMLXPointer`, `XMLTransform` (XSLT), indexes/lookup |
 | 6 | XML Documents | 18 | `XMLSave`, encoding, catalogs, XInclude, canonicalization, doc IDs |

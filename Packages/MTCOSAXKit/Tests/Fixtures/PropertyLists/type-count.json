@@ -1,0 +1,104 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/simple.plist",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "2c00000075a600002058210000600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "chld",
+        "fields" : [
+          {
+            "key" : "key ",
+            "value" : {
+              "text" : "count",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "2c00000075a600002058210000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "2c00000075a600005783cf6d9759532f",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disp",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "2c00000075a600005783cf6d9759532f",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "integer",
+          "type" : "utf8"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "2c00000075a600002058210000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "type-count",
+  "recordedAt" : "2026-09-28T13:15:21Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistType (PlistChild p key \"count\")\nPlistClose p",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

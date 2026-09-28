@@ -1,0 +1,140 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/big.plist",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "020000004d5443700500000000000000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "key ",
+            "value" : {
+              "text" : "big",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "020000004d5443700500000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 1099511627776,
+          "type" : "doub"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "key ",
+            "value" : {
+              "text" : "huge",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "020000004d5443700500000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 1e+300,
+          "type" : "doub"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "key ",
+            "value" : {
+              "text" : "small",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "020000004d5443700500000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 1e-300,
+          "type" : "doub"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "020000004d5443700500000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "get-big-numbers",
+  "recordedAt" : "2026-09-28T13:28:03Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "set p to PlistOpen (POSIX file \"$FILES/big.plist\")\nPlistGet p key \"big\"\nPlistGet p key \"huge\"\nPlistGet p key \"small\"\nPlistClose p",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

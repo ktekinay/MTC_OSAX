@@ -1,0 +1,112 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "make",
+        "fields" : [
+
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "0800000075a6000000da240000600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disp",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "0800000075a6000000da240000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "dictionary",
+          "type" : "utf8"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "DISP",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "0800000075a6000000da240000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n<plist version=\"1.0\">\n<dict/>\n</plist>\n",
+          "type" : "utf8"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "0800000075a6000000da240000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+
+          ],
+          "type" : "reco"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "0800000075a6000000da240000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "new-empty",
+  "recordedAt" : "2026-09-28T13:15:20Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set p to PlistNew\nPlistType p\nPlistGetXML p\nPlistGet p\nPlistClose p",
+  "timeZone" : "America/New_York"
+}

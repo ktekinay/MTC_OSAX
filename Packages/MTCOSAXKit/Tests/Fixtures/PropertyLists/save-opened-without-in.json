@@ -1,0 +1,192 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "make",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "a",
+                        "type" : "utxt"
+                      },
+                      {
+                        "integer" : 1,
+                        "type" : "long"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "270000009ba600006096430300600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "save",
+        "fields" : [
+          {
+            "key" : "kfil",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/opened.plist",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "270000009ba600006096430300600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/opened.plist",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "280000009ba6000040cf430300600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "seta",
+        "fields" : [
+          {
+            "key" : "key ",
+            "value" : {
+              "text" : "a",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "to  ",
+            "value" : {
+              "integer" : 3,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "280000009ba6000040cf430300600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "save",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "280000009ba6000040cf430300600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "280000009ba6000040cf430300600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Read",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/opened.plist",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n<plist version=\"1.0\">\n<dict>\n\t<key>a</key>\n\t<integer>3</integer>\n</dict>\n</plist>\n",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "save-opened-without-in",
+  "recordedAt" : "2026-09-28T13:15:25Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "PlistSave (PlistNew {a:1}) in (POSIX file \"$TMP/opened.plist\")\nset p to PlistOpen (POSIX file \"$TMP/opened.plist\")\nPlistSet p key \"a\" to 3\nPlistSave p\nPlistClose p\nreadtext (POSIX file \"$TMP/opened.plist\")",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

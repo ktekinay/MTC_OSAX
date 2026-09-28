@@ -1,0 +1,101 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "POOL",
+        "eventID" : "pool",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "mtc-e",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "make",
+        "fields" : [
+
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "3e0000009ba60000a0e5430300600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "POOL",
+        "eventID" : "dpoo",
+        "fields" : [
+
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "POOL",
+        "eventID" : "pool",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "mtc-e",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "3e0000009ba60000a0e5430300600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1728
+      }
+    }
+  ],
+  "name" : "pool-delete-default",
+  "recordedAt" : "2026-09-28T13:15:25Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "SetPool \"mtc-e\"\nset p to PlistNew\nDeletePool\nSetPool \"\"\nPlistGet p",
+  "timeZone" : "America/New_York"
+}

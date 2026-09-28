@@ -1,0 +1,169 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "make",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "a",
+                        "type" : "utxt"
+                      },
+                      {
+                        "integer" : 1,
+                        "type" : "long"
+                      },
+                      {
+                        "text" : "l",
+                        "type" : "utxt"
+                      },
+                      {
+                        "items" : [
+                          {
+                            "text" : "x",
+                            "type" : "utxt"
+                          },
+                          {
+                            "text" : "y",
+                            "type" : "utxt"
+                          }
+                        ],
+                        "type" : "list"
+                      },
+                      {
+                        "text" : "d",
+                        "type" : "utxt"
+                      },
+                      {
+                        "fields" : [
+                          {
+                            "key" : "usrf",
+                            "value" : {
+                              "items" : [
+                                {
+                                  "text" : "e",
+                                  "type" : "utxt"
+                                },
+                                {
+                                  "integer" : 1,
+                                  "type" : "long"
+                                }
+                              ],
+                              "type" : "list"
+                            }
+                          }
+                        ],
+                        "type" : "reco"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "0a0000009ba60000a05a460300600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "chld",
+        "fields" : [
+          {
+            "key" : "key ",
+            "value" : {
+              "text" : "l",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "0a0000009ba60000a05a460300600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "0a0000009ba6000070e0a40300600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "cont",
+        "fields" : [
+          {
+            "key" : "in  ",
+            "value" : {
+              "hex" : "0a0000009ba6000070e0a40300600000",
+              "type" : "CFob"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "q",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "0a0000009ba60000a05a460300600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "exist-array-missing",
+  "recordedAt" : "2026-09-28T13:15:24Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistExist \"q\" in (PlistChild p key \"l\")\nPlistClose p",
+  "timeZone" : "America/New_York"
+}

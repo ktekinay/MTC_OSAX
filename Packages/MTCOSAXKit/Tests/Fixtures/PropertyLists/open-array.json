@@ -1,0 +1,127 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/array.plist",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "2300000075a60000308cc00000600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disp",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "2300000075a60000308cc00000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "array",
+          "type" : "utf8"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "2300000075a60000308cc00000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "integer" : 1,
+              "type" : "long"
+            },
+            {
+              "text" : "two",
+              "type" : "ut16"
+            },
+            {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "three",
+                        "type" : "TEXT"
+                      },
+                      {
+                        "integer" : 3,
+                        "type" : "long"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "2300000075a60000308cc00000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "open-array",
+  "recordedAt" : "2026-09-28T13:15:20Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set p to PlistOpen (POSIX file \"$FILES/array.plist\")\nPlistType p\nPlistGet p\nPlistClose p",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

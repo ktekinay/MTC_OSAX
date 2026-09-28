@@ -1,0 +1,116 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "make",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "a",
+                        "type" : "utxt"
+                      },
+                      {
+                        "integer" : 1,
+                        "type" : "long"
+                      },
+                      {
+                        "text" : "l",
+                        "type" : "utxt"
+                      },
+                      {
+                        "items" : [
+                          {
+                            "text" : "x",
+                            "type" : "utxt"
+                          },
+                          {
+                            "text" : "y",
+                            "type" : "utxt"
+                          }
+                        ],
+                        "type" : "list"
+                      },
+                      {
+                        "text" : "d",
+                        "type" : "utxt"
+                      },
+                      {
+                        "fields" : [
+                          {
+                            "key" : "usrf",
+                            "value" : {
+                              "items" : [
+                                {
+                                  "text" : "e",
+                                  "type" : "utxt"
+                                },
+                                {
+                                  "integer" : 1,
+                                  "type" : "long"
+                                }
+                              ],
+                              "type" : "list"
+                            }
+                          }
+                        ],
+                        "type" : "reco"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "9000000075a600000011220000600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "addc",
+        "fields" : [
+          {
+            "key" : "key ",
+            "value" : {
+              "text" : "b",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "v",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1701
+      }
+    }
+  ],
+  "name" : "newchild-no-at",
+  "recordedAt" : "2026-09-28T13:15:23Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistNewChild \"v\" key \"b\"\nPlistGetXML p\nPlistClose p",
+  "timeZone" : "America/New_York"
+}

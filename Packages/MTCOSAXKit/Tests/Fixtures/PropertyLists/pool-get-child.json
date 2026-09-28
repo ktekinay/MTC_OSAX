@@ -1,0 +1,142 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "make",
+        "fields" : [
+          {
+            "key" : "pool",
+            "value" : {
+              "text" : "mtc-j",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "a",
+                        "type" : "utxt"
+                      },
+                      {
+                        "fields" : [
+                          {
+                            "key" : "usrf",
+                            "value" : {
+                              "items" : [
+                                {
+                                  "text" : "b",
+                                  "type" : "utxt"
+                                },
+                                {
+                                  "integer" : 1,
+                                  "type" : "long"
+                                }
+                              ],
+                              "type" : "list"
+                            }
+                          }
+                        ],
+                        "type" : "reco"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "420000009ba6000060ed430300600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "chld",
+        "fields" : [
+          {
+            "key" : "key ",
+            "value" : {
+              "text" : "a",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "420000009ba6000060ed430300600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "420000009ba60000a0ed430300600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "POOL",
+        "eventID" : "gpoo",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "420000009ba60000a0ed430300600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "mtc-j",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "420000009ba6000060ed430300600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "pool-get-child",
+  "recordedAt" : "2026-09-28T13:15:25Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set p to PlistNew {a:{b:1}} in pool \"mtc-j\"\nGetPool (PlistChild p key \"a\")\nPlistClose p",
+  "timeZone" : "America/New_York"
+}

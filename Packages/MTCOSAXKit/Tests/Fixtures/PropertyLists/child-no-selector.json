@@ -1,0 +1,444 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/simple.plist",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "4c00000075a60000e0c6210000600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "chld",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "4c00000075a60000e0c6210000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "hex" : "4c00000075a6000020fdc00000600000",
+              "type" : "CFob"
+            },
+            {
+              "hex" : "4c00000075a6000040f8c00000600000",
+              "type" : "CFob"
+            },
+            {
+              "hex" : "4c00000075a60000203ac70000600000",
+              "type" : "CFob"
+            },
+            {
+              "hex" : "4c00000075a60000c0c7210000600000",
+              "type" : "CFob"
+            },
+            {
+              "hex" : "4c00000075a600005783cf6d9759532f",
+              "type" : "CFob"
+            },
+            {
+              "hex" : "4c00000075a6000080fac00000600000",
+              "type" : "CFob"
+            },
+            {
+              "hex" : "4c00000075a6000040cc210000600000",
+              "type" : "CFob"
+            },
+            {
+              "hex" : "4c00000075a60000c0284c43f87f0000",
+              "type" : "CFob"
+            },
+            {
+              "hex" : "4c00000075a600006d80cf2db9d27002",
+              "type" : "CFob"
+            },
+            {
+              "hex" : "4c00000075a60000b0284c43f87f0000",
+              "type" : "CFob"
+            },
+            {
+              "hex" : "4c00000075a6000070fbc00000600000",
+              "type" : "CFob"
+            },
+            {
+              "hex" : "4c00000075a60000e0fac00000600000",
+              "type" : "CFob"
+            },
+            {
+              "hex" : "4c00000075a60000c0fcc00000600000",
+              "type" : "CFob"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "hex" : "4c00000075a6000020fdc00000600000",
+                  "type" : "CFob"
+                },
+                {
+                  "hex" : "4c00000075a6000040f8c00000600000",
+                  "type" : "CFob"
+                },
+                {
+                  "hex" : "4c00000075a60000203ac70000600000",
+                  "type" : "CFob"
+                },
+                {
+                  "hex" : "4c00000075a60000c0c7210000600000",
+                  "type" : "CFob"
+                },
+                {
+                  "hex" : "4c00000075a600005783cf6d9759532f",
+                  "type" : "CFob"
+                },
+                {
+                  "hex" : "4c00000075a6000080fac00000600000",
+                  "type" : "CFob"
+                },
+                {
+                  "hex" : "4c00000075a6000040cc210000600000",
+                  "type" : "CFob"
+                },
+                {
+                  "hex" : "4c00000075a60000c0284c43f87f0000",
+                  "type" : "CFob"
+                },
+                {
+                  "hex" : "4c00000075a600006d80cf2db9d27002",
+                  "type" : "CFob"
+                },
+                {
+                  "hex" : "4c00000075a60000b0284c43f87f0000",
+                  "type" : "CFob"
+                },
+                {
+                  "hex" : "4c00000075a6000070fbc00000600000",
+                  "type" : "CFob"
+                },
+                {
+                  "hex" : "4c00000075a60000e0fac00000600000",
+                  "type" : "CFob"
+                },
+                {
+                  "hex" : "4c00000075a60000c0fcc00000600000",
+                  "type" : "CFob"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "items" : [
+                {
+                  "fields" : [
+                    {
+                      "key" : "usrf",
+                      "value" : {
+                        "items" : [
+                          {
+                            "text" : "age",
+                            "type" : "TEXT"
+                          },
+                          {
+                            "integer" : 30,
+                            "type" : "long"
+                          },
+                          {
+                            "text" : "first",
+                            "type" : "TEXT"
+                          },
+                          {
+                            "text" : "Ann",
+                            "type" : "ut16"
+                          }
+                        ],
+                        "type" : "list"
+                      }
+                    }
+                  ],
+                  "type" : "reco"
+                },
+                {
+                  "fields" : [
+                    {
+                      "key" : "usrf",
+                      "value" : {
+                        "items" : [
+                          {
+                            "text" : "age",
+                            "type" : "TEXT"
+                          },
+                          {
+                            "integer" : 40,
+                            "type" : "long"
+                          },
+                          {
+                            "text" : "first",
+                            "type" : "TEXT"
+                          },
+                          {
+                            "text" : "Bob",
+                            "type" : "ut16"
+                          }
+                        ],
+                        "type" : "list"
+                      }
+                    }
+                  ],
+                  "type" : "reco"
+                },
+                {
+                  "fields" : [
+                    {
+                      "key" : "usrf",
+                      "value" : {
+                        "items" : [
+                          {
+                            "text" : "age",
+                            "type" : "TEXT"
+                          },
+                          {
+                            "integer" : 30,
+                            "type" : "long"
+                          },
+                          {
+                            "text" : "first",
+                            "type" : "TEXT"
+                          },
+                          {
+                            "text" : "Cy",
+                            "type" : "ut16"
+                          },
+                          {
+                            "text" : "pet",
+                            "type" : "TEXT"
+                          },
+                          {
+                            "text" : "cat",
+                            "type" : "ut16"
+                          }
+                        ],
+                        "type" : "list"
+                      }
+                    }
+                  ],
+                  "type" : "reco"
+                }
+              ],
+              "type" : "list"
+            },
+            {
+              "text" : "\u0000\u0001\u0002hello",
+              "type" : "TEXT"
+            },
+            {
+              "text" : "café ☃",
+              "type" : "ut16"
+            },
+            {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "empty",
+                        "type" : "TEXT"
+                      },
+                      {
+                        "fields" : [
+
+                        ],
+                        "type" : "reco"
+                      },
+                      {
+                        "text" : "x",
+                        "type" : "TEXT"
+                      },
+                      {
+                        "integer" : 1,
+                        "type" : "long"
+                      },
+                      {
+                        "text" : "y",
+                        "type" : "TEXT"
+                      },
+                      {
+                        "fields" : [
+                          {
+                            "key" : "usrf",
+                            "value" : {
+                              "items" : [
+                                {
+                                  "text" : "z",
+                                  "type" : "TEXT"
+                                },
+                                {
+                                  "text" : "deep",
+                                  "type" : "ut16"
+                                }
+                              ],
+                              "type" : "list"
+                            }
+                          }
+                        ],
+                        "type" : "reco"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            },
+            {
+              "integer" : 3,
+              "type" : "long"
+            },
+            {
+              "items" : [
+
+              ],
+              "type" : "list"
+            },
+            {
+              "real" : 2.5,
+              "type" : "doub"
+            },
+            {
+              "boolean" : false,
+              "type" : "bool"
+            },
+            {
+              "hex" : "88a6e6da00000000",
+              "type" : "ldt "
+            },
+            {
+              "boolean" : true,
+              "type" : "bool"
+            },
+            {
+              "items" : [
+                {
+                  "text" : "a",
+                  "type" : "ut16"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "real" : 2.5,
+                  "type" : "doub"
+                },
+                {
+                  "boolean" : true,
+                  "type" : "bool"
+                },
+                {
+                  "fields" : [
+                    {
+                      "key" : "usrf",
+                      "value" : {
+                        "items" : [
+                          {
+                            "text" : "nested",
+                            "type" : "TEXT"
+                          },
+                          {
+                            "text" : "yes",
+                            "type" : "ut16"
+                          }
+                        ],
+                        "type" : "list"
+                      }
+                    }
+                  ],
+                  "type" : "reco"
+                }
+              ],
+              "type" : "list"
+            },
+            {
+              "text" : "",
+              "type" : "ut16"
+            },
+            {
+              "text" : "Simple",
+              "type" : "ut16"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "4c00000075a60000e0c6210000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "child-no-selector",
+  "recordedAt" : "2026-09-28T13:15:21Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nset c to PlistChild p\nPlistGet c\nPlistClose p",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

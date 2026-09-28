@@ -1,0 +1,94 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "NOSJ",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "[1, \"two\", 3.5]",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "570000009ba6000020eea30300600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disp",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "570000009ba6000020eea30300600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "array",
+          "type" : "utf8"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "DISP",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "570000009ba6000020eea30300600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n<plist version=\"1.0\">\n<array>\n\t<real>1</real>\n\t<string>two</string>\n\t<real>3.5</real>\n</array>\n</plist>\n",
+          "type" : "utf8"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "570000009ba6000020eea30300600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "fromjson-array",
+  "recordedAt" : "2026-09-28T13:15:26Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set p to PlistFromJSON \"[1, \\\"two\\\", 3.5]\"\nPlistType p\nPlistGetXML p\nPlistClose p",
+  "timeZone" : "America/New_York"
+}

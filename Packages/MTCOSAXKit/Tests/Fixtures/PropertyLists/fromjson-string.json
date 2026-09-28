@@ -1,0 +1,94 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "NOSJ",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "\"just text\"",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "590000009ba60000a707e4a83ed614fb",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disp",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "590000009ba60000a707e4a83ed614fb",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "string",
+          "type" : "utf8"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "DISP",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "590000009ba60000a707e4a83ed614fb",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n<plist version=\"1.0\">\n<string>just text</string>\n</plist>\n",
+          "type" : "utf8"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "590000009ba60000a707e4a83ed614fb",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "fromjson-string",
+  "recordedAt" : "2026-09-28T13:15:26Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set p to PlistFromJSON \"\\\"just text\\\"\"\nPlistType p\nPlistGetXML p\nPlistClose p",
+  "timeZone" : "America/New_York"
+}

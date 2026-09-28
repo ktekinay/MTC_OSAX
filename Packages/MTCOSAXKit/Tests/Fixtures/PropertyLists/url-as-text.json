@@ -1,0 +1,167 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "make",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "a",
+                        "type" : "utxt"
+                      },
+                      {
+                        "integer" : 1,
+                        "type" : "long"
+                      },
+                      {
+                        "text" : "l",
+                        "type" : "utxt"
+                      },
+                      {
+                        "items" : [
+                          {
+                            "text" : "x",
+                            "type" : "utxt"
+                          },
+                          {
+                            "text" : "y",
+                            "type" : "utxt"
+                          }
+                        ],
+                        "type" : "list"
+                      },
+                      {
+                        "text" : "d",
+                        "type" : "utxt"
+                      },
+                      {
+                        "fields" : [
+                          {
+                            "key" : "usrf",
+                            "value" : {
+                              "items" : [
+                                {
+                                  "text" : "e",
+                                  "type" : "utxt"
+                                },
+                                {
+                                  "integer" : 1,
+                                  "type" : "long"
+                                }
+                              ],
+                              "type" : "list"
+                            }
+                          }
+                        ],
+                        "type" : "reco"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "0e000000daaf0000e04c470000600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "save",
+        "fields" : [
+          {
+            "key" : "kfil",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/url-as-text.plist",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "0e000000daaf0000e04c470000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "gurl",
+        "fields" : [
+          {
+            "key" : "rtyp",
+            "value" : {
+              "code" : "ctxt",
+              "type" : "type"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "0e000000daaf0000e04c470000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "file:///private/tmp/mtc-fixtures/tmp/url-as-text.plist",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "0e000000daaf0000e04c470000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "url-as-text",
+  "recordedAt" : "2026-09-28T13:26:18Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSave p in (POSIX file \"$TMP/url-as-text.plist\")\nPlistURL p as text\nPlistClose p",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

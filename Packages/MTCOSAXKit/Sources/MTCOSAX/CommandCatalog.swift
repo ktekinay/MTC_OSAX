@@ -4,6 +4,7 @@ import Diagnostics
 import Arrays
 import ListUtilities
 import MathFunctions
+@_exported import PropertyLists
 import FilesAndFolders
 import TextAdditions
 import Foundation
@@ -13,19 +14,24 @@ public enum CommandCatalog {
 	/// - Parameters:
 	///   - timeZone: the zone for date commands; tests pass the zone a fixture was recorded in.
 	///   - dialogs: the app's dialogs for the `navchoose` commands; without them, those commands aren't handled.
+	///   - documents: the open property lists; the app keeps it to know when documents are open.
 	public static func makeDispatcher(
 		version: @escaping () -> String = bundleVersion,
 		timeZone: TimeZone = .current,
-		dialogs: (any FileDialogs)? = nil
+		dialogs: (any FileDialogs)? = nil,
+		documents: DocumentStore = DocumentStore()
 	) -> CommandDispatcher {
 		let dispatcher = CommandDispatcher()
 		dispatcher.register(Diagnostics.commands(version: version))
-		dispatcher.register(TextAdditions.commands(timeZone: timeZone))
+		dispatcher.register(TextAdditions.commands(timeZone: timeZone) { reference, entries in
+			try PropertyLists.add(entries, to: reference, store: documents)
+		})
 		dispatcher.register(FilesAndFolders.commands())
 		dispatcher.register(FileAdditions.commands(dialogs: dialogs))
 		dispatcher.register(MathFunctions.commands())
 		dispatcher.register(ListUtilities.commands())
 		dispatcher.register(Arrays.commands())
+		dispatcher.register(PropertyLists.commands(store: documents))
 		return dispatcher
 	}
 

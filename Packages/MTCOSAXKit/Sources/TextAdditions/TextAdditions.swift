@@ -4,10 +4,16 @@ import TextMatching
 
 /// The "Satimage Text Additions" suite (event class `SATI`).
 public enum TextAdditions {
-	/// - Parameter timeZone: the zone dates are formatted and parsed in. Tests replay fixtures in the zone they were
-	///   recorded in; the app uses the system's.
-	public static func commands(timeZone: TimeZone = .current) -> [CommandDefinition] {
-		commands(context: TextContext(timeZone: timeZone))
+	/// Adds keys and values to the property list dictionary a CFRef refers to (from the PropertyList suite), for
+	/// `filter text … into`. Values are text or lists of text.
+	public typealias PropertyListWriter = (_ reference: NSAppleEventDescriptor, _ entries: [(key: String, value: Any)]) throws -> Void
+
+	/// - Parameters:
+	///   - timeZone: the zone dates are formatted and parsed in. Tests replay fixtures in the zone they were
+	///     recorded in; the app uses the system's.
+	///   - propertyLists: writes `filter text … into` a CFRef.
+	public static func commands(timeZone: TimeZone = .current, propertyLists: PropertyListWriter? = nil) -> [CommandDefinition] {
+		commands(context: TextContext(timeZone: timeZone, propertyLists: propertyLists))
 	}
 
 	static func commands(context: TextContext) -> [CommandDefinition] {
@@ -22,12 +28,15 @@ final class TextContext {
 	let dollarReferencesDefault: () -> Bool
 	/// The zone `strftime` and `strptime` work in.
 	let timeZone: TimeZone
+	let propertyLists: TextAdditions.PropertyListWriter?
 
 	init(
 		dollarReferencesDefault: @escaping () -> Bool = { UserDefaults.standard.bool(forKey: "DollarReferences") },
-		timeZone: TimeZone = .current
+		timeZone: TimeZone = .current,
+		propertyLists: TextAdditions.PropertyListWriter? = nil
 	) {
 		self.dollarReferencesDefault = dollarReferencesDefault
 		self.timeZone = timeZone
+		self.propertyLists = propertyLists
 	}
 }

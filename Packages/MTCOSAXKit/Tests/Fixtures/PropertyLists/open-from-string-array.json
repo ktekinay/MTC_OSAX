@@ -1,0 +1,83 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "text" : "<plist version=\"1.0\"><array><string>x</string></array></plist>",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "type" : "null"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "2800000075a6000000c6c00000600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "2800000075a6000000c6c00000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "x",
+              "type" : "ut16"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "2800000075a6000000c6c00000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "open-from-string-array",
+  "recordedAt" : "2026-09-28T13:15:20Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set p to PlistOpen from string \"<plist version=\\\"1.0\\\"><array><string>x</string></array></plist>\"\nPlistGet p\nPlistClose p",
+  "timeZone" : "America/New_York"
+}

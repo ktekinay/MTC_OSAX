@@ -204,7 +204,9 @@ public struct DescriptorSnapshot: Codable, Hashable {
 	// MARK: Comparison and display
 
 	/// The same value with encodings that scripts can't tell apart unified, for comparing replies:
-	/// all text types become `utxt`, and `true`/`fals` become `bool`.
+	/// all text types become `utxt`, and `true`/`fals` become `bool`. Record fields (and the user-defined properties
+	/// in `usrf`) are sorted by key, since a record's order means nothing to a script, and SatimageOSAX's property list
+	/// records come in hashing order.
 	public var normalized: DescriptorSnapshot {
 		var copy = self
 		if type == "true" || type == "fals" {
@@ -217,7 +219,44 @@ public struct DescriptorSnapshot: Codable, Hashable {
 		}
 		copy.items = items?.map(\.normalized)
 		copy.fields = fields?.map { Field(key: $0.key, value: $0.value.normalized) }
+		if type != "aevt", var fields = copy.fields {
+			fields.sort { $0.key < $1.key }
+			if let index = fields.firstIndex(where: { $0.key == "usrf" }), let items = fields[index].value.items, items.count.isMultiple(of: 2) {
+				let pairs = stride(from: 0, to: items.count, by: 2).map { (items[$0], items[$0 + 1]) }
+				fields[index].value.items = pairs.sorted { ($0.0.text ?? "") < ($1.0.text ?? "") }.flatMap { [$0.0, $0.1] }
+			}
+			copy.fields = fields
+		}
 		return copy
+	}
+
+	/// Replaces the recorded CFRefs (`CFob`, Satimage's property list references) in `self` with the ones the app
+	/// returned in their place, as `references` maps them (by their recorded bytes).
+	public func replacingReferences(_ references: [String: DescriptorSnapshot]) -> DescriptorSnapshot {
+		if type == "CFob", let hex, let replacement = references[hex] {
+			return replacement
+		}
+		var copy = self
+		copy.items = items?.map { $0.replacingReferences(references) }
+		copy.fields = fields?.map { Field(key: $0.key, value: $0.value.replacingReferences(references)) }
+		return copy
+	}
+
+	/// Pairs each recorded CFRef in `self` (an expected reply) with the CFRef at the same place in `actual`, adding
+	/// new pairs to `references`.
+	public func collectReferences(from actual: DescriptorSnapshot, into references: inout [String: DescriptorSnapshot]) {
+		if type == "CFob", actual.type == "CFob", let hex {
+			if references[hex] == nil {
+				references[hex] = actual
+			}
+			return
+		}
+		for (expected, other) in zip(items ?? [], actual.items ?? []) {
+			expected.collectReferences(from: other, into: &references)
+		}
+		for (expected, other) in zip(fields ?? [], actual.fields ?? []) where expected.key == other.key {
+			expected.value.collectReferences(from: other.value, into: &references)
+		}
 	}
 
 	/// A compact one-line description, e.g. `list [utxt "abc", long 1, reco {mPos: long 2}]`.
@@ -247,7 +286,8 @@ public struct DescriptorSnapshot: Codable, Hashable {
 	/// (used for dates and applications that depend on the machine). Reals may differ by `realTolerance` units in the
 	/// last place. Compare normalized snapshots.
 	public func matches(_ actual: DescriptorSnapshot, realTolerance: Int = 0) -> Bool {
-		if type == "any" {
+		// Property list references (CFRefs) are opaque, and SatimageOSAX gave equal small numbers the same one.
+		if type == "any" || (type == "CFob" && actual.type == "CFob") {
 			return true
 		}
 		if realTolerance > 0, type == "doub", actual.type == "doub", let expected = real, let other = actual.real {

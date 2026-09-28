@@ -1,0 +1,28 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "GDbK",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "mtc-no-such-id",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -2763
+      }
+    }
+  ],
+  "name" : "docid-missing",
+  "recordedAt" : "2026-09-28T13:15:25Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "PlistGetDocByID \"mtc-no-such-id\"",
+  "timeZone" : "America/New_York"
+}

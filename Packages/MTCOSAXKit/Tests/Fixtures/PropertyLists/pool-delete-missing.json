@@ -1,0 +1,28 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "POOL",
+        "eventID" : "dpoo",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "mtc-never",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "pool-delete-missing",
+  "recordedAt" : "2026-09-28T13:15:25Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "DeletePool \"mtc-never\"",
+  "timeZone" : "America/New_York"
+}

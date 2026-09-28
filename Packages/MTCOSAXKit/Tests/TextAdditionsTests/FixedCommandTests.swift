@@ -109,6 +109,22 @@ struct FilterTextTests {
 		#expect(written == ["k": "a"])
 	}
 
+	@Test func intoPropertyListReference() throws {
+		var written: [(key: String, value: Any)] = []
+		let dispatcher = CommandDispatcher()
+		dispatcher.register(TextAdditions.commands(context: TextContext(dollarReferencesDefault: { false }, propertyLists: { _, entries in written = entries })))
+		let event = NSAppleEventDescriptor.untargetedEvent(EventKey(code: filterText))
+		let reference = NSAppleEventDescriptor(descriptorType: FourCharCode(fourCharString: "CFob"), data: Data(count: 16))!
+		for (keyword, value) in ["----": "^([A-z]+) is (.*)", "$in ": people, "key ": "\\1", "by  ": "\\2", "into": reference] as [String: any AppleEventEncodable] {
+			event.setParam(value.appleEventDescriptor, forKeyword: FourCharCode(fourCharString: keyword))
+		}
+		let reply = dispatcher.dispatch(event)
+		#expect(reply.error == nil && reply.result == nil)
+		#expect(written.map(\.key) == ["John", "Anna"])
+		#expect(written.first?.value as? String == "ten\nat school")
+		#expect(send(filterText, ["----": "(a)", "$in ": "a", "key ": "k", "into": reference]).error == .eventNotHandled)
+	}
+
 	@Test func errors() {
 		#expect(send(filterText, ["----": "(", "$in ": "a", "key ": "k"]).error == OSAXError(-117))
 		#expect(send(filterText, ["----": "a", "$in ": "a"]).error == .missingParameter)

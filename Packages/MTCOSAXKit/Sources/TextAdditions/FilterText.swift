@@ -8,8 +8,8 @@ extension TextAdditions {
 	/// - every match of the pattern gives a key (`key` template) and a value (`using` template, default `\0`);
 	/// - `as string` (the default) joins each key's values with `separator` (default linefeed); `as list` gives an
 	///   array per key, without repeats when `duplicates` is false;
-	/// - the property list is returned as XML text, or written to the file given as `into` (returning nothing).
-	///   `into` a plist reference needs the PropertyList suite, not implemented yet.
+	/// - the property list is returned as XML text, written to the file given as `into`, or added to the dictionary
+	///   a CFRef given as `into` refers to (replacing keys it already has); both return nothing.
 	static func filterText(_ request: AppleEventRequest, context: TextContext) throws -> NSAppleEventDescriptor? {
 		let pattern = try request.requiredDirectParameter(as: String.self)
 		let input = try TextInput(request, keyword: "$in ")
@@ -31,8 +31,9 @@ extension TextAdditions {
 		case let .file(url): text = try FileText.read(url).text
 		}
 
-		// Values per key, in the order found.
+		// Values per key; keys in the order found.
 		var values: [String: [String]] = [:]
+		var keys: [String] = []
 		let utf16 = UTF16Text(text)
 		for match in searcher.allMatches(in: utf16) {
 			let keyText = try key.expand(match, in: utf16, groupCount: searcher.groupCount, namedGroups: searcher.namedGroups)
@@ -40,7 +41,20 @@ extension TextAdditions {
 			if asList, !duplicates, values[keyText]?.contains(valueText) == true {
 				continue
 			}
+			if values[keyText] == nil {
+				keys.append(keyText)
+			}
 			values[keyText, default: []].append(valueText)
+		}
+		let entries: [(key: String, value: Any)] = keys.map { key in
+			(key, asList ? values[key]! : values[key]!.joined(separator: separator))
+		}
+		if let destination = request.descriptor(for: "into"), destination.descriptorType == FourCharCode(fourCharString: "CFob") {
+			guard let propertyLists = context.propertyLists else {
+				throw OSAXError.eventNotHandled
+			}
+			try propertyLists(destination, entries)
+			return nil
 		}
 		let plist: [String: Any] = asList ? values : values.mapValues { $0.joined(separator: separator) }
 		let data: Data
@@ -54,7 +68,7 @@ extension TextAdditions {
 			guard TextInput.isFile(destination) || destination.descriptorType == typeUnicodeText
 				|| destination.descriptorType == typeUTF8Text || destination.descriptorType == typeChar
 			else {
-				throw OSAXError(-1708, "filter text into a property list reference needs the PropertyList suite, which MTC_OSAX doesn't have yet.")
+				throw OSAXError.coercionFailed
 			}
 			try FileText.write(data, to: URL(appleEventDescriptor: destination), append: false)
 			return nil

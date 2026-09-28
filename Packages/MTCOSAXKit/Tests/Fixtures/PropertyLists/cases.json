@@ -1,0 +1,938 @@
+[
+ {
+  "name": "script-prefs-read",
+  "script": "set p to PlistOpen ((POSIX file \"$FILES/prefs.plist\") as alias)\nPlistGet p key \"String_Utils_Script_Path\"\nPlistClose p"
+ },
+ {
+  "name": "script-prefs-new-save",
+  "script": "set p to PlistNew\nPlistSet p key \"String_Utils_Script_Path\" to \"/Users/me/x.scpt\"\nPlistSave p in (POSIX file \"$TMP/script-prefs.plist\")\nPlistClose p\nset p to PlistOpen (POSIX file \"$TMP/script-prefs.plist\")\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "script-prefs-update",
+  "script": "set p to PlistNew {String_Utils_Script_Path:\"old\"}\nPlistSave p in (POSIX file \"$TMP/update.plist\")\nPlistClose p\nset p to PlistOpen (POSIX file \"$TMP/update.plist\")\nPlistSet p key \"String_Utils_Script_Path\" to \"new\"\nPlistSave p in (POSIX file \"$TMP/update.plist\")\nPlistClose p\nset p to PlistOpen (POSIX file \"$TMP/update.plist\")\nPlistGet p key \"String_Utils_Script_Path\"\nPlistClose p"
+ },
+ {
+  "name": "script-spamcop",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/messages.plist\")\nPlistGet p key \"MessageList\"\nPlistClose p"
+ },
+ {
+  "name": "new-empty",
+  "script": "set p to PlistNew\nPlistType p\nPlistGetXML p\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "new-record",
+  "script": "set p to PlistNew {a:1, b:\"two\", c:2.5}\nPlistType p\nPlistGetXML p\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "new-list",
+  "script": "set p to PlistNew {1, \"two\", 2.5, true}\nPlistType p\nPlistGetXML p\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "new-text",
+  "script": "set p to PlistNew \"hello\"\nPlistType p\nPlistGetXML p\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "new-integer",
+  "script": "set p to PlistNew 42\nPlistType p\nPlistGetXML p\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "new-real",
+  "script": "set p to PlistNew 2.5\nPlistType p\nPlistGetXML p\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "new-negative",
+  "script": "set p to PlistNew -7\nPlistType p\nPlistGetXML p\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "new-boolean",
+  "script": "set p to PlistNew false\nPlistType p\nPlistGetXML p\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "new-date",
+  "script": "set p to PlistNew date \"Saturday, January 1, 2000 at 12:00:00 AM\"\nPlistType p\nPlistGetXML p\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "new-nested",
+  "script": "set p to PlistNew {a:{b:{c:{1, {d:\"deep\"}}}}}\nPlistType p\nPlistGetXML p\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "new-keywords",
+  "script": "set p to PlistNew {name:\"x\", id:3}\nPlistType p\nPlistGetXML p\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "new-missing-value",
+  "script": "set p to PlistNew {a:missing value, b:1}\nPlistType p\nPlistGetXML p\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "new-list-missing-value",
+  "script": "set p to PlistNew {1, missing value, 2}\nPlistType p\nPlistGetXML p\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "new-big-real",
+  "script": "set p to PlistNew 1.0E+20\nPlistType p\nPlistGetXML p\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "new-empty-record-in-list",
+  "script": "set p to PlistNew {{}, {a:1}}\nPlistType p\nPlistGetXML p\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "new-unicode",
+  "script": "set p to PlistNew {t:\"café ☃\"}\nPlistType p\nPlistGetXML p\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "new-data",
+  "script": "set p to PlistNew «data rdat00010203»\nPlistType p\nPlistGetXML p\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "new-type",
+  "script": "set p to PlistNew {t:integer}\nPlistType p\nPlistGetXML p\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "new-record-with-list-key",
+  "script": "set p to PlistNew {|a b|:1, |c/d|:2}\nPlistType p\nPlistGetXML p\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "open-xml",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistType p\nPlistCount p\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "open-binary",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/binary.plist\")\nPlistBinaryFormat p\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "open-xml-format",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistBinaryFormat p\nPlistClose p"
+ },
+ {
+  "name": "open-array",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/array.plist\")\nPlistType p\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "open-invalid",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/invalid.plist\")"
+ },
+ {
+  "name": "open-missing",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/nope.plist\")"
+ },
+ {
+  "name": "open-alias",
+  "script": "set p to PlistOpen ((POSIX file \"$FILES/simple.plist\") as alias)\nPlistCount p\nPlistClose p"
+ },
+ {
+  "name": "open-path-string",
+  "script": "set p to PlistOpen \"$FILES/simple.plist\"\nPlistCount p\nPlistClose p"
+ },
+ {
+  "name": "open-from-string",
+  "script": "set p to PlistOpen from string \"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?><plist version=\\\"1.0\\\"><dict><key>a</key><integer>1</integer></dict></plist>\"\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "open-from-string-array",
+  "script": "set p to PlistOpen from string \"<plist version=\\\"1.0\\\"><array><string>x</string></array></plist>\"\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "open-from-string-invalid",
+  "script": "set p to PlistOpen from string \"not xml\""
+ },
+ {
+  "name": "open-twice",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nset r to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistEqual p to r\nPlistClose p\nPlistClose r"
+ },
+ {
+  "name": "open-no-parameter",
+  "script": "PlistOpen"
+ },
+ {
+  "name": "type-name",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistType (PlistChild p key \"name\")\nPlistClose p"
+ },
+ {
+  "name": "type-count",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistType (PlistChild p key \"count\")\nPlistClose p"
+ },
+ {
+  "name": "type-ratio",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistType (PlistChild p key \"ratio\")\nPlistClose p"
+ },
+ {
+  "name": "type-enabled",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistType (PlistChild p key \"enabled\")\nPlistClose p"
+ },
+ {
+  "name": "type-disabled",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistType (PlistChild p key \"disabled\")\nPlistClose p"
+ },
+ {
+  "name": "type-when",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistType (PlistChild p key \"when\")\nPlistClose p"
+ },
+ {
+  "name": "type-blob",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistType (PlistChild p key \"blob\")\nPlistClose p"
+ },
+ {
+  "name": "type-list",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistType (PlistChild p key \"list\")\nPlistClose p"
+ },
+ {
+  "name": "type-dict",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistType (PlistChild p key \"dict\")\nPlistClose p"
+ },
+ {
+  "name": "type-emptyList",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistType (PlistChild p key \"emptyList\")\nPlistClose p"
+ },
+ {
+  "name": "type-emptyText",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistType (PlistChild p key \"emptyText\")\nPlistClose p"
+ },
+ {
+  "name": "count-array",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistCount (PlistChild p key \"list\")\nPlistClose p"
+ },
+ {
+  "name": "count-empty-dict",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistCount (PlistChild p using \"dict/empty\")\nPlistClose p"
+ },
+ {
+  "name": "count-string",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistCount (PlistChild p key \"name\")\nPlistClose p"
+ },
+ {
+  "name": "count-list",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistCount {PlistChild p key \"list\", PlistChild p key \"dict\"}\nPlistClose p"
+ },
+ {
+  "name": "child-key",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nset c to PlistChild p key \"dict\"\nPlistGet c\nPlistClose p"
+ },
+ {
+  "name": "child-index",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nset c to PlistChild p index 1\nPlistGet c\nPlistClose p"
+ },
+ {
+  "name": "child-using-key",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nset c to PlistChild p using \"dict\"\nPlistGet c\nPlistClose p"
+ },
+ {
+  "name": "child-using-path",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nset c to PlistChild p using \"dict/y/z\"\nPlistGet c\nPlistClose p"
+ },
+ {
+  "name": "child-using-index",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nset c to PlistChild p using \"list[5]/nested\"\nPlistGet c\nPlistClose p"
+ },
+ {
+  "name": "child-using-array-of-dicts",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nset c to PlistChild p using \"people[2]/first\"\nPlistGet c\nPlistClose p"
+ },
+ {
+  "name": "child-using-leading-slash",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nset c to PlistChild p using \"/dict/x\"\nPlistGet c\nPlistClose p"
+ },
+ {
+  "name": "child-using-index-only",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nset c to PlistChild p using \"[1]\"\nPlistGet c\nPlistClose p"
+ },
+ {
+  "name": "child-using-bad-index",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nset c to PlistChild p using \"list[9]\"\nPlistGet c\nPlistClose p"
+ },
+ {
+  "name": "child-using-zero-index",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nset c to PlistChild p using \"list[0]\"\nPlistGet c\nPlistClose p"
+ },
+ {
+  "name": "child-using-missing-key",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nset c to PlistChild p using \"dict/nope\"\nPlistGet c\nPlistClose p"
+ },
+ {
+  "name": "child-using-garbage",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nset c to PlistChild p using \"list[x\"\nPlistGet c\nPlistClose p"
+ },
+ {
+  "name": "child-missing-key",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nset c to PlistChild p key \"nope\"\nPlistGet c\nPlistClose p"
+ },
+ {
+  "name": "child-index-out-of-range",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nset c to PlistChild p index 99\nPlistGet c\nPlistClose p"
+ },
+ {
+  "name": "child-index-zero",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nset c to PlistChild p index 0\nPlistGet c\nPlistClose p"
+ },
+ {
+  "name": "child-index-negative",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nset c to PlistChild p index -1\nPlistGet c\nPlistClose p"
+ },
+ {
+  "name": "child-key-list",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nset c to PlistChild p key {\"name\", \"count\"}\nPlistGet c\nPlistClose p"
+ },
+ {
+  "name": "child-index-list",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nset c to PlistChild p index {1, 2}\nPlistGet c\nPlistClose p"
+ },
+ {
+  "name": "child-no-selector",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nset c to PlistChild p\nPlistGet c\nPlistClose p"
+ },
+ {
+  "name": "child-key-and-index",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nset c to PlistChild p key \"name\" index 1\nPlistGet c\nPlistClose p"
+ },
+ {
+  "name": "child-array-index",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nset c to PlistChild (PlistChild p key \"list\") index 2\nPlistGet c\nPlistClose p"
+ },
+ {
+  "name": "child-array-key",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistChild (PlistChild p key \"list\") key \"a\"\nPlistClose p"
+ },
+ {
+  "name": "child-of-string",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistChild (PlistChild p key \"name\") index 1\nPlistClose p"
+ },
+ {
+  "name": "child-keys-with-slash",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/keys.plist\")\nPlistGet p key \"a/b\"\nPlistGet p key \"c[1]\"\nPlistGet p key \"\"\nPlistClose p"
+ },
+ {
+  "name": "child-path-keys-with-slash",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/keys.plist\")\nPlistGet p using \"nest/a/b/c\"\nPlistClose p"
+ },
+ {
+  "name": "child-path-escaped",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/keys.plist\")\nPlistGet p using \"nest/a\\\\/b/c\"\nPlistClose p"
+ },
+ {
+  "name": "get-whole",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "get-key",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistGet p key \"name\"\nPlistClose p"
+ },
+ {
+  "name": "get-index",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistGet p index 2\nPlistClose p"
+ },
+ {
+  "name": "get-using",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistGet p using \"people[1]/age\"\nPlistClose p"
+ },
+ {
+  "name": "get-date",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistGet p key \"when\"\nPlistClose p"
+ },
+ {
+  "name": "get-data",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistGet p key \"blob\"\nPlistClose p"
+ },
+ {
+  "name": "get-real",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistGet p key \"ratio\"\nPlistClose p"
+ },
+ {
+  "name": "get-boolean",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistGet p key \"enabled\"\nPlistClose p"
+ },
+ {
+  "name": "get-list",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistGet p key \"list\"\nPlistClose p"
+ },
+ {
+  "name": "get-dict",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistGet p key \"dict\"\nPlistClose p"
+ },
+ {
+  "name": "get-empty-dict",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistGet p using \"dict/empty\"\nPlistClose p"
+ },
+ {
+  "name": "get-empty-list",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistGet p key \"emptyList\"\nPlistClose p"
+ },
+ {
+  "name": "get-unicode",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistGet p key \"unicode\"\nPlistClose p"
+ },
+ {
+  "name": "get-missing-key",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistGet p key \"nope\"\nPlistClose p"
+ },
+ {
+  "name": "get-key-list",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistGet p key {\"name\", \"count\"}\nPlistClose p"
+ },
+ {
+  "name": "get-key-list-missing",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistGet p key {\"name\", \"nope\"}\nPlistClose p"
+ },
+ {
+  "name": "get-data-as-text",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistGet p key \"blob\" as text\nPlistClose p"
+ },
+ {
+  "name": "get-text-as-integer",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistGet p key \"count\" as integer\nPlistClose p"
+ },
+ {
+  "name": "get-xml-child",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistGetXML (PlistChild p key \"dict\")\nPlistClose p"
+ },
+ {
+  "name": "get-xml-string",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistGetXML (PlistChild p key \"name\")\nPlistClose p"
+ },
+ {
+  "name": "get-keys",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistGetKeys p\nPlistClose p"
+ },
+ {
+  "name": "get-keys-child",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistGetKeys (PlistChild p key \"dict\")\nPlistClose p"
+ },
+ {
+  "name": "get-keys-array",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistGetKeys (PlistChild p key \"list\")\nPlistClose p"
+ },
+ {
+  "name": "set-key-new",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSet p key \"b\" to \"new\"\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "set-key-existing",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSet p key \"a\" to 2\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "set-index",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSet (PlistChild p key \"l\") index 2 to \"z\"\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "set-index-append",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSet (PlistChild p key \"l\") index 3 to \"z\"\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "set-index-out-of-range",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSet (PlistChild p key \"l\") index 9 to \"z\"\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "set-using",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSet p using \"d/e\" to 5\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "set-using-new-key",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSet p using \"d/f\" to 6\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "set-using-missing-path",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSet p using \"q/r\" to 7\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "set-using-index",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSet p using \"l[1]\" to \"w\"\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "set-to-list",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSet p key \"a\" to {1, 2}\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "set-to-record",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSet p key \"a\" to {x:1}\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "set-to-date",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSet p key \"a\" to date \"Saturday, January 1, 2000 at 12:00:00 AM\"\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "set-to-reference",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSet p key \"copy\" to (PlistChild p key \"d\")\nPlistSet (PlistChild p key \"d\") key \"e\" to 99\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "set-to-reference-other-document",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nset r to PlistNew {z:1}\nPlistSet p key \"other\" to r\nPlistClose r\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "set-missing-values-suppressed",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSet p key \"d\" to {e:missing value, f:2}\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "set-missing-values-kept",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSet p key \"d\" to {e:missing value, f:2} without suppressing\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "set-missing-value-list",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSet p key \"l\" to {1, missing value, 2}\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "set-untyped",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSet p key \"a\" to 5 without typed\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "set-key-on-array",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSet (PlistChild p key \"l\") key \"x\" to 1\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "set-index-on-dict",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSet p index 1 to 1\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "set-no-to",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSet p key \"a\"\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "set-no-selector",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSet p to 3\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "set-key-list",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSet p key {\"a\", \"b\"} to {10, 20}\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "set-key-list-missing-value",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSet p key {\"a\", \"b\"} to {5, missing value}\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "set-key-list-remove-existing",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSet p key {\"a\", \"d\"} to {missing value, 3}\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "set-untyped-real",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSet p key \"a\" to 2.5 without typed\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "set-untyped-text",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSet p key \"a\" to \"t\" without typed\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "newchild-dict-key",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nset c to PlistNewChild \"v\" at p key \"b\"\nPlistGet c\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "newchild-dict-existing-key",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistNewChild \"v\" at p key \"a\"\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "newchild-dict-no-key",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistNewChild \"v\" at p\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "newchild-array-append",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nset c to PlistNewChild \"z\" at (PlistChild p key \"l\")\nPlistGet c\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "newchild-array-index",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistNewChild \"z\" at (PlistChild p key \"l\") index 1\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "newchild-array-index-end",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistNewChild \"z\" at (PlistChild p key \"l\") index 3\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "newchild-array-index-too-big",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistNewChild \"z\" at (PlistChild p key \"l\") index 5\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "newchild-default-record",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nset c to PlistNewChild at p key \"r\"\nPlistType c\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "newchild-record-then-fill",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nset c to PlistNewChild {} at p key \"r\"\nPlistSet c key \"k\" to 1\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "newchild-using",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistNewChild \"v\" at p using \"d/f\"\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "newchild-reference",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistNewChild (PlistChild p key \"d\") at p key \"copy\"\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "newchild-untyped",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistNewChild 5 at p key \"u\" without typed\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "newchild-no-at",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistNewChild \"v\" key \"b\"\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "remove-key",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistRemoveChild p key \"a\"\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "remove-index",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistRemoveChild (PlistChild p key \"l\") index 1\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "remove-using",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistRemoveChild p using \"d/e\"\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "remove-missing-key",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistRemoveChild p key \"nope\"\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "remove-index-out-of-range",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistRemoveChild (PlistChild p key \"l\") index 5\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "remove-no-selector",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistRemoveChild p\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "equal-same",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nset r to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistEqual p to r\nPlistClose p\nPlistClose r"
+ },
+ {
+  "name": "equal-different",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nset r to PlistNew {a:2}\nPlistEqual p to r\nPlistClose p\nPlistClose r"
+ },
+ {
+  "name": "equal-children",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistEqual (PlistChild p using \"people[1]/age\") to (PlistChild p using \"people[3]/age\")\nPlistClose p"
+ },
+ {
+  "name": "equal-integer-real",
+  "script": "set p to PlistNew {a:1}\nset r to PlistNew {a:1.0}\nPlistEqual p to r\nPlistClose p\nPlistClose r"
+ },
+ {
+  "name": "exist-array",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistExist \"y\" in (PlistChild p key \"l\")\nPlistClose p"
+ },
+ {
+  "name": "exist-array-missing",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistExist \"q\" in (PlistChild p key \"l\")\nPlistClose p"
+ },
+ {
+  "name": "exist-dict",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistExist 1 in p\nPlistClose p"
+ },
+ {
+  "name": "exist-dict-record",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistExist {e:1} in p\nPlistClose p"
+ },
+ {
+  "name": "exist-several",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistExist {\"x\", \"y\"} in (PlistChild p key \"l\") with several values\nPlistClose p"
+ },
+ {
+  "name": "exist-list-without-several",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistExist {\"x\", \"y\"} in (PlistChild p key \"l\")\nPlistClose p"
+ },
+ {
+  "name": "exist-case",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistExist \"X\" in (PlistChild p key \"l\")\nPlistClose p"
+ },
+ {
+  "name": "exist-number-as-text",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistExist \"1\" in p\nPlistClose p"
+ },
+ {
+  "name": "match-key",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistMatch (PlistChild p key \"people\") key \"pet\"\nPlistClose p"
+ },
+ {
+  "name": "match-key-value",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistMatch (PlistChild p key \"people\") key \"age\" value 30\nPlistClose p"
+ },
+ {
+  "name": "match-key-value-text",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistMatch (PlistChild p key \"people\") key \"first\" value \"Bob\"\nPlistClose p"
+ },
+ {
+  "name": "match-none",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistMatch (PlistChild p key \"people\") key \"zzz\"\nPlistClose p"
+ },
+ {
+  "name": "match-value-type",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistMatch (PlistChild p key \"people\") key \"age\" value \"30\"\nPlistClose p"
+ },
+ {
+  "name": "match-using",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistMatch (PlistChild p key \"people\") using \"pet\"\nPlistClose p"
+ },
+ {
+  "name": "match-not-array",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistMatch p key \"name\"\nPlistClose p"
+ },
+ {
+  "name": "add-arrays-after",
+  "script": "set r to PlistNew {\"a\", \"b\"}\nset s to PlistNew {\"c\"}\nPlistAdd s after r\nPlistGet r\nPlistClose r\nPlistClose s"
+ },
+ {
+  "name": "add-arrays-before",
+  "script": "set r to PlistNew {\"a\", \"b\"}\nset s to PlistNew {\"c\"}\nPlistAdd s before r\nPlistGet r\nPlistClose r\nPlistClose s"
+ },
+ {
+  "name": "add-dicts",
+  "script": "set r to PlistNew {a:1, b:2}\nset s to PlistNew {b:3, c:4}\nPlistAdd s after r\nPlistGetXML r\nPlistClose r\nPlistClose s"
+ },
+ {
+  "name": "add-dicts-before",
+  "script": "set r to PlistNew {a:1, b:2}\nset s to PlistNew {b:3, c:4}\nPlistAdd s before r\nPlistGetXML r\nPlistClose r\nPlistClose s"
+ },
+ {
+  "name": "add-list",
+  "script": "set r to PlistNew {\"a\"}\nPlistAdd {\"b\", \"c\"} after r\nPlistGet r\nPlistClose r"
+ },
+ {
+  "name": "add-record",
+  "script": "set r to PlistNew {a:1}\nPlistAdd {b:2} after r\nPlistGetXML r\nPlistClose r"
+ },
+ {
+  "name": "add-mismatch",
+  "script": "set r to PlistNew {\"a\"}\nPlistAdd {b:2} after r\nPlistClose r"
+ },
+ {
+  "name": "add-no-target",
+  "script": "set r to PlistNew {\"a\"}\nPlistAdd {\"b\"}\nPlistClose r"
+ },
+ {
+  "name": "save-xml",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSave p in (POSIX file \"$TMP/save-xml.plist\")\nPlistClose p\nreadtext (POSIX file \"$TMP/save-xml.plist\")"
+ },
+ {
+  "name": "save-binary",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSave p in (POSIX file \"$TMP/save-binary.plist\") with binary\nPlistClose p\nset p to PlistOpen (POSIX file \"$TMP/save-binary.plist\")\nPlistBinaryFormat p\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "save-without-in",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSave p in (POSIX file \"$TMP/save-again.plist\")\nPlistSet p key \"a\" to 2\nPlistSave p\nPlistClose p\nreadtext (POSIX file \"$TMP/save-again.plist\")"
+ },
+ {
+  "name": "save-new-without-in",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSave p\nPlistClose p"
+ },
+ {
+  "name": "save-opened-without-in",
+  "script": "PlistSave (PlistNew {a:1}) in (POSIX file \"$TMP/opened.plist\")\nset p to PlistOpen (POSIX file \"$TMP/opened.plist\")\nPlistSet p key \"a\" to 3\nPlistSave p\nPlistClose p\nreadtext (POSIX file \"$TMP/opened.plist\")"
+ },
+ {
+  "name": "save-binary-opened",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/binary.plist\")\nPlistSave p in (POSIX file \"$TMP/from-binary.plist\")\nPlistClose p\nset p to PlistOpen (POSIX file \"$TMP/from-binary.plist\")\nPlistBinaryFormat p\nPlistClose p"
+ },
+ {
+  "name": "save-missing-folder",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSave p in (POSIX file \"$TMP/nope/x.plist\")\nPlistClose p"
+ },
+ {
+  "name": "save-child",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSave (PlistChild p key \"d\") in (POSIX file \"$TMP/child.plist\")\nPlistClose p\nreadtext (POSIX file \"$TMP/child.plist\")"
+ },
+ {
+  "name": "binary-format-new",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistBinaryFormat p\nPlistClose p"
+ },
+ {
+  "name": "url",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistURL p\nPlistClose p"
+ },
+ {
+  "name": "url-parent",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistURL p with parent\nPlistClose p"
+ },
+ {
+  "name": "url-as-text",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSave p in (POSIX file \"$TMP/url-as-text.plist\")\nPlistURL p as text\nPlistClose p"
+ },
+ {
+  "name": "url-as-alias",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistURL p as alias\nPlistClose p"
+ },
+ {
+  "name": "url-as-string",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSave p in (POSIX file \"$TMP/url as string.plist\")\nPlistURL p as string\nPlistURL p as string with parent\nPlistClose p"
+ },
+ {
+  "name": "url-new",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistURL p\nPlistClose p"
+ },
+ {
+  "name": "url-child",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistURL (PlistChild p key \"dict\")\nPlistClose p"
+ },
+ {
+  "name": "url-after-save",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSave p in (POSIX file \"$TMP/url-after-save.plist\")\nPlistURL p\nPlistClose p"
+ },
+ {
+  "name": "document",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nset r to PlistDocument (POSIX file \"$FILES/simple.plist\")\nPlistEqual p to r\nPlistCount r\nPlistClose p"
+ },
+ {
+  "name": "document-not-open",
+  "script": "PlistDocument (POSIX file \"$FILES/simple.plist\")"
+ },
+ {
+  "name": "document-string",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistCount (PlistDocument \"$FILES/simple.plist\")\nPlistClose p"
+ },
+ {
+  "name": "pool-default",
+  "script": "GetPool (PlistNew)\nPlistListDocuments \"mtc-none\""
+ },
+ {
+  "name": "pool-set",
+  "script": "set old to SetPool \"mtc-a\"\nset p to PlistNew {a:1}\nGetPool p\nPlistCount (item 1 of (PlistListDocuments))\nSetPool old\nDeletePool \"mtc-a\""
+ },
+ {
+  "name": "pool-in-pool",
+  "script": "set p to PlistNew {a:1} in pool \"mtc-b\"\nGetPool p\nPlistListDocuments \"mtc-b\"\nPlistClose p\nPlistListDocuments \"mtc-b\""
+ },
+ {
+  "name": "pool-open-in-pool",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\") in pool \"mtc-c\"\nGetPool p\nPlistDocument (POSIX file \"$FILES/simple.plist\") in pool \"mtc-c\"\nPlistDocument (POSIX file \"$FILES/simple.plist\")\nPlistClose p"
+ },
+ {
+  "name": "pool-delete",
+  "script": "set p to PlistNew {a:1} in pool \"mtc-d\"\nDeletePool \"mtc-d\"\nPlistGet p"
+ },
+ {
+  "name": "pool-delete-missing",
+  "script": "DeletePool \"mtc-never\""
+ },
+ {
+  "name": "pool-delete-default",
+  "script": "SetPool \"mtc-e\"\nset p to PlistNew\nDeletePool\nSetPool \"\"\nPlistGet p"
+ },
+ {
+  "name": "pool-set-returns-previous",
+  "script": "SetPool \"mtc-f\"\nSetPool \"mtc-g\"\nSetPool \"\""
+ },
+ {
+  "name": "pool-list-new-documents",
+  "script": "set p to PlistNew {a:1} in pool \"mtc-h\"\nset r to PlistNew {\"b\"} in pool \"mtc-h\"\nset docs to PlistListDocuments \"mtc-h\"\ncount docs\nDeletePool \"mtc-h\""
+ },
+ {
+  "name": "pool-list-opened",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\") in pool \"mtc-i\"\nPlistListDocuments \"mtc-i\"\nPlistClose p"
+ },
+ {
+  "name": "pool-get-child",
+  "script": "set p to PlistNew {a:{b:1}} in pool \"mtc-j\"\nGetPool (PlistChild p key \"a\")\nPlistClose p"
+ },
+ {
+  "name": "docid",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSetDocID p to \"mine\"\nPlistEqual p to (PlistGetDocByID \"mine\")\nPlistSetDocID p to \"other\"\nPlistClose p"
+ },
+ {
+  "name": "docid-missing",
+  "script": "PlistGetDocByID \"mtc-no-such-id\""
+ },
+ {
+  "name": "docid-after-close",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSetDocID p to \"closed\"\nPlistClose p\nPlistGetDocByID \"closed\""
+ },
+ {
+  "name": "docid-duplicate",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nset r to PlistNew {b:1}\nPlistSetDocID p to \"dup\"\nPlistSetDocID r to \"dup\"\nPlistCount (PlistGetDocByID \"dup\")\nPlistClose p\nPlistClose r"
+ },
+ {
+  "name": "docid-in-pool",
+  "script": "set p to PlistNew {a:1} in pool \"mtc-k\"\nPlistSetDocID p to \"pooled\"\nPlistGetDocByID \"pooled\"\nPlistCount (PlistGetDocByID \"pooled\" in pool \"mtc-k\")\nPlistClose p"
+ },
+ {
+  "name": "docid-child",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSetDocID (PlistChild p key \"d\") to \"child\"\nPlistClose p"
+ },
+ {
+  "name": "hidden-retain",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistRetain p\nPlistClose p\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "json-simple",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistToJSON p\nPlistClose p"
+ },
+ {
+  "name": "json-formatted",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistToJSON p with formatting\nPlistClose p"
+ },
+ {
+  "name": "json-child",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistToJSON (PlistChild p key \"l\")\nPlistClose p"
+ },
+ {
+  "name": "json-string",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistToJSON (PlistChild p key \"a\")\nPlistClose p"
+ },
+ {
+  "name": "json-replacer",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistToJSON p replacer \"function(key, value) { return typeof value === \\\"number\\\" ? value * 10 : value; }\"\nPlistClose p"
+ },
+ {
+  "name": "json-replacer-invalid",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistToJSON p replacer \"not javascript (\"\nPlistClose p"
+ },
+ {
+  "name": "json-unicode",
+  "script": "set p to PlistNew {t:\"café ☃ \\\"q\\\" /\", u:\"line\" & return & \"two\"}\nPlistToJSON p\nPlistClose p"
+ },
+ {
+  "name": "json-big-numbers",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/big.plist\")\nPlistToJSON p\nPlistClose p"
+ },
+ {
+  "name": "javascript",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistToJavaScript p\nPlistClose p"
+ },
+ {
+  "name": "fromjson-array",
+  "script": "set p to PlistFromJSON \"[1, \\\"two\\\", 3.5]\"\nPlistType p\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "fromjson-number",
+  "script": "set p to PlistFromJSON \"42\"\nPlistType p\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "fromjson-string",
+  "script": "set p to PlistFromJSON \"\\\"just text\\\"\"\nPlistType p\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "fromjson-integers-and-reals",
+  "script": "set p to PlistFromJSON \"{\\\"i\\\": 3, \\\"r\\\": 3.0, \\\"e\\\": 1e3, \\\"big\\\": 12345678901234567890}\"\nPlistType p\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "fromjson-unicode",
+  "script": "set p to PlistFromJSON \"{\\\"t\\\": \\\"caf\\\\u00e9 \\\\u2603\\\"}\"\nPlistType p\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "fromjson-invalid",
+  "script": "set p to PlistFromJSON \"{not json}\"\nPlistType p\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "fromjson-empty",
+  "script": "set p to PlistFromJSON \"\"\nPlistType p\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "fromjson-empty-object",
+  "script": "set p to PlistFromJSON \"{}\"\nPlistType p\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "fromjson-in-pool",
+  "script": "set p to PlistFromJSON \"{}\" in pool \"mtc-l\"\nGetPool p\nPlistClose p"
+ },
+ {
+  "name": "closed-get",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistClose p\nPlistGet p"
+ },
+ {
+  "name": "closed-child",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nset c to PlistChild p key \"d\"\nPlistClose p\nPlistGet c"
+ },
+ {
+  "name": "closed-twice",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistClose p\nPlistClose p"
+ },
+ {
+  "name": "not-a-reference",
+  "script": "PlistGet \"text\""
+ },
+ {
+  "name": "close-child",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistClose (PlistChild p key \"d\")\nPlistGet p\nPlistClose p"
+ }
+]

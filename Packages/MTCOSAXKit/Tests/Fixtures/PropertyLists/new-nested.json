@@ -1,0 +1,270 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "make",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "a",
+                        "type" : "utxt"
+                      },
+                      {
+                        "fields" : [
+                          {
+                            "key" : "usrf",
+                            "value" : {
+                              "items" : [
+                                {
+                                  "text" : "b",
+                                  "type" : "utxt"
+                                },
+                                {
+                                  "fields" : [
+                                    {
+                                      "key" : "usrf",
+                                      "value" : {
+                                        "items" : [
+                                          {
+                                            "text" : "c",
+                                            "type" : "utxt"
+                                          },
+                                          {
+                                            "items" : [
+                                              {
+                                                "integer" : 1,
+                                                "type" : "long"
+                                              },
+                                              {
+                                                "fields" : [
+                                                  {
+                                                    "key" : "usrf",
+                                                    "value" : {
+                                                      "items" : [
+                                                        {
+                                                          "text" : "d",
+                                                          "type" : "utxt"
+                                                        },
+                                                        {
+                                                          "text" : "deep",
+                                                          "type" : "utxt"
+                                                        }
+                                                      ],
+                                                      "type" : "list"
+                                                    }
+                                                  }
+                                                ],
+                                                "type" : "reco"
+                                              }
+                                            ],
+                                            "type" : "list"
+                                          }
+                                        ],
+                                        "type" : "list"
+                                      }
+                                    }
+                                  ],
+                                  "type" : "reco"
+                                }
+                              ],
+                              "type" : "list"
+                            }
+                          }
+                        ],
+                        "type" : "reco"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "1100000075a6000080c8200000600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disp",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "1100000075a6000080c8200000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "dictionary",
+          "type" : "utf8"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "DISP",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "1100000075a6000080c8200000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n<plist version=\"1.0\">\n<dict>\n\t<key>a</key>\n\t<dict>\n\t\t<key>b</key>\n\t\t<dict>\n\t\t\t<key>c</key>\n\t\t\t<array>\n\t\t\t\t<integer>1</integer>\n\t\t\t\t<dict>\n\t\t\t\t\t<key>d</key>\n\t\t\t\t\t<string>deep</string>\n\t\t\t\t</dict>\n\t\t\t</array>\n\t\t</dict>\n\t</dict>\n</dict>\n</plist>\n",
+          "type" : "utf8"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "1100000075a6000080c8200000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "usrf",
+              "value" : {
+                "items" : [
+                  {
+                    "text" : "a",
+                    "type" : "TEXT"
+                  },
+                  {
+                    "fields" : [
+                      {
+                        "key" : "usrf",
+                        "value" : {
+                          "items" : [
+                            {
+                              "text" : "b",
+                              "type" : "TEXT"
+                            },
+                            {
+                              "fields" : [
+                                {
+                                  "key" : "usrf",
+                                  "value" : {
+                                    "items" : [
+                                      {
+                                        "text" : "c",
+                                        "type" : "TEXT"
+                                      },
+                                      {
+                                        "items" : [
+                                          {
+                                            "integer" : 1,
+                                            "type" : "long"
+                                          },
+                                          {
+                                            "fields" : [
+                                              {
+                                                "key" : "usrf",
+                                                "value" : {
+                                                  "items" : [
+                                                    {
+                                                      "text" : "d",
+                                                      "type" : "TEXT"
+                                                    },
+                                                    {
+                                                      "text" : "deep",
+                                                      "type" : "ut16"
+                                                    }
+                                                  ],
+                                                  "type" : "list"
+                                                }
+                                              }
+                                            ],
+                                            "type" : "reco"
+                                          }
+                                        ],
+                                        "type" : "list"
+                                      }
+                                    ],
+                                    "type" : "list"
+                                  }
+                                }
+                              ],
+                              "type" : "reco"
+                            }
+                          ],
+                          "type" : "list"
+                        }
+                      }
+                    ],
+                    "type" : "reco"
+                  }
+                ],
+                "type" : "list"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "1100000075a6000080c8200000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "new-nested",
+  "recordedAt" : "2026-09-28T13:15:20Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set p to PlistNew {a:{b:{c:{1, {d:\"deep\"}}}}}\nPlistType p\nPlistGetXML p\nPlistGet p\nPlistClose p",
+  "timeZone" : "America/New_York"
+}

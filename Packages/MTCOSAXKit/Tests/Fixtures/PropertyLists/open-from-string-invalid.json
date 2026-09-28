@@ -1,0 +1,34 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "text" : "not xml",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "type" : "null"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1
+      }
+    }
+  ],
+  "name" : "open-from-string-invalid",
+  "recordedAt" : "2026-09-28T13:15:20Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set p to PlistOpen from string \"not xml\"",
+  "timeZone" : "America/New_York"
+}

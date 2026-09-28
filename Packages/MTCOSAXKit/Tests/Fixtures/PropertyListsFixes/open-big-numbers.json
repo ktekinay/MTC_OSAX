@@ -1,0 +1,138 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/big.plist",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "010000004d5443700500000000000000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "010000004d5443700500000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "usrf",
+              "value" : {
+                "items" : [
+                  {
+                    "text" : "small",
+                    "type" : "utxt"
+                  },
+                  {
+                    "real" : 1e-300,
+                    "type" : "doub"
+                  },
+                  {
+                    "text" : "big",
+                    "type" : "utxt"
+                  },
+                  {
+                    "real" : 1099511627776,
+                    "type" : "doub"
+                  },
+                  {
+                    "text" : "huge",
+                    "type" : "utxt"
+                  },
+                  {
+                    "real" : 1e+300,
+                    "type" : "doub"
+                  },
+                  {
+                    "text" : "neg",
+                    "type" : "utxt"
+                  },
+                  {
+                    "integer" : -5,
+                    "type" : "long"
+                  }
+                ],
+                "type" : "list"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "DISP",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "010000004d5443700500000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n<plist version=\"1.0\">\n<dict>\n\t<key>big</key>\n\t<integer>1099511627776</integer>\n\t<key>huge</key>\n\t<real>1.0000000000000001e+300</real>\n\t<key>neg</key>\n\t<integer>-5</integer>\n\t<key>small</key>\n\t<real>1e-300</real>\n</dict>\n</plist>\n",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "010000004d5443700500000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "open-big-numbers",
+  "recordedAt" : "2026-09-28T13:28:03Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "set p to PlistOpen (POSIX file \"$FILES/big.plist\")\nPlistGet p\nPlistGetXML p\nPlistClose p",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

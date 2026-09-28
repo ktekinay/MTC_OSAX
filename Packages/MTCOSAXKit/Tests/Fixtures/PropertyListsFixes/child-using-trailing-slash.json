@@ -1,0 +1,156 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/simple.plist",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "0a0000004d5443702200000000000000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "chld",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "dict/",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "0a0000004d5443702200000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "0a0000004d5443701200000000000000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "0a0000004d5443701200000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "usrf",
+              "value" : {
+                "items" : [
+                  {
+                    "text" : "empty",
+                    "type" : "utxt"
+                  },
+                  {
+                    "fields" : [
+
+                    ],
+                    "type" : "reco"
+                  },
+                  {
+                    "text" : "x",
+                    "type" : "utxt"
+                  },
+                  {
+                    "integer" : 1,
+                    "type" : "long"
+                  },
+                  {
+                    "text" : "y",
+                    "type" : "utxt"
+                  },
+                  {
+                    "fields" : [
+                      {
+                        "key" : "usrf",
+                        "value" : {
+                          "items" : [
+                            {
+                              "text" : "z",
+                              "type" : "utxt"
+                            },
+                            {
+                              "text" : "deep",
+                              "type" : "utxt"
+                            }
+                          ],
+                          "type" : "list"
+                        }
+                      }
+                    ],
+                    "type" : "reco"
+                  }
+                ],
+                "type" : "list"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "0a0000004d5443702200000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "child-using-trailing-slash",
+  "recordedAt" : "2026-09-28T13:28:03Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nset c to PlistChild p using \"dict/\"\nPlistGet c\nPlistClose p",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

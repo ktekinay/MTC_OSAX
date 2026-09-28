@@ -39,7 +39,15 @@ So that `use application "MTC_OSAX"` finds a command-line build, register it onc
 /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f build/DerivedData/Build/Products/Debug/MTC_OSAX.app
 ```
 
-The app has no UI. It launches when a script sends it a command and quits after an hour without commands. To test the idle quit, shorten the timeout: `defaults write com.mactechnologies.mtc-osax IdleTimeoutSeconds 5` (remove it again with `defaults delete com.mactechnologies.mtc-osax IdleTimeoutSeconds`).
+The app has no UI. It launches when a script sends it a command and quits after an hour without commands. The timeout is a preference, in seconds, where 0 means never quit:
+
+```sh
+defaults write com.mactechnologies.mtc-osax IdleTimeoutSeconds 300   # quit after 5 minutes
+defaults write com.mactechnologies.mtc-osax IdleTimeoutSeconds 0     # never quit
+defaults delete com.mactechnologies.mtc-osax IdleTimeoutSeconds      # back to an hour
+```
+
+A change applies from the next command, without restarting the app.
 
 ## Diagnostic commands
 

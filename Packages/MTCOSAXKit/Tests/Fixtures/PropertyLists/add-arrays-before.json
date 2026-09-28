@@ -1,0 +1,166 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "make",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "a",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "b",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "1a0000009ba60000007ca70300600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "make",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "c",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "1b0000009ba600007014a70300600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "conc",
+        "fields" : [
+          {
+            "key" : "befo",
+            "value" : {
+              "hex" : "1a0000009ba60000007ca70300600000",
+              "type" : "CFob"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "1b0000009ba600007014a70300600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "1a0000009ba60000007ca70300600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "c",
+              "type" : "ut16"
+            },
+            {
+              "text" : "a",
+              "type" : "ut16"
+            },
+            {
+              "text" : "b",
+              "type" : "ut16"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "1a0000009ba60000007ca70300600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "1b0000009ba600007014a70300600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "add-arrays-before",
+  "recordedAt" : "2026-09-28T13:15:24Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set r to PlistNew {\"a\", \"b\"}\nset s to PlistNew {\"c\"}\nPlistAdd s before r\nPlistGet r\nPlistClose r\nPlistClose s",
+  "timeZone" : "America/New_York"
+}

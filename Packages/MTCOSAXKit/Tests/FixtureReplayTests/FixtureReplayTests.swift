@@ -31,7 +31,8 @@ enum Fixtures {
 		try Fixture(contentsOf: directory.appendingPathComponent(path))
 	}
 
-	/// Replays a fixture with its variables set for this run: `FILES` is the `Input` folder next to the fixture,
+	/// Replays a fixture with its variables set for this run: `FILES` is the `Input` folder next to the fixture (or its
+	/// section's, for a "…Fixes" folder),
 	/// `TMP` a new empty folder, removed afterwards. `TMP` is a real path (`/private/var/…`, not `/var/…`), as
 	/// recorded, since file references and aliases in results resolve symbolic links.
 	static func replay(_ path: String, using dispatcher: CommandDispatcher) throws -> [String] {
@@ -43,7 +44,14 @@ enum Fixtures {
 			free(real)
 		}
 		defer { try? FileManager.default.removeItem(at: temporary) }
-		let input = directory.appendingPathComponent(path).deletingLastPathComponent().appendingPathComponent("Input")
+		// A "…Fixes" folder shares its section's inputs (e.g. PropertyListsFixes uses PropertyLists/Input).
+		let fixtureFolder = directory.appendingPathComponent(path).deletingLastPathComponent()
+		var input = fixtureFolder.appendingPathComponent("Input")
+		if !FileManager.default.fileExists(atPath: input.path), fixtureFolder.lastPathComponent.hasSuffix("Fixes") {
+			input = fixtureFolder.deletingLastPathComponent()
+				.appendingPathComponent(String(fixtureFolder.lastPathComponent.dropLast("Fixes".count)))
+				.appendingPathComponent("Input")
+		}
 		let folder = String(path.prefix { $0 != "/" })
 		return fixture.replay(using: dispatcher, variables: ["FILES": input.path, "TMP": temporary.path], realTolerance: realTolerances[folder] ?? 0)
 	}

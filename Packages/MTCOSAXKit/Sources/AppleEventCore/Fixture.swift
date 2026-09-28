@@ -114,6 +114,9 @@ public struct Fixture: Codable {
 			}
 			substitutions.append((recorded, value))
 		}
+		// Property list references (CFRefs) differ between apps: each one the app returns in place of a recorded one
+		// replaces it in later events and replies.
+		var references: [String: DescriptorSnapshot] = [:]
 		return exchanges.enumerated().compactMap { index, exchange in
 			var event = exchange.event
 			var reply = exchange.reply
@@ -121,8 +124,13 @@ public struct Fixture: Codable {
 				event = event.replacingText(substitution.old, with: substitution.new)
 				reply = reply.replacingText(substitution.old, with: substitution.new)
 			}
-			let expected = reply.normalized
+			event = event.replacingReferences(references)
 			let actual = Reply(dispatcher.dispatch(event.descriptor)).normalized
+			if let recorded = reply.result, let result = actual.result {
+				recorded.normalized.collectReferences(from: result, into: &references)
+			}
+			reply.result = reply.result?.replacingReferences(references)
+			let expected = reply.normalized
 			guard !expected.matches(actual, realTolerance: realTolerance) else {
 				return nil
 			}

@@ -134,6 +134,26 @@ struct SnapshotTests {
 		#expect(DescriptorSnapshot.unitsInTheLastPlace(between: 1, and: -1) == .max)
 	}
 
+	@Test func recordsCompareRegardlessOfOrder() {
+		let a = RecordFields([(.user("b"), NSAppleEventDescriptor(int32: 2)), (.user("a"), NSAppleEventDescriptor(int32: 1)), (.code("pnam"), NSAppleEventDescriptor(string: "x"))])
+		let b = RecordFields([(.code("pnam"), NSAppleEventDescriptor(string: "x")), (.user("a"), NSAppleEventDescriptor(int32: 1)), (.user("b"), NSAppleEventDescriptor(int32: 2))])
+		#expect(DescriptorSnapshot(a.appleEventDescriptor) != DescriptorSnapshot(b.appleEventDescriptor))
+		#expect(DescriptorSnapshot(a.appleEventDescriptor).normalized == DescriptorSnapshot(b.appleEventDescriptor).normalized)
+		let c = RecordFields([(.user("a"), NSAppleEventDescriptor(int32: 2)), (.user("b"), NSAppleEventDescriptor(int32: 1))])
+		#expect(DescriptorSnapshot(a.appleEventDescriptor).normalized != DescriptorSnapshot(c.appleEventDescriptor).normalized)
+	}
+
+	@Test func referencesAreMapped() {
+		let reference = { (bytes: [UInt8]) in DescriptorSnapshot(NSAppleEventDescriptor(descriptorType: FourCharCode(fourCharString: "CFob"), data: Data(bytes))!) }
+		let recorded = reference([1, 2]), actual = reference([9, 9])
+		var references: [String: DescriptorSnapshot] = [:]
+		let recordedList = DescriptorSnapshot([recorded.descriptor, NSAppleEventDescriptor(int32: 1)].appleEventDescriptor)
+		recordedList.collectReferences(from: DescriptorSnapshot([actual.descriptor, NSAppleEventDescriptor(int32: 1)].appleEventDescriptor), into: &references)
+		#expect(references[recorded.hex!] == actual)
+		#expect(recordedList.replacingReferences(references).items?.first == actual)
+		#expect(reference([3]).replacingReferences(references) == reference([3]))
+	}
+
 	@Test func textIsStoredReadably() {
 		let snapshot = DescriptorSnapshot(NSAppleEventDescriptor(descriptorType: FourCharCode(fourCharString: "ut16"), data: "Hé".data(using: .utf16))!)
 		#expect(snapshot.text == "Hé")

@@ -13,7 +13,6 @@
 	<suite name="Satimage Types" code="MTCt" description="Types used by the Satimage suites." hidden="yes">
 		<class name="alias" code="alis" hidden="yes" plural="aliases"/>
 		<class name="anything" code="****" description="any class or reference" hidden="yes"/>
-		<value-type name="CFRef" code="CFob" description="an opaque reference to a property list element. Initial CFRefs must be created with PlistNew or PlistOpen." hidden="yes"/>
 	</suite>
 
 	<!-- Copied verbatim from "SatImageOSAX SDEF/dictionary.sdef". -->
@@ -1181,6 +1180,292 @@ set x to randomarray 10 range {2, 3} seed 12345
 </documentation>
 			</command>
 	</suite>
+
+	<suite name="Satimage PropertyList Additions" code="PLST" description="An AppleScript interface to property lists.">
+      <documentation>
+        <html>
+<h3>Presentation</h3><p>
+Property lists are widely used in MacOSX. They are stored as files with the "plist" extension.
+</p><p>
+Property lists (plists in short) can contain simple types (numbers, strings, dates, booleans and raw data) and collections: dictionaries and arrays:
+</p><ul style="line-height: 1em ; margin-top: 0.5em ; margin-bottom: 0.5em"><li>
+dictionaries contain elements that you reference by key (string).
+</li><li>
+arrays contain ordered elements that you reference by index.
+</li></ul><p>
+	This suite lets you edit property lists.
+	</p><h3>Creating a plist</h3>
+	The CRef type is used to refer to any element in a plist or to the plist itself.<br/>
+		Plists are created with PlistNew:<br/>
+	<div class="example-source">	set myPlist to PlistNew {"a", "b", "c"}</div>
+	or with PlistOpen:
+	<div class="example-source">	set myPlist to PlistNew someFile.</div>
+	<h3>Browsing a plist</h3>Walking through a plist is quite simple with the <span class="src">PlistChild</span> command:<ul><li>
+	use the parameter key to access a dictionary's child,
+</li><li>
+	use the parameter index to access an array's item.</li></ul>
+	Retrieve the contents of an element with PlistGet.
+	<h3>Changing a plist</h3><p>Modifying a plist may be more difficult since some elements are not changeable and thus can only be replaced inside their container.
+	The modifiable elements are dictionary, arrays and strings.</p>
+	Thus, while
+	<div class="example-source">	PlistGet someReference</div>
+	always works, 
+	<div class="example-source">	PlistSet someReference to something</div> may fail.<br/>
+	And you must use <div class="example-source">	PlistSet someDict key aKey to something</div> or <div class="example-source">	PlistSet someArray index i to something</div>
+	except in some rare cases where either you need to keep some references intact (see warnings) or you set the root itself.<br/> 
+	Examples:
+<div class="example-source">	set p to PlistNew {"a", "b", 1}
+	set pp to PlistChild p index 2
+	PlistGet pp -- returns "b"
+	PlistSet pp to "d" -- ok
+	PlistGet pp -- returns "d"
+	PlistSet pp to {} -- error: pp is not an array
+	PlistSet p index 2 to {} -- ok, but pp is no more valid
+	set pp to PlistChild p index 3
+	PlistGet pp -- returns 1
+	PlistGet p index 3-- returns 1
+	PlistSet pp to 2 -- error: pp is not mutable
+	PlistSet p index 3 to 2 -- ok, but pp is no more valid
+	PlistGet p -- returns {"a", {}, 2}
+</div>
+	<h3>Saving and closing a plist</h3>
+	When you are done with a plist you can save it with PlistSave and close it with PlistClose to release the memory.
+	<h3>Warnings</h3>
+	This suite handles real pointers for the sake of speed. Thus you cannot reuse references to an object that has been replaced or removed:
+	<div class="example-source">	set pp to PlistChild p key "name"
+	PlistSet p key "name" to "a"
+	-- or PlistRemoveChild p key "name"
+	PlistGet pp --crashes the current application</div>
+	while:
+	<div class="example-source">	set pp to PlistChild p key "name"
+	PlistSet pp to "a" -- here we assume that pp already refers to a string
+	PlistGet pp --returns "a"</div>
+	But referring to an element of a plist closed with PlistClose does not crash - it will just throw an error.
+	<div class="example-source">	set pp to PlistChild p key "name"
+	PlistClose p
+	try
+		PlistGet pp --error can't get «data...»
+	on error
+		log "Damnation, the plist does not exist!"
+	end</div>
+        </html>
+      </documentation>
+    <value-type name="CFRef" code="CFob" description="an opaque reference to a property list element. Initial CFRefs must be created with PlistNew or PlistOpen.">
+</value-type>
+    <command name="PlistNew" code="PLSTmake" description="create a new PropertyList with the contents of the direct parameter. Must be balanced with a PlistClose at the end of the job.">
+      <direct-parameter type="anything" optional="yes" description="any AppleScript type, usually, a record or a list. Default: an empty record."/>
+      <parameter name="typed" code="flat" type="boolean" optional="yes" description="if false, write as raw base64 data. Default: true. Use false when storing complex types (such as alias) to allow other software to use the p-list (for instance, when changing a Preference p-list). If false, specify the type with 'as' when using PlistGet."/>
+      <parameter name="in pool" code="pool" type="string" optional="yes" description="the name of the group where the plist document is created. Default: the current pool. At launch the current pool is &quot;&quot;."/>
+      <result type="CFRef" description="a reference to the property list, required by the other PropertyList commands"/>
+    </command>
+    <command name="PlistOpen" code="PLSTopen" description="open a property list file and parse it. Must be balanced with a PlistClose at the end of the job.">
+      <direct-parameter type="alias" description=""/>
+      <parameter name="from string" code="from" type="text" optional="yes" description="a string containing xml data"/>
+      <parameter name="in pool" code="pool" type="string" optional="yes" description="the name of the group where the plist document is created. Default: the current pool. At launch the current pool is &quot;&quot;."/>
+      <result type="CFRef" description="a reference to the parsed property list, required by the other PropertyList commands"/>
+    </command>
+    <command name="PlistClose" code="PLSTclos" description="release memory, associated CFRefs are no more valid.">
+      <direct-parameter type="CFRef"/>
+    </command>
+    <command name="PlistRetain" code="PLSTReta" description="" hidden="yes">
+      <direct-parameter type="CFRef"/>
+    </command>
+    <command name="PlistSave" code="PLSTsave" description="save a Plist.">
+      <direct-parameter type="CFRef" description="the Plist to save"/>
+      <parameter name="in" code="kfil" type="file specification" optional="yes" description="the file path"/>
+      <parameter name="binary" code="bina" type="boolean" optional="yes" description="default: false"/>
+    </command>
+    <command name="PlistBinaryFormat" code="PLSTIsBi" description="is the plist in a binary file format?">
+      <direct-parameter type="CFRef" description="the Plist"/>
+      <result type="boolean"/>
+    </command>
+    <command name="PlistCount" code="PLSTcunt" description="count children in the given CFRef.">
+      <direct-parameter  description="an CFRef">
+	<type type="CFRef"/>
+ 	<type type="CFRef" list="yes"/>
+</direct-parameter>
+      <result description="the number of children">
+	<type type="integer"/>
+ 	<type type="integer" list="yes"/>
+ </result>
+    </command>
+    <command name="PlistChild" code="PLSTchld" description="provide access to children of a given CFRef. Similar to PlistGet, but return a CFRef. Provide either a  &quot;index&quot;, or a &quot;key&quot;, or a &quot;using&quot; parameter. Only the direct parameter or &quot;key&quot;, or &quot;index&quot; may be a list. If there is no specifier, PlistChild returns all the children.">
+      <direct-parameter type="CFRef" description="the parent: an array or a dictionary"/>
+      <parameter name="index" code="indx" type="integer" optional="yes" description="1..PlistCount, index of the requested child"/>
+      <parameter name="key" code="key " type="string" optional="yes" description="relevant only if the direct parameter is a dictionary"/>
+      <parameter name="using" code="by  " type="string" optional="yes" description="a selecting path. A valid path contains sequences of keys (for dictionaries) separated with slashes, and indices (for arrays) inside brackets. Example: &quot;key1/key2[4]/key3[2]&quot;"/>
+      <result type="CFRef" description="the child or a list if one parameter is a list"/>
+    </command>
+    <command name="PlistType" code="PLSTdisp" description="return the type of a CFRef (the tag's name).">
+      <direct-parameter type="CFRef" description="the CFobject to display"/>
+      <result type="string"/>
+    </command>
+    <command name="PlistGet" code="PLSTdisx" description="Similar to PlistChild, but return actual contents. Can be used with direct parameter alone to retrieve the contents of a CFRef. Only one of the parameters &quot;key&quot;, &quot;index&quot; or &quot;using&quot; can be specified. Only the direct parameter or &quot;key&quot;, or &quot;index&quot; may be a list.">
+      <direct-parameter type="CFRef" description="the CFRef to display"/>
+      <parameter name="as" code="rtyp" type="string" optional="yes" description="for base64 data stored 'without typed', the AppleScript type."/>
+      <parameter name="index" code="indx" type="integer" optional="yes" description="1..PlistCount, index of the requested child"/>
+      <parameter name="key" code="key " type="string" optional="yes" description=""/>
+      <parameter name="using" code="by  " type="string" optional="yes" description="a path. See the PlistChild command."/>
+      <result type="anything" description="or a list if one parameter is a list"/>
+    </command>
+    <command name="PlistGetXML" code="PLSTDISP" description="return the contents of a CFRef as xml data.">
+      <direct-parameter type="CFRef" description="the CFRef to display"/>
+      <result type="string"/>
+    </command>
+    <command name="PlistGetKeys" code="PLSTgkey" description="return the list of keys in a dictionary.">
+      <direct-parameter type="CFRef" description="the dictionary"/>
+      <result>
+        <type type="string" list="yes"/>
+      </result>
+    </command>
+    <command name="PlistSet" code="PLSTseta" description="equivalent to PlistNewChild on dictionaries. Use PlistSet to modify an existing element in an array.">
+      <direct-parameter type="CFRef" description="the parent: an array or a dictionary"/>
+      <parameter name="index" code="indx" optional="yes" description="1..PlistCount, index of the requested child">
+		<type type="integer"/>
+		<type type="integer" list="yes"/>
+	</parameter>
+      <parameter name="key" code="key " optional="yes" description="">
+		<type type="string"/>
+		<type type="string" list="yes"/>
+	</parameter>
+      <parameter name="using" code="by  " type="string" optional="yes" description="a path. See the PlistChild command."/>
+      <parameter name="to" code="to  " type="anything" description="any AppleScript content or a CFRef. Be aware of self-references when you use CFRef"/>
+      <parameter name="suppressing" code="Supp" type="boolean" optional="yes" description="default: true. If true and the &quot;to&quot; parameter is a list containing missing values, then XMLSetAttribute removes the corresponding attributes. Otherwise these values are ignored"/>
+      <parameter name="typed" code="flat" type="boolean" optional="yes" description="irrelevant with CFRefs. Default: true. If false, write as raw base64 data. Use false to store complex types (eg alias) for use by other software (eg, when editing a Preference file). If false, specify the type with 'as' when using PlistGet."/>
+      <documentation>
+        <html>
+        </html>
+      </documentation>
+
+    </command>
+    <command name="PlistNewChild" code="PLSTaddc" description="create a new child in a given object (array or dictionary). You must use PlistSet to modify an existing element of an array.">
+      <direct-parameter type="anything" optional="yes" description="any AppleScript content or a CFRef. Be aware of self-references when you use CFRef. Default: an empty record."/>
+      <parameter name="at" code="at  " type="CFRef" description="the container: an array or a dictionary"/>
+      <parameter name="index" code="indx" type="integer" optional="yes" description="1..(PlistCount+1), index of the new child"/>
+      <parameter name="key" code="key " type="string" optional="yes" description="requested if CFRef is a dictionary"/>
+      <parameter name="using" code="by  " type="string" optional="yes" description="a path. See the PlistChild command."/>
+      <parameter name="typed" code="flat" type="boolean" optional="yes" description="see the PlistSet command."/>
+      <result type="CFRef" description="the child"/>
+    </command>
+    <command name="PlistRemoveChild" code="PLSTremc" description="delete an object. The reference to this object (or to any object it may contain) is no longer valid. Future use of this reference may crash XMLLib.">
+      <direct-parameter type="CFRef" description="the container: an array or a dictionary"/>
+      <parameter name="index" code="indx" type="integer" optional="yes" description="1..PlistCount, index of the requested child"/>
+      <parameter name="key" code="key " optional="yes" description="the key of the requested child">
+ 	<type type="string"/>
+	<type type="string" list="yes"/>
+</parameter>
+      <parameter name="using" code="by  " type="string" optional="yes" description="a path. See the PlistChild command."/>
+    </command>
+    <command name="PlistEqual" code="PLSTequa" description="compare the contents of two plist. Return true if equal.">
+      <direct-parameter type="CFRef" description=""/>
+      <parameter name="to" code="to  " type="CFRef"/>
+	<result type="boolean"/>
+    </command>
+    <command name="PlistExist" code="PLSTcont" description="match a value in an array (or a dictionary).">
+      <direct-parameter type="any" description="a value"/>
+      <parameter name="in" code="in  " type="CFRef" description="an array (or a dictionary)"/>
+      <parameter name="several values" code="List" type="boolean" description="is the direct parameter a list of values. Default: false"/>
+	<result description="the available indices (1 based) or the available keys">
+	<type type="integer" list="yes"/>
+	<type type="string" list="yes"/>
+	</result>
+    </command>
+     <command name="PlistMatch" code="PLSTmatc" description="return a list of dictionaries containing a given key or a given (key, value) pair.">
+      <direct-parameter type="CFRef" description="an array containing dictionaries"/>
+      <parameter name="key" code="key " type="string" description="the key to match. For a more complex request, omit this parameter and provide the &quot;using&quot; parameter"/>
+	<parameter name="using" code="by  " type="string" optional="yes" description="a selecting path (see PlistChild)"/>      
+	<parameter name="value" code="to  " optional="yes" description="the requested value of the key">
+	<type type="string"/>
+	<type type="real"/>
+	<type type="boolean"/>
+	</parameter>
+	<result>
+	<type type="CFRef" list="yes"/>
+	</result>
+    </command>
+   <command name="PlistURL" code="PLSTgurl" description="get the path to the plist document.">
+      <direct-parameter type="CFRef" description="the document"/>
+      <parameter name="as" code="rtyp" optional="yes" type="type" description=""/>
+      <parameter name="parent" code="pare" optional="yes" type="boolean" description="return the parent folder. Default: false"/>
+      <result type="file specification" description=""/>
+    </command>
+    <command name="PlistDocument" code="PLSTgfur" description="retrieve the already opened plist from the file URL.">
+      <direct-parameter type="file specification" description=""/>
+      <parameter name="in pool" code="pool" type="string" optional="yes" description="Default: the current pool. At launch the current pool is &quot;&quot;."/>
+      <result type="CFRef" description="the plist"/>
+    </command>
+    <command name="PlistListDocuments" code="PLSTList" description="List the opened plist documents">
+      <direct-parameter type="string" optional="yes" description="the pool. Default: the current pool"/>
+      <result description="the property lists opened in the specified pool.">
+        <type type="CFRef" list="yes"/>
+      </result>
+    </command>
+    <command name="PlistAdd" code="PLSTconc" description="concatenate arrays or dictionaries. &quot;PlistAdd x after y&quot; (resp. &quot;PlistAdd x before y&quot;) works like the Applescript statement &quot;set y to y &amp; x&quot; (resp. &quot;set y to x &amp; y&quot;) ">
+      <direct-parameter type="CFRef" description="of the same type as the &quot;after&quot; or &quot;before&quot; parameter. May alternatively be a list or a record"/>
+      <parameter name="after" code="afte" type="CFRef" optional="yes" description="the array or the dictionary to modify"/>
+      <parameter name="before" code="befo" type="CFRef" optional="yes" description="the array or the dictionary to modify"/>
+    </command>
+    <command name="PlistToJSON" code="PLSTJSON" description="transform a plist into a JSON">
+      <direct-parameter type="CFRef" description=""/>
+      <parameter name="formatting" code="smar" type="boolean" optional="yes" description="add returns and tabs for legibility. Default: false."/>   
+     <parameter name="replacer" code="rplc" type="string" optional="yes" description="a JavaScript function for the optional callback of JSON.stringify."/>   
+	<result type="string"/>
+      <documentation>
+        <html>
+          <div style="display:none" class="example">
+            <div class="example-source">set p to PlistNew
+PlistNewChild 3 at p key "any key"
+PlistNewChild {"a", "list"} at p key "b"
+PlistToJSON p
+-- "{\"b\":[\"a\", \"list\"], \"any key\":3}"
+PlistClose p
+</div>
+          </div>
+        </html>
+      </documentation>
+    </command>
+     <command name="PlistToJavaScript" code="PLSTToJa" hidden="yes" description="">
+      <direct-parameter type="CFRef" description=""/>
+      <result type="string"/>
+    </command>
+  <command name="PlistFromJSON" code="PLSTNOSJ" description="transform a JSON into a plist">
+      <direct-parameter type="string" description="the JSON"/>
+       <parameter name="in pool" code="pool" type="string" optional="yes" description="the name of the group where the plist document is created. Default: the current pool."/>
+     <result type="CFRef"/>
+     </command>
+   <command name="PlistSetDocID" code="PLSTSDbK" description="set an identifier to an existing plist">
+      <direct-parameter type="CFRef" description="the XML document"/>
+	<parameter name="to" code="to  " type="string" description=""/>
+	<result type="string" description="the previous ID"/>
+    </command>
+   <command name="PlistGetDocByID" code="PLSTGDbK" description="retrieve a plist by identifier. Avoid many problems with the AppleScript's global variables">
+      <direct-parameter type="string" description="the identifier"/>
+     <parameter name="in pool" code="pool" type="string" optional="yes" description="Default: the current pool."/>
+	<result type="CFRef" description=""/>
+    </command>
+    <command name="PlistGetID" code="PLSTgID " hidden="yes" description="">
+      <direct-parameter type="CFRef" description="a reference to the property list"/>
+      <result type="integer" description="the ID of the property list"/>
+    </command>
+    <command name="PlistFromID" code="PLSTgfID" hidden="yes" description="">
+      <direct-parameter type="integer" description="the ID of the property list"/>
+      <result type="CFRef" description="a reference to the property list"/>
+    </command>
+  </suite>
+
+	<suite name="Satimage Pool Additions" code="POOL" description="Pool management. Optional features that you can use to manage groups of XML documents or PList's, protect their privacy, and dispose of them when suitable.">
+    <command name="SetPool" code="POOLpool" description="Set the new default pool. Further &quot;XMLOpen&quot;, &quot;XMLListDocuments&quot;, &quot;PlistOpen&quot;, &quot;PlistNew&quot; and &quot;PlistListDocuments&quot; will occur in this pool">
+      <direct-parameter type="string" description="name of the new default pool"/>
+      <result type="string" description="the previous default pool."/>
+    </command>
+    <command name="DeletePool" code="POOLdpoo" description="release all documents in the specified pool.">
+      <direct-parameter type="string" optional="yes" description="name of the pool. Default: the default pool."/>
+    </command>
+    <command name="GetPool" code="POOLgpoo" description="return the name of the pool containing the document">
+      <direct-parameter type="anything" description="an XML document (XMLRef) or a plist document (CFRef)"/>
+      <result type="string" description="the name of the pool."/>
+    </command>
+  </suite>
 
 	<suite name="MTC Diagnostics" code="MTCd" description="Commands for checking that MTC_OSAX is working." hidden="yes">
 		<command name="mtc_ping" code="MTCdping" description="Returns &quot;pong&quot;." hidden="yes">

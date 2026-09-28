@@ -1,0 +1,28 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "text",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1700
+      }
+    }
+  ],
+  "name" : "not-a-reference",
+  "recordedAt" : "2026-09-28T13:15:26Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "PlistGet \"text\"",
+  "timeZone" : "America/New_York"
+}

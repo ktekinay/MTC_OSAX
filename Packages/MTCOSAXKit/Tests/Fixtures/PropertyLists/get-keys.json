@@ -1,0 +1,128 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/simple.plist",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "6900000075a60000808d210000600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "gkey",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "6900000075a60000808d210000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "blob",
+              "type" : "ut16"
+            },
+            {
+              "text" : "count",
+              "type" : "ut16"
+            },
+            {
+              "text" : "dict",
+              "type" : "ut16"
+            },
+            {
+              "text" : "disabled",
+              "type" : "ut16"
+            },
+            {
+              "text" : "emptyList",
+              "type" : "ut16"
+            },
+            {
+              "text" : "emptyText",
+              "type" : "ut16"
+            },
+            {
+              "text" : "enabled",
+              "type" : "ut16"
+            },
+            {
+              "text" : "list",
+              "type" : "ut16"
+            },
+            {
+              "text" : "name",
+              "type" : "ut16"
+            },
+            {
+              "text" : "people",
+              "type" : "ut16"
+            },
+            {
+              "text" : "ratio",
+              "type" : "ut16"
+            },
+            {
+              "text" : "unicode",
+              "type" : "ut16"
+            },
+            {
+              "text" : "when",
+              "type" : "ut16"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "6900000075a60000808d210000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "get-keys",
+  "recordedAt" : "2026-09-28T13:15:22Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistGetKeys p\nPlistClose p",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}
