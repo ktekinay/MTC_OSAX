@@ -42,6 +42,22 @@ struct FixtureTests {
 		#expect(fixture.replay(using: CommandDispatcher()).first?.contains("error -1708") == true)
 	}
 
+	/// A recorded value is replaced everywhere, so only paths and URLs are allowed.
+	@Test func recordedValuesArePathsOrURLs() {
+		var fixture = fixture(expecting: AppleEventReply(result: NSAppleEventDescriptor(int32: 42)))
+		fixture.variables = ["TMP": "/private/tmp/x"]
+		#expect(fixture.replay(using: dispatcher(), variables: ["TMP": "/tmp/y"]).isEmpty)
+		fixture.variables = ["N": "4"]
+		#expect(fixture.replay(using: dispatcher(), variables: ["N": "5"]).first?.contains("isn't a path or URL") == true)
+	}
+
+	/// A keyword descriptor's data was read with an aligned load and no length check.
+	@Test func shortKeyword() {
+		let short = NSAppleEventDescriptor(descriptorType: typeKeyword, data: Data([0x61, 0x62]))!
+		#expect(DescriptorSnapshot(short).code == "????")
+		#expect(DescriptorSnapshot(NSAppleEventDescriptor(descriptorType: typeKeyword, bytes: [UInt32(0x6B657977)], length: 4)!).code == "keyw")
+	}
+
 	@Test func emptyFixtureFails() {
 		var fixture = fixture(expecting: AppleEventReply())
 		fixture.exchanges = []

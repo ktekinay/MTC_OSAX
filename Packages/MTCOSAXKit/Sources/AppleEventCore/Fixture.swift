@@ -112,6 +112,11 @@ public struct Fixture: Codable {
 			guard let value = current[variable] else {
 				return ["\(name): replay needs a value for $\(variable)"]
 			}
+			// Recorded values are replaced in every text, error messages too, so they must be distinctive: a path
+			// or a URL, not something as short as "a" that could turn up anywhere.
+			guard recorded.hasPrefix("/") || recorded.contains("://") else {
+				return ["\(name): $\(variable) was recorded as \"\(recorded)\", which isn't a path or URL to replace safely"]
+			}
 			substitutions.append((recorded, value))
 		}
 		// Property list references (CFRefs) differ between apps: each one the app returns in place of a recorded one

@@ -85,7 +85,9 @@ public struct DescriptorSnapshot: Codable, Hashable {
 		case "enum":
 			code = descriptor.enumCodeValue.fourCharString
 		case "keyw":
-			code = descriptor.data.withUnsafeBytes { $0.load(as: FourCharCode.self) }.fourCharString
+			// Descriptor data needn't be aligned, or long enough.
+			let data = descriptor.data
+			code = data.count >= 4 ? data.withUnsafeBytes { $0.loadUnaligned(as: FourCharCode.self) }.fourCharString : "????"
 		default:
 			if descriptor.isRecordDescriptor {
 				fields = Self.fields(of: descriptor)

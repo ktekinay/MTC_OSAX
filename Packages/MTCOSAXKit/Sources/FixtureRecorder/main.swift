@@ -120,6 +120,10 @@ do {
 // Fixture files are named after cases, and the disk is usually case-insensitive.
 var seenNames: [String: String] = [:]
 for testCase in cases {
+	// A name is a file name next to cases.json, not a path.
+	guard !testCase.name.isEmpty, !testCase.name.contains("/"), !testCase.name.hasPrefix(".") else {
+		fail("Case name \"\(testCase.name)\" can't be a file name: no \"/\", and not starting with \".\".")
+	}
 	if let other = seenNames[testCase.name.lowercased()] {
 		fail("Cases \"\(other)\" and \"\(testCase.name)\" would write the same file on a case-insensitive disk.")
 	}
@@ -135,7 +139,8 @@ for testCase in cases where onlyName == nil || testCase.name == onlyName {
 	capturedExchanges = []
 	var script = testCase.script
 	var used: [String: String] = [:]
-	for (variable, value) in variables where script.contains("$" + variable) {
+	// Longest names first, so $TMP doesn't replace the start of $TMPDIR.
+	for (variable, value) in variables.sorted(by: { $0.key.count > $1.key.count }) where script.contains("$" + variable) {
 		script = script.replacingOccurrences(of: "$" + variable, with: value)
 		used[variable] = value
 	}
