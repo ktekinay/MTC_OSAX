@@ -542,5 +542,9 @@
  {
   "name": "special-concat-per-row",
   "script": "special concat (\"a\" & linefeed & \"b\" & return & \"x\") with (\"c\" & return & \"d\" & linefeed & \"y\")"
+ },
+ {
+  "name": "masklist-empty-with-mask",
+  "script": "masklist {} with {1}"
  }
 ]

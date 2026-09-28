@@ -64,6 +64,10 @@ public enum ListUtilities {
 			throw OSAXError.parameterError
 		}
 		let mask: [Double?] = (Self.items(maskDescriptor) ?? [maskDescriptor]).map { try? Numbers.number($0) }
+		// An empty list with a mask is an empty list, but a longer mask otherwise is -50, as in SatimageOSAX.
+		if items.isEmpty, !mask.isEmpty {
+			return list
+		}
 		guard !mask.isEmpty, mask.count <= items.count else {
 			throw OSAXError.parameterError
 		}
