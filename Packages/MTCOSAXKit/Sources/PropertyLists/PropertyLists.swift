@@ -103,6 +103,22 @@ public enum PropertyLists {
 }
 
 extension PropertyLists {
+	/// Opens a property list from its data (XML or binary) in `pool`: its CFRef. -1 if it isn't one.
+	public static func open(_ data: Data, pool: String?, store: DocumentStore) throws -> NSAppleEventDescriptor {
+		store.reference(try document(data, pool: pool, store: store).root)
+	}
+
+	static func document(_ data: Data, pool: String?, store: DocumentStore) throws -> Document {
+		var format = PropertyListSerialization.PropertyListFormat.xml
+		guard let object = try? PropertyListSerialization.propertyList(from: data, options: [], format: &format) else {
+			throw invalid
+		}
+		let document = store.newDocument(pool: pool)
+		document.isBinary = format == .binary
+		document.root = node(from: object, in: document)
+		return document
+	}
+
 	/// Adds keys to the dictionary a CFRef refers to (replacing ones it has), for `filter text … into`: -1 unless it's
 	/// a dictionary.
 	public static func add(_ entries: [(key: String, value: Any)], to reference: NSAppleEventDescriptor, store: DocumentStore) throws {
@@ -165,14 +181,8 @@ struct Commands {
 			data = contents
 			url = file
 		}
-		var format = PropertyListSerialization.PropertyListFormat.xml
-		guard let object = try? PropertyListSerialization.propertyList(from: data, options: [], format: &format) else {
-			throw PropertyLists.invalid
-		}
-		let document = store.newDocument(pool: pool)
+		let document = try PropertyLists.document(data, pool: pool, store: store)
 		document.url = url
-		document.isBinary = format == .binary
-		document.root = PropertyLists.node(from: object, in: document)
 		return store.reference(document.root)
 	}
 

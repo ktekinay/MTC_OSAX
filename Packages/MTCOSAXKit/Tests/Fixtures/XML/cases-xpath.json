@@ -1,0 +1,438 @@
+[
+ {
+  "name": "xpath-children",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset x to XMLXPath r with \"book\"\nx\nXMLClose d"
+ },
+ {
+  "name": "xpath-descendants",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset x to XMLXPath r with \"//title\"\nx\nXMLClose d"
+ },
+ {
+  "name": "xpath-predicate",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset x to XMLXPath r with \"book[@lang='fr']/title\"\nx\nXMLClose d"
+ },
+ {
+  "name": "xpath-position",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset x to XMLXPath r with \"book[2]\"\nx\nXMLClose d"
+ },
+ {
+  "name": "xpath-attribute",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset x to XMLXPath r with \"book/@id\"\nx\nXMLClose d"
+ },
+ {
+  "name": "xpath-text-nodes",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset x to XMLXPath r with \"book/title/text()\"\nx\nXMLClose d"
+ },
+ {
+  "name": "xpath-count",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset x to XMLXPath r with \"count(//book)\"\nx\nXMLClose d"
+ },
+ {
+  "name": "xpath-string",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset x to XMLXPath r with \"string(book[1]/title)\"\nx\nXMLClose d"
+ },
+ {
+  "name": "xpath-boolean",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset x to XMLXPath r with \"count(book) > 1\"\nx\nXMLClose d"
+ },
+ {
+  "name": "xpath-number-sum",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset x to XMLXPath r with \"sum(//year)\"\nx\nXMLClose d"
+ },
+ {
+  "name": "xpath-no-match",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset x to XMLXPath r with \"nothing\"\nx\nXMLClose d"
+ },
+ {
+  "name": "xpath-absolute",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset x to XMLXPath r with \"/library/note\"\nx\nXMLClose d"
+ },
+ {
+  "name": "xpath-parent",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset x to XMLXPath r with \"book[1]/title/..\"\nx\nXMLClose d"
+ },
+ {
+  "name": "xpath-union",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset x to XMLXPath r with \"note | empty\"\nx\nXMLClose d"
+ },
+ {
+  "name": "xpath-comment",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset x to XMLXPath r with \"book[2]/comment()\"\nx\nXMLClose d"
+ },
+ {
+  "name": "xpath-invalid",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset x to XMLXPath r with \"book[\"\nx\nXMLClose d"
+ },
+ {
+  "name": "xpath-unknown-function",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset x to XMLXPath r with \"nope(1)\"\nx\nXMLClose d"
+ },
+ {
+  "name": "xpath-prefix-undeclared",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset x to XMLXPath r with \"book/dc:creator\"\nx\nXMLClose d"
+ },
+ {
+  "name": "xpath-prefix-declared",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset x to XMLXPath r with \"book/dc:creator\" namespace {nsprefix:\"dc\", nsurl:\"http://purl.org/dc/elements/1.1/\"}\nx\nXMLClose d"
+ },
+ {
+  "name": "xpath-prefix-declared-list",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset x to XMLXPath r with \"book/dc:creator\" namespace {{nsprefix:\"dc\", nsurl:\"http://purl.org/dc/elements/1.1/\"}}\nx\nXMLClose d"
+ },
+ {
+  "name": "xpath-variable-list",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset x to XMLXPath r with \"book[@id=$v]/title\" xpath variables {\"v\", \"b2\"}\nx\nXMLClose d"
+ },
+ {
+  "name": "xpath-variable-record",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset x to XMLXPath r with \"book[@id=$v]/title\" xpath variables {v:\"b2\"}\nx\nXMLClose d"
+ },
+ {
+  "name": "xpath-variable-number",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset x to XMLXPath r with \"book[$n]/title\" xpath variables {\"n\", 2}\nx\nXMLClose d"
+ },
+ {
+  "name": "xpath-variable-boolean",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset x to XMLXPath r with \"$b\" xpath variables {\"b\", true}\nx\nXMLClose d"
+ },
+ {
+  "name": "xpath-variable-undefined",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset x to XMLXPath r with \"book[@id=$v]\"\nx\nXMLClose d"
+ },
+ {
+  "name": "xpath-variable-list-odd",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset x to XMLXPath r with \"$v\" xpath variables {\"v\"}\nx\nXMLClose d"
+ },
+ {
+  "name": "xpath-result-use",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset {t} to XMLXPath r with \"book[1]/title\"\nXMLGetText t\nXMLClose d"
+ },
+ {
+  "name": "xpath-attribute-use",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset a to item 1 of (XMLXPath r with \"book/@id\")\nXMLNodeInfo a\nXMLGetText a\nXMLTagName a\nXMLClose d"
+ },
+ {
+  "name": "xpath-from-document",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLXPath d with \"library/book[1]/title\"\nXMLXPath d with \"//year\"\nXMLClose d"
+ },
+ {
+  "name": "xpath-from-text-node",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset t to XMLChild (XMLChild (XMLChild r index 1) index 1) index 1\nXMLXPath t with \"..\"\nXMLClose d"
+ },
+ {
+  "name": "xpath-default-namespace",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/namespaces.xml\")\nset r to XMLRoot d\nXMLXPath r with \"item\"\nXMLXPath r with \"d:item\" namespace {nsprefix:\"d\", nsurl:\"urn:default\"}\nXMLClose d"
+ },
+ {
+  "name": "xpath-no-with",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLXPath r\nXMLClose d"
+ },
+ {
+  "name": "xpath-list",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLXPath {r, XMLChild r index 1} with \"title\"\nXMLClose d"
+ },
+ {
+  "name": "xpath-functions-fn",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLSetContext d namespace {{nsprefix:\"fn\", nsurl:\"http://www.w3.org/2005/xpath-functions\"}}\ntry\nXMLXPath r with \"fn:upper-case(string(book[1]/title))\"\nend try\ntry\nXMLXPath r with \"fn:lower-case('ABC')\"\nend try\ntry\nXMLXPath r with \"fn:compare('a', 'b')\"\nend try\ntry\nXMLXPath r with \"fn:compare('b', 'b')\"\nend try\ntry\nXMLXPath r with \"fn:ends-with('abc', 'bc')\"\nend try\ntry\nXMLXPath r with \"fn:base-uri(book[1])\"\nend try\ntry\nXMLXPath r with \"fn:upper-case()\"\nend try\nXMLClose d"
+ },
+ {
+  "name": "xpath-functions-exslt-math",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLSetContext d namespace {{nsprefix:\"math\", nsurl:\"http://exslt.org/math\"}}\ntry\nXMLXPath r with \"math:abs(-3)\"\nend try\ntry\nXMLXPath r with \"math:max(//year)\"\nend try\ntry\nXMLXPath r with \"math:sqrt(16)\"\nend try\nXMLClose d"
+ },
+ {
+  "name": "xpath-functions-exslt-str",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLSetContext d namespace {{nsprefix:\"str\", nsurl:\"http://exslt.org/strings\"}}\ntry\nXMLXPath r with \"str:padding(3, 'x')\"\nend try\ntry\nXMLXPath r with \"str:concat(//title)\"\nend try\ntry\nXMLXPath r with \"str:encode-uri('a b', true())\"\nend try\ntry\nXMLXPath r with \"str:align('ab', '----', 'right')\"\nend try\ntry\nXMLXPath r with \"str:decode-uri('a%20b')\"\nend try\nXMLClose d"
+ },
+ {
+  "name": "xpath-functions-exslt-set",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLSetContext d namespace {{nsprefix:\"set\", nsurl:\"http://exslt.org/sets\"}}\ntry\nXMLXPath r with \"count(set:distinct(//book/@lang | //book/@lang))\"\nend try\ntry\nXMLXPath r with \"count(set:leading(book, book[2]))\"\nend try\nXMLClose d"
+ },
+ {
+  "name": "xpath-functions-exslt-date",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLSetContext d namespace {{nsprefix:\"date\", nsurl:\"http://exslt.org/dates-and-times\"}}\ntry\nXMLXPath r with \"date:year('2020-03-04')\"\nend try\ntry\nXMLXPath r with \"date:day-name('2020-03-04')\"\nend try\nXMLClose d"
+ },
+ {
+  "name": "xpath-functions-exslt-crypto",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLSetContext d namespace {{nsprefix:\"crypto\", nsurl:\"http://exslt.org/crypto\"}}\ntry\nXMLXPath r with \"crypto:md5('abc')\"\nend try\ntry\nXMLXPath r with \"crypto:sha1('abc')\"\nend try\ntry\nXMLXPath r with \"crypto:sha256('abc')\"\nend try\ntry\nXMLXPath r with \"crypto:sha224('abc')\"\nend try\nXMLClose d"
+ },
+ {
+  "name": "xpath-functions-satimage-uri",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLSetContext d namespace {{nsprefix:\"sat\", nsurl:\"http://satimage.fr/software/xpath-functions\"}}\ntry\nXMLXPath r with \"sat:parent-uri('http://a.com/b/c.xml')\"\nend try\ntry\nXMLXPath r with \"sat:relative-uri('http://a.com/b/c.xml', 'http://a.com/d/e.xml')\"\nend try\ntry\nXMLXPath r with \"sat:parent-uri('http://a.com/b/')\"\nend try\nXMLClose d"
+ },
+ {
+  "name": "xpath-functions-undeclared",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLXPath r with \"upper-case('a')\"\nXMLXPath r with \"math:abs(-3)\"\nXMLClose d"
+ },
+ {
+  "name": "xpath-context",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLSetContext d namespace {{nsprefix:\"dc\", nsurl:\"http://purl.org/dc/elements/1.1/\"}} xpath variables {\"v\", \"b1\"}\nXMLGetContext d\nXMLXPath r with \"book[@id=$v]/dc:creator\"\nXMLClose d"
+ },
+ {
+  "name": "xpath-context-empty",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLGetContext d\nXMLClose d"
+ },
+ {
+  "name": "xpath-context-override",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLSetContext d xpath variables {\"v\", \"b1\"}\nXMLXPath r with \"book[@id=$v]/title\" xpath variables {\"v\", \"b2\"}\nXMLClose d"
+ },
+ {
+  "name": "xpath-context-record",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLSetContext d xpath variables {v:\"b1\", n:2}\nXMLGetContext d\nXMLClose d"
+ },
+ {
+  "name": "xpath-context-from-parameters",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLXPath r with \"book[@id=$v]/dc:creator\" namespace {nsprefix:\"dc\", nsurl:\"http://purl.org/dc/elements/1.1/\"} xpath variables {\"v\", \"b1\"}\nXMLGetContext d\nXMLXPath r with \"book[@id=$v]/dc:creator\"\nXMLXPath r with \"count(book[@id=$v])\" xpath variables {\"v\", \"b2\"}\nXMLGetContext d\nXMLClose d"
+ },
+ {
+  "name": "xpath-context-from-index",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLNewIndex \"k\" match \"//book[@lang=$l]\" use \"dc:creator\" at d namespace {nsprefix:\"dc\", nsurl:\"http://purl.org/dc/elements/1.1/\"} xpath variables {\"l\", \"fr\"}\nXMLGetContext d\nXMLClose d"
+ },
+ {
+  "name": "xpath-context-from-xpointer",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLXPointer \"#xpointer(//dc:creator)\" from d namespace {nsprefix:\"dc\", nsurl:\"http://purl.org/dc/elements/1.1/\"}\nXMLGetContext d\nXMLClose d"
+ },
+ {
+  "name": "xpath-context-other-document",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset e to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLSetContext d xpath variables {\"v\", \"b1\"}\nXMLXPath (XMLRoot e) with \"book[@id=$v]\"\nXMLClose d\nXMLClose e"
+ },
+ {
+  "name": "xpath-node-path",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset y to item 1 of (XMLXPath r with \"book[2]/year\")\nXMLGetNodePath y\nXMLGetNodePath r\nXMLClose d"
+ },
+ {
+  "name": "xpath-node-path-document",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLGetNodePath d\nXMLClose d"
+ },
+ {
+  "name": "xpath-node-path-text",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset t to item 1 of (XMLXPath r with \"book[1]/title/text()\")\nXMLGetNodePath t\nXMLClose d"
+ },
+ {
+  "name": "xpath-node-path-attribute",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset a to item 1 of (XMLXPath r with \"book[1]/@lang\")\nXMLGetNodePath a\nXMLClose d"
+ },
+ {
+  "name": "xpath-node-path-comment",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset c to item 1 of (XMLXPath r with \"book[2]/comment()\")\nXMLGetNodePath c\nXMLClose d"
+ },
+ {
+  "name": "xpath-node-path-unique",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLGetNodePath (XMLFind r name \"note\")\nXMLClose d"
+ },
+ {
+  "name": "xpath-node-path-namespace",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLGetNodePath (XMLChild (XMLChild r index 1) index 2)\nXMLClose d"
+ },
+ {
+  "name": "xptr-xpath",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLXPointer \"#xpointer(//book[2]/title)\" from d\nXMLClose d"
+ },
+ {
+  "name": "xptr-xpath-use",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset {t} to XMLXPointer \"#xpointer(//book[2]/title)\" from d\nXMLGetText t\nXMLClose d"
+ },
+ {
+  "name": "xptr-id",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/dtd.xml\") with validate\nset {p} to XMLXPointer \"#p2\" from d\nXMLGetText p\nXMLClose d"
+ },
+ {
+  "name": "xptr-id-not-validated",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/dtd.xml\")\nXMLXPointer \"#p2\" from d\nXMLClose d"
+ },
+ {
+  "name": "xptr-id-missing",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/dtd.xml\") with validate\nXMLXPointer \"#zz\" from d\nXMLClose d"
+ },
+ {
+  "name": "xptr-other-file",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset {p} to XMLXPointer \"dtd.xml#xpointer(/people/person[1])\" from d\nXMLGetText p\nXMLClose d"
+ },
+ {
+  "name": "xptr-base-url",
+  "script": "set {p} to XMLXPointer \"dtd.xml#xpointer(/people/person[2])\" baseURL \"file://$FILES/\"\nXMLGetText p"
+ },
+ {
+  "name": "xptr-no-read-permission",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLXPointer \"latin1.xml#xpointer(/root)\" from d without read permission\nXMLClose d"
+ },
+ {
+  "name": "xptr-namespace",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLXPointer \"#xpointer(//dc:creator)\" from d namespace {nsprefix:\"dc\", nsurl:\"http://purl.org/dc/elements/1.1/\"}\nXMLClose d"
+ },
+ {
+  "name": "xptr-invalid",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLXPointer \"#xpointer(((\" from d\nXMLClose d"
+ },
+ {
+  "name": "xptr-escape",
+  "script": "XMLEscapeXPointer \"it's (a) test ^ here\"\nXMLEscapeXPointer \"plain\""
+ },
+ {
+  "name": "xslt-file",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset t to XMLTransform d with (POSIX file \"$FILES/titles.xsl\")\nXMLDisplayXML t\nXMLClose t\nXMLClose d"
+ },
+ {
+  "name": "xslt-path-string",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset t to XMLTransform d with \"$FILES/titles.xsl\"\nXMLDisplayXML t\nXMLClose t\nXMLClose d"
+ },
+ {
+  "name": "xslt-reference",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset s to XMLOpen (POSIX file \"$FILES/titles.xsl\")\nset t to XMLTransform d with s\nXMLDisplayXML t\nXMLClose t\nXMLClose s\nXMLClose d"
+ },
+ {
+  "name": "xslt-string",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset t to XMLTransform d with \"<xsl:stylesheet version=\\\"1.0\\\" xmlns:xsl=\\\"http://www.w3.org/1999/XSL/Transform\\\"><xsl:template match=\\\"/\\\"><n><xsl:value-of select=\\\"count(//book)\\\"/></n></xsl:template></xsl:stylesheet>\"\nXMLDisplayXML t\nXMLClose t\nXMLClose d"
+ },
+ {
+  "name": "xslt-params",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset t to XMLTransform d with (POSIX file \"$FILES/titles.xsl\") xsl params {\"label\", \"'Books'\"}\nXMLGetAttribute (XMLRoot t) name \"label\"\nXMLClose t\nXMLClose d"
+ },
+ {
+  "name": "xslt-params-xpath",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset t to XMLTransform d with (POSIX file \"$FILES/titles.xsl\") xsl params {\"label\", \"count(//book)\"}\nXMLGetAttribute (XMLRoot t) name \"label\"\nXMLClose t\nXMLClose d"
+ },
+ {
+  "name": "xslt-params-record",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset t to XMLTransform d with (POSIX file \"$FILES/titles.xsl\") xsl params {label:\"'R'\"}\nXMLGetAttribute (XMLRoot t) name \"label\"\nXMLClose t\nXMLClose d"
+ },
+ {
+  "name": "xslt-string-params",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset t to XMLTransform d with (POSIX file \"$FILES/titles.xsl\") xsl string params {\"label\", \"It's\"}\nXMLGetAttribute (XMLRoot t) name \"label\"\nXMLClose t\nXMLClose d"
+ },
+ {
+  "name": "xslt-as-string",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLTransform d with (POSIX file \"$FILES/titles.xsl\") as string\nXMLClose d"
+ },
+ {
+  "name": "xslt-text-as-string",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLTransform d with (POSIX file \"$FILES/text.xsl\") as string\nXMLClose d"
+ },
+ {
+  "name": "xslt-text-as-reference",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset t to XMLTransform d with (POSIX file \"$FILES/text.xsl\")\nXMLDisplayXML t\nXMLClose d"
+ },
+ {
+  "name": "xslt-as-plist",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset p to XMLTransform d with (POSIX file \"$FILES/plist.xsl\") as CFRef\nPlistGet p\nPlistClose p\nXMLClose d"
+ },
+ {
+  "name": "xslt-in-file",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLTransform d with (POSIX file \"$FILES/titles.xsl\") in (POSIX file \"$TMP/titles-out.xml\")\nXMLClose d\nreadtext (POSIX file \"$TMP/titles-out.xml\")"
+ },
+ {
+  "name": "xslt-in-pool",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset t to XMLTransform d with (POSIX file \"$FILES/titles.xsl\") in pool \"mtc-xs\"\nGetPool t\nXMLClose t\nXMLClose d"
+ },
+ {
+  "name": "xslt-node",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset t to XMLTransform (XMLChild r index 2) with (POSIX file \"$FILES/titles.xsl\")\nXMLDisplayXML t\nXMLClose t\nXMLClose d"
+ },
+ {
+  "name": "xslt-processing-instruction",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/with-pi.xml\")\nXMLTransform d as string\nXMLClose d"
+ },
+ {
+  "name": "xslt-no-stylesheet",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLTransform d\nXMLClose d"
+ },
+ {
+  "name": "xslt-invalid",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLTransform d with (POSIX file \"$FILES/invalid.xsl\")\nXMLClose d"
+ },
+ {
+  "name": "xslt-missing-file",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLTransform d with (POSIX file \"$FILES/nope.xsl\")\nXMLClose d"
+ },
+ {
+  "name": "xslt-exslt",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLTransform d with (POSIX file \"$FILES/exslt.xsl\") as string\nXMLClose d"
+ },
+ {
+  "name": "xslt-compile",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset s to XMLOpen (POSIX file \"$FILES/titles.xsl\")\nXMLCompile s\nset t to XMLTransform d with s\nXMLGetAttribute (XMLRoot t) name \"label\"\nXMLClose t\nXMLClose s\nXMLClose d"
+ },
+ {
+  "name": "xslt-result-url",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset t to XMLTransform d with (POSIX file \"$FILES/titles.xsl\")\nXMLURL t\nXMLClose t\nXMLClose d"
+ },
+ {
+  "name": "index-lookup",
+  "script": "set d to XMLOpen from string \"<a><b name='x'/><b name='y'/><b name='x'/></a>\"\nXMLNewIndex \"k\" match \"//b\" use \"@name\" at d\nXMLLookup \"x\" using \"k\" at d\nXMLLookup \"y\" using \"k\" at d\nXMLLookup \"z\" using \"k\" at d\nXMLEntries \"k\" at d\nXMLEntries \"k\" at d with duplicate match\nXMLEntries \"k\" at d without duplicate match\nXMLClose d"
+ },
+ {
+  "name": "index-documentation",
+  "script": "set doc to XMLOpen from string \"<a><b name='x'/><b name='y'/></a>\"\nXMLNewIndex \"test key\" match \"//b\" use \"@name\" at doc\nset {x} to XMLLookup \"x\" using \"test key\" at doc\nXMLDisplayXML x\nXMLClose doc"
+ },
+ {
+  "name": "index-empty",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLNewIndex \"k\" match \"//nothing\" use \"@id\" at d\nXMLClose d"
+ },
+ {
+  "name": "index-missing",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLLookup \"x\" using \"nope\" at d\nXMLClose d"
+ },
+ {
+  "name": "index-missing-entries",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLEntries \"nope\" at d\nXMLClose d"
+ },
+ {
+  "name": "index-at-node",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLNewIndex \"k\" match \"book\" use \"title\" at r\nXMLLookup \"Emma\" using \"k\" at r\nXMLLookup \"Moby-Dick\" using \"k\" at d\nXMLClose d"
+ },
+ {
+  "name": "index-namespace",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLNewIndex \"k\" match \"//book\" use \"dc:creator\" at d namespace {nsprefix:\"dc\", nsurl:\"http://purl.org/dc/elements/1.1/\"}\nXMLLookup \"Victor Hugo\" using \"k\" at d\nXMLClose d"
+ },
+ {
+  "name": "index-variables",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLNewIndex \"k\" match \"//book[@lang=$l]\" use \"@id\" at d xpath variables {\"l\", \"fr\"}\nXMLEntries \"k\" at d\nXMLClose d"
+ },
+ {
+  "name": "index-replace",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLNewIndex \"k\" match \"//book\" use \"@id\" at d\nXMLNewIndex \"k\" match \"//book\" use \"@lang\" at d\nXMLEntries \"k\" at d\nXMLClose d"
+ },
+ {
+  "name": "index-document",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLIndexDocument d\nXMLClose d"
+ },
+ {
+  "name": "index-order",
+  "script": "set d to XMLOpen from string \"<a><b n='m'/><b n='c'/><b n='z'/><b n='a'/><b n='c'/><b n='q'/></a>\"\nXMLNewIndex \"k\" match \"//b\" use \"@n\" at d\nXMLEntries \"k\" at d\nXMLLookup \"c\" using \"k\" at d\nXMLClose d"
+ },
+ {
+  "name": "index-remove",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLNewIndex \"k\" match \"//book\" use \"@id\" at d\nXMLNewIndex \"k\" match \"\" use \"@id\" at d\nXMLEntries \"k\" at d\nXMLClose d"
+ },
+ {
+  "name": "xpath-node-path-several",
+  "script": "set d to XMLOpen from string \"<a><!--1--><!--2--><?p x?><b/>t<b/><?p y?></a>\"\nset r to XMLRoot d\nXMLGetNodePath (XMLChild r index 2 with all nodes)\nXMLGetNodePath (XMLChild r index 3 with all nodes)\nXMLGetNodePath (XMLChild r index 5 with all nodes)\nXMLGetNodePath (XMLChild r index 7 with all nodes)\nXMLClose d"
+ },
+ {
+  "name": "xpath-node-path-from-other",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLGetNodePath (item 1 of (XMLXPath r with \"book[2]/year\")) from (XMLChild r index 1)\nXMLClose d"
+ },
+ {
+  "name": "xptr-get-suffix-slash",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLGetXPointer (XMLChild r index 2) suffix \"/title\"\nXMLClose d"
+ },
+ {
+  "name": "xptr-get-no-url",
+  "script": "set d to XMLOpen from string \"<a><b/></a>\"\nset r to XMLRoot d\nXMLGetXPointer (XMLChild r index 1)\nXMLClose d"
+ },
+ {
+  "name": "xpath-strings",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLStrings (XMLXPath r with \"//title/text()\")\nXMLStrings (XMLChild r index 1)\nXMLClose d"
+ },
+ {
+  "name": "xpath-localize-text",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset l to XMLXPath r with \"//title/text()\"\nwritetext \"\\\"Moby-Dick\\\" = \\\"Moby Dick (fr)\\\";\" to (POSIX file \"$TMP/l.strings\")\nXMLLocalize l using (POSIX file \"$TMP/l.strings\")\nXMLGetText l\nXMLClose d"
+ },
+ {
+  "name": "xpath-localize-element",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nwritetext \"\\\"%1$sMoby-Dick%2$s%3$sHerman Melville%4$s%5$s1851%6$s%7$s9.99%8$s\\\" = \\\"%3$sHM%4$s%1$sMD%2$s%7$s1%8$s%5$s2%6$s\\\";\" to (POSIX file \"$TMP/e.strings\")\nXMLLocalize b using (POSIX file \"$TMP/e.strings\")\nXMLDisplayXML b\nXMLClose d"
+ },
+ {
+  "name": "xpath-strings-nested",
+  "script": "set d to XMLOpen from string \"<a>x<b>y<c>z</c></b><d/>w</a>\"\nset r to XMLRoot d\nXMLStrings r\nXMLClose d"
+ }
+]

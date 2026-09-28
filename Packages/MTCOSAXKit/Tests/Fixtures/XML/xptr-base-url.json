@@ -1,0 +1,80 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "xptr",
+        "fields" : [
+          {
+            "key" : "Krtn",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "p",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "burl",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "dtd.xml#xpointer(/people/person[2])",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "hex" : "350000000d70010080a9840000600000",
+              "type" : "XMLR"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "gttx",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "350000000d70010080a9840000600000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "Bob",
+          "type" : "utf8"
+        }
+      }
+    }
+  ],
+  "name" : "xptr-base-url",
+  "recordedAt" : "2026-09-28T15:05:17Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set {p} to XMLXPointer \"dtd.xml#xpointer(/people/person[2])\" baseURL \"file://$FILES/\"\nXMLGetText p",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

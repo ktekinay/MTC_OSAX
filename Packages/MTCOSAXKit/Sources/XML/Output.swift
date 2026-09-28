@@ -73,7 +73,7 @@ enum Output {
 	}
 
 	/// Runs `body` with libxml2's indent string set to `XMLSetIndentString`'s (a tab by default).
-	private static func withIndentString<T>(_ indent: String, _ body: () throws -> T) rethrows -> T {
+	static func withIndentString<T>(_ indent: String, _ body: () throws -> T) rethrows -> T {
 		let pointer = __xmlTreeIndentString()!
 		let previous = pointer.pointee
 		let copy = strdup(indent)!

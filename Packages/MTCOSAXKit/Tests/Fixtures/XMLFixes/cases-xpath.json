@@ -1,0 +1,34 @@
+[
+ {
+  "name": "xpath-functions-exslt-str-replace",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLSetContext d namespace {{nsprefix:\"str\", nsurl:\"http://exslt.org/strings\"}}\ntry\nXMLXPath r with \"str:replace('a-b-c', '-', '+')\"\nend try\ntry\nXMLXPath r with \"str:replace(string(book[1]/title), 'Dick', 'Duck')\"\nend try\nXMLClose d"
+ },
+ {
+  "name": "xpath-context-remove",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLSetContext d namespace {{nsprefix:\"dc\", nsurl:\"http://purl.org/dc/elements/1.1/\"}} xpath variables {\"v\", \"b1\"}\nXMLSetContext d namespace {{nsprefix:\"dc\", nsurl:\"\"}} xpath variables {\"v\", missing value}\nXMLGetContext d\nXMLXPath r with \"book/dc:creator\"\nXMLClose d"
+ },
+ {
+  "name": "xpath-context-from-list",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset e to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLXPath {XMLRoot d, XMLRoot e} with \"$v\" xpath variables {\"v\", 1}\nXMLGetContext d\nXMLGetContext e\nXMLClose d\nXMLClose e"
+ },
+ {
+  "name": "xpath-node-path-from-root",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset y to item 1 of (XMLXPath r with \"book[2]/year\")\nXMLGetNodePath y from r\nXMLClose d"
+ },
+ {
+  "name": "xpath-node-path-from",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLGetNodePath (item 1 of (XMLXPath r with \"book[2]/year\")) from (XMLChild r index 2)\nXMLClose d"
+ },
+ {
+  "name": "xptr-relative",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLXPointer \"#xpointer(title)\" from (XMLChild r index 1)\nXMLClose d"
+ },
+ {
+  "name": "xptr-no-url",
+  "script": "set d to XMLOpen from string \"<a><b>B</b></a>\"\nset {b} to XMLXPointer \"#xpointer(/a/b)\" from d\nXMLGetText b\nXMLClose d"
+ },
+ {
+  "name": "xptr-get",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLGetXPointer (XMLChild r index 2)\nXMLGetXPointer (XMLChild r index 2) suffix \"title\"\nXMLGetXPointer d\nXMLClose d"
+ }
+]

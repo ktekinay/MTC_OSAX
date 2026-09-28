@@ -590,7 +590,7 @@ extension XMLCommands {
 			return RecordFields(fields)
 		}
 		let type = node.pointee.type
-		if type == XML_ELEMENT_NODE || type == XML_PI_NODE {
+		if type == XML_ELEMENT_NODE || type == XML_PI_NODE || type == XML_ATTRIBUTE_NODE {
 			fields.append((.code("pnam"), NSAppleEventDescriptor(string: Parsing.name(node))))
 		}
 		if type == XML_ELEMENT_NODE {

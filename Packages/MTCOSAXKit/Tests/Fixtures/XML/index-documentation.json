@@ -1,0 +1,165 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "text" : "<a><b name='x'/><b name='y'/></a>",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "600000000d7001000000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "NKey",
+        "fields" : [
+          {
+            "key" : "matc",
+            "value" : {
+              "text" : "//b",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "use ",
+            "value" : {
+              "text" : "@name",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "at  ",
+            "value" : {
+              "hex" : "600000000d7001000000000000000000",
+              "type" : "XMLR"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "test key",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "GKey",
+        "fields" : [
+          {
+            "key" : "Krtn",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "x",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "test key",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "at  ",
+            "value" : {
+              "hex" : "600000000d7001000000000000000000",
+              "type" : "XMLR"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "hex" : "600000000d70010080a6830000600000",
+              "type" : "XMLR"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "600000000d70010080a6830000600000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "<b name=\"x\"/>",
+          "type" : "utf8"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "600000000d7001000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "index-documentation",
+  "recordedAt" : "2026-09-28T15:05:18Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set doc to XMLOpen from string \"<a><b name='x'/><b name='y'/></a>\"\nXMLNewIndex \"test key\" match \"//b\" use \"@name\" at doc\nset {x} to XMLLookup \"x\" using \"test key\" at doc\nXMLDisplayXML x\nXMLClose doc",
+  "timeZone" : "America/New_York"
+}

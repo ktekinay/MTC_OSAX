@@ -21,7 +21,7 @@ public enum XML {
 			XMLReferences.isReference(descriptor) ? try commands.references.resolve(descriptor).0 : nil
 		}
 		// libxml2's callbacks are per thread; the app runs every command on the main thread, tests on several.
-		return (commands.dom + commands.documents + stageTwoAndThree).map { command in
+		return (commands.dom + commands.documents + commands.xpath + commands.xslt + stageThree).map { command in
 			CommandDefinition(command.name, code: command.key.code) { request in
 				XMLDocument.installCallbacks()
 				return try command.handler(request)
@@ -29,12 +29,8 @@ public enum XML {
 		}
 	}
 
-	/// XPath, XSLT and Validation: stages 2 and 3 of PLAN-XML.md, not implemented yet.
-	private static var stageTwoAndThree: [CommandDefinition] { [
-		("XMLXPath", "XML path"), ("XMLSetContext", "XML xpns"), ("XMLGetContext", "XML xpNS"), ("XMLGetNodePath", "XML NoPa"),
-		("XMLXPointer", "XML xptr"), ("XMLEscapeXPointer", "XML ExXp"), ("XMLGetXPointer", "XML gxpt"), ("XMLTransform", "XML xslt"),
-		("XMLCompile", "XML pxsl"), ("XMLNewIndex", "XML NKey"), ("XMLLookup", "XML GKey"), ("XMLEntries", "XML LKey"),
-		("XMLIndexDocument", "XML idoc"), ("XMLStrings", "XML DCon"), ("XMLLocalize", "XML LoCo"),
+	/// Validation: stage 3 of PLAN-XML.md, not implemented yet.
+	private static var stageThree: [CommandDefinition] { [
 		("XMLValidate", "XML vali"), ("XMLSchema", "XML Schm"), ("XMLRelaxNG", "XML rlax"), ("XMLCheckDTD", "XML Pdtd"),
 		("XMLGetByID", "XML geti"), ("XMLGetxmlID", "XML geID"), ("XMLValidName", "XML Isnm"), ("XMLValidNCName", "XML Isnc"),
 		("XMLDu", "XML du  "),

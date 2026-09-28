@@ -17,6 +17,13 @@ final class XMLDocument: StoredDocument {
 	/// `XMLSetExtras`: any value a script keeps with the document.
 	var extras: NSAppleEventDescriptor?
 	var isModified = false
+	/// `XMLSetContext`: namespaces and variables for this document's XPath expressions, in the order they were set.
+	var namespaces: [(prefix: String, uri: String)] = []
+	var variables: [(name: String, value: NSAppleEventDescriptor)] = []
+	/// `XMLCompile`: the document compiled as a stylesheet, used when it's `XMLTransform`'s stylesheet.
+	var stylesheet: xsltStylesheetPtr?
+	/// `XMLNewIndex`: indexes by name.
+	var indexes: [String: XMLIndex] = [:]
 	fileprivate var nodes: [Int: xmlNodePtr] = [:]
 	private var nextNode = 1
 
@@ -28,6 +35,10 @@ final class XMLDocument: StoredDocument {
 	}
 
 	func didClose() {
+		if let stylesheet {
+			xsltFreeStylesheet(stylesheet)
+			self.stylesheet = nil
+		}
 		guard let doc else { return }
 		self.doc = nil
 		doc.pointee._private = nil
@@ -59,6 +70,12 @@ final class XMLDocument: StoredDocument {
 			return doc.map { UnsafeMutableRawPointer($0).assumingMemoryBound(to: xmlNode.self) }
 		}
 		return nodes[number]
+	}
+
+	/// The open document a node belongs to (nil for a copy, like a stylesheet's).
+	static func owner(of node: xmlNodePtr) -> XMLDocument? {
+		guard let doc = node.pointee.doc, let owner = doc.pointee._private else { return nil }
+		return Unmanaged<XMLDocument>.fromOpaque(owner).takeUnretainedValue()
 	}
 
 	/// Clears the numbers of a copied subtree (libxml2 copies `_private`), so the copy gets its own.

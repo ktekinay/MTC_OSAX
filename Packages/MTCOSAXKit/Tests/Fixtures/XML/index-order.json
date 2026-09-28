@@ -1,0 +1,185 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "text" : "<a><b n='m'/><b n='c'/><b n='z'/><b n='a'/><b n='c'/><b n='q'/></a>",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "740000000d7001000000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "NKey",
+        "fields" : [
+          {
+            "key" : "matc",
+            "value" : {
+              "text" : "//b",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "use ",
+            "value" : {
+              "text" : "@n",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "at  ",
+            "value" : {
+              "hex" : "740000000d7001000000000000000000",
+              "type" : "XMLR"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "k",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "LKey",
+        "fields" : [
+          {
+            "key" : "at  ",
+            "value" : {
+              "hex" : "740000000d7001000000000000000000",
+              "type" : "XMLR"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "k",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "m",
+              "type" : "utf8"
+            },
+            {
+              "text" : "c",
+              "type" : "utf8"
+            },
+            {
+              "text" : "q",
+              "type" : "utf8"
+            },
+            {
+              "text" : "z",
+              "type" : "utf8"
+            },
+            {
+              "text" : "a",
+              "type" : "utf8"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "GKey",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "k",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "at  ",
+            "value" : {
+              "hex" : "740000000d7001000000000000000000",
+              "type" : "XMLR"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "c",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "hex" : "740000000d70010080b3810000600000",
+              "type" : "XMLR"
+            },
+            {
+              "hex" : "740000000d70010000ba810000600000",
+              "type" : "XMLR"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "740000000d7001000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "index-order",
+  "recordedAt" : "2026-09-28T15:11:05Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set d to XMLOpen from string \"<a><b n='m'/><b n='c'/><b n='z'/><b n='a'/><b n='c'/><b n='q'/></a>\"\nXMLNewIndex \"k\" match \"//b\" use \"@n\" at d\nXMLEntries \"k\" at d\nXMLLookup \"c\" using \"k\" at d\nXMLClose d",
+  "timeZone" : "America/New_York"
+}

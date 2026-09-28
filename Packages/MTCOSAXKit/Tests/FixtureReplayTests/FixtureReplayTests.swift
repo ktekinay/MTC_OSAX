@@ -16,12 +16,12 @@ enum Fixtures {
 	/// silicon's math libraries differ slightly (up to 15 units for `lgamma` near its roots).
 	static let realTolerances = ["MathFunctions": 16, "MathFunctionsFixes": 16]
 
-	/// Paths relative to the Fixtures folder, e.g. "Diagnostics/ping.json". `cases.json` files are inputs, not fixtures.
+	/// Paths relative to the Fixtures folder, e.g. "Diagnostics/ping.json". `cases*.json` files are inputs, not fixtures.
 	static func paths(in folder: String? = nil) -> [String] {
 		let root = folder.map { directory.appendingPathComponent($0) } ?? directory
 		let files = FileManager.default.enumerator(at: root, includingPropertiesForKeys: nil)?
 			.compactMap { $0 as? URL }
-			.filter { $0.pathExtension == "json" && $0.lastPathComponent != "cases.json" } ?? []
+			.filter { $0.pathExtension == "json" && !$0.lastPathComponent.hasPrefix("cases") } ?? []
 		return files
 			.map { String($0.standardizedFileURL.path.dropFirst(directory.standardizedFileURL.path.count + 1)) }
 			.filter { folder != nil || !excludedFolders.contains(String($0.prefix { $0 != "/" })) }

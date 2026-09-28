@@ -106,4 +106,42 @@ write("base.xml", """<?xml version="1.0"?>
 	<child xml:base="sub/"><leaf href="file.html"/></child>
 </root>
 """)
+# XSLT (stage 2)
+write("titles.xsl", """<?xml version="1.0"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+	<xsl:param name="label" select="'Titles'"/>
+	<xsl:output method="xml" indent="yes"/>
+	<xsl:template match="/">
+		<titles label="{$label}">
+			<xsl:for-each select="//book">
+				<title id="{@id}"><xsl:value-of select="title"/></title>
+			</xsl:for-each>
+		</titles>
+	</xsl:template>
+</xsl:stylesheet>
+""")
+write("text.xsl", """<?xml version="1.0"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+	<xsl:output method="text"/>
+	<xsl:template match="/"><xsl:for-each select="//title"><xsl:value-of select="."/>;</xsl:for-each></xsl:template>
+</xsl:stylesheet>
+""")
+write("plist.xsl", """<?xml version="1.0"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+	<xsl:template match="/"><plist version="1.0"><dict><xsl:for-each select="//book"><key><xsl:value-of select="@id"/></key><string><xsl:value-of select="title"/></string></xsl:for-each></dict></plist></xsl:template>
+</xsl:stylesheet>
+""")
+write("exslt.xsl", """<?xml version="1.0"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:str="http://exslt.org/strings" extension-element-prefixes="str">
+	<xsl:output method="text"/>
+	<xsl:template match="/"><xsl:for-each select="str:tokenize('a,b,c', ',')"><xsl:value-of select="."/>|</xsl:for-each></xsl:template>
+</xsl:stylesheet>
+""")
+write("invalid.xsl", """<?xml version="1.0"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"><xsl:template match="/"><xsl:value-of select="(("/></xsl:template></xsl:stylesheet>
+""")
+write("with-pi.xml", """<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="text.xsl"?>
+<library><book id="b1"><title>One</title></book><book id="b2"><title>Two</title></book></library>
+""")
 print(sorted(os.listdir("Input")))
