@@ -16,7 +16,11 @@ enum TopologicalSort {
 			throw OSAXError.missingParameter
 		}
 
-		var vertices = given ?? []
+		// A vertex given twice counts once, at its first place.
+		var vertices: [Int] = []
+		for vertex in given ?? [] where !vertices.contains(vertex) {
+			vertices.append(vertex)
+		}
 		var edges: [(Int, Int)] = []
 		if let edgesDescriptor {
 			edges = try self.edges(edgesDescriptor)

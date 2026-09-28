@@ -1,0 +1,62 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Sort",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "real" : 1.5,
+              "type" : "doub"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "items" : [
+                    {
+                      "integer" : 3,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 1,
+                      "type" : "long"
+                    }
+                  ],
+                  "type" : "list"
+                },
+                {
+                  "items" : [
+                    {
+                      "integer" : 1,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 2,
+                      "type" : "long"
+                    }
+                  ],
+                  "type" : "list"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1700
+      }
+    }
+  ],
+  "name" : "sortlist-respect-fraction",
+  "recordedAt" : "2026-09-28T21:06:31Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "sortlist {{3, 1}, {1, 2}} with respect to 1.5",
+  "timeZone" : "America/New_York"
+}

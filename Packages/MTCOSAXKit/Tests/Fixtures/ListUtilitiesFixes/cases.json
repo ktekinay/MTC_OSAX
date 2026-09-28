@@ -150,5 +150,13 @@
  {
   "name": "concat-text-and-record",
   "script": "special concat \"a\" with {a:1}"
+ },
+ {
+  "name": "sortlist-respect-fraction",
+  "script": "sortlist {{3, 1}, {1, 2}} with respect to 1.5"
+ },
+ {
+  "name": "topological-sort-repeated-vertex",
+  "script": "topological sort {1, 1, 2} edges {{2, 1}}"
  }
 ]

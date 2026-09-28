@@ -89,6 +89,9 @@ struct SortListTests {
 		#expect(sort(lists, ["from": [1, 2], "Asce": [true, false]]) == [[1, 1, 2, 2], ["d", "c", "b", "a"], [2, 4, 1, 3]])
 		#expect(send("SATISort", ["----": AppleEventList([[1, 2], [1]]), "from": 1]).error == OSAXError(-1))
 		#expect(send("SATISort", ["----": lists, "from": 4]).error == OSAXError(-1))
+		// Not whole numbers: 1.5 used to become 1, and 1.0E+19 trapped.
+		#expect(send("SATISort", ["----": lists, "from": 1.5]).error == .coercionFailed)
+		#expect(send("SATISort", ["----": lists, "from": 1e19]).error == .coercionFailed)
 	}
 }
 
@@ -119,6 +122,8 @@ struct TopologicalSortTests {
 		#expect(order(["----": [3, 1, 2]]) == [3, 1, 2])
 		#expect(order(["depe": AppleEventList([[2], [3], [Int]()])]) == [3, 2, 1])
 		#expect(order(["----": [10, 20, 30], "depe": AppleEventList([[20], [30], [Int]()])]) == [30, 20, 10])
+		// A repeated vertex used to abort the app.
+		#expect(order(["----": [1, 1, 2], "edge": [[2, 1]]]) == [2, 1])
 	}
 
 	@Test func errors() {

@@ -1,0 +1,74 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "TSrt",
+        "fields" : [
+          {
+            "key" : "edge",
+            "value" : {
+              "items" : [
+                {
+                  "items" : [
+                    {
+                      "integer" : 2,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 1,
+                      "type" : "long"
+                    }
+                  ],
+                  "type" : "list"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 2,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "integer" : 2,
+              "type" : "long"
+            },
+            {
+              "integer" : 1,
+              "type" : "long"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "topological-sort-repeated-vertex",
+  "recordedAt" : "2026-09-28T21:06:31Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "topological sort {1, 1, 2} edges {{2, 1}}",
+  "timeZone" : "America/New_York"
+}

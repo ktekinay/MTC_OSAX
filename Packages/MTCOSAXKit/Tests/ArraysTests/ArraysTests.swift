@@ -57,6 +57,16 @@ struct RandomArrayTests {
 		#expect(a != nil && a == values(send("SATICRRA", ["----": 3, "seed": 4_000_000_000.0])))
 	}
 
+	/// Seeds beyond 64 bits used to trap; they're reduced to their low 32 bits like any other.
+	@Test func hugeSeeds() throws {
+		#expect(try Arrays.seed(1e30) == Int64(fmod(1e30, 4_294_967_296)))
+		#expect(try Arrays.seed(4_294_967_297) == 1)
+		#expect(try Arrays.seed(-1) == -1)
+		#expect(values(send("SATICRRA", ["----": 3, "seed": 1e30]))?.count == 3)
+		#expect(send("SATICRRA", ["----": 3, "seed": Double.nan]).error == .parameterError)
+		#expect(send("SATICRRA", ["----": 3, "seed": Double.infinity]).error == .parameterError)
+	}
+
 	@Test func mersenneTwisterReferenceValues() {
 		// The first outputs of MT19937 seeded with 5489, from its reference implementation.
 		var generator = MersenneTwister(seed: 5489)

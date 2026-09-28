@@ -39,7 +39,14 @@ enum Sorting {
 		let items = ListUtilities.items(descriptor) ?? [descriptor]
 		let isListOfLists = !items.isEmpty && items.allSatisfy(ListUtilities.isList)
 		if isListOfLists, let respect = request.descriptor(for: "from") {
-			let criteria = try (ListUtilities.items(respect) ?? [respect]).map { try Int(Numbers.number($0)) }
+			// Whole numbers only (1.5 used to become 1, and 1.0E+19 trapped); SatimageOSAX gave -1700 for 1.0E+19.
+			let criteria = try (ListUtilities.items(respect) ?? [respect]).map { item in
+				let value = try Numbers.number(item)
+				guard value.rounded() == value, abs(value) <= Double(Int32.max) else {
+					throw OSAXError.coercionFailed
+				}
+				return Int(value)
+			}
 			return try sortTogether(items, by: criteria, ascending: ascending, options: options)
 		}
 		if isListOfLists {

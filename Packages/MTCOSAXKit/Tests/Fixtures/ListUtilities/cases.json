@@ -522,5 +522,9 @@
  {
   "name": "concat-no-with",
   "script": "special concat {a:1}"
+ },
+ {
+  "name": "sortlist-respect-huge",
+  "script": "sortlist {{3, 1}, {1, 2}} with respect to 1.0E+19"
  }
 ]

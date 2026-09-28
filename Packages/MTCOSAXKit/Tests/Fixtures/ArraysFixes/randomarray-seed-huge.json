@@ -1,0 +1,51 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CRRA",
+        "fields" : [
+          {
+            "key" : "seed",
+            "value" : {
+              "real" : 1e+30,
+              "type" : "doub"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 3,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 0.548813502304256,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.5928446163889021,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.715189364971593,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    }
+  ],
+  "name" : "randomarray-seed-huge",
+  "recordedAt" : "2026-09-28T21:06:32Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "randomarray 3 seed 1.0E+30",
+  "timeZone" : "America/New_York"
+}

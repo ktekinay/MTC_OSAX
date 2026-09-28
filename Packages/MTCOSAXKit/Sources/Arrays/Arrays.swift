@@ -17,7 +17,7 @@ public enum Arrays {
 			CommandDefinition("randomarray", code: "SATICRRA") { request in
 				let count = try size(request)
 				let (low, high) = try range(request) ?? (0, 1)
-				let seed = try request.descriptor(for: "seed").map { Int64(try Numbers.number($0).rounded(.toNearestOrEven)) }
+				let seed = try request.descriptor(for: "seed").map { try self.seed(Numbers.number($0)) }
 				return random.withGenerator(seed: seed) { generator in
 					ArrayOfReal((0 ..< count).map { _ in low + (high - low) * generator.nextUnit() })
 				}
@@ -34,6 +34,15 @@ public enum Arrays {
 			throw OSAXError.parameterError
 		}
 		return Int(rounded)
+	}
+
+	/// The seed rounded half to even, reduced to its low 32 bits however large it is (a double beyond 2^53 is a
+	/// whole number, and `fmod` is exact); error -50 for infinity or NaN.
+	static func seed(_ value: Double) throws -> Int64 {
+		guard value.isFinite else {
+			throw OSAXError.parameterError
+		}
+		return Int64(fmod(value.rounded(.toNearestOrEven), 4_294_967_296))
 	}
 
 	/// `range {min, max}`: the first two numbers; one number (or a list of one) is both.
