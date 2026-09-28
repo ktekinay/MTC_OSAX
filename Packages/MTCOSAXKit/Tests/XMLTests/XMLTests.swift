@@ -313,6 +313,16 @@ struct XMLChangeTests {
 		#expect(xml.send("XML addc", ["----": "<r/>", "at  ": d]).error == nil)
 	}
 
+	/// Appending to a CDATA section, comment or processing instruction used to add an invisible child.
+	@Test func appendTextToLiteralNodes() throws {
+		let xml = XMLs()
+		let a = try xml.root(xml.open("<a><![CDATA[c]]><!--m--><?p d?></a>"))
+		for index in 1 ... 3 {
+			xml.send("XML ApTx", ["----": "+", "at  ": try #require(xml.send("XML chld", ["----": a, "indx": index]).result)])
+		}
+		#expect(xml.send("XML disx", ["----": a, "smar": false]).result?.stringValue == "<a><![CDATA[c+]]><!--m+--><?p d+?></a>")
+	}
+
 	@Test func setXMLOfTextNode() throws {
 		let xml = XMLs()
 		let a = try xml.root(xml.open("<a>one<b/>two</a>"))

@@ -399,15 +399,20 @@ extension XMLCommands {
 		return nil
 	}
 
-	/// Appends text to a text node, or to an element (to its last text node, or a new one).
+	/// Appends text to a text node, a CDATA section, a comment or a processing instruction (to its content), or to
+	/// an element or attribute (to its last text node, or a new one).
 	func appendText(_ request: AppleEventRequest) throws -> NSAppleEventDescriptor? {
 		let text = try request.requiredDirectParameter(as: String.self)
 		let (document, node) = try resolve(request.requiredParameter("at  ", as: AnyDescriptor.self).descriptor)
-		try XMLCommands.require(node, isOneOf: [XML_ELEMENT_NODE, XML_TEXT_NODE, XML_ATTRIBUTE_NODE])
+		try XMLCommands.require(node, isOneOf: [XML_ELEMENT_NODE, XML_ATTRIBUTE_NODE, XML_TEXT_NODE, XML_CDATA_SECTION_NODE,
+		                                        XML_COMMENT_NODE, XML_PI_NODE])
 		modified(document)
 		try withXMLString(text) { value in
 			if node.pointee.type == XML_TEXT_NODE {
 				xmlTextConcat(node, value, try Int32(length: strlen(UnsafeRawPointer(value).assumingMemoryBound(to: CChar.self))))
+			} else if [XML_CDATA_SECTION_NODE, XML_COMMENT_NODE, XML_PI_NODE].contains(node.pointee.type) {
+				// Their text is their content; a child would be invisible.
+				xmlNodeAddContent(node, value)
 			} else {
 				_ = xmlAddChild(node, xmlNewDocText(document.doc, value))
 			}
