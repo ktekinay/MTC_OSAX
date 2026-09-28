@@ -47,27 +47,41 @@ enum SpecialConcat {
 		return x
 	}
 
-	/// Row by row, joined with a tab. Rows are separated as in the first table (return, linefeed or both); a table
-	/// with fewer rows gets empty cells; a final separator is kept.
+	/// Row by row, joined with a tab. Each table's rows end at any line ending (return, linefeed or both), and each
+	/// row of the result ends as that row of the second table did, or else of the first, as in SatimageOSAX (which
+	/// the comment here used to say took the first table's, and the code took whichever came first in a fixed
+	/// order, splitting both tables with it). A table with fewer rows gets empty cells; a final line ending is kept.
 	static func sideBySide(_ a: String, _ b: String) -> String {
-		let separator = [("\r\n"), "\r", "\n"].first { a.contains($0) || b.contains($0) } ?? "\r"
-		func rows(_ text: String) -> (rows: [String], trailing: Bool) {
-			guard !text.isEmpty else {
-				return ([], false)
-			}
-			var rows = text.components(separatedBy: separator)
-			let trailing = rows.count > 1 && rows.last == ""
-			if trailing {
-				rows.removeLast()
-			}
-			return (rows, trailing)
+		let left = rows(a)
+		let right = rows(b)
+		var result = ""
+		for index in 0 ..< max(left.count, right.count) {
+			let first = left.indices.contains(index) ? left[index] : nil
+			let second = right.indices.contains(index) ? right[index] : nil
+			result += (first?.text ?? "") + "\t" + (second?.text ?? "") + (second?.ending ?? first?.ending ?? "")
 		}
-		let (left, leftTrailing) = rows(a)
-		let (right, rightTrailing) = rows(b)
-		let lines = (0 ..< max(left.count, right.count)).map { index in
-			(left.indices.contains(index) ? left[index] : "") + "\t" + (right.indices.contains(index) ? right[index] : "")
+		return result
+	}
+
+	/// A table's rows, each with the line ending after it (none for a last row without one).
+	static func rows(_ text: String) -> [(text: String, ending: String?)] {
+		var rows: [(text: String, ending: String?)] = []
+		var row = ""
+		var characters = text[...]
+		while let character = characters.first {
+			characters = characters.dropFirst()
+			// "\r\n" is one Character in Swift.
+			if character == "\r\n" || character == "\r" || character == "\n" {
+				rows.append((row, String(character)))
+				row = ""
+			} else {
+				row.append(character)
+			}
 		}
-		return lines.joined(separator: separator) + (leftTrailing || rightTrailing ? separator : "")
+		if !row.isEmpty {
+			rows.append((row, nil))
+		}
+		return rows
 	}
 }
 

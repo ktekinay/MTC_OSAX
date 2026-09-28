@@ -200,6 +200,12 @@ struct SpecialConcatTests {
 		#expect(concat("1\rA\rX", "3\rC") == "1\t3\rA\tC\rX\t")
 		#expect(concat("1\rA\r", "3\rC\r") == "1\t3\rA\tC\r")
 		#expect(concat("", "b") == "\tb")
+		// Mixed line endings, as SatimageOSAX joined them: each row ends as it did in the second table, else the first.
+		#expect(concat("a\nb", "c\r\nd") == "a\tc\r\nb\td")
+		#expect(concat("a\rb", "c\nd") == "a\tc\nb\td")
+		#expect(concat("a\r\nb", "c\nd") == "a\tc\nb\td")
+		#expect(concat("a\nb", "c") == "a\tc\nb\t")
+		#expect(concat("a\nb\rx", "c\rd\ny") == "a\tc\rb\td\nx\ty")
 	}
 
 	@Test func errors() {

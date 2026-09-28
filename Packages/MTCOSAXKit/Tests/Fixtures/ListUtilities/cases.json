@@ -526,5 +526,21 @@
  {
   "name": "sortlist-respect-huge",
   "script": "sortlist {{3, 1}, {1, 2}} with respect to 1.0E+19"
+ },
+ {
+  "name": "special-concat-lf-crlf",
+  "script": "special concat (\"a\" & linefeed & \"b\") with (\"c\" & return & linefeed & \"d\")"
+ },
+ {
+  "name": "special-concat-cr-lf",
+  "script": "special concat (\"a\" & return & \"b\") with (\"c\" & linefeed & \"d\")"
+ },
+ {
+  "name": "special-concat-first-only",
+  "script": "special concat (\"a\" & linefeed & \"b\") with \"c\""
+ },
+ {
+  "name": "special-concat-per-row",
+  "script": "special concat (\"a\" & linefeed & \"b\" & return & \"x\") with (\"c\" & return & \"d\" & linefeed & \"y\")"
  }
 ]
