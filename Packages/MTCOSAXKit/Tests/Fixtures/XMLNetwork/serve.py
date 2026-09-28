@@ -6,7 +6,7 @@
 #   GET /missing                404 with an HTML body
 import sys
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit, unquote
 from xml.sax.saxutils import quoteattr, escape
 
 FOLDER = sys.argv[2]
@@ -22,8 +22,11 @@ class Handler(BaseHTTPRequestHandler):
     def handle_any(self, method):
         url = urlsplit(self.path)
         if url.path.startswith("/files/"):
+            name = unquote(url.path[len("/files/"):])
+            if not name or "/" in name or name in (".", ".."):
+                return self.respond(404, b"<html><body>Not found</body></html>", "text/html")
             try:
-                with open(FOLDER + "/" + url.path[len("/files/"):], "rb") as f:
+                with open(FOLDER + "/" + name, "rb") as f:
                     return self.respond(200, f.read())
             except OSError:
                 return self.respond(404, b"<html><body>Not found</body></html>", "text/html")

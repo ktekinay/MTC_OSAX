@@ -11,9 +11,12 @@ final class NetworkFixtureServer: @unchecked Sendable {
 	private let queue = DispatchQueue(label: "NetworkFixtureServer")
 	private(set) var port: UInt16 = 0
 
+	/// Listens on the loopback interface only, on a port of the system's choosing.
 	init(folder: URL) throws {
 		self.folder = folder
-		listener = try NWListener(using: .tcp, on: .any)
+		let parameters = NWParameters.tcp
+		parameters.requiredInterfaceType = .loopback
+		listener = try NWListener(using: parameters, on: .any)
 		let ready = DispatchSemaphore(value: 0)
 		listener.stateUpdateHandler = { state in
 			if case .ready = state { ready.signal() }
@@ -64,7 +67,10 @@ final class NetworkFixtureServer: @unchecked Sendable {
 	private func response(_ request: Request) -> (Int, Data, String) {
 		let notFound = (404, Data("<html><body>Not found</body></html>".utf8), "text/html")
 		if request.path.hasPrefix("/files/") {
-			let file = folder.appendingPathComponent(String(request.path.dropFirst("/files/".count)))
+			// One name in the folder: nothing outside it (`/files/../../etc/passwd`), even percent-encoded.
+			let name = String(request.path.dropFirst("/files/".count)).removingPercentEncoding ?? ""
+			guard !name.isEmpty, !name.contains("/"), name != ".", name != ".." else { return notFound }
+			let file = folder.appendingPathComponent(name)
 			guard let data = try? Data(contentsOf: file) else { return notFound }
 			return (200, data, "application/xml")
 		}
@@ -113,7 +119,7 @@ final class NetworkFixtureServer: @unchecked Sendable {
 				guard let colon = line.firstIndex(of: ":") else { continue }
 				headers[line[..<colon].lowercased()] = line[line.index(after: colon)...].trimmingCharacters(in: .whitespaces)
 			}
-			let length = Int(headers["content-length"] ?? "0") ?? 0
+			let length = max(0, Int(headers["content-length"] ?? "0") ?? 0)
 			let bodyData = data[end.upperBound...]
 			guard bodyData.count >= length else { return nil }
 			body = String(decoding: bodyData.prefix(length), as: UTF8.self)

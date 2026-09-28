@@ -92,6 +92,37 @@ struct NetworkFixtureTests {
 	}
 }
 
+/// The test server serves only the files in its folder.
+struct NetworkFixtureServerTests {
+	@Test func staysInItsFolder() throws {
+		let files = Fixtures.directory.appendingPathComponent("XML/Input")
+		let server = try NetworkFixtureServer(folder: files)
+		func status(_ path: String) throws -> Int? {
+			let url = try #require(URL(string: server.address + path))
+			let result = Result<Data, Error>.fetchStatus(URLRequest(url: url))
+			return result
+		}
+		#expect(try status("/files/simple.xml") == 200)
+		for path in ["/files/../FixtureReplayTests.swift", "/files/%2E%2E%2Fcases.json", "/files/", "/files/.."] {
+			#expect(try status(path) == 404, "\(path)")
+		}
+	}
+}
+
+extension Result where Success == Data, Failure == Error {
+	/// The status of a synchronous request.
+	static func fetchStatus(_ request: URLRequest) -> Int? {
+		let done = DispatchSemaphore(value: 0)
+		nonisolated(unsafe) var status: Int?
+		URLSession.shared.dataTask(with: request) { _, response, _ in
+			status = (response as? HTTPURLResponse)?.statusCode
+			done.signal()
+		}.resume()
+		done.wait()
+		return status
+	}
+}
+
 /// Satimage fixtures recorded before the command is implemented, replayed against a stand-in,
 /// to show that recording and replay work end to end.
 struct ExampleFixtureTests {
