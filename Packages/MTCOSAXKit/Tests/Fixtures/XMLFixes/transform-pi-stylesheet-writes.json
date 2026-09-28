@@ -1,0 +1,80 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "text" : "<?xml-stylesheet type='text/xsl' href='#s'?><!DOCTYPE a [<!ATTLIST xsl:stylesheet id ID #IMPLIED>]><a><xsl:stylesheet id='s' version='1.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform' xmlns:exsl='http://exslt.org/common' extension-element-prefixes='exsl'><xsl:template match='xsl:stylesheet'/><xsl:template match='/'><exsl:document href='/private/tmp/mtc-fixtures/tmp/pi.txt' method='text'>written</exsl:document><r/></xsl:template></xsl:stylesheet></a>",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "020000004d5443780000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "xslt",
+        "fields" : [
+          {
+            "key" : "rtyp",
+            "value" : {
+              "code" : "TEXT",
+              "type" : "type"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "020000004d5443780000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorMessage" : "A stylesheet chosen by the document’s xml-stylesheet instruction can’t write files.",
+        "errorNumber" : 1535
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "020000004d5443780000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "transform-pi-stylesheet-writes",
+  "recordedAt" : "2026-09-28T21:52:40Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "set d to XMLOpen from string \"<?xml-stylesheet type='text/xsl' href='#s'?><!DOCTYPE a [<!ATTLIST xsl:stylesheet id ID #IMPLIED>]><a><xsl:stylesheet id='s' version='1.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform' xmlns:exsl='http://exslt.org/common' extension-element-prefixes='exsl'><xsl:template match='xsl:stylesheet'/><xsl:template match='/'><exsl:document href='$TMP/pi.txt' method='text'>written</exsl:document><r/></xsl:template></xsl:stylesheet></a>\"\ntry\nXMLTransform d as string\non error number n\nXMLClose d\nerror number n\nend try",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

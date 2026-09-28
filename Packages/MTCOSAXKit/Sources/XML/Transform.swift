@@ -23,6 +23,10 @@ extension XMLCommands {
 	/// (a file, a path or URL, an XMLRef, or XSLT text), or the one the document's `xml-stylesheet` processing
 	/// instruction names (-1701 if none). The result is a new document in the pool, `as string` its text,
 	/// `as CFRef` a property list, or written to the file `in`.
+	///
+	/// A stylesheet the script gives can write files (`exsl:document`), as the script itself could. One the document
+	/// chooses is code from the document, which may not be trusted: it can't write files, make folders or write to
+	/// the network (error 1535, libxml2's "not permitted", as SatimageOSAX's sandbox gave).
 	func transform(_ request: AppleEventRequest) throws -> NSAppleEventDescriptor? {
 		let (document, node) = try direct(request)
 		guard let doc = document.doc else { throw XML.noSuchNode }
@@ -33,8 +37,12 @@ extension XMLCommands {
 
 		var parameters: [(String, String)] = try XPath.variables(request.descriptor(for: "varx")).map { ($0.name, try XMLCommands.text($0.value)) }
 		parameters += try XPath.variables(request.descriptor(for: "vaxs")).map { ($0.name, Stylesheets.quoted(try XMLCommands.text($0.value))) }
-		let (output, _) = XMLIssues.collect { Stylesheets.apply(style.pointer, to: doc, parameters: parameters) }
-		guard let output else { throw XPath.failed }
+		let (applied, _) = XMLIssues.collect { Stylesheets.apply(style.pointer, to: doc, parameters: parameters, allowingWrites: !style.chosenByDocument) }
+		guard !applied.refused else {
+			if let output = applied.output { xmlFreeDoc(output) }
+			throw OSAXError(1535, "A stylesheet chosen by the document’s xml-stylesheet instruction can’t write files.")
+		}
+		guard let output = applied.output else { throw XPath.failed }
 
 		if let file = try request.parameter("kfil", as: URL.self) {
 			defer { xmlFreeDoc(output) }
@@ -68,18 +76,20 @@ extension XMLCommands {
 
 	/// The stylesheet, and whether it's this command's to free. A node to transform gets a stylesheet of its own,
 	/// with a template for the root that applies the templates to the node.
-	func stylesheet(_ request: AppleEventRequest, document: XMLDocument, node: xmlNodePtr?) throws -> (pointer: xsltStylesheetPtr, owned: Bool) {
+	func stylesheet(_ request: AppleEventRequest, document: XMLDocument, node: xmlNodePtr?) throws
+		-> (pointer: xsltStylesheetPtr, owned: Bool, chosenByDocument: Bool)
+	{
 		guard let with = request.descriptor(for: "with") else {
 			guard let doc = document.doc else { throw XML.noSuchNode }
 			let (style, _) = XMLIssues.collect { xsltLoadStylesheetPI(doc) }
 			guard let style else { throw OSAXError.missingParameter }
-			return (style, true)
+			return (style, true, true)
 		}
 		let source: xmlDocPtr
 		if XMLReferences.isReference(with) {
 			let styleDocument = try resolve(with).0
 			if node == nil, let compiled = styleDocument.stylesheet {
-				return (compiled, false)
+				return (compiled, false, false)
 			}
 			guard let doc = styleDocument.doc else { throw XML.noSuchNode }
 			source = Stylesheets.copy(doc)
@@ -89,7 +99,7 @@ extension XMLCommands {
 		if let node {
 			Stylesheets.addRootTemplate(source, applyingTo: node)
 		}
-		return (try Stylesheets.compile(source), true)
+		return (try Stylesheets.compile(source), true, false)
 	}
 }
 
@@ -175,15 +185,41 @@ enum Stylesheets {
 	}
 
 	/// Runs a stylesheet with parameters (XPath expressions).
-	static func apply(_ style: xsltStylesheetPtr, to doc: xmlDocPtr, parameters: [(String, String)]) -> xmlDocPtr? {
+	/// Applies a stylesheet; without `allowingWrites`, what it would write is refused, and `refused` says so.
+	static func apply(_ style: xsltStylesheetPtr, to doc: xmlDocPtr, parameters: [(String, String)], allowingWrites: Bool = true)
+		-> (output: xmlDocPtr?, refused: Bool)
+	{
+		guard let context = xsltNewTransformContext(style, doc) else { return (nil, false) }
+		defer { xsltFreeTransformContext(context) }
+		let prefs = allowingWrites ? nil : xsltNewSecurityPrefs()
+		defer { if let prefs { xsltFreeSecurityPrefs(prefs) } }
+		if let prefs {
+			for option in [XSLT_SECPREF_WRITE_FILE, XSLT_SECPREF_CREATE_DIRECTORY, XSLT_SECPREF_WRITE_NETWORK] {
+				xsltSetSecurityPrefs(prefs, option, refuse)
+			}
+			xsltSetCtxtSecurityPrefs(prefs, context)
+		}
+		var refused = false
 		var strings: [UnsafeMutablePointer<CChar>?] = parameters.flatMap { [strdup($0.0), strdup($0.1)] }
 		defer { strings.forEach { free($0) } }
 		strings.append(nil)
-		return strings.withUnsafeMutableBufferPointer { buffer in
-			buffer.baseAddress!.withMemoryRebound(to: UnsafePointer<CChar>?.self, capacity: buffer.count) {
-				xsltApplyStylesheet(style, doc, $0)
+		let output = withUnsafeMutablePointer(to: &refused) { flag in
+			// The refusal callback finds the flag through the context.
+			context.pointee._private = UnsafeMutableRawPointer(flag)
+			defer { context.pointee._private = nil }
+			return strings.withUnsafeMutableBufferPointer { buffer in
+				buffer.baseAddress!.withMemoryRebound(to: UnsafePointer<CChar>?.self, capacity: buffer.count) {
+					xsltApplyStylesheetUser(style, doc, $0, nil, nil, context)
+				}
 			}
 		}
+		return (output, refused)
+	}
+
+	/// libxslt's security check that says no, noting it in the flag `apply` put in the context.
+	private static let refuse: xsltSecurityCheck = { _, context, _ in
+		context?.pointee._private?.assumingMemoryBound(to: Bool.self).pointee = true
+		return 0
 	}
 
 	/// Text as an XPath string literal.

@@ -220,6 +220,34 @@ struct XSLTTests {
 		#expect(xml.send("XML xslt", ["----": d, "with": "/nonexistent.xsl"]).error == OSAXError(4))
 	}
 
+	/// A stylesheet the script gives may write files; one the document picks with `xml-stylesheet` may not.
+	@Test func writingFiles() throws {
+		let folder = FileManager.default.temporaryDirectory.appendingPathComponent("xslt-\(UUID().uuidString)")
+		try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+		defer { try? FileManager.default.removeItem(at: folder) }
+		func stylesheet(_ name: String, id: String = "") -> String {
+			"<xsl:stylesheet \(id)version='1.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform' xmlns:exsl='http://exslt.org/common' "
+				+ "extension-element-prefixes='exsl'><xsl:template match='xsl:stylesheet'/><xsl:template match='/'>"
+				+ "<exsl:document href='\(folder.path)/\(name)' method='text'>written</exsl:document><r/></xsl:template></xsl:stylesheet>"
+		}
+		let xml = XMLs()
+		let d = try xml.open("<a/>")
+		#expect(xml.send("XML xslt", ["----": d, "with": stylesheet("given.txt")]).error == nil)
+		#expect(try String(contentsOf: folder.appendingPathComponent("given.txt"), encoding: .utf8) == "written")
+		let chosen = try xml.open("<?xml-stylesheet type='text/xsl' href='#s'?><!DOCTYPE a [<!ATTLIST xsl:stylesheet id ID #IMPLIED>]><a>"
+			+ stylesheet("chosen.txt", id: "id='s' ") + "</a>")
+		#expect(xml.send("XML xslt", ["----": chosen]).error?.number == 1535)
+		#expect(!FileManager.default.fileExists(atPath: folder.appendingPathComponent("chosen.txt").path))
+		// Folders aren't made either, and a stylesheet that doesn't write is fine.
+		let nested = try xml.open("<?xml-stylesheet type='text/xsl' href='#s'?><!DOCTYPE a [<!ATTLIST xsl:stylesheet id ID #IMPLIED>]><a>"
+			+ stylesheet("sub/chosen.txt", id: "id='s' ") + "</a>")
+		#expect(xml.send("XML xslt", ["----": nested]).error?.number == 1535)
+		#expect(!FileManager.default.fileExists(atPath: folder.appendingPathComponent("sub").path))
+		let harmless = try xml.open("<?xml-stylesheet type='text/xsl' href='#s'?><!DOCTYPE a [<!ATTLIST xsl:stylesheet id ID #IMPLIED>]><a>"
+			+ "<xsl:stylesheet id='s' version='1.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'><xsl:template match='/'><r/></xsl:template></xsl:stylesheet></a>")
+		#expect(xml.send("XML xslt", ["----": harmless, "rtyp": type("utxt")]).result?.stringValue?.contains("<r/>") == true)
+	}
+
 	@Test func parameters() throws {
 		let xml = XMLs()
 		let d = try xml.open(library)

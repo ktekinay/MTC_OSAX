@@ -46,5 +46,13 @@
  {
   "name": "c14n-nodelist",
   "script": "set d to XMLOpen from string \"<a><b x='1'>t<!--c--><i/></b><c/></a>\"\nXMLc14n d nodelist (XMLXPath d with \"//i\")\nXMLClose d"
+ },
+ {
+  "name": "transform-stylesheet-writes",
+  "script": "set d to XMLOpen from string \"<a/>\"\nset r to XMLTransform d with \"<xsl:stylesheet version='1.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform' xmlns:exsl='http://exslt.org/common' extension-element-prefixes='exsl'><xsl:template match='xsl:stylesheet'/><xsl:template match='/'><exsl:document href='$TMP/given.txt' method='text'>written</exsl:document><r/></xsl:template></xsl:stylesheet>\" as string\nXMLClose d\n{r, readtext (POSIX file \"$TMP/given.txt\")}"
+ },
+ {
+  "name": "transform-pi-stylesheet-writes",
+  "script": "set d to XMLOpen from string \"<?xml-stylesheet type='text/xsl' href='#s'?><!DOCTYPE a [<!ATTLIST xsl:stylesheet id ID #IMPLIED>]><a><xsl:stylesheet id='s' version='1.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform' xmlns:exsl='http://exslt.org/common' extension-element-prefixes='exsl'><xsl:template match='xsl:stylesheet'/><xsl:template match='/'><exsl:document href='$TMP/pi.txt' method='text'>written</exsl:document><r/></xsl:template></xsl:stylesheet></a>\"\ntry\nXMLTransform d as string\non error number n\nXMLClose d\nerror number n\nend try"
  }
 ]
