@@ -243,3 +243,24 @@ struct RegexCacheTests {
 		#expect(try cache.regex("1") !== first)
 	}
 }
+
+/// Runaway backtracking is an error, not "no match" or a crash.
+struct RegexLimitTests {
+	/// Onigmo's backtracking stack used to be unlimited.
+	@Test func onigmoStackLimit() throws {
+		// Fails only after backtracking through every character (with nothing Onigmo can rule out beforehand).
+		let pattern = try CompiledRegex(#"\A(?:a|b)*(?<!b)\z"#)
+		let error = #expect(throws: RegexError.self) { try pattern.firstMatch(in: UTF16Text(String(repeating: "ab", count: 3_000_000))) }
+		#expect(error?.code == -15)
+		#expect(try pattern.firstMatch(in: UTF16Text(String(repeating: "ab", count: 100_000))) == nil)
+		#expect(try CompiledRegex("(?:a|b)*").firstMatch(in: UTF16Text(String(repeating: "a", count: 100_000)))?.range == 0 ..< 100_000)
+	}
+
+	/// PCRE2's limits used to be reported as no match.
+	@Test func pcreMatchLimit() throws {
+		let text = UTF16Text(String(repeating: "a", count: 40) + "b")
+		let error = #expect(throws: RegexError.self) { try CompiledRegex("(a+)+$", syntax: .pcre).firstMatch(in: text) }
+		#expect(error?.code == -3047)
+		#expect(error?.message.contains("limit") == true)
+	}
+}

@@ -42,6 +42,13 @@ struct PCRECommandTests {
 		#expect(send("SATIRPLl", parameters).result?.stringValue == "Xbc")
 	}
 
+	/// PCRE2's match limit used to be "not found" (-2763).
+	@Test func matchLimitIsAnError() {
+		let reply = send("SATIFINd", ["----": "(a+)+$", "$in ": String(repeating: "a", count: 40) + "b", "UsGR": true, "synt": "PCRE"])
+		#expect(reply.error?.number == -3047)
+		#expect(reply.error?.message?.contains("limit") == true)
+	}
+
 	@Test func change() {
 		let parameters: [String: any AppleEventEncodable] = ["----": #"(?<word>\w+)@(\w+)"#, "by  ": "\\2 at \\k<word>", "$in ": "me@home", "UsGR": true, "synt": "PCRE"]
 		#expect(send("SATIRPLl", parameters).result?.stringValue == "home at me")

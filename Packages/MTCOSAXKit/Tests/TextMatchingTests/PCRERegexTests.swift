@@ -22,7 +22,7 @@ struct PCRERegexTests {
 		let regex = try pcre(#"(?<year>\d+)-(\d+)(x)?"#)
 		#expect(regex.groupCount == 3)
 		#expect(regex.namedGroups == ["year": [1]])
-		let match = try #require(regex.firstMatch(in: UTF16Text("on 2026-09")))
+		let match = try #require(try regex.firstMatch(in: UTF16Text("on 2026-09")))
 		#expect(match.groups == [3 ..< 10, 3 ..< 7, 8 ..< 10, nil])
 		// Duplicate names, with (?J).
 		#expect(try pcre(#"(?J)(?<n>a)|(?<n>b)"#).namedGroups == ["n": [1, 2]])
@@ -78,11 +78,11 @@ struct PCRERegexTests {
 	@Test func boundsAndBackward() throws {
 		let text = UTF16Text("abcabc")
 		let regex = try pcre("abc")
-		#expect(regex.firstMatch(in: text, from: 1)?.range == 3 ..< 6)
-		#expect(regex.firstMatch(in: text, within: 0 ..< 5)?.range == 0 ..< 3)
-		#expect(regex.firstMatch(in: text, from: 1, within: 1 ..< 5) == nil)
-		#expect(regex.firstMatch(in: text, backward: true)?.range == 3 ..< 6)
-		#expect(regex.firstMatch(in: text, from: 2, backward: true)?.range == 0 ..< 3)
+		#expect(try regex.firstMatch(in: text, from: 1)?.range == 3 ..< 6)
+		#expect(try regex.firstMatch(in: text, within: 0 ..< 5)?.range == 0 ..< 3)
+		#expect(try regex.firstMatch(in: text, from: 1, within: 1 ..< 5) == nil)
+		#expect(try regex.firstMatch(in: text, backward: true)?.range == 3 ..< 6)
+		#expect(try regex.firstMatch(in: text, from: 2, backward: true)?.range == 0 ..< 3)
 		// Lookbehind sees text before the bounds.
 		#expect(try pcre("(?<=a)b").firstMatch(in: text, within: 1 ..< 6)?.range == 1 ..< 2)
 		#expect(try pcre("x*").allMatches(in: UTF16Text("")).count == 1)
@@ -98,8 +98,8 @@ struct PCRERegexTests {
 		let text = UTF16Text("a\nb")
 		let onigmo = try cache.regex("a[^x]b")
 		let pcre = try cache.regex("a[^x]b", syntax: .pcre)
-		#expect(onigmo.firstMatch(in: text) == nil)
-		#expect(pcre.firstMatch(in: text) != nil)
+		#expect(try onigmo.firstMatch(in: text) == nil)
+		#expect(try pcre.firstMatch(in: text) != nil)
 		#expect(cache.count == 2)
 	}
 }

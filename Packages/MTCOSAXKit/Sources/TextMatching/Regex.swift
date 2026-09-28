@@ -159,7 +159,8 @@ protocol RegexEngine: AnyObject {
 	var namedGroups: [String: [Int]] { get }
 	/// The first match starting between `start` and `limit` (searching backward if `limit` is before `start`); the
 	/// text ends at `bounds.upperBound` but starts at 0, so lookbehind and `^` see what comes before `bounds`.
-	func search(_ text: UTF16Text, bounds: Range<Int>, start: Int, limit: Int) -> RegexMatch?
+	/// Errors are the engine's limits (runaway backtracking), not "no match".
+	func search(_ text: UTF16Text, bounds: Range<Int>, start: Int, limit: Int) throws(RegexError) -> RegexMatch?
 }
 
 /// A compiled pattern, with Onigmo (Satimage's engine) or, for `syntax "PCRE"`, PCRE2. Searches text as UTF-16, so
@@ -188,20 +189,22 @@ public final class CompiledRegex {
 
 	/// The first match starting at or after `start` (or, with `backward`, the last match starting at or before it),
 	/// looking only within `bounds`. `bounds` defaults to the whole text.
-	public func firstMatch(in text: UTF16Text, from start: Int? = nil, within bounds: Range<Int>? = nil, backward: Bool = false) -> RegexMatch? {
+	public func firstMatch(in text: UTF16Text, from start: Int? = nil, within bounds: Range<Int>? = nil, backward: Bool = false) throws(RegexError)
+		-> RegexMatch?
+	{
 		let bounds = bounds ?? 0 ..< text.count
 		let start = start ?? (backward ? bounds.upperBound : bounds.lowerBound)
 		let limit = backward ? bounds.lowerBound : bounds.upperBound
-		return engine.search(text, bounds: bounds, start: start, limit: limit)
+		return try engine.search(text, bounds: bounds, start: start, limit: limit)
 	}
 
 	/// Every non-overlapping match within `bounds`, left to right. After an empty match, the search
 	/// continues one character later, so it always terminates.
-	public func allMatches(in text: UTF16Text, within bounds: Range<Int>? = nil) -> [RegexMatch] {
+	public func allMatches(in text: UTF16Text, within bounds: Range<Int>? = nil) throws(RegexError) -> [RegexMatch] {
 		let bounds = bounds ?? 0 ..< text.count
 		var matches: [RegexMatch] = []
 		var position = bounds.lowerBound
-		while position <= bounds.upperBound, let match = engine.search(text, bounds: bounds, start: position, limit: bounds.upperBound) {
+		while position <= bounds.upperBound, let match = try engine.search(text, bounds: bounds, start: position, limit: bounds.upperBound) {
 			matches.append(match)
 			if match.range.isEmpty {
 				guard match.range.upperBound < bounds.upperBound else { break }

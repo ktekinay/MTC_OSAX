@@ -8,7 +8,7 @@ import TextMatching
 private func expand(_ template: String, pattern: String, in string: String, dollarReferences: Bool = false) throws -> String {
 	let text = UTF16Text(string)
 	let regex = try CompiledRegex(pattern)
-	let match = try #require(regex.firstMatch(in: text))
+	let match = try #require(try regex.firstMatch(in: text))
 	return try Template(template, dollarReferences: dollarReferences)
 		.expand(TextMatch(groups: match.groups), in: text, groupCount: regex.groupCount, namedGroups: regex.namedGroups)
 }

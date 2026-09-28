@@ -92,7 +92,7 @@ extension TextAdditions {
 			if options.allOccurrences {
 				return try searcher.allMatches(in: text).map { try describe($0, in: text) }.appleEventDescriptor
 			}
-			guard let match = searcher.firstMatch(in: text) else {
+			guard let match = try searcher.firstMatch(in: text) else {
 				if isList { return nil }
 				throw notFoundError
 			}
@@ -172,7 +172,7 @@ extension TextAdditions {
 		onlyGroup: NSAppleEventDescriptor?
 	) throws -> (text: String, count: Int) {
 		let text = UTF16Text(string)
-		let matches = searcher.allMatches(in: text)
+		let matches = try searcher.allMatches(in: text)
 		guard !matches.isEmpty else {
 			return (string, 0)
 		}
@@ -226,7 +226,7 @@ extension TextAdditions {
 			let text = UTF16Text(string)
 			var pieces: [String] = []
 			var position = 0
-			for match in searcher.allMatches(in: text) {
+			for match in try searcher.allMatches(in: text) {
 				pieces.append(text[position ..< match.range.lowerBound])
 				position = match.range.upperBound
 			}

@@ -136,8 +136,8 @@ struct TextSearcher {
 	var groupCount: Int { regex?.groupCount ?? 0 }
 	var namedGroups: [String: [Int]] { regex?.namedGroups ?? [:] }
 
-	/// The first match (the last one for a literal `backward` search).
-	func firstMatch(in text: UTF16Text) -> TextMatch? {
+	/// The first match (the last one for a literal `backward` search). Errors are the regex engine's limits.
+	func firstMatch(in text: UTF16Text) throws -> TextMatch? {
 		guard let bounds = options.bounds(in: text) else {
 			return nil
 		}
@@ -146,7 +146,11 @@ struct TextSearcher {
 			guard bounds.lowerBound < bounds.upperBound else {
 				return nil
 			}
-			return regex.firstMatch(in: text, from: bounds.lowerBound, within: bounds).map { TextMatch(groups: $0.groups) }
+			do {
+				return try regex.firstMatch(in: text, from: bounds.lowerBound, within: bounds).map { TextMatch(groups: $0.groups) }
+			} catch {
+				throw OSAXError(error)
+			}
 		}
 		if options.backward {
 			// Backward: searches the text before `starting at` (the whole text if not given).
@@ -157,7 +161,7 @@ struct TextSearcher {
 	}
 
 	/// Every non-overlapping match, left to right.
-	func allMatches(in text: UTF16Text) -> [TextMatch] {
+	func allMatches(in text: UTF16Text) throws -> [TextMatch] {
 		guard let bounds = options.bounds(in: text) else {
 			return []
 		}
@@ -168,7 +172,11 @@ struct TextSearcher {
 		while position < bounds.upperBound {
 			let match: TextMatch?
 			if let regex {
-				match = regex.firstMatch(in: text, from: position, within: bounds).map { TextMatch(groups: $0.groups) }
+				do {
+					match = try regex.firstMatch(in: text, from: position, within: bounds).map { TextMatch(groups: $0.groups) }
+				} catch {
+					throw OSAXError(error)
+				}
 			} else {
 				match = literalMatch(in: text, within: position ..< bounds.upperBound, backward: false)
 			}

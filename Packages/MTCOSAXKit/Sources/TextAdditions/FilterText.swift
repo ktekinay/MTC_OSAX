@@ -35,7 +35,7 @@ extension TextAdditions {
 		var values: [String: [String]] = [:]
 		var keys: [String] = []
 		let utf16 = UTF16Text(text)
-		for match in searcher.allMatches(in: utf16) {
+		for match in try searcher.allMatches(in: utf16) {
 			let keyText = try key.expand(match, in: utf16, groupCount: searcher.groupCount, namedGroups: searcher.namedGroups)
 			let valueText = try value.expand(match, in: utf16, groupCount: searcher.groupCount, namedGroups: searcher.namedGroups)
 			if asList, !duplicates, values[keyText]?.contains(valueText) == true {

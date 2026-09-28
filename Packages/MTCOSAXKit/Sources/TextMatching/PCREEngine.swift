@@ -58,12 +58,17 @@ final class PCREEngine: RegexEngine {
 
 	/// Forward: PCRE's search from `start`. Backward: the last position from `start` down to `limit` where the
 	/// pattern matches (PCRE can only search forward, so each position is tried anchored).
-	func search(_ text: UTF16Text, bounds: Range<Int>, start: Int, limit: Int) -> RegexMatch? {
+	/// A match error other than "no match" (PCRE2's match, depth and heap limits, which stop runaway backtracking)
+	/// is -3000 minus its number, like compile errors: -3047 for the match limit.
+	func search(_ text: UTF16Text, bounds: Range<Int>, start: Int, limit: Int) throws(RegexError) -> RegexMatch? {
 		guard let data = pcre2_match_data_create_from_pattern_16(code, nil) else { return nil }
 		defer { pcre2_match_data_free_16(data) }
-		func run(_ subject: UnsafePointer<UInt16>) -> RegexMatch? {
-			func match(at position: Int, options: UInt32) -> RegexMatch? {
+		func run(_ subject: UnsafePointer<UInt16>) throws(RegexError) -> RegexMatch? {
+			func match(at position: Int, options: UInt32) throws(RegexError) -> RegexMatch? {
 				let result = pcre2_match_16(code, subject, bounds.upperBound, position, matchOptions | options, data, nil)
+				if result < 0, result != PCRE2_ERROR_NOMATCH {
+					throw RegexError(code: -3000 + Int(result), message: Self.message(for: result), isExtension: true)
+				}
 				guard result > 0 else { return nil }
 				let vector = pcre2_get_ovector_pointer_16(data)!
 				return RegexMatch(groups: (0 ... groupCount).map { index -> Range<Int>? in
@@ -77,11 +82,11 @@ final class PCREEngine: RegexEngine {
 				})
 			}
 			guard limit < start else {
-				return start <= limit ? match(at: start, options: 0) : nil
+				return start <= limit ? try match(at: start, options: 0) : nil
 			}
 			var position = start
 			while position >= limit {
-				if let found = match(at: position, options: UInt32(PCRE2_ANCHORED)) {
+				if let found = try match(at: position, options: UInt32(PCRE2_ANCHORED)) {
 					return found
 				}
 				position -= 1
@@ -89,8 +94,10 @@ final class PCREEngine: RegexEngine {
 			return nil
 		}
 		// Empty text still needs an address.
-		return text.units.isEmpty ? [UInt16(0)].withUnsafeBufferPointer { run($0.baseAddress!) }
-			: text.units.withUnsafeBufferPointer { run($0.baseAddress!) }
+		let result: Result<RegexMatch?, RegexError> = text.units.isEmpty
+			? [UInt16(0)].withUnsafeBufferPointer { buffer in Result { () throws(RegexError) in try run(buffer.baseAddress!) } }
+			: text.units.withUnsafeBufferPointer { buffer in Result { () throws(RegexError) in try run(buffer.baseAddress!) } }
+		return try result.get()
 	}
 
 	private static func message(for error: Int32) -> String {
