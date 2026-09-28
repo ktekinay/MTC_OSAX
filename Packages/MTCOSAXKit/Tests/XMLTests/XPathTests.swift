@@ -216,6 +216,8 @@ struct XSLTTests {
 		#expect(xml.send("XML xslt", ["----": d, "with": text, "rtyp": type("utxt")]).result?.stringValue == "Moby-Dick;Les Misérables;")
 		#expect(xml.send("XML xslt", ["----": d]).error == .missingParameter)
 		#expect(xml.send("XML xslt", ["----": d, "with": "<xsl:stylesheet version='1.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'><xsl:template match='/'><xsl:value-of select='(('/></xsl:template></xsl:stylesheet>"]).error == OSAXError(3))
+		// libxslt's messages used to go to the console, leaving XMLError empty.
+		#expect(xml.send("XML lErr").result?.stringValue?.contains("value-of") == true)
 		#expect(xml.send("XML xslt", ["----": d, "with": URL(fileURLWithPath: "/nonexistent.xsl")]).error == OSAXError(4))
 		#expect(xml.send("XML xslt", ["----": d, "with": "/nonexistent.xsl"]).error == OSAXError(4))
 	}

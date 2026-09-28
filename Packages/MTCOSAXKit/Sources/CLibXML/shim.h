@@ -22,3 +22,25 @@
 #include <libxslt/xsltutils.h>
 #include <libexslt/exslt.h>
 #include <libxml/xmlreader.h>
+
+#include <stdarg.h>
+#include <stdio.h>
+
+// libxslt reports errors through a variadic callback, which Swift can't write. This one formats each message
+// and hands it to a plain callback (MTC_OSAX's), which travels as libxslt's error context.
+typedef void (*MTCXSLTErrorSink)(const char *text);
+
+static void mtc_xslt_generic_error(void *context, const char *format, ...) {
+	char text[4096];
+	va_list arguments;
+	va_start(arguments, format);
+	vsnprintf(text, sizeof text, format, arguments);
+	va_end(arguments);
+	if (context) {
+		((MTCXSLTErrorSink)context)(text);
+	}
+}
+
+static inline void mtc_xslt_set_error_sink(MTCXSLTErrorSink sink) {
+	xsltSetGenericErrorFunc((void *)sink, mtc_xslt_generic_error);
+}

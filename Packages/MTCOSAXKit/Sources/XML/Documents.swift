@@ -201,7 +201,11 @@ struct XMLIssue {
 /// Collects libxml2's errors while a command runs, for its error number and for `XMLError`. libxml2's error
 /// handler is per thread, so the collection is too.
 enum XMLIssues {
-	private final class Box { var issues: [XMLIssue] = [] }
+	private final class Box {
+		var issues: [XMLIssue] = []
+		/// libxslt's text so far, which comes in pieces: each line is a problem.
+		var xsltText = ""
+	}
 
 	private static var box: Box {
 		let key = "MTCXMLIssues"
@@ -210,6 +214,7 @@ enum XMLIssues {
 		}
 		let box = Box()
 		Thread.current.threadDictionary[key] = box
+		installXSLTErrors()
 		xmlSetStructuredErrorFunc(nil) { _, error in
 			guard let error else { return }
 			let message = error.pointee.message.map { String(cString: $0) } ?? ""
@@ -222,6 +227,30 @@ enum XMLIssues {
 			))
 		}
 		return box
+	}
+
+	/// libxslt's errors (a stylesheet that doesn't compile, a failing transform) go into the same collection, one
+	/// problem per line, so `XMLError` says what went wrong. Its callback is global, but it's called on the thread
+	/// doing the work, whose collection it adds to.
+	private static func installXSLTErrors() {
+		_ = xsltInstallation
+	}
+
+	private static let xsltInstallation: Void = mtc_xslt_set_error_sink { text in
+		guard let text else { return }
+		let box = XMLIssues.box
+		box.xsltText += String(cString: text)
+		while let newline = box.xsltText.firstIndex(of: "\n") {
+			addXSLTLine(String(box.xsltText[..<newline]), to: box)
+			box.xsltText = String(box.xsltText[box.xsltText.index(after: newline)...])
+		}
+	}
+
+	private static func addXSLTLine(_ line: String, to box: Box) {
+		let message = line.trimmingCharacters(in: .whitespaces)
+		if !message.isEmpty {
+			box.issues.append(XMLIssue(code: 3, level: 2, line: 0, file: nil, message: message))
+		}
 	}
 
 	/// Adds a problem of MTC_OSAX's own to the current collection, as a warning like libxml2's own "failed to load
@@ -240,7 +269,10 @@ enum XMLIssues {
 	static func collect<T>(_ body: () throws -> T) rethrows -> (T, [XMLIssue]) {
 		let box = self.box
 		box.issues = []
+		box.xsltText = ""
 		let result = try body()
+		addXSLTLine(box.xsltText, to: box)
+		box.xsltText = ""
 		let issues = box.issues
 		box.issues = []
 		lastText = text(issues)

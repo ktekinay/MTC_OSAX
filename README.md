@@ -88,7 +88,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 
 - `XMLExists` of a removed node or closed document is false instead of error -1728.
 - `XMLAppendText` to an element with mixed content works (it crashed SatimageOSAX); `XMLSetXML` of a text node replaces it (SatimageOSAX left the document unreadable).
-- `XMLError` after a command without problems is `""` instead of stale text; `XMLSave … in` a POSIX path works.
+- `XMLError` after a failed `XMLTransform` or `XMLCompile` has libxslt's messages. `XMLError` after a command without problems is `""` instead of stale text; `XMLSave … in` a POSIX path works.
 - `XMLSetContext` with `nsurl ""` removes the namespace; `str:replace` works in XPath.
 - `XMLGetNodePath … from` works from any ancestor, without a leading space; `XMLGetXPointer … suffix` adds the suffix as a further step.
 - `XMLXPointer` works in documents opened `from string` and for relative `xpointer(…)` links from an element.
