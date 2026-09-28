@@ -21,7 +21,7 @@
           {
             "key" : "synt",
             "value" : {
-              "text" : "PCRE",
+              "text" : "NOT_A_SYNTAX",
               "type" : "utxt"
             }
           },
@@ -41,7 +41,8 @@
     }
   ],
   "name" : "find-syntax-unknown",
-  "recordedAt" : "2026-09-27T18:50:57Z",
+  "recordedAt" : "2026-09-28T16:37:18Z",
   "recordedFrom" : "SatimageOSAX",
-  "script" : "find text \"a\" in \"ab\" with regexp syntax \"PCRE\""
+  "script" : "find text \"a\" in \"ab\" with regexp syntax \"NOT_A_SYNTAX\"",
+  "timeZone" : "America/New_York"
 }

@@ -1,7 +1,8 @@
 import COnigmo
 import Foundation
 
-/// A regex syntax, named as in Satimage's `syntax` parameter.
+/// A regex syntax, named as in Satimage's `syntax` parameter, plus MTC_OSAX's `PCRE`, which uses the PCRE2 engine
+/// instead of Onigmo.
 public enum RegexSyntax: String, CaseIterable, Sendable {
 	case ruby = "RUBY"
 	case perl = "PERL"
@@ -11,6 +12,7 @@ public enum RegexSyntax: String, CaseIterable, Sendable {
 	case emacs = "EMACS"
 	case posixBasic = "POSIX"
 	case posixExtended = "POSIX_EXTENDED"
+	case pcre = "PCRE"
 
 	/// Accepts Satimage's names in any case, with spaces or underscores.
 	public init?(name: String) {
@@ -18,7 +20,8 @@ public enum RegexSyntax: String, CaseIterable, Sendable {
 		self.init(rawValue: normalized)
 	}
 
-	var onigmoSyntax: MTCOnigSyntax {
+	/// The Onigmo syntax; nil for PCRE.
+	var onigmoSyntax: MTCOnigSyntax? {
 		switch self {
 		case .ruby: MTCOnigSyntaxRuby
 		case .perl: MTCOnigSyntaxPerl
@@ -28,6 +31,7 @@ public enum RegexSyntax: String, CaseIterable, Sendable {
 		case .emacs: MTCOnigSyntaxEmacs
 		case .posixBasic: MTCOnigSyntaxPosixBasic
 		case .posixExtended: MTCOnigSyntaxPosixExtended
+		case .pcre: nil
 		}
 	}
 }
@@ -56,6 +60,8 @@ public struct RegexFlags: OptionSet, Hashable, Sendable {
 	public static let newlineInNegativeCC = RegexFlags(rawValue: 1 << 10)
 	/// MTC_OSAX extension: `$1`-style references in replacement templates. Doesn't affect matching.
 	public static let dollarReferences = RegexFlags(rawValue: 1 << 11)
+	/// MTC_OSAX extension, PCRE only: `.` matches newlines (PCRE's `DOTALL`).
+	public static let dotAll = RegexFlags(rawValue: 1 << 12)
 
 	private static let names: [String: RegexFlags] = [
 		"IGNORECASE": .ignoreCase,
@@ -70,6 +76,7 @@ public struct RegexFlags: OptionSet, Hashable, Sendable {
 		"NOTEOL": .notEOL,
 		"NEWLINE_IN_NEGATIVE_CC": .newlineInNegativeCC,
 		"DOLLAR_REFERENCES": .dollarReferences,
+		"DOTALL": .dotAll,
 	]
 
 	/// Parses flag names as scripts write them (`"FIND LONGEST"` or `"FIND_LONGEST"`, any case).
@@ -87,7 +94,7 @@ public struct RegexFlags: OptionSet, Hashable, Sendable {
 	}
 
 	/// Options given to Onigmo when compiling.
-	var compileOptions: OnigOptionType {
+	var onigmoCompileOptions: OnigOptionType {
 		var options: OnigOptionType = 0
 		let mapping: [(RegexFlags, OnigOptionType)] = [
 			(.ignoreCase, MTCOnigOptionIgnoreCase),
@@ -110,7 +117,7 @@ public struct RegexFlags: OptionSet, Hashable, Sendable {
 	}
 
 	/// Options given to Onigmo when searching.
-	var searchOptions: OnigOptionType {
+	var onigmoSearchOptions: OnigOptionType {
 		var options: OnigOptionType = 0
 		if contains(.notBOL) { options |= MTCOnigOptionNotBOL }
 		if contains(.notEOL) { options |= MTCOnigOptionNotEOL }
@@ -118,11 +125,21 @@ public struct RegexFlags: OptionSet, Hashable, Sendable {
 	}
 }
 
-/// A pattern that failed to compile.
+/// A pattern that failed to compile, or options the engine doesn't have.
 public struct RegexError: Error, Equatable, CustomStringConvertible {
-	/// Onigmo's error code (negative).
+	/// Onigmo's error code (negative), -3000 minus PCRE2's (so -3101 and down), or -1 for an option the engine
+	/// doesn't have.
 	public let code: Int
 	public let message: String
+	/// Whether scripts get the message with the error: PCRE's errors, which Satimage never had. Onigmo's errors
+	/// are only numbers, as in Satimage.
+	public let isExtension: Bool
+
+	public init(code: Int, message: String, isExtension: Bool = false) {
+		self.code = code
+		self.message = message
+		self.isExtension = isExtension
+	}
 
 	public var description: String { message }
 }
@@ -134,58 +151,40 @@ public struct RegexMatch: Equatable, Sendable {
 	public var range: Range<Int> { groups[0]! }
 }
 
-/// A compiled Onigmo pattern. Searches text as UTF-16, so offsets are UTF-16 code units, as in `NSString`.
-///
-/// Matches Satimage's build of Onigmo (see the line-end fixtures): CR, LF, NEL, U+2028 and U+2029 are line ends,
-/// negated classes exclude `\n` and `\r` in every syntax unless `newlineInNegativeCC` is given, and unnamed groups
-/// are numbered alongside named ones.
+/// An engine's compiled pattern: Onigmo's or PCRE2's.
+protocol RegexEngine: AnyObject {
+	/// Number of capture groups, not counting the whole match.
+	var groupCount: Int { get }
+	/// Group numbers for each named group.
+	var namedGroups: [String: [Int]] { get }
+	/// The first match starting between `start` and `limit` (searching backward if `limit` is before `start`); the
+	/// text ends at `bounds.upperBound` but starts at 0, so lookbehind and `^` see what comes before `bounds`.
+	func search(_ text: UTF16Text, bounds: Range<Int>, start: Int, limit: Int) -> RegexMatch?
+}
+
+/// A compiled pattern, with Onigmo (Satimage's engine) or, for `syntax "PCRE"`, PCRE2. Searches text as UTF-16, so
+/// offsets are UTF-16 code units, as in `NSString`.
 public final class CompiledRegex {
 	public let pattern: String
 	public let syntax: RegexSyntax
 	public let flags: RegexFlags
-	/// Number of capture groups, not counting the whole match.
-	public let groupCount: Int
-	/// Group numbers for each named group.
-	public let namedGroups: [String: [Int]]
-
-	private let regex: OnigRegex
-	/// Onigmo keeps a pointer to the syntax, so the modified copy must live as long as the regex.
-	private let customSyntax: UnsafeMutablePointer<OnigSyntaxType>
+	private let engine: any RegexEngine
 
 	public init(_ pattern: String, syntax: RegexSyntax = .ruby, flags: RegexFlags = []) throws(RegexError) {
 		self.pattern = pattern
 		self.syntax = syntax
 		self.flags = flags
-
-		let syntaxCopy = UnsafeMutablePointer<OnigSyntaxType>.allocate(capacity: 1)
-		onig_copy_syntax(syntaxCopy, mtc_onig_syntax(syntax.onigmoSyntax))
-		var behavior = onig_get_syntax_behavior(syntaxCopy) | MTCOnigSynNotNewlineInNegativeCC
-		if flags.contains(.newlineInNegativeCC) {
-			behavior &= ~MTCOnigSynNotNewlineInNegativeCC
+		if syntax == .pcre {
+			engine = try PCREEngine(pattern, flags: flags)
+		} else {
+			engine = try OnigmoEngine(pattern, syntax: syntax, flags: flags)
 		}
-		onig_set_syntax_behavior(syntaxCopy, behavior)
-		customSyntax = syntaxCopy
-
-		var compiled: OnigRegex?
-		var errorInfo = OnigErrorInfo()
-		let units = Array(pattern.utf16)
-		let status = units.withUnsafeBytes { bytes in
-			let start = bytes.baseAddress!.assumingMemoryBound(to: OnigUChar.self)
-			return onig_new(&compiled, start, start + bytes.count, flags.compileOptions, mtc_onig_encoding_satimage_utf16le(), syntaxCopy, &errorInfo)
-		}
-		guard status == ONIG_NORMAL, let compiled else {
-			syntaxCopy.deallocate()
-			throw RegexError(code: Int(status), message: Self.message(for: Int(status), info: &errorInfo))
-		}
-		regex = compiled
-		groupCount = Int(onig_number_of_captures(compiled))
-		namedGroups = Self.namedGroups(of: compiled)
 	}
 
-	deinit {
-		onig_free(regex)
-		customSyntax.deallocate()
-	}
+	/// Number of capture groups, not counting the whole match.
+	public var groupCount: Int { engine.groupCount }
+	/// Group numbers for each named group.
+	public var namedGroups: [String: [Int]] { engine.namedGroups }
 
 	/// The first match starting at or after `start` (or, with `backward`, the last match starting at or before it),
 	/// looking only within `bounds`. `bounds` defaults to the whole text.
@@ -193,7 +192,7 @@ public final class CompiledRegex {
 		let bounds = bounds ?? 0 ..< text.count
 		let start = start ?? (backward ? bounds.upperBound : bounds.lowerBound)
 		let limit = backward ? bounds.lowerBound : bounds.upperBound
-		return search(text, bounds: bounds, start: start, limit: limit)
+		return engine.search(text, bounds: bounds, start: start, limit: limit)
 	}
 
 	/// Every non-overlapping match within `bounds`, left to right. After an empty match, the search
@@ -202,7 +201,7 @@ public final class CompiledRegex {
 		let bounds = bounds ?? 0 ..< text.count
 		var matches: [RegexMatch] = []
 		var position = bounds.lowerBound
-		while position <= bounds.upperBound, let match = search(text, bounds: bounds, start: position, limit: bounds.upperBound) {
+		while position <= bounds.upperBound, let match = engine.search(text, bounds: bounds, start: position, limit: bounds.upperBound) {
 			matches.append(match)
 			if match.range.isEmpty {
 				guard match.range.upperBound < bounds.upperBound else { break }
@@ -212,59 +211,5 @@ public final class CompiledRegex {
 			}
 		}
 		return matches
-	}
-
-	/// Runs `onig_search`: the text seen by the regex ends at `bounds.upperBound`, but starts at the beginning
-	/// of the whole text, so lookbehind and `^` see what comes before `bounds.lowerBound`.
-	private func search(_ text: UTF16Text, bounds: Range<Int>, start: Int, limit: Int) -> RegexMatch? {
-		let region = onig_region_new()!
-		defer { onig_region_free(region, 1) }
-
-		let position = text.units.withUnsafeBytes { bytes -> OnigPosition in
-			let base = bytes.baseAddress?.assumingMemoryBound(to: OnigUChar.self) ?? UnsafePointer(bitPattern: 1)!
-			return onig_search(
-				regex,
-				base,
-				base + bounds.upperBound * 2,
-				base + start * 2,
-				base + limit * 2,
-				region,
-				flags.searchOptions
-			)
-		}
-		guard position >= 0 else {
-			return nil
-		}
-		let groups = (0 ..< Int(region.pointee.num_regs)).map { index -> Range<Int>? in
-			let begin = region.pointee.beg[index]
-			let end = region.pointee.end[index]
-			return begin < 0 ? nil : Int(begin) / 2 ..< Int(end) / 2
-		}
-		return RegexMatch(groups: groups)
-	}
-
-	private static func message(for code: Int, info: inout OnigErrorInfo) -> String {
-		var buffer = [OnigUChar](repeating: 0, count: Int(MTCOnigMaxErrorMessageLength) + 1)
-		let length = mtc_onig_error_message(&buffer, OnigPosition(code), &info)
-		// Error messages quote the pattern in its own encoding (UTF-16LE); decode leniently.
-		let bytes = Array(buffer.prefix(Int(max(length, 0))))
-		return String(decoding: bytes.filter { $0 != 0 }, as: UTF8.self)
-	}
-
-	private static func namedGroups(of regex: OnigRegex) -> [String: [Int]] {
-		final class Collector {
-			var names: [String: [Int]] = [:]
-		}
-		let collector = Collector()
-		_ = onig_foreach_name(regex, { nameStart, nameEnd, count, groups, _, context in
-			let collector = Unmanaged<Collector>.fromOpaque(context!).takeUnretainedValue()
-			let byteCount = nameEnd! - nameStart!
-			let name = UnsafeRawPointer(nameStart!).withMemoryRebound(to: UInt16.self, capacity: byteCount / 2) {
-				String(decoding: UnsafeBufferPointer(start: $0, count: byteCount / 2), as: UTF16.self)
-			}
-			collector.names[name] = (0 ..< Int(count)).map { Int(groups![$0]) }
-			return 0
-		}, Unmanaged.passUnretained(collector).toOpaque())
-		return collector.names
 	}
 }

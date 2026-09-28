@@ -8,6 +8,9 @@ private let ownSuitePrefixes = ["MTCd"]
 /// Parameters MTC_OSAX adds to copied Satimage commands: `dollar references`.
 private let extensionParameters: Set = ["DlRf"]
 
+/// Parameters MTC_OSAX adds to one command: `syntax` on `splittext` (for PCRE; Satimage's other regex commands had it).
+private let commandExtensions: [String: Set<String>] = ["SATISplt": ["synt"]]
+
 struct SDEFConsistencyTests {
 	@Test func everySDEFCommandHasAHandler() throws {
 		let sdef = try SDEF(contentsOf: ProjectFiles.appSDEF)
@@ -36,7 +39,8 @@ struct SDEFConsistencyTests {
 	@Test func copiedSuitesMatchSatimage() throws {
 		let ours = try SDEF(contentsOf: ProjectFiles.appSDEF)
 		let satimage = try SDEF(contentsOf: ProjectFiles.satimageSDEF)
-		let differences = ours.differences(from: satimage, ignoringCodesWithPrefixes: ownSuitePrefixes, extensionParameters: extensionParameters)
+		let differences = ours.differences(from: satimage, ignoringCodesWithPrefixes: ownSuitePrefixes, extensionParameters: extensionParameters,
+		                                   commandExtensions: commandExtensions)
 		#expect(differences.isEmpty, "\(differences.joined(separator: "\n"))")
 	}
 

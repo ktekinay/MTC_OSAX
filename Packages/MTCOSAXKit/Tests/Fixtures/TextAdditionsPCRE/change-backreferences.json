@@ -1,0 +1,58 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RPLl",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "\\2 at \\1",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "me@home you@work",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "synt",
+            "value" : {
+              "text" : "PCRE",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "(\\w+)@(\\w+)",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "home at me work at you",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "change-backreferences",
+  "recordedAt" : "2026-09-28T16:41:55Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "change \"(\\\\w+)@(\\\\w+)\" into \"\\\\2 at \\\\1\" in \"me@home you@work\" with regexp syntax \"PCRE\"",
+  "timeZone" : "America/New_York"
+}

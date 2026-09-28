@@ -46,7 +46,7 @@
 </parameter>
       <parameter name="all occurrences" code="WaAl" type="boolean" optional="yes" description="returns a list of all occurrences. Default: false"/>
       <parameter name="string result" code="WaMr" type="boolean" optional="yes" description="return only the matching string instead of the whole record"/>
-	<parameter name="syntax" code="synt" type="string" optional="yes" description="the syntax for regular expressions. Relevant if regexp parameter is true. A string among (&quot;POSIX&quot; | &quot;POSIX_EXTENDED&quot; | &quot;EMACS&quot; | &quot;GREP&quot; | &quot;GNU_REGEX&quot; | &quot;JAVA&quot; | &quot;PERL&quot; | &quot;RUBY&quot;). Default: &quot;RUBY&quot;"/>
+	<parameter name="syntax" code="synt" type="string" optional="yes" description="the syntax for regular expressions. Relevant if regexp parameter is true. A string among (&quot;POSIX&quot; | &quot;POSIX_EXTENDED&quot; | &quot;EMACS&quot; | &quot;GREP&quot; | &quot;GNU_REGEX&quot; | &quot;JAVA&quot; | &quot;PERL&quot; | &quot;RUBY&quot;), or &quot;PCRE&quot; (MTC_OSAX extension: the PCRE2 engine). Default: &quot;RUBY&quot;, or the RegexSyntax setting (defaults write com.mactechnologies.mtc-osax RegexSyntax PCRE)"/>
        <parameter name="options" code="Opti" type="string" optional="yes" description="list of  shortcuts:  &apos;a&apos; for &quot;all occurrences&quot;, &apos;r&apos; for &quot;regexp&quot;, &apos;s&apos; for &quot;string result&quot;, &apos;c&apos; for &quot;not case sensitive&quot;, &apos;d&apos; for &quot;not diacritic sensitive&quot;. For instance &quot;ras&quot; stands for for &quot;with regexp, all occurrences and string result&quot;."/>
 	<!-- MTC_OSAX extension (not in Satimage): $1-style references in templates. -->
 	<parameter name="dollar references" code="DlRf" type="boolean" optional="yes" description="MTC_OSAX extension: also accept $0–$9, ${name} and $$ in templates. Default: the DollarReferences setting (off unless turned on with defaults write com.mactechnologies.mtc-osax DollarReferences -bool YES)."/>
@@ -150,7 +150,7 @@ change "([0-9]{1,2})/([0-9]{1,2})" into "\\2/\\1" in {"31/12/2007", "29/2/2008"}
     </command>
 	<command name="re_compile" code="SATICmpi" description="check a regular expression">
 				<direct-parameter type="string" description="the regular expression"/>
-	<parameter name="syntax" code="synt" type="string" optional="yes" description="the syntax for regular expressions. Relevant if regexp parameter is true. A string among (&quot;POSIX&quot; | &quot;POSIX_EXTENDED&quot; | &quot;EMACS&quot; | &quot;GREP&quot; | &quot;GNU_REGEX&quot; | &quot;JAVA&quot; | &quot;PERL&quot; | &quot;RUBY&quot;). Default: &quot;RUBY&quot;"/>
+	<parameter name="syntax" code="synt" type="string" optional="yes" description="the syntax for regular expressions. Relevant if regexp parameter is true. A string among (&quot;POSIX&quot; | &quot;POSIX_EXTENDED&quot; | &quot;EMACS&quot; | &quot;GREP&quot; | &quot;GNU_REGEX&quot; | &quot;JAVA&quot; | &quot;PERL&quot; | &quot;RUBY&quot;), or &quot;PCRE&quot; (MTC_OSAX extension: the PCRE2 engine). Default: &quot;RUBY&quot;, or the RegexSyntax setting (defaults write com.mactechnologies.mtc-osax RegexSyntax PCRE)"/>
 	</command>
     <command name="splittext" code="SATISplt" description="split a text according to a given separator pattern. Optional matching parameters work like with the &quot;find text&quot; command">
       <direct-parameter type="string" description="the string to split"/>
@@ -160,6 +160,8 @@ change "([0-9]{1,2})/([0-9]{1,2})" into "\\2/\\1" in {"31/12/2007", "29/2/2008"}
 <parameter name="diacritic sensitive" code="DiSe" type="boolean" optional="yes" description="default true. Irrelevant with regexp"/>
       <parameter name="whole word" code="WhWo" type="boolean" optional="yes" description="consider only whole word separators. default false. Irrelevant with regexp"/>
           <parameter name="options" code="Opti" type="string" optional="yes" description="list of  shortcuts (see  &quot;find text&quot;)"/>
+	<!-- MTC_OSAX extension (not in Satimage's splittext): the regex syntax, for PCRE. -->
+	<parameter name="syntax" code="synt" type="string" optional="yes" description="MTC_OSAX extension: see the documentation for find text"/>
        <result description="the splitted text. If no separator found, the returned list contains one element: the original string.">
         <type type="string" list="yes"/>
         </result>

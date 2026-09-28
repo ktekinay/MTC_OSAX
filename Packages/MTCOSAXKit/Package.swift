@@ -31,8 +31,23 @@ let package = Package(
 			]
 		),
 
-		// Regex (Onigmo) and literal text search, shared by every suite that searches text.
-		.target(name: "TextMatching", dependencies: ["COnigmo"]),
+		// PCRE2 10.49 (https://github.com/PCRE2Project/pcre2), MTC_OSAX's alternative regex engine (`syntax "PCRE"`).
+		// BSD 3-clause; see LICENCE.md. Only the 16-bit library, without JIT; config.h is set up once from config.h.generic.
+		.target(
+			name: "CPCRE2",
+			exclude: ["LICENCE.md"],
+			cSettings: [
+				.headerSearchPath("."),
+				.headerSearchPath("include"),
+				.define("HAVE_CONFIG_H"),
+				.define("PCRE2_CODE_UNIT_WIDTH", to: "16"),
+				.define("PCRE2_STATIC"),
+				.unsafeFlags(["-w"]),
+			]
+		),
+
+		// Regex (Onigmo, or PCRE2 when asked) and literal text search, shared by every suite that searches text.
+		.target(name: "TextMatching", dependencies: ["COnigmo", "CPCRE2"]),
 
 		// Suites. Each implemented Satimage section gets its own module.
 		.target(name: "Diagnostics", dependencies: ["AppleEventCore"]),
@@ -58,7 +73,7 @@ let package = Package(
 
 		.testTarget(name: "AppleEventCoreTests", dependencies: ["AppleEventCore"]),
 		.testTarget(name: "DiagnosticsTests", dependencies: ["Diagnostics"]),
-		.testTarget(name: "TextMatchingTests", dependencies: ["TextMatching"]),
+		.testTarget(name: "TextMatchingTests", dependencies: ["TextMatching", "CPCRE2"]),
 		.testTarget(name: "TextAdditionsTests", dependencies: ["TextAdditions"]),
 		.testTarget(name: "FilesAndFoldersTests", dependencies: ["FilesAndFolders"]),
 		.testTarget(name: "FileAdditionsTests", dependencies: ["FileAdditions"]),

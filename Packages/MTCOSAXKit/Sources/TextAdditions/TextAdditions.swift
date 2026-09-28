@@ -26,17 +26,27 @@ final class TextContext {
 	let regexCache = RegexCache()
 	/// Whether `$1`-style references are on when a command doesn't say (the `DollarReferences` default).
 	let dollarReferencesDefault: () -> Bool
+	/// The regex syntax when a command doesn't say (the `RegexSyntax` default, e.g. `PCRE`); Satimage's `RUBY` if
+	/// it's not set or not a syntax name.
+	let regexSyntaxDefault: () -> RegexSyntax
 	/// The zone `strftime` and `strptime` work in.
 	let timeZone: TimeZone
 	let propertyLists: TextAdditions.PropertyListWriter?
 
 	init(
 		dollarReferencesDefault: @escaping () -> Bool = { UserDefaults.standard.bool(forKey: "DollarReferences") },
+		regexSyntaxDefault: @escaping () -> RegexSyntax = { TextContext.regexSyntax(in: .standard) },
 		timeZone: TimeZone = .current,
 		propertyLists: TextAdditions.PropertyListWriter? = nil
 	) {
 		self.dollarReferencesDefault = dollarReferencesDefault
+		self.regexSyntaxDefault = regexSyntaxDefault
 		self.timeZone = timeZone
 		self.propertyLists = propertyLists
+	}
+
+	/// The `RegexSyntax` setting: a syntax name (`PCRE`, `RUBY`, …); `RUBY` if it's missing or unknown.
+	static func regexSyntax(in defaults: UserDefaults) -> RegexSyntax {
+		defaults.string(forKey: "RegexSyntax").flatMap(RegexSyntax.init(name:)) ?? .ruby
 	}
 }

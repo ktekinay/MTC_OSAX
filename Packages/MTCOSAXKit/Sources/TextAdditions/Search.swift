@@ -41,6 +41,7 @@ struct SearchOptions {
 
 	/// Reads the parameters a command has. `options` shortcut letters override the individual parameters.
 	init(_ request: AppleEventRequest, context: TextContext, readsBackward: Bool = false) throws {
+		syntax = context.regexSyntaxDefault()
 		regexp = try request.parameter("UsGR", default: false)
 		caseSensitive = try request.parameter("CaSe", default: true)
 		diacriticSensitive = try request.parameter("DiSe", default: true)
@@ -98,6 +99,13 @@ struct SearchOptions {
 	}
 }
 
+extension OSAXError {
+	/// A pattern's error: Onigmo's number alone, as in Satimage; PCRE's with its message.
+	init(_ error: RegexError) {
+		self.init(error.code, error.isExtension ? error.message : nil)
+	}
+}
+
 /// The `dollar references` parameter MTC_OSAX adds to `find text`, `change` and `filter text`.
 let dollarReferencesKeyword = "DlRf"
 
@@ -118,7 +126,7 @@ struct TextSearcher {
 			do {
 				regex = try context.regexCache.regex(pattern, syntax: options.syntax, flags: flags)
 			} catch {
-				throw OSAXError(error.code)
+				throw OSAXError(error)
 			}
 		} else {
 			regex = nil

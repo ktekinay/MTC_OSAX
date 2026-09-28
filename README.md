@@ -93,6 +93,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 ### New features
 
 - **Native on Apple silicon**, so it keeps working after Rosetta is removed.
+- **PCRE** as a second regex engine, with `syntax "PCRE"` on `find text`, `change`, `splittext`, `filter text` and `re_compile` (`splittext` gains the `syntax` parameter for this). Patterns get PCRE2's features (`\h`, `\K`, recursion, possessive quantifiers, Unicode-aware `\w` and case), and any line ending counts. As with Onigmo, `^` and `$` match at every line unless the pattern says `(?-m)` or the call gives `regexpflag {"SINGLELINE"}`; `"DOTALL"` makes `.` match newlines. Onigmo-only flags (`FIND LONGEST`, `NEGATE SINGLELINE`, `NEWLINE IN NEGATIVE CC`) are error -1, and a pattern error is -3000 minus PCRE2's number, with PCRE2's message. To make PCRE the default: `defaults write com.mactechnologies.mtc-osax RegexSyntax PCRE` (an explicit `syntax` still wins).
 - **Dollar references** in replacement templates (`$1`, `${12}`, `${name}`, `$$`), opt-in: `with dollar references` on `change`, `find text` and `filter text`, the `"DOLLAR REFERENCES"` regexp flag, or `defaults write com.mactechnologies.mtc-osax DollarReferences -bool YES`.
 - **Idle quit** is a preference (`IdleTimeoutSeconds`; see [Building](#building)), and the app doesn't quit while property list or XML documents are open.
 - **Diagnostic commands** (`mtc_ping` and others; see [Diagnostic commands](#diagnostic-commands)).
@@ -227,5 +228,7 @@ Fixtures store the values used, and replays substitute the checkout's `Input` fo
 **Case names** must differ by more than letter case, since the disk is usually case-insensitive; the recorder refuses names that would collide.
 
 ## Third-party code
+
+- **PCRE2 10.49** (`Packages/MTCOSAXKit/Sources/CPCRE2`), the engine for `syntax "PCRE"`, by Philip Hazel and the PCRE2 project. BSD 3-clause license (with the PCRE2 exemption); see [LICENCE.md](Packages/MTCOSAXKit/Sources/CPCRE2/LICENCE.md). Only the 16-bit library's sources are included, without JIT. `config.h` is PCRE2's `config.h.generic` with the changes marked `MTC_OSAX` (16-bit and Unicode support, macOS's headers, any line ending by default), `pcre2.h` is `pcre2.h.generic`, `pcre2_chartables.c` is `pcre2_chartables.c.dist`, and `include/CPCRE2Shim.h` is ours.
 
 - **Onigmo 6.2.0** (`Packages/MTCOSAXKit/Sources/COnigmo`), the regular expression engine Satimage used, by K.Kosako and K.Takata. BSD 2-clause license; see [COPYING](Packages/MTCOSAXKit/Sources/COnigmo/COPYING). Only the engine and the encodings it needs are included. Changes to match Satimage's build: `regparse.c` has two small patches (marked `MTC_SATIMAGE_COMPATIBILITY`) so negated classes also exclude `\r` and `(?x)` comments also end at `\r` and the escapes `\n`/`\r`; our own `mtc_encoding.c` defines Satimage's line terminators. `include/COnigmoShim.h` is also ours.

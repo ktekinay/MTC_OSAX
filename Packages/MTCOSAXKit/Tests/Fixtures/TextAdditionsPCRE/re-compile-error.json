@@ -1,0 +1,36 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Cmpi",
+        "fields" : [
+          {
+            "key" : "synt",
+            "value" : {
+              "text" : "PCRE",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "(unclosed",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorMessage" : "missing closing parenthesis at offset 9",
+        "errorNumber" : -3114
+      }
+    }
+  ],
+  "name" : "re-compile-error",
+  "recordedAt" : "2026-09-28T16:41:55Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "re_compile \"(unclosed\" syntax \"PCRE\"",
+  "timeZone" : "America/New_York"
+}

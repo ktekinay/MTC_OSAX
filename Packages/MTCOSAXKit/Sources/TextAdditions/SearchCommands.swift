@@ -226,10 +226,10 @@ extension TextAdditions {
 
 	// MARK: re_compile
 
-	/// Checks a pattern. Returns the pattern itself if it compiles, Onigmo's error code if not.
+	/// Checks a pattern. Returns the pattern itself if it compiles, the engine's error code if not.
 	private static func reCompile(_ request: AppleEventRequest, context: TextContext) throws -> NSAppleEventDescriptor? {
 		let pattern = try request.requiredDirectParameter(as: String.self)
-		var syntax = RegexSyntax.ruby
+		var syntax = context.regexSyntaxDefault()
 		if let name = try request.parameter("synt", as: String.self) {
 			guard let parsed = RegexSyntax(name: name) else {
 				throw invalidOptionError
@@ -239,7 +239,7 @@ extension TextAdditions {
 		do {
 			_ = try context.regexCache.regex(pattern, syntax: syntax)
 		} catch {
-			throw OSAXError(error.code)
+			throw OSAXError(error)
 		}
 		return pattern.appleEventDescriptor
 	}

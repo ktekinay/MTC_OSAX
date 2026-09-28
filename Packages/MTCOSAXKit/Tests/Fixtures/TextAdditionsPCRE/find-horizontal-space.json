@@ -1,0 +1,57 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FINd",
+        "fields" : [
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "x \t y",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "WaMr",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "synt",
+            "value" : {
+              "text" : "PCRE",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "\\h+",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : " \t ",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "find-horizontal-space",
+  "recordedAt" : "2026-09-28T16:41:54Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "find text \"\\\\h+\" in \"x \" & tab & \" y\" with regexp and string result syntax \"PCRE\"",
+  "timeZone" : "America/New_York"
+}

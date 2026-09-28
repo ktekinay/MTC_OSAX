@@ -163,7 +163,8 @@ struct RegexFlagTests {
 	}
 
 	@Test func negatedClassesExcludeLineFeedAndReturn() throws {
-		for syntax in RegexSyntax.allCases where syntax != .posixBasic && syntax != .grep && syntax != .emacs {
+		// Onigmo's syntaxes (PCRE keeps its own rule: see PCRERegexTests).
+		for syntax in RegexSyntax.allCases where ![.posixBasic, .grep, .emacs, .pcre].contains(syntax) {
 			#expect(try first("a[^x]b", in: "a\nb", syntax: syntax) == nil, "\(syntax)")
 			#expect(try first("a[^x]b", in: "a\rb", syntax: syntax) == nil, "\(syntax)")
 		}
@@ -213,7 +214,8 @@ struct RegexFlagTests {
 		#expect(RegexSyntax(name: "ruby") == .ruby)
 		#expect(RegexSyntax(name: "POSIX EXTENDED") == .posixExtended)
 		#expect(RegexSyntax(name: "gnu_regex") == .gnuRegex)
-		#expect(RegexSyntax(name: "PCRE") == nil)
+		#expect(RegexSyntax(name: "pcre") == .pcre)
+		#expect(RegexSyntax(name: "NOT_A_SYNTAX") == nil)
 	}
 }
 

@@ -225,7 +225,7 @@
  },
  {
   "name": "find-syntax-unknown",
-  "script": "find text \"a\" in \"ab\" with regexp syntax \"PCRE\""
+  "script": "find text \"a\" in \"ab\" with regexp syntax \"NOT_A_SYNTAX\""
  },
  {
   "name": "find-invalid-regexp",
@@ -573,7 +573,7 @@
  },
  {
   "name": "re-compile-syntax-unknown",
-  "script": "re_compile \"a\" syntax \"PCRE\""
+  "script": "re_compile \"a\" syntax \"NOT_A_SYNTAX\""
  },
  {
   "name": "re-compile-missing",
