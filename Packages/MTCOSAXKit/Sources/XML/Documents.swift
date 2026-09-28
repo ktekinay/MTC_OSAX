@@ -78,6 +78,19 @@ final class XMLDocument: StoredDocument {
 		return Unmanaged<XMLDocument>.fromOpaque(owner).takeUnretainedValue()
 	}
 
+	/// Forgets the numbers of nodes (and what's in them) that are about to be freed without libxml2's callback.
+	static func forgetNumbers(in node: xmlNodePtr?) {
+		var current = node
+		while let node = current {
+			if let number = node.pointee._private, let document = owner(of: node) {
+				document.nodes[Int(bitPattern: number)] = nil
+				node.pointee._private = nil
+			}
+			forgetNumbers(in: node.pointee.children)
+			current = node.pointee.next
+		}
+	}
+
 	/// Clears the numbers of a copied subtree (libxml2 copies `_private`), so the copy gets its own.
 	static func clearNumbers(_ node: xmlNodePtr?) {
 		var current = node

@@ -930,5 +930,21 @@
  {
   "name": "c14n-empty-list",
   "script": "XMLc14n {}"
+ },
+ {
+  "name": "new-child-at-attribute",
+  "script": "set d to XMLOpen from string \"<a k='v' j='w'>x<b/></a>\"\ntry\nXMLNewChild \"<z/>\" at (item 1 of (XMLXPath d with \"//@j\"))\non error number n\nXMLClose d\nerror number n\nend try"
+ },
+ {
+  "name": "new-child-second-root",
+  "script": "set d to XMLOpen from string \"<a k='v' j='w'>x<b/></a>\"\ntry\nXMLNewChild \"<z/>\" at d\non error number n\nXMLClose d\nerror number n\nend try"
+ },
+ {
+  "name": "remove-attribute-node",
+  "script": "set d to XMLOpen from string \"<a k='v' j='w'>x<b/></a>\"\nXMLRemove (item 1 of (XMLXPath d with \"//@k\"))\nset x to XMLDisplayXML (XMLRoot d)\nXMLClose d\nx"
+ },
+ {
+  "name": "set-text-attribute-node",
+  "script": "set d to XMLOpen from string \"<a k='v' j='w'>x<b/></a>\"\nXMLSetText (item 1 of (XMLXPath d with \"//@j\")) to \"new\"\nset x to XMLDisplayXML (XMLRoot d)\nXMLClose d\nx"
  }
 ]

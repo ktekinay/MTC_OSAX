@@ -236,6 +236,48 @@ struct XMLChangeTests {
 		#expect(xml.send("XML disx", ["----": k, "smar": false]).result?.stringValue == "<k/>")
 	}
 
+	/// DTD declarations were freed without forgetting their numbers, and some commands linked nodes where they
+	/// can't go (an element into an attribute list, a second root) or freed declarations as if they were nodes.
+	@Test func nodeKinds() throws {
+		let xml = XMLs()
+		let d = try xml.open("<!DOCTYPE a [<!ELEMENT a ANY><!ENTITY e 'ent'>]><a k='v' j='w'>x&e;<b/></a>")
+		let a = try xml.root(d)
+		func child(_ node: NSAppleEventDescriptor, _ index: Int) throws -> NSAppleEventDescriptor {
+			try #require(xml.send("XML chld", ["----": node, "indx": index]).result)
+		}
+		let dtd = try child(d, 1)
+		let declaration = try child(dtd, 2)
+		let entityReference = try child(a, 2)
+		let entity = try child(entityReference, 1)
+		let k = try #require(xml.send("XML path", ["----": d, "with": "//@k"]).result?.atIndex(1))
+		let j = try #require(xml.send("XML path", ["----": d, "with": "//@j"]).result?.atIndex(1))
+		let text = try child(a, 1)
+		#expect(xml.send("XML remo", ["----": declaration]).error == .parameterError)
+		#expect(xml.send("XML remo", ["----": entity]).error == .parameterError)
+		#expect(xml.send("XML remc", ["----": dtd]).error == .parameterError)
+		#expect(xml.send("XML addc", ["----": "<z/>", "at  ": j]).error == .coercionFailed)
+		#expect(xml.send("XML addc", ["----": "<z/>", "at  ": dtd]).error == .coercionFailed)
+		#expect(xml.send("XML addc", ["----": "<z/>", "at  ": text]).error == .coercionFailed)
+		#expect(xml.send("XML addc", ["----": "<z/>", "at  ": d]).error == OSAXError(-1))
+		#expect(xml.send("XML adds", ["----": "<z/>", "afte": j]).error == .parameterError)
+		#expect(xml.send("XML adds", ["----": "<z/>", "afte": declaration]).error == .parameterError)
+		#expect(xml.send("XML sttx", ["----": entityReference, "to  ": "x"]).error == .parameterError)
+		#expect(xml.send("XML stxm", ["----": entity, "to  ": "x"]).error == .parameterError)
+		#expect(xml.send("XML ApTx", ["----": "x", "at  ": dtd]).error == .parameterError)
+		// Attributes can be removed and set, as in SatimageOSAX.
+		#expect(xml.send("XML remo", ["----": k]).error == nil)
+		#expect(xml.send("XML sttx", ["----": j, "to  ": "new"]).error == nil)
+		#expect(xml.send("XML disx", ["----": a, "smar": false]).result?.stringValue == "<a j=\"new\">x&e;<b/></a>")
+		// Removing the DTD makes references to its declarations invalid.
+		#expect(xml.send("XML remo", ["----": dtd]).error == nil)
+		#expect(xml.send("XML gtag", ["----": declaration]).error == OSAXError(-1728))
+		#expect(xml.send("XML Exis", ["----": dtd]).result?.booleanValue == false)
+		// A comment beside the root is fine, and so is a root in a document that has none.
+		#expect(xml.send("XML addc", ["----": "<!--c-->", "at  ": d]).error == nil)
+		xml.send("XML remo", ["----": a])
+		#expect(xml.send("XML addc", ["----": "<r/>", "at  ": d]).error == nil)
+	}
+
 	@Test func setXMLOfTextNode() throws {
 		let xml = XMLs()
 		let a = try xml.root(xml.open("<a>one<b/>two</a>"))

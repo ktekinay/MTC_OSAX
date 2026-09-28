@@ -141,8 +141,23 @@ struct XMLCommands {
 		document.isModified = true
 	}
 
-	/// Unlinks and frees nodes (their references then give -1728).
+	/// The kinds of node that can be inside an element: the ones scripts can move, replace and remove.
+	static let contentKinds = [XML_ELEMENT_NODE, XML_TEXT_NODE, XML_CDATA_SECTION_NODE, XML_COMMENT_NODE, XML_PI_NODE, XML_ENTITY_REF_NODE]
+
+	/// Error -50 (or `error`) unless the node is one of `kinds`. Declarations inside a DTD in particular can be read
+	/// but not changed: libxml2 frees them through the DTD's tables, not as nodes.
+	static func require(_ node: xmlNodePtr, isOneOf kinds: [xmlElementType], error: OSAXError = .parameterError) throws {
+		guard kinds.contains(node.pointee.type) else {
+			throw error
+		}
+	}
+
+	/// Unlinks and frees nodes (their references then give -1728). A DTD's declarations are freed without
+	/// libxml2's node callback, so their numbers are forgotten first.
 	static func remove(_ node: xmlNodePtr) {
+		if node.pointee.type == XML_DTD_NODE {
+			XMLDocument.forgetNumbers(in: node.pointee.children)
+		}
 		xmlUnlinkNode(node)
 		xmlFreeNode(node)
 	}

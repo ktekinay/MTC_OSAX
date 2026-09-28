@@ -45,6 +45,7 @@ extension XMLCommands {
 			CommandDefinition("XMLRemove", code: "XML remo") { request in
 				try changeEach(request) { _, document, node in
 					guard !XMLCommands.isDocument(node) else { return }
+					try XMLCommands.require(node, isOneOf: XMLCommands.contentKinds + [XML_ATTRIBUTE_NODE, XML_DTD_NODE])
 					modified(document)
 					XMLCommands.remove(node)
 				}
@@ -52,6 +53,7 @@ extension XMLCommands {
 			},
 			CommandDefinition("XMLRemoveChildren", code: "XML remc") { request in
 				try changeEach(request) { _, document, node in
+					try XMLCommands.require(node, isOneOf: [XML_ELEMENT_NODE, XML_DOCUMENT_NODE, XML_HTML_DOCUMENT_NODE])
 					modified(document)
 					for child in XMLCommands.children(of: node, allNodes: true) {
 						XMLCommands.remove(child)
@@ -289,13 +291,19 @@ extension XMLCommands {
 		return (try Parsing.fragment(XMLCommands.text(value), in: context, keepBlanks: keepBlanks), false)
 	}
 
-	/// Appends XML text or copies of XMLRefs `at` an element; returns the first new node (or one per copied node).
+	/// Appends XML text or copies of XMLRefs `at` an element or a document (-1700 at another kind of node, as in
+	/// SatimageOSAX; -1 for a second root element); returns the first new node (or one per copied node).
 	func newChild(_ request: AppleEventRequest) throws -> NSAppleEventDescriptor {
 		let (document, parent) = try resolve(request.requiredParameter("at  ", as: AnyDescriptor.self).descriptor)
+		try XMLCommands.require(parent, isOneOf: [XML_ELEMENT_NODE, XML_DOCUMENT_NODE, XML_HTML_DOCUMENT_NODE], error: .coercionFailed)
 		let nsclean = try request.parameter("NsCl", default: true)
 		let isClone = XMLCommands.items(try request.requiredDirectParameter(as: AnyDescriptor.self).descriptor).allSatisfy(XMLReferences.isReference)
 		let (nodes, isList) = try newNodes(request, context: parent, document: document)
 		guard !nodes.isEmpty else { throw XML.invalid }
+		if XMLCommands.isDocument(parent), xmlDocGetRootElement(document.doc) != nil, nodes.contains(where: XMLCommands.isElement) {
+			nodes.forEach { xmlFreeNode($0) }
+			throw XML.invalid
+		}
 		modified(document)
 		let added = try nodes.map { node in
 			let added = try XMLCommands.added(node, xmlAddChild(parent, node))
@@ -313,6 +321,7 @@ extension XMLCommands {
 		guard let anchorDescriptor = after ?? request.descriptor(for: "befo") else { throw OSAXError.coercionFailed }
 		let (document, anchor) = try resolve(anchorDescriptor)
 		guard let parent = anchor.pointee.parent, !XMLCommands.isDocument(parent) else { throw XML.invalid }
+		try XMLCommands.require(anchor, isOneOf: XMLCommands.contentKinds)
 		let (nodes, isList) = try newNodes(request, context: parent, document: document)
 		guard !nodes.isEmpty else { throw XML.invalid }
 		modified(document)
@@ -332,6 +341,7 @@ extension XMLCommands {
 	/// document unreadable after). Returns the first new node.
 	func setXML(_ request: AppleEventRequest) throws -> NSAppleEventDescriptor? {
 		let (document, node) = try direct(request)
+		try XMLCommands.require(node, isOneOf: [XML_ELEMENT_NODE, XML_DOCUMENT_NODE, XML_HTML_DOCUMENT_NODE, XML_TEXT_NODE, XML_CDATA_SECTION_NODE])
 		let text = try request.requiredParameter("to  ", as: String.self)
 		let isText = node.pointee.type == XML_TEXT_NODE || node.pointee.type == XML_CDATA_SECTION_NODE
 		guard let context = isText ? node.pointee.parent : node else { throw XML.invalid }
@@ -364,6 +374,9 @@ extension XMLCommands {
 		try changeEach(request) { index, document, node in
 			// One value for every node, or one each (nodes without a value are left alone).
 			guard let value = values.count == 1 ? values[0] : values.indices.contains(index) ? values[index] : nil else { return }
+			// Not an entity reference: libxml2 would free the entity its content points at.
+			try XMLCommands.require(node, isOneOf: [XML_ELEMENT_NODE, XML_TEXT_NODE, XML_CDATA_SECTION_NODE, XML_COMMENT_NODE,
+			                                        XML_PI_NODE, XML_ATTRIBUTE_NODE])
 			if XMLCommands.isMissingValue(value) {
 				guard suppressing else { return }
 				modified(document)
@@ -390,6 +403,7 @@ extension XMLCommands {
 	func appendText(_ request: AppleEventRequest) throws -> NSAppleEventDescriptor? {
 		let text = try request.requiredDirectParameter(as: String.self)
 		let (document, node) = try resolve(request.requiredParameter("at  ", as: AnyDescriptor.self).descriptor)
+		try XMLCommands.require(node, isOneOf: [XML_ELEMENT_NODE, XML_TEXT_NODE, XML_ATTRIBUTE_NODE])
 		modified(document)
 		try withXMLString(text) { value in
 			if node.pointee.type == XML_TEXT_NODE {

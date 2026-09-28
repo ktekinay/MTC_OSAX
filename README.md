@@ -104,6 +104,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 ### Other differences
 
 - MTC_OSAX uses macOS's libxml2 (2.9.13) and libxslt, newer than SatimageOSAX's. HTML output has no line break after `<br>`, XInclude leaves no blank lines for its markers, and `XMLError` has a second message when a schema file can't be loaded. The content is otherwise the same.
+- `XMLChild` of a DTD gives its declarations (SatimageOSAX gave -2763); they can be read but not changed or removed (-50). `XMLNewChild` at a text node is error -1700, as at an attribute (SatimageOSAX did nothing).
 - Math results can differ from SatimageOSAX's Intel math library in the last digits (up to 15 units in the last place for `lgamma` near its roots).
 
 ## Layout
