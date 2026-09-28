@@ -10,8 +10,6 @@ final class XMLSettings: @unchecked Sendable {
 	var extendedCharacters = true
 	/// `XMLSetIndentString`: a tab at launch.
 	var indentString = "\t"
-	/// What `XMLError` returns: the messages of the last command that parsed something.
-	var lastErrorText = ""
 }
 
 /// The options of `XMLOpen` and the commands that parse fragments.

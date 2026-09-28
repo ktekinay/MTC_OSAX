@@ -23,7 +23,8 @@ extension TextAdditions {
 
 			CommandDefinition("writetext", code: "SATIWrit") { request in
 				let text = try request.requiredDirectParameter(as: String.self)
-				let url = try writeDestination(request.requiredParameter("to  ", as: AnyDescriptor.self).descriptor)
+				// A file reference, or a POSIX or HFS path (Satimage rejected POSIX paths with error 1).
+				let url = try request.requiredParameter("to  ", as: URL.self)
 				let encoding = try request.parameter("enco", as: String.self).map(FileText.encoding(named:)) ?? .utf8
 				let data = try FileText.encode(text, encoding: encoding, missingCharacter: request.parameter("Lssb", as: String.self))
 				try FileText.write(data, to: url, append: request.parameter("appe", default: false))
@@ -46,8 +47,4 @@ extension TextAdditions {
 		]
 	}
 
-	/// `writetext … to`: a file reference, or a POSIX or HFS path (Satimage rejected POSIX paths with error 1).
-	private static func writeDestination(_ descriptor: NSAppleEventDescriptor) throws -> URL {
-		try URL(appleEventDescriptor: descriptor)
-	}
 }

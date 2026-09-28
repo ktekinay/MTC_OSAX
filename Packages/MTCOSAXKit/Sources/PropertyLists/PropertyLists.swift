@@ -61,7 +61,7 @@ public enum PropertyLists {
 			CommandDefinition("PlistToJavaScript", code: "PLSTToJa") { request in
 				JSON.javaScript(object(of: try commands.node(request)))
 			},
-			CommandDefinition("PlistFromJSON", code: "PLSTNOSJ", handler: commands.fromJSON),
+			CommandDefinition("PlistFromJSON", code: "PLSTNOSJ") { try commands.newDocument($0) { text, _ in try JSON.parse(text) } },
 			// MTC_OSAX extensions: YAML and TOML, in their own suite (event class MTCp).
 			CommandDefinition("PlistToYAML", code: "MTCpTYML") { try commands.output(YAML.write(object(of: commands.node($0))), $0) },
 			CommandDefinition("PlistFromYAML", code: "MTCpFYML") { try commands.newDocument($0, from: YAML.read) },
@@ -537,18 +537,9 @@ struct Commands {
 		return text.hasPrefix("\u{FEFF}") ? String(text.dropFirst()) : text
 	}
 
-	/// A new document from text in another format (`PlistFromYAML`, `PlistFromTOML`), `in pool`.
+	/// A new document from text in another format (`PlistFromJSON`, `PlistFromYAML`, `PlistFromTOML`), `in pool`.
 	func newDocument(_ request: AppleEventRequest, from read: (String, TimeZone) throws -> Any) throws -> NSAppleEventDescriptor {
 		let object = try read(input(request), .current)
-		try PropertyLists.checkDepth(object)
-		let document = store.newDocument(pool: try request.parameter("pool", as: String.self))
-		document.root = PropertyLists.node(from: object, in: document)
-		return store.reference(document.root)
-	}
-
-	/// JSON text, or (an MTC_OSAX extension) a JSON file.
-	func fromJSON(_ request: AppleEventRequest) throws -> NSAppleEventDescriptor {
-		let object = try JSON.parse(input(request))
 		try PropertyLists.checkDepth(object)
 		let document = store.newDocument(pool: try request.parameter("pool", as: String.self))
 		document.root = PropertyLists.node(from: object, in: document)
