@@ -307,6 +307,20 @@ struct FilterIntoTests {
 	}
 }
 
+struct ElementTableTests {
+	/// Every element ever made kept an entry in its document's table.
+	@Test func tableStaysSmall() throws {
+		let plists = Plists()
+		let p = try plists.new(record(["a": 1]))
+		for value in 0 ..< 5000 {
+			plists.send("PLSTseta", ["----": p, "key ": "a", "to  ": AppleEventList([value, "x"])])
+		}
+		let document = try plists.store.node(p).document
+		#expect(document.elements.count < 2100)
+		#expect(plists.xml(p) == "<dict><key>a</key><array><integer>4999</integer><string>x</string></array></dict>")
+	}
+}
+
 struct IntegerTests {
 	/// 64-bit integers used to be stored as 0.
 	@Test func sixtyFourBits() throws {

@@ -153,6 +153,10 @@ final class Document: StoredDocument {
 	var retainCount = 1
 	fileprivate(set) var elements: [Int: WeakNode] = [:]
 	private var nextElement = 1
+	/// When the table next drops the entries of elements that no longer exist (every copy `PlistSet … to` makes,
+	/// and the scratch elements of `PlistExist` and `PlistMatch`, get one, so it grew for as long as the document
+	/// was open).
+	private var compactAt = 1024
 
 	init(number: Int, pool: String) {
 		self.number = number
@@ -164,6 +168,10 @@ final class Document: StoredDocument {
 	}
 
 	fileprivate func register() -> Int {
+		if elements.count >= compactAt {
+			elements = elements.filter { $0.value.node != nil }
+			compactAt = max(1024, elements.count * 2)
+		}
 		defer { nextElement += 1 }
 		return nextElement
 	}
