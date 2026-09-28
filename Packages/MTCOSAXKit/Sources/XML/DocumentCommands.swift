@@ -331,11 +331,21 @@ enum NetworkInput {
 }
 
 extension Result where Success == Data, Failure == Error {
+	/// The session for fetching. The main thread waits for each fetch, and with it every script using MTC_OSAX, so a
+	/// slow server gets 30 seconds between packets and a minute in all (URLSession's defaults are a minute and a
+	/// week), well within AppleScript's two-minute timeout for a command.
+	static let session: URLSession = {
+		let configuration = URLSessionConfiguration.default
+		configuration.timeoutIntervalForRequest = 30
+		configuration.timeoutIntervalForResource = 60
+		return URLSession(configuration: configuration)
+	}()
+
 	/// A synchronous URL request (commands run one at a time on the main thread; the session works on its own).
 	static func fetch(_ request: URLRequest) -> Result<Data, Error> {
 		let semaphore = DispatchSemaphore(value: 0)
 		nonisolated(unsafe) var result: Result<Data, Error> = .failure(URLError(.unknown))
-		URLSession.shared.dataTask(with: request) { data, response, error in
+		session.dataTask(with: request) { data, response, error in
 			// Only a success status counts; a 404 page isn't the document.
 			if let status = (response as? HTTPURLResponse)?.statusCode, !(200 ..< 300).contains(status) {
 				result = .failure(URLError(.badServerResponse))

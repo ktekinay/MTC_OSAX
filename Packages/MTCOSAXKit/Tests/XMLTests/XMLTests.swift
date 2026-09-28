@@ -90,6 +90,12 @@ struct XMLOpenTests {
 		#expect(xml.send("XML disx", ["----": try xml.root(bypassed), "smar": false]).result?.stringValue == "<a><b/></a>")
 	}
 
+	/// Fetches used URLSession's defaults, so a slow server could hold every script up for a week.
+	@Test func fetchesHaveTimeLimits() {
+		#expect(Result<Data, Error>.session.configuration.timeoutIntervalForRequest == 30)
+		#expect(Result<Data, Error>.session.configuration.timeoutIntervalForResource == 60)
+	}
+
 	@Test func queryIsEncoded() throws {
 		let base = try #require(URL(string: "http://example.com/x?a=1"))
 		#expect(Network.appending(query: "name=hello world", to: base).absoluteString == "http://example.com/x?a=1&name=hello%20world")
