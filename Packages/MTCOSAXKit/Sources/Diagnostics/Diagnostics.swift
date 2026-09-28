@@ -25,10 +25,13 @@ public enum Diagnostics {
 					?? "(no direct parameter)"
 			},
 
-			// mtc_raise_error "message" number n
+			// mtc_raise_error "message" number n. Error 0 would be no error at all to AppleScript: -50.
 			CommandDefinition("mtc_raise_error", code: "MTCdrais") { request in
 				let number = try request.requiredParameter(Keyword.errorNumber, as: Int.self)
 				let message = try request.directParameter(as: String.self)
+				guard number != 0 else {
+					throw OSAXError(-50, "The error number can't be 0, which means no error.")
+				}
 				throw OSAXError(number, message)
 			},
 		]

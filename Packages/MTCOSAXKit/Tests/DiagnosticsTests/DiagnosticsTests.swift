@@ -51,6 +51,11 @@ struct DiagnosticsTests {
 		#expect(reply.error == OSAXError(42, "boom"))
 	}
 
+	/// Error 0 is success to AppleScript, so the command seemed to do nothing.
+	@Test func raiseErrorZero() {
+		#expect(send("MTCdrais", ["errn": NSAppleEventDescriptor(int32: 0)]).error?.number == -50)
+	}
+
 	@Test func raiseErrorWithoutMessage() {
 		#expect(send("MTCdrais", ["errn": NSAppleEventDescriptor(int32: -1728)]).error == OSAXError(-1728))
 	}

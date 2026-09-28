@@ -208,7 +208,7 @@ A hidden suite for checking that the app works. It doesn't appear in the diction
 | `mtc_version` | e.g. `"MTC_OSAX 0.1 (1)"` |
 | `mtc_echo <anything>` | the value, unchanged |
 | `mtc_describe <anything>` | the Apple event descriptor received, e.g. `list [long 1, doub 2.5]` |
-| `mtc_raise_error "message" number n` | raises that error |
+| `mtc_raise_error "message" number n` | raises that error (-50 for 0, which is no error) |
 
 ## Tests
 
