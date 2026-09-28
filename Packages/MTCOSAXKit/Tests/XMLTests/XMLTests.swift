@@ -130,6 +130,19 @@ struct XMLOpenTests {
 		#expect(xml.send("XML Vr11", ["----": false]).result?.booleanValue == true)
 		#expect(xml.send("XML open", ["from": "<a>x&#1;y</a>"]).error == OSAXError(9))
 	}
+
+	/// References in comments, CDATA and processing instructions are literal text, and used to be rewritten to
+	/// private characters; attribute values were rewritten but never turned back.
+	@Test func extendedCharactersOnlyInTextAndAttributes() throws {
+		let xml = XMLs()
+		let d = try xml.open("<a t='&#1;'><!-- &#1; --><![CDATA[&#2;]]><?p &#3;?>x&#4;</a>")
+		let a = try xml.root(d)
+		#expect(xml.send("XML geta", ["----": a, "pnam": "t"]).result?.stringValue == "\u{1}")
+		#expect(xml.send("XML gttx", ["----": try #require(xml.send("XML chld", ["----": a, "indx": 1]).result)]).result?.stringValue == " &#1; ")
+		#expect(xml.send("XML gttx", ["----": try #require(xml.send("XML chld", ["----": a, "indx": 2]).result)]).result?.stringValue == "&#2;")
+		#expect(xml.send("XML gttx", ["----": try #require(xml.send("XML chld", ["----": a, "indx": 3]).result)]).result?.stringValue == "&#3;")
+		#expect(xml.send("XML gttx", ["----": try #require(xml.send("XML chld", ["----": a, "indx": 4]).result)]).result?.stringValue == "x\u{4}")
+	}
 }
 
 struct XMLNavigationTests {

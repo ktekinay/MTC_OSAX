@@ -946,5 +946,9 @@
  {
   "name": "set-text-attribute-node",
   "script": "set d to XMLOpen from string \"<a k='v' j='w'>x<b/></a>\"\nXMLSetText (item 1 of (XMLXPath d with \"//@j\")) to \"new\"\nset x to XMLDisplayXML (XMLRoot d)\nXMLClose d\nx"
+ },
+ {
+  "name": "extended-char-literal-markup",
+  "script": "set d to XMLOpen from string \"<a t='&#1;'><!-- &#1; --><![CDATA[&#2;]]><?p &#3;?>x&#4;</a>\"\nset a to XMLRoot d\nset r to {XMLGetAttribute a name \"t\", XMLGetText (XMLChild a index 1), XMLGetText (XMLChild a index 2), XMLGetText (XMLChild a index 3), XMLGetText (XMLChild a index 4)}\nXMLClose d\nr"
  }
 ]

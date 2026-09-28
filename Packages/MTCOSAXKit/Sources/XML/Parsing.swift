@@ -196,36 +196,77 @@ enum Parsing {
 enum ExtendedCharacters {
 	private static let reference = try! NSRegularExpression(pattern: "&#(x[0-9A-Fa-f]+|[0-9]+);")
 
+	/// Markup whose content is literal, so `&#1;` in it is text rather than a character reference.
+	private static let literalMarkup = [(open: "<!--", close: "-->"), (open: "<![CDATA[", close: "]]>"), (open: "<?", close: "?>")]
+
+	/// Rewrites references to control characters in text and attribute values (not in comments, CDATA sections
+	/// or processing instructions, where they're literal text).
 	static func encode(_ data: Data) -> Data {
 		guard data.firstRange(of: Data("&#".utf8)) != nil, let text = String(data: data, encoding: .utf8) else {
 			return data
 		}
 		var result = ""
-		var last = text.startIndex
-		for match in reference.matches(in: text, range: NSRange(text.startIndex..., in: text)) {
-			let range = Range(match.range, in: text)!
-			let digits = text[Range(match.range(at: 1), in: text)!]
-			let value = digits.hasPrefix("x") ? Int(digits.dropFirst(), radix: 16) : Int(digits)
-			guard let value, (1 ... 31).contains(value), ![9, 10, 13].contains(value) else { continue }
-			result += text[last ..< range.lowerBound] + String(format: "&#x10FF%02X;", value)
-			last = range.upperBound
+		var changed = false
+		var segment = text.startIndex
+		var index = text.startIndex
+		while let open = text[index...].firstIndex(of: "<") {
+			guard let markup = literalMarkup.first(where: { text[open...].hasPrefix($0.open) }) else {
+				index = text.index(after: open)
+				continue
+			}
+			changed = rewrite(text[segment ..< open], into: &result) || changed
+			let content = text.index(open, offsetBy: markup.open.count)
+			let end = text[content...].range(of: markup.close)?.upperBound ?? text.endIndex
+			result += text[open ..< end]
+			segment = end
+			index = end
 		}
-		guard last != text.startIndex else { return data }
-		return Data((result + text[last...]).utf8)
+		changed = rewrite(text[segment...], into: &result) || changed
+		return changed ? Data(result.utf8) : data
 	}
 
+	/// Appends `text` with its control character references rewritten; whether there were any.
+	private static func rewrite(_ text: Substring, into result: inout String) -> Bool {
+		let string = String(text)
+		var last = string.startIndex
+		for match in reference.matches(in: string, range: NSRange(string.startIndex..., in: string)) {
+			let range = Range(match.range, in: string)!
+			let digits = string[Range(match.range(at: 1), in: string)!]
+			let value = digits.hasPrefix("x") ? Int(digits.dropFirst(), radix: 16) : Int(digits)
+			guard let value, (1 ... 31).contains(value), ![9, 10, 13].contains(value) else { continue }
+			result += string[last ..< range.lowerBound] + String(format: "&#x10FF%02X;", value)
+			last = range.upperBound
+		}
+		result += string[last...]
+		return last != string.startIndex
+	}
+
+	/// Turns the private characters back into control characters, in text and in attribute values.
 	static func decode(_ root: xmlNodePtr?) {
 		Parsing.walk(root) { node in
-			guard node.pointee.type == XML_TEXT_NODE || node.pointee.type == XML_CDATA_SECTION_NODE,
-			      let content = node.pointee.content
-			else { return }
-			let text = String(cString: content)
-			guard text.unicodeScalars.contains(where: { (0x10FF01 ... 0x10FF1F).contains($0.value) }) else { return }
-			let decoded = String(String.UnicodeScalarView(text.unicodeScalars.map {
-				(0x10FF01 ... 0x10FF1F).contains($0.value) ? Unicode.Scalar($0.value - 0x10FF00)! : $0
-			}))
-			withXMLString(decoded) { xmlNodeSetContent(node, $0) }
+			if node.pointee.type == XML_TEXT_NODE || node.pointee.type == XML_CDATA_SECTION_NODE {
+				decodeContent(node)
+			}
+			var attribute = node.pointee.type == XML_ELEMENT_NODE ? node.pointee.properties : nil
+			while let current = attribute {
+				var child = current.pointee.children
+				while let text = child {
+					decodeContent(text)
+					child = text.pointee.next
+				}
+				attribute = current.pointee.next
+			}
 		}
+	}
+
+	private static func decodeContent(_ node: xmlNodePtr) {
+		guard let content = node.pointee.content else { return }
+		let text = String(cString: content)
+		guard text.unicodeScalars.contains(where: { (0x10FF01 ... 0x10FF1F).contains($0.value) }) else { return }
+		let decoded = String(String.UnicodeScalarView(text.unicodeScalars.map {
+			(0x10FF01 ... 0x10FF1F).contains($0.value) ? Unicode.Scalar($0.value - 0x10FF00)! : $0
+		}))
+		withXMLString(decoded) { xmlNodeSetContent(node, $0) }
 	}
 }
 

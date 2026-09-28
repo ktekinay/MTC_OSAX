@@ -94,6 +94,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 - `XMLXPointer` works in documents opened `from string` and for relative `xpointer(…)` links from an element.
 - `XMLXPath` of nodes in two documents with `xpath variables` works.
 - `XMLValidate` of an element with ID attributes works (SatimageOSAX reported every ID as already defined).
+- With `XMLExtendedChar` on (the default), a document containing the private characters U+10FF01…U+10FF1F reads them as the control characters U+0001…U+001F, since that's how control character references are carried through libxml2.
 - `XMLValidName` and `XMLValidNCName` return false for an invalid name instead of error 1821.
 - `XMLc14n … nodelist` canonicalizes only those nodes (SatimageOSAX ignored it and output the whole document).
 
