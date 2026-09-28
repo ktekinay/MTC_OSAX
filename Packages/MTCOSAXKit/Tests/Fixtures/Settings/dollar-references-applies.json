@@ -1,0 +1,137 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MTCs",
+        "eventID" : "set ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "code" : "MTsd",
+              "type" : "enum"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RPLl",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "[$1]",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "abc",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "(b)",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "a[b]c",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "MTCs",
+        "eventID" : "rset",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "code" : "MTsd",
+              "type" : "enum"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RPLl",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "[$1]",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "abc",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "(b)",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "a[$1]c",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "dollar-references-applies",
+  "recordedAt" : "2026-09-28T18:09:50Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "mtc_set dollar_references to true\nchange \"(b)\" into \"[$1]\" in \"abc\" with regexp\nmtc_reset dollar_references\nchange \"(b)\" into \"[$1]\" in \"abc\" with regexp",
+  "timeZone" : "America/New_York"
+}

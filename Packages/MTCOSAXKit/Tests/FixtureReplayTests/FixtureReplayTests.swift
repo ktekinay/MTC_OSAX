@@ -68,7 +68,9 @@ struct FixtureReplayTests {
 	@Test(arguments: Fixtures.paths())
 	func replay(_ path: String) throws {
 		let timeZone = try Fixtures.load(path).timeZone.flatMap(TimeZone.init(identifier:)) ?? .current
-		let differences = try Fixtures.replay(path, using: CommandCatalog.makeDispatcher(timeZone: timeZone))
+		// Settings of their own: fixtures don't read or change the machine's.
+		let settings = UserDefaults(suiteName: "mtc-osax-replay-\(UUID().uuidString)")!
+		let differences = try Fixtures.replay(path, using: CommandCatalog.makeDispatcher(timeZone: timeZone, settings: settings))
 		#expect(differences.isEmpty, "\(differences.joined(separator: "\n"))")
 	}
 

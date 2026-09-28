@@ -1,0 +1,124 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MTCs",
+        "eventID" : "set ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "pcre",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "code" : "MTsr",
+              "type" : "enum"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "MTCs",
+        "eventID" : "get ",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "code" : "MTsr",
+              "type" : "enum"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "PCRE",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "MTCs",
+        "eventID" : "set ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "real" : 300,
+              "type" : "doub"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "code" : "MTsi",
+              "type" : "enum"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "MTCs",
+        "eventID" : "get ",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "code" : "MTsi",
+              "type" : "enum"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "integer" : 300,
+          "type" : "long"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "MTCs",
+        "eventID" : "rset",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "code" : "MTsa",
+              "type" : "enum"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "set-normalizes",
+  "recordedAt" : "2026-09-28T18:09:50Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "mtc_set regex_syntax to \"pcre\"\nmtc_get regex_syntax\nmtc_set idle_timeout to 300.0\nmtc_get idle_timeout\nmtc_reset all_settings",
+  "timeZone" : "America/New_York"
+}

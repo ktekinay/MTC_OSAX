@@ -1,0 +1,36 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MTCs",
+        "eventID" : "set ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "code" : "msng",
+              "type" : "type"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "code" : "MTsr",
+              "type" : "enum"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorMessage" : "Use mtc_reset to put regex_syntax back to its default.",
+        "errorNumber" : -1700
+      }
+    }
+  ],
+  "name" : "error-missing-value",
+  "recordedAt" : "2026-09-28T18:09:50Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "mtc_set regex_syntax to missing value",
+  "timeZone" : "America/New_York"
+}

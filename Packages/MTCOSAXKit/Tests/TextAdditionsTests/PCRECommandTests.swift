@@ -3,6 +3,7 @@ import Foundation
 import Testing
 import TextMatching
 @testable import TextAdditions
+import Settings
 
 /// Sends a command with the app-wide `RegexSyntax` setting as given.
 private func send(_ code: String, _ parameters: [String: any AppleEventEncodable], syntaxDefault: RegexSyntax = .ruby) -> AppleEventReply {
@@ -81,10 +82,10 @@ struct PCRECommandTests {
 
 	@Test func defaultReadsTheSetting() throws {
 		let defaults = try #require(UserDefaults(suiteName: "mtc-osax-tests-\(UUID().uuidString)"))
-		#expect(TextContext.regexSyntax(in: defaults) == .ruby)
+		#expect(Settings.regexSyntax(in: defaults) == .ruby)
 		defaults.set("pcre", forKey: "RegexSyntax")
-		#expect(TextContext.regexSyntax(in: defaults) == .pcre)
+		#expect(Settings.regexSyntax(in: defaults) == .pcre)
 		defaults.set("NOT_A_SYNTAX", forKey: "RegexSyntax")
-		#expect(TextContext.regexSyntax(in: defaults) == .ruby)
+		#expect(Settings.regexSyntax(in: defaults) == .ruby)
 	}
 }

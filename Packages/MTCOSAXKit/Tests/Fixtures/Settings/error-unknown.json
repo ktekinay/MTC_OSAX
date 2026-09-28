@@ -1,0 +1,29 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MTCs",
+        "eventID" : "get ",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "nope",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorMessage" : "There's no setting named \"nope\". The settings are idle_timeout, dollar_references, regex_syntax.",
+        "errorNumber" : -1728
+      }
+    }
+  ],
+  "name" : "error-unknown",
+  "recordedAt" : "2026-09-28T18:09:50Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "mtc_get \"nope\"",
+  "timeZone" : "America/New_York"
+}

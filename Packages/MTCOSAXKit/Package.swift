@@ -51,7 +51,7 @@ let package = Package(
 
 		// Suites. Each implemented Satimage section gets its own module.
 		.target(name: "Diagnostics", dependencies: ["AppleEventCore"]),
-		.target(name: "TextAdditions", dependencies: ["AppleEventCore", "TextMatching"]),
+		.target(name: "TextAdditions", dependencies: ["AppleEventCore", "TextMatching", "Settings"]),
 		.target(name: "FilesAndFolders", dependencies: ["AppleEventCore"]),
 		.target(name: "FileAdditions", dependencies: ["AppleEventCore"]),
 		.target(name: "MathFunctions", dependencies: ["AppleEventCore", "Numerics"]),
@@ -60,6 +60,9 @@ let package = Package(
 		.target(name: "PropertyLists", dependencies: ["AppleEventCore"]),
 		.target(name: "XML", dependencies: ["AppleEventCore", "CLibXML", "PropertyLists"]),
 
+		// MTC_OSAX's settings and the commands that read and change them (an MTC_OSAX extension).
+		.target(name: "Settings", dependencies: ["AppleEventCore", "TextMatching"]),
+
 		// macOS's libxml2 and libxslt, which SatimageOSAX's XML suites were built on.
 		.systemLibrary(name: "CLibXML"),
 
@@ -67,7 +70,7 @@ let package = Package(
 		.target(name: "Numerics", dependencies: ["AppleEventCore"]),
 
 		// Registers every suite with a dispatcher; the app links only this.
-		.target(name: "MTCOSAX", dependencies: ["AppleEventCore", "Diagnostics", "TextAdditions", "FilesAndFolders", "FileAdditions", "MathFunctions", "ListUtilities", "Arrays", "PropertyLists", "XML"]),
+		.target(name: "MTCOSAX", dependencies: ["AppleEventCore", "Diagnostics", "TextAdditions", "FilesAndFolders", "FileAdditions", "MathFunctions", "ListUtilities", "Arrays", "PropertyLists", "XML", "Settings"]),
 
 		.executableTarget(name: "FixtureRecorder", dependencies: ["AppleEventCore"]),
 
@@ -83,6 +86,7 @@ let package = Package(
 		.testTarget(name: "ArraysTests", dependencies: ["Arrays"]),
 		.testTarget(name: "PropertyListsTests", dependencies: ["PropertyLists"]),
 		.testTarget(name: "XMLTests", dependencies: ["XML"]),
+		.testTarget(name: "SettingsTests", dependencies: ["Settings", "TextAdditions"]),
 		.testTarget(name: "SDEFConsistencyTests", dependencies: ["MTCOSAX"]),
 		.testTarget(name: "FixtureReplayTests", dependencies: ["MTCOSAX"]),
 	]

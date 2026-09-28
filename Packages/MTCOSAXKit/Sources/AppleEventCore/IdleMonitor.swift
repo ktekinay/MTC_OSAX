@@ -21,7 +21,7 @@ public final class IdleMonitor {
 
 	/// The timeout set in `defaults` under `key`, in seconds: 0 means never; missing, negative or not a number
 	/// means `defaultTimeout`.
-	public static func timeout(in defaults: UserDefaults, key: String, default defaultTimeout: Duration) -> Duration? {
+	public nonisolated static func timeout(in defaults: UserDefaults, key: String, default defaultTimeout: Duration) -> Duration? {
 		guard let seconds = (defaults.object(forKey: key) as? NSNumber)?.doubleValue ?? (defaults.string(forKey: key)).flatMap(Double.init),
 		      seconds.isFinite, seconds >= 0
 		else {

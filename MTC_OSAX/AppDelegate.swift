@@ -5,11 +5,6 @@ import MTCOSAX
 /// then quits after an hour without events. The next script that targets it relaunches it.
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
-	/// `defaults write com.mactechnologies.mtc-osax IdleTimeoutSeconds 10` sets the timeout in seconds; 0 means
-	/// never quit. Read each time the countdown starts, so a change applies after the next command.
-	private static let idleTimeoutDefaultsKey = "IdleTimeoutSeconds"
-	private static let defaultIdleTimeout = Duration.seconds(60 * 60)
-
 	private var installer: AppleEventHandlerInstaller?
 	private var idleMonitor: IdleMonitor?
 
@@ -20,7 +15,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 		_ = NSScriptSuiteRegistry.shared()
 		// Open property lists would be lost, so the app doesn't quit for being idle while any are open.
 		let documents = DocumentStore()
-		let idleMonitor = IdleMonitor(timeout: { documents.hasOpenDocuments ? nil : Self.idleTimeout() }) {
+		// The idle timeout setting (`mtc_set idle_timeout`) is read each time the countdown starts, so a change
+		// applies after the next command.
+		let idleMonitor = IdleMonitor(timeout: { documents.hasOpenDocuments ? nil : Settings.idleTimeout(in: .standard) }) {
 			NSApplication.shared.terminate(nil)
 		}
 		let dispatcher = CommandCatalog.makeDispatcher(dialogs: PanelDialogs(), documents: documents)
@@ -34,9 +31,5 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 		// Cocoa Scripting may have installed its own handlers for the SDEF's commands during launch.
 		installer?.install()
 		idleMonitor?.start()
-	}
-
-	private static func idleTimeout() -> Duration? {
-		IdleMonitor.timeout(in: .standard, key: idleTimeoutDefaultsKey, default: defaultIdleTimeout)
 	}
 }

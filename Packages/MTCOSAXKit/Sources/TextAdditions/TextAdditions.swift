@@ -1,5 +1,6 @@
 import AppleEventCore
 import Foundation
+import Settings
 import TextMatching
 
 /// The "Satimage Text Additions" suite (event class `SATI`).
@@ -11,9 +12,15 @@ public enum TextAdditions {
 	/// - Parameters:
 	///   - timeZone: the zone dates are formatted and parsed in. Tests replay fixtures in the zone they were
 	///     recorded in; the app uses the system's.
+	///   - settings: where the `DollarReferences` and `RegexSyntax` settings are read; fixture replays pass their own.
 	///   - propertyLists: writes `filter text … into` a CFRef.
-	public static func commands(timeZone: TimeZone = .current, propertyLists: PropertyListWriter? = nil) -> [CommandDefinition] {
-		commands(context: TextContext(timeZone: timeZone, propertyLists: propertyLists))
+	public static func commands(timeZone: TimeZone = .current, settings: UserDefaults = .standard, propertyLists: PropertyListWriter? = nil) -> [CommandDefinition] {
+		commands(context: TextContext(
+			dollarReferencesDefault: { Settings.dollarReferences(in: settings) },
+			regexSyntaxDefault: { Settings.regexSyntax(in: settings) },
+			timeZone: timeZone,
+			propertyLists: propertyLists
+		))
 	}
 
 	static func commands(context: TextContext) -> [CommandDefinition] {
@@ -34,8 +41,8 @@ final class TextContext {
 	let propertyLists: TextAdditions.PropertyListWriter?
 
 	init(
-		dollarReferencesDefault: @escaping () -> Bool = { UserDefaults.standard.bool(forKey: "DollarReferences") },
-		regexSyntaxDefault: @escaping () -> RegexSyntax = { TextContext.regexSyntax(in: .standard) },
+		dollarReferencesDefault: @escaping () -> Bool = { Settings.dollarReferences(in: .standard) },
+		regexSyntaxDefault: @escaping () -> RegexSyntax = { Settings.regexSyntax(in: .standard) },
 		timeZone: TimeZone = .current,
 		propertyLists: TextAdditions.PropertyListWriter? = nil
 	) {
@@ -43,10 +50,5 @@ final class TextContext {
 		self.regexSyntaxDefault = regexSyntaxDefault
 		self.timeZone = timeZone
 		self.propertyLists = propertyLists
-	}
-
-	/// The `RegexSyntax` setting: a syntax name (`PCRE`, `RUBY`, …); `RUBY` if it's missing or unknown.
-	static func regexSyntax(in defaults: UserDefaults) -> RegexSyntax {
-		defaults.string(forKey: "RegexSyntax").flatMap(RegexSyntax.init(name:)) ?? .ruby
 	}
 }

@@ -1,0 +1,98 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MTCs",
+        "eventID" : "set ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "PCRE",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "code" : "MTsr",
+              "type" : "enum"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "MTCs",
+        "eventID" : "get ",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "code" : "MTsr",
+              "type" : "enum"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "PCRE",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "MTCs",
+        "eventID" : "rset",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "code" : "MTsr",
+              "type" : "enum"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "MTCs",
+        "eventID" : "get ",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "code" : "MTsr",
+              "type" : "enum"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "RUBY",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "get-set-reset",
+  "recordedAt" : "2026-09-28T18:09:50Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "mtc_set regex_syntax to \"PCRE\"\nmtc_get regex_syntax\nmtc_reset regex_syntax\nmtc_get regex_syntax",
+  "timeZone" : "America/New_York"
+}

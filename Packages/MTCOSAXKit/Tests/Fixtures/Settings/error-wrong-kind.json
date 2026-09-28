@@ -1,0 +1,36 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MTCs",
+        "eventID" : "set ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "300",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "code" : "MTsi",
+              "type" : "enum"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorMessage" : "idle timeout must be a number of seconds.",
+        "errorNumber" : -1700
+      }
+    }
+  ],
+  "name" : "error-wrong-kind",
+  "recordedAt" : "2026-09-28T18:09:50Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "mtc_set idle_timeout to \"300\"",
+  "timeZone" : "America/New_York"
+}

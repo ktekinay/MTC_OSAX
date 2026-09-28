@@ -2,8 +2,9 @@ import Foundation
 import MTCOSAX
 import Testing
 
-/// Event classes that belong to MTC_OSAX itself rather than being copied from Satimage.
-private let ownSuitePrefixes = ["MTCd"]
+/// Codes that belong to MTC_OSAX itself rather than being copied from Satimage: the diagnostics and settings suites'
+/// event classes, and the settings suite's enumeration and record type (`MTs…`).
+private let ownSuitePrefixes = ["MTCd", "MTCs", "MTs"]
 
 /// Parameters MTC_OSAX adds to copied Satimage commands: `dollar references`.
 private let extensionParameters: Set = ["DlRf"]

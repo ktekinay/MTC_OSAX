@@ -93,9 +93,10 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 ### New features
 
 - **Native on Apple silicon**, so it keeps working after Rosetta is removed.
-- **PCRE** as a second regex engine, with `syntax "PCRE"` on `find text`, `change`, `splittext`, `filter text` and `re_compile` (`splittext` gains the `syntax` parameter for this). Patterns get PCRE2's features (`\h`, `\K`, recursion, possessive quantifiers, Unicode-aware `\w` and case), and any line ending counts. As with Onigmo, `^` and `$` match at every line unless the pattern says `(?-m)` or the call gives `regexpflag {"SINGLELINE"}`; `"DOTALL"` makes `.` match newlines. Onigmo-only flags (`FIND LONGEST`, `NEGATE SINGLELINE`, `NEWLINE IN NEGATIVE CC`) are error -1, and a pattern error is -3000 minus PCRE2's number, with PCRE2's message. To make PCRE the default: `defaults write com.mactechnologies.mtc-osax RegexSyntax PCRE` (an explicit `syntax` still wins).
-- **Dollar references** in replacement templates (`$1`, `${12}`, `${name}`, `$$`), opt-in: `with dollar references` on `change`, `find text` and `filter text`, the `"DOLLAR REFERENCES"` regexp flag, or `defaults write com.mactechnologies.mtc-osax DollarReferences -bool YES`.
-- **Idle quit** is a preference (`IdleTimeoutSeconds`; see [Building](#building)), and the app doesn't quit while property list or XML documents are open.
+- **PCRE** as a second regex engine, with `syntax "PCRE"` on `find text`, `change`, `splittext`, `filter text` and `re_compile` (`splittext` gains the `syntax` parameter for this). Patterns get PCRE2's features (`\h`, `\K`, recursion, possessive quantifiers, Unicode-aware `\w` and case), and any line ending counts. As with Onigmo, `^` and `$` match at every line unless the pattern says `(?-m)` or the call gives `regexpflag {"SINGLELINE"}`; `"DOTALL"` makes `.` match newlines. Onigmo-only flags (`FIND LONGEST`, `NEGATE SINGLELINE`, `NEWLINE IN NEGATIVE CC`) are error -1, and a pattern error is -3000 minus PCRE2's number, with PCRE2's message. To make PCRE the default: `mtc_set regex_syntax to "PCRE"` (see [Settings](#settings); an explicit `syntax` still wins).
+- **Dollar references** in replacement templates (`$1`, `${12}`, `${name}`, `$$`), opt-in: `with dollar references` on `change`, `find text` and `filter text`, the `"DOLLAR REFERENCES"` regexp flag, or as the default with `mtc_set dollar_references to true`.
+- **Settings commands:** `mtc_get`, `mtc_set` and `mtc_reset`, in their own "MTC_OSAX Settings" suite, read and change MTC_OSAX's settings from a script. Settings are global and permanent: a change affects every script that uses MTC_OSAX until it's changed again or reset (see [Settings](#settings)).
+- **Idle quit** is a setting (`idle_timeout`), and the app doesn't quit while property list or XML documents are open.
 - **Diagnostic commands** (`mtc_ping` and others; see [Diagnostic commands](#diagnostic-commands)).
 
 ### Other differences
@@ -132,15 +133,40 @@ So that `use application "MTC_OSAX"` finds a command-line build, register it onc
 /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f build/DerivedData/Build/Products/Debug/MTC_OSAX.app
 ```
 
-The app has no UI. It launches when a script sends it a command and quits after an hour without commands. The timeout is a preference, in seconds, where 0 means never quit:
+The app has no UI. It launches when a script sends it a command and quits after an hour without commands (the `idle_timeout` setting; see [Settings](#settings)).
 
-```sh
-defaults write com.mactechnologies.mtc-osax IdleTimeoutSeconds 300   # quit after 5 minutes
-defaults write com.mactechnologies.mtc-osax IdleTimeoutSeconds 0     # never quit
-defaults delete com.mactechnologies.mtc-osax IdleTimeoutSeconds      # back to an hour
+## Settings
+
+MTC_OSAX has three settings. Scripts read and change them with the commands of the "MTC_OSAX Settings" suite, and a change applies from the next command, without restarting the app.
+
+**Settings are global and permanent.** A change affects every script that uses MTC_OSAX, not just the one that made it, including scripts run later and after MTC_OSAX or the Mac restarts, until it's changed again or reset. To change how a single command behaves, use its own parameter instead (`syntax "PCRE"`, `with dollar references`); a command's parameter always wins over the setting.
+
+
+| Setting | Default | What it does |
+|---|---|---|
+| `idle_timeout` | 3600 | Seconds without commands before the app quits; 0 means never. It doesn't quit while property lists or XML documents are open either way. |
+| `dollar_references` | false | Whether replacement templates also accept `$1`-style references when a command doesn't say. |
+| `regex_syntax` | `"RUBY"` | The regex syntax when a command doesn't give one, e.g. `"PCRE"`. |
+
+```applescript
+mtc_get regex_syntax                    --> "RUBY"
+mtc_set regex_syntax to "PCRE"
+mtc_set idle_timeout to 300             -- quit after 5 minutes (0: never)
+mtc_reset regex_syntax                  -- back to the default
+mtc_get all_settings                    --> {{name:idle_timeout, key:"IdleTimeoutSeconds", value:300, default value:3600, …}, …}
+mtc_reset all_settings                  -- every setting back to its default
 ```
 
-A change applies from the next command, without restarting the app.
+A setting can also be named with text: its friendly name (`"regex syntax"`), its `defaults` key (`"RegexSyntax"`) or the constant's name, ignoring case, spaces and underscores; `"all settings"` stands for `all_settings`. A value of the wrong kind is error -1700 and one that isn't allowed -50 (both with a message); an unknown setting is -1728. To go back to a default, use `mtc_reset` (`mtc_set … to missing value` is an error).
+
+The settings are kept in MTC_OSAX's defaults, so they can also be changed from the shell:
+
+```sh
+defaults write com.mactechnologies.mtc-osax IdleTimeoutSeconds 300
+defaults write com.mactechnologies.mtc-osax DollarReferences -bool YES
+defaults write com.mactechnologies.mtc-osax RegexSyntax PCRE
+defaults delete com.mactechnologies.mtc-osax RegexSyntax              # back to the default
+```
 
 ## Diagnostic commands
 
