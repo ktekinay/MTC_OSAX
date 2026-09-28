@@ -7,6 +7,7 @@ import Foundation
 /// - Files and packages are copied when missing from the destination, or updated when the source was modified
 ///   later. Nothing is ever deleted from the destination.
 /// - Folders are created as needed; `except folders` skips folders (not packages) by name at any depth.
+/// - Symbolic links are copied as links, never followed (SatimageOSAX made an empty folder for each).
 /// - Invisible items are skipped. `after`, `only extensions` and `except extensions` (case-sensitive, without
 ///   the dot) apply to files and packages.
 /// - Level 0 reports what would change, listing a missing folder once rather than its contents; level 1 syncs and
@@ -94,26 +95,31 @@ struct Backup {
 				if exceptExtensions.contains(pathExtension) || onlyExtensions.map({ !$0.contains(pathExtension) }) == true {
 					continue
 				}
-				let modified = FileItem.modificationDate(from) ?? .distantPast
+				// A link's own date: following it could leave the source (a link to .. copied the tree into itself).
+				let isLink = (status.st_mode & S_IFMT) == S_IFLNK
+				let modified = isLink ? FileItem.date(status.st_mtimespec) : FileItem.modificationDate(from) ?? .distantPast
 				if let after, modified < after {
 					continue
 				}
-				if FileItem.status(to) == nil {
-					copy(from, to, isNew: true)
-				} else if let existing = FileItem.modificationDate(to), modified > existing {
-					copy(from, to, isNew: false)
+				if let existing = FileItem.status(to) {
+					let existingDate = (existing.st_mode & S_IFMT) == S_IFLNK ? FileItem.date(existing.st_mtimespec) : FileItem.modificationDate(to)
+					if let existingDate, modified > existingDate {
+						copy(from, to, isNew: false, isLink: isLink)
+					}
+				} else {
+					copy(from, to, isNew: true, isLink: isLink)
 				}
 			}
 		}
 	}
 
-	/// Copies (or, for a report, lists) a new or newer file or package.
-	private mutating func copy(_ from: URL, _ to: URL, isNew: Bool) {
+	/// Copies (or, for a report, lists) a new or newer file, package or link.
+	private mutating func copy(_ from: URL, _ to: URL, isNew: Bool, isLink: Bool) {
 		if !reportOnly {
 			if !isNew {
 				try? FileManager.default.removeItem(at: to)
 			}
-			let flags = copyfile_flags_t(COPYFILE_ALL | (FileItem.isDirectory(from) ? COPYFILE_RECURSIVE : 0))
+			let flags = copyfile_flags_t(COPYFILE_ALL | (isLink ? COPYFILE_NOFOLLOW : FileItem.isDirectory(from) ? COPYFILE_RECURSIVE : 0))
 			guard copyfile(from.path, to.path, nil, flags) == 0 else {
 				errors.append((to.path, errno))
 				return

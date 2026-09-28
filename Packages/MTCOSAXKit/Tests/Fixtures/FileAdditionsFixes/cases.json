@@ -14,5 +14,9 @@
  {
   "name": "backup-destination-inside-source",
   "script": "mkdir (POSIX file \"$TMP/backup-inside/src/sub\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-inside/src/a.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-inside/src/sub/b.txt\")\nbackup (POSIX file \"$TMP/backup-inside/src\") onto (POSIX file \"$TMP/backup-inside/src/Backup\") level 1\nlist files (POSIX file \"$TMP/backup-inside/src\") as unix path"
+ },
+ {
+  "name": "backup-links",
+  "script": "mkdir (POSIX file \"$TMP/backup-links/src\")\nmkdir (POSIX file \"$TMP/backup-links/other\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-links/target.txt\")\ncreate symlink \"../target.txt\" in (POSIX file \"$TMP/backup-links/src\") name \"filelink\"\ncreate symlink \"../other\" in (POSIX file \"$TMP/backup-links/src\") name \"dirlink\"\ncreate symlink \"..\" in (POSIX file \"$TMP/backup-links/src\") name \"up\"\nbackup (POSIX file \"$TMP/backup-links/src\") onto (POSIX file \"$TMP/backup-links/dst\") level 1\n{readlink (POSIX file \"$TMP/backup-links/dst/filelink\"), readlink (POSIX file \"$TMP/backup-links/dst/dirlink\"), readlink (POSIX file \"$TMP/backup-links/dst/up\")}"
  }
 ]

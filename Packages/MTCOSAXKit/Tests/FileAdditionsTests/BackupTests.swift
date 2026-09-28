@@ -139,6 +139,29 @@ struct BackupTests {
 			.error?.number == -50)
 	}
 
+	/// Links used to be followed, so a link to an ancestor copied the tree (and the growing destination) into itself.
+	@Test func linksAreCopiedAsLinks() throws {
+		let folder = try source()
+		defer { folder.remove() }
+		try folder.file("target.txt")
+		try folder.folder("other")
+		let manager = FileManager.default
+		try manager.createSymbolicLink(atPath: folder.path("src/filelink"), withDestinationPath: "../target.txt")
+		try manager.createSymbolicLink(atPath: folder.path("src/dirlink"), withDestinationPath: "../other")
+		try manager.createSymbolicLink(atPath: folder.path("src/up"), withDestinationPath: "..")
+		#expect(report(backup(folder, ["Repo": 2]), folder) == ["Items created : a.txt, b.md, dirlink, filelink, pkg.app, skip/e.txt, sub/c.txt, up"])
+		for (name, target) in [("filelink", "../target.txt"), ("dirlink", "../other"), ("up", "..")] {
+			#expect(try manager.destinationOfSymbolicLink(atPath: folder.path("dst/\(name)")) == target)
+		}
+		// Up to date: nothing to do. A newer link replaces the old one.
+		#expect(backup(folder, ["Repo": 2]).result?.stringValue == "OK")
+		try manager.removeItem(atPath: folder.path("src/filelink"))
+		Thread.sleep(forTimeInterval: 0.01)
+		try manager.createSymbolicLink(atPath: folder.path("src/filelink"), withDestinationPath: "../other")
+		#expect(report(backup(folder, ["Repo": 2]), folder) == ["Items updated : filelink"])
+		#expect(try manager.destinationOfSymbolicLink(atPath: folder.path("dst/filelink")) == "../other")
+	}
+
 	@Test func parameterErrors() throws {
 		let folder = try source()
 		defer { folder.remove() }

@@ -130,6 +130,10 @@ enum FileItem {
 		url.lastPathComponent.hasPrefix(".") || (try? url.resourceValues(forKeys: [.isHiddenKey]))?.isHidden == true
 	}
 
+	static func date(_ time: timespec) -> Date {
+		Date(timeIntervalSince1970: Double(time.tv_sec) + Double(time.tv_nsec) / 1_000_000_000)
+	}
+
 	static func modificationDate(_ url: URL) -> Date? {
 		(try? url.resourceValues(forKeys: [.contentModificationDateKey]))?.contentModificationDate
 	}
