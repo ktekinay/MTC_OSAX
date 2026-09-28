@@ -354,6 +354,10 @@ public enum FilesAndFolders {
 		guard let mode = mode_t(modeText, radix: 8), mode <= 0o7777, wildcards >= 0 else {
 			throw invalidInput
 		}
+		// More can't fit in a name (and 2147483647 made a 2 GB string).
+		guard wildcards <= NAME_MAX else {
+			throw OSAXError(-1, "A name can have at most \(NAME_MAX) wildcards.")
+		}
 
 		let fullName = template.lastPathComponent
 		guard suffixLength >= 0, suffixLength <= fullName.count else {

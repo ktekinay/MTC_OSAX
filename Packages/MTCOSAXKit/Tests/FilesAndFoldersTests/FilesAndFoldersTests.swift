@@ -308,6 +308,13 @@ struct TemporaryTests {
 	}
 
 	/// Satimage always used 6 random characters for folders.
+	@Test func tooManyWildcards() throws {
+		let sandbox = try Sandbox()
+		#expect(send(makeTemporaryFile, ["----": sandbox.url, "wild": 2_147_483_647]).error?.number == -1)
+		#expect(send(makeTemporaryFolder, ["----": sandbox.url, "wild": 256]).error?.number == -1)
+		#expect(send(makeTemporaryFile, ["----": sandbox.url, "wild": 200]).result?.stringValue?.count ?? 0 > 200)
+	}
+
 	@Test func mkdtempWildcards() throws {
 		let sandbox = try Sandbox()
 		let reply = send(makeTemporaryFolder, ["----": sandbox.url, "pnam": "d", "wild": 8])
