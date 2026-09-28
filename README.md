@@ -89,7 +89,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 
 - `XMLExists` of a removed node or closed document is false instead of error -1728.
 - `XMLAppendText` to an element with mixed content works (it crashed SatimageOSAX); `XMLSetXML` of a text node replaces it (SatimageOSAX left the document unreadable).
-- `XMLError` after a failed `XMLTransform` or `XMLCompile` has libxslt's messages. `XMLError` after a command without problems is `""` instead of stale text; `XMLSave … in` a POSIX path works.
+- `XMLError` gives the problems of the last command that parsed or transformed something (commands that don't, such as `XMLGetText`, leave it as it was): `""` if that command had none, instead of stale text, and libxslt's messages after a failed `XMLTransform` or `XMLCompile`. `XMLSave … in` a POSIX path works.
 - `XMLSetContext` with `nsurl ""` removes the namespace; `str:replace` works in XPath.
 - `XMLGetNodePath … from` works from any ancestor, without a leading space; `XMLGetXPointer … suffix` adds the suffix as a further step.
 - `XMLXPointer` works in documents opened `from string` and for relative `xpointer(…)` links from an element.
@@ -116,6 +116,9 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 - `XMLTransform` with a stylesheet the script gives (`with`) can write files with `exsl:document`, as the script itself could (SatimageOSAX's sandbox refused, error 1535). A stylesheet the document chooses with its `xml-stylesheet` instruction is the document's code, so it can't write files, make folders or write to the network (1535).
 - `XMLXInclude` includes local files (relative to the document, or any `file:` URL) but nothing from the network.
 - `XMLSave`, `XMLc14n … in`, `XMLTransform … in`, `PlistSave`, `PlistTo… in` and `writetext` (except when appending) replace the file in one step, so a failure part way never leaves it cut short. A symbolic link's target is replaced and the file keeps its permissions, but, being a new file, not its extended attributes or other hard links to it.
+- A file command's `from` folder applies to relative paths as they are, so `..` can reach above it (`filecopy "../a.txt" from f …`).
+- `chmod` of a symbolic link reads and changes the permissions of the item it points to, as the shell's `chmod` does.
+- In XPath, EXSLT's math, sets, strings and dates functions can also be called with the prefixes `mtc-exslt-math`, `mtc-exslt-sets`, `mtc-exslt-strings` and `mtc-exslt-dates`, which MTC_OSAX declares on every context to register them.
 - Math results can differ from SatimageOSAX's Intel math library in the last digits (up to 15 units in the last place for `lgamma` near its roots).
 
 ## Layout
