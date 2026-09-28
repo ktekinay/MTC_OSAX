@@ -1722,5 +1722,17 @@
  {
   "name": "format-scientific-14",
   "script": "format 1 into \"'P'0.000\"\nformat 9.95 into \"#.##E+0\""
+ },
+ {
+  "name": "format-percent-overflow-scientific",
+  "script": "format 1.0E+307 into \"00E0%\""
+ },
+ {
+  "name": "format-percent-overflow",
+  "script": "format 1.0E+307 into \"0%\""
+ },
+ {
+  "name": "format-percent-overflow-negative",
+  "script": "format -1.0E+307 into \"#,##0.00%\""
  }
 ]

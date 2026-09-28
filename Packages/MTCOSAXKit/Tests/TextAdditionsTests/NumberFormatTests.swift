@@ -32,6 +32,14 @@ struct NumberFormatTests {
 		#expect(try format(-5, "#;(#)") == "(5)")
 	}
 
+	/// `%` overflowing to infinity used to trap; Satimage shows ∞.
+	@Test func percentOverflow() throws {
+		#expect(try format(1e307, "00E0%") == "∞%")
+		#expect(try format(-1e307, "'x'#,##0.00%") == "-x∞%")
+		#expect(try format(.infinity, "0.0") == "∞")
+		#expect(try format(.nan, "0.0") == "NaN")
+	}
+
 	/// Satimage used the first section's layout for all sections and rejected three.
 	@Test func sections() throws {
 		#expect(try format(-6_278_518.85, "abcE+00;E##.0##") == "E6278518.85")

@@ -256,6 +256,10 @@ struct NumberFormat: Equatable {
 
 	private static func format(_ magnitude: Double, _ section: Section, underflowTest: Bool) -> String {
 		let value = section.literals.percent ? magnitude * 100 : magnitude
+		// `%` can overflow a finite number; Satimage showed the result as ∞ between the section's literals.
+		guard value.isFinite else {
+			return section.literals.prefix + (value.isNaN ? "NaN" : "∞") + section.literals.suffix
+		}
 		var shape = section.shape
 		if underflowTest, shape.exponent == nil, value != 0, showsAsZero(value, shape) {
 			shape.exponent = Exponent(alwaysSign: true, minimumDigits: 2)
