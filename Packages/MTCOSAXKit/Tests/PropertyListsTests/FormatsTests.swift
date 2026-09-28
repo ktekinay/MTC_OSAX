@@ -88,6 +88,19 @@ struct TOMLTests {
 		#expect(((object["aot"] as? NSArray)?.firstObject as? NSDictionary)?["n"] as? NSNumber == 1)
 	}
 
+	/// TOML allows offsets beyond TimeZone's 18 hours; they used to trap.
+	@Test func largeOffsets() throws {
+		let object = try #require(try TOML.read("""
+		d = 2026-09-28T10:30:00+19:00
+		e = 2026-09-28T10:30:00-23:59
+		f = 2026-09-28T10:30:00.5+05:30
+		""") as? NSDictionary)
+		let utc = try #require(ISO8601DateFormatter().date(from: "2026-09-28T10:30:00Z"))
+		#expect(object["d"] as? Date == utc.addingTimeInterval(-19 * 3600))
+		#expect(object["e"] as? Date == utc.addingTimeInterval(23 * 3600 + 59 * 60))
+		#expect(object["f"] as? Date == utc.addingTimeInterval(0.5 - 5.5 * 3600))
+	}
+
 	@Test func errors() {
 		do {
 			_ = try TOML.read("a = ")

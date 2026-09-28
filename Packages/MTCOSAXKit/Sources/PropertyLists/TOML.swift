@@ -160,7 +160,9 @@ enum TOML {
 		case TOML_BOOLEAN:
 			return NSNumber(value: datum.u.boolean)
 		case TOML_DATETIMETZ:
-			return date(datum, timeZone: TimeZone(secondsFromGMT: Int(datum.u.ts.tz) * 60)!)
+			// Read in UTC and then moved by the offset: TOML allows offsets up to 23:59, TimeZone only 18 hours.
+			let utc = date(datum, timeZone: TimeZone(identifier: "UTC")!)
+			return utc.addingTimeInterval(-Double(datum.u.ts.tz) * 60)
 		case TOML_DATETIME, TOML_DATE:
 			return date(datum, timeZone: timeZone)
 		case TOML_TIME:
