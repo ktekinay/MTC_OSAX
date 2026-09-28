@@ -177,6 +177,15 @@ defaults write com.mactechnologies.mtc-osax RegexSyntax PCRE
 defaults delete com.mactechnologies.mtc-osax RegexSyntax              # back to the default
 ```
 
+## Untrusted documents
+
+A script is trusted: it can already do anything you can. The files it opens (XML, stylesheets, property lists, JSON, YAML, TOML, text) and the text it takes from them often aren't, so MTC_OSAX limits what a document can make happen on its own:
+
+- A stylesheet chosen by the document's `xml-stylesheet` instruction (`XMLTransform` without `with`) is code from the document: it can't write files, make folders or write to the network (error 1535). A stylesheet the script gives with `with` can, as the script could.
+- `XMLXInclude` includes local files, but nothing from the network.
+- What libxml2 and libxslt load by URL themselves (external DTDs and entities, `xsl:import`, `document()`, schemas) comes from local files or over http and https (with URLSession, so https works and is checked); ftp isn't supported.
+- `XMLOpen … with substitute entities`, `with validate` and `with load external DTD` let the document load what its DTD names: an entity such as `<!ENTITY x SYSTEM "file:///etc/passwd">` becomes text the script can read, and a DTD at an http URL is fetched. Use them only with documents you trust.
+
 ## Diagnostic commands
 
 A hidden suite for checking that the app works. It doesn't appear in the dictionary viewer.

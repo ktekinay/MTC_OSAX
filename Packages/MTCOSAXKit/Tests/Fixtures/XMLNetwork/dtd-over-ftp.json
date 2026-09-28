@@ -1,0 +1,50 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "text" : "<!DOCTYPE a SYSTEM \"ftp://127.0.0.1:9/a.dtd\"><a/>",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "Vali",
+            "value" : {
+              "type" : "true"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : 534
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "lErr",
+        "fields" : [
+
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "ftp isn’t supported: ftp://127.0.0.1:9/a.dtd\n\nline 1\nNo declaration for element a\n\n",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "dtd-over-ftp",
+  "recordedAt" : "2026-09-28T21:56:39Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "try\nXMLOpen from string \"<!DOCTYPE a SYSTEM \\\"ftp://127.0.0.1:9/a.dtd\\\"><a/>\" with validate\non error number n\n{n, XMLError}\nend try",
+  "timeZone" : "America/New_York"
+}

@@ -54,5 +54,21 @@
  {
   "name": "unreachable",
   "script": "XMLOpen \"http://127.0.0.1:1/nothing.xml\""
+ },
+ {
+  "name": "dtd-over-http",
+  "script": "set d to XMLOpen \"$HTTP/files/external-dtd.xml\" with validate\nXMLValidate d\nXMLClose d"
+ },
+ {
+  "name": "entity-over-http",
+  "script": "set d to XMLOpen from string \"<!DOCTYPE a [<!ENTITY e SYSTEM \\\"$HTTP/files/latin1.xml\\\">]><a>&e;</a>\" with substitute entities\nXMLGetText (XMLRoot d)\nXMLClose d"
+ },
+ {
+  "name": "schema-over-http",
+  "script": "set d to XMLOpen \"$HTTP/files/external-dtd.xml\"\nXMLSchema d with respect to \"$HTTP/files/people.xsd\"\nXMLClose d"
+ },
+ {
+  "name": "dtd-over-ftp",
+  "script": "try\nXMLOpen from string \"<!DOCTYPE a SYSTEM \\\"ftp://127.0.0.1:9/a.dtd\\\"><a/>\" with validate\non error number n\n{n, XMLError}\nend try"
  }
 ]

@@ -224,6 +224,12 @@ enum XMLIssues {
 		return box
 	}
 
+	/// Adds a problem of MTC_OSAX's own to the current collection, as a warning like libxml2's own "failed to load
+	/// external entity" (1549).
+	static func warn(_ message: String) {
+		box.issues.append(XMLIssue(code: 1549, level: 1, line: 0, file: nil, message: message))
+	}
+
 	/// The text of the last collection on this thread, for `XMLError`.
 	static var lastText: String {
 		get { Thread.current.threadDictionary["MTCXMLIssuesText"] as? String ?? "" }

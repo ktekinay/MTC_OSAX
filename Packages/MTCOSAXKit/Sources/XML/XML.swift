@@ -17,6 +17,7 @@ public enum XML {
 	/// - Parameter store: the open documents, shared with the PropertyList suite and its pools.
 	public static func commands(store: DocumentStore = DocumentStore()) -> [CommandDefinition] {
 		let commands = XMLCommands(store: store, settings: XMLSettings())
+		NetworkInput.install()
 		store.addResolver { descriptor in
 			XMLReferences.isReference(descriptor) ? try commands.references.resolve(descriptor).0 : nil
 		}

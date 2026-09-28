@@ -252,6 +252,78 @@ enum Network {
 	}
 }
 
+/// What libxml2 and libxslt load by URL themselves (external DTDs and entities, `xsl:import`, `document()`,
+/// XInclude, schemas): http and https through `Network.fetch`, so with TLS rather than libxml2's own cleartext
+/// client, which can't do https; ftp not at all. Anything else (files) is left to libxml2. Parsing with
+/// `XML_PARSE_NONET` still keeps them all off the network, since libxml2 checks it before asking these.
+enum NetworkInput {
+	/// Installs the callbacks, once. Callbacks registered later are asked first, so libxml2's own are
+	/// registered (by initializing it) before these.
+	static func install() {
+		_ = installation
+	}
+
+	private static let installation: Void = {
+		xmlInitParser()
+		_ = xmlRegisterInputCallbacks(matches, open, read, close)
+	}()
+
+	/// A URL these callbacks answer for: http, https or ftp.
+	static func scheme(_ name: UnsafePointer<CChar>?) -> String? {
+		guard let name else { return nil }
+		let text = String(cString: name)
+		guard let colon = text.firstIndex(of: ":"), text[colon...].hasPrefix("://") else { return nil }
+		let scheme = text[..<colon].lowercased()
+		return ["http", "https", "ftp"].contains(scheme) ? scheme : nil
+	}
+
+	/// What was fetched, or nil for a stream whose first read fails. libxml2 goes on to its own clients when an
+	/// open callback gives nil, so a refused or failed load is a stream that fails instead.
+	private final class Stream {
+		let data: Data?
+		var offset = 0
+
+		init(_ data: Data?) {
+			self.data = data
+		}
+	}
+
+	private static let matches: xmlInputMatchCallback = { name in
+		scheme(name) == nil ? 0 : 1
+	}
+
+	/// A failing stream for ftp, or when the fetch fails.
+	private static let open: xmlInputOpenCallback = { name in
+		var data: Data?
+		let text = name.map { String(cString: $0) } ?? ""
+		if scheme(name) == "ftp" {
+			XMLIssues.warn("ftp isn’t supported: \(text)")
+		} else if let url = URL(string: text) {
+			data = try? Network.fetch(url, post: false, query: nil, headers: nil)
+			if data == nil { XMLIssues.warn("Couldn’t load \(text)") }
+		}
+		return Unmanaged.passRetained(Stream(data)).toOpaque()
+	}
+
+	private static let read: xmlInputReadCallback = { context, buffer, length in
+		guard let context, let buffer else { return -1 }
+		let stream = Unmanaged<Stream>.fromOpaque(context).takeUnretainedValue()
+		guard let data = stream.data else { return -1 }
+		let count = min(Int(length), data.count - stream.offset)
+		guard count > 0 else { return 0 }
+		data.withUnsafeBytes { bytes in
+			UnsafeMutableRawPointer(buffer).copyMemory(from: bytes.baseAddress! + stream.offset, byteCount: count)
+		}
+		stream.offset += count
+		return Int32(count)
+	}
+
+	private static let close: xmlInputCloseCallback = { context in
+		if let context { Unmanaged<Stream>.fromOpaque(context).release() }
+		return 0
+	}
+}
+
 extension Result where Success == Data, Failure == Error {
 	/// A synchronous URL request (commands run one at a time on the main thread; the session works on its own).
 	static func fetch(_ request: URLRequest) -> Result<Data, Error> {

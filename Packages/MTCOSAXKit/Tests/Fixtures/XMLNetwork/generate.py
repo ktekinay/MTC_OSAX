@@ -24,5 +24,13 @@ case("post-no-query", 'set d to XMLOpen "$HTTP/echo" with POST', "XMLDisplayXML 
 case("post-headers", 'set d to XMLOpen "$HTTP/echo" query "x=1" header {|X-Test|:"hello"} with POST', "XMLDisplayXML (XMLRoot d)", CLOSE)
 case("unreachable", 'XMLOpen "http://127.0.0.1:1/nothing.xml"')
 
+# What libxml2 loads by URL itself (DTDs, entities, schemas) goes through the same fetching; ftp is refused.
+case("dtd-over-http", 'set d to XMLOpen "$HTTP/files/external-dtd.xml" with validate', "XMLValidate d", CLOSE)
+case("entity-over-http", 'set d to XMLOpen from string "<!DOCTYPE a [<!ENTITY e SYSTEM \\"$HTTP/files/latin1.xml\\">]><a>&e;</a>" with substitute entities',
+     "XMLGetText (XMLRoot d)", CLOSE)
+case("schema-over-http", 'set d to XMLOpen "$HTTP/files/external-dtd.xml"', 'XMLSchema d with respect to "$HTTP/files/people.xsd"', CLOSE)
+case("dtd-over-ftp", "try", 'XMLOpen from string "<!DOCTYPE a SYSTEM \\"ftp://127.0.0.1:9/a.dtd\\"><a/>" with validate',
+     "on error number n", "{n, XMLError}", "end try")
+
 json.dump(cases, open("cases.json", "w"), indent=1, ensure_ascii=False)
 print(len(cases), "MTC_OSAX cases")

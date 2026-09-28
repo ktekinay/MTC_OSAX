@@ -1,0 +1,79 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "http://127.0.0.1:8765/files/external-dtd.xml",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "030000004d5443780000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Schm",
+        "fields" : [
+          {
+            "key" : "With",
+            "value" : {
+              "text" : "http://127.0.0.1:8765/files/people.xsd",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "030000004d5443780000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "030000004d5443780000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "schema-over-http",
+  "recordedAt" : "2026-09-28T21:56:12Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "set d to XMLOpen \"$HTTP/files/external-dtd.xml\"\nXMLSchema d with respect to \"$HTTP/files/people.xsd\"\nXMLClose d",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "HTTP" : "http://127.0.0.1:8765"
+  }
+}
