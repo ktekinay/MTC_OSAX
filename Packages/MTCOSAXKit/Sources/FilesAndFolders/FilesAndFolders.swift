@@ -368,24 +368,33 @@ public enum FilesAndFolders {
 		}
 		let prefix = String(fullName.dropLast(suffixLength))
 		let suffix = String(fullName.suffix(suffixLength))
-		var path = Array(template.deletingLastPathComponent().appendingPathComponent(prefix + String(repeating: "X", count: wildcards) + suffix).path.utf8CString)
-
-		if folder {
-			guard mkdtemp(&path) != nil else {
-				throw posixError(errno)
-			}
-		} else {
-			let descriptor = mkstemps(&path, Int32(suffixLength))
-			guard descriptor >= 0 else {
-				throw posixError(errno)
-			}
-			close(descriptor)
-		}
-		let created = String(decoding: path.prefix { $0 != 0 }.map { UInt8(bitPattern: $0) }, as: UTF8.self)
+		let created = try createUnique(in: template.deletingLastPathComponent(), prefix: prefix, randomCount: wildcards, suffix: suffix, folder: folder)
 		let mask = umask(0)
 		umask(mask)
 		Darwin.chmod(created, mode & ~mask)
 		return result(URL(fileURLWithPath: created), folder: folder)
+	}
+
+	/// Creates a file (only for the owner, as mkstemp does) or folder named prefix + random letters and digits +
+	/// suffix that didn't exist; its path. (mkstemps and mkdtemp replace every X at the end of their template, so a
+	/// prefix ending in X lost it.)
+	static func createUnique(in folder: URL, prefix: String, randomCount: Int, suffix: String, folder isFolder: Bool) throws -> String {
+		let characters = Array("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+		for _ in 0 ..< (randomCount == 0 ? 1 : 1000) {
+			let random = String((0 ..< randomCount).map { _ in characters.randomElement()! })
+			let path = folder.appendingPathComponent(prefix + random + suffix).path
+			if isFolder {
+				if Darwin.mkdir(path, 0o700) == 0 { return path }
+			} else {
+				let descriptor = open(path, O_CREAT | O_EXCL | O_RDWR, 0o600)
+				if descriptor >= 0 {
+					close(descriptor)
+					return path
+				}
+			}
+			guard errno == EEXIST else { throw posixError(errno) }
+		}
+		throw posixError(EEXIST)
 	}
 
 	// MARK: create symlink

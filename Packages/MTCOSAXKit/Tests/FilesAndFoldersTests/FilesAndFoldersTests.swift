@@ -320,7 +320,18 @@ struct TemporaryTests {
 		#expect((attributes[.posixPermissions] as? Int) == 0o600)
 	}
 
-	/// Satimage always used 6 random characters for folders.
+	/// mkstemps replaced every X at the end of the template, so a prefix ending in X lost it.
+	@Test func prefixEndingInX() throws {
+		let sandbox = try Sandbox()
+		let file = try name(send(makeTemporaryFile, ["----": sandbox.url, "pnam": "boxX.txt", "suff": 4, "wild": 3]))
+		#expect(file.hasPrefix("boxX") && file.hasSuffix(".txt") && file.count == 11)
+		let folder = try name(send(makeTemporaryFolder, ["----": sandbox.url, "pnam": "XX", "wild": 2]))
+		#expect(folder.hasPrefix("XX") && folder.count == 4)
+		// Without wildcards, the name itself, once.
+		#expect(try name(send(makeTemporaryFile, ["----": sandbox.url, "pnam": "exact", "wild": 0])) == "exact")
+		#expect(send(makeTemporaryFile, ["----": sandbox.url, "pnam": "exact", "wild": 0]).error == OSAXError(17))
+	}
+
 	@Test func tooManyWildcards() throws {
 		let sandbox = try Sandbox()
 		#expect(send(makeTemporaryFile, ["----": sandbox.url, "wild": 2_147_483_647]).error?.number == -1)
@@ -328,6 +339,7 @@ struct TemporaryTests {
 		#expect(send(makeTemporaryFile, ["----": sandbox.url, "wild": 200]).result?.stringValue?.count ?? 0 > 200)
 	}
 
+	/// Satimage always used 6 random characters for folders.
 	@Test func mkdtempWildcards() throws {
 		let sandbox = try Sandbox()
 		let reply = send(makeTemporaryFolder, ["----": sandbox.url, "pnam": "d", "wild": 8])
