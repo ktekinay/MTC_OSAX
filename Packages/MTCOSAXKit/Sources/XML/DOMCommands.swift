@@ -43,14 +43,15 @@ extension XMLCommands {
 			CommandDefinition("XMLSetAttribute", code: "XML seta", handler: setAttribute),
 			CommandDefinition("XMLRemoveAttribute", code: "XML rema", handler: removeAttribute),
 			CommandDefinition("XMLRemove", code: "XML remo") { request in
-				for (document, node) in try directNodes(request).nodes where !XMLCommands.isDocument(node) {
+				try changeEach(request) { _, document, node in
+					guard !XMLCommands.isDocument(node) else { return }
 					modified(document)
 					XMLCommands.remove(node)
 				}
 				return nil
 			},
 			CommandDefinition("XMLRemoveChildren", code: "XML remc") { request in
-				for (document, node) in try directNodes(request).nodes {
+				try changeEach(request) { _, document, node in
 					modified(document)
 					for child in XMLCommands.children(of: node, allNodes: true) {
 						XMLCommands.remove(child)
@@ -237,7 +238,7 @@ extension XMLCommands {
 		let values = XMLCommands.items(try request.requiredParameter("to  ", as: AnyDescriptor.self).descriptor)
 		let namespace = try request.parameter("nsls", as: String.self)
 		let suppressing = try request.parameter("Supp", default: false)
-		for (document, node) in try directNodes(request).nodes {
+		try changeEach(request) { _, document, node in
 			guard XMLCommands.isElement(node) else { throw XML.noSuchNode }
 			modified(document)
 			let ns = try namespace.map { href -> xmlNsPtr in
@@ -261,7 +262,7 @@ extension XMLCommands {
 	func removeAttribute(_ request: AppleEventRequest) throws -> NSAppleEventDescriptor? {
 		let names = try XMLCommands.items(request.requiredParameter("pnam", as: AnyDescriptor.self).descriptor).map(XMLCommands.text)
 		let namespace = try request.parameter("nsls", as: String.self)
-		for (document, node) in try directNodes(request).nodes {
+		try changeEach(request) { _, document, node in
 			modified(document)
 			let ns = namespace.flatMap { href in withXMLString(href) { xmlSearchNsByHref(document.doc, node, $0) } }
 			for name in names {
@@ -358,19 +359,20 @@ extension XMLCommands {
 	/// Sets text (as it is: `&` is text, not an entity); an element's contents become the one text node. With
 	/// lists, `missing value` is ignored, or empties the node with `suppressing`.
 	func setText(_ request: AppleEventRequest) throws -> NSAppleEventDescriptor? {
-		let (nodes, _) = try directNodes(request)
 		let values = XMLCommands.items(try request.requiredParameter("to  ", as: AnyDescriptor.self).descriptor)
 		let suppressing = try request.parameter("Supp", default: false)
-		for ((document, node), value) in zip(nodes, values.count == 1 ? Array(repeating: values[0], count: nodes.count) : values) {
+		try changeEach(request) { index, document, node in
+			// One value for every node, or one each (nodes without a value are left alone).
+			guard let value = values.count == 1 ? values[0] : values.indices.contains(index) ? values[index] : nil else { return }
 			if XMLCommands.isMissingValue(value) {
-				guard suppressing else { continue }
+				guard suppressing else { return }
 				modified(document)
 				if XMLCommands.isElement(node) {
 					for child in XMLCommands.children(of: node, allNodes: true) { XMLCommands.remove(child) }
 				} else {
 					XMLCommands.remove(node)
 				}
-				continue
+				return
 			}
 			let text = try XMLCommands.text(value)
 			modified(document)

@@ -203,6 +203,35 @@ struct XMLChangeTests {
 		#expect(xml.send("XML disx", ["----": t, "smar": false]).result?.stringValue == "<t><b/>1two</t>")
 	}
 
+	/// A list with a node and its descendant, or a node twice, used to free the same memory twice.
+	@Test func nestedAndRepeatedNodes() throws {
+		let xml = XMLs()
+		let d = try xml.open("<r><item a='1'><x/>t</item><item><y/></item><z/></r>")
+		let r = try xml.root(d)
+		let nested = try #require(xml.send("XML path", ["----": d, "with": "//item | //item/*"]).result)
+		#expect(nested.numberOfItems == 4)
+		#expect(xml.send("XML remo", ["----": nested]).error == nil)
+		#expect(xml.send("XML disx", ["----": r, "smar": false]).result?.stringValue == "<r><z/></r>")
+		let z = try #require(xml.send("XML chld", ["----": r, "indx": 1]).result)
+		#expect(xml.send("XML remo", ["----": AppleEventList([z, z])]).error == nil)
+		#expect(xml.send("XML cunt", ["----": r]).result?.int32Value == 0)
+		// Already invalid to begin with: -1728, and nothing is removed.
+		let e = try xml.root(xml.open("<e><f/></e>"))
+		let f = try #require(xml.send("XML chld", ["----": e, "indx": 1]).result)
+		#expect(xml.send("XML remo", ["----": AppleEventList([f, z])]).error == OSAXError(-1728))
+		#expect(xml.send("XML cunt", ["----": e]).result?.int32Value == 1)
+		// Emptying an element and then its (removed) child, and attributes of removed nodes.
+		let g = try xml.root(xml.open("<g><h k='v'>text</h></g>"))
+		let h = try #require(xml.send("XML chld", ["----": g, "indx": 1]).result)
+		let text = try #require(xml.send("XML chld", ["----": h, "indx": 1]).result)
+		xml.send("XML sttx", ["----": AppleEventList([g, text]), "to  ": AppleEventList([NSAppleEventDescriptor.missingValue]), "Supp": true])
+		#expect(xml.send("XML cunt", ["----": g]).result?.int32Value == 0)
+		let k = try xml.root(xml.open("<k><l/></k>"))
+		let l = try #require(xml.send("XML chld", ["----": k, "indx": 1]).result)
+		#expect(xml.send("XML remc", ["----": AppleEventList([k, l])]).error == nil)
+		#expect(xml.send("XML disx", ["----": k, "smar": false]).result?.stringValue == "<k/>")
+	}
+
 	@Test func setXMLOfTextNode() throws {
 		let xml = XMLs()
 		let a = try xml.root(xml.open("<a>one<b/>two</a>"))

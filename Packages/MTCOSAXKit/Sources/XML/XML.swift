@@ -60,6 +60,20 @@ struct XMLCommands {
 		return ([try resolve(descriptor)], false)
 	}
 
+	/// Changes the direct parameter's nodes in turn, with each one's position in the list. Every reference is
+	/// checked first (-1728 for one that's invalid), then resolved again just before its node is changed, so a node
+	/// that an earlier change freed (a descendant of a removed node, or one listed twice) is skipped instead of used.
+	func changeEach(_ request: AppleEventRequest, _ change: (Int, XMLDocument, xmlNodePtr) throws -> Void) throws {
+		let items = XMLCommands.items(try request.requiredDirectParameter(as: AnyDescriptor.self).descriptor)
+		for item in items {
+			_ = try resolve(item)
+		}
+		for (index, item) in items.enumerated() {
+			guard let (document, node) = try? resolve(item) else { continue }
+			try change(index, document, node)
+		}
+	}
+
 	func reference(_ node: xmlNodePtr, _ document: XMLDocument) -> NSAppleEventDescriptor {
 		references.reference(node, in: document)
 	}
