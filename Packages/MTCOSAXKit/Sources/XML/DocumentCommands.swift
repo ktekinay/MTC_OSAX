@@ -69,7 +69,10 @@ extension XMLCommands {
 			CommandDefinition("XMLSetEncoding", code: "XML senc") { request in
 				let (document, _) = try direct(request)
 				let name = try request.requiredParameter("to  ", as: String.self)
-				guard xmlFindCharEncodingHandler(name) != nil, let doc = document.doc else { throw OSAXError.parameterError }
+				// The handler is only to check the name; an iconv one is made for each lookup and has to be closed.
+				guard let handler = xmlFindCharEncodingHandler(name) else { throw OSAXError.parameterError }
+				xmlCharEncCloseFunc(handler)
+				guard let doc = document.doc else { throw OSAXError.parameterError }
 				if let old = doc.pointee.encoding { xmlRelease(UnsafeMutableRawPointer(mutating: old)) }
 				doc.pointee.encoding = withXMLString(name) { UnsafePointer(xmlStrdup($0)) }
 				modified(document)
