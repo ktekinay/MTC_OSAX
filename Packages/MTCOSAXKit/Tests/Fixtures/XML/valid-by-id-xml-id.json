@@ -1,0 +1,275 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/xmlid.xml",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "25000000004100000000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "geti",
+        "fields" : [
+          {
+            "key" : "xlmi",
+            "value" : {
+              "text" : "s1",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "25000000004100000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "250000000041000000c2d70000600000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "gttx",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "250000000041000000c2d70000600000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "One",
+          "type" : "utf8"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "geti",
+        "fields" : [
+          {
+            "key" : "xlmi",
+            "value" : {
+              "text" : "s3",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "25000000004100000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "250000000041000080c3d70000600000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "gttx",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "250000000041000080c3d70000600000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "Three",
+          "type" : "utf8"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "geti",
+        "fields" : [
+          {
+            "key" : "xlmi",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "s1",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "s2",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "25000000004100000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "hex" : "250000000041000000c2d70000600000",
+              "type" : "XMLR"
+            },
+            {
+              "hex" : "250000000041000000d6d70000600000",
+              "type" : "XMLR"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "geti",
+        "fields" : [
+          {
+            "key" : "xlmi",
+            "value" : {
+              "text" : "zz",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "25000000004100000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -2763
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "geti",
+        "fields" : [
+          {
+            "key" : "xlmi",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "s1",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "zz",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "25000000004100000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "hex" : "250000000041000000c2d70000600000",
+              "type" : "XMLR"
+            },
+            {
+              "code" : "msng",
+              "type" : "type"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "25000000004100000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "valid-by-id-xml-id",
+  "recordedAt" : "2026-09-28T15:49:01Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set d to XMLOpen (POSIX file \"$FILES/xmlid.xml\")\ntry\nXMLGetText (XMLGetByID d xmlid \"s1\")\nend try\ntry\nXMLGetText (XMLGetByID d xmlid \"s3\")\nend try\ntry\nXMLGetByID d xmlid {\"s1\", \"s2\"}\nend try\ntry\nXMLGetByID d xmlid \"zz\"\nend try\ntry\nXMLGetByID d xmlid {\"s1\", \"zz\"}\nend try\nXMLClose d",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

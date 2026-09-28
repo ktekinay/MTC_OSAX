@@ -1,0 +1,170 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/simple.xml",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "2e000000004100000000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "root",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "2e000000004100000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "2e000000004100000001d40000600000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "du  ",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "2e000000004100000001d40000600000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "library\n\tbook\n\t\ttitle\n\t\tcreator\n\t\tyear\n\t\tprice\n\tbook\n\t\ttitle\n\t\tcreator\n\t\tyear\n\tnote\n\t\tem\n\tempty\n\tspaces\n",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "du  ",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "2e000000004100000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/\nlibrary\n\tbook\n\t\ttitle\n\t\tcreator\n\t\tyear\n\t\tprice\n\tbook\n\t\ttitle\n\t\tcreator\n\t\tyear\n\tnote\n\t\tem\n\tempty\n\tspaces\n",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "chld",
+        "fields" : [
+          {
+            "key" : "indx",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "2e000000004100000001d40000600000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "2e000000004100000002d40000600000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "du  ",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "2e000000004100000002d40000600000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "book\n\ttitle\n\tcreator\n\tyear\n\tprice\n",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "2e000000004100000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "valid-du",
+  "recordedAt" : "2026-09-28T15:49:01Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\ntry\nXMLDu r\nend try\ntry\nXMLDu d\nend try\ntry\nXMLDu (XMLChild r index 1)\nend try\nXMLClose d",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

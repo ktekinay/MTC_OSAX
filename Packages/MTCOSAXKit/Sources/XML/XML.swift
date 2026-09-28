@@ -6,7 +6,7 @@ import PropertyLists
 /// Satimage's four XML suites (event class `XML `): XML DOM, XPath and XSLT, Documents, and Validation, built on
 /// macOS's libxml2 and libxslt as SatimageOSAX's were.
 /// Behavior recorded from SatimageOSAX in `Fixtures/XML`; where Satimage was broken, MTC_OSAX follows the
-/// dictionary (`Fixtures/XMLFixes`, listed in PLAN-XML.md).
+/// dictionary (`Fixtures/XMLFixes`, listed in Implemented/PLAN-XML.md).
 public enum XML {
 	// Error numbers recorded from SatimageOSAX (libxml2's own numbers are passed through as they are).
 	static let noSuchNode = OSAXError(-1728) // errAENoSuchObject
@@ -21,20 +21,13 @@ public enum XML {
 			XMLReferences.isReference(descriptor) ? try commands.references.resolve(descriptor).0 : nil
 		}
 		// libxml2's callbacks are per thread; the app runs every command on the main thread, tests on several.
-		return (commands.dom + commands.documents + commands.xpath + commands.xslt + stageThree).map { command in
+		return (commands.dom + commands.documents + commands.xpath + commands.xslt + commands.validation).map { command in
 			CommandDefinition(command.name, code: command.key.code) { request in
 				XMLDocument.installCallbacks()
 				return try command.handler(request)
 			}
 		}
 	}
-
-	/// Validation: stage 3 of PLAN-XML.md, not implemented yet.
-	private static var stageThree: [CommandDefinition] { [
-		("XMLValidate", "XML vali"), ("XMLSchema", "XML Schm"), ("XMLRelaxNG", "XML rlax"), ("XMLCheckDTD", "XML Pdtd"),
-		("XMLGetByID", "XML geti"), ("XMLGetxmlID", "XML geID"), ("XMLValidName", "XML Isnm"), ("XMLValidNCName", "XML Isnc"),
-		("XMLDu", "XML du  "),
-	].map { name, code in CommandDefinition(name, code: code) { _ in throw OSAXError.eventNotHandled } } }
 
 	/// The libxml2 version in use, e.g. "20913".
 	static var libxmlVersion: String {

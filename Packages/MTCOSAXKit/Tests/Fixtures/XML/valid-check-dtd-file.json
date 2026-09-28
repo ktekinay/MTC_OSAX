@@ -1,0 +1,66 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Pdtd",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/people.dtd",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Pdtd",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/bad.dtd",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : 55
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "lErr",
+        "fields" : [
+
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "show \"file:///private/tmp/mtc-fixtures/files/bad.dtd\" selection 1:\nContentDecl : ',' '|' or ')' expected\n\n",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "valid-check-dtd-file",
+  "recordedAt" : "2026-09-28T15:49:01Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "try\nXMLCheckDTD (POSIX file \"$FILES/people.dtd\")\nend try\ntry\nXMLCheckDTD (POSIX file \"$FILES/bad.dtd\")\nend try\nXMLError",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

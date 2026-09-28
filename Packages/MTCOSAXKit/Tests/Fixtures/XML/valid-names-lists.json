@@ -1,0 +1,102 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Isnm",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "a",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "b",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "boolean" : true,
+          "type" : "bool"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Isnc",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "a",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "b",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "boolean" : true,
+          "type" : "bool"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Isnm",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "a:b",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "c",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "boolean" : true,
+          "type" : "bool"
+        }
+      }
+    }
+  ],
+  "name" : "valid-names-lists",
+  "recordedAt" : "2026-09-28T15:49:55Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "try\nXMLValidName {\"a\", \"b\"}\nend try\ntry\nXMLValidNCName {\"a\", \"b\"}\nend try\ntry\nXMLValidName {\"a:b\", \"c\"}\nend try",
+  "timeZone" : "America/New_York"
+}

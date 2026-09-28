@@ -227,7 +227,8 @@ enum XMLIssues {
 			if let file = issue.file, !file.isEmpty {
 				return "show \"\(file)\" selection \(issue.line):\n\(issue.message)\n\n"
 			}
-			return "line \(issue.line)\n\(issue.message)\n\n"
+			// Without a file or a line (a file that can't be loaded), only the message.
+			return issue.line > 0 ? "line \(issue.line)\n\(issue.message)\n\n" : "\(issue.message)\n\n"
 		}.joined()
 	}
 }

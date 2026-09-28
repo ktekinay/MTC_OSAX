@@ -1,4 +1,4 @@
-# Generates cases-xpath.json for the XML XPath, XSLT suite (stage 2 of PLAN-XML.md), recorded from SatimageOSAX
+# Generates cases-xpath.json for the XML XPath, XSLT suite (stage 2 of Implemented/PLAN-XML.md), recorded from SatimageOSAX
 # into this folder like generate.py's. Warm SatimageOSAX up with an XMLOpen first. Run: python3 generate_xpath.py
 import json, os
 

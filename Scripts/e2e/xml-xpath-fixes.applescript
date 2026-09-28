@@ -1,5 +1,5 @@
 -- End-to-end checks of what MTC_OSAX does where SatimageOSAX was broken in the XML XPath, XSLT suite (see
--- PLAN-XML.md). MTC_OSAX only. Run with Scripts/run-e2e.sh xml-xpath-fixes (through iTerm).
+-- Implemented/PLAN-XML.md). MTC_OSAX only. Run with Scripts/run-e2e.sh xml-xpath-fixes (through iTerm).
 
 use AppleScript version "2.4"
 use application "MTC_OSAX"

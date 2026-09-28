@@ -1,0 +1,244 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Isnc",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "abc",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "boolean" : true,
+          "type" : "bool"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Isnc",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "a:b",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "boolean" : false,
+          "type" : "bool"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Isnc",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "1abc",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "boolean" : false,
+          "type" : "bool"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Isnc",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "_x-1.y",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "boolean" : true,
+          "type" : "bool"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Isnc",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "boolean" : false,
+          "type" : "bool"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Isnc",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "a b",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "boolean" : false,
+          "type" : "bool"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Isnc",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "é",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "boolean" : true,
+          "type" : "bool"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Isnc",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "a",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "1",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "a:b",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "boolean" : false,
+          "type" : "bool"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Isnc",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "boolean" : true,
+          "type" : "bool"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Isnc",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 12,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "boolean" : false,
+          "type" : "bool"
+        }
+      }
+    }
+  ],
+  "name" : "valid-validncname",
+  "recordedAt" : "2026-09-28T15:53:15Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "try\nXMLValidNCName \"abc\"\nend try\ntry\nXMLValidNCName \"a:b\"\nend try\ntry\nXMLValidNCName \"1abc\"\nend try\ntry\nXMLValidNCName \"_x-1.y\"\nend try\ntry\nXMLValidNCName \"\"\nend try\ntry\nXMLValidNCName \"a b\"\nend try\ntry\nXMLValidNCName \"é\"\nend try\ntry\nXMLValidNCName {\"a\", \"1\", \"a:b\"}\nend try\ntry\nXMLValidNCName {}\nend try\ntry\nXMLValidNCName 12\nend try",
+  "timeZone" : "America/New_York"
+}

@@ -1,0 +1,206 @@
+[
+ {
+  "name": "valid-validate-internal",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/dtd.xml\")\ntry\nXMLValidate d\nend try\nXMLError\nXMLClose d"
+ },
+ {
+  "name": "valid-validate-internal-verbose",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/dtd.xml\")\ntry\nXMLValidate d with verbose\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-validate-no-dtd",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/no-dtd.xml\")\ntry\nXMLValidate d\nend try\nXMLError\nXMLClose d"
+ },
+ {
+  "name": "valid-validate-against-invalid",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/no-dtd.xml\")\ntry\nXMLValidate d against (POSIX file \"$FILES/people.dtd\")\nend try\nXMLError\nXMLClose d"
+ },
+ {
+  "name": "valid-validate-against-valid",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/external-dtd.xml\")\ntry\nXMLValidate d against (POSIX file \"$FILES/people.dtd\")\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-validate-against-path",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/external-dtd.xml\")\ntry\nXMLValidate d against \"$FILES/people.dtd\"\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-validate-against-missing",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/external-dtd.xml\")\ntry\nXMLValidate d against (POSIX file \"$FILES/nope.dtd\")\nend try\nXMLError\nXMLClose d"
+ },
+ {
+  "name": "valid-validate-against-bad",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/external-dtd.xml\")\ntry\nXMLValidate d against (POSIX file \"$FILES/bad.dtd\")\nend try\nXMLError\nXMLClose d"
+ },
+ {
+  "name": "valid-validate-external",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/external-dtd.xml\")\ntry\nXMLValidate d\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-validate-external-loaded",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/external-dtd.xml\") with load external DTD\ntry\nXMLValidate d\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-validate-modified",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/dtd.xml\")\nset r to XMLRoot d\nXMLNewChild \"<bogus/>\" at r\ntry\nXMLValidate d\nend try\nXMLError\ntry\nXMLValidate d with verbose\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-validate-failure-level",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/dtd.xml\")\nset r to XMLRoot d\nXMLNewChild \"<bogus/>\" at r\ntry\nXMLValidate d failure level 1\nend try\ntry\nXMLValidate d failure level 3\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-validate-string",
+  "script": "set d to XMLOpen from string \"<!DOCTYPE a [<!ELEMENT a (b)><!ELEMENT b EMPTY>]><a><c/></a>\"\ntry\nXMLValidate d\nend try\nXMLError\nXMLClose d"
+ },
+ {
+  "name": "valid-schema-with",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/external-dtd.xml\")\ntry\nXMLSchema d with respect to (POSIX file \"$FILES/people.xsd\")\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-schema-invalid",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/no-dtd.xml\")\ntry\nXMLSchema d with respect to (POSIX file \"$FILES/people.xsd\")\nend try\nXMLError\nXMLClose d"
+ },
+ {
+  "name": "valid-schema-location",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/schema-located.xml\")\ntry\nXMLSchema d\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-schema-location-invalid",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/schema-located-invalid.xml\")\ntry\nXMLSchema d\nend try\nXMLError\nXMLClose d"
+ },
+ {
+  "name": "valid-schema-no-location",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\ntry\nXMLSchema d\nend try\nXMLError\nXMLClose d"
+ },
+ {
+  "name": "valid-schema-path",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/external-dtd.xml\")\ntry\nXMLSchema d with respect to \"$FILES/people.xsd\"\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-schema-url-text",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/external-dtd.xml\")\ntry\nXMLSchema d with respect to \"file://$FILES/people.xsd\"\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-schema-reference",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/external-dtd.xml\")\nset s to XMLOpen (POSIX file \"$FILES/people.xsd\")\ntry\nXMLSchema d with respect to s\nend try\nXMLClose s\nXMLClose d"
+ },
+ {
+  "name": "valid-schema-text",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/no-dtd.xml\")\ntry\nXMLSchema d with respect to \"<xs:schema xmlns:xs=\\\"http://www.w3.org/2001/XMLSchema\\\"><xs:element name=\\\"people\\\"/></xs:schema>\"\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-schema-element",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/external-dtd.xml\")\nset r to XMLRoot d\ntry\nXMLSchema r with respect to (POSIX file \"$FILES/people.xsd\")\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-schema-only",
+  "script": "try\nXMLSchema with respect to (POSIX file \"$FILES/people.xsd\")\nend try\ntry\nXMLSchema with respect to (POSIX file \"$FILES/bad.xsd\")\nend try\nXMLError"
+ },
+ {
+  "name": "valid-schema-none",
+  "script": "try\nXMLSchema\nend try"
+ },
+ {
+  "name": "valid-relaxng-valid",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/external-dtd.xml\")\ntry\nXMLRelaxNG d with respect to (POSIX file \"$FILES/people.rng\")\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-relaxng-invalid",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/no-dtd.xml\")\ntry\nXMLRelaxNG d with respect to (POSIX file \"$FILES/people.rng\")\nend try\nXMLError\nXMLClose d"
+ },
+ {
+  "name": "valid-relaxng-path",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/external-dtd.xml\")\ntry\nXMLRelaxNG d with respect to \"$FILES/people.rng\"\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-relaxng-reference",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/external-dtd.xml\")\nset s to XMLOpen (POSIX file \"$FILES/people.rng\")\ntry\nXMLRelaxNG d with respect to s\nend try\nXMLClose s\nXMLClose d"
+ },
+ {
+  "name": "valid-relaxng-text",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/external-dtd.xml\")\ntry\nXMLRelaxNG d with respect to \"<element name=\\\"people\\\" xmlns=\\\"http://relaxng.org/ns/structure/1.0\\\"><zeroOrMore><element name=\\\"person\\\"><attribute name=\\\"id\\\"/><text/></element></zeroOrMore></element>\"\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-relaxng-element",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/external-dtd.xml\")\nset r to XMLRoot d\ntry\nXMLRelaxNG r with respect to (POSIX file \"$FILES/people.rng\")\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-relaxng-only",
+  "script": "try\nXMLRelaxNG with respect to (POSIX file \"$FILES/people.rng\")\nend try\ntry\nXMLRelaxNG with respect to (POSIX file \"$FILES/bad.rng\")\nend try\nXMLError"
+ },
+ {
+  "name": "valid-relaxng-missing",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/external-dtd.xml\")\ntry\nXMLRelaxNG d with respect to (POSIX file \"$FILES/nope.rng\")\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-relaxng-none",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/external-dtd.xml\")\ntry\nXMLRelaxNG d\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-check-dtd-file",
+  "script": "try\nXMLCheckDTD (POSIX file \"$FILES/people.dtd\")\nend try\ntry\nXMLCheckDTD (POSIX file \"$FILES/bad.dtd\")\nend try\nXMLError"
+ },
+ {
+  "name": "valid-check-dtd-path",
+  "script": "try\nXMLCheckDTD \"$FILES/people.dtd\"\nend try\ntry\nXMLCheckDTD \"file://$FILES/people.dtd\"\nend try"
+ },
+ {
+  "name": "valid-check-dtd-text",
+  "script": "try\nXMLCheckDTD \"<!ELEMENT a (b)><!ELEMENT b EMPTY>\"\nend try\ntry\nXMLCheckDTD \"<!ELEMENT a (b>\"\nend try\nXMLError"
+ },
+ {
+  "name": "valid-check-dtd-missing",
+  "script": "try\nXMLCheckDTD (POSIX file \"$FILES/nope.dtd\")\nend try\nXMLError"
+ },
+ {
+  "name": "valid-by-id-xml-id",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/xmlid.xml\")\ntry\nXMLGetText (XMLGetByID d xmlid \"s1\")\nend try\ntry\nXMLGetText (XMLGetByID d xmlid \"s3\")\nend try\ntry\nXMLGetByID d xmlid {\"s1\", \"s2\"}\nend try\ntry\nXMLGetByID d xmlid \"zz\"\nend try\ntry\nXMLGetByID d xmlid {\"s1\", \"zz\"}\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-by-id-from-element",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/xmlid.xml\")\nset r to XMLRoot d\ntry\nXMLGetText (XMLGetByID (XMLChild r index 3) xmlid \"s2\")\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-by-id-dtd",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/dtd.xml\")\ntry\nXMLGetText (XMLGetByID d xmlid \"p2\")\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-by-id-dtd-validated",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/dtd.xml\") with validate\ntry\nXMLGetText (XMLGetByID d xmlid \"p2\")\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-by-id-none",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\ntry\nXMLGetByID d xmlid \"b1\"\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-xml-id",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/xmlid.xml\")\nset r to XMLRoot d\ntry\nXMLGetxmlID (XMLChild r index 1)\nend try\ntry\nXMLGetxmlID (XMLChild r index 3)\nend try\ntry\nXMLGetxmlID r\nend try\ntry\nXMLGetxmlID d\nend try\ntry\nXMLGetxmlID (XMLChild (XMLChild r index 1) index 1)\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-xml-id-dtd",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/dtd.xml\")\nset r to XMLRoot d\ntry\nXMLGetxmlID (XMLChild r index 1)\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-xml-id-dtd-validated",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/dtd.xml\") with validate\nset r to XMLRoot d\ntry\nXMLGetxmlID (XMLChild r index 2)\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-xml-id-list",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/xmlid.xml\")\nset r to XMLRoot d\ntry\nXMLGetxmlID {XMLChild r index 1, XMLChild r index 2}\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-names-lists",
+  "script": "try\nXMLValidName {\"a\", \"b\"}\nend try\ntry\nXMLValidNCName {\"a\", \"b\"}\nend try\ntry\nXMLValidName {\"a:b\", \"c\"}\nend try"
+ },
+ {
+  "name": "valid-validate-element-no-ids",
+  "script": "set d to XMLOpen from string \"<!DOCTYPE a [<!ELEMENT a (b*)><!ELEMENT b EMPTY><!ATTLIST b n CDATA #IMPLIED>]><a><b n=\\\"1\\\"/><b/></a>\"\nset r to XMLRoot d\ntry\nXMLValidate r\nend try\ntry\nXMLValidate (XMLChild r index 1)\nend try\nXMLNewChild \"<c/>\" at (XMLChild r index 1)\ntry\nXMLValidate (XMLChild r index 1)\nend try\nXMLError\ntry\nXMLValidate r\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-du",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\ntry\nXMLDu r\nend try\ntry\nXMLDu d\nend try\ntry\nXMLDu (XMLChild r index 1)\nend try\nXMLClose d"
+ },
+ {
+  "name": "valid-du-small",
+  "script": "set d to XMLOpen from string \"<a x=\\\"1\\\"><b>t</b><b/><!--c--><c><d/></c></a>\"\nset r to XMLRoot d\ntry\nXMLDu r\nend try\ntry\nXMLDu d\nend try\nXMLClose d"
+ }
+]

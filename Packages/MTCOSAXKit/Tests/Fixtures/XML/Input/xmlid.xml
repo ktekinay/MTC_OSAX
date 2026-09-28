@@ -1,0 +1,2 @@
+<?xml version="1.0"?>
+<doc><sec xml:id="s1">One</sec><sec xml:id="s2">Two<sub xml:id="s3">Three</sub></sec><sec>Four</sec></doc>

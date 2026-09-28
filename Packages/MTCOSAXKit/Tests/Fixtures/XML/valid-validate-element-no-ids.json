@@ -1,0 +1,280 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "text" : "<!DOCTYPE a [<!ELEMENT a (b*)><!ELEMENT b EMPTY><!ATTLIST b n CDATA #IMPLIED>]><a><b n=\"1\"/><b/></a>",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "31000000004100000000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "root",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "31000000004100000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "31000000004100008091d70000600000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "vali",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "31000000004100008091d70000600000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "chld",
+        "fields" : [
+          {
+            "key" : "indx",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "31000000004100008091d70000600000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "3100000000410000008ed70000600000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "vali",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "3100000000410000008ed70000600000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "chld",
+        "fields" : [
+          {
+            "key" : "indx",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "31000000004100008091d70000600000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "3100000000410000008ed70000600000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "addc",
+        "fields" : [
+          {
+            "key" : "at  ",
+            "value" : {
+              "hex" : "3100000000410000008ed70000600000",
+              "type" : "XMLR"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "<c/>",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "31000000004100008000d40000600000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "chld",
+        "fields" : [
+          {
+            "key" : "indx",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "31000000004100008091d70000600000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "3100000000410000008ed70000600000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "vali",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "3100000000410000008ed70000600000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : 528
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "lErr",
+        "fields" : [
+
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "line 1\nElement b was declared EMPTY this one has content\n\nline 1\nNo declaration for element c\n\n",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "vali",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "31000000004100008091d70000600000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : 528
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "31000000004100000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "valid-validate-element-no-ids",
+  "recordedAt" : "2026-09-28T15:49:55Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set d to XMLOpen from string \"<!DOCTYPE a [<!ELEMENT a (b*)><!ELEMENT b EMPTY><!ATTLIST b n CDATA #IMPLIED>]><a><b n=\\\"1\\\"/><b/></a>\"\nset r to XMLRoot d\ntry\nXMLValidate r\nend try\ntry\nXMLValidate (XMLChild r index 1)\nend try\nXMLNewChild \"<c/>\" at (XMLChild r index 1)\ntry\nXMLValidate (XMLChild r index 1)\nend try\nXMLError\ntry\nXMLValidate r\nend try\nXMLClose d",
+  "timeZone" : "America/New_York"
+}

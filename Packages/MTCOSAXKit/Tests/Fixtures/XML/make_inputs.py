@@ -144,4 +144,51 @@ write("with-pi.xml", """<?xml version="1.0"?>
 <?xml-stylesheet type="text/xsl" href="text.xsl"?>
 <library><book id="b1"><title>One</title></book><book id="b2"><title>Two</title></book></library>
 """)
+# Validation (stage 3)
+write("people.dtd", """<!ELEMENT people (person*)>
+<!ELEMENT person (#PCDATA)>
+<!ATTLIST person id ID #REQUIRED>
+""")
+write("bad.dtd", """<!ELEMENT people (person*>
+""")
+write("external-dtd.xml", """<?xml version="1.0"?>
+<!DOCTYPE people SYSTEM "people.dtd">
+<people><person id="p1">Ann</person><person id="p2">Bob</person></people>
+""")
+write("no-dtd.xml", """<?xml version="1.0"?>
+<people><person id="p1">Ann</person><person>Bob</person><extra/></people>
+""")
+write("xmlid.xml", """<?xml version="1.0"?>
+<doc><sec xml:id="s1">One</sec><sec xml:id="s2">Two<sub xml:id="s3">Three</sub></sec><sec>Four</sec></doc>
+""")
+write("people.xsd", """<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="people">
+		<xs:complexType><xs:sequence>
+			<xs:element name="person" maxOccurs="unbounded">
+				<xs:complexType><xs:simpleContent><xs:extension base="xs:string">
+					<xs:attribute name="id" type="xs:ID" use="required"/>
+				</xs:extension></xs:simpleContent></xs:complexType>
+			</xs:element>
+		</xs:sequence></xs:complexType>
+	</xs:element>
+</xs:schema>
+""")
+write("bad.xsd", """<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"><xs:element name="people" type="xs:nothing"/></xs:schema>
+""")
+write("schema-located.xml", """<?xml version="1.0"?>
+<people xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="people.xsd"><person id="p1">Ann</person></people>
+""")
+write("schema-located-invalid.xml", """<?xml version="1.0"?>
+<people xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="people.xsd"><person>Ann</person></people>
+""")
+write("people.rng", """<?xml version="1.0"?>
+<element name="people" xmlns="http://relaxng.org/ns/structure/1.0">
+	<zeroOrMore><element name="person"><attribute name="id"><text/></attribute><text/></element></zeroOrMore>
+</element>
+""")
+write("bad.rng", """<?xml version="1.0"?>
+<element name="people" xmlns="http://relaxng.org/ns/structure/1.0"><nothing/></element>
+""")
 print(sorted(os.listdir("Input")))

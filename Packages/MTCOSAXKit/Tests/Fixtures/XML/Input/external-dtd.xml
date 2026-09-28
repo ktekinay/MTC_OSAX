@@ -1,0 +1,3 @@
+<?xml version="1.0"?>
+<!DOCTYPE people SYSTEM "people.dtd">
+<people><person id="p1">Ann</person><person id="p2">Bob</person></people>

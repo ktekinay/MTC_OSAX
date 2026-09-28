@@ -1,4 +1,4 @@
-# Generates cases.json for the XML DOM and XML Documents suites (stage 1 of PLAN-XML.md), recorded from SatimageOSAX.
+# Generates cases.json for the XML DOM and XML Documents suites (stage 1 of Implemented/PLAN-XML.md), recorded from SatimageOSAX.
 # Cases open files in Input/ (made by make_inputs.py) through $FILES and write to $TMP. Each case closes what it
 # opens; cases that list documents use their own pool, since a case that stops at an error leaves its document open.
 # The first XML command after SatimageOSAX launches is sent three times (it loads its XML library), so warm it up

@@ -1,0 +1,244 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Isnm",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "abc",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "boolean" : true,
+          "type" : "bool"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Isnm",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "a:b",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "boolean" : true,
+          "type" : "bool"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Isnm",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "1abc",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "boolean" : false,
+          "type" : "bool"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Isnm",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "_x-1.y",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "boolean" : true,
+          "type" : "bool"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Isnm",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "boolean" : false,
+          "type" : "bool"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Isnm",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "a b",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "boolean" : false,
+          "type" : "bool"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Isnm",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "é",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "boolean" : true,
+          "type" : "bool"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Isnm",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "a",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "1",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "a:b",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "boolean" : false,
+          "type" : "bool"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Isnm",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "boolean" : true,
+          "type" : "bool"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Isnm",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 12,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "boolean" : false,
+          "type" : "bool"
+        }
+      }
+    }
+  ],
+  "name" : "valid-validname",
+  "recordedAt" : "2026-09-28T15:53:14Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "try\nXMLValidName \"abc\"\nend try\ntry\nXMLValidName \"a:b\"\nend try\ntry\nXMLValidName \"1abc\"\nend try\ntry\nXMLValidName \"_x-1.y\"\nend try\ntry\nXMLValidName \"\"\nend try\ntry\nXMLValidName \"a b\"\nend try\ntry\nXMLValidName \"é\"\nend try\ntry\nXMLValidName {\"a\", \"1\", \"a:b\"}\nend try\ntry\nXMLValidName {}\nend try\ntry\nXMLValidName 12\nend try",
+  "timeZone" : "America/New_York"
+}

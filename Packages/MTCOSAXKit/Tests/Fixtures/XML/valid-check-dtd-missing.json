@@ -1,0 +1,47 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Pdtd",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/nope.dtd",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : 1549
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "lErr",
+        "fields" : [
+
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "failed to load external entity \"file:///private/tmp/mtc-fixtures/files/nope.dtd\"\n\n",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "valid-check-dtd-missing",
+  "recordedAt" : "2026-09-28T15:49:01Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "try\nXMLCheckDTD (POSIX file \"$FILES/nope.dtd\")\nend try\nXMLError",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

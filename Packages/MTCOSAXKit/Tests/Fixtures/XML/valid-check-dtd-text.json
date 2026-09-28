@@ -1,0 +1,63 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Pdtd",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "<!ELEMENT a (b)><!ELEMENT b EMPTY>",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Pdtd",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "<!ELEMENT a (b>",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : 55
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "lErr",
+        "fields" : [
+
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "line 1\nContentDecl : ',' '|' or ')' expected\n\n",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "valid-check-dtd-text",
+  "recordedAt" : "2026-09-28T15:49:01Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "try\nXMLCheckDTD \"<!ELEMENT a (b)><!ELEMENT b EMPTY>\"\nend try\ntry\nXMLCheckDTD \"<!ELEMENT a (b>\"\nend try\nXMLError",
+  "timeZone" : "America/New_York"
+}

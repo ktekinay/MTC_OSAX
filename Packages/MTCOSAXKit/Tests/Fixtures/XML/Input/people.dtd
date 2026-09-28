@@ -1,0 +1,3 @@
+<!ELEMENT people (person*)>
+<!ELEMENT person (#PCDATA)>
+<!ATTLIST person id ID #REQUIRED>

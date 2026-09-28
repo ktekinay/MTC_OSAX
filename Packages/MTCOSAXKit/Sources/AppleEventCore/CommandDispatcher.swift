@@ -82,7 +82,16 @@ public struct AppleEventReply {
 public final class CommandDispatcher {
 	public private(set) var commands: [EventKey: CommandDefinition] = [:]
 
-	public init() {}
+	public init() {
+		_ = Self.appleScriptCoercions
+	}
+
+	/// The Apple Event Manager coerces text to numbers (`"2.5"` for a real) only with AppleScript's coercions, which
+	/// a scriptable app has and other processes (tests) get when AppleScript is first loaded: loads it once.
+	private static let appleScriptCoercions: Void = {
+		var error: NSDictionary?
+		_ = NSAppleScript(source: "1")?.compileAndReturnError(&error)
+	}()
 
 	public func register(_ command: CommandDefinition) {
 		precondition(commands[command.key] == nil, "Duplicate command code \(command.key) for \(command.name)")
