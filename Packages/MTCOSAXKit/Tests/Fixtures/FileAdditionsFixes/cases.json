@@ -22,5 +22,9 @@
  {
   "name": "backup-file-over-folder",
   "script": "mkdir (POSIX file \"$TMP/backup-file-over-folder/src\")\nmkdir (POSIX file \"$TMP/backup-file-over-folder/dst/x\")\nwritetext \"keep\" to (POSIX file \"$TMP/backup-file-over-folder/dst/x/keep.txt\")\ndelay 1.1\nwritetext \"new\" to (POSIX file \"$TMP/backup-file-over-folder/src/x\")\n{backup (POSIX file \"$TMP/backup-file-over-folder/src\") onto (POSIX file \"$TMP/backup-file-over-folder/dst\") level 2, list files (POSIX file \"$TMP/backup-file-over-folder/dst\") as unix path}"
+ },
+ {
+  "name": "glob-from-brackets",
+  "script": "mkdir (POSIX file \"$TMP/glob-from-brackets/g[1]\")\nwritetext \"x\" to (POSIX file \"$TMP/glob-from-brackets/g[1]/x.txt\")\nglob \"*.txt\" from (POSIX file \"$TMP/glob-from-brackets/g[1]\") with names only"
  }
 ]

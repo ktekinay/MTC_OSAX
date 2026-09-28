@@ -177,6 +177,18 @@ struct GlobTests {
 		#expect(texts(send(glob, ["----": "Syste?", "namo": true])) == ["System"])
 	}
 
+	/// The folder's name was read as a pattern too: `g[1]` matched nothing (or the folder `g1`).
+	@Test func fromFolderWithPatternCharacters() throws {
+		let folder = try TemporaryFolder()
+		defer { folder.remove() }
+		for name in ["g[1]", "h*{a,b}?", "back\\slash"] {
+			try folder.file("\(name)/x.txt")
+			#expect(texts(send(glob, ["----": "*.txt", "from": folder.url.appendingPathComponent(name), "namo": true])) == ["x.txt"], "\(name)")
+		}
+		try folder.file("g1/y.txt")
+		#expect(texts(send(glob, ["----": "*", "from": folder.url.appendingPathComponent("g[1]"), "namo": true])) == ["x.txt"])
+	}
+
 	@Test func tildeIsTheRealHomeFolder() {
 		#expect(texts(send(glob, ["----": "~", "rtyp": typeObject("psxP")])) == [NSHomeDirectory() + "/"])
 	}

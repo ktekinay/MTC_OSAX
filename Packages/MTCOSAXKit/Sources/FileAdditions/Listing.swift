@@ -78,7 +78,8 @@ extension FileAdditions {
 			let full = if pattern.hasPrefix("/") || pattern.hasPrefix("~") {
 				pattern
 			} else {
-				(base?.path ?? "") + "/" + pattern
+				// The folder is a name, not a pattern: `g[1]` would otherwise match `g1`.
+				escaped(base?.path ?? "") + "/" + pattern
 			}
 			for path in matches(full) {
 				let url = URL(fileURLWithPath: path)
@@ -100,6 +101,18 @@ extension FileAdditions {
 
 	/// Paths matching a shell pattern with `*`, `?`, `[…]`, `{a,b}` and `~`, in the order the file system lists
 	/// them.
+	/// A path with glob(3)'s special characters backslash-escaped, so it only matches itself.
+	static func escaped(_ path: String) -> String {
+		var result = ""
+		for character in path {
+			if "\\*?[]{}~".contains(character) {
+				result.append("\\")
+			}
+			result.append(character)
+		}
+		return result
+	}
+
 	static func matches(_ pattern: String) -> [String] {
 		var result = glob_t()
 		defer { globfree(&result) }
