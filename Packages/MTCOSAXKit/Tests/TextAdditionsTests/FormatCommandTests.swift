@@ -118,6 +118,14 @@ struct DateFormattingTests {
 	}
 
 	/// Satimage gave -1 (1969-12-31 23:59:59 UTC) before 1900; MTC_OSAX works.
+	/// A literal "%z" (written `%%z`) used to be taken for a zone, ignoring the local one.
+	@Test func literalPercentZ() throws {
+		#expect(try newYork.strptime("2007-01-15T16:10:56 %z", format: "%FT%T %%z", gmt: false) == 1_168_895_456)
+		#expect(DateFormatting.hasDirective("z", in: "%FT%T%z"))
+		#expect(!DateFormatting.hasDirective("z", in: "%%z %%%%z"))
+		#expect(DateFormatting.hasDirective("z", in: "%%%z"))
+	}
+
 	@Test func strptimeBefore1900() throws {
 		#expect(try newYork.strptime("1850-06-01", format: "%Y-%m-%d", gmt: true) == -3_773_779_200)
 		#expect(try newYork.strftime(newYork.localDateTime(for: newYork.strptime("1850-06-01", format: "%Y-%m-%d", gmt: false)), format: "%F %T", gmt: false) == "1850-06-01 00:00:00")

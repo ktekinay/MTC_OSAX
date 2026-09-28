@@ -367,6 +367,18 @@ struct DateFormatting {
 		}
 	}
 
+	/// Whether `format` has the directive `%<character>` (`%%z` is a literal "%z", not a zone).
+	static func hasDirective(_ character: Character, in format: String) -> Bool {
+		var characters = format[...]
+		while let percent = characters.firstIndex(of: "%") {
+			let next = characters.index(after: percent)
+			guard next < characters.endIndex else { return false }
+			if characters[next] == character { return true }
+			characters = characters[characters.index(after: next)...]
+		}
+		return false
+	}
+
 	/// Replaces `%s` (seconds since 1970), `%z` (±hhmm) and `%+` (date(1) format) before calling `strftime`.
 	private static func expandComputedDirectives(_ format: String, time: time_t, offset: Int) -> String {
 		var result = ""
@@ -403,7 +415,7 @@ struct DateFormatting {
 			guard Foundation.strptime(string, format, &components) != nil else {
 				throw invalidOptionError
 			}
-			if format.contains("%z") {
+			if Self.hasDirective("z", in: format) {
 				return Self.utcSeconds(components) - time_t(components.tm_gmtoff)
 			}
 			return gmt ? Self.utcSeconds(components) : Self.time(fromLocal: components)
