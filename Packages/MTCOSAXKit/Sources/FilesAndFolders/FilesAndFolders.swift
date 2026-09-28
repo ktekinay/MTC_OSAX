@@ -25,7 +25,7 @@ public enum FilesAndFolders {
 			CommandDefinition("mkdtemp", code: "Quommkdt") { try makeTemporary($0, folder: true) },
 			CommandDefinition("create symlink", code: "QuomSymL", handler: createSymlink),
 			CommandDefinition("testsymlink", code: "QuomIsSy") { request in
-				isSymlink(try request.requiredDirectParameter(as: URL.self))
+				FileItem.isSymlink(try request.requiredDirectParameter(as: URL.self))
 			},
 			CommandDefinition("readlink", code: "Quomrdsy") { request in
 				let url = try request.requiredDirectParameter(as: URL.self)
@@ -53,30 +53,8 @@ public enum FilesAndFolders {
 
 	/// The text Satimage returns for an item: its POSIX path, with a trailing `/` for a folder.
 	static func result(_ url: URL, folder: Bool? = nil) -> String {
-		let isFolder = folder ?? isDirectory(url)
+		let isFolder = folder ?? FileItem.isDirectory(url)
 		return url.path + (isFolder && url.path != "/" ? "/" : "")
-	}
-
-	static func isDirectory(_ url: URL) -> Bool {
-		var directory: ObjCBool = false
-		return FileManager.default.fileExists(atPath: url.path, isDirectory: &directory) && directory.boolValue
-	}
-
-	static func exists(_ url: URL) -> Bool {
-		(try? url.checkResourceIsReachable()) == true || isSymlink(url)
-	}
-
-	/// Whether two paths are the same item (a case variant on a case-insensitive volume, or a hard link), by device
-	/// and inode, without following links.
-	static func isSameItem(_ a: URL, _ b: URL) -> Bool {
-		var first = stat()
-		var second = stat()
-		return lstat(a.path, &first) == 0 && lstat(b.path, &second) == 0 && first.st_dev == second.st_dev && first.st_ino == second.st_ino
-	}
-
-	static func isSymlink(_ url: URL) -> Bool {
-		var status = stat()
-		return lstat(url.path, &status) == 0 && (status.st_mode & S_IFMT) == S_IFLNK
 	}
 
 	/// The file for `directory`, or `directory/name` when `name` is given.
@@ -107,7 +85,7 @@ public enum FilesAndFolders {
 	static func fileNew(_ request: AppleEventRequest) throws -> (any AppleEventEncodable)? {
 		let url = try destination(request)
 		_ = try request.parameter("RECU", default: false)
-		guard !exists(url) else {
+		guard !FileItem.exists(url) else {
 			throw alreadyExists
 		}
 		do {
@@ -126,14 +104,14 @@ public enum FilesAndFolders {
 	static func makeDirectory(_ request: AppleEventRequest) throws -> (any AppleEventEncodable)? {
 		let url = try destination(request)
 		let recursively = try request.parameter("RECU", default: true)
-		guard !exists(url) else {
+		guard !FileItem.exists(url) else {
 			throw posixError(EEXIST)
 		}
 		if recursively {
 			do {
 				try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
 			} catch {
-				throw posixError(isDirectory(url.deletingLastPathComponent()) ? EACCES : ENOTDIR)
+				throw posixError(FileItem.isDirectory(url.deletingLastPathComponent()) ? EACCES : ENOTDIR)
 			}
 		} else if Darwin.mkdir(url.path, 0o777) != 0 {
 			throw posixError(errno)
@@ -149,15 +127,15 @@ public enum FilesAndFolders {
 		guard !name.contains("/"), !name.isEmpty else {
 			throw invalidInput
 		}
-		guard exists(url) else {
+		guard FileItem.exists(url) else {
 			throw notFound
 		}
 		let renamed = url.deletingLastPathComponent().appendingPathComponent(name)
-		if exists(renamed), isSameItem(url, renamed) {
+		if FileItem.exists(renamed), FileItem.isSameItem(url, renamed) {
 			guard Darwin.rename(url.path, renamed.path) == 0 else { throw invalidInput }
 			return result(renamed, folder: false)
 		}
-		guard !exists(renamed) else {
+		guard !FileItem.exists(renamed) else {
 			throw alreadyExists
 		}
 		do {
@@ -206,18 +184,18 @@ public enum FilesAndFolders {
 		}
 
 		return try sources.map { source -> String in
-			guard exists(source) else {
+			guard FileItem.exists(source) else {
 				throw notFound
 			}
 			let target = filePath ?? folder!.appendingPathComponent(name ?? source.lastPathComponent)
-			guard isDirectory(target.deletingLastPathComponent()) else {
+			guard FileItem.isDirectory(target.deletingLastPathComponent()) else {
 				throw notFound
 			}
-			let isFolder = isDirectory(source)
+			let isFolder = FileItem.isDirectory(source)
 			// The target is the source itself (the same path, or a case variant): removing the "existing" target
 			// would delete the source. Moving to another spelling renames it (SatimageOSAX gave -48); otherwise it's
 			// -48 without `replacing` and left as it is with it, as in SatimageOSAX.
-			if exists(target), isSameItem(source, target) {
+			if FileItem.exists(target), FileItem.isSameItem(source, target) {
 				if move, source.path != target.path {
 					guard Darwin.rename(source.path, target.path) == 0 else { throw posixError(errno) }
 					return result(target, folder: isFolder)
@@ -225,7 +203,7 @@ public enum FilesAndFolders {
 				guard replacing else { throw alreadyExists }
 				return result(source, folder: isFolder)
 			}
-			guard exists(target) else {
+			guard FileItem.exists(target) else {
 				do {
 					if move {
 						try FileManager.default.moveItem(at: source, to: target)
@@ -296,14 +274,14 @@ public enum FilesAndFolders {
 		case let .single(url): urls = [url]
 		case let .list(list): urls = list
 		}
-		guard urls.allSatisfy(exists) else {
+		guard urls.allSatisfy(FileItem.exists) else {
 			throw notFound
 		}
 		if filesOnly {
 			urls = urls.flatMap { url -> [URL] in
-				guard isDirectory(url) else { return [url] }
+				guard FileItem.isDirectory(url) else { return [url] }
 				let contents = (try? FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil)) ?? []
-				return contents.filter { !isDirectory($0) }
+				return contents.filter { !FileItem.isDirectory($0) }
 			}
 			urls = urls.filter { url in
 				let modified = (try? url.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate) ?? .distantPast
@@ -417,8 +395,8 @@ public enum FilesAndFolders {
 		let replacing = try request.parameter("Repl", default: true)
 		let link = folder.appendingPathComponent(name)
 
-		if exists(link) {
-			guard isSymlink(link), replacing else {
+		if FileItem.exists(link) {
+			guard FileItem.isSymlink(link), replacing else {
 				throw alreadyExists
 			}
 			try? FileManager.default.removeItem(at: link)
@@ -443,10 +421,8 @@ enum Paths {
 		}
 		let base = try request.parameter("from", as: URL.self)
 		func url(_ item: NSAppleEventDescriptor) throws -> URL {
-			if let base, let text = try? String(appleEventDescriptor: item),
-			   !text.hasPrefix("/"), !text.hasPrefix("~"), !text.hasPrefix("file://"), !text.contains(":")
-			{
-				return base.appendingPathComponent(text)
+			if let base, let text = try? String(appleEventDescriptor: item), URL.isRelativeScriptPath(text) {
+				return try URL(scriptPath: text, relativeTo: base)
 			}
 			return try URL(appleEventDescriptor: item)
 		}

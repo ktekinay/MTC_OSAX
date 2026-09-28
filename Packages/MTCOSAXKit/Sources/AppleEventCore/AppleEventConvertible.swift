@@ -200,9 +200,14 @@ extension URL: AppleEventConvertible {
 	}
 
 	/// Interprets a path string given by a script: a POSIX path (`/…` or `~…`), a `file://` URL (on this Mac:
-	/// no host, or `localhost`), or an HFS path (`Volume:folder:file`). Anything else, including other URLs
-	/// (`http://…`), is -1700.
-	public init(scriptPath path: String) throws {
+	/// no host, or `localhost`), or an HFS path (`Volume:folder:file`). With `base` (a command's `from`), a relative
+	/// path (`isRelativeScriptPath`) is in that folder; without, it's -1700, as is any other URL (`http://…`).
+	/// Every command that takes a path as text goes through here.
+	public init(scriptPath path: String, relativeTo base: URL? = nil) throws {
+		if let base, URL.isRelativeScriptPath(path) {
+			self = base.appendingPathComponent(path)
+			return
+		}
 		if path.lowercased().hasPrefix("file://") {
 			guard let url = URL(string: path), url.isFileURL, !url.path.isEmpty,
 			      url.host.map({ $0.isEmpty || $0.lowercased() == "localhost" }) ?? true
@@ -219,6 +224,12 @@ extension URL: AppleEventConvertible {
 		} else {
 			throw OSAXError.coercionFailed
 		}
+	}
+
+	/// A path with nothing to say where it starts: no `/` or `~` at the front, and no colon (which HFS paths and URLs
+	/// have).
+	public static func isRelativeScriptPath(_ path: String) -> Bool {
+		!path.hasPrefix("/") && !path.hasPrefix("~") && !path.contains(":")
 	}
 
 	/// Converts `"Volume:folder:file"` to `"/folder/file"` (startup volume) or `"/Volumes/Volume/folder/file"`. As
