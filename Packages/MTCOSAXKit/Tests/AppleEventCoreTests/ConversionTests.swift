@@ -114,3 +114,12 @@ struct EncodingTests {
 		#expect(DescriptorSnapshot(.missingValue).summary == "type 'msng'")
 	}
 }
+
+struct CLengthTests {
+	/// Lengths of 2 GB or more used to trap in Int32(_:) before reaching libxml2 or tomlc17.
+	@Test func tooLargeIsAnError() throws {
+		#expect(try Int32(length: 12) == 12)
+		#expect(try Int32(length: Int(Int32.max)) == Int32.max)
+		#expect((#expect(throws: OSAXError.self) { try Int32(length: Int(Int32.max) + 1) })?.number == -50)
+	}
+}

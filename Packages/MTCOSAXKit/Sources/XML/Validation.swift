@@ -81,7 +81,7 @@ extension XMLCommands {
 			defer { source.release() }
 			let parser: xmlSchemaParserCtxtPtr? = switch source {
 			case let .url(url): xmlSchemaNewParserCtxt(url)
-			case let .text(text): xmlSchemaNewMemParserCtxt(text, Int32(strlen(text)))
+			case let .text(text): xmlSchemaNewMemParserCtxt(text, try Int32(length: strlen(text)))
 			case let .document(doc): xmlSchemaNewDocParserCtxt(doc)
 			}
 			guard let parser else { throw XML.invalid }
@@ -111,7 +111,7 @@ extension XMLCommands {
 		defer { source.release() }
 		let parser: xmlRelaxNGParserCtxtPtr? = switch source {
 		case let .url(url): xmlRelaxNGNewParserCtxt(url)
-		case let .text(text): xmlRelaxNGNewMemParserCtxt(text, Int32(strlen(text)))
+		case let .text(text): xmlRelaxNGNewMemParserCtxt(text, try Int32(length: strlen(text)))
 		case let .document(doc): xmlRelaxNGNewDocParserCtxt(doc)
 		}
 		guard let parser else { throw XML.invalid }
@@ -227,7 +227,8 @@ enum Validation {
 		let (dtd, issues) = try XMLIssues.collect { () -> xmlDtdPtr? in
 			if let text = try Validation.text(descriptor), text.contains("<") {
 				let data = Data(text.utf8)
-				let buffer = data.withUnsafeBytes { xmlParserInputBufferCreateMem($0.baseAddress!.assumingMemoryBound(to: CChar.self), Int32($0.count), XML_CHAR_ENCODING_UTF8) }
+				let length = try Int32(length: data.count)
+				let buffer = data.withUnsafeBytes { xmlParserInputBufferCreateMem($0.baseAddress!.assumingMemoryBound(to: CChar.self), length, XML_CHAR_ENCODING_UTF8) }
 				return xmlIOParseDTD(nil, buffer, XML_CHAR_ENCODING_UTF8)
 			}
 			let url = try Validation.text(descriptor).map(Validation.url) ?? URL(appleEventDescriptor: descriptor).absoluteString

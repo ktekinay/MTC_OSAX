@@ -386,9 +386,9 @@ extension XMLCommands {
 		let text = try request.requiredDirectParameter(as: String.self)
 		let (document, node) = try resolve(request.requiredParameter("at  ", as: AnyDescriptor.self).descriptor)
 		modified(document)
-		withXMLString(text) { value in
+		try withXMLString(text) { value in
 			if node.pointee.type == XML_TEXT_NODE {
-				xmlTextConcat(node, value, Int32(strlen(UnsafeRawPointer(value).assumingMemoryBound(to: CChar.self))))
+				xmlTextConcat(node, value, try Int32(length: strlen(UnsafeRawPointer(value).assumingMemoryBound(to: CChar.self))))
 			} else {
 				_ = xmlAddChild(node, xmlNewDocText(document.doc, value))
 			}
@@ -563,7 +563,7 @@ extension XMLCommands {
 			(.code("pnam"), NSAppleEventDescriptor(string: found.name)),
 			(.code("stnd"), NSAppleEventDescriptor(boolean: true)),
 			(.code("hdtd"), NSAppleEventDescriptor(boolean: isDoctype)),
-			(.code("cpar"), NSAppleEventDescriptor(int32: Int32(found.line))),
+			(.code("cpar"), NSAppleEventDescriptor(int32: Int32(clamping: found.line))),
 		]
 		let start = String(decoding: data.prefix(200), as: UTF8.self)
 		if let match = start.firstMatch(of: /^<\?xml[^>]*encoding=["']([^"']+)["']/) {

@@ -53,13 +53,14 @@ enum Parsing {
 			throw OSAXError(-1)
 		}
 		let input = options.extendedCharacters ? ExtendedCharacters.encode(data) : data
+		let length = try Int32(length: input.count)
 		let (parsed, issues) = XMLIssues.collect { () -> xmlDocPtr? in
 			input.withUnsafeBytes { bytes in
 				let base = bytes.baseAddress!.assumingMemoryBound(to: CChar.self)
 				if options.html {
-					return htmlReadMemory(base, Int32(bytes.count), url, options.encoding, options.htmlOptions)
+					return htmlReadMemory(base, length, url, options.encoding, options.htmlOptions)
 				}
-				return xmlReadMemory(base, Int32(bytes.count), url, options.encoding, options.libxmlOptions)
+				return xmlReadMemory(base, length, url, options.encoding, options.libxmlOptions)
 			}
 		}
 		guard let doc = parsed else {
@@ -89,8 +90,9 @@ enum Parsing {
 			guard failure == nil, node.pointee.type == XML_ELEMENT_NODE, name(node).lowercased() == "script" else { return }
 			let content = text(node)
 			let wrapped = Data("<script>\(content)</script>".utf8)
+			// A script can't be longer than the document it came from, which was under 2 GB.
 			let (parsed, issues) = XMLIssues.collect { () -> xmlDocPtr? in
-				wrapped.withUnsafeBytes { xmlReadMemory($0.baseAddress!.assumingMemoryBound(to: CChar.self), Int32($0.count), nil, "UTF-8", 0) }
+				wrapped.withUnsafeBytes { xmlReadMemory($0.baseAddress!.assumingMemoryBound(to: CChar.self), Int32(clamping: $0.count), nil, "UTF-8", 0) }
 			}
 			if let parsed { xmlFreeDoc(parsed) }
 			if let issue = issues.first(where: { $0.level >= 2 }) {
@@ -130,10 +132,11 @@ enum Parsing {
 	/// the nodes aren't attached. Error: libxml2's error number.
 	static func fragment(_ text: String, in parent: xmlNodePtr, keepBlanks: Bool) throws -> [xmlNodePtr] {
 		let data = Data(text.utf8)
+		let length = try Int32(length: data.count)
 		var list: xmlNodePtr?
 		let (status, issues) = XMLIssues.collect { () -> xmlParserErrors in
 			data.withUnsafeBytes { bytes in
-				xmlParseInNodeContext(parent, bytes.baseAddress!.assumingMemoryBound(to: CChar.self), Int32(bytes.count),
+				xmlParseInNodeContext(parent, bytes.baseAddress!.assumingMemoryBound(to: CChar.self), length,
 				                      Int32(keepBlanks ? 0 : Int(XML_PARSE_NOBLANKS.rawValue)), &list)
 			}
 		}

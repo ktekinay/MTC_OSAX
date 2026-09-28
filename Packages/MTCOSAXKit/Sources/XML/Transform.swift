@@ -147,9 +147,10 @@ enum Stylesheets {
 				data = try Network.fetch(url, post: false, query: nil, headers: nil)
 			}
 		}
+		let length = try Int32(length: data.count)
 		let (doc, issues) = XMLIssues.collect { () -> xmlDocPtr? in
 			data.withUnsafeBytes { bytes in
-				xmlReadMemory(bytes.baseAddress!.assumingMemoryBound(to: CChar.self), Int32(bytes.count), url?.absoluteString, nil, parseOptions)
+				xmlReadMemory(bytes.baseAddress!.assumingMemoryBound(to: CChar.self), length, url?.absoluteString, nil, parseOptions)
 			}
 		}
 		guard let doc else { throw OSAXError(issues.first?.code ?? 4) }

@@ -140,7 +140,8 @@ enum TOML {
 	/// `timeZone` (a date alone is midnight); local times are text. Comments are ignored. -1 with tomlc17's
 	/// message for text that isn't TOML.
 	static func read(_ text: String, timeZone: TimeZone = .current) throws -> Any {
-		let result = text.withCString { toml_parse($0, Int32(text.utf8.count)) }
+		let length = try Int32(length: text.utf8.count)
+		let result = text.withCString { toml_parse($0, length) }
 		defer { toml_free(result) }
 		guard result.ok else {
 			let message = withUnsafeBytes(of: result.errmsg) { String(decoding: $0.prefix { $0 != 0 }, as: UTF8.self) }

@@ -34,3 +34,13 @@ public struct OSAXError: Error, Equatable, CustomStringConvertible {
 		OSAXError(-2700, message)
 	}
 }
+
+extension Int32 {
+	/// A length for a C function that takes an `int`: error -50 for 2 GB or more, which `Int32(_:)` would trap on.
+	public init(length: Int) throws {
+		guard let value = Int32(exactly: length) else {
+			throw OSAXError(-50, "The text or data is too large (2 GB or more).")
+		}
+		self = value
+	}
+}
