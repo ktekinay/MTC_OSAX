@@ -37,13 +37,16 @@ final class OnigmoEngine: RegexEngine {
 		var compiled: OnigRegex?
 		var errorInfo = OnigErrorInfo()
 		let units = Array(pattern.utf16)
-		let status = units.withUnsafeBytes { bytes in
+		// The message is made inside the closure: the error info can point into the pattern's buffer.
+		let (status, message) = units.withUnsafeBytes { bytes in
 			let start = bytes.baseAddress!.assumingMemoryBound(to: OnigUChar.self)
-			return onig_new(&compiled, start, start + bytes.count, flags.onigmoCompileOptions, mtc_onig_encoding_satimage_utf16le(), syntaxCopy, &errorInfo)
+			let status = onig_new(&compiled, start, start + bytes.count, flags.onigmoCompileOptions, mtc_onig_encoding_satimage_utf16le(),
+			                      syntaxCopy, &errorInfo)
+			return (status, status == ONIG_NORMAL ? nil : Self.message(for: Int(status), info: &errorInfo))
 		}
 		guard status == ONIG_NORMAL, let compiled else {
 			syntaxCopy.deallocate()
-			throw RegexError(code: Int(status), message: Self.message(for: Int(status), info: &errorInfo))
+			throw RegexError(code: Int(status), message: message ?? "")
 		}
 		regex = compiled
 		groupCount = Int(onig_number_of_captures(compiled))

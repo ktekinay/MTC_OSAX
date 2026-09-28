@@ -99,6 +99,12 @@ struct RegexTests {
 		}
 	}
 
+	/// Onigmo quotes part of the pattern from its buffer, which used to be read after the buffer's scope had ended.
+	@Test func messageQuotingThePattern() {
+		let error = #expect(throws: RegexError.self) { try CompiledRegex(#"(?<x>a)\k<nope>"#) }
+		#expect(error?.message.contains("nope") == true)
+	}
+
 	@Test func invalidPatternMessage() {
 		do {
 			_ = try CompiledRegex("a{2,1}")
