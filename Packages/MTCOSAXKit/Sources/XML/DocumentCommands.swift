@@ -52,9 +52,11 @@ extension XMLCommands {
 				let clone = store.add(pool: try request.parameter("pool", as: String.self)) { XMLDocument(number: $0, pool: $1, doc: copy) }
 				return references.reference(clone)
 			},
+			// Includes can read local files (relative to the document, or anywhere with a file: URL) but not the
+			// network: a document from elsewhere could otherwise make the Mac fetch any URL.
 			CommandDefinition("XMLXInclude", code: "XML Xinc") { request in
 				let (document, _) = try direct(request)
-				let (count, issues) = XMLIssues.collect { xmlXIncludeProcess(document.doc) }
+				let (count, issues) = XMLIssues.collect { xmlXIncludeProcessFlags(document.doc, Int32(XML_PARSE_NONET.rawValue)) }
 				guard count >= 0 else { throw OSAXError(issues.first?.code ?? -1) }
 				if count > 0 { modified(document) }
 				return Int(count)

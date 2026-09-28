@@ -380,6 +380,24 @@ struct XMLDocumentTests {
 		#expect(xml.send("XML c14n", ["----": d, "Nset": try xml.root(other)]).error?.number == -50)
 	}
 
+	/// XInclude reads local files but not the network.
+	@Test func xinclude() throws {
+		let folder = FileManager.default.temporaryDirectory.appendingPathComponent("xinclude-\(UUID().uuidString)")
+		try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+		defer { try? FileManager.default.removeItem(at: folder) }
+		try Data("<part/>".utf8).write(to: folder.appendingPathComponent("part.xml"))
+		let xml = XMLs()
+		func including(_ href: String) throws -> NSAppleEventDescriptor {
+			try xml.open("<doc xmlns:xi='http://www.w3.org/2001/XInclude'><xi:include href='\(href)'/></doc>")
+		}
+		let local = try including(folder.appendingPathComponent("part.xml").absoluteString)
+		#expect(xml.send("XML Xinc", ["----": local]).result?.int32Value == 1)
+		#expect(xml.send("XML disx", ["----": try xml.root(local), "smar": false]).result?.stringValue?.contains("<part") == true)
+		let remote = try including("http://127.0.0.1:9/part.xml")
+		#expect(xml.send("XML Xinc", ["----": remote]).error != nil)
+		#expect(xml.send("XML lErr").result?.stringValue?.contains("network") == true)
+	}
+
 	@Test func documentsPoolsAndIdentifiers() throws {
 		let xml = XMLs()
 		let d = try #require(xml.send("XML open", ["from": "<a/>", "pool": "p"]).result)
