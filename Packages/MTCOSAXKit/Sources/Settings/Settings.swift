@@ -15,9 +15,10 @@ public enum Settings {
 		IdleMonitor.timeout(in: defaults, key: Setting.idleTimeout.key, default: .seconds(Setting.defaultIdleTimeout))
 	}
 
-	/// `DollarReferences`: whether `$1`-style references are on when a command doesn't say. Off by default.
+	/// `DollarReferences`: whether `$1`-style references are on when a command doesn't say. Off by default, and for
+	/// anything `mtc_get` wouldn't report as a setting (the same rule for both).
 	public static func dollarReferences(in defaults: UserDefaults) -> Bool {
-		defaults.bool(forKey: Setting.dollarReferences.key)
+		Setting.dollarReferences.stored(defaults)?.booleanValue ?? false
 	}
 
 	/// `RegexSyntax`: the regex syntax when a command doesn't say (`PCRE`, `RUBY`, …); `RUBY` if it's missing or

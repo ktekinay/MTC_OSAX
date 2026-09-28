@@ -133,6 +133,12 @@ struct SettingsTests {
 			#expect(settings.get(idleTimeout).result?.int32Value == 3600, "\(value)")
 			#expect(Settings.idleTimeout(in: settings.defaults) == .seconds(3600), "\(value)")
 		}
+		// The text commands and mtc_get read DollarReferences by one rule.
+		for (value, on) in [("Y", false), ("TRUE", true), ("maybe", false), ("0", false)] as [(Any, Bool)] {
+			settings.defaults.set(value, forKey: "DollarReferences")
+			#expect(Settings.dollarReferences(in: settings.defaults) == on, "\(value)")
+			#expect(settings.get(dollarReferences).result?.booleanValue == on, "\(value)")
+		}
 		settings.defaults.set("YES", forKey: "DollarReferences")
 		#expect(settings.get(dollarReferences).result?.booleanValue == true)
 		settings.defaults.set("bogus", forKey: "RegexSyntax")
