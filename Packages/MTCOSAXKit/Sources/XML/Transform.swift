@@ -36,7 +36,11 @@ extension XMLCommands {
 
 		var parameters: [(String, String)] = try XPath.variables(request.descriptor(for: "varx")).map { ($0.name, try XMLCommands.text($0.value)) }
 		parameters += try XPath.variables(request.descriptor(for: "vaxs")).map { ($0.name, Stylesheets.quoted(try XMLCommands.text($0.value))) }
-		let (applied, _) = XMLIssues.collect { Stylesheets.apply(style.pointer, to: doc, parameters: parameters, allowingWrites: !style.chosenByDocument) }
+		// libxslt removes the blank text that `xsl:strip-space` names from the document it's given, which made the
+		// script's references to those nodes invalid: such a stylesheet transforms a copy.
+		let source = Stylesheets.stripsSpace(style.pointer) ? Stylesheets.copy(doc) : doc
+		defer { if source != doc { xmlFreeDoc(source) } }
+		let (applied, _) = XMLIssues.collect { Stylesheets.apply(style.pointer, to: source, parameters: parameters, allowingWrites: !style.chosenByDocument) }
 		guard !applied.refused else {
 			if let output = applied.output { xmlFreeDoc(output) }
 			throw OSAXError(1535, "A stylesheet chosen by the document’s xml-stylesheet instruction can’t write files.")
@@ -126,7 +130,23 @@ enum Stylesheets {
 
 	private static let registration: Void = exsltRegisterAll()
 
-	/// A copy of a document to compile (libxslt keeps the document it compiles).
+	/// Whether a stylesheet, or one it imports, strips blank text (`xsl:strip-space`).
+	static func stripsSpace(_ style: xsltStylesheetPtr) -> Bool {
+		if style.pointee.stripSpaces != nil || style.pointee.stripAll != 0 {
+			return true
+		}
+		var imported = style.pointee.imports
+		while let current = imported {
+			if stripsSpace(current) {
+				return true
+			}
+			imported = current.pointee.next
+		}
+		return false
+	}
+
+	/// A copy of a document, without MTC_OSAX's node numbers (to compile, since libxslt keeps the document it
+	/// compiles, or to transform).
 	static func copy(_ doc: xmlDocPtr) -> xmlDocPtr {
 		let copy = xmlCopyDoc(doc, 1)!
 		copy.pointee._private = nil

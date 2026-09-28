@@ -281,6 +281,22 @@ struct XSLTTests {
 		#expect(xml.send("XML xslt", ["----": try xml.open("<a/>"), "with": style, "rtyp": type("utxt")]).result?.stringValue == "42")
 	}
 
+	/// xsl:strip-space used to remove the blank text from the source document itself, so references to it became
+	/// invalid.
+	@Test func stripSpaceLeavesTheSourceAlone() throws {
+		let xml = XMLs()
+		let d = try #require(xml.send("XML open", ["from": "<a>\n <b/>\n</a>", "kbln": true]).result)
+		let blank = try #require(xml.send("XML chld", ["----": try xml.root(d), "indx": 1]).result)
+		let strip = """
+		<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"><xsl:strip-space elements="*"/>\
+		<xsl:template match="@*|node()"><xsl:copy><xsl:apply-templates select="@*|node()"/></xsl:copy></xsl:template></xsl:stylesheet>
+		"""
+		let output = try #require(xml.send("XML xslt", ["----": d, "with": strip]).result)
+		#expect(xml.send("XML disx", ["----": try xml.root(output), "smar": false]).result?.stringValue == "<a><b/></a>")
+		#expect(xml.send("XML Exis", ["----": blank]).result?.booleanValue == true)
+		#expect(xml.send("XML cunt", ["----": try xml.root(d), "ANot": true]).result?.int32Value == 3)
+	}
+
 	@Test func parameters() throws {
 		let xml = XMLs()
 		let d = try xml.open(library)
