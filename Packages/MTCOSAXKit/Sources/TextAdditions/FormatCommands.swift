@@ -354,9 +354,16 @@ struct DateFormatting {
 				localtime_r(&time, &broken)
 			}
 			let prepared = Self.expandComputedDirectives(format, time: time, offset: gmt ? 0 : Int(broken.tm_gmtoff))
-			var buffer = [CChar](repeating: 0, count: 256 + prepared.utf8.count * 8)
-			let count = Foundation.strftime(&buffer, buffer.count, prepared, &broken)
-			return String(decoding: buffer.prefix(count).map { UInt8(bitPattern: $0) }, as: UTF8.self)
+			// 0 means the buffer was too small (a hundred `%c`s) or the result is empty: tries larger ones first.
+			var size = 256 + prepared.utf8.count * 8
+			while true {
+				var buffer = [CChar](repeating: 0, count: size)
+				let count = Foundation.strftime(&buffer, buffer.count, prepared, &broken)
+				if count > 0 || size >= 1 << 24 {
+					return String(decoding: buffer.prefix(count).map { UInt8(bitPattern: $0) }, as: UTF8.self)
+				}
+				size *= 4
+			}
 		}
 	}
 

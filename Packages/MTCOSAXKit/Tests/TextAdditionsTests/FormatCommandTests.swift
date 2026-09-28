@@ -87,6 +87,13 @@ struct DateFormattingTests {
 		#expect(try newYork.strftime(date, format: "%FT%T %z %Z", gmt: true) == "2007-01-15T21:10:56 +0000 UTC")
 	}
 
+	/// A result longer than the first buffer used to be "".
+	@Test func longResults() throws {
+		let one = try newYork.strftime(date, format: "%c", gmt: false)
+		#expect(!one.isEmpty)
+		#expect(try newYork.strftime(date, format: String(repeating: "%c", count: 100), gmt: false) == String(repeating: one, count: 100))
+	}
+
 	@Test func emptyFormat() throws {
 		#expect(try newYork.strftime(date, format: "", gmt: false) == "")
 	}
