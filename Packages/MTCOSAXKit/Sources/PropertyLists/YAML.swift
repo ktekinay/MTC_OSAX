@@ -263,6 +263,13 @@ enum YAML {
 		let timeZone: TimeZone
 		/// Nodes being read, to catch an alias inside itself.
 		var active: Set<Int> = []
+		/// Nodes already read, with how many values each is when expanded: an alias reuses what its node gave, and
+		/// counts as that many values towards `limit`.
+		var read: [Int: (object: Any, count: Int)] = [:]
+		var total = 0
+		/// libyaml resolves every alias to the same node, so nine levels of `[*a, *a, …]` would expand to hundreds
+		/// of millions of values: more than this is -50.
+		static let limit = 1_000_000
 
 		init(document: yaml_document_t, timeZone: TimeZone) {
 			self.document = document
@@ -275,10 +282,29 @@ enum YAML {
 
 		mutating func object(_ node: UnsafeMutablePointer<yaml_node_t>) throws -> Any {
 			let identity = Int(bitPattern: node)
+			if let (object, count) = read[identity] {
+				try add(count)
+				return object
+			}
 			guard active.insert(identity).inserted else {
 				throw OSAXError(-50, "The YAML has an alias inside what it refers to, which can't be a property list.")
 			}
 			defer { active.remove(identity) }
+			let before = total
+			try add(1)
+			let object = try newObject(node)
+			read[identity] = (object, total - before)
+			return object
+		}
+
+		mutating func add(_ count: Int) throws {
+			total += count
+			guard total <= Self.limit else {
+				throw OSAXError(-50, "The YAML’s aliases expand to more than a million values.")
+			}
+		}
+
+		private mutating func newObject(_ node: UnsafeMutablePointer<yaml_node_t>) throws -> Any {
 			let tag = node.pointee.tag.map { String(cString: UnsafeRawPointer($0).assumingMemoryBound(to: CChar.self)) } ?? ""
 			switch node.pointee.type {
 			case YAML_SCALAR_NODE:

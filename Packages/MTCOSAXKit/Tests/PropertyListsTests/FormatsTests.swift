@@ -128,6 +128,23 @@ struct TOMLTests {
 }
 
 struct YAMLTests {
+	/// Aliases used to be expanded again at every use, so a few lines could make hundreds of millions of values.
+	@Test func aliasExpansion() throws {
+		var lines = ["a0: &a0 [x, x, x, x, x, x, x, x, x]"]
+		for level in 1 ... 9 {
+			lines.append("a\(level): &a\(level) [" + Array(repeating: "*a\(level - 1)", count: 9).joined(separator: ", ") + "]")
+		}
+		let start = Date()
+		let error = #expect(throws: OSAXError.self) { try YAML.read(lines.joined(separator: "\n")) }
+		#expect(error?.number == -50)
+		#expect(Date().timeIntervalSince(start) < 5)
+		// A few levels are fine, and each use is the whole value.
+		let small = try #require(try YAML.read(lines.prefix(3).joined(separator: "\n")) as? NSDictionary)
+		#expect((small["a2"] as? NSArray)?.count == 9)
+		#expect(((small["a2"] as? NSArray)?[8] as? NSArray)?.count == 9)
+		#expect(small["a1"] as? NSArray == (small["a2"] as? NSArray)?[0] as? NSArray)
+	}
+
 	/// Empty text used to hand libyaml a pointer to a temporary array.
 	@Test func emptyTextHasNoDocument() {
 		for text in ["", "# only a comment\n"] {

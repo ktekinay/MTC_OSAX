@@ -185,6 +185,7 @@ A script is trusted: it can already do anything you can. The files it opens (XML
 - `XMLXInclude` includes local files, but nothing from the network.
 - What libxml2 and libxslt load by URL themselves (external DTDs and entities, `xsl:import`, `document()`, schemas) comes from local files or over http and https (with URLSession, so https works and is checked); ftp isn't supported.
 - libxml2's limits hold, as in SatimageOSAX: a text node over 10 MB is an error, and so are entities that expand without end ("billion laughs").
+- YAML whose aliases would expand to more than a million values is error -50.
 - `XMLOpen … with substitute entities`, `with validate` and `with load external DTD` let the document load what its DTD names: an entity such as `<!ENTITY x SYSTEM "file:///etc/passwd">` becomes text the script can read, and a DTD at an http URL is fetched. Use them only with documents you trust.
 
 ## Diagnostic commands
