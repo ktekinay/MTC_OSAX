@@ -1,6 +1,8 @@
 #!/bin/zsh
 # Runs jobs queued by iterm-run.sh inside this iTerm window, so Apple events
 # are sent with iTerm's Automation permission. Only one instance runs at a time.
+# Whatever is queued runs, so any program running as you can use this window's
+# permission while it's open (see iterm-run.sh); close it when you're done.
 
 QUEUE="$HOME/Library/Caches/mtc-osax-runner"
 PIDFILE="$QUEUE/runner.pid"
@@ -32,6 +34,10 @@ while true; do
 		# The status file is written last; its presence means the job is done.
 		echo $code > "$QUEUE/$id.status.tmp" && mv "$QUEUE/$id.status.tmp" "$QUEUE/$id.status"
 		echo "[$(date +%H:%M:%S)] $id: exit $code"
+		# Nobody is waiting for a job that timed out while it ran.
+		if [[ -f "$QUEUE/$id.abandoned" ]]; then
+			rm -f "$QUEUE/$id.out" "$QUEUE/$id.status" "$QUEUE/$id.abandoned"
+		fi
 	done
 	sleep 0.3
 done
