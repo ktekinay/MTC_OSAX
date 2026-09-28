@@ -1,0 +1,89 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/filerename-case-only",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/filerename-case-only/",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/filerename-case-only/a.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "keep",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "RenF",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "A.txt",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/filerename-case-only/a.txt",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/filerename-case-only/A.txt",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "filerename-case-only",
+  "recordedAt" : "2026-09-28T21:49:38Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "mkdir (POSIX file \"$TMP/filerename-case-only\")\nwritetext \"keep\" to (POSIX file \"$TMP/filerename-case-only/a.txt\")\nfilerename (POSIX file \"$TMP/filerename-case-only/a.txt\") to \"A.txt\"",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

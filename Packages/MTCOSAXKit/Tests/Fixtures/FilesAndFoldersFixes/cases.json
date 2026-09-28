@@ -35,5 +35,9 @@
  {
   "name": "filemove-case-only",
   "script": "mkdir (POSIX file \"$TMP/filemove-case-only\")\nwritetext \"keep\" to (POSIX file \"$TMP/filemove-case-only/a.txt\")\nfilemove (POSIX file \"$TMP/filemove-case-only/a.txt\") to (POSIX file \"$TMP/filemove-case-only\") name \"A.txt\""
+ },
+ {
+  "name": "filerename-case-only",
+  "script": "mkdir (POSIX file \"$TMP/filerename-case-only\")\nwritetext \"keep\" to (POSIX file \"$TMP/filerename-case-only/a.txt\")\nfilerename (POSIX file \"$TMP/filerename-case-only/a.txt\") to \"A.txt\""
  }
 ]

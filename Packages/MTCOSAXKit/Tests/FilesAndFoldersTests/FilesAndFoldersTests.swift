@@ -120,6 +120,16 @@ struct CreateTests {
 		#expect(send(rename, ["----": sandbox.path("nope"), "to  ": "z"]).error == OSAXError(-43))
 	}
 
+	/// The same item with another case used to count as an existing item (-48).
+	@Test func renameCaseOnly() throws {
+		let sandbox = try Sandbox()
+		let file = try sandbox.file("a.txt")
+		#expect(send(rename, ["----": file, "to  ": "A.txt"]).result?.stringValue == sandbox.path("A.txt"))
+		#expect(try FileManager.default.contentsOfDirectory(atPath: sandbox.url.path) == ["A.txt"])
+		_ = try sandbox.file("b.txt")
+		#expect(send(rename, ["----": URL(fileURLWithPath: sandbox.path("b.txt")), "to  ": "a.txt"]).error == OSAXError(-48))
+	}
+
 	@Test func renameFolderHasNoTrailingSlash() throws {
 		let sandbox = try Sandbox()
 		try FileManager.default.createDirectory(at: sandbox.url.appendingPathComponent("d"), withIntermediateDirectories: false)

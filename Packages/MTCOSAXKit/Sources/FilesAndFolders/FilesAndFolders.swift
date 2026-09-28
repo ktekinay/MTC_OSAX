@@ -129,7 +129,8 @@ public enum FilesAndFolders {
 		return result(url, folder: true)
 	}
 
-	/// Renames in place. The new name can't contain `/` (-1); an existing item with that name: -48.
+	/// Renames in place. The new name can't contain `/` (-1); an existing item with that name: -48. A new name that
+	/// differs only in case (the same item on a case-insensitive volume) renames it (SatimageOSAX gave -48).
 	static func rename(_ request: AppleEventRequest) throws -> (any AppleEventEncodable)? {
 		let url = try request.requiredDirectParameter(as: URL.self)
 		let name = try request.requiredParameter("to  ", as: String.self)
@@ -140,6 +141,10 @@ public enum FilesAndFolders {
 			throw notFound
 		}
 		let renamed = url.deletingLastPathComponent().appendingPathComponent(name)
+		if exists(renamed), isSameItem(url, renamed) {
+			guard Darwin.rename(url.path, renamed.path) == 0 else { throw invalidInput }
+			return result(renamed, folder: false)
+		}
 		guard !exists(renamed) else {
 			throw alreadyExists
 		}
