@@ -1,0 +1,125 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "text" : "<a><b n='1'>one</b><b n='2'>two</b><c/></a>",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "07000000585f01000000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "root",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "07000000585f01000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "07000000585f010080bd910200600000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "geta",
+        "fields" : [
+          {
+            "key" : "pnam",
+            "value" : {
+              "text" : "n",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "XMLR",
+                  "value" : {
+                    "hex" : "07000000585f010080bd910200600000",
+                    "type" : "XMLR"
+                  }
+                },
+                {
+                  "key" : "xpat",
+                  "value" : {
+                    "text" : "b",
+                    "type" : "utxt"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "1",
+              "type" : "utf8"
+            },
+            {
+              "text" : "2",
+              "type" : "utf8"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "07000000585f01000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "xpathref-attributes",
+  "recordedAt" : "2026-09-29T13:03:35Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set d to XMLOpen from string \"<a><b n='1'>one</b><b n='2'>two</b><c/></a>\"\nset r to XMLRoot d\nset x to XMLGetAttribute {XMLRef:r, xpath pattern:\"b\"} name \"n\"\nXMLClose d\nx",
+  "timeZone" : "America/New_York"
+}

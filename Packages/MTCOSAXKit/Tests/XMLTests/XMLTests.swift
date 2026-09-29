@@ -323,6 +323,25 @@ struct XMLChangeTests {
 		#expect(xml.send("XML disx", ["----": a, "smar": false]).result?.stringValue == "<a><![CDATA[c+]]><!--m+--><?p d+?></a>")
 	}
 
+	/// An XPathRef stands for the nodes it selects, wherever a list of XMLRefs can go; one that selects a node and
+	/// its descendants is removed as safely as such a list; namespace nodes are left out.
+	@Test func xpathReferences() throws {
+		let xml = XMLs()
+		let d = try xml.open("<r xmlns:n='urn:n'><item><x/></item><item/></r>")
+		let r = try xml.root(d)
+		func xpathRef(_ pattern: String) -> NSAppleEventDescriptor {
+			RecordFields([(.code("XMLR"), r), (.code("xpat"), NSAppleEventDescriptor(string: pattern))]).appleEventDescriptor
+		}
+		#expect(xml.send("XML gtag", ["----": xpathRef("//item/* | //item")]).result?.numberOfItems == 3)
+		#expect(xml.send("XML gtag", ["----": xpathRef("namespace::*")]).result?.numberOfItems == 0)
+		#expect(xml.send("XML remo", ["----": xpathRef("//item | //item/*")]).error == nil)
+		#expect(xml.send("XML disx", ["----": r, "smar": false]).result?.stringValue == "<r xmlns:n=\"urn:n\"/>")
+		// The XPathRef's start must exist.
+		xml.send("XML clos", ["----": d])
+		#expect(xml.send("XML gtag", ["----": xpathRef("*")]).error == OSAXError(-1728))
+		#expect(xml.send("XML Exis", ["----": xpathRef("*")]).result?.booleanValue == false)
+	}
+
 	@Test func setXMLOfTextNode() throws {
 		let xml = XMLs()
 		let a = try xml.root(xml.open("<a>one<b/>two</a>"))

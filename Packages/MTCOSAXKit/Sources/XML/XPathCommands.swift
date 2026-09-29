@@ -85,16 +85,8 @@ extension XMLCommands {
 	/// an XMLRef, a list of them (-1700 if empty), or an `XPathRef` record `{XMLRef:…, xpath pattern:…}` with an
 	/// optional `namespace` and `xpath variables` (used only for this expression).
 	func withNodeSet<T>(_ descriptor: NSAppleEventDescriptor, _ body: (XMLDocument?, xmlNodeSetPtr) throws -> T) throws -> T {
-		if let fields = RecordFields(descriptor), let start = fields[.code("XMLR")] {
-			let (document, node) = try resolve(start)
-			let expression = try fields[.code("xpat")].map(XMLCommands.text) ?? "."
-			let namespaces = XPath.merged(document.namespaces.map { ($0.prefix, $0.uri) }, try XPath.namespaces(fields[.code("nsls")])) { $0.isEmpty }
-			let variables = XPath.merged(document.variables.map { ($0.name, $0.value) }, try XPath.variables(fields[.code("vars")]),
-			                             isRemoval: XMLCommands.isMissingValue)
-			return try XPath.withContext(document.doc, node: node, namespaces: namespaces.map { (prefix: $0.0, uri: $0.1) },
-			                             variables: variables.map { (name: $0.0, value: $0.1) }, references: references) { context in
-				let object = try XPath.evaluate(expression, in: context)
-				defer { xmlXPathFreeObject(object) }
+		if XMLCommands.isXPathReference(descriptor) {
+			return try withXPathReference(descriptor) { document, object in
 				guard object.pointee.type == XPATH_NODESET else { throw OSAXError.coercionFailed }
 				// The object keeps any namespace nodes XPath made alive until the body is done.
 				guard let set = object.pointee.nodesetval ?? xmlXPathNodeSetCreate(nil) else { throw XML.invalid }
@@ -112,6 +104,23 @@ extension XMLCommands {
 			xmlXPathNodeSetAdd(set, node)
 		}
 		return try body(nodes[0].0, set)
+	}
+
+	/// Evaluates an `XPathRef` record `{XMLRef:…, xpath pattern:…}` at its node, with its optional `namespace` and
+	/// `xpath variables` (for this expression only), and runs `body` with the node's document and the result.
+	func withXPathReference<T>(_ descriptor: NSAppleEventDescriptor, _ body: (XMLDocument, xmlXPathObjectPtr) throws -> T) throws -> T {
+		guard let fields = RecordFields(descriptor), let start = fields[.code("XMLR")] else { throw OSAXError.coercionFailed }
+		let (document, node) = try resolve(start)
+		let expression = try fields[.code("xpat")].map(XMLCommands.text) ?? "."
+		let namespaces = XPath.merged(document.namespaces.map { ($0.prefix, $0.uri) }, try XPath.namespaces(fields[.code("nsls")])) { $0.isEmpty }
+		let variables = XPath.merged(document.variables.map { ($0.name, $0.value) }, try XPath.variables(fields[.code("vars")]),
+		                             isRemoval: XMLCommands.isMissingValue)
+		return try XPath.withContext(document.doc, node: node, namespaces: namespaces.map { (prefix: $0.0, uri: $0.1) },
+		                             variables: variables.map { (name: $0.0, value: $0.1) }, references: references) { context in
+			let object = try XPath.evaluate(expression, in: context)
+			defer { xmlXPathFreeObject(object) }
+			return try body(document, object)
+		}
 	}
 
 	/// Changes the document's context: a namespace with an empty URL, or a variable set to `missing value`, is

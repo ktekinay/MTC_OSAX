@@ -53,20 +53,39 @@ struct XMLCommands {
 		try resolve(request.requiredDirectParameter(as: AnyDescriptor.self).descriptor)
 	}
 
-	/// The direct parameter's nodes: one, or a list. Commands that take lists answer with lists.
-	func directNodes(_ request: AppleEventRequest) throws -> (nodes: [(XMLDocument, xmlNodePtr)], isList: Bool) {
-		let descriptor = try request.requiredDirectParameter(as: AnyDescriptor.self).descriptor
-		if descriptor.descriptorType == typeAEList {
-			return (try (0 ..< descriptor.numberOfItems).map { try resolve(descriptor.atIndex($0 + 1)!) }, true)
+	/// Whether a value is an `XPathRef` record: `{XMLRef:…, xpath pattern:…}`.
+	static func isXPathReference(_ descriptor: NSAppleEventDescriptor) -> Bool {
+		descriptor.descriptorType != typeAEList && RecordFields(descriptor)?[.code("XMLR")] != nil
+	}
+
+	/// The XMLRefs a command's nodes are given as: one, a list, or an `XPathRef` record, which stands for the list
+	/// of nodes its expression selects wherever a list of XMLRefs can go, as the dictionary says. As in SatimageOSAX
+	/// that's a list even of one node, and empty when the expression gives something other than nodes; namespace
+	/// nodes (which XPath makes on the fly) are left out.
+	func nodeReferences(_ descriptor: NSAppleEventDescriptor) throws -> (items: [NSAppleEventDescriptor], isList: Bool) {
+		guard XMLCommands.isXPathReference(descriptor) else {
+			return (XMLCommands.items(descriptor), descriptor.descriptorType == typeAEList)
 		}
-		return ([try resolve(descriptor)], false)
+		let items = try withXPathReference(descriptor) { _, object in
+			guard object.pointee.type == XPATH_NODESET else { return [NSAppleEventDescriptor]() }
+			return XPath.nodes(object.pointee.nodesetval).compactMap { node in
+				node.pointee.type == XML_NAMESPACE_DECL ? nil : XMLDocument.owner(of: node).map { reference(node, $0) }
+			}
+		}
+		return (items, true)
+	}
+
+	/// The direct parameter's nodes: one, a list, or an `XPathRef`. Commands that take lists answer with lists.
+	func directNodes(_ request: AppleEventRequest) throws -> (nodes: [(XMLDocument, xmlNodePtr)], isList: Bool) {
+		let (items, isList) = try nodeReferences(request.requiredDirectParameter(as: AnyDescriptor.self).descriptor)
+		return (try items.map(resolve), isList)
 	}
 
 	/// Changes the direct parameter's nodes in turn, with each one's position in the list. Every reference is
 	/// checked first (-1728 for one that's invalid), then resolved again just before its node is changed, so a node
 	/// that an earlier change freed (a descendant of a removed node, or one listed twice) is skipped instead of used.
 	func changeEach(_ request: AppleEventRequest, _ change: (Int, XMLDocument, xmlNodePtr) throws -> Void) throws {
-		let items = XMLCommands.items(try request.requiredDirectParameter(as: AnyDescriptor.self).descriptor)
+		let items = try nodeReferences(request.requiredDirectParameter(as: AnyDescriptor.self).descriptor).items
 		for item in items {
 			_ = try resolve(item)
 		}

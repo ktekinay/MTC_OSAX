@@ -64,7 +64,7 @@ extension XMLCommands {
 			CommandDefinition("XMLExists", code: "XML Exis") { request in
 				// True if every reference is valid; false otherwise (SatimageOSAX gave -1728 for invalid ones).
 				let descriptor = try request.requiredDirectParameter(as: AnyDescriptor.self).descriptor
-				return XMLCommands.items(descriptor).allSatisfy { (try? resolve($0)) != nil }
+				return (try? nodeReferences(descriptor))?.items.allSatisfy { (try? resolve($0)) != nil } ?? false
 			},
 			CommandDefinition("XMLNewChild", code: "XML addc", handler: newChild),
 			CommandDefinition("XMLNewSibling", code: "XML adds", handler: newSibling),
@@ -280,13 +280,13 @@ extension XMLCommands {
 	func newNodes(_ request: AppleEventRequest, context: xmlNodePtr, document: XMLDocument) throws -> (nodes: [xmlNodePtr], isList: Bool) {
 		let value = try request.requiredDirectParameter(as: AnyDescriptor.self).descriptor
 		let keepBlanks = try request.parameter("kbln", default: false)
-		let items = XMLCommands.items(value)
-		if items.allSatisfy(XMLReferences.isReference) {
+		let (items, isList) = try nodeReferences(value)
+		if XMLCommands.isXPathReference(value) || items.allSatisfy(XMLReferences.isReference) {
 			let copies = try items.map { item -> xmlNodePtr in
 				guard let copy = XMLCommands.copy(try resolve(item).1, into: document) else { throw XML.invalid }
 				return copy
 			}
-			return (copies, value.descriptorType == typeAEList)
+			return (copies, isList)
 		}
 		return (try Parsing.fragment(XMLCommands.text(value), in: context, keepBlanks: keepBlanks), false)
 	}
@@ -297,7 +297,8 @@ extension XMLCommands {
 		let (document, parent) = try resolve(request.requiredParameter("at  ", as: AnyDescriptor.self).descriptor)
 		try XMLCommands.require(parent, isOneOf: [XML_ELEMENT_NODE, XML_DOCUMENT_NODE, XML_HTML_DOCUMENT_NODE], error: .coercionFailed)
 		let nsclean = try request.parameter("NsCl", default: true)
-		let isClone = XMLCommands.items(try request.requiredDirectParameter(as: AnyDescriptor.self).descriptor).allSatisfy(XMLReferences.isReference)
+		let direct = try request.requiredDirectParameter(as: AnyDescriptor.self).descriptor
+		let isClone = XMLCommands.isXPathReference(direct) || XMLCommands.items(direct).allSatisfy(XMLReferences.isReference)
 		let (nodes, isList) = try newNodes(request, context: parent, document: document)
 		guard !nodes.isEmpty else { throw XML.invalid }
 		if XMLCommands.isDocument(parent), xmlDocGetRootElement(document.doc) != nil, nodes.contains(where: XMLCommands.isElement) {
@@ -548,7 +549,7 @@ extension XMLCommands {
 	/// (`paragraph`), and for documents whether they have a DTD and its IDs.
 	func nodeInfo(_ request: AppleEventRequest) throws -> NSAppleEventDescriptor {
 		let descriptor = try request.requiredDirectParameter(as: AnyDescriptor.self).descriptor
-		if !XMLCommands.items(descriptor).allSatisfy(XMLReferences.isReference) {
+		if !XMLCommands.isXPathReference(descriptor), !XMLCommands.items(descriptor).allSatisfy(XMLReferences.isReference) {
 			return try XMLCommands.fileInfo(URL(appleEventDescriptor: descriptor)).appleEventDescriptor
 		}
 		return try each(request) { document, node in XMLCommands.info(node, document).appleEventDescriptor }

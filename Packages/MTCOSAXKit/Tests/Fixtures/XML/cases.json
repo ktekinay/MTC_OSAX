@@ -950,5 +950,45 @@
  {
   "name": "extended-char-literal-markup",
   "script": "set d to XMLOpen from string \"<a t='&#1;'><!-- &#1; --><![CDATA[&#2;]]><?p &#3;?>x&#4;</a>\"\nset a to XMLRoot d\nset r to {XMLGetAttribute a name \"t\", XMLGetText (XMLChild a index 1), XMLGetText (XMLChild a index 2), XMLGetText (XMLChild a index 3), XMLGetText (XMLChild a index 4)}\nXMLClose d\nr"
+ },
+ {
+  "name": "xpathref-get-text",
+  "script": "set d to XMLOpen from string \"<a><b n='1'>one</b><b n='2'>two</b><c/></a>\"\nset r to XMLRoot d\nset x to XMLGetText {XMLRef:r, xpath pattern:\"b\"}\nXMLClose d\nx"
+ },
+ {
+  "name": "xpathref-single",
+  "script": "set d to XMLOpen from string \"<a><b n='1'>one</b><b n='2'>two</b><c/></a>\"\nset r to XMLRoot d\nset x to XMLGetText {XMLRef:r, xpath pattern:\"c\"}\nXMLClose d\nx"
+ },
+ {
+  "name": "xpathref-empty",
+  "script": "set d to XMLOpen from string \"<a><b n='1'>one</b><b n='2'>two</b><c/></a>\"\nset r to XMLRoot d\nset x to XMLGetText {XMLRef:r, xpath pattern:\"zzz\"}\nXMLClose d\nx"
+ },
+ {
+  "name": "xpathref-not-nodes",
+  "script": "set d to XMLOpen from string \"<a><b n='1'>one</b><b n='2'>two</b><c/></a>\"\nset r to XMLRoot d\nset x to XMLGetText {XMLRef:r, xpath pattern:\"count(b)\"}\nXMLClose d\nx"
+ },
+ {
+  "name": "xpathref-attributes",
+  "script": "set d to XMLOpen from string \"<a><b n='1'>one</b><b n='2'>two</b><c/></a>\"\nset r to XMLRoot d\nset x to XMLGetAttribute {XMLRef:r, xpath pattern:\"b\"} name \"n\"\nXMLClose d\nx"
+ },
+ {
+  "name": "xpathref-exists",
+  "script": "set d to XMLOpen from string \"<a><b n='1'>one</b><b n='2'>two</b><c/></a>\"\nset r to XMLRoot d\nset x to XMLExists {XMLRef:r, xpath pattern:\"b\"}\nXMLClose d\nx"
+ },
+ {
+  "name": "xpathref-xpath",
+  "script": "set d to XMLOpen from string \"<a><b n='1'>one</b><b n='2'>two</b><c/></a>\"\nset r to XMLRoot d\nset x to XMLXPath {XMLRef:r, xpath pattern:\"b\"} with \"string(@n)\"\nXMLClose d\nx"
+ },
+ {
+  "name": "xpathref-set-text",
+  "script": "set d to XMLOpen from string \"<a><b n='1'>one</b><b n='2'>two</b><c/></a>\"\nset r to XMLRoot d\nXMLSetText {XMLRef:r, xpath pattern:\"b\"} to \"z\"\nset x to XMLDisplayXML r\nXMLClose d\nx"
+ },
+ {
+  "name": "xpathref-clone",
+  "script": "set d to XMLOpen from string \"<a><b n='1'>one</b><b n='2'>two</b><c/></a>\"\nset r to XMLRoot d\nXMLNewChild {XMLRef:r, xpath pattern:\"b\"} at (XMLChild r index 3)\nset x to XMLDisplayXML r\nXMLClose d\nx"
+ },
+ {
+  "name": "xpathref-remove",
+  "script": "set d to XMLOpen from string \"<a><b n='1'>one</b><b n='2'>two</b><c/></a>\"\nset r to XMLRoot d\nXMLRemove {XMLRef:r, xpath pattern:\"b\"}\nset x to XMLDisplayXML r\nXMLClose d\nx"
  }
 ]
