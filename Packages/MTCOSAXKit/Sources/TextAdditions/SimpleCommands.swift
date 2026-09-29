@@ -1,5 +1,6 @@
 import AppleEventCore
 import Foundation
+import TextMatching
 
 /// The commands that transform one string (or each string of a list) without searching.
 /// Their exact behavior is recorded in `Fixtures/TextAdditions/Simple`.
@@ -163,7 +164,7 @@ extension TextAdditions {
 			}
 			index = semicolon + 1
 		}
-		return String(decoding: result, as: UTF16.self)
+		return UTF16Text.string(result)
 	}
 
 	/// The character of a numeric reference's digits ("65", "x41" or "X41"); nil if they aren't one.

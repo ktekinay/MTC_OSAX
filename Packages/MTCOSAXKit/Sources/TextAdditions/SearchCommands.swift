@@ -212,7 +212,7 @@ extension TextAdditions {
 			position = target.upperBound
 		}
 		result += text.units[position...]
-		return (String(decoding: result, as: UTF16.self), count)
+		return (UTF16Text.string(result), count)
 	}
 
 	// MARK: splittext
