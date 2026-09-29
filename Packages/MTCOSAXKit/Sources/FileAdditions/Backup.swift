@@ -75,14 +75,17 @@ struct Backup {
 
 	private var reportOnly: Bool { level == 0 }
 
+	/// Everything about an item comes from one `lstat`: `appendingPathComponent(_:)` checked the disk for each name
+	/// to see whether it was a folder, and the hidden flag and dates were read again through URL resource values.
 	mutating func run(_ source: URL, onto destination: URL) {
 		for name in FileItem.names(in: source) {
-			let from = source.appendingPathComponent(name)
-			let to = destination.appendingPathComponent(name)
-			guard let status = FileItem.status(from), !FileItem.isHidden(from) else {
+			var status = stat()
+			guard lstat(source.path + "/" + name, &status) == 0, !FileItem.isHidden(name: name, status: status) else {
 				continue
 			}
 			let isDirectory = (status.st_mode & S_IFMT) == S_IFDIR
+			let from = source.appendingPathComponent(name, isDirectory: isDirectory)
+			let to = destination.appendingPathComponent(name, isDirectory: isDirectory)
 			if isDirectory && !FileItem.isPackage(from) {
 				guard recursively, !exceptFolders.contains(name), FileItem.Identity(status) != destinationIdentity else {
 					continue
@@ -107,13 +110,12 @@ struct Backup {
 				}
 				// A link's own date: following it could leave the source (a link to .. copied the tree into itself).
 				let isLink = (status.st_mode & S_IFMT) == S_IFLNK
-				let modified = isLink ? FileItem.date(status.st_mtimespec) : FileItem.modificationDate(from) ?? .distantPast
+				let modified = FileItem.date(status.st_mtimespec)
 				if let after, modified < after {
 					continue
 				}
 				if let existing = FileItem.status(to) {
-					let existingDate = (existing.st_mode & S_IFMT) == S_IFLNK ? FileItem.date(existing.st_mtimespec) : FileItem.modificationDate(to)
-					if let existingDate, modified > existingDate {
+					if modified > FileItem.date(existing.st_mtimespec) {
 						copy(from, to, isNew: false, isLink: isLink)
 					}
 				} else {

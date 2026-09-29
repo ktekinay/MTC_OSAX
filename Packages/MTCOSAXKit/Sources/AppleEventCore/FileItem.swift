@@ -55,6 +55,11 @@ public enum FileItem {
 		url.lastPathComponent.hasPrefix(".") || (try? url.resourceValues(forKeys: [.isHiddenKey]))?.isHidden == true
 	}
 
+	/// `isHidden` from an item's name and `lstat`, without asking the file system again.
+	public static func isHidden(name: String, status: stat) -> Bool {
+		name.hasPrefix(".") || status.st_flags & UInt32(UF_HIDDEN) != 0
+	}
+
 	public static func date(_ time: timespec) -> Date {
 		Date(timeIntervalSince1970: Double(time.tv_sec) + Double(time.tv_nsec) / 1_000_000_000)
 	}

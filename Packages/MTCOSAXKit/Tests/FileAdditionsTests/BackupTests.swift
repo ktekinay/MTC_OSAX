@@ -109,6 +109,17 @@ struct BackupTests {
 		#expect(backup(after, ["Repo": 2, "afte": Date().addingTimeInterval(3600)]).result?.stringValue == "OK")
 	}
 
+	/// Items with the hidden flag (as `chflags hidden` sets) are skipped, like names starting with a dot.
+	@Test func hiddenFlagIsSkipped() throws {
+		let folder = try source()
+		defer { folder.remove() }
+		try folder.file("src/flagged.txt")
+		try folder.file("src/flagged folder/d.txt")
+		#expect(chflags(folder.path("src/flagged.txt"), UInt32(UF_HIDDEN)) == 0)
+		#expect(chflags(folder.path("src/flagged folder"), UInt32(UF_HIDDEN)) == 0)
+		#expect(report(backup(folder), folder) == ["Items to create : a.txt, b.md, pkg.app, skip, sub"])
+	}
+
 	@Test func errorsAreReported() throws {
 		let folder = try source()
 		defer { folder.remove() }
