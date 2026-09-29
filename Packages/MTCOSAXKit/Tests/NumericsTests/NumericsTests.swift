@@ -3,6 +3,7 @@ import Foundation
 import Testing
 @testable import Numerics
 
+@MainActor
 struct NumbersTests {
 	@Test func decodesNumbersListsAndArrays() throws {
 		#expect(try Numbers(NSAppleEventDescriptor(int32: 3)) == .number(3))

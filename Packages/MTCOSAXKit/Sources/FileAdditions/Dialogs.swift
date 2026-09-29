@@ -4,6 +4,7 @@ import UniformTypeIdentifiers
 
 /// Shows the dialogs for the `navchoose` commands and `navask save`. The app implements it with AppKit; tests
 /// use a fake. Every method throws error -128 ("User canceled") when the user cancels.
+@MainActor
 public protocol FileDialogs {
 	/// Open dialog (`navchoose file`, `folder`, `object`, `volume`): the chosen items.
 	func choose(_ options: ChooseOptions) throws -> [URL]
@@ -57,9 +58,10 @@ extension FileAdditions {
 	/// Where `key` folders are remembered, e.g. `["3": "/Users/me/Documents"]`.
 	static let keyFoldersDefault = "NavKeyFolders"
 
+	@MainActor
 	static func dialogCommands(_ dialogs: (any FileDialogs)?, defaults: UserDefaults = .standard) -> [CommandDefinition] {
 		let chooseFile = { (kind: ChooseOptions.Kind) in
-			{ (request: AppleEventRequest) throws -> NSAppleEventDescriptor in
+			{ @MainActor (request: AppleEventRequest) throws -> NSAppleEventDescriptor in
 				guard let dialogs else {
 					throw OSAXError.eventNotHandled
 				}
@@ -67,7 +69,7 @@ extension FileAdditions {
 			}
 		}
 		let newItem = { (folder: Bool) in
-			{ (request: AppleEventRequest) throws -> NSAppleEventDescriptor in
+			{ @MainActor (request: AppleEventRequest) throws -> NSAppleEventDescriptor in
 				guard let dialogs else {
 					throw OSAXError.eventNotHandled
 				}
@@ -95,6 +97,7 @@ extension FileAdditions {
 	}
 
 	/// The open dialogs: a list of aliases.
+	@MainActor
 	static func choose(_ kind: ChooseOptions.Kind, _ request: AppleEventRequest, dialogs: any FileDialogs, defaults: UserDefaults) throws -> NSAppleEventDescriptor {
 		var options = ChooseOptions(kind: kind)
 		options.prompt = try request.parameter("prmp", as: String.self)
@@ -122,6 +125,7 @@ extension FileAdditions {
 	}
 
 	/// The save dialogs: a file URL for the new item.
+	@MainActor
 	static func chooseNewItem(folder: Bool, _ request: AppleEventRequest, dialogs: any FileDialogs, defaults: UserDefaults) throws -> NSAppleEventDescriptor {
 		var options = NewItemOptions(folder: folder)
 		options.prompt = try request.parameter("prmt", as: String.self)

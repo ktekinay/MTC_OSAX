@@ -133,8 +133,9 @@ final class XMLDocument: StoredDocument {
 // MARK: - References
 
 /// XMLRefs (`XMLR`): a document's number, "MTCx", and a node's number (0 for the document).
+@MainActor
 struct XMLReferences {
-	static let type = FourCharCode(fourCharString: "XMLR")
+	nonisolated static let type = FourCharCode(fourCharString: "XMLR")
 	let store: DocumentStore
 
 	func reference(_ node: xmlNodePtr, in document: XMLDocument) -> NSAppleEventDescriptor {
@@ -154,7 +155,7 @@ struct XMLReferences {
 		reference(document.node(number: 0)!, in: document)
 	}
 
-	static func isReference(_ descriptor: NSAppleEventDescriptor) -> Bool {
+	nonisolated static func isReference(_ descriptor: NSAppleEventDescriptor) -> Bool {
 		descriptor.descriptorType == type
 	}
 

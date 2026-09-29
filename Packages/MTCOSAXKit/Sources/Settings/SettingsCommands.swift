@@ -3,6 +3,7 @@ import Foundation
 
 extension Settings {
 	/// `mtc_get`, `mtc_set` and `mtc_reset`, reading and writing `defaults` (the app's own; tests pass another).
+	@MainActor
 	public static func commands(defaults: UserDefaults = .standard) -> [CommandDefinition] {
 		[
 			CommandDefinition("mtc_get", code: "MTCsget ") { request in

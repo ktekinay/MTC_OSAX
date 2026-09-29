@@ -102,6 +102,7 @@ public struct Fixture: Codable {
 	/// are replaced in the events and the expected replies. Returns a description of each difference;
 	/// empty means the dispatcher behaves as recorded. `realTolerance` lets reals differ by that many units in the
 	/// last place (math libraries differ slightly between Intel and Apple silicon).
+	@MainActor
 	public func replay(using dispatcher: CommandDispatcher, variables current: [String: String] = [:], realTolerance: Int = 0) -> [String] {
 		guard !exchanges.isEmpty else {
 			return ["\(name): fixture has no recorded events"]

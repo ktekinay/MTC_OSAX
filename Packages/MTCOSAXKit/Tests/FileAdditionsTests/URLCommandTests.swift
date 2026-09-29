@@ -3,6 +3,7 @@ import Foundation
 import Testing
 @testable import FileAdditions
 
+@MainActor
 struct AbsoluteURLTests {
 	private let absoluteURL = "SATIaURL"
 
@@ -61,6 +62,7 @@ struct AbsoluteURLTests {
 	}
 }
 
+@MainActor
 struct RelativeURLTests {
 	private func relative(_ target: String, _ base: String) -> String? {
 		send("SATIrURL", ["----": target, "from": base]).result?.stringValue
@@ -98,6 +100,7 @@ struct RelativeURLTests {
 	}
 }
 
+@MainActor
 struct URLInfoTests {
 	private let urlInfo = "SATIIURL"
 
@@ -193,6 +196,7 @@ struct URLInfoTests {
 	}
 }
 
+@MainActor
 struct AliasDescriptionTests {
 	private let aliasDescription = "SATIALIS"
 

@@ -2,6 +2,7 @@ import CPCRE2
 import Testing
 
 /// The vendored PCRE2 builds and matches UTF-16 text.
+@MainActor
 struct PCRE2Tests {
 	@Test func version() {
 		var buffer = [UInt16](repeating: 0, count: 32)

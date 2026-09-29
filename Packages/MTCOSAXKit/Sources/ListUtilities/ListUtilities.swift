@@ -6,6 +6,7 @@ import Numerics
 /// Behavior recorded from SatimageOSAX in `Fixtures/ListUtilities`; where Satimage was broken, MTC_OSAX follows the
 /// dictionary (`Fixtures/ListUtilitiesFixes`, listed in Implemented/PLAN-MathAndLists.md).
 public enum ListUtilities {
+	@MainActor
 	public static func commands() -> [CommandDefinition] {
 		[
 			CommandDefinition("sortlist", code: "SATISort", handler: Sorting.sortList),

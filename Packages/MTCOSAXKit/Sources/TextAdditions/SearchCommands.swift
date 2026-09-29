@@ -3,6 +3,7 @@ import Foundation
 import TextMatching
 
 extension TextAdditions {
+	@MainActor
 	static func searchCommands(_ context: TextContext) -> [CommandDefinition] {
 		[
 			CommandDefinition("find text", code: "SATIFINd") { request in
@@ -32,6 +33,7 @@ extension TextAdditions {
 		case templates([Template])
 	}
 
+	@MainActor
 	private static func findText(_ request: AppleEventRequest, context: TextContext) throws -> NSAppleEventDescriptor? {
 		let pattern = try request.requiredDirectParameter(as: String.self)
 		let input = try TextInput(request, keyword: "$in ")
@@ -102,6 +104,7 @@ extension TextAdditions {
 
 	// MARK: change
 
+	@MainActor
 	private static func change(_ request: AppleEventRequest, context: TextContext) throws -> NSAppleEventDescriptor? {
 		let patternDescriptor = try request.requiredDirectParameter(as: AnyDescriptor.self).descriptor
 		let replacementDescriptor = try request.requiredParameter("by  ", as: AnyDescriptor.self).descriptor
@@ -217,6 +220,7 @@ extension TextAdditions {
 
 	// MARK: splittext
 
+	@MainActor
 	private static func splitText(_ request: AppleEventRequest, context: TextContext) throws -> NSAppleEventDescriptor? {
 		let input = try TextInput(request, keyword: Keyword.directObject)
 		let separator = try request.requiredParameter("by  ", as: String.self)
@@ -239,6 +243,7 @@ extension TextAdditions {
 	// MARK: re_compile
 
 	/// Checks a pattern. Returns the pattern itself if it compiles, the engine's error code if not.
+	@MainActor
 	private static func reCompile(_ request: AppleEventRequest, context: TextContext) throws -> NSAppleEventDescriptor? {
 		let pattern = try request.requiredDirectParameter(as: String.self)
 		var syntax = context.regexSyntaxDefault()

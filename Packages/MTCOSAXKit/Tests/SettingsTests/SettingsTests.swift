@@ -6,6 +6,7 @@ import TestSupport
 import TextAdditions
 
 /// The settings commands with a defaults suite of their own, so tests never read or change the app's settings.
+@MainActor
 private final class SettingsCommands {
 	let defaults = MemoryDefaults.make()
 	private let dispatcher = CommandDispatcher()
@@ -40,6 +41,7 @@ private var dollarReferences: NSAppleEventDescriptor { constant("MTsd") }
 private var regexSyntax: NSAppleEventDescriptor { constant("MTsr") }
 private var allSettings: NSAppleEventDescriptor { constant("MTsa") }
 
+@MainActor
 struct SettingsTests {
 	@Test func defaults() {
 		let settings = SettingsCommands()

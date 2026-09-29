@@ -14,8 +14,8 @@ import Foundation
 extension PropertyLists {
 	/// How deeply lists and records (or arrays and dictionaries) may nest: the recursion that converts them would
 	/// otherwise run out of stack and crash the app (a JSON file of a million `[`s did).
-	static let maximumDepth = 512
-	static let tooDeep = OSAXError(-50, "The value is nested more than \(maximumDepth) levels deep.")
+	nonisolated static let maximumDepth = 512
+	nonisolated static let tooDeep = OSAXError(-50, "The value is nested more than \(maximumDepth) levels deep.")
 
 	/// -50 for Foundation objects (a parsed file) nested more than `maximumDepth` levels deep.
 	static func checkDepth(_ object: Any, depth: Int = 0) throws {
@@ -123,7 +123,7 @@ extension PropertyLists {
 
 	// MARK: Flattened descriptors
 
-	static func flatten(_ descriptor: NSAppleEventDescriptor) -> Data {
+	nonisolated static func flatten(_ descriptor: NSAppleEventDescriptor) -> Data {
 		guard var desc = descriptor.aeDesc?.pointee else {
 			return Data()
 		}
@@ -138,7 +138,7 @@ extension PropertyLists {
 
 	/// The descriptor flattened in `data`, or nil if it isn't one. The length inside the data isn't trusted (data
 	/// from a file can claim more than it holds; `AEUnflattenDesc` would read past the end).
-	static func unflatten(_ data: Data) -> NSAppleEventDescriptor? {
+	nonisolated static func unflatten(_ data: Data) -> NSAppleEventDescriptor? {
 		guard data.starts(with: Array("dle2".utf8)) else {
 			return nil
 		}

@@ -4,10 +4,11 @@ import JavaScriptCore
 
 /// JSON through JavaScriptCore's `JSON.stringify` and `JSON.parse`, as SatimageOSAX made it: JavaScript's number
 /// formatting, dictionary keys in their (hashing) order, and `replacer` functions.
+@MainActor
 enum JSON {
 	/// One virtual machine for every call (making one took 0.3 ms); each call still gets its own context, so a
-	/// replacer's globals don't outlive it. Commands run one at a time, on the main thread.
-	nonisolated(unsafe) private static let machine = JSVirtualMachine()!
+	/// replacer's globals don't outlive it.
+	private static let machine = JSVirtualMachine()!
 
 	/// Dates become ISO 8601 text and data base64 text (JSON has neither; SatimageOSAX returned nothing).
 	/// `formatted` indents with tabs (SatimageOSAX added no returns). A `replacer` that isn't a JavaScript function is -1.

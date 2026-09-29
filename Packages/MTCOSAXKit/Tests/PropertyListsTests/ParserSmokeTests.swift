@@ -3,6 +3,7 @@ import CYAML
 import Testing
 
 /// The vendored YAML and TOML parsers build and parse.
+@MainActor
 struct ParserSmokeTests {
 	@Test func libyaml() {
 		#expect(String(cString: yaml_get_version_string()) == "0.2.5")

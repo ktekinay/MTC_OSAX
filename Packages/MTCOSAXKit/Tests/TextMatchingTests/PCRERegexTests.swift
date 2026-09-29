@@ -10,6 +10,7 @@ private func matches(_ pattern: String, in string: String, _ flags: RegexFlags =
 	return try pcre(pattern, flags).allMatches(in: text).map { text[$0.range] }
 }
 
+@MainActor
 struct PCRERegexTests {
 	@Test func utf16Offsets() throws {
 		let text = UTF16Text("😀 cafe\u{301} x")

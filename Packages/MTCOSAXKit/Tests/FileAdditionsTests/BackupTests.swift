@@ -3,6 +3,7 @@ import Foundation
 import Testing
 @testable import FileAdditions
 
+@MainActor
 struct BackupTests {
 	private func source() throws -> TemporaryFolder {
 		let folder = try TemporaryFolder()

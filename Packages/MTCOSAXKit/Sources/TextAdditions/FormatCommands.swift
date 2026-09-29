@@ -4,6 +4,7 @@ import Foundation
 /// `format`, `printf`, `strftime` and `strptime`. Behavior recorded in `Fixtures/TextAdditions/NumberFormat` and
 /// `Fixtures/TextAdditions/Format`.
 extension TextAdditions {
+	@MainActor
 	static func formatCommands(_ context: TextContext) -> [CommandDefinition] {
 		[
 			CommandDefinition("printf", code: "SATIprtf") { request in

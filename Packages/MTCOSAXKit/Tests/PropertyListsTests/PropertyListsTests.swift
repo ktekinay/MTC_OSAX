@@ -4,6 +4,7 @@ import Testing
 @testable import PropertyLists
 
 /// Sends commands to one set of PropertyList and Pool commands, sharing their documents.
+@MainActor
 final class Plists {
 	let store = DocumentStore()
 	private let dispatcher = CommandDispatcher()
@@ -38,6 +39,7 @@ func record(_ fields: KeyValuePairs<String, any AppleEventEncodable>) -> NSApple
 	RecordFields(fields.map { (.user($0.key), $0.value.appleEventDescriptor) }).appleEventDescriptor
 }
 
+@MainActor
 struct PropertyListsCommandTests {
 	@Test func everyCommandIsRegistered() {
 		// Satimage's 29 PropertyList and 3 Pool commands, and MTC_OSAX's 4 for YAML and TOML.
@@ -45,6 +47,7 @@ struct PropertyListsCommandTests {
 	}
 }
 
+@MainActor
 struct DocumentTests {
 	@Test func newGetAndClose() throws {
 		let plists = Plists()
@@ -145,6 +148,7 @@ struct DocumentTests {
 	}
 }
 
+@MainActor
 struct ValueTests {
 	@Test func typesRoundTrip() throws {
 		let plists = Plists()
@@ -200,6 +204,7 @@ struct ValueTests {
 	}
 }
 
+@MainActor
 struct SelectorTests {
 	@Test func paths() throws {
 		#expect(try Selector.steps("a/b[2][3]/c") == [.key("a"), .key("b"), .index(2), .index(3), .key("c")])
@@ -233,6 +238,7 @@ struct SelectorTests {
 	}
 }
 
+@MainActor
 struct ChangeTests {
 	@Test func setNewChildAndRemove() throws {
 		let plists = Plists()
@@ -282,6 +288,7 @@ struct ChangeTests {
 	}
 }
 
+@MainActor
 struct JSONTests {
 	@Test func toJSON() throws {
 		let plists = Plists()
@@ -321,6 +328,7 @@ struct JSONTests {
 	}
 }
 
+@MainActor
 struct FilterIntoTests {
 	@Test func addsEntries() throws {
 		let plists = Plists()
@@ -331,6 +339,7 @@ struct FilterIntoTests {
 	}
 }
 
+@MainActor
 struct PlistKeyTests {
 	@Test func codeKeys() {
 		#expect(RecordFields.Key(plistKey: "«class pnam»") == .code("pnam"))
@@ -352,6 +361,7 @@ struct PlistKeyTests {
 	}
 }
 
+@MainActor
 struct ElementTableTests {
 	/// Every element ever made kept an entry in its document's table.
 	@Test func tableStaysSmall() throws {
@@ -366,6 +376,7 @@ struct ElementTableTests {
 	}
 }
 
+@MainActor
 struct IntegerTests {
 	/// 64-bit integers used to be stored as 0.
 	@Test func sixtyFourBits() throws {
@@ -377,6 +388,7 @@ struct IntegerTests {
 	}
 }
 
+@MainActor
 struct FlattenedDescriptorTests {
 	private func bytes(_ hex: String) -> Data {
 		Data(stride(from: 0, to: hex.count, by: 2).map { UInt8(hex.dropFirst($0).prefix(2), radix: 16)! })
@@ -397,32 +409,12 @@ struct FlattenedDescriptorTests {
 	}
 }
 
-/// Runs `body` on a thread with the main thread's 8 MB stack, where the app runs commands (tests run on threads
-/// with much smaller stacks).
-func onMainSizedStack(_ body: @escaping @Sendable () -> Void) {
-	let done = DispatchSemaphore(value: 0)
-	let thread = Thread {
-		body()
-		done.signal()
-	}
-	thread.stackSize = 8 << 20
-	thread.start()
-	done.wait()
-}
-
-/// Deep nesting used to recurse until the stack ran out (a JSON file of a million `[`s crashed the app).
+/// Deep nesting used to recurse until the stack ran out (a JSON file of a million `[`s crashed the app). Runs on the
+/// main thread, as the app runs commands, with its 8 MB stack (other test threads have much smaller ones).
+@MainActor
 struct NestingTests {
-	@Test func tooDeepIsAnError() {
-		onMainSizedStack {
-			do {
-				try checkNesting()
-			} catch {
-				Issue.record(error)
-			}
-		}
-	}
-
-	private func checkNesting() throws {
+	@Test func tooDeepIsAnError() throws {
+		#expect(Thread.isMainThread)
 		let plists = Plists()
 		func nested(_ depth: Int) -> String { String(repeating: "[", count: depth) + String(repeating: "]", count: depth) }
 		#expect(plists.send("PLSTNOSJ", ["----": nested(100)]).error == nil)

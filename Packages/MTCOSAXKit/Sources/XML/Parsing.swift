@@ -3,7 +3,8 @@ import CLibXML
 import Foundation
 
 /// The XML suites' settings, one set per app (per set of commands, so tests don't share them).
-final class XMLSettings: @unchecked Sendable {
+@MainActor
+final class XMLSettings {
 	/// `XMLErrorLevel`: which problems make parsing fail (1 warnings, 2 errors, 3 only fatal errors); 2 at launch.
 	var errorLevel = 2
 	/// `XMLExtendedChar`: whether XML 1.1's control characters (`&#1;` to `&#31;`) are allowed; true at launch.

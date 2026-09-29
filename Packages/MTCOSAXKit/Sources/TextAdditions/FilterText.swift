@@ -10,6 +10,7 @@ extension TextAdditions {
 	///   array per key, without repeats when `duplicates` is false;
 	/// - the property list is returned as XML text, written to the file given as `into`, or added to the dictionary
 	///   a CFRef given as `into` refers to (replacing keys it already has); both return nothing.
+	@MainActor
 	static func filterText(_ request: AppleEventRequest, context: TextContext) throws -> NSAppleEventDescriptor? {
 		let pattern = try request.requiredDirectParameter(as: String.self)
 		let input = try TextInput(request, keyword: "$in ")

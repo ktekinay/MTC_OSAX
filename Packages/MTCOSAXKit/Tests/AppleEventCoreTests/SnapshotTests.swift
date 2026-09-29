@@ -2,6 +2,7 @@ import Foundation
 import Testing
 @testable import AppleEventCore
 
+@MainActor
 struct SnapshotTests {
 	/// Converting to a snapshot, through JSON, and back must give an identical descriptor.
 	private func roundTrip(_ descriptor: NSAppleEventDescriptor) throws -> NSAppleEventDescriptor {

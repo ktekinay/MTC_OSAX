@@ -3,6 +3,7 @@ import Foundation
 import Testing
 @testable import TextAdditions
 
+@MainActor
 struct CaseTests {
 	@Test func upper() {
 		#expect(TextAdditions.transformCase("straße ǆ", CFStringUppercase) == "STRASSE Ǆ")
@@ -17,6 +18,7 @@ struct CaseTests {
 	}
 }
 
+@MainActor
 struct NumberParsingTests {
 	@Test(arguments: [("1.5", 1.5), (" 2.5", 2.5), ("1e3", 1000), ("0x10", 16), ("1.5abc", 1.5), ("1,5", 1.5), (".5", 0.5)])
 	func reals(_ text: String, _ expected: Double) throws {
@@ -51,6 +53,7 @@ struct NumberParsingTests {
 	}
 }
 
+@MainActor
 struct EntityTests {
 	@Test func encode() {
 		#expect(TextAdditions.encodeEntities(#"'a' < "b" & c >"#) == "&apos;a&apos; &lt; &quot;b&quot; &amp; c &gt;")
@@ -83,6 +86,7 @@ struct EntityTests {
 	}
 }
 
+@MainActor
 struct URLEscapingTests {
 	@Test func escapes() {
 		#expect(TextAdditions.escapeURL("http://x.com/a b?q=é#f [x]", alsoEscaping: "") == "http://x.com/a%20b?q=%C3%A9%23f%20%5Bx%5D")
@@ -111,6 +115,7 @@ struct URLEscapingTests {
 	}
 }
 
+@MainActor
 struct HashAndTransformTests {
 	/// Values recorded from SatimageOSAX.
 	@Test(arguments: [("", 0), ("abc", 12_885_873), ("ABC", 10_566_673), ("é", 794_120), ("e\u{301}", 794_120), ("ﬁ", 792_085), ("😀", 4_969_531)])

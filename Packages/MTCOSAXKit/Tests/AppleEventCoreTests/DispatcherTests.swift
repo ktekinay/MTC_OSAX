@@ -15,6 +15,7 @@ func makeReplyEvent() -> NSAppleEventDescriptor {
 	NSAppleEventDescriptor.untargetedEvent(EventKey(eventClass: kCoreEventClass, eventID: kAEAnswer))
 }
 
+@MainActor
 struct RequestTests {
 	@Test func requiredParameterPresent() throws {
 		let request = AppleEventRequest(makeEvent("TESTtest", ["$in ": NSAppleEventDescriptor(string: "abc")]))
@@ -50,6 +51,7 @@ struct RequestTests {
 	}
 }
 
+@MainActor
 struct DispatcherTests {
 	private func dispatcher() -> CommandDispatcher {
 		let dispatcher = CommandDispatcher()

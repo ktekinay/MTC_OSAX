@@ -4,6 +4,7 @@ import Foundation
 /// The hidden "MTC Diagnostics" suite (event class `MTCd`), for checking that the app works end to end.
 public enum Diagnostics {
 	/// - Parameter version: supplies the text `mtc_version` returns.
+	@MainActor
 	public static func commands(version: @escaping () -> String) -> [CommandDefinition] {
 		[
 			CommandDefinition("mtc_ping", code: "MTCdping") { _ in

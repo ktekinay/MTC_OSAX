@@ -185,7 +185,8 @@ final class Document: StoredDocument {
 }
 
 /// The open documents of every kind, in the order they were opened, and the pools they're in. One per app.
-public final class DocumentStore: @unchecked Sendable {
+@MainActor
+public final class DocumentStore {
 	public private(set) var allDocuments: [any StoredDocument] = []
 	/// The pool new documents go into (`SetPool`); "" at launch.
 	public var currentPool = ""
@@ -248,7 +249,7 @@ public final class DocumentStore: @unchecked Sendable {
 	// MARK: References
 
 	/// A CFRef (`CFob`) for an element: its document's number, "MTCp", and its element number.
-	static let referenceType = FourCharCode(fourCharString: "CFob")
+	nonisolated static let referenceType = FourCharCode(fourCharString: "CFob")
 
 	func reference(_ node: Node) -> NSAppleEventDescriptor {
 		var data = Data()
@@ -277,7 +278,7 @@ public final class DocumentStore: @unchecked Sendable {
 		return node
 	}
 
-	static func isReference(_ descriptor: NSAppleEventDescriptor) -> Bool {
+	nonisolated static func isReference(_ descriptor: NSAppleEventDescriptor) -> Bool {
 		descriptor.descriptorType == referenceType
 	}
 }

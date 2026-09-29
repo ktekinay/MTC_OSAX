@@ -7,6 +7,7 @@ import TextMatching
 import Settings
 
 /// Sends a command with the app-wide `RegexSyntax` setting as given.
+@MainActor
 private func send(_ code: String, _ parameters: [String: any AppleEventEncodable], syntaxDefault: RegexSyntax = .ruby) -> AppleEventReply {
 	let dispatcher = CommandDispatcher()
 	dispatcher.register(TextAdditions.commands(context: TextContext(dollarReferencesDefault: { false }, regexSyntaxDefault: { syntaxDefault })))
@@ -18,6 +19,7 @@ private func send(_ code: String, _ parameters: [String: any AppleEventEncodable
 }
 
 /// `syntax "PCRE"` (an MTC_OSAX extension) in each regex command, and the `RegexSyntax` setting.
+@MainActor
 struct PCRECommandTests {
 	/// `\h` is PCRE's horizontal space; Onigmo's Ruby syntax reads it as a hex digit.
 	private let spaces = "x \t y"

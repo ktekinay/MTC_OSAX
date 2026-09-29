@@ -3,6 +3,7 @@ import Foundation
 import Testing
 @testable import ListUtilities
 
+@MainActor
 func send(_ code: String, _ parameters: [String: any AppleEventEncodable]) -> AppleEventReply {
 	let dispatcher = CommandDispatcher()
 	dispatcher.register(ListUtilities.commands())
@@ -40,12 +41,14 @@ func user(_ fields: KeyValuePairs<String, any AppleEventEncodable>) -> NSAppleEv
 	RecordFields(fields.map { (.user($0.key), $0.value.appleEventDescriptor) }).appleEventDescriptor
 }
 
+@MainActor
 struct ListUtilitiesCommandTests {
 	@Test func everyCommandIsRegistered() {
 		#expect(ListUtilities.commands().count == 7)
 	}
 }
 
+@MainActor
 struct SortListTests {
 	private func sort(_ list: any AppleEventEncodable, _ parameters: [String: any AppleEventEncodable] = [:]) -> [AnyHashable]? {
 		values(send("SATISort", parameters.merging(["----": list]) { $1 }).result)
@@ -95,6 +98,7 @@ struct SortListTests {
 	}
 }
 
+@MainActor
 struct MaskListTests {
 	@Test func masks() {
 		#expect(values(send("SATIMASk", ["----": ["a", "b", "c"], "with": [1, 0, 1]]).result) == ["a", "c"])
@@ -107,6 +111,7 @@ struct MaskListTests {
 	}
 }
 
+@MainActor
 struct TopologicalSortTests {
 	private func order(_ parameters: [String: any AppleEventEncodable]) -> [AnyHashable]? {
 		values(send("SATITSrt", parameters).result)
@@ -147,6 +152,7 @@ struct TopologicalSortTests {
 	}
 }
 
+@MainActor
 struct SuppressItemTests {
 	@Test func lists() {
 		#expect(values(send("SATIDLKY", ["----": 2, "from": ["a", "b", "c"]]).result) == ["a", "c"])
@@ -170,6 +176,7 @@ struct SuppressItemTests {
 	}
 }
 
+@MainActor
 struct FilterItemsTests {
 	private let letters = ["a", "z", "e", "r", "t", "y"]
 
@@ -191,6 +198,7 @@ struct FilterItemsTests {
 	}
 }
 
+@MainActor
 struct SpecialConcatTests {
 	@Test func records() throws {
 		let a = user(["a": 1, "b": [1], "c": "A", "d": 0])

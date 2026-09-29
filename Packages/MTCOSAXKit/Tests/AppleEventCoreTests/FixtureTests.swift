@@ -2,6 +2,7 @@ import Foundation
 import Testing
 @testable import AppleEventCore
 
+@MainActor
 struct FixtureTests {
 	private func fixture(expecting reply: AppleEventReply) -> Fixture {
 		Fixture(

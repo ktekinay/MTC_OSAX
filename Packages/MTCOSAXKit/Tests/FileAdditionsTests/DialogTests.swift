@@ -6,7 +6,7 @@ import UniformTypeIdentifiers
 @testable import FileAdditions
 
 /// Stands in for the app's dialogs: records the options it was given and answers with fixed results.
-final class FakeDialogs: FileDialogs, @unchecked Sendable {
+final class FakeDialogs: FileDialogs {
 	var chosen: [URL] = []
 	var newItem = URL(fileURLWithPath: "/private/tmp/new.txt")
 	var canceled = false
@@ -37,6 +37,7 @@ final class FakeDialogs: FileDialogs, @unchecked Sendable {
 	}
 }
 
+@MainActor
 struct DialogTests {
 	private let dialogs = FakeDialogs()
 	private let defaults = MemoryDefaults.make()

@@ -4,6 +4,7 @@ import Testing
 @testable import TextAdditions
 
 /// Sends a command to the Text suite's handlers, with the app-wide dollar references setting as given.
+@MainActor
 private func send(
 	_ code: String,
 	_ parameters: [String: any AppleEventEncodable],
@@ -22,6 +23,7 @@ private let change = "SATIRPLl"
 private let findText = "SATIFINd"
 
 /// The dollar references extension: parameter, then flag, then app-wide default.
+@MainActor
 struct DollarReferencesTests {
 	private let regexChange: [String: any AppleEventEncodable] = ["----": "(b)", "by  ": "[$1]", "$in ": "abc", "UsGR": true]
 
@@ -64,6 +66,7 @@ struct DollarReferencesTests {
 }
 
 /// Rules recorded from Satimage that aren't obvious from its dictionary.
+@MainActor
 struct SearchRuleTests {
 	@Test func notFoundIsError2763() {
 		#expect(send(findText, ["----": "z", "$in ": "abc"]).error == OSAXError(-2763))

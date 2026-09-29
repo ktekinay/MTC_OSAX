@@ -40,6 +40,7 @@ struct SearchOptions {
 	var dollarReferences = false
 
 	/// Reads the parameters a command has. `options` shortcut letters override the individual parameters.
+	@MainActor
 	init(_ request: AppleEventRequest, context: TextContext, readsBackward: Bool = false) throws {
 		syntax = context.regexSyntaxDefault()
 		regexp = try request.parameter("UsGR", default: false)
@@ -115,6 +116,7 @@ struct TextSearcher {
 	private let pattern: String
 	private let regex: CompiledRegex?
 
+	@MainActor
 	init(pattern: String, options: SearchOptions, context: TextContext) throws {
 		self.pattern = pattern
 		self.options = options

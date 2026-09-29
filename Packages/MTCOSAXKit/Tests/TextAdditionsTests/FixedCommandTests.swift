@@ -5,6 +5,7 @@ import Testing
 
 /// Commands that never worked in SatimageOSAX (they replied -1708), implemented from their documentation.
 
+@MainActor
 private func send(_ code: String, _ parameters: [String: any AppleEventEncodable]) -> AppleEventReply {
 	let dispatcher = CommandDispatcher()
 	dispatcher.register(TextAdditions.commands(context: TextContext(dollarReferencesDefault: { false })))
@@ -21,6 +22,7 @@ private func temporaryFile(_ contents: Data) throws -> URL {
 	return url
 }
 
+@MainActor
 struct FileOffsetTests {
 	private let fileOffset = "SATIFoff"
 
@@ -56,6 +58,7 @@ struct FileOffsetTests {
 	}
 }
 
+@MainActor
 struct FilterTextTests {
 	private let filterText = "SATIGPli"
 	private let people = "John is ten\nAnna is twelve\nJohn is at school\nAnna sleeps"

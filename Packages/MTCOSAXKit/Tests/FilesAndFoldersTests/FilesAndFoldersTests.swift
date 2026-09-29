@@ -5,6 +5,7 @@ import Testing
 @testable import FilesAndFolders
 
 /// Runs a command with the given parameters.
+@MainActor
 private func send(_ code: String, _ parameters: [String: any AppleEventEncodable]) -> AppleEventReply {
 	let dispatcher = CommandDispatcher()
 	dispatcher.register(FilesAndFolders.commands())
@@ -53,6 +54,7 @@ private let changeMode = "Quomchmd", copy = "QuomCopy", move = "QuomMove", remov
 private let makeTemporaryFile = "Quommkst", makeTemporaryFolder = "Quommkdt"
 private let createSymlink = "QuomSymL", testSymlink = "QuomIsSy", readLink = "Quomrdsy"
 
+@MainActor
 struct PathInputTests {
 	@Test func pathForms() throws {
 		let sandbox = try Sandbox()
@@ -72,6 +74,7 @@ struct PathInputTests {
 	}
 }
 
+@MainActor
 struct CreateTests {
 	@Test func fileNewCreatesFoldersOnTheWay() throws {
 		let sandbox = try Sandbox()
@@ -137,6 +140,7 @@ struct CreateTests {
 	}
 }
 
+@MainActor
 struct ChangeModeTests {
 	@Test func getAndSet() throws {
 		let sandbox = try Sandbox()
@@ -159,6 +163,7 @@ struct ChangeModeTests {
 	}
 }
 
+@MainActor
 struct CopyMoveTests {
 	@Test func copyToFolderWithName() throws {
 		let sandbox = try Sandbox()
@@ -238,6 +243,7 @@ struct CopyMoveTests {
 	}
 }
 
+@MainActor
 struct RemoveTests {
 	@Test func removeFilesAndFolders() throws {
 		let sandbox = try Sandbox()
@@ -299,6 +305,7 @@ struct RemoveTests {
 	}
 }
 
+@MainActor
 struct TemporaryTests {
 	private func name(_ reply: AppleEventReply) throws -> String {
 		try #require(reply.result?.stringValue).split(separator: "/").last.map(String.init) ?? ""
@@ -350,6 +357,7 @@ struct TemporaryTests {
 }
 
 /// Failures part way say what failed and why, with POSIX numbers where they help.
+@MainActor
 struct FailureTests {
 	@Test func removingAListPartWay() throws {
 		let sandbox = try Sandbox()
@@ -377,6 +385,7 @@ struct FailureTests {
 	}
 }
 
+@MainActor
 struct SymlinkTests {
 	@Test func createAndRead() throws {
 		let sandbox = try Sandbox()
@@ -410,6 +419,7 @@ struct SymlinkTests {
 }
 
 /// A `name` from an untrusted source could write outside the folder (`../escaped`).
+@MainActor
 struct NameTests {
 	@Test(arguments: ["../escaped", "sub/file", "..", ".", ""])
 	func namesArePlainNames(_ name: String) throws {
@@ -430,6 +440,7 @@ struct NameTests {
 	}
 }
 
+@MainActor
 struct RegistrationTests {
 	@Test func allCommandsRegistered() {
 		#expect(FilesAndFolders.commands().count == 13)

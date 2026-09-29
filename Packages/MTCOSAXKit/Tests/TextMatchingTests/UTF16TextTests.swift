@@ -2,6 +2,7 @@ import Foundation
 import Testing
 @testable import TextMatching
 
+@MainActor
 struct UTF16TextTests {
 	/// Every kind of character, and lone surrogates (which become U+FFFD, as `String(decoding:as:)` makes them).
 	@Test func textMatchesStandardDecoding() {

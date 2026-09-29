@@ -8,6 +8,7 @@ private func first(_ pattern: String, in string: String, syntax: RegexSyntax = .
 }
 
 /// The behaviors that identified Satimage's engine as Onigmo with Ruby syntax (see Implemented/PLAN-TextAdditions.md).
+@MainActor
 struct SatimageFingerprintTests {
 	@Test func hIsHexDigit() throws {
 		#expect(try first(#"\h+"#, in: "zz 1aF zz") == "1aF")
@@ -34,6 +35,7 @@ struct SatimageFingerprintTests {
 	}
 }
 
+@MainActor
 struct RegexTests {
 	@Test func offsetsAreUTF16Units() throws {
 		for string in ["😀b", "e\u{301}b", "日本b", "éb"] {
@@ -116,6 +118,7 @@ struct RegexTests {
 	}
 }
 
+@MainActor
 struct RegexFlagTests {
 	@Test func parsesSatimageSpellings() {
 		#expect(RegexFlags(names: ["IGNORECASE", "find longest", "FIND_NOT_EMPTY", "Newline In Negative CC"])
@@ -225,6 +228,7 @@ struct RegexFlagTests {
 	}
 }
 
+@MainActor
 struct RegexCacheTests {
 	@Test func reusesCompiledPatterns() throws {
 		let cache = RegexCache()
@@ -245,6 +249,7 @@ struct RegexCacheTests {
 }
 
 /// Runaway backtracking is an error, not "no match" or a crash.
+@MainActor
 struct RegexLimitTests {
 	/// Onigmo's backtracking stack used to be unlimited.
 	@Test func onigmoStackLimit() throws {
@@ -267,6 +272,7 @@ struct RegexLimitTests {
 
 /// Text from a script can hold a lone surrogate. Onigmo's UTF-16 read the pair's second half anyway, past the end
 /// of the text (AddressSanitizer caught it in a case-insensitive search).
+@MainActor
 struct LoneSurrogateTests {
 	@Test(arguments: [[UInt16(0xD800)], [0xD800, 0x61], [0x61, 0xDC00], [0xD83D, 0xDE00, 0xD800]])
 	func caseInsensitiveSearch(_ units: [UInt16]) throws {
@@ -284,6 +290,7 @@ struct LoneSurrogateTests {
 
 /// A text character that folds to more than is left of the pattern's text (ß is ss) made Onigmo read past the
 /// pattern (AddressSanitizer caught it).
+@MainActor
 struct CaseFoldingTests {
 	@Test func foldsLongerThanThePattern() throws {
 		#expect(try CompiledRegex("s", flags: .ignoreCase).firstMatch(in: UTF16Text("ß")) == nil)
@@ -297,6 +304,7 @@ struct CaseFoldingTests {
 
 /// Onigmo peeked at the character after the end of the text when a greedy repeat of anything was followed by a
 /// literal, as in the find-script-ldjson fixture (AddressSanitizer caught it).
+@MainActor
 struct PeekAtEndTests {
 	@Test func greedyRepeatBeforeALiteral() throws {
 		let regex = try CompiledRegex(#"<s>([\s\S]*)</s>"#)

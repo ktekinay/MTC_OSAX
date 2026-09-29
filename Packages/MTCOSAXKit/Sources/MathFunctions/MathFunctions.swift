@@ -11,6 +11,7 @@ import Numerics
 /// shape with reals. A single result that isn't a finite number is error -50; in a list it's `missing value`, and in
 /// an array NaN.
 public enum MathFunctions {
+	@MainActor
 	public static func commands() -> [CommandDefinition] {
 		let functions: [(String, String, (Double) -> Double)] = [
 			("abs", "MATHABS ", { Swift.abs($0) }),

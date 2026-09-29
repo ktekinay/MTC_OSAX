@@ -2,6 +2,7 @@ import Foundation
 import Testing
 @testable import AppleEventCore
 
+@MainActor
 struct FourCharCodeTests {
 	@Test(arguments: ["SATI", "$in ", "----", "ut16"])
 	func roundTrips(_ code: String) {
@@ -14,6 +15,7 @@ struct FourCharCodeTests {
 	}
 }
 
+@MainActor
 struct DecodingTests {
 	@Test func stringFromText() throws {
 		#expect(try String(appleEventDescriptor: NSAppleEventDescriptor(string: "abc")) == "abc")
@@ -118,6 +120,7 @@ struct DecodingTests {
 	}
 }
 
+@MainActor
 struct EncodingTests {
 	@Test func smallIntIsInteger() {
 		#expect(42.appleEventDescriptor.descriptorType == typeSInt32)
@@ -139,6 +142,7 @@ struct EncodingTests {
 	}
 }
 
+@MainActor
 struct CLengthTests {
 	/// Lengths of 2 GB or more used to trap in Int32(_:) before reaching libxml2 or tomlc17.
 	@Test func tooLargeIsAnError() throws {
@@ -148,6 +152,7 @@ struct CLengthTests {
 	}
 }
 
+@MainActor
 struct WriteReplacingTests {
 	/// Saves used to write in place, so a failure part way left a cut-short file.
 	@Test func replacesInOneStep() throws {
@@ -174,6 +179,7 @@ struct WriteReplacingTests {
 	}
 }
 
+@MainActor
 struct ArrayOfRealTests {
 	/// Asking a list's data (to see whether it was an `array of real`) made the Apple Event Manager copy and
 	/// byte-swap the whole list, and log, each time: half of `sortlist`'s time. 1,000 checks took about 10 seconds.

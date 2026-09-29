@@ -3,6 +3,7 @@ import Foundation
 import Testing
 @testable import Diagnostics
 
+@MainActor
 struct DiagnosticsTests {
 	private let dispatcher: CommandDispatcher = {
 		let dispatcher = CommandDispatcher()

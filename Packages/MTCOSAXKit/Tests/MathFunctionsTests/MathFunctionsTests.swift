@@ -3,6 +3,7 @@ import Foundation
 import Testing
 @testable import MathFunctions
 
+@MainActor
 private func send(_ code: String, _ direct: (any AppleEventEncodable)?) -> AppleEventReply {
 	let dispatcher = CommandDispatcher()
 	dispatcher.register(MathFunctions.commands())
@@ -13,6 +14,7 @@ private func send(_ code: String, _ direct: (any AppleEventEncodable)?) -> Apple
 	return dispatcher.dispatch(event)
 }
 
+@MainActor
 struct MathFunctionsCommandTests {
 	@Test func everyCommandIsRegistered() {
 		#expect(MathFunctions.commands().count == 27)

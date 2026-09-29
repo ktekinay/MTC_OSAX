@@ -13,6 +13,7 @@ private func expand(_ template: String, pattern: String, in string: String, doll
 		.expand(TextMatch(groups: match.groups), in: text, groupCount: regex.groupCount, namedGroups: regex.namedGroups)
 }
 
+@MainActor
 struct TemplateTests {
 	@Test func numberedGroups() throws {
 		#expect(try expand(#"[\0|\1|\2]"#, pattern: "(a)(b)", in: "xab") == "[ab|a|b]")

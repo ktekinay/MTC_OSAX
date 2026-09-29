@@ -7,6 +7,7 @@ private func printf(_ format: String, _ arguments: [any AppleEventEncodable]) th
 	try Printf.format(format, arguments: arguments.map(\.appleEventDescriptor))
 }
 
+@MainActor
 struct PrintfTests {
 	@Test func documentationExamples() throws {
 		#expect(try printf(#"integers like %d, floats like %g, strings like "%s"."#, [12, Double.pi, "hello"])
@@ -76,6 +77,7 @@ struct PrintfTests {
 	}
 }
 
+@MainActor
 struct DateFormattingTests {
 	private let newYork = DateFormatting(timeZone: TimeZone(identifier: "America/New_York")!)
 

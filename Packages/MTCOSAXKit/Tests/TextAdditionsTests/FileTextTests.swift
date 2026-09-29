@@ -3,6 +3,7 @@ import Foundation
 import Testing
 @testable import TextAdditions
 
+@MainActor
 struct FileTextDecodingTests {
 	@Test func byteOrderMarks() {
 		let utf8 = FileText.decode(Data([0xEF, 0xBB, 0xBF]) + Data("é".utf8), trimIncompleteEnd: false)
@@ -48,6 +49,7 @@ struct FileTextDecodingTests {
 	}
 }
 
+@MainActor
 struct FileTextEncodingTests {
 	@Test func missingCharacterPerUTF16Unit() throws {
 		let data = try FileText.encode("a😀bé", encoding: .isoLatin1, missingCharacter: "?")
@@ -66,6 +68,7 @@ struct FileTextEncodingTests {
 	}
 }
 
+@MainActor
 struct FileTextReadWriteTests {
 	private func temporaryFile(_ contents: Data) throws -> URL {
 		let url = FileManager.default.temporaryDirectory.appendingPathComponent("filetext-\(UUID().uuidString).txt")
@@ -109,6 +112,7 @@ struct FileTextReadWriteTests {
 	}
 }
 
+@MainActor
 struct ByteSearchTests {
 	/// Generic UTF-32 was always little-endian, while UTF-16 followed the byte-order mark.
 	@Test func byteOrderMarks() {
@@ -119,6 +123,7 @@ struct ByteSearchTests {
 	}
 }
 
+@MainActor
 struct ReadTextURLTests {
 	private func read(_ source: any AppleEventEncodable) -> AppleEventReply {
 		let dispatcher = CommandDispatcher()
@@ -137,6 +142,7 @@ struct ReadTextURLTests {
 	}
 }
 
+@MainActor
 struct ReadTextSpecialFileTests {
 	/// /dev/zero was read until memory ran out, and a named pipe waited forever.
 	@Test func onlyRegularFiles() throws {

@@ -3,6 +3,7 @@ import Foundation
 import Testing
 @testable import Arrays
 
+@MainActor
 private func send(_ code: String, _ parameters: [String: any AppleEventEncodable]) -> AppleEventReply {
 	let dispatcher = CommandDispatcher()
 	dispatcher.register(Arrays.commands())
@@ -17,6 +18,7 @@ private func values(_ reply: AppleEventReply) -> [Double]? {
 	reply.result.flatMap(ArrayOfReal.values(of:))
 }
 
+@MainActor
 struct CreateArrayTests {
 	@Test func ranges() {
 		#expect(values(send("SATICRAR", ["----": 3])) == [0, 1, 2])
@@ -41,6 +43,7 @@ struct CreateArrayTests {
 	}
 }
 
+@MainActor
 struct RandomArrayTests {
 	@Test func seedsMatchSatimage() {
 		// Recorded from SatimageOSAX: randomarray 3 seed 12345.

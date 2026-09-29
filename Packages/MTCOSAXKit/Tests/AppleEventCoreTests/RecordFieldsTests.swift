@@ -2,6 +2,7 @@ import Foundation
 import Testing
 @testable import AppleEventCore
 
+@MainActor
 struct RecordFieldsTests {
 	@Test func codesAndUserKeysRoundTrip() throws {
 		let record = RecordFields([

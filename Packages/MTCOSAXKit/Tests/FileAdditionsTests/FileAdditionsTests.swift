@@ -5,6 +5,7 @@ import Testing
 
 // MARK: Helpers
 
+@MainActor
 func send(_ code: String, _ parameters: [String: any AppleEventEncodable], commands: [CommandDefinition] = FileAdditions.commands()) -> AppleEventReply {
 	let dispatcher = CommandDispatcher()
 	dispatcher.register(commands)
@@ -87,6 +88,7 @@ func type(_ code: String) -> NSAppleEventDescriptor {
 
 // MARK: Result forms
 
+@MainActor
 struct ResultFormTests {
 	private func form(_ value: NSAppleEventDescriptor?) -> ResultForm {
 		let event = NSAppleEventDescriptor.untargetedEvent(EventKey(code: "SATIlsfl"))

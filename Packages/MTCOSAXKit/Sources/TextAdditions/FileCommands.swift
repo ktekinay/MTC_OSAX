@@ -3,6 +3,7 @@ import Foundation
 
 /// `readtext`, `writetext` and `file offset`. Behavior recorded in `Fixtures/TextAdditions/Files`.
 extension TextAdditions {
+	@MainActor
 	static func fileCommands() -> [CommandDefinition] {
 		[
 			CommandDefinition("readtext", code: "SATIRead") { request in

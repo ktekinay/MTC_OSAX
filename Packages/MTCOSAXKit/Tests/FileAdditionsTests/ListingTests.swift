@@ -4,6 +4,7 @@ import Testing
 @testable import FileAdditions
 
 /// `list files` and `glob`. Order is the file system's, so tests that don't sort by date compare sorted results.
+@MainActor
 struct ListFilesTests {
 	private let listFiles = "SATIlsfl"
 
@@ -128,6 +129,7 @@ struct ListFilesTests {
 	}
 }
 
+@MainActor
 struct GlobTests {
 	private let glob = "SATIGlob"
 

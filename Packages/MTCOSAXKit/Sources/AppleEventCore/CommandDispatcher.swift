@@ -2,7 +2,8 @@ import Foundation
 
 /// One scripting command: its SDEF code and the handler that implements it.
 public struct CommandDefinition {
-	public typealias Handler = (AppleEventRequest) throws -> (any AppleEventEncodable)?
+	/// Handlers run on the main thread, one at a time, as the Apple Event Manager calls them.
+	public typealias Handler = @MainActor (AppleEventRequest) throws -> (any AppleEventEncodable)?
 
 	/// The command's AppleScript name, as in the SDEF (for diagnostics only).
 	public let name: String
@@ -79,6 +80,7 @@ public struct AppleEventReply {
 }
 
 /// Routes incoming Apple events to registered commands.
+@MainActor
 public final class CommandDispatcher {
 	public private(set) var commands: [EventKey: CommandDefinition] = [:]
 

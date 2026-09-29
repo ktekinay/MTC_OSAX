@@ -1,6 +1,7 @@
 import Foundation
 
 /// Keeps recently compiled patterns, since scripts often run the same `find text` or `change` in a loop.
+@MainActor
 public final class RegexCache {
 	private struct Key: Hashable {
 		let pattern: String

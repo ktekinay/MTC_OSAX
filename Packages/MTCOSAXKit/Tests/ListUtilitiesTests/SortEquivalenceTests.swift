@@ -5,6 +5,7 @@ import Testing
 
 /// `sortlist` against a plain implementation of its rules (the comparison it used before sort keys were made once
 /// per item), over random lists.
+@MainActor
 struct SortEquivalenceTests {
 	private static let pieces = ["a", "A", "b", "B", "é", "É", "e", "z", "0", "1", "2", "9", "10", "007", " ", "-", "ß", "😀", "Ω", "ω"]
 

@@ -117,6 +117,7 @@ extension XMLCommands {
 	}
 }
 
+@MainActor
 enum Stylesheets {
 	/// libxslt's parsing options for stylesheets.
 	static let parseOptions = Int32(XML_PARSE_NOENT.rawValue | XML_PARSE_DTDLOAD.rawValue | XML_PARSE_DTDATTR.rawValue | XML_PARSE_NOCDATA.rawValue)

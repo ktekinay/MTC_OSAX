@@ -8,7 +8,7 @@ extension XPath {
 	/// for them): XPath 2.0's compare, upper-case, lower-case, ends-with and base-uri; EXSLT's math, sets, strings
 	/// and dates-and-times functions, and md5, sha1, sha224 and sha256 (base64, as SatimageOSAX gave them); and
 	/// SatimageOSAX's parent-uri and relative-uri.
-	enum Functions {
+	nonisolated enum Functions {
 		static let xpath2 = "http://www.w3.org/2005/xpath-functions"
 		static let crypto = "http://exslt.org/crypto"
 		static let strings = "http://exslt.org/strings"

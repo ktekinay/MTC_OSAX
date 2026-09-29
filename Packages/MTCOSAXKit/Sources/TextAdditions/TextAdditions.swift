@@ -14,6 +14,7 @@ public enum TextAdditions {
 	///     recorded in; the app uses the system's.
 	///   - settings: where the `DollarReferences` and `RegexSyntax` settings are read; fixture replays pass their own.
 	///   - propertyLists: writes `filter text … into` a CFRef.
+	@MainActor
 	public static func commands(timeZone: TimeZone = .current, settings: UserDefaults = .standard, propertyLists: PropertyListWriter? = nil) -> [CommandDefinition] {
 		commands(context: TextContext(
 			dollarReferencesDefault: { Settings.dollarReferences(in: settings) },
@@ -23,12 +24,14 @@ public enum TextAdditions {
 		))
 	}
 
+	@MainActor
 	static func commands(context: TextContext) -> [CommandDefinition] {
 		searchCommands(context) + simpleCommands() + fileCommands() + formatCommands(context)
 	}
 }
 
 /// State shared by the suite's commands for the life of the app.
+@MainActor
 final class TextContext {
 	let regexCache = RegexCache()
 	/// Whether `$1`-style references are on when a command doesn't say (the `DollarReferences` default).

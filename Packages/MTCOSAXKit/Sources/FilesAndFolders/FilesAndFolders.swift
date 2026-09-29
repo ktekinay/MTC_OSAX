@@ -9,6 +9,7 @@ import Foundation
 /// Files can be given as aliases, file references, POSIX paths (with `~`), `file://` URLs or HFS paths. Results are
 /// POSIX paths as text, with a trailing `/` for folders, as Satimage returns them.
 public enum FilesAndFolders {
+	@MainActor
 	public static func commands() -> [CommandDefinition] {
 		[
 			CommandDefinition("filegetname", code: "QuomGFNa") { request in

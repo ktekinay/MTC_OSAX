@@ -32,6 +32,7 @@ extension XMLs {
 	}
 }
 
+@MainActor
 struct XPathTests {
 	@Test func resultsAndErrors() throws {
 		let xml = XMLs()
@@ -125,6 +126,7 @@ struct XPathTests {
 	}
 }
 
+@MainActor
 struct NodePathTests {
 	@Test func paths() throws {
 		let xml = XMLs()
@@ -155,6 +157,7 @@ struct NodePathTests {
 	}
 }
 
+@MainActor
 struct XPointerTests {
 	@Test func escapeAndGet() throws {
 		let xml = XMLs()
@@ -195,6 +198,7 @@ struct XPointerTests {
 	}
 }
 
+@MainActor
 struct XSLTTests {
 	private let titles = """
 	<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"><xsl:param name="label" select="'Titles'"/>\
@@ -364,6 +368,7 @@ struct XSLTTests {
 	}
 }
 
+@MainActor
 struct IndexTests {
 	@Test func indexes() throws {
 		let xml = XMLs()
@@ -411,6 +416,7 @@ struct IndexTests {
 	}
 }
 
+@MainActor
 struct LocalizeTests {
 	@Test func stringsAndLocalize() throws {
 		let xml = XMLs()

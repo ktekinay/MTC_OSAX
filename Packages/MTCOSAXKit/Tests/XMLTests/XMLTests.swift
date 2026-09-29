@@ -5,6 +5,7 @@ import Testing
 @testable import XML
 
 /// Sends commands to one set of XML (and PropertyList, for pools) commands, sharing their documents.
+@MainActor
 final class XMLs {
 	let store = DocumentStore()
 	private let dispatcher = CommandDispatcher()
@@ -32,6 +33,7 @@ final class XMLs {
 	}
 }
 
+@MainActor
 struct XMLCommandTests {
 	@Test func libxml2IsLinked() {
 		#expect(XML.libxmlVersion.hasPrefix("209"))
@@ -59,6 +61,7 @@ struct XMLCommandTests {
 	}
 }
 
+@MainActor
 struct XMLOpenTests {
 	@Test func errorsAndLevels() throws {
 		let xml = XMLs()
@@ -145,6 +148,7 @@ struct XMLOpenTests {
 	}
 }
 
+@MainActor
 struct XMLNavigationTests {
 	private let text = "<?xml version=\"1.0\"?><!-- c --><r><a id=\"1\">A</a>text<b/><!-- d --></r>"
 
@@ -180,6 +184,7 @@ struct XMLNavigationTests {
 	}
 }
 
+@MainActor
 struct XMLChangeTests {
 	@Test func attributesAndText() throws {
 		let xml = XMLs()
@@ -352,6 +357,7 @@ struct XMLChangeTests {
 	}
 }
 
+@MainActor
 struct XMLSearchTests {
 	@Test func findAndRegexp() throws {
 		let xml = XMLs()
@@ -381,6 +387,7 @@ struct XMLSearchTests {
 	}
 }
 
+@MainActor
 struct XMLDocumentTests {
 	@Test func saveURLsAndEncodings() throws {
 		let xml = XMLs()
@@ -500,6 +507,7 @@ struct XMLDocumentTests {
 	}
 }
 
+@MainActor
 struct XMLFileInfoTests {
 	@Test func firstTag() {
 		#expect(XMLCommands.firstTag("<?xml version=\"1.0\"?>\n<!-- c -->\n<root a=\"1\">")! == (false, "root", 3))

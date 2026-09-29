@@ -17,6 +17,7 @@ private func dictionary(_ pairs: [String: Any]) -> NSMutableDictionary {
 
 private var missing: Data { PropertyLists.missingValueData }
 
+@MainActor
 struct TOMLTests {
 	@Test func scalars() throws {
 		let text = try TOML.write(dictionary([
@@ -127,6 +128,7 @@ struct TOMLTests {
 	}
 }
 
+@MainActor
 struct YAMLTests {
 	/// Aliases used to be expanded again at every use, so a few lines could make hundreds of millions of values.
 	@Test func aliasExpansion() throws {
@@ -274,6 +276,7 @@ struct YAMLTests {
 	}
 }
 
+@MainActor
 struct FormatCommandTests {
 	@Test func commands() throws {
 		let plists = Plists()
@@ -299,6 +302,7 @@ struct FormatCommandTests {
 }
 
 /// Cases from the TOML 1.1 and YAML 1.2 specifications that the converters must get right.
+@MainActor
 struct FormatConformanceTests {
 	@Test(arguments: [
 		("dotted = 1\na.b.c = 2", "a", "{b = {c = 2;};}"),
@@ -365,6 +369,7 @@ struct FormatConformanceTests {
 }
 
 /// Reading and writing files (decision 12), for JSON, YAML and TOML alike.
+@MainActor
 struct FormatFileTests {
 	private let formats = [("JSON", "PLSTJSON", "PLSTNOSJ"), ("YAML", "MTCpTYML", "MTCpFYML"), ("TOML", "MTCpTTML", "MTCpFTML")]
 
@@ -427,6 +432,7 @@ struct FormatFileTests {
 }
 
 /// Cases the audit listed as untested.
+@MainActor
 struct FormatEdgeTests {
 	@Test func yamlEdges() throws {
 		let object = try #require(try YAML.read("""

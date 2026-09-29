@@ -28,6 +28,7 @@ private func withFiles<T>(_ files: [String: String], _ body: (URL) throws -> T) 
 	return try body(folder)
 }
 
+@MainActor
 struct DTDValidationTests {
 	@Test func documents() throws {
 		let xml = XMLs()
@@ -77,6 +78,7 @@ struct DTDValidationTests {
 	}
 }
 
+@MainActor
 struct SchemaValidationTests {
 	@Test func xmlSchema() throws {
 		try withFiles(["people.xsd": xsd, "located.xml": "<people xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:noNamespaceSchemaLocation='people.xsd'><person>A</person></people>"]) { folder in
@@ -108,6 +110,7 @@ struct SchemaValidationTests {
 	}
 }
 
+@MainActor
 struct IDAndNameTests {
 	@Test func ids() throws {
 		let xml = XMLs()

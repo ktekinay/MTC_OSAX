@@ -5,6 +5,7 @@ import Foundation
 
 /// XPath for `XMLXPath`, `XMLNewIndex` and `XMLXPointer`: contexts with a document's namespaces and variables
 /// (`XMLSetContext`) and SatimageOSAX's extension functions; results as Apple event values.
+@MainActor
 enum XPath {
 	typealias Namespaces = [(prefix: String, uri: String)]
 	typealias Variables = [(name: String, value: NSAppleEventDescriptor)]
@@ -135,7 +136,7 @@ enum XPath {
 		return NSAppleEventDescriptor(double: value)
 	}
 
-	static func nodes(_ set: xmlNodeSetPtr?) -> [xmlNodePtr] {
+	nonisolated static func nodes(_ set: xmlNodeSetPtr?) -> [xmlNodePtr] {
 		guard let set, let table = set.pointee.nodeTab else { return [] }
 		return (0 ..< Int(set.pointee.nodeNr)).compactMap { table[$0] }
 	}

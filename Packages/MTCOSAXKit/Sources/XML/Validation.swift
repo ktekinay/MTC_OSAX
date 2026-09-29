@@ -179,6 +179,7 @@ extension XMLCommands {
 	}
 }
 
+@MainActor
 enum Validation {
 	/// Where a schema comes from: a file or URL, XML text (a copy libxml2 reads while parsing), or an open document.
 	enum Source {
@@ -191,6 +192,7 @@ enum Validation {
 		}
 
 		/// An alias or file, a path, URL or XML text, or an XMLRef.
+		@MainActor
 		init(_ descriptor: NSAppleEventDescriptor, references: XMLReferences) throws {
 			if XMLReferences.isReference(descriptor) {
 				guard let doc = try references.resolve(descriptor).0.doc else { throw XML.noSuchNode }

@@ -16,6 +16,7 @@ private let commandExtensions: [String: Set<String>] = ["SATISplt": ["synt"], "P
 /// Commands whose direct parameter takes more than Satimage's: `PlistFromJSON` also takes a file.
 private let directParameterExtensions: Set = ["PLSTNOSJ"]
 
+@MainActor
 struct SDEFConsistencyTests {
 	@Test func everySDEFCommandHasAHandler() throws {
 		let sdef = try SDEF(contentsOf: ProjectFiles.appSDEF)
@@ -67,6 +68,7 @@ struct SDEFConsistencyTests {
 }
 
 /// Checks the comparison itself, since with only the Diagnostics suite it has nothing to compare yet.
+@MainActor
 struct SDEFComparisonTests {
 	private let satimage = """
 		<dictionary>

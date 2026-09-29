@@ -37,6 +37,7 @@ enum Fixtures {
 	/// section's, for a "…Fixes" folder),
 	/// `TMP` a new empty folder, removed afterwards. `TMP` is a real path (`/private/var/…`, not `/var/…`), as
 	/// recorded, since file references and aliases in results resolve symbolic links.
+	@MainActor
 	static func replay(_ path: String, using dispatcher: CommandDispatcher) throws -> [String] {
 		let fixture = try load(path)
 		var temporary = FileManager.default.temporaryDirectory.appendingPathComponent("mtc-replay-\(UUID().uuidString)")
@@ -65,6 +66,7 @@ enum Fixtures {
 }
 
 /// Replays every recorded fixture against the app's real commands.
+@MainActor
 struct FixtureReplayTests {
 	@Test(arguments: Fixtures.paths())
 	func replay(_ path: String) throws {
@@ -81,6 +83,7 @@ struct FixtureReplayTests {
 
 /// XMLOpen of http URLs, replayed against the test server they were recorded with (`$HTTP`), with the XML
 /// fixtures' input files.
+@MainActor
 struct NetworkFixtureTests {
 	@Test(arguments: Fixtures.paths(in: "XMLNetwork"))
 	func replay(_ path: String) throws {
@@ -93,6 +96,7 @@ struct NetworkFixtureTests {
 }
 
 /// The test server serves only the files in its folder.
+@MainActor
 struct NetworkFixtureServerTests {
 	@Test func staysInItsFolder() throws {
 		let files = Fixtures.directory.appendingPathComponent("XML/Input")
@@ -125,6 +129,7 @@ extension Result where Success == Data, Failure == Error {
 
 /// Satimage fixtures recorded before the command is implemented, replayed against a stand-in,
 /// to show that recording and replay work end to end.
+@MainActor
 struct ExampleFixtureTests {
 	private let stub: CommandDispatcher = {
 		let dispatcher = CommandDispatcher()

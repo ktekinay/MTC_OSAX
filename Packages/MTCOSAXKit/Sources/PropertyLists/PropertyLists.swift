@@ -7,14 +7,16 @@ import Foundation
 ///
 /// Scripts work on property lists through CFRefs: references to a document or to an element in one, valid until
 /// the element is removed or the document closed (then error -1728).
+@MainActor
 public enum PropertyLists {
 	// Error numbers recorded from SatimageOSAX.
-	static let invalid = OSAXError(-1)
-	static let noSuchElement = OSAXError(-1728) // errAENoSuchObject
-	static let notFound = OSAXError(-2763)
-	static let wrongType = OSAXError(-10001) // errAETypeError
+	nonisolated static let invalid = OSAXError(-1)
+	nonisolated static let noSuchElement = OSAXError(-1728) // errAENoSuchObject
+	nonisolated static let notFound = OSAXError(-2763)
+	nonisolated static let wrongType = OSAXError(-10001) // errAETypeError
 
 	/// - Parameter store: the open documents; the app passes its own, to know when documents are open.
+	@MainActor
 	public static func commands(store: DocumentStore = DocumentStore()) -> [CommandDefinition] {
 		let commands = Commands(store: store)
 		return [
@@ -146,6 +148,7 @@ extension PropertyLists {
 }
 
 /// The handlers, sharing the document store.
+@MainActor
 struct Commands {
 	let store: DocumentStore
 

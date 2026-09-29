@@ -4,6 +4,7 @@ import UniformTypeIdentifiers
 @testable import FileAdditions
 
 /// The rules the app's dialogs use to enable and accept items.
+@MainActor
 struct PanelRulesTests {
 	/// A folder with a text file, a JPEG, a subfolder and an app package with a file inside.
 	private func withItems(_ body: (URL) throws -> Void) throws {

@@ -9,6 +9,7 @@ import Foundation
 public enum FileAdditions {
 	/// - Parameter dialogs: shows the `navchoose` dialogs and the `navask save` alert; the app passes its AppKit
 	///   implementation. Without one, those commands reply "event not handled".
+	@MainActor
 	public static func commands(dialogs: (any FileDialogs)? = nil) -> [CommandDefinition] {
 		[
 			CommandDefinition("alias description for", code: "SATIALIS", handler: aliasDescription),

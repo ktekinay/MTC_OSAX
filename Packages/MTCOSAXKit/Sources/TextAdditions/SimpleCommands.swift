@@ -5,6 +5,7 @@ import TextMatching
 /// The commands that transform one string (or each string of a list) without searching.
 /// Their exact behavior is recorded in `Fixtures/TextAdditions/Simple`.
 extension TextAdditions {
+	@MainActor
 	static func simpleCommands() -> [CommandDefinition] {
 		[
 			eachString("uppercase", code: "SATIUPPE") { transformCase($0, CFStringUppercase) },
@@ -64,6 +65,7 @@ extension TextAdditions {
 	}
 
 	/// A command that applies `transform` to its direct parameter, a string or each string of a list.
+	@MainActor
 	private static func eachString(_ name: String, code: String, _ transform: @escaping (String) throws -> String) -> CommandDefinition {
 		CommandDefinition(name, code: code) { request in
 			try TextInput(request, keyword: Keyword.directObject).map { try transform($0).appleEventDescriptor }

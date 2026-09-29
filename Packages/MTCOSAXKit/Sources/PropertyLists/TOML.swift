@@ -221,5 +221,5 @@ func isMissingValue(_ value: Any) -> Bool {
 }
 
 extension PropertyLists {
-	static let missingValueData = flatten(.missingValue)
+	nonisolated static let missingValueData = flatten(.missingValue)
 }

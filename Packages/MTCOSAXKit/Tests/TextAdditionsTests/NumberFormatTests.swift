@@ -4,6 +4,7 @@ import Testing
 @testable import TextAdditions
 
 /// Examples recorded from SatimageOSAX; the fixtures cover many more.
+@MainActor
 struct NumberFormatTests {
 	private func format(_ value: Double, _ format: String) throws -> String {
 		try #require(NumberFormat(format)).format(value)
@@ -95,6 +96,7 @@ struct NumberFormatTests {
 }
 
 /// Satimage silently reused the last valid format for an invalid one or a missing `into`; MTC_OSAX doesn't.
+@MainActor
 struct FormatErrorTests {
 	private func send(_ value: Double, into format: String?) -> AppleEventReply {
 		let dispatcher = CommandDispatcher()

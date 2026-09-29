@@ -5,6 +5,7 @@ import Numerics
 /// From Satimage's "Arrays" suite, the commands that make an `array of real`: `createarray` and `randomarray`.
 /// Behavior recorded from SatimageOSAX in `Fixtures/Arrays`. The rest of the suite isn't implemented yet.
 public enum Arrays {
+	@MainActor
 	public static func commands() -> [CommandDefinition] {
 		let random = RandomSource()
 		return [

@@ -15,6 +15,7 @@ public enum XML {
 	static let badIndex = OSAXError(-1719) // errAEIllegalIndex
 
 	/// - Parameter store: the open documents, shared with the PropertyList suite and its pools.
+	@MainActor
 	public static func commands(store: DocumentStore = DocumentStore()) -> [CommandDefinition] {
 		let commands = XMLCommands(store: store, settings: XMLSettings())
 		NetworkInput.install()
@@ -38,6 +39,7 @@ public enum XML {
 }
 
 /// The handlers, sharing the document store.
+@MainActor
 struct XMLCommands {
 	let store: DocumentStore
 	let settings: XMLSettings
