@@ -20,12 +20,14 @@ public struct ArrayOfReal: Equatable, AppleEventConvertible {
 		self.values = values
 	}
 
-	/// The numbers in an `array of real` descriptor, or nil if it isn't one.
+	/// The numbers in an `array of real` descriptor, or nil if it isn't one. The type is checked first: asking a
+	/// list for its data made the Apple Event Manager copy and byte-swap the whole list (and log).
 	public static func values(of descriptor: NSAppleEventDescriptor) -> [Double]? {
+		guard descriptor.descriptorType == descriptorType else {
+			return nil
+		}
 		let data = descriptor.data
-		guard descriptor.descriptorType == descriptorType, data.starts(with: header),
-		      (data.count - header.count) % 8 == 0
-		else {
+		guard data.starts(with: header), (data.count - header.count) % 8 == 0 else {
 			return nil
 		}
 		return stride(from: header.count, to: data.count, by: 8).map { offset in

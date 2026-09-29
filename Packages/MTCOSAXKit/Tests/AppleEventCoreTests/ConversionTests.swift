@@ -173,3 +173,19 @@ struct WriteReplacingTests {
 		#expect(throws: (any Error).self) { try Data().writeReplacing(folder.appendingPathComponent("nope/b.txt")) }
 	}
 }
+
+struct ArrayOfRealTests {
+	/// Asking a list's data (to see whether it was an `array of real`) made the Apple Event Manager copy and
+	/// byte-swap the whole list, and log, each time: half of `sortlist`'s time. 1,000 checks took about 10 seconds.
+	@Test func otherDescriptorsAreRejectedWithoutReadingThem() {
+		let list = Array(1 ... 10_000).appleEventDescriptor
+		let clock = ContinuousClock()
+		let elapsed = clock.measure {
+			for _ in 0 ..< 1_000 {
+				#expect(ArrayOfReal.values(of: list) == nil)
+			}
+		}
+		#expect(elapsed < .seconds(1))
+		#expect(ArrayOfReal.values(of: NSAppleEventDescriptor(descriptorType: FourCharCode(fourCharString: "Lido"), data: Data("Not a record".utf8))!) == nil)
+	}
+}
