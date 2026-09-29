@@ -155,9 +155,9 @@ struct TextSearcher {
 		if options.backward {
 			// Backward: searches the text before `starting at` (the whole text if not given).
 			let upper = options.start.map { min(max($0, 0), text.count) } ?? text.count
-			return literalMatch(in: text, within: 0 ..< upper, backward: true)
+			return literalMatch(in: text, string: Self.searchString(text), within: 0 ..< upper, backward: true)
 		}
-		return literalMatch(in: text, within: bounds, backward: false)
+		return literalMatch(in: text, string: Self.searchString(text), within: bounds, backward: false)
 	}
 
 	/// Every non-overlapping match, left to right.
@@ -167,6 +167,7 @@ struct TextSearcher {
 		}
 		var matches: [TextMatch] = []
 		var position = bounds.lowerBound
+		lazy var string = Self.searchString(text)
 		// Satimage's loop: a search never starts at the end of the searched range. After an empty match
 		// the next search starts one character later.
 		while position < bounds.upperBound {
@@ -178,7 +179,7 @@ struct TextSearcher {
 					throw OSAXError(error)
 				}
 			} else {
-				match = literalMatch(in: text, within: position ..< bounds.upperBound, backward: false)
+				match = literalMatch(in: text, string: string, within: position ..< bounds.upperBound, backward: false)
 			}
 			guard let match else {
 				break
@@ -189,13 +190,24 @@ struct TextSearcher {
 		return matches
 	}
 
+	/// The text for `literalMatch`, made once per search: copying it for every match made a search of all
+	/// occurrences take time proportional to the text's length times the number of matches (8 seconds for 1,250
+	/// matches in 100 KB). Made from the UTF-16 units, so positions are found directly.
+	private static func searchString(_ text: UTF16Text) -> NSString {
+		text.units.withUnsafeBufferPointer { units in
+			guard let characters = units.baseAddress else {
+				return ""
+			}
+			return NSString(characters: characters, length: units.count)
+		}
+	}
+
 	/// `NSString` search: canonically equivalent text matches (precomposed and decomposed é), with optional
 	/// case and diacritic folding. `whole word` skips matches next to a letter, digit or underscore.
-	private func literalMatch(in text: UTF16Text, within bounds: Range<Int>, backward: Bool) -> TextMatch? {
+	private func literalMatch(in text: UTF16Text, string: NSString, within bounds: Range<Int>, backward: Bool) -> TextMatch? {
 		guard !pattern.isEmpty, !bounds.isEmpty else {
 			return nil
 		}
-		let string = text.string as NSString
 		var compareOptions: NSString.CompareOptions = []
 		if !options.caseSensitive { compareOptions.insert(.caseInsensitive) }
 		if !options.diacriticSensitive { compareOptions.insert(.diacriticInsensitive) }

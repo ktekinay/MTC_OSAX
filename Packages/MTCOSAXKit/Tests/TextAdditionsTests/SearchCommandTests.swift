@@ -136,4 +136,20 @@ struct SearchRuleTests {
 	@Test func reCompileReturnsPattern() {
 		#expect(send("SATICmpi", ["----": "a(b)c"]).result?.stringValue == "a(b)c")
 	}
+
+	/// Each match used to copy the whole text again, so 1,250 matches in 100 KB took 8 seconds, and this took over
+	/// 10 minutes. It now takes about 0.3 seconds (about 1 with AddressSanitizer).
+	@Test func literalSearchOfManyMatchesIsFast() {
+		let text = String(repeating: "ab ", count: 20_000)
+		let clock = ContinuousClock()
+		var found: AppleEventReply?
+		var changed: AppleEventReply?
+		let elapsed = clock.measure {
+			found = send(findText, ["----": "ab", "$in ": text, "WaAl": true, "WaMr": true])
+			changed = send(change, ["----": "ab", "by  ": "x", "$in ": text])
+		}
+		#expect(found?.result?.numberOfItems == 20_000)
+		#expect(changed?.result?.stringValue == String(repeating: "x ", count: 20_000))
+		#expect(elapsed < .seconds(5))
+	}
 }
