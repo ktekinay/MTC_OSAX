@@ -307,6 +307,18 @@ struct JSONTests {
 		#expect(plists.send("PLSTNOSJ", ["----": "{not json}"]).error == OSAXError(-1))
 		#expect(plists.send("PLSTNOSJ", ["----": ""]).error == OSAXError(-1))
 	}
+
+	/// Many records there and back, as JavaScriptCore converts them all at once.
+	@Test func roundTripOfManyRecords() throws {
+		let plists = Plists()
+		let records = (1 ... 2_000).map { record(["id": $0, "name": "item \($0)", "tags": ["a", "b"], "price": Double($0) / 4]) }
+		let p = try plists.new(records)
+		let json = try #require(plists.send("PLSTJSON", ["----": p]).result?.stringValue)
+		#expect(json.contains(#""name":"item 2000""#))
+		let q = try #require(plists.send("PLSTNOSJ", ["----": json]).result)
+		#expect(plists.send("PLSTJSON", ["----": q]).result?.stringValue == json)
+		#expect(plists.xml(q).contains("<key>id</key><real>2000</real>"))
+	}
 }
 
 struct FilterIntoTests {
@@ -416,6 +428,12 @@ struct NestingTests {
 		#expect(plists.send("PLSTNOSJ", ["----": nested(100)]).error == nil)
 		#expect(plists.send("PLSTNOSJ", ["----": nested(1000)]).error?.number == -50)
 		#expect(plists.send("PLSTNOSJ", ["----": nested(1_000_000)]).error?.number == -50)
+		// The innermost (empty) array is at depth 512 here, and 513 in the next.
+		#expect(plists.send("PLSTNOSJ", ["----": nested(513)]).error == nil)
+		#expect(plists.send("PLSTNOSJ", ["----": nested(514)]).error?.number == -50)
+		// Brackets in text don't count; text that isn't JSON is -1 however deep.
+		#expect(plists.send("PLSTNOSJ", ["----": #"["\#(String(repeating: "[{\\\"", count: 1000))"]"#]).error == nil)
+		#expect(plists.send("PLSTNOSJ", ["----": String(repeating: "[", count: 1000)]).error?.number == -1)
 		#expect(plists.send("MTCpFYML", ["----": "a: " + nested(1000)]).error?.number == -50)
 		#expect(plists.send("MTCpFYML", ["----": "a: " + nested(100)]).error == nil)
 		// Nothing is left open after the error.

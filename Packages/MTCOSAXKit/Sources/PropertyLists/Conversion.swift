@@ -20,7 +20,7 @@ extension PropertyLists {
 	/// -50 for Foundation objects (a parsed file) nested more than `maximumDepth` levels deep.
 	static func checkDepth(_ object: Any, depth: Int = 0) throws {
 		guard depth <= maximumDepth else { throw tooDeep }
-		switch object {
+		switch object as AnyObject {
 		case let dictionary as NSDictionary:
 			for value in dictionary.allValues { try checkDepth(value, depth: depth + 1) }
 		case let array as NSArray:
@@ -169,23 +169,25 @@ extension PropertyLists {
 	}
 
 	/// An element from Foundation objects (a parsed file, checked with `checkDepth`). Dictionaries keep their key order.
+	/// Objective-C classes are checked: Swift casts such as `as String` and `as Date` are slow for Objective-C objects,
+	/// and were most of `PlistFromJSON`'s time.
 	static func node(from object: Any, in document: Document) -> Node {
-		switch object {
+		switch object as AnyObject {
 		case let dictionary as NSDictionary:
 			return Node(.dictionary(dictionary.mappingValues { node(from: $0, in: document) }), in: document)
 		case let array as NSArray:
 			return Node(.array(array.map { node(from: $0, in: document) }), in: document)
-		case let text as String:
-			return Node(.string(text), in: document)
+		case let text as NSString:
+			return Node(.string(text as String), in: document)
 		case let number as NSNumber:
 			if CFGetTypeID(number) == CFBooleanGetTypeID() {
 				return Node(.boolean(number.boolValue), in: document)
 			}
 			return Node(CFNumberIsFloatType(number) ? .real(number.doubleValue) : .integer(number.int64Value), in: document)
-		case let date as Date:
-			return Node(.date(date), in: document)
-		case let data as Data:
-			return Node(.data(data), in: document)
+		case let date as NSDate:
+			return Node(.date(date as Date), in: document)
+		case let data as NSData:
+			return Node(.data(data as Data), in: document)
 		case is NSNull:
 			// JSON's null, stored as `missing value` (SatimageOSAX made a property list it couldn't use).
 			return Node(.data(flatten(.missingValue)), in: document)

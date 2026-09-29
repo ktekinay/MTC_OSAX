@@ -214,7 +214,10 @@ enum TOML {
 /// Whether a property list value is `missing value`: data holding AppleScript's `missing value`, as `PlistFromJSON`
 /// stores JSON's `null`.
 func isMissingValue(_ value: Any) -> Bool {
-	(value as? Data) == PropertyLists.missingValueData
+	guard let data = value as AnyObject as? NSData else {
+		return false
+	}
+	return data as Data == PropertyLists.missingValueData
 }
 
 extension PropertyLists {
