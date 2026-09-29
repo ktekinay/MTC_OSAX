@@ -229,7 +229,7 @@ Run them with AddressSanitizer too before committing a change to code that uses 
 swift test --package-path Packages/MTCOSAXKit --sanitize=address
 ```
 
-`AppleEventCoreTests` sometimes crashes (signal 10) while it loads AppleScript for its coercions: the Apple Event Manager recurses until the stack runs out, about one run in ten, on `develop` before the audit fixes too. It doesn't happen in the app, which loads AppleScript once on its main thread; run the tests again if it does.
+Every test target links `AppleScriptPreload`, which loads AppleScript when the test bundle is loaded, before any test runs. Loading it while many tests ran at once sometimes made the Apple Event Manager recurse until the stack ran out (about one `AppleEventCoreTests` run in ten). The app loads it at launch, on its main thread, with nothing else running, and isn't affected; the target is for tests only.
 
 - **SDEF consistency** checks that every command in `MTC_OSAX.sdef` has a handler (and the reverse), and that everything copied from Satimage keeps its names and codes.
 - **Fixture replay** sends each recorded Apple event to the app's commands and compares the reply with the recorded one. Text encodings (`utxt`, `ut16`, …) and boolean encodings (`true`, `fals`, `bool`) count as equal, since scripts can't tell them apart.

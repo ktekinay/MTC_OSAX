@@ -87,7 +87,8 @@ public final class CommandDispatcher {
 	}
 
 	/// The Apple Event Manager coerces text to numbers (`"2.5"` for a real) only with AppleScript's coercions, which
-	/// a scriptable app has and other processes (tests) get when AppleScript is first loaded: loads it once.
+	/// a scriptable app has and other processes (tests) get when AppleScript is first loaded: loads it once. (Test
+	/// bundles load it before any test runs, with the AppleScriptPreload target.)
 	private static let appleScriptCoercions: Void = {
 		var error: NSDictionary?
 		_ = NSAppleScript(source: "1")?.compileAndReturnError(&error)

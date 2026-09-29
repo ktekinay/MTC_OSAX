@@ -93,21 +93,23 @@ let package = Package(
 
 		// For tests: defaults kept in memory.
 		.target(name: "TestSupport"),
+		// For tests: AppleScript loaded before any test runs (see AppleScriptPreload.m).
+		.target(name: "AppleScriptPreload"),
 
-		.testTarget(name: "AppleEventCoreTests", dependencies: ["AppleEventCore", "TestSupport"]),
-		.testTarget(name: "DiagnosticsTests", dependencies: ["Diagnostics"]),
-		.testTarget(name: "TextMatchingTests", dependencies: ["TextMatching", "CPCRE2"]),
-		.testTarget(name: "TextAdditionsTests", dependencies: ["TextAdditions", "TestSupport"]),
-		.testTarget(name: "FilesAndFoldersTests", dependencies: ["FilesAndFolders"]),
-		.testTarget(name: "FileAdditionsTests", dependencies: ["FileAdditions", "TestSupport"]),
-		.testTarget(name: "NumericsTests", dependencies: ["Numerics"]),
-		.testTarget(name: "MathFunctionsTests", dependencies: ["MathFunctions"]),
-		.testTarget(name: "ListUtilitiesTests", dependencies: ["ListUtilities"]),
-		.testTarget(name: "ArraysTests", dependencies: ["Arrays"]),
-		.testTarget(name: "PropertyListsTests", dependencies: ["PropertyLists"]),
-		.testTarget(name: "XMLTests", dependencies: ["XML"]),
-		.testTarget(name: "SettingsTests", dependencies: ["Settings", "TextAdditions", "TestSupport"]),
-		.testTarget(name: "SDEFConsistencyTests", dependencies: ["MTCOSAX"]),
-		.testTarget(name: "FixtureReplayTests", dependencies: ["MTCOSAX", "TestSupport"]),
+		.testTarget(name: "AppleEventCoreTests", dependencies: ["AppleEventCore", "TestSupport", "AppleScriptPreload"]),
+		.testTarget(name: "DiagnosticsTests", dependencies: ["Diagnostics", "AppleScriptPreload"]),
+		.testTarget(name: "TextMatchingTests", dependencies: ["TextMatching", "CPCRE2", "AppleScriptPreload"]),
+		.testTarget(name: "TextAdditionsTests", dependencies: ["TextAdditions", "TestSupport", "AppleScriptPreload"]),
+		.testTarget(name: "FilesAndFoldersTests", dependencies: ["FilesAndFolders", "AppleScriptPreload"]),
+		.testTarget(name: "FileAdditionsTests", dependencies: ["FileAdditions", "TestSupport", "AppleScriptPreload"]),
+		.testTarget(name: "NumericsTests", dependencies: ["Numerics", "AppleScriptPreload"]),
+		.testTarget(name: "MathFunctionsTests", dependencies: ["MathFunctions", "AppleScriptPreload"]),
+		.testTarget(name: "ListUtilitiesTests", dependencies: ["ListUtilities", "AppleScriptPreload"]),
+		.testTarget(name: "ArraysTests", dependencies: ["Arrays", "AppleScriptPreload"]),
+		.testTarget(name: "PropertyListsTests", dependencies: ["PropertyLists", "AppleScriptPreload"]),
+		.testTarget(name: "XMLTests", dependencies: ["XML", "AppleScriptPreload"]),
+		.testTarget(name: "SettingsTests", dependencies: ["Settings", "TextAdditions", "TestSupport", "AppleScriptPreload"]),
+		.testTarget(name: "SDEFConsistencyTests", dependencies: ["MTCOSAX", "AppleScriptPreload"]),
+		.testTarget(name: "FixtureReplayTests", dependencies: ["MTCOSAX", "TestSupport", "AppleScriptPreload"]),
 	]
 )
