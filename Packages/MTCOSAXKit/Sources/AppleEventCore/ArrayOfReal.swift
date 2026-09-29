@@ -30,16 +30,21 @@ public struct ArrayOfReal: Equatable, AppleEventConvertible {
 		guard data.starts(with: header), (data.count - header.count) % 8 == 0 else {
 			return nil
 		}
-		return stride(from: header.count, to: data.count, by: 8).map { offset in
-			Double(bitPattern: UInt64(littleEndian: data[offset ..< offset + 8].withUnsafeBytes { $0.loadUnaligned(as: UInt64.self) }))
+		// Copied in one step (the numbers are little-endian, as the Mac is); element by element through slices
+		// took most of `sqrt`'s time.
+		let count = (data.count - header.count) / 8
+		return [Double](unsafeUninitializedCapacity: count) { buffer, initialized in
+			data.withUnsafeBytes { bytes in
+				UnsafeMutableRawBufferPointer(buffer).copyMemory(from: UnsafeRawBufferPointer(rebasing: bytes[header.count...]))
+			}
+			initialized = count
 		}
 	}
 
 	public var appleEventDescriptor: NSAppleEventDescriptor {
+		// Written in one step; appending 8 bytes at a time took most of `createarray`'s time.
 		var data = Self.header
-		for value in values {
-			withUnsafeBytes(of: value.bitPattern.littleEndian) { data.append(contentsOf: $0) }
-		}
+		values.withUnsafeBytes { data.append(contentsOf: $0) }
 		return NSAppleEventDescriptor(descriptorType: Self.descriptorType, data: data)!
 	}
 }

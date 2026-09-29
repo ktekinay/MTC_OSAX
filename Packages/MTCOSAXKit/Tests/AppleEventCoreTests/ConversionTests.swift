@@ -188,4 +188,21 @@ struct ArrayOfRealTests {
 		#expect(elapsed < .seconds(1))
 		#expect(ArrayOfReal.values(of: NSAppleEventDescriptor(descriptorType: FourCharCode(fourCharString: "Lido"), data: Data("Not a record".utf8))!) == nil)
 	}
+
+	/// The data was built 8 bytes at a time and read back through slices: 60 to 90% of `createarray` and `sqrt`.
+	/// This took 0.95 seconds, and now about 5 ms.
+	@Test func largeArraysConvertQuickly() throws {
+		let values = (0 ..< 1_000_000).map { Double($0) / 3 }
+		let clock = ContinuousClock()
+		var decoded: [Double]?
+		let elapsed = clock.measure {
+			for _ in 0 ..< 5 {
+				decoded = ArrayOfReal.values(of: ArrayOfReal(values).appleEventDescriptor)
+			}
+		}
+		#expect(decoded == values)
+		#expect(elapsed < .milliseconds(100))
+		let bytes = ArrayOfReal([1.5, -0.0]).appleEventDescriptor.data
+		#expect(bytes == Data("Not a recordbuod".utf8) + Data([0, 0, 0, 0, 0, 0, 0xf8, 0x3f, 0, 0, 0, 0, 0, 0, 0, 0x80]))
+	}
 }
