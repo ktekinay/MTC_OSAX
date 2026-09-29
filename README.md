@@ -152,6 +152,8 @@ So that `use application "MTC_OSAX"` finds a command-line build, register it onc
 
 The app has no UI. It launches when a script sends it a command and quits after an hour without commands (the `idle_timeout` setting; see [Settings](#settings)).
 
+On macOS 26, AppKit's update cycle holds each incoming Apple event until the next display frame, adding about 16.5 ms to every command. `main.swift` turns it off by registering the undocumented `NSApplicationUpdateCycleEnabled` default as false, which brings a round trip to about 0.2 ms. If a later macOS ignores the key, commands are slower but work the same; the `diagnostics` end-to-end check fails if a round trip takes that long again.
+
 ## Settings
 
 MTC_OSAX has three settings. Scripts read and change them with the commands of the "MTC_OSAX Settings" suite, and a change applies from the next command, without restarting the app.

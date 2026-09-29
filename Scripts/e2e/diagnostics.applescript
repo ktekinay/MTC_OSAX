@@ -3,6 +3,7 @@
 
 use AppleScript version "2.4"
 use application "MTC_OSAX"
+use scripting additions
 
 property checks : 0
 
@@ -56,5 +57,14 @@ set folderPath to "/private/tmp"
 set folderText to (POSIX file folderPath) as text
 check("POSIX file of a variable", folderText contains "private:tmp", true)
 check("commands still work after Cocoa Scripting handled an event", mtc_ping, "pong")
+
+-- Each command is answered right away, not at the next display frame (about 16.5 ms each with macOS 26's
+-- update cycle on, so 300 pings took about 5 seconds; about 0.1 second with it off). `current date` counts
+-- whole seconds, which is enough to tell them apart.
+set started to current date
+repeat 300 times
+	mtc_ping
+end repeat
+check("300 pings take under 2 seconds", ((current date) - started) < 2, true)
 
 "OK: " & checks & " checks passed"
