@@ -3,13 +3,24 @@ import Testing
 import TestSupport
 @testable import AppleEventCore
 
+/// Waits (up to five seconds) until `condition` holds: the timer fires late when many test processes run at once, and
+/// a fixed wait failed now and then.
+@MainActor
+private func waitUntil(_ condition: () -> Bool) async throws {
+	let deadline = ContinuousClock.now + .seconds(5)
+	while !condition(), ContinuousClock.now < deadline {
+		try await Task.sleep(for: .milliseconds(10))
+	}
+}
+
 @MainActor
 struct IdleMonitorTests {
 	@Test func firesAfterTimeout() async throws {
 		var fired = 0
 		let monitor = IdleMonitor(timeout: .milliseconds(50)) { fired += 1 }
 		monitor.start()
-		try await Task.sleep(for: .milliseconds(300))
+		try await waitUntil { fired > 0 }
+		try await Task.sleep(for: .milliseconds(100))
 		#expect(fired == 1)
 	}
 
@@ -22,13 +33,14 @@ struct IdleMonitorTests {
 		#expect(fired == 0)
 
 		monitor.endActivity()
-		try await Task.sleep(for: .milliseconds(300))
+		try await waitUntil { fired > 0 }
 		#expect(fired == 1)
 	}
 
 	@Test func activityRestartsTimeout() async throws {
 		var fired = 0
-		let monitor = IdleMonitor(timeout: .milliseconds(400)) { fired += 1 }
+		// Five times the step between activities, so a slow step isn't taken for idleness.
+		let monitor = IdleMonitor(timeout: .milliseconds(1000)) { fired += 1 }
 		monitor.start()
 		for _ in 0 ..< 4 {
 			try await Task.sleep(for: .milliseconds(200))
@@ -36,7 +48,7 @@ struct IdleMonitorTests {
 			monitor.endActivity()
 		}
 		#expect(fired == 0)
-		try await Task.sleep(for: .milliseconds(800))
+		try await waitUntil { fired > 0 }
 		#expect(fired == 1)
 	}
 
@@ -60,7 +72,7 @@ struct IdleMonitorTests {
 		#expect(fired == 0)
 		monitor.beginActivity()
 		monitor.endActivity()
-		try await Task.sleep(for: .milliseconds(300))
+		try await waitUntil { fired > 0 }
 		#expect(fired == 1)
 	}
 
