@@ -285,6 +285,13 @@ struct NumberFormat: Equatable {
 	/// and the integer part is printed exactly (so 1e20 isn't disturbed by scaling past double precision).
 	private static func roundedDigits(_ value: Double, decimals: Int) -> (integer: String, fraction: String) {
 		let scale = pow(10, Double(decimals))
+		// Past 2⁵³ the scaled value has lost digits (and past 10³⁰⁸ it's infinite, which printed "nan"): printf's
+		// conversion is exact there.
+		guard abs(value) * scale < 9e15 else {
+			let text = String(format: "%.\(decimals)f", abs(value))
+			let parts = text.split(separator: ".", omittingEmptySubsequences: false)
+			return (String(parts[0]), parts.count > 1 ? String(parts[1]) : "")
+		}
 		var integer = value.rounded(.towardZero)
 		let scaledFraction = value * scale - integer * scale
 		var fraction = scaledFraction.rounded(.down)
@@ -360,7 +367,7 @@ struct NumberFormat: Equatable {
 		} else if shape.integerPlaceholders == 0 {
 			// No integer placeholders: the mantissa is 0.xxx.
 			exponent = value == 0 ? 0 : decimalExponent(value) + 1
-			var scaled = value / pow(10, Double(exponent))
+			var scaled = scaledDown(value, exponent)
 			if value != 0, roundedDigits(scaled, decimals: shape.decimalPlaceholders).integer != "0" {
 				exponent += 1
 				scaled /= 10
@@ -370,7 +377,7 @@ struct NumberFormat: Equatable {
 			var plain = shape
 			plain.minimumIntegerDigits = 1
 			exponent = value == 0 ? 0 : decimalExponent(value)
-			var scaled = value / pow(10, Double(exponent))
+			var scaled = scaledDown(value, exponent)
 			if roundedDigits(scaled, decimals: plain.decimalPlaceholders).integer == "10" {
 				exponent += 1
 				scaled /= 10
@@ -380,7 +387,7 @@ struct NumberFormat: Equatable {
 			// Only 0 integer placeholders ("00E00"): exactly that many integer digits, rounded to significant digits.
 			let digits = shape.integerPlaceholders
 			exponent = value == 0 ? 0 : decimalExponent(value) - digits + 1
-			var scaled = value / pow(10, Double(exponent))
+			var scaled = scaledDown(value, exponent)
 			if roundToSignificant(scaled, significant) >= pow(10, Double(digits)) {
 				exponent += 1
 				scaled /= 10
@@ -392,14 +399,14 @@ struct NumberFormat: Equatable {
 			// (showing decimals for them even with no decimal placeholders).
 			let step = shape.integerPlaceholders
 			exponent = value == 0 ? 0 : floorDivide(decimalExponent(value), by: step) * step
-			var scaled = value / pow(10, Double(exponent))
+			var scaled = scaledDown(value, exponent)
 			var rounded = roundToSignificant(scaled, significant)
 			if rounded >= pow(10, Double(step)) {
 				exponent += step
 				scaled /= pow(10, Double(step))
 				rounded = roundToSignificant(scaled, significant)
 			}
-			let integerCount = rounded < 1 ? 1 : Int(floor(log10(rounded))) + 1
+			let integerCount = rounded < 1 || !rounded.isFinite ? 1 : Int(floor(log10(rounded))) + 1
 			let decimalCount = max(significant - integerCount, 0)
 			let (integer, allDecimals) = roundedDigits(rounded, decimals: decimalCount)
 			var decimals = Substring(allDecimals)
@@ -425,10 +432,21 @@ struct NumberFormat: Equatable {
 	}
 
 	private static func roundToSignificant(_ value: Double, _ significant: Int) -> Double {
-		guard value != 0 else { return 0 }
+		guard value != 0, value.isFinite else { return value }
 		let integerDigits = Int(floor(log10(value))) + 1
 		let scale = pow(10, Double(significant - integerDigits))
+		// More digits than a Double has (hundreds of decimals): it's already that precise. (The scale was infinite,
+		// the result NaN, and turning its logarithm into an Int trapped.)
+		guard scale.isFinite, scale > 0, (value * scale).isFinite else { return value }
 		return (value * scale).rounded(.toNearestOrEven) / scale
+	}
+
+	/// `value` ÷ 10^`exponent`. Doubles go down to 10⁻³²⁴ (subnormal), where 10^exponent alone is 0 and the
+	/// result was infinite (and turning its logarithm into an Int trapped): such powers are divided in two steps.
+	private static func scaledDown(_ value: Double, _ exponent: Int) -> Double {
+		guard abs(exponent) > 300 else { return value / pow(10, Double(exponent)) }
+		let half = exponent / 2
+		return value / pow(10, Double(half)) / pow(10, Double(exponent - half))
 	}
 
 	/// `value`'s shortest round-tripping digits (no leading or trailing zeros) and the power of ten of the first.

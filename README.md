@@ -45,7 +45,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 
 **Text Additions**
 
-- `format`: an invalid format is error -50 instead of silently reusing the previous one; `into` is required; the three sections `f1;f2;f3` (positive, negative, zero) work, each with its own layout; `^` is a space; `underflow test` works; decimals follow the placeholders.
+- `format`: numbers down to the smallest a real can hold work in scientific formats, and a format with many decimals shows the number's exact digits (past about 16 decimals they were wrong, and past 308 "nan"); an invalid format is error -50 instead of silently reusing the previous one; `into` is required; the three sections `f1;f2;f3` (positive, negative, zero) work, each with its own layout; `^` is a space; `underflow test` works; decimals follow the placeholders.
 - `readtext … starting at` without `for` reads to the end; `writetext` accepts a POSIX path string.
 - `strftime` and `strptime` work for dates before 1900.
 - `printf %c` gives a character. Widths and precisions past 512 characters work (SatimageOSAX cut each conversion's output at 512), up to a million (more is error 10, as is a width too long to be a number, which SatimageOSAX turned into nothing); `%*s` with a negative width left-justifies, as `%*d` does.

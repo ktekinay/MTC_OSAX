@@ -33,6 +33,22 @@ struct NumberFormatTests {
 		#expect(try format(-5, "#;(#)") == "(5)")
 	}
 
+	/// Numbers near a Double's smallest in scientific formats, and formats with hundreds of decimals, trapped: a
+	/// power of ten underflowed to 0 or overflowed to infinity, and the logarithm of the result became an Int.
+	@Test func extremes() throws {
+		#expect(try format(1e-323, "00E0") == "10E-324")
+		#expect(try format(1e-323, "#0E0") == "10E-324")
+		#expect(try format(1e-322, "##0E0") == "100E-324")
+		#expect(try format(5e-324, "0.0E+0") == "4.9E-324")
+		#expect(try format(5e-324, ".00E0") == ".49E-323")
+		#expect(try format(1.5e-310, "0.00E0") == "1.50E-310")
+		let zeros = String(repeating: "0", count: 400)
+		#expect(try format(5, "#0." + zeros + "E0") == "5." + zeros + "E0")
+		// Many decimals are the Double's exact digits (they were wrong past about 16, and "nan" past 308).
+		#expect(try format(1.0 / 3, "0." + zeros) == "0.333333333333333314829616256247390992939472198486328125" + String(repeating: "0", count: 346))
+		#expect(try format(1.0 / 3, "0." + String(repeating: "0", count: 30)) == "0.333333333333333314829616256247")
+	}
+
 	/// `%` overflowing to infinity used to trap; Satimage shows ∞.
 	@Test func percentOverflow() throws {
 		#expect(try format(1e307, "00E0%") == "∞%")
