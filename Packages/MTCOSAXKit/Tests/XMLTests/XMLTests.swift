@@ -420,6 +420,25 @@ struct XMLChangeTests {
 		#expect(xml.send("XML disp", ["----": declarations[0]]).error == nil)
 	}
 
+	/// A copy of a document was put inside an element (a document node in the tree), and an attribute copied beside
+	/// content failed after the copy was made. Copies must be nodes that can go there.
+	@Test func whatCanBeCopiedWhere() throws {
+		let xml = XMLs()
+		let d = try xml.open("<a k='v'><b/></a>")
+		let a = try xml.root(d)
+		let b = try #require(xml.send("XML chld", ["----": a, "indx": 1]).result)
+		let k = try #require(xml.send("XML path", ["----": d, "with": "//@k"]).result?.atIndex(1))
+		let other = try xml.open("<o/>")
+		#expect(xml.send("XML addc", ["----": other, "at  ": b]).error == .parameterError)
+		#expect(xml.send("XML adds", ["----": other, "afte": b]).error == .parameterError)
+		#expect(xml.send("XML adds", ["----": k, "afte": b]).error == .parameterError)
+		#expect(xml.send("XML addc", ["----": k, "at  ": d]).error == .parameterError)
+		// An attribute copied into an element, and nodes beside others, are fine.
+		#expect(xml.send("XML addc", ["----": k, "at  ": b]).error == nil)
+		#expect(xml.send("XML adds", ["----": try xml.root(other), "afte": b]).error == nil)
+		#expect(xml.send("XML disx", ["----": a, "smar": false]).result?.stringValue == "<a k=\"v\"><b k=\"v\"/><o/></a>")
+	}
+
 	/// Appending to a CDATA section, comment or processing instruction used to add an invisible child.
 	@Test func appendTextToLiteralNodes() throws {
 		let xml = XMLs()

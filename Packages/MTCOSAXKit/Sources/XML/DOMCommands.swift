@@ -276,14 +276,19 @@ extension XMLCommands {
 
 	// MARK: New nodes
 
-	/// The nodes to insert: parsed from XML text in `context`, or copies of XMLRefs.
-	func newNodes(_ request: AppleEventRequest, context: xmlNodePtr, document: XMLDocument) throws -> (nodes: [xmlNodePtr], isList: Bool) {
+	/// The nodes to insert: parsed from XML text in `context`, or copies of XMLRefs, which must be of `kinds` (-50
+	/// otherwise: a document's copy was put inside an element, and attributes beside content failed).
+	func newNodes(_ request: AppleEventRequest, context: xmlNodePtr, document: XMLDocument, kinds: [xmlElementType]) throws
+		-> (nodes: [xmlNodePtr], isList: Bool)
+	{
 		let value = try request.requiredDirectParameter(as: AnyDescriptor.self).descriptor
 		let keepBlanks = try request.parameter("kbln", default: false)
 		let (items, isList) = try nodeReferences(value)
 		if XMLCommands.isXPathReference(value) || items.allSatisfy(XMLReferences.isReference) {
-			let copies = try items.map { item -> xmlNodePtr in
-				guard let copy = XMLCommands.copy(try resolve(item).1, into: document) else { throw XML.invalid }
+			let sources = try items.map { try resolve($0).1 }
+			try sources.forEach { try XMLCommands.require($0, isOneOf: kinds) }
+			let copies = try sources.map { source -> xmlNodePtr in
+				guard let copy = XMLCommands.copy(source, into: document) else { throw XML.invalid }
 				return copy
 			}
 			return (copies, isList)
@@ -299,7 +304,9 @@ extension XMLCommands {
 		let nsclean = try request.parameter("NsCl", default: true)
 		let direct = try request.requiredDirectParameter(as: AnyDescriptor.self).descriptor
 		let isClone = XMLCommands.isXPathReference(direct) || XMLCommands.items(direct).allSatisfy(XMLReferences.isReference)
-		let (nodes, isList) = try newNodes(request, context: parent, document: document)
+		// Attributes go into elements only.
+		let kinds = XMLCommands.contentKinds + (XMLCommands.isElement(parent) ? [XML_ATTRIBUTE_NODE] : [])
+		let (nodes, isList) = try newNodes(request, context: parent, document: document, kinds: kinds)
 		guard !nodes.isEmpty else { throw XML.invalid }
 		if XMLCommands.isDocument(parent), xmlDocGetRootElement(document.doc) != nil, nodes.contains(where: XMLCommands.isElement) {
 			nodes.forEach { xmlFreeNode($0) }
@@ -323,7 +330,7 @@ extension XMLCommands {
 		let (document, anchor) = try resolve(anchorDescriptor)
 		guard let parent = anchor.pointee.parent, !XMLCommands.isDocument(parent) else { throw XML.invalid }
 		try XMLCommands.require(anchor, isOneOf: XMLCommands.contentKinds)
-		let (nodes, isList) = try newNodes(request, context: parent, document: document)
+		let (nodes, isList) = try newNodes(request, context: parent, document: document, kinds: XMLCommands.contentKinds)
 		guard !nodes.isEmpty else { throw XML.invalid }
 		modified(document)
 		var position = anchor
