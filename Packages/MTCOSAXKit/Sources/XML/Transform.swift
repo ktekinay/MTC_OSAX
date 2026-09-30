@@ -146,13 +146,10 @@ enum Stylesheets {
 		return false
 	}
 
-	/// A copy of a document, without MTC_OSAX's node numbers (to compile, since libxslt keeps the document it
-	/// compiles, or to transform).
+	/// A copy of a document (to compile, since libxslt keeps the document it compiles, or to transform). Like any
+	/// libxml2 copy, it has none of MTC_OSAX's node numbers.
 	static func copy(_ doc: xmlDocPtr) -> xmlDocPtr {
-		let copy = xmlCopyDoc(doc, 1)!
-		copy.pointee._private = nil
-		XMLDocument.clearNumbers(UnsafeMutableRawPointer(copy).assumingMemoryBound(to: xmlNode.self).pointee.children)
-		return copy
+		xmlCopyDoc(doc, 1)!
 	}
 
 	/// Compiles (and takes) a document; error 3 if it isn't a stylesheet.

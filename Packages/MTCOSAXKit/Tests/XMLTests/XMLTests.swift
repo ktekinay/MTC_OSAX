@@ -505,6 +505,42 @@ struct XMLDocumentTests {
 		xml.send("XML clos", ["----": clone])
 		#expect(!xml.store.hasOpenDocuments)
 	}
+
+	/// Copies of documents with a DTD had their "numbers" cleared through fields that DTD declarations and entities
+	/// don't have, writing zeros into the heap (a crash, or corrupted memory). Copies start without numbers.
+	@Test func copiesOfDocumentsWithDeclarations() throws {
+		let xml = XMLs()
+		let source = "<!DOCTYPE r [<!ENTITY a 'x'><!ATTLIST p z CDATA 'some default value'>]><r><p b='2'>t&a;</p></r>"
+		let d = try xml.open(source)
+		let r = try xml.root(d)
+		let p = try #require(xml.send("XML chld", ["----": r, "indx": 1]).result)
+		// Every node has a number before it's copied.
+		#expect(xml.send("XML path", ["----": d, "with": "//node() | //@*"]).error == nil)
+
+		let clone = try #require(xml.send("XML cdoc", ["----": d]).result)
+		#expect(xml.send("XML disx", ["----": try xml.root(clone), "smar": false]).result?.stringValue == "<r><p b=\"2\">t&a;</p></r>")
+		let copied = try #require(xml.send("XML addc", ["----": p, "at  ": r]).result)
+		#expect(copied.data != p.data)
+		#expect(xml.send("XML disx", ["----": r, "smar": false]).result?.stringValue == "<r><p b=\"2\">t&a;</p><p b=\"2\">t&a;</p></r>")
+		#expect(xml.send("XML disx", ["----": p, "smar": false]).result?.stringValue == "<p b=\"2\">t&a;</p>")
+		#expect(xml.send("XML rlax", ["----": p, "With": "<element name='p' xmlns='http://relaxng.org/ns/structure/1.0'><attribute name='b'/><text/></element>"]).error == nil)
+		let stripping = """
+			<xsl:stylesheet version='1.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
+			<xsl:strip-space elements='*'/><xsl:template match='/'><o><xsl:value-of select='r'/></o></xsl:template>
+			</xsl:stylesheet>
+			"""
+		let text = NSAppleEventDescriptor(typeCode: FourCharCode(fourCharString: "utxt"))
+		let stripped = xml.send("XML xslt", ["----": d, "with": stripping, "rtyp": text]).result?.stringValue
+		#expect(stripped == "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<o>tt</o>\n")
+		// Compiling copies the stylesheet document, DTD and all.
+		let style = try xml.open("<!DOCTYPE xsl:stylesheet [<!ENTITY s 'y'>]>" + stripping.replacingOccurrences(of: "<o>", with: "<o>&s;"))
+		#expect(xml.send("XML pxsl", ["----": style]).error == nil)
+		let compiled = xml.send("XML xslt", ["----": d, "with": style, "rtyp": text]).result?.stringValue
+		#expect(compiled?.hasSuffix("tt</o>\n") == true)
+		// The originals keep their numbers and the copies get new ones.
+		#expect(xml.send("XML gtag", ["----": p]).result?.stringValue == "p")
+		#expect(xml.send("XML gtag", ["----": copied]).result?.stringValue == "p")
+	}
 }
 
 @MainActor

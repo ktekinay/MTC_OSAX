@@ -49,8 +49,6 @@ extension XMLCommands {
 			CommandDefinition("XMLCloneDocument", code: "XML cdoc") { request in
 				let (document, _) = try direct(request)
 				guard let copy = xmlCopyDoc(document.doc, 1) else { throw XML.invalid }
-				XMLDocument.clearNumbers(UnsafeMutableRawPointer(copy).assumingMemoryBound(to: xmlNode.self).pointee.children)
-				copy.pointee._private = nil
 				let clone = store.add(pool: try request.parameter("pool", as: String.self)) { XMLDocument(number: $0, pool: $1, doc: copy) }
 				return references.reference(clone)
 			},

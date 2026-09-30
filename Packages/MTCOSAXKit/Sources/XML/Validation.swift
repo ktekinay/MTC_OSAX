@@ -130,7 +130,6 @@ extension XMLCommands {
 			let scratch = xmlNewDoc(nil)
 			defer { xmlFreeDoc(scratch) }
 			let copy = xmlDocCopyNode(node, scratch, 1)
-			XMLDocument.clearNumbers(copy)
 			xmlDocSetRootElement(scratch, copy)
 			return xmlRelaxNGValidateDoc(context, scratch)
 		}

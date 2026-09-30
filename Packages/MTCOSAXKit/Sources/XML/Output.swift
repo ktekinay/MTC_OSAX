@@ -64,7 +64,6 @@ enum Output {
 				defer { xmlFreeDoc(scratch) }
 				let copy = xmlDocCopyNode(node, scratch, 1)
 				xmlDocSetRootElement(scratch, copy)
-				XMLDocument.clearNumbers(copy)
 				xmlSaveTree(context, copy)
 				xmlSaveClose(context)
 				return Data(bytes: xmlBufferContent(buffer), count: Int(xmlBufferLength(buffer)))

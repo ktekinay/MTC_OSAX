@@ -7,7 +7,8 @@ import PropertyLists
 ///
 /// Scripts refer to nodes by number (in XMLRefs). A node gets a number the first time a reference to it is made,
 /// kept in the node's `_private` field; when libxml2 frees a node (however it was removed), the deregistration
-/// callback forgets its number, so later references give an error instead of reaching freed memory.
+/// callback forgets its number, so later references give an error instead of reaching freed memory. libxml2's
+/// copies (`xmlCopyDoc`, `xmlDocCopyNode`) don't copy `_private`, so a copy starts without numbers.
 final class XMLDocument: StoredDocument {
 	let number: Int
 	var pool: String
@@ -88,21 +89,6 @@ final class XMLDocument: StoredDocument {
 				node.pointee._private = nil
 			}
 			forgetNumbers(in: node.pointee.children)
-			current = node.pointee.next
-		}
-	}
-
-	/// Clears the numbers of a copied subtree (libxml2 copies `_private`), so the copy gets its own.
-	static func clearNumbers(_ node: xmlNodePtr?) {
-		var current = node
-		while let node = current {
-			node.pointee._private = nil
-			var attribute = node.pointee.properties
-			while let property = attribute {
-				property.pointee._private = nil
-				attribute = property.pointee.next
-			}
-			clearNumbers(node.pointee.children)
 			current = node.pointee.next
 		}
 	}

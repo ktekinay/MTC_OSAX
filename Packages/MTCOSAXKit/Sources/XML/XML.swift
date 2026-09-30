@@ -198,9 +198,7 @@ struct XMLCommands {
 
 	/// Copies a node (and what's in it) into a document, for inserting a clone.
 	static func copy(_ node: xmlNodePtr, into document: XMLDocument) -> xmlNodePtr? {
-		let copy = xmlDocCopyNode(node, document.doc, 1)
-		XMLDocument.clearNumbers(copy)
-		return copy
+		xmlDocCopyNode(node, document.doc, 1)
 	}
 
 	/// Removes namespace declarations of new nodes that an ancestor already declares (`nsclean`).
