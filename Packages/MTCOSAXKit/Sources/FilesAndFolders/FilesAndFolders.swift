@@ -335,9 +335,12 @@ public enum FilesAndFolders {
 	/// flags are changed (chflags would unlock what it points to, which isn't being removed); the system flag needs
 	/// root, so without it only the user flag is cleared.
 	private static func unlock(_ url: URL) {
-		let paths = [url.path] + (FileManager.default.enumerator(atPath: url.path)?.compactMap {
+		// What's in it only for a real folder: through a link to one, every locked file under the folder it pointed
+		// to was unlocked, though only the link was deleted.
+		let isFolder = FileItem.status(url).map { ($0.st_mode & S_IFMT) == S_IFDIR } == true
+		let paths = [url.path] + (isFolder ? FileManager.default.enumerator(atPath: url.path)?.compactMap {
 			($0 as? String).map { url.appendingPathComponent($0).path }
-		} ?? [])
+		} ?? [] : [])
 		let locks = UInt32(UF_IMMUTABLE | SF_IMMUTABLE)
 		for path in paths {
 			var status = stat()

@@ -327,6 +327,21 @@ struct RemoveTests {
 
 	/// Removing a link to a locked file used to unlock the file (chflags follows links); the link goes, the file
 	/// stays locked.
+	/// Removing a link to a folder unlocked every locked file under the folder it pointed to.
+	@Test func linkToFolderWithLockedFiles() throws {
+		let sandbox = try Sandbox()
+		_ = try sandbox.file("real/f1")
+		_ = try sandbox.file("real/inner/f2")
+		for path in ["real/f1", "real/inner/f2"] { chflags(sandbox.path(path), UInt32(UF_IMMUTABLE)) }
+		try FileManager.default.createSymbolicLink(atPath: sandbox.path("link"), withDestinationPath: sandbox.path("real"))
+		#expect(send(remove, ["----": sandbox.path("link")]).result?.int32Value == 1)
+		#expect(!sandbox.exists("link"))
+		for path in ["real/f1", "real/inner/f2"] {
+			var status = stat()
+			#expect(lstat(sandbox.path(path), &status) == 0 && status.st_flags & UInt32(UF_IMMUTABLE) != 0, "\(path)")
+		}
+	}
+
 	@Test func linkToLockedFile() throws {
 		let sandbox = try Sandbox()
 		let locked = try sandbox.file("locked.txt")
