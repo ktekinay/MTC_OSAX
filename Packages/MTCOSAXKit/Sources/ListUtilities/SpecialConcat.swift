@@ -8,7 +8,7 @@ enum SpecialConcat {
 		let first = try request.requiredDirectParameter(as: AnyDescriptor.self).descriptor
 		let second = try request.requiredParameter("with", as: AnyDescriptor.self).descriptor
 		if let a = RecordFields(first), let b = RecordFields(second) {
-			return merge(a, b).appleEventDescriptor
+			return try merge(a, b).appleEventDescriptor
 		}
 		// Text with anything but text is an error (SatimageOSAX returned garbage for a record).
 		guard ListUtilities.isText(first), ListUtilities.isText(second), let a = first.stringValue, let b = second.stringValue else {
@@ -18,9 +18,9 @@ enum SpecialConcat {
 	}
 
 	/// The first record's properties, combined with the second's where both have them, then the second's others.
-	static func merge(_ a: RecordFields, _ b: RecordFields) -> RecordFields {
-		var result = RecordFields(a.fields.map { key, value in
-			(key, b[key].map { combine(value, $0) } ?? value)
+	static func merge(_ a: RecordFields, _ b: RecordFields) throws -> RecordFields {
+		var result = RecordFields(try a.fields.map { key, value in
+			(key, try b[key].map { try combine(value, $0) } ?? value)
 		})
 		for field in b.fields where a[field.key] == nil {
 			result.fields.append(field)
@@ -30,18 +30,23 @@ enum SpecialConcat {
 
 	/// Lists are joined (a value is added to a list), numbers added (as reals), records merged; anything else keeps
 	/// the first value.
-	static func combine(_ x: NSAppleEventDescriptor, _ y: NSAppleEventDescriptor) -> NSAppleEventDescriptor {
+	static func combine(_ x: NSAppleEventDescriptor, _ y: NSAppleEventDescriptor) throws -> NSAppleEventDescriptor {
 		if x.descriptorType == typeAEList {
 			return ((ListUtilities.items(x) ?? []) + (ListUtilities.items(y).flatMap { y.descriptorType == typeAEList ? $0 : nil } ?? [y])).appleEventDescriptor
 		}
 		if let a = RecordFields(x), let b = RecordFields(y) {
-			return merge(a, b).appleEventDescriptor
+			return try merge(a, b).appleEventDescriptor
 		}
 		if let first = try? Numbers.number(x), !ListUtilities.isText(x) {
 			let items = ListUtilities.items(y)
 			let other = items.flatMap { $0.count == 1 ? $0[0] : nil } ?? y
 			if let second = try? Numbers.number(other), !ListUtilities.isText(other) {
-				return NSAppleEventDescriptor(double: first + second)
+				// A sum too large for a real is -50, as the math functions' results are (it was infinity).
+				let sum = first + second
+				guard sum.isFinite || !first.isFinite || !second.isFinite else {
+					throw OSAXError(-50, "The sum is too large for a real.")
+				}
+				return NSAppleEventDescriptor(double: sum)
 			}
 		}
 		return x

@@ -27,6 +27,10 @@ struct CreateArrayTests {
 		#expect(values(send("SATICRAR", ["----": 3, "rang": [3, 1]])) == [3, 2, 1])
 		#expect(values(send("SATICRAR", ["----": 3, "rang": [1]])) == [1, 1, 1])
 		#expect(values(send("SATICRAR", ["----": 3, "rang": 1])) == [1, 1, 1])
+		// A range wider than a real can hold made {NaN, inf, inf}.
+		#expect(values(send("SATICRAR", ["----": 3, "rang": [-1e308, 1e308]])) == [-1e308, 0, 1e308])
+		let random = values(send("SATICRRA", ["----": 1000, "rang": [-1e308, 1e308]])) ?? []
+		#expect(random.count == 1000 && random.allSatisfy { $0.isFinite && $0 >= -1e308 && $0 <= 1e308 })
 	}
 
 	@Test func sizes() {

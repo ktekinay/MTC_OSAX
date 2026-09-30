@@ -253,6 +253,8 @@ struct SpecialConcatTests {
 		#expect(result[.user("a")]?.doubleValue == 3)
 		#expect(values(result[.user("b")]) == [1, 2])
 		#expect(result[.user("c")]?.stringValue == "A")
+		// A sum too large for a real is -50, as math results are (it was infinity).
+		#expect(send("SATICONC", ["----": user(["a": 1e308]), "with": user(["a": 1e308])]).error?.number == -50)
 	}
 
 	@Test func tables() {
