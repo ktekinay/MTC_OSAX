@@ -413,7 +413,10 @@ struct Commands {
 		if case .none = selector, case let .array(items) = container.content {
 			(parent, step) = (container, .index(items.count + 1))
 		} else {
-			(parent, step) = try target(container, selector)[0]
+			// One new child, at one place: `key {}` trapped (there was no first), and more keys were ignored.
+			let targets = try target(container, selector)
+			guard targets.count == 1 else { throw PropertyLists.invalid }
+			(parent, step) = targets[0]
 		}
 		let child = try PropertyLists.node(from: value, in: container.document, store: store, typed: typed)
 		try place(child, in: parent, at: step, inserting: true)

@@ -223,6 +223,11 @@ struct SelectorTests {
 			#expect(plists.send(code, ["----": p, "by  ": "l[-9223372036854775808]"]).error == OSAXError(-1), "\(code)")
 		}
 		#expect(plists.send("PLSTdisx", ["----": p, "by  ": "l[9223372036854775807]"]).error == OSAXError(-1))
+		// A new child goes in one place: no key, or several, is -1 (no keys trapped; more than one used the first).
+		#expect(plists.send("PLSTaddc", ["----": "v", "at  ": p, "key ": [String]()]).error == OSAXError(-1))
+		#expect(plists.send("PLSTaddc", ["----": "v", "at  ": p, "key ": ["x", "y"]]).error == OSAXError(-1))
+		#expect(plists.send("PLSTaddc", ["----": "v", "at  ": p, "key ": ["x"]]).error == nil)
+		#expect(plists.send("PLSTdisx", ["----": p, "key ": "x"]).result?.stringValue == "v")
 	}
 
 	@Test func childrenAndErrors() throws {
