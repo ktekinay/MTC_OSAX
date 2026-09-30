@@ -174,6 +174,21 @@ struct BackupTests {
 		#expect(try manager.destinationOfSymbolicLink(atPath: folder.path("dst/filelink")) == "../other")
 	}
 
+	/// Packages were copied following the links in them: a link to a file became a copy of what it pointed at (a
+	/// private key, say, from an untrusted package), and a link to a folder an empty folder.
+	@Test func linksInPackagesAreCopiedAsLinks() throws {
+		let folder = try source()
+		defer { folder.remove() }
+		try folder.file("secret.txt", "secret")
+		try folder.folder("other")
+		let manager = FileManager.default
+		try manager.createSymbolicLink(atPath: folder.path("src/pkg.app/Contents/key"), withDestinationPath: folder.path("secret.txt"))
+		try manager.createSymbolicLink(atPath: folder.path("src/pkg.app/Contents/dir"), withDestinationPath: "../../../other")
+		_ = backup(folder, ["Repo": 1])
+		#expect(try manager.destinationOfSymbolicLink(atPath: folder.path("dst/pkg.app/Contents/key")) == folder.path("secret.txt"))
+		#expect(try manager.destinationOfSymbolicLink(atPath: folder.path("dst/pkg.app/Contents/dir")) == "../../../other")
+	}
+
 	/// A folder where the destination had a link (as an earlier backup of a link leaves) was backed up through the
 	/// link, into wherever it pointed.
 	@Test func linksInTheDestinationAreNotFollowed() throws {

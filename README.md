@@ -64,7 +64,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 - `glob "…/.*"` doesn't return `.` and `..`; `glob … not conforming to "public.folder"` excludes folders.
 - `~` is your home folder, not SatimageOSAX's sandbox container.
 - `backup` onto a folder inside the source backs up everything but that folder (SatimageOSAX created it and then gave -50); onto the source itself is -50.
-- `backup` copies symbolic links as links (SatimageOSAX made an empty folder for each), and never backs up through a link in the destination: a folder where the destination has a link is error 20, rather than being copied to wherever the link points.
+- `backup` copies symbolic links as links, inside packages too (SatimageOSAX made an empty folder for each), and never backs up through a link in the destination: a folder where the destination has a link is error 20, rather than being copied to wherever the link points.
 - `backup` gives new folders their source folder's permissions, and a `level` other than 0, 1 or 2 is error -50 (SatimageOSAX reported as if for level 0, but still created the destination folder).
 - `backup` never deletes anything: a newer file where the destination has a folder of that name is reported as error 21 (SatimageOSAX replaced the folder and everything in it), and an update that fails leaves the old item.
 

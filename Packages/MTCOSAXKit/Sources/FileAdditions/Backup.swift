@@ -141,7 +141,10 @@ struct Backup {
 			return
 		}
 		if !reportOnly {
-			let flags = copyfile_flags_t(COPYFILE_ALL | (isLink ? COPYFILE_NOFOLLOW : isFolder ? COPYFILE_RECURSIVE : 0))
+			// Links are copied as links, inside packages too (following them copied what a link in an untrusted
+			// package pointed at, such as a private key, into the backup), and so is an item that became a link since
+			// it was looked at. A new item isn't written over one that appeared meanwhile.
+			let flags = copyfile_flags_t(COPYFILE_ALL | COPYFILE_NOFOLLOW | (isFolder ? COPYFILE_RECURSIVE : 0) | (isNew ? COPYFILE_EXCL : 0))
 			let target = isNew ? to : to.deletingLastPathComponent().appendingPathComponent(".\(to.lastPathComponent).mtc-backup-\(UUID().uuidString)")
 			guard copyfile(from.path, target.path, nil, flags) == 0 else {
 				let code = errno
