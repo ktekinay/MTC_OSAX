@@ -225,6 +225,25 @@ struct CopyMoveTests {
 		#expect(try FileManager.default.contentsOfDirectory(atPath: sandbox.url.path) == ["A.txt"])
 	}
 
+	/// Small inconsistencies: filerename's name was checked less than the others' (`..` was -48); a NUL in a name or
+	/// path became `%00`; a failed mkdir guessed its reason; a list copied part way didn't say how far it got.
+	@Test func smallInconsistencies() throws {
+		let sandbox = try Sandbox()
+		let a = try sandbox.file("f/a.txt")
+		_ = try sandbox.file("f/b.txt")
+		for name in ["..", ".", "x/y", "a\0b"] {
+			#expect(send(rename, ["----": a, "to  ": name]).error?.number == -1, "\(name)")
+		}
+		#expect(send(fileNew, ["----": sandbox.url, "pnam": "a\0b"]).error?.number == -1)
+		#expect(send(fileNew, ["----": sandbox.path("a\0b")]).error?.number == -1700)
+		try FileManager.default.createSymbolicLink(atPath: sandbox.path("loop"), withDestinationPath: "loop")
+		#expect(send(makeDirectory, ["----": sandbox.path("loop/sub")]).error == OSAXError(62))
+		try FileManager.default.createDirectory(at: sandbox.url.appendingPathComponent("d"), withIntermediateDirectories: true)
+		let partial = send(copy, ["----": ["a.txt", "nope.txt", "b.txt"], "from": sandbox.url.appendingPathComponent("f"), "to  ": sandbox.path("d")])
+		#expect(partial.error?.number == -43)
+		#expect(partial.error?.message?.contains("1 of the 3 items were copied before it.") == true)
+	}
+
 	/// Two hard links to one file were taken for one name spelled two ways: renaming or moving one onto the other did
 	/// nothing (rename(2) leaves both) and reported success.
 	@Test func hardLinks() throws {

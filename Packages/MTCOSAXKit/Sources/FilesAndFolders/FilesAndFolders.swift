@@ -73,10 +73,16 @@ public enum FilesAndFolders {
 		guard let name = try request.parameter("pnam", as: String.self) else {
 			return nil
 		}
-		guard !name.contains("/"), isName(name) else {
+		try requireValidName(name)
+		return name
+	}
+
+	/// -1 with a message for a name that isn't one name: empty, with `/` or NUL (which became `%00` in the file
+	/// name), or `.` or `..`.
+	static func requireValidName(_ name: String) throws {
+		guard !name.contains("/"), !name.contains("\0"), isName(name) else {
 			throw OSAXError(-1, "A name can’t be empty, contain “/” or be “.” or “..”. To use a subfolder, give its path as the folder instead.")
 		}
-		return name
 	}
 
 	/// Whether a path's last part is a name: not empty, “.” or “..”, which say where a folder is instead.
@@ -130,6 +136,11 @@ public enum FilesAndFolders {
 			do {
 				try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
 			} catch {
+				// The system's reason (a full disk was reported as no permission); guessed only without one.
+				let underlying = (error as NSError).userInfo[NSUnderlyingErrorKey] as? NSError
+				if let underlying, underlying.domain == NSPOSIXErrorDomain {
+					throw posixError(Int32(underlying.code))
+				}
 				throw posixError(FileItem.isDirectory(url.deletingLastPathComponent()) ? EACCES : ENOTDIR)
 			}
 		} else if Darwin.mkdir(url.path, 0o777) != 0 {
@@ -143,9 +154,12 @@ public enum FilesAndFolders {
 	static func rename(_ request: AppleEventRequest) throws -> (any AppleEventEncodable)? {
 		let url = try request.requiredDirectParameter(as: URL.self)
 		let name = try request.requiredParameter("to  ", as: String.self)
+		// `/` or nothing is -1 without a message, as in SatimageOSAX; `.`, `..` (which was -48, the folder above
+		// existing) and NUL as for the other commands' names.
 		guard !name.contains("/"), !name.isEmpty else {
 			throw invalidInput
 		}
+		try requireValidName(name)
 		guard FileItem.exists(url) else {
 			throw notFound
 		}
@@ -202,7 +216,7 @@ public enum FilesAndFolders {
 			throw OSAXError.missingParameter
 		}
 
-		return try sources.map { source -> String in
+		return try sources.map(done: move ? "moved" : "copied") { source -> String in
 			guard FileItem.exists(source) else {
 				throw notFound
 			}
@@ -481,12 +495,23 @@ enum Paths {
 	}
 
 	/// One result per path: a single value, or a list.
-	func map(_ transform: (URL) throws -> String) throws -> NSAppleEventDescriptor {
+	/// For a list, an error says how many items were `done` before it (as fileremove's does).
+	func map(done: String? = nil, _ transform: (URL) throws -> String) throws -> NSAppleEventDescriptor {
 		switch self {
 		case let .single(url):
 			return try transform(url).appleEventDescriptor
 		case let .list(urls):
-			return try urls.map(transform).appleEventDescriptor
+			var results: [String] = []
+			for url in urls {
+				do {
+					results.append(try transform(url))
+				} catch let error as OSAXError {
+					guard let done, urls.count > 1 else { throw error }
+					let reason = error.message.map { $0 + " " } ?? ""
+					throw OSAXError(error.number, reason + "\(results.count) of the \(urls.count) items were \(done) before it.")
+				}
+			}
+			return results.appleEventDescriptor
 		}
 	}
 }

@@ -211,6 +211,8 @@ extension URL: AppleEventConvertible {
 	/// An empty path is -1700 either way (in a folder, it was the folder itself: `fileremove {""} from f` deleted
 	/// `f`). Every command that takes a path as text goes through here.
 	public init(scriptPath path: String, relativeTo base: URL? = nil) throws {
+		// No file has a NUL in its path (it became `%00` in the name).
+		guard !path.contains("\0") else { throw OSAXError(-1700, "A path can’t contain a NUL character.") }
 		if let base, URL.isRelativeScriptPath(path) {
 			guard !path.isEmpty else { throw OSAXError(-1700, "An empty path doesn’t name a file.") }
 			self = base.appendingPathComponent(path)
