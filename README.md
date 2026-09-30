@@ -71,7 +71,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 
 **Math and list utilities**
 
-- `sortlist` of a single value gives a list of it; `with respect to 1.5` is error -1700, as 1.0E+19 is (SatimageOSAX left the lists unsorted); without a parameter it's error -1701; `missing value` sorts last and stays `missing value` (SatimageOSAX turned every number into a real).
+- `sortlist` of a single value gives a list of it; NaN in a column it sorts by sorts last, as it does alone and as `missing value` does (it left the rows unsorted); `with respect to 1.5` is error -1700, as 1.0E+19 is (SatimageOSAX left the lists unsorted); without a parameter it's error -1701; `missing value` sorts last and stays `missing value` (SatimageOSAX turned every number into a real).
 - `suppress item` with a single index works (including the dictionary's example).
 - `exclude items` and `keep items` `without case sensitive` ignore case; `keep items {}` gives `{}`.
 - `special concat` of text with a record is error -1700 instead of garbage; empty text gives empty cells.

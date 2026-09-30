@@ -130,8 +130,10 @@ enum Sorting {
 			return (.numbers(items.map { $0.dateValue?.timeIntervalSinceReferenceDate }), items)
 		}
 		let anyReal = present.contains(.real)
+		// NaN (not a number: from `ln -1`, say, in an array) sorts as missing value, as it does alone: as a number it
+		// compared equal to every number, so rows weren't sorted, and `remove duplicates` dropped real ones.
 		let keys = Column.numbers(items.map { item in
-			item.descriptorType == typeType ? nil : item.doubleValue
+			item.descriptorType == typeType || item.doubleValue.isNaN ? nil : item.doubleValue
 		})
 		let converted = items.map { item in
 			anyReal && item.descriptorType != typeType ? NSAppleEventDescriptor(double: item.doubleValue) : item

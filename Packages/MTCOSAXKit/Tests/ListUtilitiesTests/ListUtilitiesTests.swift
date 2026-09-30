@@ -62,6 +62,21 @@ struct SortListTests {
 		#expect(sort(ArrayOfReal([3, 1, 2]), ["Asce": false]) == [3.0, 2.0, 1.0])
 	}
 
+	/// NaN compared equal to every number, so sorting by a column with NaN left rows unsorted, and `remove
+	/// duplicates` dropped rows that weren't duplicates. It sorts last, as missing value does.
+	@Test func notANumberInAColumn() throws {
+		let letters = ["a", "b", "c", "d", "e", "f", "g"]
+		let numbers: [Double] = [3, .nan, 1, 5, .nan, 2, 4]
+		for column in [AppleEventList(numbers) as any AppleEventEncodable, ArrayOfReal(numbers)] {
+			for unique in [false, true] {
+				let reply = try #require(send("SATISort", ["----": AppleEventList([column, letters]), "from": 1, "Uniq": unique]).result)
+				let sortedLetters = try #require(reply.atIndex(2)).map { list in (1 ... list.numberOfItems).map { list.atIndex($0)!.stringValue! } }
+				// With `remove duplicates`, rows with equal keys (here both NaN, as two missing values) are one.
+				#expect(sortedLetters == ["c", "f", "a", "g", "d", "b"] + (unique ? [] : ["e"]), "unique: \(unique)")
+			}
+		}
+	}
+
 	@Test func text() {
 		#expect(sort(["abc", "ABC", "xyz", "123"]) == ["123", "ABC", "abc", "xyz"])
 		#expect(sort(["é", "e", "f", "E"]) == ["E", "e", "f", "é"])
