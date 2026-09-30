@@ -186,6 +186,23 @@ struct WriteReplacingTests {
 		#expect(throws: (any Error).self) { try Data().writeReplacing(folder.appendingPathComponent("nope/b.txt")) }
 	}
 
+	/// Replacing needs to make a file in the folder: a writable file in a folder that isn't couldn't be saved at all.
+	@Test func writableFileInReadOnlyFolder() throws {
+		let folder = FileManager.default.temporaryDirectory.appendingPathComponent("replace-\(UUID().uuidString)")
+		try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+		let file = folder.appendingPathComponent("a.txt")
+		try Data("old".utf8).write(to: file)
+		chmod(folder.path, 0o555)
+		defer {
+			chmod(folder.path, 0o755)
+			try? FileManager.default.removeItem(at: folder)
+		}
+		try Data("new".utf8).writeReplacing(file)
+		#expect(try String(contentsOf: file, encoding: .utf8) == "new")
+		// A new file there still can't be made.
+		#expect(throws: (any Error).self) { try Data().writeReplacing(folder.appendingPathComponent("b.txt")) }
+	}
+
 	/// A link to a file that didn't exist yet was replaced by a file (with the link's 0755) instead of the file
 	/// being made; setuid and setgid bits were put back after the write cleared them.
 	@Test func linksToNewFilesAndSpecialBits() throws {
