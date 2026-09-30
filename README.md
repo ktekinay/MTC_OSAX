@@ -206,7 +206,7 @@ A script is trusted: it can already do anything you can. The files it opens (XML
 - `PlistToJSON … replacer` runs the script's JavaScript with no time limit: a replacer that never returns blocks MTC_OSAX, and every script using it, until it's quit.
 - YAML with so many anchors and aliases that looking them up would take more than a moment is error -50. YAML whose aliases would expand to more than a million values, or repeat more than 100 MB of text as keys, is error -50. So is a property list file (a binary one can use the same array or text in many places) that would repeat more than a million values, or 100 MB of text and data, when it becomes a tree.
 - JSON, YAML, TOML and AppleScript values nested more than 512 levels deep are error -50 when they become property lists (Apple's own reader already stops property list files at about that depth).
-- `XMLOpen … with substitute entities`, `with validate` and `with load external DTD` let the document load what its DTD names: an entity such as `<!ENTITY x SYSTEM "file:///etc/passwd">` becomes text the script can read, and a DTD at an http URL is fetched. Use them only with documents you trust.
+- `XMLOpen … with substitute entities`, `with validate` and `with load external DTD` let the document load what its DTD names: an entity such as `<!ENTITY x SYSTEM "file:///etc/passwd">` becomes text the script can read, and a DTD at an http URL is fetched. So does `XMLValidate` of a document without `against`, which loads the external DTD the document names (from a file, or over http or https) to validate against it. Use them only with documents you trust.
 
 ## Diagnostic commands
 
