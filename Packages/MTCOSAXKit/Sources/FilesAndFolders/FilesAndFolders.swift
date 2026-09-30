@@ -73,10 +73,23 @@ public enum FilesAndFolders {
 		guard let name = try request.parameter("pnam", as: String.self) else {
 			return nil
 		}
-		guard !name.isEmpty, !name.contains("/"), name != ".", name != ".." else {
+		guard !name.contains("/"), isName(name) else {
 			throw OSAXError(-1, "A name can’t be empty, contain “/” or be “.” or “..”. To use a subfolder, give its path as the folder instead.")
 		}
 		return name
+	}
+
+	/// Whether a path's last part is a name: not empty, “.” or “..”, which say where a folder is instead.
+	static func isName(_ name: String) -> Bool {
+		!name.isEmpty && name != "." && name != ".." && name != "/"
+	}
+
+	/// -1 unless an item made from other parameters (a path's last part) gets a name: `filecopy "a/.." to f`
+	/// would otherwise be `f/..`, the folder above `f`, which `with replacing` deleted.
+	static func requireName(_ url: URL) throws {
+		guard isName(url.lastPathComponent) else {
+			throw OSAXError(-1, "“\(url.path)” doesn’t end in a name. Give a path that ends in the item’s name, or a name.")
+		}
 	}
 
 	// MARK: filenew, mkdir, filerename
@@ -189,6 +202,7 @@ public enum FilesAndFolders {
 				throw notFound
 			}
 			let target = filePath ?? folder!.appendingPathComponent(name ?? source.lastPathComponent)
+			try requireName(target)
 			guard FileItem.isDirectory(target.deletingLastPathComponent()) else {
 				throw notFound
 			}
@@ -395,6 +409,9 @@ public enum FilesAndFolders {
 		}
 		let folder = try request.requiredParameter("in  ", as: URL.self)
 		let name = try nameParameter(request) ?? (target as NSString).lastPathComponent
+		guard isName(name) else {
+			throw OSAXError(-1, "“\(target)” doesn’t end in a name for the link. Give a name.")
+		}
 		let replacing = try request.parameter("Repl", default: true)
 		let link = folder.appendingPathComponent(name)
 

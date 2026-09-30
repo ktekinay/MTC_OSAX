@@ -438,6 +438,36 @@ struct NameTests {
 		#expect(try FileManager.default.contentsOfDirectory(atPath: sandbox.url.path) == ["f"])
 		#expect(try FileManager.default.contentsOfDirectory(atPath: folder) == ["a.txt"])
 	}
+
+	/// Without `name`, the new item was named after the source's last part: from `s/..` into `d`, it was `d/..`, the
+	/// folder above `d`, and `with replacing` deleted that folder and everything in it. So could `into` a path
+	/// ending in `..`.
+	@Test func namesFromOtherParameters() throws {
+		let sandbox = try Sandbox()
+		_ = try sandbox.file("top/s/a.txt")
+		_ = try sandbox.file("top/d/keep.txt")
+		_ = try sandbox.file("keep.txt")
+		let s = sandbox.path("top/s"), d = sandbox.path("top/d")
+		for command in [copy, move] {
+			for parameters in [
+				["----": s + "/..", "to  ": d], ["----": s + "/.", "to  ": d], ["----": ["..", "."], "from": s, "to  ": d],
+				["----": s + "/a.txt", "into": URL(fileURLWithPath: d + "/..")], ["----": s + "/a.txt", "into": URL(fileURLWithPath: d + "/.")],
+			] as [[String: any AppleEventEncodable]] {
+				let error = send(command, parameters.merging(["Repl": true]) { $1 }).error
+				#expect(error?.number == -1, "\(command) \(parameters)")
+				#expect(error?.message?.contains("doesn’t end in a name") == true, "\(command) \(parameters)")
+			}
+		}
+		#expect(sandbox.exists("keep.txt") && sandbox.exists("top/d/keep.txt") && sandbox.exists("top/s/a.txt"))
+		#expect(try FileManager.default.contentsOfDirectory(atPath: d) == ["keep.txt"])
+		// With a name, a source ending in `..` is the folder it names.
+		_ = try sandbox.file("x/y/b.txt")
+		#expect(send(copy, ["----": sandbox.path("x/y") + "/..", "to  ": d, "pnam": "copy"]).error == nil)
+		#expect(sandbox.exists("top/d/copy/y/b.txt"))
+		// A link's name comes from its target's path unless it's given.
+		#expect(send(createSymlink, ["----": s + "/..", "in  ": d]).error?.number == -1)
+		#expect(send(createSymlink, ["----": s + "/..", "in  ": d, "pnam": "up"]).error == nil)
+	}
 }
 
 @MainActor
