@@ -37,14 +37,24 @@ public struct DescriptorSnapshot: Codable, Hashable {
 	// MARK: Descriptor → snapshot
 
 	public init(_ descriptor: NSAppleEventDescriptor) {
+		self.init(descriptor, hexLimit: nil)
+	}
+
+	/// `hexLimit`: at most that many bytes of data as hex, with `…` after (for `mtc_describe`; fixtures keep every
+	/// byte).
+	public init(_ descriptor: NSAppleEventDescriptor, hexLimit: Int?) {
 		type = descriptor.descriptorType.fourCharString
+		func hexText(_ data: Data) -> String {
+			let shown = hexLimit.map { data.prefix($0) } ?? data
+			return shown.map { String(format: "%02x", $0) }.joined() + (shown.count < data.count ? "…" : "")
+		}
 		switch type {
 		case "aevt":
 			eventClass = descriptor.eventClass.fourCharString
 			eventID = descriptor.eventID.fourCharString
-			fields = Self.fields(of: descriptor)
+			fields = Self.fields(of: descriptor, hexLimit: hexLimit)
 		case "list":
-			items = (0 ..< descriptor.numberOfItems).map { DescriptorSnapshot(descriptor.atIndex($0 + 1)!) }
+			items = (0 ..< descriptor.numberOfItems).map { DescriptorSnapshot(descriptor.atIndex($0 + 1)!, hexLimit: hexLimit) }
 		case "Lido" where ArrayOfReal.values(of: descriptor) != nil:
 			items = ArrayOfReal.values(of: descriptor)!.map { DescriptorSnapshot(NSAppleEventDescriptor(double: $0)) }
 		case "utxt", "ut16", "utf8", "TEXT":
@@ -58,14 +68,14 @@ public struct DescriptorSnapshot: Codable, Hashable {
 			if let url = descriptor.coerce(toDescriptorType: typeFileURL)?.fileURLValue {
 				text = url.path
 			} else {
-				hex = descriptor.data.map { String(format: "%02x", $0) }.joined()
+				hex = hexText(descriptor.data)
 			}
 		case "fsrf":
 			// An FSRef identifies an item by volume and node; keep its POSIX path instead, like an alias.
 			if let path = descriptor.fileReferencePath {
 				text = path
 			} else {
-				hex = descriptor.data.map { String(format: "%02x", $0) }.joined()
+				hex = hexText(descriptor.data)
 			}
 		case "long", "shor":
 			integer = Int(descriptor.int32Value)
@@ -90,18 +100,18 @@ public struct DescriptorSnapshot: Codable, Hashable {
 			code = data.count >= 4 ? data.withUnsafeBytes { $0.loadUnaligned(as: FourCharCode.self) }.fourCharString : "????"
 		default:
 			if descriptor.isRecordDescriptor {
-				fields = Self.fields(of: descriptor)
+				fields = Self.fields(of: descriptor, hexLimit: hexLimit)
 			} else {
-				hex = descriptor.data.map { String(format: "%02x", $0) }.joined()
+				hex = hexText(descriptor.data)
 			}
 		}
 	}
 
-	private static func fields(of descriptor: NSAppleEventDescriptor) -> [Field] {
+	private static func fields(of descriptor: NSAppleEventDescriptor, hexLimit: Int? = nil) -> [Field] {
 		(0 ..< descriptor.numberOfItems).map { index in
 			Field(
 				key: descriptor.keywordForDescriptor(at: index + 1).fourCharString,
-				value: DescriptorSnapshot(descriptor.atIndex(index + 1)!)
+				value: DescriptorSnapshot(descriptor.atIndex(index + 1)!, hexLimit: hexLimit)
 			)
 		}
 	}

@@ -20,6 +20,17 @@ private func values(_ reply: AppleEventReply) -> [Double]? {
 
 @MainActor
 struct CreateArrayTests {
+	/// The size from a list's first item was found recursively; now it's found however deep.
+	@Test func deepSize() {
+		var deep: NSAppleEventDescriptor = NSAppleEventDescriptor(int32: 2)
+		for _ in 0 ..< 1_000 {
+			let list = NSAppleEventDescriptor.list()
+			list.insert(deep, at: 1)
+			deep = list
+		}
+		#expect(values(send("SATICRAR", ["----": deep])) == [0, 1])
+	}
+
 	@Test func ranges() {
 		#expect(values(send("SATICRAR", ["----": 3])) == [0, 1, 2])
 		#expect(values(send("SATICRAR", ["----": 5, "rang": [2, 3]])) == [2, 2.25, 2.5, 2.75, 3])

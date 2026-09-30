@@ -255,6 +255,14 @@ struct SpecialConcatTests {
 		#expect(result[.user("c")]?.stringValue == "A")
 		// A sum too large for a real is -50, as math results are (it was infinity).
 		#expect(send("SATICONC", ["----": user(["a": 1e308]), "with": user(["a": 1e308])]).error?.number == -50)
+		// Records are merged recursively: nested past 512 levels is -50 (the stack could run out).
+		var deep: NSAppleEventDescriptor = NSAppleEventDescriptor(int32: 1)
+		for _ in 0 ..< 600 {
+			let list = NSAppleEventDescriptor.list()
+			list.insert(deep, at: 1)
+			deep = list
+		}
+		#expect(send("SATICONC", ["----": user(["a": deep]), "with": user(["a": deep])]).error?.number == -50)
 	}
 
 	@Test func tables() {

@@ -89,10 +89,12 @@ public enum Arrays {
 	}
 
 	private static func firstNumber(_ descriptor: NSAppleEventDescriptor) throws -> Double {
-		if descriptor.descriptorType == typeAEList, descriptor.numberOfItems > 0 {
-			return try firstNumber(descriptor.atIndex(1)!)
+		// A loop, not recursion: nested however deep, it can't run out of stack.
+		var current = descriptor
+		while current.descriptorType == typeAEList, current.numberOfItems > 0, let first = current.atIndex(1) {
+			current = first
 		}
-		return try Numbers.number(descriptor)
+		return try Numbers.number(current)
 	}
 }
 

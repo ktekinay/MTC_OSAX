@@ -21,9 +21,11 @@ public enum Diagnostics {
 			},
 
 			// Describes the descriptor types and keys the script sent.
+			// Nesting is limited, and only the start of long data is shown (every byte of it was written out).
 			CommandDefinition("mtc_describe", code: "MTCddesc") { request in
-				request.descriptor(for: Keyword.directObject).map { DescriptorSnapshot($0).summary }
-					?? "(no direct parameter)"
+				guard let descriptor = request.descriptor(for: Keyword.directObject) else { return "(no direct parameter)" }
+				guard !descriptor.nestsDeeper() else { throw NSAppleEventDescriptor.nestedTooDeep }
+				return DescriptorSnapshot(descriptor, hexLimit: 256).summary
 			},
 
 			// mtc_raise_error "message" number n. Error 0 would be no error at all to AppleScript: -50.

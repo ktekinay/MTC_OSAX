@@ -7,6 +7,8 @@ enum SpecialConcat {
 	static func concat(_ request: AppleEventRequest) throws -> NSAppleEventDescriptor {
 		let first = try request.requiredDirectParameter(as: AnyDescriptor.self).descriptor
 		let second = try request.requiredParameter("with", as: AnyDescriptor.self).descriptor
+		// Records are merged recursively.
+		guard !first.nestsDeeper(), !second.nestsDeeper() else { throw NSAppleEventDescriptor.nestedTooDeep }
 		if let a = RecordFields(first), let b = RecordFields(second) {
 			return try merge(a, b).appleEventDescriptor
 		}

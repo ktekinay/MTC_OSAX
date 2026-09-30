@@ -15,11 +15,17 @@ public indirect enum Numbers: Equatable {
 
 	/// Error -1700 for anything that isn't a number, a text that reads as one, a list of those or an array;
 	/// -1701 for a record, as SatimageOSAX replied.
+	/// Lists nested more than `NSAppleEventDescriptor.maximumNesting` deep are -50 (they ran out of stack).
 	public init(_ descriptor: NSAppleEventDescriptor) throws {
+		guard !descriptor.nestsDeeper() else { throw NSAppleEventDescriptor.nestedTooDeep }
+		self = try Numbers(checked: descriptor)
+	}
+
+	private init(checked descriptor: NSAppleEventDescriptor) throws {
 		if let values = ArrayOfReal.values(of: descriptor) {
 			self = .array(values)
 		} else if descriptor.descriptorType == typeAEList {
-			self = .list(try (0 ..< descriptor.numberOfItems).map { try Numbers(descriptor.atIndex($0 + 1)!) })
+			self = .list(try (0 ..< descriptor.numberOfItems).map { try Numbers(checked: descriptor.atIndex($0 + 1)!) })
 		} else if descriptor.isRecordDescriptor {
 			throw OSAXError.missingParameter
 		} else {

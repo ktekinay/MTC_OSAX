@@ -172,6 +172,30 @@ struct CLengthTests {
 	}
 }
 
+func nested(_ depth: Int, around value: NSAppleEventDescriptor = NSAppleEventDescriptor(int32: 1)) -> NSAppleEventDescriptor {
+	var descriptor = value
+	for _ in 0 ..< depth {
+		let list = NSAppleEventDescriptor.list()
+		list.insert(descriptor, at: 1)
+		descriptor = list
+	}
+	return descriptor
+}
+
+/// Values that commands go through recursively are checked for depth first, without recursing.
+@MainActor
+struct NestingTests {
+	@Test func depth() {
+		#expect(!nested(512).nestsDeeper())
+		#expect(nested(513).nestsDeeper())
+		#expect(nested(1_000).nestsDeeper())
+		#expect(!NSAppleEventDescriptor.list().nestsDeeper())
+		let record = NSAppleEventDescriptor.record()
+		record.setDescriptor(nested(600), forKeyword: FourCharCode(fourCharString: "abcd"))
+		#expect(record.nestsDeeper())
+	}
+}
+
 @MainActor
 struct WriteReplacingTests {
 	/// Saves used to write in place, so a failure part way left a cut-short file.

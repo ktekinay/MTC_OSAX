@@ -5,6 +5,20 @@ import Testing
 
 @MainActor
 struct DiagnosticsTests {
+	/// mtc_describe recursed without a limit, and wrote out every byte of long data.
+	@Test func describeLimits() {
+		var deep: NSAppleEventDescriptor = NSAppleEventDescriptor(int32: 1)
+		for _ in 0 ..< 600 {
+			let list = NSAppleEventDescriptor.list()
+			list.insert(deep, at: 1)
+			deep = list
+		}
+		#expect(send("MTCddesc", ["----": deep]).error?.number == -50)
+		let data = NSAppleEventDescriptor(descriptorType: FourCharCode(fourCharString: "rdat"), data: Data(count: 1_000_000))!
+		let summary = send("MTCddesc", ["----": data]).result?.stringValue ?? ""
+		#expect(summary.count < 600 && summary.contains("…"))
+	}
+
 	private let dispatcher: CommandDispatcher = {
 		let dispatcher = CommandDispatcher()
 		dispatcher.register(Diagnostics.commands(version: { "MTC_OSAX 9.9 (99)" }))

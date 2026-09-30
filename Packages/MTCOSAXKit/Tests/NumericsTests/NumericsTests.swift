@@ -5,6 +5,17 @@ import Testing
 
 @MainActor
 struct NumbersTests {
+	/// Nested lists were read recursively without a limit.
+	@Test func deepLists() {
+		var deep: NSAppleEventDescriptor = NSAppleEventDescriptor(int32: 1)
+		for _ in 0 ..< 600 {
+			let list = NSAppleEventDescriptor.list()
+			list.insert(deep, at: 1)
+			deep = list
+		}
+		#expect((#expect(throws: OSAXError.self) { try Numbers(deep) })?.number == -50)
+	}
+
 	@Test func decodesNumbersListsAndArrays() throws {
 		#expect(try Numbers(NSAppleEventDescriptor(int32: 3)) == .number(3))
 		#expect(try Numbers(NSAppleEventDescriptor(double: 2.5)) == .number(2.5))
