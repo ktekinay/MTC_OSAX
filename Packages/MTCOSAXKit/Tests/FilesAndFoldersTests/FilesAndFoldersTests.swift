@@ -418,6 +418,25 @@ struct TemporaryTests {
 		#expect((attributes[.posixPermissions] as? Int) == 0o600)
 	}
 
+	/// Modes are less the umask, which the system applies as it creates the item (reading it meant setting the
+	/// process's to 0 for a moment); special bits are kept.
+	@Test func modesLessTheUmask() throws {
+		let sandbox = try Sandbox()
+		let mask = umask(0)
+		umask(mask)
+		func mode(_ code: String, _ text: String) throws -> Int? {
+			let path = try #require(send(code, ["----": sandbox.url, "pnam": "t", "Mode": text]).result?.stringValue)
+			return try FileManager.default.attributesOfItem(atPath: path)[.posixPermissions] as? Int
+		}
+		#expect(try mode(makeTemporaryFile, "666") == Int(0o666 & ~mask))
+		#expect(try mode(makeTemporaryFile, "4755") == Int((0o755 & ~mask) | 0o4000))
+		#expect(try mode(makeTemporaryFolder, "777") == Int(0o777 & ~mask))
+		#expect(try mode(makeTemporaryFolder, "1777") == Int((0o777 & ~mask) | 0o1000))
+		// filenew refuses an item made since it looked, as one already there.
+		_ = try sandbox.file("there")
+		#expect(send(fileNew, ["----": sandbox.path("there")]).error == OSAXError(-48))
+	}
+
 	/// mkstemps replaced every X at the end of the template, so a prefix ending in X lost it.
 	@Test func prefixEndingInX() throws {
 		let sandbox = try Sandbox()

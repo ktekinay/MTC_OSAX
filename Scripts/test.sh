@@ -13,7 +13,8 @@ package="${0:A:h:h}/Packages/MTCOSAXKit"
 temporary="$(getconf DARWIN_USER_TEMP_DIR)"
 caches="$(getconf DARWIN_USER_CACHE_DIR)"
 
-# Later rules win: writing is denied everywhere, then allowed in these folders.
+# Later rules win: writing is denied everywhere, then allowed in these folders. Setting setuid and setgid bits is an
+# operation of its own, which the sandbox refuses unless it's allowed (the tests of modes set them in temporary items).
 profile="(version 1)
 (allow default)
 (deny file-write*)
@@ -25,7 +26,10 @@ profile="(version 1)
 	(subpath \"/private/var/tmp\")
 	(subpath \"/dev\")
 	(subpath \"${HOME:A}/Library/Caches/org.swift.swiftpm\")
-	(subpath \"${HOME:A}/Library/org.swift.swiftpm\"))"
+	(subpath \"${HOME:A}/Library/org.swift.swiftpm\"))
+(allow file-write-setugid
+	(subpath \"${temporary:A}\")
+	(subpath \"/private/tmp\"))"
 
 # SwiftPM sandboxes the manifest's compilation itself, which can't be done inside this sandbox; this one is stricter.
 exec sandbox-exec -p "$profile" swift test --package-path "$package" --disable-sandbox "$@"

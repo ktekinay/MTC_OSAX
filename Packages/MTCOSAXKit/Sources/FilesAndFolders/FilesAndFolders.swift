@@ -109,9 +109,12 @@ public enum FilesAndFolders {
 		} catch {
 			throw OSAXError.file(error, "make the folders for “\(url.lastPathComponent)”", fallback: notFound.number)
 		}
-		guard FileManager.default.createFile(atPath: url.path, contents: nil) else {
-			throw invalidInput
+		// Only if it's still not there (a file made since the check was overwritten).
+		let descriptor = open(url.path, O_CREAT | O_EXCL | O_WRONLY | O_NOFOLLOW, 0o666)
+		guard descriptor >= 0 else {
+			throw errno == EEXIST ? alreadyExists : invalidInput
 		}
+		close(descriptor)
 		return result(url, folder: false)
 	}
 
@@ -377,29 +380,38 @@ public enum FilesAndFolders {
 		}
 		let prefix = String(fullName.dropLast(suffixLength))
 		let suffix = String(fullName.suffix(suffixLength))
-		let created = try createUnique(in: template.deletingLastPathComponent(), prefix: prefix, randomCount: wildcards, suffix: suffix, folder: folder)
-		let mask = umask(0)
-		umask(mask)
-		Darwin.chmod(created, mode & ~mask)
+		let created = try createUnique(in: template.deletingLastPathComponent(), prefix: prefix, randomCount: wildcards, suffix: suffix,
+		                               folder: folder, mode: mode)
 		return result(URL(fileURLWithPath: created), folder: folder)
 	}
 
-	/// Creates a file (only for the owner, as mkstemp does) or folder named prefix + random letters and digits +
-	/// suffix that didn't exist; its path. (mkstemps and mkdtemp replace every X at the end of their template, so a
-	/// prefix ending in X lost it.)
-	static func createUnique(in folder: URL, prefix: String, randomCount: Int, suffix: String, folder isFolder: Bool) throws -> String {
+	/// Creates a file or folder named prefix + random letters and digits + suffix that didn't exist, with `mode` less
+	/// the umask; its path. The system applies the umask as it creates it (reading the umask meant setting the whole
+	/// process's to 0 for a moment); setuid, setgid and sticky bits, which creating doesn't set, are added after.
+	/// (mkstemps and mkdtemp replace every X at the end of their template, so a prefix ending in X lost it.)
+	static func createUnique(in folder: URL, prefix: String, randomCount: Int, suffix: String, folder isFolder: Bool,
+	                         mode: mode_t = 0o600) throws -> String
+	{
 		let characters = Array("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
 		for _ in 0 ..< (randomCount == 0 ? 1 : 1000) {
 			let random = String((0 ..< randomCount).map { _ in characters.randomElement()! })
 			let path = folder.appendingPathComponent(prefix + random + suffix).path
+			var created = false
 			if isFolder {
-				if Darwin.mkdir(path, 0o700) == 0 { return path }
+				created = Darwin.mkdir(path, mode & 0o777) == 0
 			} else {
-				let descriptor = open(path, O_CREAT | O_EXCL | O_RDWR, 0o600)
+				let descriptor = open(path, O_CREAT | O_EXCL | O_RDWR | O_NOFOLLOW, mode & 0o777)
 				if descriptor >= 0 {
 					close(descriptor)
-					return path
+					created = true
 				}
+			}
+			if created {
+				var status = stat()
+				if mode & 0o7000 != 0, lstat(path, &status) == 0 {
+					Darwin.chmod(path, (status.st_mode & 0o777) | (mode & 0o7000))
+				}
+				return path
 			}
 			guard errno == EEXIST else { throw posixError(errno) }
 		}
