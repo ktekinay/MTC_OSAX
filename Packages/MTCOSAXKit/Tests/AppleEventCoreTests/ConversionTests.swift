@@ -177,6 +177,33 @@ struct WriteReplacingTests {
 		#expect(try FileManager.default.contentsOfDirectory(atPath: folder.path).sorted() == ["a.txt", "link.txt"])
 		#expect(throws: (any Error).self) { try Data().writeReplacing(folder.appendingPathComponent("nope/b.txt")) }
 	}
+
+	/// A link to a file that didn't exist yet was replaced by a file (with the link's 0755) instead of the file
+	/// being made; setuid and setgid bits were put back after the write cleared them.
+	@Test func linksToNewFilesAndSpecialBits() throws {
+		let folder = FileManager.default.temporaryDirectory.appendingPathComponent("replace-\(UUID().uuidString)")
+		try FileManager.default.createDirectory(at: folder.appendingPathComponent("sub"), withIntermediateDirectories: true)
+		defer { try? FileManager.default.removeItem(at: folder) }
+		let manager = FileManager.default
+		try manager.createSymbolicLink(atPath: folder.path + "/relative.txt", withDestinationPath: "sub/new.txt")
+		try manager.createSymbolicLink(atPath: folder.path + "/chain.txt", withDestinationPath: folder.path + "/relative.txt")
+		try Data("made".utf8).writeReplacing(folder.appendingPathComponent("chain.txt"))
+		#expect(try manager.destinationOfSymbolicLink(atPath: folder.path + "/chain.txt") == folder.path + "/relative.txt")
+		#expect(try manager.destinationOfSymbolicLink(atPath: folder.path + "/relative.txt") == "sub/new.txt")
+		#expect(try String(contentsOfFile: folder.path + "/sub/new.txt", encoding: .utf8) == "made")
+		let mode = try #require(manager.attributesOfItem(atPath: folder.path + "/sub/new.txt")[.posixPermissions] as? Int)
+		#expect(mode & 0o111 == 0)
+		// A loop is an error, not a file in its place.
+		try manager.createSymbolicLink(atPath: folder.path + "/loop", withDestinationPath: "loop")
+		#expect(throws: (any Error).self) { try Data().writeReplacing(folder.appendingPathComponent("loop")) }
+		#expect((try? manager.destinationOfSymbolicLink(atPath: folder.path + "/loop")) == "loop")
+		// setuid goes, as with any write.
+		let file = folder.appendingPathComponent("tool")
+		try Data("old".utf8).write(to: file)
+		chmod(file.path, 0o4755)
+		try Data("new".utf8).writeReplacing(file)
+		#expect(try manager.attributesOfItem(atPath: file.path)[.posixPermissions] as? Int == 0o755)
+	}
 }
 
 @MainActor
