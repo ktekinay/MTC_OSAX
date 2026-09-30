@@ -446,6 +446,28 @@ struct NestingTests {
 
 	private func reference(_ index: Int) -> [UInt8] { [UInt8(index >> 8), UInt8(index & 0xFF)] }
 
+	/// A script could build a document deeper than a file may be (a CFRef of a deep part put under another deep part,
+	/// or one level at a time), until writing it out or reading it ran out of stack.
+	@Test func scriptsCantBuildTooDeep() throws {
+		let plists = Plists()
+		let root = try plists.new(record(["a": 1]))
+		var deepest = root
+		// Dictionaries down to level 511, whose values are at 512, the most there may be.
+		for _ in 1 ... 511 {
+			deepest = try #require(plists.send("PLSTaddc", ["----": record(["a": 1]), "at  ": deepest, "key ": "d"]).result)
+		}
+		#expect(plists.send("PLSTaddc", ["----": record(["a": 1]), "at  ": deepest, "key ": "d"]).error == PropertyLists.tooDeep)
+		#expect(plists.send("PLSTseta", ["----": deepest, "key ": "x", "to  ": record(["b": 2])]).error == PropertyLists.tooDeep)
+		#expect(plists.send("PLSTaddc", ["----": 1, "at  ": deepest, "key ": "x"]).error == nil)
+		// A deep part under a deep part.
+		let half = try #require(plists.send("PLSTchld", ["----": root, "by  ": String(repeating: "d/", count: 300)]).result)
+		#expect(plists.send("PLSTseta", ["----": half, "key ": "copy", "to  ": root]).error == PropertyLists.tooDeep)
+		#expect(plists.send("PLSTconc", ["----": record(["copy": half]), "afte": half]).error == PropertyLists.tooDeep)
+		// What fits is fine, and the document can still be written.
+		#expect(plists.send("PLSTseta", ["----": half, "key ": "small", "to  ": record(["b": 2])]).error == nil)
+		#expect(plists.send("PLSTDISP", ["----": root]).error == nil)
+	}
+
 	/// A binary file can use one array in two places, the array holding it in two places, and so on: 200 bytes
 	/// stood for 2⁴⁰ values, which PlistOpen went through for days, then ran out of memory making. Or one long
 	/// text a thousand times.

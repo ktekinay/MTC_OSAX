@@ -32,6 +32,23 @@ final class Node {
 		}
 	}
 
+	/// How many levels up the root is (0 for the root itself).
+	var depth: Int {
+		var depth = 0
+		var current = parent
+		while let node = current {
+			depth += 1
+			current = node.parent
+		}
+		return depth
+	}
+
+	/// How many levels of children are below (0 for a value that isn't an array or dictionary). Trees are never more
+	/// than `PropertyLists.maximumDepth` deep (every way of building one checks), so this recursion is too.
+	var height: Int {
+		children.map { $0.height + 1 }.max() ?? 0
+	}
+
 	/// The children of a dictionary (in key order) or an array; none for other values.
 	var children: [Node] {
 		switch content {

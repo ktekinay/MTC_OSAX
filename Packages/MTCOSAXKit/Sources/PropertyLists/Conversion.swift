@@ -23,6 +23,13 @@ extension PropertyLists {
 	nonisolated static let maximumRepeatedBytes = 100_000_000
 	nonisolated static let tooRepetitive = OSAXError(-50, "The property list uses the same values over and over: as a tree it would be too large.")
 
+	/// -50 unless `child` can go under `parent` without the tree being more than `maximumDepth` levels deep. A script
+	/// could build one deeper (a CFRef of a deep part put under another deep part, say) until writing it out, or
+	/// reading it, ran out of stack.
+	static func checkDepth(of child: Node, under parent: Node) throws {
+		guard parent.depth + 1 + child.height <= maximumDepth else { throw tooDeep }
+	}
+
 	/// -50 for Foundation objects (a parsed file) nested more than `maximumDepth` levels deep, or that would repeat
 	/// more than `maximumRepeatedValues` values or `maximumRepeatedBytes` bytes when made a tree.
 	///

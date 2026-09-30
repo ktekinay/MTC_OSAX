@@ -385,6 +385,7 @@ struct Commands {
 	/// Puts `child` at a key of a dictionary, or at an index of an array: replacing (`PlistSet`, up to count + 1)
 	/// or inserting (`PlistNewChild`); -1 otherwise.
 	func place(_ child: Node, in parent: Node, at step: Selector.Step, inserting: Bool) throws {
+		try PropertyLists.checkDepth(of: child, under: parent)
 		switch (step, parent.content) {
 		case let (.key(key), .dictionary):
 			parent.setChild(child, forKey: key)
@@ -450,6 +451,8 @@ struct Commands {
 		}
 		let target = try store.node(targetDescriptor)
 		let source = try PropertyLists.node(from: request.requiredDirectParameter(as: AnyDescriptor.self).descriptor, in: target.document, store: store)
+		// The source's children go one level under the target (it's the tree above them).
+		guard target.depth + source.height <= PropertyLists.maximumDepth else { throw PropertyLists.tooDeep }
 		switch (target.content, source.content) {
 		case let (.array(items), .array(added)):
 			for (offset, child) in added.enumerated() {
