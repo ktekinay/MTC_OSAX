@@ -3,11 +3,11 @@ import Testing
 import TestSupport
 @testable import AppleEventCore
 
-/// Waits (up to five seconds) until `condition` holds: the timer fires late when many test processes run at once, and
-/// a fixed wait failed now and then.
+/// Waits (up to 30 seconds; it returns as soon as it holds) until `condition` holds: the timer fires late when many test
+/// processes run at once, much later with AddressSanitizer, and a fixed wait failed now and then.
 @MainActor
 private func waitUntil(_ condition: () -> Bool) async throws {
-	let deadline = ContinuousClock.now + .seconds(5)
+	let deadline = ContinuousClock.now + .seconds(30)
 	while !condition(), ContinuousClock.now < deadline {
 		try await Task.sleep(for: .milliseconds(10))
 	}
