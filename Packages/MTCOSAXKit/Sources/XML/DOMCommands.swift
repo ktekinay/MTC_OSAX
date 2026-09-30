@@ -323,13 +323,14 @@ extension XMLCommands {
 		return isList ? references.appleEventDescriptor : references[0]
 	}
 
-	/// Inserts XML text or copies `after` or `before` a node (-1700 with neither; -1 beside the root element).
+	/// Inserts XML text or copies `after` or `before` a node in an element (-1700 with neither; -1 beside the root
+	/// element, or beside the text in an attribute, where elements ended up inside the attribute).
 	func newSibling(_ request: AppleEventRequest) throws -> NSAppleEventDescriptor {
 		let after = request.descriptor(for: "afte")
 		guard let anchorDescriptor = after ?? request.descriptor(for: "befo") else { throw OSAXError.coercionFailed }
 		let (document, anchor) = try resolve(anchorDescriptor)
-		guard let parent = anchor.pointee.parent, !XMLCommands.isDocument(parent) else { throw XML.invalid }
 		try XMLCommands.require(anchor, isOneOf: XMLCommands.contentKinds)
+		guard let parent = anchor.pointee.parent, XMLCommands.isElement(parent) else { throw XML.invalid }
 		let (nodes, isList) = try newNodes(request, context: parent, document: document, kinds: XMLCommands.contentKinds)
 		guard !nodes.isEmpty else { throw XML.invalid }
 		modified(document)
@@ -352,7 +353,8 @@ extension XMLCommands {
 		try XMLCommands.require(node, isOneOf: [XML_ELEMENT_NODE, XML_DOCUMENT_NODE, XML_HTML_DOCUMENT_NODE, XML_TEXT_NODE, XML_CDATA_SECTION_NODE])
 		let text = try request.requiredParameter("to  ", as: String.self)
 		let isText = node.pointee.type == XML_TEXT_NODE || node.pointee.type == XML_CDATA_SECTION_NODE
-		guard let context = isText ? node.pointee.parent : node else { throw XML.invalid }
+		// Text in an element (the text of an attribute would get elements inside the attribute).
+		guard let context = isText ? node.pointee.parent : node, !isText || XMLCommands.isElement(context) else { throw XML.invalid }
 		let nodes = try Parsing.fragment(text, in: context, keepBlanks: true)
 		modified(document)
 		if isText {

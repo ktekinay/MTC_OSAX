@@ -439,6 +439,21 @@ struct XMLChangeTests {
 		#expect(xml.send("XML disx", ["----": a, "smar": false]).result?.stringValue == "<a k=\"v\"><b k=\"v\"/><o/></a>")
 	}
 
+	/// The text in an attribute as the place for new nodes put elements inside the attribute.
+	@Test func nothingNewInsideAttributes() throws {
+		let xml = XMLs()
+		let d = try xml.open("<a k='v'>t</a>")
+		let k = try #require(xml.send("XML path", ["----": d, "with": "//@k"]).result?.atIndex(1))
+		let value = try #require(xml.send("XML chld", ["----": k, "indx": 1]).result)
+		#expect(xml.send("XML adds", ["----": "<x/>", "afte": value]).error == XML.invalid)
+		#expect(xml.send("XML adds", ["----": "<x/>", "befo": value]).error == XML.invalid)
+		#expect(xml.send("XML stxm", ["----": value, "to  ": "<x/>"]).error == XML.invalid)
+		#expect(xml.send("XML disx", ["----": try xml.root(d), "smar": false]).result?.stringValue == "<a k=\"v\">t</a>")
+		// Beside the text in an element is fine.
+		let t = try #require(xml.send("XML chld", ["----": try xml.root(d), "indx": 1]).result)
+		#expect(xml.send("XML adds", ["----": "<x/>", "afte": t]).error == nil)
+	}
+
 	/// Appending to a CDATA section, comment or processing instruction used to add an invisible child.
 	@Test func appendTextToLiteralNodes() throws {
 		let xml = XMLs()
