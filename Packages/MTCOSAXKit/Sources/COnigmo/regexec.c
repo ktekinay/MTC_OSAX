@@ -1421,6 +1421,10 @@ stack_type_str(int stack_type)
 
 /* match data(str - end) from position (sstart). */
 /* if sstart == str then set sprev to NULL. */
+/* MTC_OSAX patch: a deadline for searches (see mtc_deadline.c), checked every 65,536 backtracks. */
+extern int mtc_onig_deadline_passed(void);
+static _Thread_local unsigned int mtc_backtracks;
+
 static OnigPosition
 match_at(regex_t* reg, const UChar* str, const UChar* end,
 #ifdef USE_MATCH_RANGE_MUST_BE_INSIDE_OF_SPECIFIED_RANGE
@@ -3146,6 +3150,11 @@ match_at(regex_t* reg, const UChar* str, const UChar* end,
 	MOP_OUT;
       }
       MOP_IN(OP_FAIL);
+      /* MTC_OSAX patch: past the deadline, stop as when out of stack. */
+      if ((++mtc_backtracks & 0xFFFF) == 0 && mtc_onig_deadline_passed()) {
+	best_len = ONIGERR_MATCH_STACK_LIMIT_OVER;
+	goto finish;
+      }
       STACK_POP;
       p     = stk->u.state.pcode;
       s     = stk->u.state.pstr;

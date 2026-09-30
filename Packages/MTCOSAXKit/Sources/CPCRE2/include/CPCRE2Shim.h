@@ -5,5 +5,11 @@
 
 #define PCRE2_CODE_UNIT_WIDTH 16
 #include "pcre2.h"
+#include <stdint.h>
+
+/// A deadline for searches on this thread, in CLOCK_UPTIME_RAW nanoseconds (0 for none), and whether the last one
+/// stopped for it (see mtc_deadline.c).
+void mtc_pcre2_set_deadline(uint64_t nanoseconds);
+int mtc_pcre2_took_too_long(void);
 
 #endif

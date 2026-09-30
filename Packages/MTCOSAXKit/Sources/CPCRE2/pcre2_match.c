@@ -41,6 +41,10 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #include "pcre2_internal.h"
 
+/* MTC_OSAX patch: a deadline for searches (see mtc_deadline.c). */
+extern int mtc_pcre2_deadline_passed(void);
+static _Thread_local unsigned int mtc_frames;
+
 
 
 /* These defines enable debugging code */
@@ -871,6 +875,10 @@ recursive depth limit (used too many backtracking frames). If not, process the
 opcodes. */
 
 if (mb->match_call_count++ >= mb->match_limit) return PCRE2_ERROR_MATCHLIMIT;
+/* MTC_OSAX patch: match_call_count starts again at each starting position, so a search of a long text isn't
+limited as a whole; past the deadline for searches (see mtc_deadline.c), checked every 65,536 frames, it stops as
+at the match limit. */
+if ((++mtc_frames & 0xFFFF) == 0 && mtc_pcre2_deadline_passed()) return PCRE2_ERROR_MATCHLIMIT;
 if (Frdepth >= mb->match_limit_depth) return PCRE2_ERROR_DEPTHLIMIT;
 
 #ifdef DEBUG_SHOW_OPS

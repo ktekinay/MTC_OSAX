@@ -84,6 +84,9 @@ final class OnigmoEngine: RegexEngine {
 		guard position >= 0 else {
 			// Anything but "no match" is an error, such as ONIGERR_MATCH_STACK_LIMIT_OVER (-15).
 			guard position == ONIG_MISMATCH else {
+				if mtc_onig_took_too_long() != 0 {
+					throw RegexDeadline.tookTooLong(code: Int(position))
+				}
 				var info = OnigErrorInfo()
 				throw RegexError(code: Int(position), message: Self.message(for: Int(position), info: &info))
 			}
@@ -98,8 +101,8 @@ final class OnigmoEngine: RegexEngine {
 	}
 
 	/// Onigmo's backtracking stack is unlimited by default: a pattern like `(a|b)*c` over a huge text could take all
-	/// the memory. Five million entries (a few hundred MB) is far more than ordinary patterns need. (This doesn't
-	/// limit time: `(a*)*b` is still exponential, as it was in SatimageOSAX.)
+	/// the memory. Five million entries (a few hundred MB) is far more than ordinary patterns need. (Time is limited by
+	/// `RegexDeadline`: `(a*)*b` is still exponential, as it was in SatimageOSAX.)
 	static let matchStackLimit: UInt32 = 5_000_000
 
 	private static func setLimits() {

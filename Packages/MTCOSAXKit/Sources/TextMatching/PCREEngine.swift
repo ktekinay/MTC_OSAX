@@ -65,8 +65,11 @@ final class PCREEngine: RegexEngine {
 		defer { pcre2_match_data_free_16(data) }
 		func run(_ subject: UnsafePointer<UInt16>) throws(RegexError) -> RegexMatch? {
 			func match(at position: Int, options: UInt32) throws(RegexError) -> RegexMatch? {
-				let result = pcre2_match_16(code, subject, bounds.upperBound, position, matchOptions | options, data, nil)
+				let result = pcre2_match_16(code, subject, bounds.upperBound, position, matchOptions | options, data, Self.context)
 				if result < 0, result != PCRE2_ERROR_NOMATCH {
+					if mtc_pcre2_took_too_long() != 0 {
+						throw RegexDeadline.tookTooLong(code: -3000 + Int(result))
+					}
 					throw RegexError(code: -3000 + Int(result), message: Self.message(for: result), isExtension: true)
 				}
 				guard result > 0 else { return nil }
@@ -99,6 +102,14 @@ final class PCREEngine: RegexEngine {
 			: text.units.withUnsafeBufferPointer { buffer in Result { () throws(RegexError) in try run(buffer.baseAddress!) } }
 		return try result.get()
 	}
+
+	/// PCRE2's memory for backtracking is limited to 20 GB by default: a search could take all the memory there is.
+	/// 128 MB is far more than ordinary patterns need (past it, -3063). Contexts are only read while matching.
+	nonisolated(unsafe) static let context: OpaquePointer? = {
+		let context = pcre2_match_context_create_16(nil)
+		pcre2_set_heap_limit_16(context, 128 * 1024) // in kilobytes
+		return context
+	}()
 
 	private static func message(for error: Int32) -> String {
 		var buffer = [UInt16](repeating: 0, count: 256)

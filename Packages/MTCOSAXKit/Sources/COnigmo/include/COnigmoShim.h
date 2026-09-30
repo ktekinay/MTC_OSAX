@@ -4,6 +4,7 @@
 #ifndef CONIGMO_SHIM_H
 #define CONIGMO_SHIM_H
 
+#include <stdint.h>
 #include "onigmo.h"
 
 typedef enum {
@@ -34,6 +35,11 @@ static inline const OnigSyntaxType *mtc_onig_syntax(MTCOnigSyntax syntax) {
 		default: return ONIG_SYNTAX_RUBY;
 	}
 }
+
+/// A deadline for searches on this thread, in CLOCK_UPTIME_RAW nanoseconds (0 for none), and whether the last one
+/// stopped for it (see mtc_deadline.c).
+void mtc_onig_set_deadline(uint64_t nanoseconds);
+int mtc_onig_took_too_long(void);
 
 /// UTF-16LE with Satimage's line terminators (see mtc_encoding.c).
 OnigEncoding mtc_onig_encoding_satimage_utf16le(void);

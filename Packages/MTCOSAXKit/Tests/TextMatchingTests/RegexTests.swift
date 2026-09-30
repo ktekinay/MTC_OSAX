@@ -281,6 +281,32 @@ struct RegexLimitTests {
 		#expect(try CompiledRegex("(?:a|b)*").firstMatch(in: UTF16Text(String(repeating: "a", count: 100_000)))?.range == 0 ..< 100_000)
 	}
 
+	/// Neither engine limited time: an exponential pattern (Onigmo), or one that backtracks a little at every position
+	/// of a long text (PCRE2's match limit starts again at each), held up every script for minutes.
+	@Test func deadlines() throws {
+		let exponential = try CompiledRegex(#"\A(a|aa)*\z"#)
+		let text = UTF16Text(String(repeating: "a", count: 60) + "!")
+		var start = Date()
+		let onigmo = RegexDeadline.withBudget(0.5) { #expect(throws: RegexError.self) { try exponential.firstMatch(in: text) } }
+		#expect(onigmo?.code == -15)
+		#expect(onigmo?.message.contains("took too long") == true)
+		#expect(Date().timeIntervalSince(start) < 5)
+		start = Date()
+		let long = UTF16Text(String(repeating: "a", count: 3_000_000))
+		let pcre = RegexDeadline.withBudget(0.5) {
+			#expect(throws: RegexError.self) { try CompiledRegex("(?:a|b){1,200}c", syntax: .pcre).firstMatch(in: long) }
+		}
+		#expect(pcre?.code == -3047)
+		#expect(pcre?.message.contains("took too long") == true)
+		#expect(Date().timeIntervalSince(start) < 5)
+		// PCRE2's memory for backtracking was up to 20 GB; it's 128 MB (heap limit, -3063).
+		let deep = #expect(throws: RegexError.self) { try CompiledRegex("(?:a|b)*c", syntax: .pcre).firstMatch(in: long) }
+		#expect(deep?.code == -3063)
+		// Afterwards, and for searches that don't take long, nothing's different.
+		#expect(try RegexDeadline.withBudget(0.5) { try exponential.firstMatch(in: UTF16Text("aaaa")) }?.range == 0 ..< 4)
+		#expect(try CompiledRegex("a+", syntax: .pcre).firstMatch(in: long)?.range == 0 ..< 3_000_000)
+	}
+
 	/// PCRE2's limits used to be reported as no match.
 	@Test func pcreMatchLimit() throws {
 		let text = UTF16Text(String(repeating: "a", count: 40) + "b")

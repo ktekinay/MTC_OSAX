@@ -24,9 +24,14 @@ public enum TextAdditions {
 		))
 	}
 
+	/// Each command's regex searches together get `RegexDeadline.budget`.
 	@MainActor
 	static func commands(context: TextContext) -> [CommandDefinition] {
-		searchCommands(context) + simpleCommands() + fileCommands() + formatCommands(context)
+		(searchCommands(context) + simpleCommands() + fileCommands() + formatCommands(context)).map { command in
+			CommandDefinition(command.name, code: command.key.code) { request in
+				try RegexDeadline.withBudget { try command.handler(request) }
+			}
+		}
 	}
 }
 
