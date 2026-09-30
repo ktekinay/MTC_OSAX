@@ -19,6 +19,17 @@ private var missing: Data { PropertyLists.missingValueData }
 
 @MainActor
 struct TOMLTests {
+	/// PlistToTOML wrote tables and arrays larger than PlistFromTOML (tomlc17) reads.
+	@Test func sizesItCanReadBack() throws {
+		let fits = NSDictionary(dictionary: Dictionary(uniqueKeysWithValues: (0 ..< TOML.maximumCount).map { ("k\($0)", $0) }))
+		#expect((try TOML.read(TOML.write(fits)) as? NSDictionary)?.count == TOML.maximumCount)
+		let tooMany = NSMutableDictionary(dictionary: fits)
+		tooMany["one more"] = 1
+		#expect((#expect(throws: OSAXError.self) { try TOML.write(tooMany) })?.number == -50)
+		let longArray: NSDictionary = ["a": Array(0 ... TOML.maximumCount) as NSArray]
+		#expect((#expect(throws: OSAXError.self) { try TOML.write(longArray) })?.number == -50)
+	}
+
 	@Test func scalars() throws {
 		let text = try TOML.write(dictionary([
 			"s": "a\"b\n\u{1}", "i": NSNumber(value: Int64(1) << 40), "r": 2.5, "t": true, "d": moment, "data": Data([1, 2, 3]),

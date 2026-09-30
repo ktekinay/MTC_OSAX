@@ -15,9 +15,27 @@ enum TOML {
 		guard let table = object as? NSDictionary else {
 			throw OSAXError(-50, "TOML's top level must be a table: give PlistToTOML a dictionary.")
 		}
+		try checkSizes(table)
 		var lines: [String] = []
 		try writeTable(table, path: [], header: nil, into: &lines)
 		return lines.joined(separator: "\n") + (lines.isEmpty ? "" : "\n")
+	}
+
+	/// The most keys in a table, or items in an array, tomlc17 reads (it refuses 16,384; its keys are looked up one by
+	/// one, so it can't take many more): PlistToTOML wrote what PlistFromTOML then refused.
+	static let maximumCount = (1 << 14) - 1
+
+	private static func checkSizes(_ object: Any) throws {
+		let children: [Any]
+		switch object {
+		case let dictionary as NSDictionary: children = dictionary.allValues
+		case let array as NSArray: children = array as [AnyObject]
+		default: return
+		}
+		guard children.count <= maximumCount else {
+			throw OSAXError(-50, "TOML (as MTC_OSAX reads it) has at most \(maximumCount) keys in a table or items in an array.")
+		}
+		try children.forEach(checkSizes)
 	}
 
 	private static func writeTable(_ table: NSDictionary, path: [String], header: String?, into lines: inout [String]) throws {
