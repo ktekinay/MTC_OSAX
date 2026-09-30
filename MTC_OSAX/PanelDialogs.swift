@@ -48,7 +48,10 @@ final class PanelDialogs: FileDialogs {
 		panel.directoryURL = options.startingAt
 		if let items = options.menuItems, !items.isEmpty {
 			let menu = NSPopUpButton(frame: .zero, pullsDown: false)
-			menu.addItems(withTitles: items)
+			// One by one: addItems(withTitles:) leaves out repeated titles, which put later items at other indexes.
+			for title in items {
+				menu.menu?.addItem(withTitle: title, action: nil, keyEquivalent: "")
+			}
 			if let index = options.menuIndex, items.indices.contains(index - 1) {
 				menu.selectItem(at: index - 1)
 			}
