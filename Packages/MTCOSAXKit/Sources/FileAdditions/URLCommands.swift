@@ -43,14 +43,14 @@ extension FileAdditions {
 		case .escapedPath:
 			return NSAppleEventDescriptor(string: url.path(percentEncoded: true))
 		case .alias, .fileReference:
-			guard url.isFileURL else {
+			guard url.isLocalFile else {
 				throw OSAXError.coercionFailed
 			}
 			return try form.descriptor(for: url, isDirectory: url.hasDirectoryPath)
 		case .fileURL:
 			// A file can't be a web page (SatimageOSAX made `http://x.com/a` a file `a` on the startup disk).
-			guard url.isFileURL else {
-				throw OSAXError(-1700, "\(url.absoluteString) isn’t a file.")
+			guard url.isLocalFile else {
+				throw OSAXError(-1700, "\(url.absoluteString) isn’t a file on this Mac.")
 			}
 			return NSAppleEventDescriptor(descriptorType: typeFileURL, data: Data(url.absoluteString.utf8))!
 		}

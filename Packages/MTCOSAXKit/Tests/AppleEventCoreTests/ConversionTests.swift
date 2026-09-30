@@ -102,6 +102,11 @@ struct DecodingTests {
 			(#expect(throws: OSAXError.self) { try URL(scriptPath: path) })?.number
 		}
 		#expect(number("file://host/etc/passwd") == -1700)
+		// A URL value naming another computer, as text does (it was used as the local path).
+		let remote = try #require(NSAppleEventDescriptor(descriptorType: typeFileURL, data: Data("file://host/etc/passwd".utf8)))
+		#expect((#expect(throws: OSAXError.self) { try URL(appleEventDescriptor: remote) })?.number == -1700)
+		let local = try #require(NSAppleEventDescriptor(descriptorType: typeFileURL, data: Data("file://localhost/tmp/x".utf8)))
+		#expect(try URL(appleEventDescriptor: local).path == "/tmp/x")
 		#expect(try URL(scriptPath: "file://localhost/tmp/x").path == "/tmp/x")
 		#expect(try URL(scriptPath: "FILE:///tmp/x").path == "/tmp/x")
 		#expect(number("HTTP://example.com/x") == -1700)

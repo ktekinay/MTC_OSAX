@@ -29,6 +29,10 @@ struct AbsoluteURLTests {
 		#expect(absolute(["----": "https://x.com/y", "from": base]) == "https://x.com/y")
 		#expect(absolute(["----": "http://h.com/a/./b/../c.html"]) == "http://h.com/a/c.html")
 		#expect(absolute(["----": "b.html", "from": "http://h.com/a/", "rtyp": typeObject("psxP")]) == "/a/b.html")
+		// A file URL naming another computer isn't a file here (an alias to the local /x was made).
+		for form in ["alis", "furl"] {
+			#expect(send("SATIaURL", ["----": "file://otherhost/x", "rtyp": type(form)]).error?.number == -1700, "\(form)")
+		}
 	}
 
 	@Test func paths() throws {

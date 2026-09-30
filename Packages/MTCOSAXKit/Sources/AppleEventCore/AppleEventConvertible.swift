@@ -189,10 +189,16 @@ extension URL: AppleEventConvertible {
 		guard let url = try descriptor.coerced(to: "furl").fileURLValue else {
 			throw OSAXError.coercionFailed
 		}
-		guard url.isFileURL else {
-			throw OSAXError(-1700, "\(url.absoluteString) isn’t a file.")
+		guard url.isLocalFile else {
+			throw OSAXError(-1700, "\(url.absoluteString) isn’t a file on this Mac.")
 		}
 		self = url
+	}
+
+	/// A file URL on this Mac: no host, or `localhost`. (`file://otherhost/x` as a URL value was used as the local
+	/// `/x`; only text was checked.)
+	public var isLocalFile: Bool {
+		isFileURL && (host.map { $0.isEmpty || $0.lowercased() == "localhost" } ?? true)
 	}
 
 	public var appleEventDescriptor: NSAppleEventDescriptor {
