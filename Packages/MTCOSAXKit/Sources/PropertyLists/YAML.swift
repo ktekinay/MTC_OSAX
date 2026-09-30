@@ -267,6 +267,11 @@ enum YAML {
 		/// counts as that many values towards `limit`.
 		var read: [Int: (object: Any, count: Int)] = [:]
 		var total = 0
+		/// Keys already read, by node. An alias used as a key gives the same text again; its length counts towards
+		/// `PropertyLists.maximumRepeatedBytes` (a megabyte of text used as a hundred thousand keys was decoded for
+		/// each, a hundred gigabytes).
+		var keys: [Int: String] = [:]
+		var repeatedKeyBytes = 0
 		/// libyaml resolves every alias to the same node, so nine levels of `[*a, *a, …]` would expand to hundreds
 		/// of millions of values: more than this is -50.
 		static let limit = 1_000_000
@@ -341,7 +346,7 @@ enum YAML {
 				guard keyNode.pointee.type == YAML_SCALAR_NODE else {
 					throw OSAXError(-50, "The YAML has a mapping or sequence as a key; a property list's keys are text.")
 				}
-				let key = text(keyNode)
+				let key = try self.key(keyNode)
 				if key == "<<", keyNode.pointee.data.scalar.style == YAML_PLAIN_SCALAR_STYLE {
 					switch try object(valueNode) {
 					case let source as NSDictionary: merged.append(source)
@@ -358,6 +363,20 @@ enum YAML {
 				}
 			}
 			return dictionary
+		}
+
+		mutating func key(_ node: UnsafeMutablePointer<yaml_node_t>) throws -> String {
+			let identity = Int(bitPattern: node)
+			guard let key = keys[identity] else {
+				let key = text(node)
+				keys[identity] = key
+				return key
+			}
+			repeatedKeyBytes += node.pointee.data.scalar.length
+			guard repeatedKeyBytes <= PropertyLists.maximumRepeatedBytes else {
+				throw OSAXError(-50, "The YAML’s aliases use the same keys over and over: as a property list it would be too large.")
+			}
+			return key
 		}
 
 		func text(_ node: UnsafeMutablePointer<yaml_node_t>) -> String {

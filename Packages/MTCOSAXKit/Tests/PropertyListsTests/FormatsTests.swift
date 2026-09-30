@@ -147,6 +147,25 @@ struct YAMLTests {
 		#expect(small["a1"] as? NSArray == (small["a2"] as? NSArray)?[0] as? NSArray)
 	}
 
+	/// The alias limit counted values, not their size, and keys not at all: a megabyte of text used as a hundred
+	/// thousand keys was decoded for each (a hundred gigabytes), and used as that many values it passed, and then
+	/// became a hundred gigabytes when read.
+	@Test func repeatedText() throws {
+		let anchor = "- &b " + String(repeating: "x", count: 1 << 20)
+		func keys(_ count: Int) -> String { ([anchor] + Array(repeating: "- {*b : 1}", count: count)).joined(separator: "\n") }
+		let start = Date()
+		#expect(throws: OSAXError.self) { try YAML.read(keys(200)) }
+		#expect(Date().timeIntervalSince(start) < 5)
+		let fine = try #require(try YAML.read(keys(20)) as? NSArray)
+		#expect(fine.count == 21)
+		#expect((fine[20] as? NSDictionary)?.allKeys.first as? String == String(repeating: "x", count: 1 << 20))
+		// Values: YAML.read gives the same text each time; the property list would repeat it.
+		let plists = Plists()
+		func values(_ count: Int) -> String { anchor + "\n- [" + Array(repeating: "*b", count: count).joined(separator: ", ") + "]" }
+		#expect(plists.send("MTCpFYML", ["----": values(200)]).error == PropertyLists.tooRepetitive)
+		#expect(plists.send("MTCpFYML", ["----": values(20)]).error == nil)
+	}
+
 	/// Empty text used to hand libyaml a pointer to a temporary array.
 	@Test func emptyTextHasNoDocument() {
 		for text in ["", "# only a comment\n"] {
