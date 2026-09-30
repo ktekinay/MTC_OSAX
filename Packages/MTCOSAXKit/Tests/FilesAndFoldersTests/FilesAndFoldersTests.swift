@@ -256,6 +256,23 @@ struct RemoveTests {
 	}
 
 	/// Satimage always reported 0 here.
+	/// With `from`, an empty path was the folder itself, and `.` too: a blank line in a list of names to delete
+	/// deleted the whole folder. A path ending in `..` deleted the folder above.
+	@Test func pathsThatAreFolders() throws {
+		let sandbox = try Sandbox()
+		_ = try sandbox.file("f/a.txt")
+		_ = try sandbox.file("f/sub/b.txt")
+		let f = sandbox.url.appendingPathComponent("f")
+		#expect(send(remove, ["----": ["a.txt", ""], "from": f]).error?.number == -1700)
+		#expect(send(remove, ["----": ".", "from": f]).error?.number == -1)
+		#expect(send(remove, ["----": "sub/..", "from": f]).error?.number == -1)
+		#expect(send(remove, ["----": sandbox.path("f/sub") + "/.."]).error?.number == -1)
+		#expect(send(copy, ["----": [""], "from": f, "to  ": sandbox.path("f/sub")]).error?.number == -1700)
+		#expect(send(getName, ["----": "", "from": f]).error?.number == -1700)
+		#expect(sandbox.exists("f/a.txt") && sandbox.exists("f/sub/b.txt"))
+		#expect(send(remove, ["----": ["a.txt", "sub"], "from": f]).result?.int32Value == 2)
+	}
+
 	@Test func filesOnly() throws {
 		let sandbox = try Sandbox()
 		_ = try sandbox.file("d/a.txt")

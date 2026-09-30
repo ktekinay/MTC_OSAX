@@ -84,11 +84,13 @@ public enum FilesAndFolders {
 		!name.isEmpty && name != "." && name != ".." && name != "/"
 	}
 
-	/// -1 unless an item made from other parameters (a path's last part) gets a name: `filecopy "a/.." to f`
-	/// would otherwise be `f/..`, the folder above `f`, which `with replacing` deleted.
-	static func requireName(_ url: URL) throws {
+	/// -1 unless a path ends in a name. An item made from other parameters (a path's last part) needs one:
+	/// `filecopy "a/.." to f` would otherwise be `f/..`, the folder above `f`, which `with replacing` deleted. So
+	/// does an item to delete, as with the shell's `rm`.
+	static func requireName(_ url: URL, orNameParameter: Bool = true) throws {
 		guard isName(url.lastPathComponent) else {
-			throw OSAXError(-1, "“\(url.path)” doesn’t end in a name. Give a path that ends in the item’s name, or a name.")
+			throw OSAXError(-1, "“\(url.path)” doesn’t end in a name. Give a path that ends in the item’s name"
+				+ (orNameParameter ? ", or a name." : "."))
 		}
 	}
 
@@ -289,6 +291,8 @@ public enum FilesAndFolders {
 		case let .single(url): urls = [url]
 		case let .list(list): urls = list
 		}
+		// `x/..` or `.` (in a `from` folder) would delete the folder it is.
+		try urls.forEach { try requireName($0, orNameParameter: false) }
 		guard urls.allSatisfy(FileItem.exists) else {
 			throw notFound
 		}
