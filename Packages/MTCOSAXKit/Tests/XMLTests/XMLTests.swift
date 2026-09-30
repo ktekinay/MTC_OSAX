@@ -193,6 +193,19 @@ struct XMLOpenTests {
 		#expect(xml.send("XML gttx", ["----": try #require(xml.send("XML chld", ["----": a, "indx": 3]).result)]).result?.stringValue == "&#3;")
 		#expect(xml.send("XML gttx", ["----": try #require(xml.send("XML chld", ["----": a, "indx": 4]).result)]).result?.stringValue == "x\u{4}")
 	}
+
+	/// A document's own private characters U+10FF01…U+10FF1F became control characters even with nothing rewritten;
+	/// and in HTML, a script's or style's `&#1;` (text there, not a reference) was rewritten for good.
+	@Test func extendedCharactersOnlyWhenRewritten() throws {
+		let xml = XMLs()
+		let own = try xml.root(xml.open("<a>\u{10FF05}</a>"))
+		#expect(xml.send("XML gttx", ["----": own]).result?.stringValue == "\u{10FF05}")
+		let html = try #require(xml.send("XML open", ["from": "<html><head><script>var a = '&#1;';</script><STYLE>p{content:'&#2;'}</STYLE></head><body>x&#3;</body></html>", "HTML": true]).result)
+		let text = xml.send("XML gttx", ["----": html]).result?.stringValue
+		#expect(text?.contains("var a = '&#1;';") == true)
+		#expect(text?.contains("p{content:'&#2;'}") == true)
+		#expect(text?.contains("x\u{3}") == true)
+	}
 }
 
 @MainActor

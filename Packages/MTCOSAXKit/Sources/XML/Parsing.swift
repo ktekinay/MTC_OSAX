@@ -53,7 +53,7 @@ enum Parsing {
 		guard !data.isEmpty else {
 			throw OSAXError(-1)
 		}
-		let input = options.extendedCharacters ? ExtendedCharacters.encode(data) : data
+		let (input, rewritten) = options.extendedCharacters ? ExtendedCharacters.encode(data, html: options.html) : (data, false)
 		let length = try Int32(length: input.count)
 		let (parsed, issues) = XMLIssues.collect { () -> xmlDocPtr? in
 			input.withUnsafeBytes { bytes in
@@ -78,7 +78,9 @@ enum Parsing {
 		if options.bypassingNamespace {
 			removeDefaultNamespaces(xmlDocGetRootElement(doc))
 		}
-		if options.extendedCharacters {
+		// Only when there were references to rewrite (a document's own private characters are left as they are, and
+		// every text node was gone through for nothing).
+		if rewritten {
 			ExtendedCharacters.decode(xmlDocGetRootElement(doc))
 		}
 		return doc
@@ -203,31 +205,36 @@ enum ExtendedCharacters {
 
 	/// Markup whose content is literal, so `&#1;` in it is text rather than a character reference.
 	private static let literalMarkup = [(open: "<!--", close: "-->"), (open: "<![CDATA[", close: "]]>"), (open: "<?", close: "?>")]
+	/// And in HTML, scripts and styles (their `&#1;` was rewritten for good, as it isn't a reference there).
+	private static let literalHTML = [(open: "<script", close: "</script>"), (open: "<style", close: "</style>")]
 
 	/// Rewrites references to control characters in text and attribute values (not in comments, CDATA sections
-	/// or processing instructions, where they're literal text).
-	static func encode(_ data: Data) -> Data {
+	/// or processing instructions, or HTML's scripts and styles, where they're literal text); whether it did.
+	static func encode(_ data: Data, html: Bool = false) -> (data: Data, rewritten: Bool) {
 		guard data.firstRange(of: Data("&#".utf8)) != nil, let text = String(data: data, encoding: .utf8) else {
-			return data
+			return (data, false)
 		}
+		let markups = literalMarkup + (html ? literalHTML : [])
 		var result = ""
 		var changed = false
 		var segment = text.startIndex
 		var index = text.startIndex
 		while let open = text[index...].firstIndex(of: "<") {
-			guard let markup = literalMarkup.first(where: { text[open...].hasPrefix($0.open) }) else {
+			guard let markup = markups.first(where: {
+				text[open...].range(of: $0.open, options: [.anchored, .caseInsensitive]) != nil
+			}) else {
 				index = text.index(after: open)
 				continue
 			}
 			changed = rewrite(text[segment ..< open], into: &result) || changed
 			let content = text.index(open, offsetBy: markup.open.count)
-			let end = text[content...].range(of: markup.close)?.upperBound ?? text.endIndex
+			let end = text[content...].range(of: markup.close, options: .caseInsensitive)?.upperBound ?? text.endIndex
 			result += text[open ..< end]
 			segment = end
 			index = end
 		}
 		changed = rewrite(text[segment...], into: &result) || changed
-		return changed ? Data(result.utf8) : data
+		return changed ? (Data(result.utf8), true) : (data, false)
 	}
 
 	/// Appends `text` with its control character references rewritten; whether there were any.
