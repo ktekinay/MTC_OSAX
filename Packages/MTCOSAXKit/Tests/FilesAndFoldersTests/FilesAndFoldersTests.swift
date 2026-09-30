@@ -225,6 +225,18 @@ struct CopyMoveTests {
 		#expect(try FileManager.default.contentsOfDirectory(atPath: sandbox.url.path) == ["A.txt"])
 	}
 
+	/// Replacing made the new item under the old one's name with 42 characters added, too long for names over about
+	/// 213 bytes: they could never be replaced.
+	@Test func replacingLongNames() throws {
+		let sandbox = try Sandbox()
+		let name = String(repeating: "n", count: 250)
+		let source = try sandbox.file("s/\(name)", "new")
+		_ = try sandbox.file("d/\(name)", "old")
+		#expect(send(copy, ["----": source, "to  ": sandbox.path("d"), "Repl": true]).error == nil)
+		#expect(try String(contentsOfFile: sandbox.path("d/\(name)"), encoding: .utf8) == "new")
+		#expect(try FileManager.default.contentsOfDirectory(atPath: sandbox.path("d")) == [name])
+	}
+
 	/// A link to the target, copied or moved onto it with replacing, deleted it and left a link to nothing.
 	@Test func linkToTheTarget() throws {
 		let sandbox = try Sandbox()

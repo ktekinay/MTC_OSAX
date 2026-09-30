@@ -25,6 +25,13 @@ public enum FileItem {
 		return stat(url.path, &status) == 0 ? Identity(status) : nil
 	}
 
+	/// A hidden name for a new item made beside another before replacing it: short and the same length whatever the
+	/// other's name (its name with a UUID added made names over about 206 bytes too long to be replaced).
+	public static func temporaryName() -> String {
+		let characters = Array("abcdefghijklmnopqrstuvwxyz0123456789")
+		return ".mtc-" + String((0 ..< 12).map { _ in characters.randomElement()! })
+	}
+
 	/// Whether anything is there, including a symbolic link whose target isn't.
 	public static func exists(_ url: URL) -> Bool {
 		(try? url.checkResourceIsReachable()) == true || isSymlink(url)

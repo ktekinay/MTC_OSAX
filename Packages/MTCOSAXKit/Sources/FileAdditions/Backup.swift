@@ -145,7 +145,7 @@ struct Backup {
 			// package pointed at, such as a private key, into the backup), and so is an item that became a link since
 			// it was looked at. A new item isn't written over one that appeared meanwhile.
 			let flags = copyfile_flags_t(COPYFILE_ALL | COPYFILE_NOFOLLOW | (isFolder ? COPYFILE_RECURSIVE : 0) | (isNew ? COPYFILE_EXCL : 0))
-			let target = isNew ? to : to.deletingLastPathComponent().appendingPathComponent(".\(to.lastPathComponent).mtc-backup-\(UUID().uuidString)")
+			let target = isNew ? to : to.deletingLastPathComponent().appendingPathComponent(FileItem.temporaryName())
 			guard copyfile(from.path, target.path, nil, flags) == 0 else {
 				let code = errno
 				if !isNew { try? FileManager.default.removeItem(at: target) }

@@ -189,6 +189,19 @@ struct BackupTests {
 		#expect(try manager.destinationOfSymbolicLink(atPath: folder.path("dst/pkg.app/Contents/dir")) == "../../../other")
 	}
 
+	/// An update was copied under the item's name with 49 characters added, too long for names over about 206 bytes:
+	/// they could never be updated (error 63).
+	@Test func longNames() throws {
+		let folder = try source()
+		defer { folder.remove() }
+		let name = String(repeating: "n", count: 250)
+		try folder.file("src/\(name)", "old")
+		_ = backup(folder, ["Repo": 1])
+		try folder.file("src/\(name)", "new", modified: Date().addingTimeInterval(60))
+		#expect(report(backup(folder, ["Repo": 2]), folder) == ["Items updated : \(name)"])
+		#expect(try String(contentsOfFile: folder.path("dst/\(name)"), encoding: .utf8) == "new")
+	}
+
 	/// A folder where the destination had a link (as an earlier backup of a link leaves) was backed up through the
 	/// link, into wherever it pointed.
 	@Test func linksInTheDestinationAreNotFollowed() throws {
@@ -229,7 +242,7 @@ struct BackupTests {
 		defer { try? FileManager.default.setAttributes([.posixPermissions: 0o644], ofItemAtPath: folder.path("src/a.txt")) }
 		#expect(backup(folder, ["Repo": 2]).result?.stringValue?.contains(folder.path("dst/a.txt") + "  Error : 13 \n") == true)
 		#expect(try String(contentsOfFile: folder.path("dst/a.txt"), encoding: .utf8) == "x")
-		#expect(try FileManager.default.contentsOfDirectory(atPath: folder.path("dst")).allSatisfy { !$0.contains("mtc-backup") })
+		#expect(try FileManager.default.contentsOfDirectory(atPath: folder.path("dst")).allSatisfy { !$0.hasPrefix(".mtc-") })
 		// An update of a package replaces it whole.
 		try FileManager.default.setAttributes([.posixPermissions: 0o644], ofItemAtPath: folder.path("src/a.txt"))
 		try FileManager.default.removeItem(atPath: folder.path("dst/pkg.app"))

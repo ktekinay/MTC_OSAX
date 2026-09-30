@@ -251,7 +251,7 @@ public enum FilesAndFolders {
 	/// move fails, or the old item can't be removed, the old item (and for a move, the source) is left as it was.
 	static func replace(_ target: URL, from source: URL, move: Bool) throws {
 		let manager = FileManager.default
-		let temporary = target.deletingLastPathComponent().appendingPathComponent(".\(target.lastPathComponent).mtc-\(UUID().uuidString)")
+		let temporary = target.deletingLastPathComponent().appendingPathComponent(FileItem.temporaryName())
 		do {
 			if move {
 				try manager.moveItem(at: source, to: temporary)
