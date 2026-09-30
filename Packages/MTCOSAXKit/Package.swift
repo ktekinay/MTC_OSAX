@@ -91,7 +91,7 @@ let package = Package(
 
 		.executableTarget(name: "FixtureRecorder", dependencies: ["AppleEventCore"]),
 
-		// For tests: defaults kept in memory.
+		// For tests: defaults kept in memory, and a local HTTP server.
 		.target(name: "TestSupport"),
 		// For tests: AppleScript loaded before any test runs (see AppleScriptPreload.m).
 		.target(name: "AppleScriptPreload"),
@@ -107,7 +107,7 @@ let package = Package(
 		.testTarget(name: "ListUtilitiesTests", dependencies: ["ListUtilities", "AppleScriptPreload"]),
 		.testTarget(name: "ArraysTests", dependencies: ["Arrays", "AppleScriptPreload"]),
 		.testTarget(name: "PropertyListsTests", dependencies: ["PropertyLists", "AppleScriptPreload"]),
-		.testTarget(name: "XMLTests", dependencies: ["XML", "AppleScriptPreload"]),
+		.testTarget(name: "XMLTests", dependencies: ["XML", "TestSupport", "AppleScriptPreload"]),
 		.testTarget(name: "SettingsTests", dependencies: ["Settings", "TextAdditions", "TestSupport", "AppleScriptPreload"]),
 		.testTarget(name: "SDEFConsistencyTests", dependencies: ["MTCOSAX", "AppleScriptPreload"]),
 		.testTarget(name: "FixtureReplayTests", dependencies: ["MTCOSAX", "TestSupport", "AppleScriptPreload"]),

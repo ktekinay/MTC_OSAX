@@ -53,12 +53,18 @@ extension XMLCommands {
 				return references.reference(clone)
 			},
 			// Includes can read local files (relative to the document, or anywhere with a file: URL) but not the
-			// network: a document from elsewhere could otherwise make the Mac fetch any URL.
+			// network: a document from elsewhere could otherwise make the Mac fetch any URL. `XML_PARSE_NONET` alone
+			// doesn't do it: libxml2 applies it only to http, and not to text includes.
 			CommandDefinition("XMLXInclude", code: "XML Xinc") { request in
 				let (document, _) = try direct(request)
-				let (count, issues) = XMLIssues.collect { xmlXIncludeProcessFlags(document.doc, Int32(XML_PARSE_NONET.rawValue)) }
-				guard count >= 0 else { throw OSAXError(issues.first?.code ?? -1) }
+				let ((count, refused), issues) = XMLIssues.collect {
+					NetworkInput.offline { xmlXIncludeProcessFlags(document.doc, Int32(XML_PARSE_NONET.rawValue)) }
+				}
+				// libxml2 makes a text include it couldn't load empty text, and keeps includes done before one that
+				// failed.
 				if count > 0 { modified(document) }
+				if let url = refused.first { throw OSAXError(1549, "A document can’t include anything from the network: \(url)") }
+				guard count >= 0 else { throw OSAXError(issues.first?.code ?? -1) }
 				return Int(count)
 			},
 			CommandDefinition("XMLGetEncoding", code: "XML genc") { request in
@@ -263,19 +269,39 @@ enum Network {
 
 /// What libxml2 and libxslt load by URL themselves (external DTDs and entities, `xsl:import`, `document()`,
 /// XInclude, schemas): http and https through `Network.fetch`, so with TLS rather than libxml2's own cleartext
-/// client, which can't do https; ftp not at all. Anything else (files) is left to libxml2. Parsing with
-/// `XML_PARSE_NONET` still keeps them all off the network, since libxml2 checks it before asking these.
+/// client, which can't do https; ftp not at all. Anything else (files) is left to libxml2. Every load from the
+/// network comes here, so this is where it's refused for what a document does on its own (`offline`):
+/// `XML_PARSE_NONET` only keeps libxml2 from loading http, and not every load passes it on.
 enum NetworkInput {
 	/// Installs the callbacks, once. Callbacks registered later are asked first, so libxml2's own are
-	/// registered (by initializing it) before these.
+	/// registered (by initializing it) before these. Documents can't name catalogs of their own
+	/// (`<?oasis-xml-catalog?>`), which would let them send what they load elsewhere.
 	static func install() {
 		_ = installation
 	}
 
 	private static let installation: Void = {
 		xmlInitParser()
+		xmlCatalogSetDefaults(XML_CATA_ALLOW_GLOBAL)
 		_ = xmlRegisterInputCallbacks(matches, open, read, close)
 	}()
+
+	private static let offlineKey = "MTCXMLOffline"
+
+	/// The URLs refused while offline.
+	private final class Refusals {
+		var urls: [String] = []
+	}
+
+	/// Runs `body` with every load from the network failing (with a warning), for what a document asks for on its
+	/// own; also gives the URLs refused. Per thread, as libxml2's callbacks are called on the thread doing the work.
+	static func offline<T>(_ body: () throws -> T) rethrows -> (result: T, refused: [String]) {
+		let previous = Thread.current.threadDictionary[offlineKey]
+		let refusals = Refusals()
+		Thread.current.threadDictionary[offlineKey] = refusals
+		defer { Thread.current.threadDictionary[offlineKey] = previous }
+		return (try body(), refusals.urls)
+	}
 
 	/// A URL these callbacks answer for: http, https or ftp.
 	static func scheme(_ name: UnsafePointer<CChar>?) -> String? {
@@ -301,12 +327,15 @@ enum NetworkInput {
 		scheme(name) == nil ? 0 : 1
 	}
 
-	/// A failing stream for ftp, or when the fetch fails.
+	/// A failing stream for ftp, offline, or when the fetch fails.
 	private static let open: xmlInputOpenCallback = { name in
 		var data: Data?
 		let text = name.map { String(cString: $0) } ?? ""
 		if scheme(name) == "ftp" {
 			XMLIssues.warn("ftp isn’t supported: \(text)")
+		} else if let refusals = Thread.current.threadDictionary[offlineKey] as? Refusals {
+			refusals.urls.append(text)
+			XMLIssues.warn("A document can’t load from the network here: \(text)")
 		} else if let url = URL(string: text) {
 			data = try? Network.fetch(url, post: false, query: nil, headers: nil)
 			if data == nil { XMLIssues.warn("Couldn’t load \(text)") }

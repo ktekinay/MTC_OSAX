@@ -2,6 +2,7 @@ import AppleEventCore
 import Foundation
 import PropertyLists
 import Testing
+import TestSupport
 @testable import XML
 
 /// Sends commands to one set of XML (and PropertyList, for pools) commands, sharing their documents.
@@ -547,6 +548,32 @@ struct XMLDocumentTests {
 		let remote = try including("http://127.0.0.1:9/part.xml")
 		#expect(xml.send("XML Xinc", ["----": remote]).error != nil)
 		#expect(xml.send("XML lErr").result?.stringValue?.contains("network") == true)
+	}
+
+	/// libxml2's `XML_PARSE_NONET` only stops http, and text includes don't pass it on: includes over https, and
+	/// text includes over http, were fetched. So were URLs a catalog the document named mapped its includes to.
+	@Test func xincludeStaysOffTheNetwork() throws {
+		let folder = FileManager.default.temporaryDirectory.appendingPathComponent("xinclude-\(UUID().uuidString)")
+		try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+		defer { try? FileManager.default.removeItem(at: folder) }
+		try Data("<part/>".utf8).write(to: folder.appendingPathComponent("part.xml"))
+		let server = try NetworkFixtureServer(folder: folder)
+		let part = "\(server.address)/files/part.xml"
+		let xml = XMLs()
+		// The server answers: XMLOpen fetches from it.
+		#expect(xml.send("XML open", ["----": part]).error == nil)
+		for include in ["parse='text' href='\(part)'", "href='\(part.replacingOccurrences(of: "http:", with: "https:"))'"] {
+			let d = try xml.open("<doc xmlns:xi='http://www.w3.org/2001/XInclude'><xi:include \(include)/></doc>")
+			#expect(xml.send("XML Xinc", ["----": d]).error?.number == 1549)
+			#expect(xml.send("XML lErr").result?.stringValue?.contains("can’t load from the network") == true)
+			#expect(xml.send("XML disx", ["----": try xml.root(d), "smar": false]).result?.stringValue?.contains("part/") == false)
+		}
+		// A catalog the document names isn't used: its public identifier doesn't find the DTD.
+		try Data("<!ENTITY e 'from the DTD'>".utf8).write(to: folder.appendingPathComponent("e.dtd"))
+		let catalog = folder.appendingPathComponent("catalog.xml")
+		try Data("<catalog xmlns='urn:oasis:names:tc:entity:xmlns:xml:catalog'><public publicId='-//MTC//E' uri='\(server.address)/files/e.dtd'/></catalog>".utf8).write(to: catalog)
+		let named = xml.send("XML open", ["from": "<?oasis-xml-catalog catalog='\(catalog.absoluteString)'?><!DOCTYPE doc PUBLIC '-//MTC//E' 'missing.dtd'><doc>&e;</doc>", "LoEx": true, "SuEn": true])
+		#expect(named.result.flatMap { try? xml.send("XML gttx", ["----": xml.root($0)]).result?.stringValue } != "from the DTD")
 	}
 
 	/// XMLDocument compared paths as given, so `/tmp/x/../a.xml` or `/tmp` for `/private/tmp` found nothing.

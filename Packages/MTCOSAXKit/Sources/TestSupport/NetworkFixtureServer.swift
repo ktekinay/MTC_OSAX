@@ -5,14 +5,14 @@ import Network
 ///   GET /files/<name>           a file from `folder`
 ///   GET or POST /echo?<query>   `<request method="…" query="…" body="…"><header name="x-…">value</header>…</request>`
 ///   anything else               404 with an HTML body
-final class NetworkFixtureServer: @unchecked Sendable {
+public final class NetworkFixtureServer: @unchecked Sendable {
 	private let listener: NWListener
 	private let folder: URL
 	private let queue = DispatchQueue(label: "NetworkFixtureServer")
-	private(set) var port: UInt16 = 0
+	public private(set) var port: UInt16 = 0
 
 	/// Listens on the loopback interface only, on a port of the system's choosing.
-	init(folder: URL) throws {
+	public init(folder: URL) throws {
 		self.folder = folder
 		let parameters = NWParameters.tcp
 		parameters.requiredInterfaceType = .loopback
@@ -33,7 +33,7 @@ final class NetworkFixtureServer: @unchecked Sendable {
 		listener.cancel()
 	}
 
-	var address: String {
+	public var address: String {
 		"http://127.0.0.1:\(port)"
 	}
 
