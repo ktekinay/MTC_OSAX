@@ -189,6 +189,13 @@ struct XPointerTests {
 		#expect(xml.texts(xml.send("XML xptr", ["----": "#p1", "from": d]).result) == ["One"])
 		#expect(xml.send("XML xptr", ["----": "#zz", "from": d]).result?.numberOfItems == 0)
 		#expect(xml.send("XML xptr", ["----": "#xpointer(((", "from": d]).error == OSAXError(1216))
+		// Ranges and points aren't supported (libxml2's code for them had memory errors); node names that look like
+		// them are fine.
+		for fragment in ["#xpointer(string-range(//p, 'w'))", "#xpointer(id('p1')/range-to(id('p2')))", "#xpointer(start-point(//p))",
+		                 "#xpointer(//p[1]/range-to (//p[2]))", "#xpointer(here())"] {
+			#expect(xml.send("XML xptr", ["----": fragment, "from": d]).error?.number == 1216, "\(fragment)")
+		}
+		#expect(XMLCommands.usesLocations("#xpointer(//range | //my-range(x) | //origin)") == false)
 		let p2 = try #require(xml.send("XML xptr", ["----": "#p2", "from": d]).result?.atIndex(1))
 		#expect(xml.texts(xml.send("XML xptr", ["----": "#xpointer(q)", "from": p2]).result) == ["x"])
 	}

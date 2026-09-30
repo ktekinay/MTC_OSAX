@@ -30,6 +30,7 @@ These suites aren't implemented and aren't in MTC_OSAX's dictionary, so a script
 Within the implemented suites:
 
 - `readtext` of an http or https URL returns an error instead of downloading it. More generally, a file parameter given a URL value that isn't a file's (`"http://…" as URL`) is error -1700 rather than being fetched; `XMLOpen` fetches http and https URLs given either way.
+- XPointer's ranges and points (`range-to`, `string-range`, `start-point` and the others) aren't supported by `XMLXPointer` (error 1216): libxml2's code for them had memory errors that kept being found (libxml2 2.10 turned it off), and links come from documents. XPointers to nodes (`xpointer(…)` with any XPath, IDs, `element(…)`) work as before.
 - XPath functions written as AppleScript handlers (the `http://satimage.fr/software/xpath-functions-applescript` namespace) aren't supported: an app can't reach the handlers of the script that sent the command. They didn't work in SatimageOSAX's app either (error -3); MTC_OSAX gives 3, an unknown function.
 
 ### Fixes

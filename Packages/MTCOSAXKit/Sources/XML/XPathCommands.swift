@@ -194,6 +194,11 @@ extension XMLCommands {
 			}
 		}
 
+		// XPointer's ranges and points aren't supported: libxml2's code for them had memory errors fuzzing kept
+		// finding (2.10 turned it off), and links, which come from documents, reach it here.
+		if Self.usesLocations(fragment) {
+			throw OSAXError(1216, "XPointer's ranges and points (range-to, string-range, start-point and so on) aren't supported.")
+		}
 		guard let context = xmlXPtrNewContext(doc, origin ?? root, origin ?? root) else { throw XML.invalid }
 		defer { xmlXPathFreeContext(context) }
 		try XPath.prepare(context, namespaces: namespaces, variables: document.variables, references: references)
@@ -204,6 +209,12 @@ extension XMLCommands {
 		}
 		defer { xmlXPathFreeObject(object) }
 		return XMLCommands.locations(object).map { references.referenceOrText($0) }.appleEventDescriptor
+	}
+
+	/// Whether an XPointer calls one of the functions for ranges and points.
+	static func usesLocations(_ fragment: String) -> Bool {
+		fragment.range(of: #"(?<![\w.:-])(range-to|string-range|range-inside|range|start-point|end-point|here|origin)\s*\("#,
+		               options: .regularExpression) != nil
 	}
 
 	/// XPointer's escapes: `^(`, `^)` and `^^`.
