@@ -350,7 +350,7 @@ struct DateFormatting {
 	/// and the process zone, which fail for dates before 1900 (Satimage returned error 2 for those).
 	func strftime(_ date: LocalDateTime, format: String, gmt: Bool) throws -> String {
 		// An empty format gives empty text (Satimage returned error 1).
-		inTimeZone {
+		try inTimeZone {
 			var time = Self.time(fromLocal: date.wallClock)
 			var broken = tm()
 			if gmt {
@@ -358,16 +358,20 @@ struct DateFormatting {
 			} else {
 				localtime_r(&time, &broken)
 			}
-			let prepared = Self.expandComputedDirectives(format, time: time, offset: gmt ? 0 : Int(broken.tm_gmtoff))
-			// 0 means the buffer was too small (a hundred `%c`s) or the result is empty: tries larger ones first.
-			var size = 256 + prepared.utf8.count * 8
+			// A character at the end, so 0 only means the buffer was too small (a hundred `%c`s): it also meant an
+			// empty result, and a result over 16 MB came back as "" with no error.
+			let prepared = Self.expandComputedDirectives(format, time: time, offset: gmt ? 0 : Int(broken.tm_gmtoff)) + "|"
+			var size = min(256 + prepared.utf8.count * 8, 1 << 24)
 			while true {
 				var buffer = [CChar](repeating: 0, count: size)
 				let count = Foundation.strftime(&buffer, buffer.count, prepared, &broken)
-				if count > 0 || size >= 1 << 24 {
-					return String(decoding: buffer.prefix(count).map { UInt8(bitPattern: $0) }, as: UTF8.self)
+				if count > 0 {
+					return String(decoding: buffer.prefix(count - 1).map { UInt8(bitPattern: $0) }, as: UTF8.self)
 				}
-				size *= 4
+				guard size < 1 << 24 else {
+					throw OSAXError(-50, "The formatted date would be more than 16 MB.")
+				}
+				size = min(size * 4, 1 << 24)
 			}
 		}
 	}

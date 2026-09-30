@@ -96,6 +96,11 @@ struct DateFormattingTests {
 		#expect(try newYork.strftime(date, format: String(repeating: "%c", count: 100), gmt: false) == String(repeating: one, count: 100))
 	}
 
+	/// A result over 16 MB was "" (or, up to 64 MB, went through), without an error.
+	@Test func tooLong() throws {
+		#expect(throws: OSAXError.self) { try newYork.strftime(date, format: String(repeating: "%c", count: 1_000_000), gmt: false) }
+	}
+
 	/// A raw date whose seconds overflow as a time since 1970 (Int64.min) trapped.
 	@Test func rawDatesOutOfRange() throws {
 		let raw = try #require(NSAppleEventDescriptor(descriptorType: typeLongDateTime, data: Data([0, 0, 0, 0, 0, 0, 0, 0x80])))
