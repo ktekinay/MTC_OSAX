@@ -10,7 +10,8 @@ PIDFILE="$QUEUE/runner.pid"
 mkdir -p "$QUEUE"
 chmod 700 "$QUEUE"
 
-if [[ -f "$PIDFILE" ]] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
+# Another runner only if that process is one (a stale pid file's number can belong to another process by now).
+if [[ -f "$PIDFILE" ]] && ps -o command= -p "$(cat "$PIDFILE")" 2>/dev/null | grep -q "iterm-runner.command"; then
 	echo "Runner already active (pid $(cat "$PIDFILE"))."
 	exit 0
 fi

@@ -27,7 +27,13 @@ PIDFILE="$QUEUE/runner.pid"
 mkdir -p "$QUEUE"
 chmod 700 "$QUEUE"
 
-if ! { [[ -f "$PIDFILE" ]] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; }; then
+# The runner is running if its process is: a stale pid file's number can belong to another process by now, which
+# kept a new runner from being started (and every job timed out).
+runner_alive() {
+	[[ -f "$PIDFILE" ]] && ps -o command= -p "$(cat "$PIDFILE")" 2>/dev/null | grep -q "iterm-runner.command"
+}
+
+if ! runner_alive; then
 	open -a iTerm "${0:A:h}/iterm-runner.command"
 	for i in {1..50}; do
 		[[ -f "$PIDFILE" ]] && break
@@ -47,6 +53,10 @@ while [[ ! -f "$QUEUE/$id.status" ]]; do
 		# deletes its results when it's done.
 		if ! rm "$QUEUE/$id.job" 2>/dev/null; then
 			touch "$QUEUE/$id.abandoned"
+			# It may have finished just now, after the runner looked for this file: then nobody else will.
+			if [[ -f "$QUEUE/$id.status" ]]; then
+				rm -f "$QUEUE/$id.out" "$QUEUE/$id.status" "$QUEUE/$id.abandoned"
+			fi
 		fi
 		echo "Timed out after ${TIMEOUT}s waiting for job $id." >&2
 		exit 124
