@@ -219,9 +219,11 @@ A hidden suite for checking that the app works. It doesn't appear in the diction
 
 ## Tests
 
-Unit, handler, SDEF-consistency and fixture-replay tests don't send Apple events and need no permissions:
+Unit, handler, SDEF-consistency and fixture-replay tests don't send Apple events and need no permissions. Run them with `Scripts/test.sh`, which runs `swift test` (with any arguments you give it) in a sandbox: the tests and the build can write only to the package's `.build` folder, the temporary and cache folders and SwiftPM's caches. Many tests create, change and delete files, and a test that goes wrong (one once ran `fileremove "/"` against code that accepted it) then can't write, delete, rename or unlock anything else.
 
 ```sh
+Scripts/test.sh
+# or, without the sandbox:
 swift test --package-path Packages/MTCOSAXKit
 # or all targets through the app's scheme:
 xcodebuild -project MTC_OSAX.xcodeproj -scheme MTC_OSAX -derivedDataPath build/DerivedData test
@@ -230,10 +232,10 @@ xcodebuild -project MTC_OSAX.xcodeproj -scheme MTC_OSAX -derivedDataPath build/D
 Run them with AddressSanitizer too before committing a change to code that uses C (libxml2, libxslt, Onigmo, PCRE2, libyaml, tomlc17, the Apple Event Manager): it catches memory errors that pass unnoticed otherwise, such as reading a freed libxml2 node.
 
 ```sh
-swift test --package-path Packages/MTCOSAXKit --sanitize=address
+Scripts/test.sh --sanitize=address
 ```
 
-Each test process has a time limit of three minutes (a process's tests take seconds), after which it's stopped with a message, so a test that runs away can't go on doing damage: Swift Testing's own time limits don't stop code that doesn't check for cancellation. `MTC_TEST_TIME_LIMIT=<seconds>` changes it (0 for none), and there's none while a debugger is attached.
+Each test process also has a time limit of three minutes (a process's tests take seconds), after which it's stopped with a message, so a test that runs away can't go on doing damage: Swift Testing's own time limits don't stop code that doesn't check for cancellation. `MTC_TEST_TIME_LIMIT=<seconds>` changes it (0 for none), and there's none while a debugger is attached.
 
 Every test target links `AppleScriptPreload`, which loads AppleScript when the test bundle is loaded, before any test runs. Loading it while many tests ran at once sometimes made the Apple Event Manager recurse until the stack ran out (about one `AppleEventCoreTests` run in ten). The app loads it at launch, on its main thread, with nothing else running, and isn't affected; the target is for tests only.
 
