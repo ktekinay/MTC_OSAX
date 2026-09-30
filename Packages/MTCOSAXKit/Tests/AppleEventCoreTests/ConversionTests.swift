@@ -106,6 +106,9 @@ struct DecodingTests {
 		#expect(try URL(scriptPath: "FILE:///tmp/x").path == "/tmp/x")
 		#expect(number("HTTP://example.com/x") == -1700)
 		#expect(number("Vol:private:tmp:..:etc:passwd") == -1700)
+		// Nor as the volume (it was /Volumes/../etc/hosts).
+		#expect(number("..:etc:hosts") == -1700)
+		#expect(number(".:etc:hosts") == -1700)
 		#expect(number(":folder:file") == -1700)
 		#expect(number("Vol:a:::b") == -1700)
 		#expect(try URL(scriptPath: "Backup:a:b::c").path == "/Volumes/Backup/a/c")

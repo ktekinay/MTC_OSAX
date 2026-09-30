@@ -261,6 +261,10 @@ extension URL: AppleEventConvertible {
 		guard !volume.isEmpty else {
 			throw OSAXError(-1700, "An HFS path starts with the volume’s name.")
 		}
+		// As for folders (`..:etc:hosts` was /Volumes/../etc/hosts).
+		guard volume != ".", volume != ".." else {
+			throw OSAXError(-1700, "HFS paths go up a folder with “::”, not “..”.")
+		}
 		var folders: [String] = []
 		for component in components {
 			if component.isEmpty {
