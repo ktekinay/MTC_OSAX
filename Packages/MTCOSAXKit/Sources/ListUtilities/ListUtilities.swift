@@ -32,6 +32,38 @@ public enum ListUtilities {
 		return (0 ..< descriptor.numberOfItems).map { descriptor.atIndex($0 + 1)! }
 	}
 
+	/// A list's items, with an `array of real`'s kept as numbers: a descriptor for each of an array's numbers (about
+	/// 145 bytes, and a conversion to text to compare) made a hundred million of them take 15 GB and minutes.
+	enum Items {
+		case reals([Double])
+		case descriptors([NSAppleEventDescriptor])
+
+		init?(_ descriptor: NSAppleEventDescriptor) {
+			if let values = ArrayOfReal.values(of: descriptor) {
+				self = .reals(values)
+			} else if descriptor.descriptorType == typeAEList {
+				self = .descriptors((0 ..< descriptor.numberOfItems).map { descriptor.atIndex($0 + 1)! })
+			} else {
+				return nil
+			}
+		}
+
+		var count: Int {
+			switch self {
+			case let .reals(values): values.count
+			case let .descriptors(items): items.count
+			}
+		}
+
+		/// The items at `rows`, in that order: an `array of real` for numbers, a list otherwise.
+		func selecting(_ rows: [Int]) -> NSAppleEventDescriptor {
+			switch self {
+			case let .reals(values): ArrayOfReal(rows.map { values[$0] }).appleEventDescriptor
+			case let .descriptors(items): rows.map { items[$0] }.appleEventDescriptor
+			}
+		}
+	}
+
 	static func isList(_ descriptor: NSAppleEventDescriptor) -> Bool {
 		descriptor.descriptorType == typeAEList || ArrayOfReal.values(of: descriptor) != nil
 	}
@@ -64,7 +96,9 @@ public enum ListUtilities {
 		guard list.descriptorType == typeAEList, let items = items(list) else {
 			throw OSAXError.parameterError
 		}
-		let mask: [Double?] = (Self.items(maskDescriptor) ?? [maskDescriptor]).map { try? Numbers.number($0) }
+		// An array's numbers as they are (a descriptor for each of a huge mask was made before its length was checked).
+		let mask: [Double?] = ArrayOfReal.values(of: maskDescriptor)
+			?? (Self.items(maskDescriptor) ?? [maskDescriptor]).map { try? Numbers.number($0) }
 		// An empty list with a mask is an empty list, but a longer mask otherwise is -50, as in SatimageOSAX.
 		if items.isEmpty, !mask.isEmpty {
 			return list
@@ -146,29 +180,61 @@ public enum ListUtilities {
 		let filterDescriptor = try request.requiredDirectParameter(as: AnyDescriptor.self).descriptor
 		let from = try request.requiredParameter("from", as: AnyDescriptor.self).descriptor
 		let caseSensitive = try request.parameter("CaSe", default: true)
+		let fold = { (text: String) in caseSensitive ? text : text.lowercased() }
+		let filter = TextFilter(Set((items(filterDescriptor) ?? [filterDescriptor]).compactMap(text).map(fold)), fold: fold)
+
+		// An array's numbers are filtered as numbers; the result is a list of reals, as it was.
+		if let values = ArrayOfReal.values(of: from) {
+			return values.filter { filter.matches($0) == keeping }.map(NSAppleEventDescriptor.init(double:)).appleEventDescriptor
+		}
 		guard let lists = items(from) else {
 			throw OSAXError.coercionFailed
 		}
-		let fold = { (text: String) in caseSensitive ? text : text.lowercased() }
-		let filter = Set((items(filterDescriptor) ?? [filterDescriptor]).compactMap(text).map(fold))
-		let matches = { (item: NSAppleEventDescriptor) in text(item).map { filter.contains(fold($0)) } ?? false }
-
 		let isListOfLists = !lists.isEmpty && lists.allSatisfy(isList)
 		guard isListOfLists else {
-			return lists.filter { matches($0) == keeping }.appleEventDescriptor
+			return lists.filter { filter.matches($0) == keeping }.appleEventDescriptor
 		}
 		let reference = try request.parameter("With", default: 1)
-		guard lists.indices.contains(reference - 1), let referenceItems = items(lists[reference - 1]) else {
+		let columns = lists.compactMap(Items.init)
+		guard columns.indices.contains(reference - 1) else {
 			throw invalidIndex
 		}
-		let kept = Set(referenceItems.indices.filter { matches(referenceItems[$0]) == keeping })
-		return lists.map { list in
-			let values = items(list) ?? []
-			let filtered = values.indices.filter(kept.contains).map { values[$0] }
-			if ArrayOfReal.values(of: list) != nil {
-				return ArrayOfReal(filtered.map(\.doubleValue)).appleEventDescriptor
+		let kept: [Int] = switch columns[reference - 1] {
+		case let .reals(values): values.indices.filter { filter.matches(values[$0]) == keeping }
+		case let .descriptors(items): items.indices.filter { filter.matches(items[$0]) == keeping }
+		}
+		return columns.map { column in column.selecting(kept.filter { $0 < column.count }) }.appleEventDescriptor
+	}
+
+	/// Items that are in a filter, compared as text (as a script would write them). Reals are looked up as numbers:
+	/// the filter's entries are read as the reals whose text they are, checked by writing them as text again, so
+	/// only an entry's own number matches (as with text, `"1"` isn't 1.0, whose text is `"1.0"`).
+	struct TextFilter {
+		let texts: Set<String>
+		let fold: (String) -> String
+		private var reals: Set<UInt64> = []
+
+		init(_ texts: Set<String>, fold: @escaping (String) -> String) {
+			self.texts = texts
+			self.fold = fold
+			for entry in texts {
+				// Text for a real may have a decimal comma, and 0 two signs.
+				for number in [Double(entry), Double(entry.replacingOccurrences(of: ",", with: "."))].compactMap({ $0 }) {
+					for candidate in number == 0 ? [0.0, -0.0] : [number] where !candidate.isNaN {
+						if let written = ListUtilities.text(NSAppleEventDescriptor(double: candidate)), fold(written) == entry {
+							reals.insert(candidate.bitPattern)
+						}
+					}
+				}
 			}
-			return filtered.appleEventDescriptor
-		}.appleEventDescriptor
+		}
+
+		func matches(_ item: NSAppleEventDescriptor) -> Bool {
+			ListUtilities.text(item).map { texts.contains(fold($0)) } ?? false
+		}
+
+		func matches(_ value: Double) -> Bool {
+			reals.contains(value.bitPattern)
+		}
 	}
 }

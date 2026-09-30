@@ -126,6 +126,35 @@ struct MaskListTests {
 	}
 }
 
+/// Arrays of real were made a descriptor for each number (about 145 bytes, and a conversion to text to compare): a
+/// hundred million took 15 GB and minutes. They're handled as numbers, with the same results.
+@MainActor
+struct LargeArrayTests {
+	@Test func sameResultsAsLists() throws {
+		let numbers: [Double] = [1, 2.5, -0.0, 0, 1e20, 3, 2.5, .nan]
+		for filter in [AppleEventList(["2.5", "1.0", "3", "1.0E+20", "0.0"]), AppleEventList([2.5, 0])] as [AppleEventList] {
+			for code in ["SATIEIFL", "SATIKIFL"] {
+				let fromList = send(code, ["----": filter, "from": AppleEventList(numbers)]).result
+				let fromArray = send(code, ["----": filter, "from": ArrayOfReal(numbers)]).result
+				#expect(fromArray.map(DescriptorSnapshot.init)?.summary == fromList.map(DescriptorSnapshot.init)?.summary, "\(code)")
+				// Columns: by an array, and by a list.
+				let byArray = send(code, ["----": filter, "from": AppleEventList([ArrayOfReal(numbers), AppleEventList(numbers)])]).result
+				let byList = send(code, ["----": filter, "from": AppleEventList([AppleEventList(numbers), ArrayOfReal(numbers)]), "With": 1]).result
+				#expect(byArray?.atIndex(2).map(DescriptorSnapshot.init)?.summary == byList?.atIndex(1).map(DescriptorSnapshot.init)?.summary)
+			}
+		}
+	}
+
+	@Test func largeArraysAreQuick() throws {
+		let large = ArrayOfReal((0 ..< 3_000_000).map(Double.init))
+		let start = Date()
+		#expect(send("SATIEIFL", ["----": AppleEventList(["1.0"]), "from": AppleEventList([large, large])]).result?.numberOfItems == 2)
+		#expect(send("SATISort", ["----": AppleEventList([large, large]), "from": 1, "Asce": false]).result?.numberOfItems == 2)
+		#expect(send("SATIMASk", ["----": [1, 2], "with": large]).error == .parameterError)
+		#expect(Date().timeIntervalSince(start) < 20)
+	}
+}
+
 @MainActor
 struct TopologicalSortTests {
 	private func order(_ parameters: [String: any AppleEventEncodable]) -> [AnyHashable]? {

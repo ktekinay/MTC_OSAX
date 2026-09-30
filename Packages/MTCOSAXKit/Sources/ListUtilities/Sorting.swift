@@ -86,23 +86,23 @@ enum Sorting {
 	/// Sorts the lists together, by the lists at `criteria` in priority order. Every list must have the same length
 	/// and the criteria must name lists (error -1 otherwise, as in SatimageOSAX).
 	static func sortTogether(_ lists: [NSAppleEventDescriptor], by criteria: [Int], ascending: [Bool], options: Options) throws -> NSAppleEventDescriptor {
-		let columns = lists.map { ListUtilities.items($0) ?? [] }
+		// Arrays stay numbers (a descriptor for each number made huge arrays take gigabytes).
+		let columns = lists.map { ListUtilities.Items($0) ?? .descriptors([]) }
 		let count = columns.first?.count ?? 0
 		guard columns.allSatisfy({ $0.count == count }), !criteria.isEmpty,
 		      criteria.allSatisfy({ columns.indices.contains($0 - 1) })
 		else {
 			throw OSAXError(-1)
 		}
-		let keys = try criteria.map { try classify(columns[$0 - 1], flags: options.flags).keys }
+		let keys = try criteria.map { criterion -> Column in
+			switch columns[criterion - 1] {
+			case let .reals(values): Column.numbers(values.map { $0.isNaN ? nil : $0 })
+			case let .descriptors(items): try classify(items, flags: options.flags).keys
+			}
+		}
 		let directions = criteria.indices.map { ascending.indices.contains($0) ? ascending[$0] : (ascending.first ?? true) }
 		let rows = order(rows: 0 ..< count, keys: keys, ascending: directions, options: options)
-		return zip(lists, columns).map { list, column in
-			let sorted = rows.map { column[$0] }
-			if ArrayOfReal.values(of: list) != nil {
-				return ArrayOfReal(sorted.map(\.doubleValue)).appleEventDescriptor
-			}
-			return sorted.appleEventDescriptor
-		}.appleEventDescriptor
+		return columns.map { $0.selecting(rows) }.appleEventDescriptor
 	}
 
 	/// The sort keys for a list, and its items as the sorted result returns them.
