@@ -218,7 +218,7 @@ enum Stylesheets {
 		guard let root = xmlDocGetRootElement(doc), let ns = root.pointee.ns, let href = ns.pointee.href,
 		      String(cString: href) == namespace
 		else { return }
-		let path = "/" + (XPath.steps(to: node) ?? []).joined(separator: "/")
+		let path = templatePath(to: node)
 		withXMLString("template") { name in
 			let template = xmlNewDocNode(doc, ns, name, nil)
 			withXMLString("match") { a in withXMLString("/") { _ = xmlSetProp(template, a, $0) } }
@@ -227,6 +227,50 @@ enum Stylesheets {
 			withXMLString("select") { a in withXMLString(path) { _ = xmlSetProp(apply, a, $0) } }
 			xmlAddChild(root, template)
 		}
+	}
+
+	/// A node's path for the root template. It's evaluated after `xsl:strip-space` has taken blank text out, and
+	/// in the stylesheet's namespaces, so (unlike `XMLGetNodePath`'s) it counts nothing stripping removes and uses no
+	/// prefixes: `text()[n]` could name another node after stripping, and `@p:name` failed without `p` declared.
+	static func templatePath(to node: xmlNodePtr) -> String {
+		func isBlank(_ text: xmlNodePtr) -> Bool {
+			Parsing.text(text).allSatisfy { $0 == " " || $0 == "\t" || $0 == "\n" || $0 == "\r" }
+		}
+		func position(of node: xmlNodePtr, among matches: (xmlNodePtr) -> Bool) -> Int {
+			var index = 1
+			var sibling = node.pointee.prev
+			while let current = sibling {
+				if matches(current) { index += 1 }
+				sibling = current.pointee.prev
+			}
+			return index
+		}
+		func quoted(_ text: String) -> String { Stylesheets.quoted(text) }
+		var steps: [String] = []
+		var current: xmlNodePtr? = node
+		while let node = current, !XMLCommands.isDocument(node) {
+			let type = node.pointee.type
+			let isText = { (other: xmlNodePtr) in [XML_TEXT_NODE, XML_CDATA_SECTION_NODE].contains(other.pointee.type) }
+			switch type {
+			case XML_ATTRIBUTE_NODE:
+				let uri = XMLCommands.namespace(of: node)?.pointee.href.map { String(cString: $0) } ?? ""
+				steps.insert("@*[local-name()=\(quoted(Parsing.name(node))) and namespace-uri()=\(quoted(uri))]", at: 0)
+			case XML_TEXT_NODE, XML_CDATA_SECTION_NODE:
+				// Stripping takes out all of an element's blank text or none, so blank text that's still there
+				// is where it was, and other text is counted among other text.
+				steps.insert(isBlank(node)
+					? "text()[\(position(of: node, among: isText))]"
+					: "text()[normalize-space()][\(position(of: node) { isText($0) && !isBlank($0) })]", at: 0)
+			case XML_COMMENT_NODE:
+				steps.insert("comment()[\(position(of: node) { $0.pointee.type == XML_COMMENT_NODE })]", at: 0)
+			case XML_PI_NODE:
+				steps.insert("processing-instruction()[\(position(of: node) { $0.pointee.type == XML_PI_NODE })]", at: 0)
+			default:
+				steps.insert("*[\(position(of: node, among: XMLCommands.isElement))]", at: 0)
+			}
+			current = node.pointee.parent
+		}
+		return "/" + steps.joined(separator: "/")
 	}
 
 	/// The folders a stylesheet the document chooses may load from: the document's (none for a document that isn't

@@ -245,6 +245,24 @@ struct XSLTTests {
 		#expect(xml.send("XML xslt", ["----": d, "with": "/nonexistent.xsl"]).error == OSAXError(4))
 	}
 
+	/// A node was found by a path counting blank text, which `xsl:strip-space` had taken out, so the text after it
+	/// wasn't found; and `@p:name` failed with no `p` in the stylesheet.
+	@Test func transformingANode() throws {
+		let xml = XMLs()
+		let d = try #require(xml.send("XML open", ["from": "<r><a xmlns:x='urn:x' x:k='v'> <b/>two</a></r>", "kbln": true]).result)
+		let style = """
+			<xsl:stylesheet version='1.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'><xsl:strip-space elements='*'/>\
+			<xsl:output method='text'/><xsl:template match='text()'>[<xsl:value-of select='.'/>]</xsl:template>\
+			<xsl:template match='@*'>(<xsl:value-of select='.'/>)</xsl:template></xsl:stylesheet>
+			"""
+		func transform(_ path: String) throws -> String? {
+			let node = try #require(xml.send("XML path", ["----": d, "with": path]).result?.atIndex(1))
+			return xml.send("XML xslt", ["----": node, "with": style, "rtyp": type("utxt")]).result?.stringValue
+		}
+		#expect(try transform("//a/text()[2]") == "[two]")
+		#expect(try transform("//@*[local-name()='k']") == "(v)")
+	}
+
 	/// A stylesheet the script gives may write files; one the document picks with `xml-stylesheet` may not.
 	@Test func writingFiles() throws {
 		let folder = FileManager.default.temporaryDirectory.appendingPathComponent("xslt-\(UUID().uuidString)")
