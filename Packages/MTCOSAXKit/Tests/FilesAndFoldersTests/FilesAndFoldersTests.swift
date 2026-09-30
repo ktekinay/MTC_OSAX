@@ -225,6 +225,22 @@ struct CopyMoveTests {
 		#expect(try FileManager.default.contentsOfDirectory(atPath: sandbox.url.path) == ["A.txt"])
 	}
 
+	/// Two hard links to one file were taken for one name spelled two ways: renaming or moving one onto the other did
+	/// nothing (rename(2) leaves both) and reported success.
+	@Test func hardLinks() throws {
+		let sandbox = try Sandbox()
+		let a = try sandbox.file("a", "text")
+		#expect(link(sandbox.path("a"), sandbox.path("b")) == 0)
+		#expect(send(rename, ["----": a, "to  ": "b"]).error == OSAXError(-48))
+		#expect(send(move, ["----": a, "to  ": sandbox.url, "pnam": "b"]).error == OSAXError(-48))
+		#expect(send(move, ["----": a, "to  ": sandbox.url, "pnam": "b", "Repl": true]).error == nil)
+		#expect(!sandbox.exists("a") && sandbox.exists("b"))
+		#expect(try String(contentsOfFile: sandbox.path("b"), encoding: .utf8) == "text")
+		// A case variant is still a rename.
+		#expect(send(rename, ["----": sandbox.url.appendingPathComponent("b"), "to  ": "B"]).error == nil)
+		#expect(try FileManager.default.contentsOfDirectory(atPath: sandbox.url.path) == ["B"])
+	}
+
 	/// Replacing made the new item under the old one's name with 42 characters added, too long for names over about
 	/// 213 bytes: they could never be replaced.
 	@Test func replacingLongNames() throws {

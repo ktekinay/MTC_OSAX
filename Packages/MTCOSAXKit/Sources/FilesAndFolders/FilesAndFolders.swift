@@ -147,7 +147,7 @@ public enum FilesAndFolders {
 			throw notFound
 		}
 		let renamed = url.deletingLastPathComponent().appendingPathComponent(name)
-		if FileItem.exists(renamed), FileItem.isSameItem(url, renamed) {
+		if FileItem.exists(renamed), FileItem.isSameEntry(url, renamed) {
 			guard Darwin.rename(url.path, renamed.path) == 0 else { throw invalidInput }
 			return result(renamed, folder: false)
 		}
@@ -212,7 +212,7 @@ public enum FilesAndFolders {
 			// The target is the source itself (the same path, or a case variant): removing the "existing" target
 			// would delete the source. Moving to another spelling renames it (SatimageOSAX gave -48); otherwise it's
 			// -48 without `replacing` and left as it is with it, as in SatimageOSAX.
-			if FileItem.exists(target), FileItem.isSameItem(source, target) {
+			if FileItem.exists(target), FileItem.isSameEntry(source, target) {
 				if move, source.path != target.path {
 					guard Darwin.rename(source.path, target.path) == 0 else { throw posixError(errno) }
 					return result(target, folder: isFolder)

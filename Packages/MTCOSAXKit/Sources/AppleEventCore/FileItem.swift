@@ -48,6 +48,14 @@ public enum FileItem {
 		return Identity(first) == Identity(second)
 	}
 
+	/// Whether two paths name one item by one name, spelled differently (a case variant on a case-insensitive
+	/// volume): the same item, in the same folder, by the same name but for case. Hard links are the same item under
+	/// different names, and renaming one onto the other does nothing (rename(2) succeeds and leaves both).
+	public static func isSameEntry(_ a: URL, _ b: URL) -> Bool {
+		isSameItem(a, b) && identity(a.deletingLastPathComponent()) == identity(b.deletingLastPathComponent())
+			&& a.lastPathComponent.lowercased() == b.lastPathComponent.lowercased()
+	}
+
 	public static func isDirectory(_ url: URL) -> Bool {
 		var directory: ObjCBool = false
 		return FileManager.default.fileExists(atPath: url.path, isDirectory: &directory) && directory.boolValue
