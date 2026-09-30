@@ -233,6 +233,8 @@ Run them with AddressSanitizer too before committing a change to code that uses 
 swift test --package-path Packages/MTCOSAXKit --sanitize=address
 ```
 
+Each test process has a time limit of three minutes (a process's tests take seconds), after which it's stopped with a message, so a test that runs away can't go on doing damage: Swift Testing's own time limits don't stop code that doesn't check for cancellation. `MTC_TEST_TIME_LIMIT=<seconds>` changes it (0 for none), and there's none while a debugger is attached.
+
 Every test target links `AppleScriptPreload`, which loads AppleScript when the test bundle is loaded, before any test runs. Loading it while many tests ran at once sometimes made the Apple Event Manager recurse until the stack ran out (about one `AppleEventCoreTests` run in ten). The app loads it at launch, on its main thread, with nothing else running, and isn't affected; the target is for tests only.
 
 Commands run on the main thread, one at a time, as the Apple Event Manager calls them, and the code says so: handlers, the dispatcher and the state commands share (open documents, settings, the regex cache) are `@MainActor`, so the compiler rejects any use from another thread. Tests that send commands are `@MainActor` too; they run on the main thread, with the app's 8 MB stack.

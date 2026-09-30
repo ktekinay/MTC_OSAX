@@ -93,7 +93,8 @@ let package = Package(
 
 		// For tests: defaults kept in memory, and a local HTTP server.
 		.target(name: "TestSupport"),
-		// For tests: AppleScript loaded before any test runs (see AppleScriptPreload.m).
+		// For tests: AppleScript loaded before any test runs (see AppleScriptPreload.m), and a time limit for each test
+		// process (TestTimeLimit.m).
 		.target(name: "AppleScriptPreload"),
 
 		.testTarget(name: "AppleEventCoreTests", dependencies: ["AppleEventCore", "TestSupport", "AppleScriptPreload"]),
