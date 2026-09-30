@@ -3,8 +3,11 @@ import Foundation
 /// Keeps recently compiled patterns, since scripts often run the same `find text` or `change` in a loop.
 @MainActor
 public final class RegexCache {
+	/// The pattern as the engines see it, in UTF-16 units: Strings are equal when canonically equivalent, so a
+	/// pattern with é as one character found the compiled pattern for e and a combining accent (whose class
+	/// `[é]` matches a bare e), from whichever script used it first.
 	private struct Key: Hashable {
-		let pattern: String
+		let pattern: [UInt16]
 		let syntax: RegexSyntax
 		let flags: RegexFlags
 	}
@@ -19,7 +22,7 @@ public final class RegexCache {
 
 	/// A compiled pattern, compiling it if needed.
 	public func regex(_ pattern: String, syntax: RegexSyntax = .ruby, flags: RegexFlags = []) throws(RegexError) -> CompiledRegex {
-		let key = Key(pattern: pattern, syntax: syntax, flags: flags)
+		let key = Key(pattern: Array(pattern.utf16), syntax: syntax, flags: flags)
 		if let cached = entries[key] {
 			touch(key)
 			return cached

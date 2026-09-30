@@ -247,6 +247,17 @@ struct RegexCacheTests {
 		#expect(try cache.regex("a+", flags: .ignoreCase) !== a)
 	}
 
+	/// Patterns that are canonically equivalent but not the same (é as one character, or as e and a combining
+	/// accent) shared one compiled pattern, so a script's `[é]` could match a bare e after another script's.
+	@Test func equivalentPatternsAreDifferent() throws {
+		let cache = RegexCache()
+		let decomposed = try cache.regex("[e\u{301}]")
+		let composed = try cache.regex("[\u{E9}]")
+		#expect(decomposed !== composed)
+		#expect(try composed.firstMatch(in: UTF16Text("e")) == nil)
+		#expect(try decomposed.firstMatch(in: UTF16Text("e")) != nil)
+	}
+
 	@Test func evictsOldest() throws {
 		let cache = RegexCache(capacity: 2)
 		let first = try cache.regex("1")
