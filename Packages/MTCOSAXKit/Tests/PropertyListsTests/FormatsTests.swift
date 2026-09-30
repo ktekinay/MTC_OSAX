@@ -166,6 +166,19 @@ struct YAMLTests {
 		#expect(plists.send("MTCpFYML", ["----": values(20)]).error == nil)
 	}
 
+	/// Text PlistToYAML wrote that PlistFromYAML then read as something else, or refused: a `<<` key (a merge),
+	/// text starting like a document's start or end, C1 controls and U+FFFE, and keys over 1,024 characters.
+	@Test func writtenYAMLReadsBack() throws {
+		let long = String(repeating: "k", count: 2000)
+		let original: NSDictionary = [
+			"<<": "merge?", "...": "end", "--- x": "start", "... y": "end", "c1": "a\u{80}b\u{9F}c\u{FFFE}d\u{FFFF}",
+			long: "long key", "nested": ["<<": ["...", "---"], long: ["a": 1]] as NSDictionary,
+		]
+		let written = YAML.write(original)
+		#expect(try YAML.read(written) as? NSDictionary == original)
+		#expect(try YAML.read(YAML.write(["...", "<<", long] as NSArray)) as? NSArray == ["...", "<<", long] as NSArray)
+	}
+
 	/// libyaml looks each anchor and alias up by comparing it with every anchor before it: 80,000 anchors took seven
 	/// seconds, and a few megabytes of them minutes.
 	@Test func manyAnchors() throws {

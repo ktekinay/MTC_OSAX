@@ -47,14 +47,22 @@ enum YAML {
 		switch block {
 		case let .mapping(entries):
 			for (key, value) in entries {
+				// A key longer than YAML's 1,024 characters for a simple key is written as an explicit one (`? key`
+				// then `: value`); libyaml refused it.
+				let keyText = scalarText(key)
+				let explicit = keyText.count > 1000
+				if explicit {
+					line("? " + keyText)
+				}
+				let keyPart = explicit ? "" : keyText
 				if let child = self.block(value) {
-					line(scalarText(key) + ":")
+					line(keyPart + ":")
 					switch child {
 					case .mapping: append(child, indent: indent + 2, into: &lines)
 					case .sequence: append(child, indent: indent, into: &lines)
 					}
 				} else {
-					line(scalarText(key) + ": " + scalar(value))
+					line(keyPart + ": " + scalar(value))
 				}
 			}
 		case let .sequence(items):
@@ -109,11 +117,19 @@ enum YAML {
 
 	private static let indicators: Set<Character> = ["-", "?", ":", ",", "[", "]", "{", "}", "#", "&", "*", "!", "|", ">", "'", "\"", "%", "@", "`"]
 
+	/// Characters written as escapes (libyaml refuses C1 controls, U+FFFE and U+FFFF, and a reader could take the
+	/// others for line breaks or a byte-order mark).
+	private static func needsEscape(_ scalar: Unicode.Scalar) -> Bool {
+		scalar.value < 0x20 || (0x7F ... 0x9F).contains(scalar.value) || scalar == "\u{2028}" || scalar == "\u{2029}"
+			|| scalar == "\u{FEFF}" || scalar == "\u{FFFE}" || scalar == "\u{FFFF}"
+	}
+
 	private static func isPlainSafe(_ text: String) -> Bool {
 		guard let first = text.first, let last = text.last,
 		      !first.isWhitespace, !last.isWhitespace, last != ":", !indicators.contains(first),
-		      !text.contains(": "), !text.contains(" #"),
-		      !text.unicodeScalars.contains(where: { $0.value < 0x20 || $0.value == 0x7F || $0 == "\u{85}" || $0 == "\u{2028}" || $0 == "\u{2029}" || $0 == "\u{FEFF}" })
+		      !text.contains(": "), !text.contains(" #"), !text.unicodeScalars.contains(where: needsEscape),
+		      // A merge key, and what can start a line as a document's start or end.
+		      text != "<<", !text.hasPrefix("---"), !text.hasPrefix("...")
 		else {
 			return false
 		}
@@ -135,7 +151,7 @@ enum YAML {
 			case "\r": result += "\\r"
 			case "\0": result += "\\0"
 			default:
-				if scalar.value < 0x20 || scalar.value == 0x7F || scalar == "\u{85}" || scalar == "\u{2028}" || scalar == "\u{2029}" || scalar == "\u{FEFF}" {
+				if needsEscape(scalar) {
 					result += String(format: "\\u%04X", scalar.value)
 				} else {
 					result.unicodeScalars.append(scalar)
