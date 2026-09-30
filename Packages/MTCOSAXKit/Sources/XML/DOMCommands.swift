@@ -394,7 +394,7 @@ extension XMLCommands {
 				for child in XMLCommands.children(of: node, allNodes: true) { XMLCommands.remove(child) }
 				withXMLString(text) { _ = xmlAddChild(node, xmlNewDocText(document.doc, $0)) }
 			} else {
-				withXMLString(text) { xmlNodeSetContent(node, $0) }
+				XMLCommands.changingValue(of: node) { withXMLString(text) { xmlNodeSetContent(node, $0) } }
 			}
 		}
 		return nil
@@ -408,7 +408,7 @@ extension XMLCommands {
 		try XMLCommands.require(node, isOneOf: [XML_ELEMENT_NODE, XML_ATTRIBUTE_NODE, XML_TEXT_NODE, XML_CDATA_SECTION_NODE,
 		                                        XML_COMMENT_NODE, XML_PI_NODE])
 		modified(document)
-		try withXMLString(text) { value in
+		try XMLCommands.changingValue(of: node) { try withXMLString(text) { value in
 			if node.pointee.type == XML_TEXT_NODE {
 				xmlTextConcat(node, value, try Int32(length: strlen(UnsafeRawPointer(value).assumingMemoryBound(to: CChar.self))))
 			} else if [XML_CDATA_SECTION_NODE, XML_COMMENT_NODE, XML_PI_NODE].contains(node.pointee.type) {
@@ -417,7 +417,7 @@ extension XMLCommands {
 			} else {
 				_ = xmlAddChild(node, xmlNewDocText(document.doc, value))
 			}
-		}
+		} }
 		return nil
 	}
 

@@ -130,6 +130,29 @@ struct IDAndNameTests {
 		#expect(xml.send("XML gttx", ["----": try #require(xml.send("XML geti", ["----": people, "xlmi": "p2"]).result)]).result?.stringValue == "Bob")
 	}
 
+	/// Changing an ID attribute's text didn't change libxml2's table of IDs, so the old ID still led to the
+	/// attribute, and after it was removed, to freed memory (AddressSanitizer: heap-use-after-free).
+	@Test func changedIDs() throws {
+		let xml = XMLs()
+		let d = try xml.open("<doc><a xml:id='x'/><b xml:id='p'/><c xml:id='q'/></doc>")
+		func id(_ value: String) -> OSAXError? { xml.send("XML geti", ["----": d, "xlmi": value]).error }
+		func attribute(_ path: String) throws -> NSAppleEventDescriptor {
+			try #require(xml.send("XML path", ["----": d, "with": path]).result?.atIndex(1))
+		}
+		// Set, appended to, and emptied (by removing its text).
+		#expect(xml.send("XML sttx", ["----": try attribute("//a/@xml:id"), "to  ": "y"]).error == nil)
+		#expect(xml.send("XML ApTx", ["----": "2", "at  ": try attribute("//b/@xml:id")]).error == nil)
+		let text = try #require(xml.send("XML chld", ["----": try attribute("//c/@xml:id"), "indx": 1]).result)
+		#expect(xml.send("XML remo", ["----": text]).error == nil)
+		#expect(id("x") == XML.notFound && id("p") == XML.notFound && id("q") == XML.notFound)
+		#expect(id("y") == nil && id("p2") == nil)
+		// Then the elements go: the IDs go with them.
+		xml.send("XML remo", ["----": try xml.root(d)])
+		for value in ["x", "y", "p", "p2", "q", ""] {
+			#expect(id(value) == XML.notFound)
+		}
+	}
+
 	@Test func names() {
 		let xml = XMLs()
 		#expect(xml.send("XML Isnm", ["----": "a:b"]).result?.booleanValue == true)

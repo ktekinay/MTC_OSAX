@@ -187,14 +187,41 @@ struct XMLCommands {
 
 	/// Unlinks and frees nodes (their references then give -1728). A DTD's declarations are freed without
 	/// libxml2's node callback, so their numbers are forgotten first, and entity references to its entities are
-	/// detached from them.
+	/// detached from them. Removing text from an ID attribute changes the ID.
 	static func remove(_ node: xmlNodePtr) {
 		if node.pointee.type == XML_DTD_NODE {
 			XMLDocument.forgetNumbers(in: node.pointee.children)
 			detachEntityReferences(from: node, in: node.pointee.doc)
 		}
-		xmlUnlinkNode(node)
-		xmlFreeNode(node)
+		guard node.pointee.type != XML_ATTRIBUTE_NODE else {
+			// libxml2 takes a freed attribute's ID out of the table itself.
+			xmlUnlinkNode(node)
+			xmlFreeNode(node)
+			return
+		}
+		changingValue(of: node) {
+			xmlUnlinkNode(node)
+			xmlFreeNode(node)
+		}
+	}
+
+	/// Runs `change`, which changes the value of an attribute or of the text in one, keeping libxml2's table of IDs
+	/// right. The table is found by an ID's value, and libxml2 doesn't update it when an attribute's text changes:
+	/// the old value then led to the attribute after it was freed (XMLGetByID, and XPath's `id()`, read freed
+	/// memory). The attribute must still be there afterwards.
+	nonisolated static func changingValue<T>(of node: xmlNodePtr, _ change: () throws -> T) rethrows -> T {
+		let owner = node.pointee.type == XML_ATTRIBUTE_NODE ? node : node.pointee.parent
+		guard let owner, owner.pointee.type == XML_ATTRIBUTE_NODE, let doc = owner.pointee.doc else { return try change() }
+		let attribute = UnsafeMutableRawPointer(owner).assumingMemoryBound(to: xmlAttr.self)
+		guard attribute.pointee.atype == XML_ATTRIBUTE_ID else { return try change() }
+		xmlRemoveID(doc, attribute)
+		defer {
+			if let value = xmlNodeListGetString(doc, attribute.pointee.children, 1) {
+				xmlAddID(nil, doc, value, attribute)
+				xmlRelease(value)
+			}
+		}
+		return try change()
 	}
 
 	/// An entity reference points at its entity (as its child, and its content is the entity's), so after the DTD

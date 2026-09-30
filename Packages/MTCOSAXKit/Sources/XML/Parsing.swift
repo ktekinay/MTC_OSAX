@@ -258,7 +258,7 @@ enum ExtendedCharacters {
 				while let text = child {
 					// Not an entity reference: its content is the entity's own, which setting it would free.
 					if text.pointee.type == XML_TEXT_NODE {
-						decodeContent(text)
+						XMLCommands.changingValue(of: text) { decodeContent(text) }
 					}
 					child = text.pointee.next
 				}
