@@ -17,6 +17,9 @@ yaml_parser_set_composer_error(yaml_parser_t *parser,
         const char *problem, yaml_mark_t problem_mark);
 
 static int
+mtc_count_anchor_comparisons(yaml_parser_t *parser, yaml_mark_t mark);  /* MTC_OSAX patch */
+
+static int
 yaml_parser_set_composer_error_context(yaml_parser_t *parser,
         const char *context, yaml_mark_t context_mark,
         const char *problem, yaml_mark_t problem_mark);
@@ -273,6 +276,11 @@ yaml_parser_register_anchor(yaml_parser_t *parser,
     data.index = index;
     data.mark = parser->document->nodes.start[index-1].start_mark;
 
+    if (!mtc_count_anchor_comparisons(parser, data.mark)) {  /* MTC_OSAX patch */
+        yaml_free(anchor);
+        return 0;
+    }
+
     for (alias_data = parser->aliases.start;
             alias_data != parser->aliases.top; alias_data ++) {
         if (strcmp((char *)alias_data->anchor, (char *)anchor) == 0) {
@@ -288,6 +296,24 @@ yaml_parser_register_anchor(yaml_parser_t *parser,
         return 0;
     }
 
+    return 1;
+}
+
+/*
+ * MTC_OSAX patch: an anchor, and an alias, is found by comparing its name with every anchor so far, so the work
+ * grows with anchors times aliases (80,000 anchors took seven seconds, and a few megabytes of them minutes). Past
+ * this many comparisons, well under a second's work that ordinary documents are far from, the document is refused.
+ */
+
+#define MTC_MAXIMUM_ANCHOR_COMPARISONS 100000000
+
+static int
+mtc_count_anchor_comparisons(yaml_parser_t *parser, yaml_mark_t mark)
+{
+    parser->mtc_anchor_comparisons += (size_t)(parser->aliases.top - parser->aliases.start);
+    if (parser->mtc_anchor_comparisons > MTC_MAXIMUM_ANCHOR_COMPARISONS) {
+        return yaml_parser_set_composer_error(parser, "too many anchors and aliases to look up", mark);
+    }
     return 1;
 }
 
@@ -353,6 +379,11 @@ yaml_parser_load_alias(yaml_parser_t *parser, yaml_event_t *event,
 {
     yaml_char_t *anchor = event->data.alias.anchor;
     yaml_alias_data_t *alias_data;
+
+    if (!mtc_count_anchor_comparisons(parser, event->start_mark)) {  /* MTC_OSAX patch */
+        yaml_free(anchor);
+        return 0;
+    }
 
     for (alias_data = parser->aliases.start;
             alias_data != parser->aliases.top; alias_data ++) {

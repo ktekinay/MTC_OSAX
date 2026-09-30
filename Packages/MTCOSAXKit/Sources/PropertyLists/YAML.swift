@@ -253,6 +253,10 @@ enum YAML {
 
 	private static func error(_ parser: yaml_parser_t) -> OSAXError {
 		let problem = parser.problem.map { String(cString: $0) } ?? "invalid YAML"
+		// The limit of MTC_OSAX's patch to libyaml (loader.c): YAML, just too much of it.
+		guard !problem.hasPrefix("too many anchors") else {
+			return OSAXError(-50, "The YAML has too many anchors and aliases to look up.")
+		}
 		let context = parser.context.map { String(cString: $0) + " " } ?? ""
 		let mark = parser.problem_mark
 		return OSAXError(-1, "Not YAML: \(context)\(problem) at line \(mark.line + 1), column \(mark.column + 1)")

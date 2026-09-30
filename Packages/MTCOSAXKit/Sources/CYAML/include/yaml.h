@@ -1299,6 +1299,9 @@ typedef struct yaml_parser_s {
         yaml_alias_data_t *top;
     } aliases;
 
+    /** MTC_OSAX patch: how many anchor names have been compared (see loader.c). */
+    size_t mtc_anchor_comparisons;
+
     /** The currently parsed document. */
     yaml_document_t *document;
 

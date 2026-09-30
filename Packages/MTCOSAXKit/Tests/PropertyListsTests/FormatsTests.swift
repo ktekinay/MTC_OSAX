@@ -166,6 +166,17 @@ struct YAMLTests {
 		#expect(plists.send("MTCpFYML", ["----": values(20)]).error == nil)
 	}
 
+	/// libyaml looks each anchor and alias up by comparing it with every anchor before it: 80,000 anchors took seven
+	/// seconds, and a few megabytes of them minutes.
+	@Test func manyAnchors() throws {
+		func anchors(_ count: Int) -> String { (0 ..< count).map { "- &a\($0) x" }.joined(separator: "\n") + "\n- *a0" }
+		let start = Date()
+		let error = #expect(throws: OSAXError.self) { try YAML.read(anchors(20000)) }
+		#expect(error?.number == -50)
+		#expect(Date().timeIntervalSince(start) < 5)
+		#expect((try YAML.read(anchors(5000)) as? NSArray)?.count == 5001)
+	}
+
 	/// Empty text used to hand libyaml a pointer to a temporary array.
 	@Test func emptyTextHasNoDocument() {
 		for text in ["", "# only a comment\n"] {
