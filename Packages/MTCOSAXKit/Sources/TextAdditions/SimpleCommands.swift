@@ -211,7 +211,9 @@ extension TextAdditions {
 		var index = 0
 		func flushEscapes(original: Substring) throws {
 			guard !decoded.isEmpty else { return }
-			guard let text = String(bytes: decoded, encoding: .utf8) else {
+			// Every character the bytes make (String(bytes:encoding:) dropped a byte-order mark at the start, and the
+			// characters after it were matched with the wrong escapes).
+			guard let text = String(validating: decoded, as: UTF8.self) else {
 				throw invalidOptionError
 			}
 			if keeping.isEmpty {

@@ -106,6 +106,9 @@ struct URLEscapingTests {
 
 	@Test func keeping() throws {
 		#expect(try TextAdditions.unescapeURL("a%2Fb%20c%2f", keeping: "/") == "a%2Fb c%2f")
+		// A byte-order mark is a character like any other: dropped, it put the kept escapes out of step.
+		#expect(try TextAdditions.unescapeURL("%EF%BB%BF%41", keeping: "A") == "\u{FEFF}%41")
+		#expect(try TextAdditions.unescapeURL("%EF%BB%BFx", keeping: "") == "\u{FEFF}x")
 	}
 
 	/// "%+4" used to decode as byte 4.
