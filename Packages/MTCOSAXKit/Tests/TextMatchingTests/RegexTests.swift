@@ -66,6 +66,15 @@ struct RegexTests {
 		#expect(matches.map { text[$0.range] } == ["2007", "12", "24"])
 	}
 
+	/// With `\K` in a lookbehind a match starts before the search did, and the search from where it ended found it
+	/// again, forever: the app hung, taking more and more memory.
+	@Test func allMatchesWithKeepInLookbehind() throws {
+		let text = UTF16Text("abc")
+		#expect(try CompiledRegex(#"(?<=\K.)"#).allMatches(in: text).map(\.range) == [0 ..< 1, 1 ..< 2, 2 ..< 3])
+		// Matches can still overlap.
+		#expect(try CompiledRegex(#"(?<=\K.)b"#).allMatches(in: UTF16Text("abb")).map(\.range) == [0 ..< 2, 1 ..< 3])
+	}
+
 	@Test func allMatchesAdvancesPastEmptyMatches() throws {
 		let text = UTF16Text("a😀b")
 		let matches = try CompiledRegex("x*").allMatches(in: text)

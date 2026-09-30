@@ -199,12 +199,19 @@ public final class CompiledRegex {
 	}
 
 	/// Every non-overlapping match within `bounds`, left to right. After an empty match, the search
-	/// continues one character later, so it always terminates.
+	/// continues one character later, so it always terminates. With `\K` in a lookbehind, a match can start before
+	/// the search did, and the search from where it ended finds it again: one that ends no later than the last
+	/// match is left out, and the search goes on one character later (it used to find it forever).
 	public func allMatches(in text: UTF16Text, within bounds: Range<Int>? = nil) throws(RegexError) -> [RegexMatch] {
 		let bounds = bounds ?? 0 ..< text.count
 		var matches: [RegexMatch] = []
 		var position = bounds.lowerBound
 		while position <= bounds.upperBound, let match = try engine.search(text, bounds: bounds, start: position, limit: bounds.upperBound) {
+			if !match.range.isEmpty, let last = matches.last, match.range.upperBound <= last.range.upperBound {
+				guard position < bounds.upperBound else { break }
+				position = text.index(after: position)
+				continue
+			}
 			matches.append(match)
 			if match.range.isEmpty {
 				guard match.range.upperBound < bounds.upperBound else { break }

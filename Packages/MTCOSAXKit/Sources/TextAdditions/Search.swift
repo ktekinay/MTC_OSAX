@@ -162,7 +162,8 @@ struct TextSearcher {
 		return literalMatch(in: text, string: Self.searchString(text), within: bounds, backward: false)
 	}
 
-	/// Every non-overlapping match, left to right.
+	/// Every non-overlapping match, left to right. (Matches can still overlap when a match starts before the search
+	/// did, with `\K` in a lookbehind.)
 	func allMatches(in text: UTF16Text) throws -> [TextMatch] {
 		guard let bounds = options.bounds(in: text) else {
 			return []
@@ -185,6 +186,12 @@ struct TextSearcher {
 			}
 			guard let match else {
 				break
+			}
+			// With `\K` in a lookbehind a match can start before the search did, and the search from where it ended
+			// finds it again: one that ends no later than the last match is left out (it was found forever).
+			if !match.range.isEmpty, let last = matches.last, match.range.upperBound <= last.range.upperBound {
+				position = text.index(after: position)
+				continue
 			}
 			matches.append(match)
 			position = match.range.isEmpty ? text.index(after: match.range.upperBound) : match.range.upperBound

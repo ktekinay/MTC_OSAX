@@ -83,6 +83,16 @@ struct SearchRuleTests {
 		#expect(reply.result.map(DescriptorSnapshot.init)?.summary == #"list [utxt "a", type 'msng']"#)
 	}
 
+	/// With `\K` in a lookbehind a match starts before the search did, and the search from where it ended found it
+	/// again, forever (the app hung, taking more and more memory); splittext's overlapping matches trapped.
+	@Test func keepInLookbehind() {
+		let found = send(findText, ["----": #"(?<=\K.)"#, "$in ": "abc", "UsGR": true, "WaAl": true])
+		#expect(found.result?.numberOfItems == 2)
+		#expect(send(change, ["----": #"(?<=\K.)"#, "by  ": "-", "$in ": "abc", "UsGR": true]).result?.stringValue == "--c")
+		let split = send("SATISplt", ["----": "abb", "by  ": #"(?<=\K.)b"#, "UsGR": true])
+		#expect(split.result.map(DescriptorSnapshot.init)?.summary == #"list [utxt "", utxt "b"]"#)
+	}
+
 	@Test func emptyMatchNotTakenAtEnd() {
 		let reply = send(change, ["----": "x*", "by  ": "-", "$in ": "ab", "UsGR": true])
 		#expect(reply.result?.stringValue == "-a-b")

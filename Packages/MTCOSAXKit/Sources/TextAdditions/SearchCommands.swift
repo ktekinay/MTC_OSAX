@@ -231,7 +231,9 @@ extension TextAdditions {
 			let text = UTF16Text(string)
 			var pieces: [String] = []
 			var position = 0
-			for match in try searcher.allMatches(in: text) {
+			// A separator that starts inside the one before (`\K` in a lookbehind) is left out, as `change` leaves such a
+			// match (it trapped the app).
+			for match in try searcher.allMatches(in: text) where match.range.lowerBound >= position {
 				pieces.append(text[position ..< match.range.lowerBound])
 				position = match.range.upperBound
 			}
