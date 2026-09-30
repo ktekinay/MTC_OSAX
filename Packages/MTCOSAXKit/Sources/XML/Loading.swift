@@ -2,7 +2,8 @@ import CLibXML
 import Foundation
 
 /// Limits on what libxml2 and libxslt load by URL while they follow a document's own choices (XInclude, a
-/// stylesheet the document names): nothing from the network, and files only from some folders.
+/// stylesheet the document names): nothing from the network, only files (not pipes or devices), and those only
+/// from some folders.
 ///
 /// Everything libxml2 and libxslt load (DTDs and entities, includes, `xsl:import`, `document()`, the entities in
 /// what those load) goes through the external entity loader, and everything from the network also through
@@ -21,16 +22,27 @@ enum LoadRestrictions {
 
 		/// Whether a URL or path libxml2 asks for may be loaded; if not, it's noted and warned about.
 		func allows(_ location: String) -> Bool {
-			let allowed = LoadRestrictions.paths(of: location).map { paths in
-				folders.map { folders in paths.allSatisfy { path in folders.contains { path == $0 || path.hasPrefix($0 + "/") } } } ?? true
-			} ?? false
-			if !allowed {
-				refused.append(location)
-				XMLIssues.warn(folders == nil
-					? "A document can’t load from the network here: \(location)"
-					: "A document can only load files from its own folder here: \(location)")
+			guard let problem = problem(with: location) else { return true }
+			refused.append(location)
+			XMLIssues.warn("\(problem): \(location)")
+			return false
+		}
+
+		private func problem(with location: String) -> String? {
+			guard let paths = LoadRestrictions.paths(of: location) else {
+				return "A document can’t load from the network here"
 			}
-			return allowed
+			if let folders, !paths.allSatisfy({ path in folders.contains { path == $0 || path.hasPrefix($0 + "/") } }) {
+				return "A document can only load files from its own folder here"
+			}
+			// A named pipe or a device would be read until it ends, which it may never do, holding up every script.
+			for path in paths {
+				var status = stat()
+				if stat(path, &status) == 0, (status.st_mode & S_IFMT) != S_IFREG {
+					return "A document can only load files here, not folders, pipes or devices"
+				}
+			}
+			return nil
 		}
 	}
 

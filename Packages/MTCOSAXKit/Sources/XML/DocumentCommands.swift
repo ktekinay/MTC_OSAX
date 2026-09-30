@@ -52,9 +52,10 @@ extension XMLCommands {
 				let clone = store.add(pool: try request.parameter("pool", as: String.self)) { XMLDocument(number: $0, pool: $1, doc: copy) }
 				return references.reference(clone)
 			},
-			// Includes can read local files (relative to the document, or anywhere with a file: URL) but not the
-			// network: a document from elsewhere could otherwise make the Mac fetch any URL. `XML_PARSE_NONET` alone
-			// doesn't do it: libxml2 applies it only to http, and not to text includes.
+			// Includes can read local files (relative to the document, or anywhere with a file: URL), as the script
+			// asked, but not the network: a document from elsewhere could otherwise make the Mac fetch any URL.
+			// `XML_PARSE_NONET` alone doesn't do it: libxml2 applies it only to http, and not to text includes. Nor
+			// pipes or devices, which could be read forever.
 			CommandDefinition("XMLXInclude", code: "XML Xinc") { request in
 				let (document, _) = try direct(request)
 				let ((count, refused), issues) = XMLIssues.collect {
@@ -63,7 +64,9 @@ extension XMLCommands {
 				// libxml2 makes a text include it couldn't load empty text, and keeps includes done before one that
 				// failed.
 				if count > 0 { modified(document) }
-				if let url = refused.first { throw OSAXError(1549, "A document can’t include anything from the network: \(url)") }
+				if let url = refused.first {
+					throw OSAXError(1549, "A document can include only files on this Mac, not the network, pipes or devices: \(url)")
+				}
 				guard count >= 0 else { throw OSAXError(issues.first?.code ?? -1) }
 				return Int(count)
 			},

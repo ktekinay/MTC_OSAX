@@ -577,6 +577,23 @@ struct XMLDocumentTests {
 
 	/// libxml2's `XML_PARSE_NONET` only stops http, and text includes don't pass it on: includes over https, and
 	/// text includes over http, were fetched. So were URLs a catalog the document named mapped its includes to.
+	/// An include of a named pipe waited for it to end, holding up every script until then.
+	@Test func xincludeOfPipes() throws {
+		let folder = FileManager.default.temporaryDirectory.appendingPathComponent("xinclude-\(UUID().uuidString)")
+		try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+		defer { try? FileManager.default.removeItem(at: folder) }
+		let pipe = folder.appendingPathComponent("pipe")
+		#expect(mkfifo(pipe.path, 0o600) == 0)
+		let xml = XMLs()
+		let start = Date()
+		for include in ["parse='text' href='\(pipe.absoluteString)'", "href='\(pipe.absoluteString)'", "parse='text' href='\(folder.absoluteString)'"] {
+			let d = try xml.open("<doc xmlns:xi='http://www.w3.org/2001/XInclude'><xi:include \(include)/></doc>")
+			#expect(xml.send("XML Xinc", ["----": d]).error?.number == 1549)
+			#expect(xml.send("XML lErr").result?.stringValue?.contains("not folders, pipes or devices") == true)
+		}
+		#expect(Date().timeIntervalSince(start) < 5)
+	}
+
 	@Test func xincludeStaysOffTheNetwork() throws {
 		let folder = FileManager.default.temporaryDirectory.appendingPathComponent("xinclude-\(UUID().uuidString)")
 		try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
