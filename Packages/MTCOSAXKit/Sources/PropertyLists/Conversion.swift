@@ -251,7 +251,12 @@ extension PropertyLists {
 			if CFGetTypeID(number) == CFBooleanGetTypeID() {
 				return Node(.boolean(number.boolValue), in: document)
 			}
-			return Node(CFNumberIsFloatType(number) ? .real(number.doubleValue) : .integer(number.int64Value), in: document)
+			// An unsigned integer past Int64.max (a property list file can hold one up to 2⁶⁴ - 1) is a real, as an
+			// integer too large for AppleScript is: as an Int64 its bits read negative (18446744073709551615 was -1).
+			if CFNumberIsFloatType(number) || number.compare(NSNumber(value: Int64.max)) == .orderedDescending {
+				return Node(.real(number.doubleValue), in: document)
+			}
+			return Node(.integer(number.int64Value), in: document)
 		case let date as NSDate:
 			return Node(.date(date as Date), in: document)
 		case let data as NSData:

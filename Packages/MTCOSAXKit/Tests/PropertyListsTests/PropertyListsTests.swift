@@ -303,6 +303,22 @@ struct ChangeTests {
 	}
 }
 
+/// Unsigned integers past Int64.max, which a property list file can hold, were read as their bits, negative.
+@MainActor
+struct LargeIntegerTests {
+	@Test func unsignedIntegers() throws {
+		let plists = Plists()
+		let text = "<plist version=\"1.0\"><array><integer>18446744073709551615</integer><integer>9223372036854775807</integer><integer>-5</integer></array></plist>"
+		let document = try PropertyLists.document(Data(text.utf8), pool: nil, store: plists.store)
+		let values = document.root.children.map(\.content)
+		guard case let .real(big) = values[0], case let .integer(max) = values[1], case let .integer(negative) = values[2] else {
+			Issue.record("\(values)")
+			return
+		}
+		#expect(big == 18446744073709551615.0 && max == Int64.max && negative == -5)
+	}
+}
+
 @MainActor
 struct JSONTests {
 	@Test func toJSON() throws {
