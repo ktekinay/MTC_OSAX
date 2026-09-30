@@ -72,6 +72,20 @@ struct PathInputTests {
 		let names = send(getName, ["----": ["a.txt", "b.txt"], "from": sandbox.url])
 		#expect(names.result.map(DescriptorSnapshot.init)?.summary == #"list [utxt "a.txt", utxt "b.txt"]"#)
 	}
+
+	/// With `from`, a name with a colon was taken for an HFS path (on a volume named by its first part). It's a name
+	/// in the folder unless that part is a mounted volume's name, so HFS paths still work.
+	@Test func namesWithColons() throws {
+		let sandbox = try Sandbox()
+		_ = try sandbox.file("Notes: 2024.txt")
+		_ = try sandbox.file("keep.txt")
+		#expect(send(remove, ["----": ["Notes: 2024.txt"], "from": sandbox.url]).result?.int32Value == 1)
+		#expect(!sandbox.exists("Notes: 2024.txt"))
+		let volume = try #require(try URL(fileURLWithPath: "/").resourceValues(forKeys: [.volumeNameKey]).volumeName)
+		let hfs = volume + sandbox.path("keep.txt").replacingOccurrences(of: "/", with: ":")
+		#expect(send(getName, ["----": [hfs], "from": sandbox.url.appendingPathComponent("elsewhere")]).result?.atIndex(1)?.stringValue == "keep.txt")
+		#expect(URL.isRelativeScriptPath("Notes: 2024.txt") && !URL.isRelativeScriptPath(hfs) && !URL.isRelativeScriptPath("file:///x"))
+	}
 }
 
 @MainActor

@@ -228,10 +228,23 @@ extension URL: AppleEventConvertible {
 		}
 	}
 
-	/// A path with nothing to say where it starts: no `/` or `~` at the front, and no colon (which HFS paths and URLs
-	/// have).
+	/// A path with nothing to say where it starts: no `/` or `~` at the front, not a URL, and not an HFS path, whose
+	/// first part is a mounted volume's name. (A name with a colon, such as "Notes: 2024.txt", which is fine in a
+	/// file name, was taken for an HFS path on a volume "Notes".)
 	public static func isRelativeScriptPath(_ path: String) -> Bool {
-		!path.hasPrefix("/") && !path.hasPrefix("~") && !path.contains(":")
+		if path.hasPrefix("/") || path.hasPrefix("~") { return false }
+		guard path.contains(":") else { return true }
+		if path.lowercased().hasPrefix("file:") || path.contains("://") { return false }
+		return !isVolumeName(String(path.prefix { $0 != ":" }))
+	}
+
+	/// Whether a volume by that name is mounted: the startup disk (in any case, as HFS paths are read) or one in
+	/// /Volumes.
+	static func isVolumeName(_ name: String) -> Bool {
+		guard !name.isEmpty, !name.contains("/"), name != ".", name != ".." else { return false }
+		let startup = try? URL(fileURLWithPath: "/").resourceValues(forKeys: [.volumeNameKey]).volumeName
+		if let startup, name.caseInsensitiveCompare(startup) == .orderedSame { return true }
+		return FileManager.default.fileExists(atPath: "/Volumes/" + name)
 	}
 
 	/// Converts `"Volume:folder:file"` to `"/folder/file"` (startup volume) or `"/Volumes/Volume/folder/file"`. As
