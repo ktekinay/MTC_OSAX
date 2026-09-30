@@ -35,7 +35,8 @@ struct TemplateTests {
 		#expect(try expand(#"A😀"#, pattern: "a", in: "a") == "A😀")
 	}
 
-	@Test(arguments: [#"\q"#, #"\$"#, #"\x41"#, #"\u41"#, #"\"#, #"\k<1"#, #"\g<1>"#, #"\u+FFF"#, #"\u-FFF"#])
+	// A backslash before a character outside the Basic Multilingual Plane (two UTF-16 units) trapped.
+	@Test(arguments: [#"\q"#, #"\$"#, #"\x41"#, #"\u41"#, #"\"#, #"\k<1"#, #"\g<1>"#, #"\u+FFF"#, #"\u-FFF"#, #"\😀"#, #"a\𝐀b"#])
 	func invalidEscapes(_ template: String) {
 		#expect(throws: Template.invalidBackreference) {
 			try Template(template)

@@ -63,7 +63,11 @@ struct Template {
 					index += 2
 					continue
 				}
-				switch Character(Unicode.Scalar(next)!) {
+				// A surrogate (the first half of a character such as an emoji) is no escape either; it trapped.
+				guard let scalar = Unicode.Scalar(next) else {
+					throw Self.invalidBackreference
+				}
+				switch Character(scalar) {
 				case "t": literal.append(ascii("\t"))
 				case "n": literal.append(ascii("\n"))
 				case "r": literal.append(ascii("\r"))
