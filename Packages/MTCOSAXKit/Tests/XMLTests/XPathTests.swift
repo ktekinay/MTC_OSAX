@@ -2,6 +2,7 @@ import AppleEventCore
 import Foundation
 import PropertyLists
 import Testing
+import TestSupport
 @testable import XML
 
 private let library = """
@@ -252,6 +253,54 @@ struct XSLTTests {
 		let harmless = try xml.open("<?xml-stylesheet type='text/xsl' href='#s'?><!DOCTYPE a [<!ATTLIST xsl:stylesheet id ID #IMPLIED>]><a>"
 			+ "<xsl:stylesheet id='s' version='1.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'><xsl:template match='/'><r/></xsl:template></xsl:stylesheet></a>")
 		#expect(xml.send("XML xslt", ["----": harmless, "rtyp": type("utxt")]).result?.stringValue?.contains("<r/>") == true)
+	}
+
+	/// A stylesheet the document picked could read any file (with `document()`, or the entities of what it read)
+	/// and any URL, so it could send the Mac's files anywhere. It, and what it loads, must now come from the
+	/// document's folder, and it can't use the network; a stylesheet the script gives still can.
+	@Test func readingFiles() throws {
+		let top = FileManager.default.temporaryDirectory.appendingPathComponent("xslt-\(UUID().uuidString)")
+		let folder = top.appendingPathComponent("doc")
+		try FileManager.default.createDirectory(at: folder.appendingPathComponent("sub"), withIntermediateDirectories: true)
+		defer { try? FileManager.default.removeItem(at: top) }
+		func write(_ text: String, _ path: String, in base: URL = folder) throws {
+			try Data(text.utf8).write(to: base.appendingPathComponent(path))
+		}
+		let secret = top.appendingPathComponent("secret.txt")
+		try write("SECRET", "secret.txt", in: top)
+		try write("inside", "sub/inside.txt")
+		try write("<!DOCTYPE d [<!ENTITY s SYSTEM 'sub/inside.txt'>]><d>&s;</d>", "near.xml")
+		try write("<!DOCTYPE d [<!ENTITY s SYSTEM '\(secret.absoluteString)'>]><d>&s;</d>", "far.xml")
+		try write("<xsl:stylesheet version='1.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'><xsl:template name='c'>C</xsl:template></xsl:stylesheet>", "common.xsl")
+		let server = try NetworkFixtureServer(folder: folder)
+		func stylesheet(reading location: String) -> String {
+			"<xsl:stylesheet version='1.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'><xsl:import href='common.xsl'/>"
+				+ "<xsl:output method='text'/><xsl:template match='/'><xsl:call-template name='c'/>[<xsl:value-of select=\"document('\(location)')\"/>]</xsl:template></xsl:stylesheet>"
+		}
+		try write(stylesheet(reading: "near.xml"), "near.xsl")
+		try write(stylesheet(reading: "far.xml"), "far.xsl")
+		try write("<d>remote</d>", "plain.xml")
+		try write(stylesheet(reading: "\(server.address)/files/plain.xml"), "remote.xsl")
+		try write(stylesheet(reading: "near.xml"), "elsewhere.xsl", in: top)
+		let xml = XMLs()
+		func transform(choosing href: String, with: String? = nil) -> AppleEventReply {
+			let file = folder.appendingPathComponent("doc-\(UUID().uuidString).xml")
+			try? write("<?xml-stylesheet type='text/xsl' href='\(href)'?><a/>", file.lastPathComponent)
+			guard let d = xml.send("XML open", ["----": file]).result else { return AppleEventReply(error: OSAXError(-1)) }
+			var parameters: [String: any AppleEventEncodable] = ["----": d, "rtyp": type("utxt")]
+			if let with { parameters["with"] = URL(fileURLWithPath: with) }
+			return xml.send("XML xslt", parameters)
+		}
+		#expect(transform(choosing: "near.xsl").result?.stringValue == "C[inside]")
+		#expect(transform(choosing: "far.xsl").error?.number == 1535)
+		#expect(xml.send("XML lErr").result?.stringValue?.contains("only load files from its own folder") == true)
+		#expect(transform(choosing: "remote.xsl").error?.number == 1535)
+		#expect(transform(choosing: top.appendingPathComponent("elsewhere.xsl").absoluteString).error?.number == 1535)
+		#expect(transform(choosing: "../elsewhere.xsl").error?.number == 1535)
+		// The server answers, and a stylesheet the script gives may read anything.
+		#expect(xml.send("XML open", ["----": "\(server.address)/files/near.xml"]).error == nil)
+		#expect(transform(choosing: "near.xsl", with: folder.appendingPathComponent("far.xsl").path).result?.stringValue == "C[SECRET]")
+		#expect(transform(choosing: "near.xsl", with: folder.appendingPathComponent("remote.xsl").path).result?.stringValue == "C[remote]")
 	}
 
 	/// `~` and HFS paths: a stylesheet's path was rebuilt from the text, and a schema's never understood them.

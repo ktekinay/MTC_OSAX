@@ -25,8 +25,9 @@ extension XMLCommands {
 	/// `as CFRef` a property list, or written to the file `in`.
 	///
 	/// A stylesheet the script gives can write files (`exsl:document`), as the script itself could. One the document
-	/// chooses is code from the document, which may not be trusted: it can't write files, make folders or write to
-	/// the network (error 1535, libxml2's "not permitted", as SatimageOSAX's sandbox gave).
+	/// chooses is code from the document, which may not be trusted: it can't write files, make folders or use the
+	/// network, and it (and what it imports and reads) must come from the document's folder (error 1535, libxml2's
+	/// "not permitted", as SatimageOSAX's sandbox gave). Otherwise it could read any file and send it anywhere.
 	func transform(_ request: AppleEventRequest) throws -> NSAppleEventDescriptor? {
 		let (document, node) = try direct(request)
 		guard let doc = document.doc else { throw XML.noSuchNode }
@@ -40,10 +41,18 @@ extension XMLCommands {
 		// script's references to those nodes invalid: such a stylesheet transforms a copy.
 		let source = Stylesheets.stripsSpace(style.pointer) ? Stylesheets.copy(doc) : doc
 		defer { if source != doc { xmlFreeDoc(source) } }
-		let (applied, _) = XMLIssues.collect { Stylesheets.apply(style.pointer, to: source, parameters: parameters, allowingWrites: !style.chosenByDocument) }
-		guard !applied.refused else {
+		let (outcome, _) = XMLIssues.collect { () -> (result: (output: xmlDocPtr?, refused: Bool), refused: [String]) in
+			guard style.chosenByDocument else {
+				return (Stylesheets.apply(style.pointer, to: source, parameters: parameters), [])
+			}
+			return LoadRestrictions.restricted(toFolders: Stylesheets.folders(of: document)) {
+				Stylesheets.apply(style.pointer, to: source, parameters: parameters, trusted: false)
+			}
+		}
+		let (applied, refusedLoads) = (outcome.result, outcome.refused)
+		guard !applied.refused, refusedLoads.isEmpty else {
 			if let output = applied.output { xmlFreeDoc(output) }
-			throw OSAXError(1535, "A stylesheet chosen by the document’s xml-stylesheet instruction can’t write files.")
+			throw Stylesheets.refusal(refusedLoads.first)
 		}
 		guard let output = applied.output else { throw XPath.failed }
 
@@ -95,7 +104,13 @@ extension XMLCommands {
 	{
 		guard let with = request.descriptor(for: "with") else {
 			guard let doc = document.doc else { throw XML.noSuchNode }
-			let (style, _) = XMLIssues.collect { xsltLoadStylesheetPI(doc) }
+			let ((style, refused), _) = XMLIssues.collect {
+				LoadRestrictions.restricted(toFolders: Stylesheets.folders(of: document)) { xsltLoadStylesheetPI(doc) }
+			}
+			guard refused.isEmpty else {
+				if let style { xsltFreeStylesheet(style) }
+				throw Stylesheets.refusal(refused.first)
+			}
 			guard let style else { throw OSAXError.missingParameter }
 			return (style, true, true)
 		}
@@ -214,17 +229,32 @@ enum Stylesheets {
 		}
 	}
 
-	/// Runs a stylesheet with parameters (XPath expressions).
-	/// Applies a stylesheet; without `allowingWrites`, what it would write is refused, and `refused` says so.
-	static func apply(_ style: xsltStylesheetPtr, to doc: xmlDocPtr, parameters: [(String, String)], allowingWrites: Bool = true)
+	/// The folders a stylesheet the document chooses may load from: the document's (none for a document that isn't
+	/// a file, such as one opened from text).
+	static func folders(of document: XMLDocument) -> [URL] {
+		guard let url = document.url, url.isFileURL else { return [] }
+		return [url.deletingLastPathComponent()]
+	}
+
+	/// Error 1535 for what a stylesheet the document chose may not do: load from `location`, or (without one) write
+	/// or use the network.
+	static func refusal(_ location: String?) -> OSAXError {
+		let start = "A stylesheet chosen by the document’s xml-stylesheet instruction"
+		guard let location else { return OSAXError(1535, "\(start) can’t write files or use the network.") }
+		return OSAXError(1535, "\(start) can only load files from the document’s folder, and nothing from the network: \(location)")
+	}
+
+	/// Applies a stylesheet with parameters (XPath expressions). An untrusted one (chosen by the document) can't write
+	/// or use the network: what it tries is refused, and `refused` says so.
+	static func apply(_ style: xsltStylesheetPtr, to doc: xmlDocPtr, parameters: [(String, String)], trusted: Bool = true)
 		-> (output: xmlDocPtr?, refused: Bool)
 	{
 		guard let context = xsltNewTransformContext(style, doc) else { return (nil, false) }
 		defer { xsltFreeTransformContext(context) }
-		let prefs = allowingWrites ? nil : xsltNewSecurityPrefs()
+		let prefs = trusted ? nil : xsltNewSecurityPrefs()
 		defer { if let prefs { xsltFreeSecurityPrefs(prefs) } }
 		if let prefs {
-			for option in [XSLT_SECPREF_WRITE_FILE, XSLT_SECPREF_CREATE_DIRECTORY, XSLT_SECPREF_WRITE_NETWORK] {
+			for option in [XSLT_SECPREF_WRITE_FILE, XSLT_SECPREF_CREATE_DIRECTORY, XSLT_SECPREF_WRITE_NETWORK, XSLT_SECPREF_READ_NETWORK] {
 				xsltSetSecurityPrefs(prefs, option, refuse)
 			}
 			xsltSetCtxtSecurityPrefs(prefs, context)

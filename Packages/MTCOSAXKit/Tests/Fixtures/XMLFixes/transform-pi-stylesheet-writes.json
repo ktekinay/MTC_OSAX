@@ -45,7 +45,7 @@
         "type" : "aevt"
       },
       "reply" : {
-        "errorMessage" : "A stylesheet chosen by the document’s xml-stylesheet instruction can’t write files.",
+        "errorMessage" : "A stylesheet chosen by the document’s xml-stylesheet instruction can’t write files or use the network.",
         "errorNumber" : 1535
       }
     },
