@@ -136,8 +136,12 @@ struct XMLCommands {
 		node.pointee.type == XML_DOCUMENT_NODE || node.pointee.type == XML_HTML_DOCUMENT_NODE
 	}
 
-	/// Children, with or without the nodes that aren't elements (`all nodes`).
+	/// Children, with or without the nodes that aren't elements (`all nodes`). An entity reference's one child is its
+	/// entity's declaration (whose siblings are the rest of the DTD, not the reference's).
 	static func children(of node: xmlNodePtr, allNodes: Bool) -> [xmlNodePtr] {
+		if node.pointee.type == XML_ENTITY_REF_NODE {
+			return allNodes ? node.pointee.children.map { [$0] } ?? [] : []
+		}
 		var result: [xmlNodePtr] = []
 		var current = node.pointee.children
 		while let child = current {

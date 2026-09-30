@@ -82,14 +82,11 @@ final class XMLDocument: StoredDocument {
 
 	/// Forgets the numbers of nodes (and what's in them) that are about to be freed without libxml2's callback.
 	static func forgetNumbers(in node: xmlNodePtr?) {
-		var current = node
-		while let node = current {
+		Parsing.walk(node) { node in
 			if let number = node.pointee._private, let document = owner(of: node) {
 				document.nodes[Int(bitPattern: number)] = nil
 				node.pointee._private = nil
 			}
-			forgetNumbers(in: node.pointee.children)
-			current = node.pointee.next
 		}
 	}
 

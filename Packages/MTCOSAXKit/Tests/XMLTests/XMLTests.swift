@@ -318,6 +318,33 @@ struct XMLChangeTests {
 		#expect(xml.send("XML addc", ["----": "<r/>", "at  ": d]).error == nil)
 	}
 
+	/// An entity reference's child is its entity's declaration, whose siblings are the rest of the DTD. Walks of the
+	/// tree went into it, and round in circles (until the stack overflowed, opening the document) when an entity
+	/// referred to one declared before it; XMLCount and XMLChild of a reference listed the rest of the DTD, and
+	/// XMLFindText searched it. Reading a DTD's fields as an element's crashed XMLValidate of a DTD.
+	@Test func entityReferencesAndDeclarations() throws {
+		let xml = XMLs()
+		let d = try xml.open("<!DOCTYPE r [<!ENTITY a 'x'><!ENTITY b '&a;y'><!-- in the DTD -->]><r>&b;<!-- in r --></r>")
+		let r = try xml.root(d)
+		let b = try #require(xml.send("XML chld", ["----": r, "indx": 1]).result)
+		#expect(xml.send("XML cunt", ["----": b]).result?.int32Value == 1)
+		#expect(xml.send("XML gtag", ["----": try #require(xml.send("XML chld", ["----": b, "indx": 1]).result)]).result?.stringValue == "b")
+		#expect(xml.send("XML chld", ["----": b, "indx": 2]).error == XML.badIndex)
+		#expect(xml.send("XML fint", ["----": "in r", "in  ": d]).error == nil)
+		#expect(xml.send("XML fint", ["----": "DTD", "in  ": d]).error == XML.notFound)
+		#expect(xml.send("XML fint", ["----": "y", "in  ": b]).error == XML.notFound)
+		#expect(xml.send("XML gttx", ["----": r]).result?.stringValue == "xy")
+		let dtd = try #require(xml.send("XML chld", ["----": d, "indx": 1]).result)
+		_ = xml.send("XML vali", ["----": dtd])
+		#expect(xml.send("XML cunt", ["----": dtd]).result?.int32Value == 3)
+
+		// Control characters in an entity used in an attribute: turning them back set the reference's content,
+		// which is the entity's own, freeing it.
+		let e = try xml.root(xml.open("<!DOCTYPE e [<!ENTITY c 'x&#1;y'>]><e a='&c;' b='&#2;'>&c;</e>"))
+		#expect(xml.send("XML geta", ["----": e, "pnam": "b"]).result?.stringValue == "\u{2}")
+		#expect(xml.send("XML geta", ["----": e, "pnam": "a"]).result != nil)
+	}
+
 	/// Appending to a CDATA section, comment or processing instruction used to add an invisible child.
 	@Test func appendTextToLiteralNodes() throws {
 		let xml = XMLs()

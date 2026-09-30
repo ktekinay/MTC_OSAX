@@ -261,7 +261,7 @@ enum Validation {
 		var seen = Set<String>()
 		var repeated = false
 		Parsing.walk(node) { element in
-			guard element == node || isInside(element, node) else { return }
+			guard element.pointee.type == XML_ELEMENT_NODE, element == node || isInside(element, node) else { return }
 			var attribute = element.pointee.properties
 			while let current = attribute {
 				if xmlIsID(doc, element, current) != 0 {

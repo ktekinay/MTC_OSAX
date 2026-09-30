@@ -473,9 +473,11 @@ extension XMLCommands {
 		return reference(first, document)
 	}
 
-	/// Text nodes under a node: text, CDATA and (as in SatimageOSAX) comments.
+	/// Text nodes under a node: text, CDATA and (as in SatimageOSAX) comments. As in XPath, there are none under an
+	/// entity reference (its child is a declaration in the DTD).
 	static func textNodes(_ node: xmlNodePtr) -> [xmlNodePtr] {
 		var result: [xmlNodePtr] = []
+		guard node.pointee.type != XML_ENTITY_REF_NODE else { return result }
 		Parsing.walk(node.pointee.children) { child in
 			if [XML_TEXT_NODE, XML_CDATA_SECTION_NODE, XML_COMMENT_NODE].contains(child.pointee.type) {
 				result.append(child)

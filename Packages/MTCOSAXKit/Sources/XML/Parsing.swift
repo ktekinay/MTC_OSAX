@@ -162,11 +162,17 @@ enum Parsing {
 
 	// MARK: Tree helpers
 
+	/// Visits a node, what's in it and the siblings after it, depth first. It doesn't go into an entity reference or
+	/// a DTD, as libxml2's own walks don't: their children are declarations, not content. (An entity reference's
+	/// child is its entity's declaration, whose siblings are the rest of the DTD, so the walk used to visit the
+	/// whole DTD, and went round in circles when an entity referred to one declared before it.)
 	static func walk(_ node: xmlNodePtr?, _ visit: (xmlNodePtr) -> Void) {
 		var current = node
 		while let node = current {
 			visit(node)
-			walk(node.pointee.children, visit)
+			if node.pointee.type != XML_ENTITY_REF_NODE, node.pointee.type != XML_DTD_NODE {
+				walk(node.pointee.children, visit)
+			}
 			current = node.pointee.next
 		}
 	}
@@ -250,7 +256,10 @@ enum ExtendedCharacters {
 			while let current = attribute {
 				var child = current.pointee.children
 				while let text = child {
-					decodeContent(text)
+					// Not an entity reference: its content is the entity's own, which setting it would free.
+					if text.pointee.type == XML_TEXT_NODE {
+						decodeContent(text)
+					}
 					child = text.pointee.next
 				}
 				attribute = current.pointee.next
