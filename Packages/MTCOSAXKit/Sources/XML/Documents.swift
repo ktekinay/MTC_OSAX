@@ -56,7 +56,7 @@ final class XMLDocument: StoredDocument {
 		if UnsafeMutableRawPointer(node) == UnsafeMutableRawPointer(doc) {
 			return 0
 		}
-		assert(node.pointee.doc == doc, "a node numbered in another document's table")
+		precondition(node.pointee.doc == doc, "a node numbered in another document's table")
 		if let existing = node.pointee._private {
 			return Int(bitPattern: existing)
 		}
@@ -122,6 +122,10 @@ struct XMLReferences {
 	let store: DocumentStore
 
 	func reference(_ node: xmlNodePtr, in document: XMLDocument) -> NSAppleEventDescriptor {
+		// The document the node is in, whatever the caller thought: numbered in another's table, the number would
+		// outlive the node there (only an assert checked, which release builds leave out).
+		let isDocumentNode = UnsafeMutableRawPointer(node) == UnsafeMutableRawPointer(document.doc)
+		let document = isDocumentNode ? document : XMLDocument.owner(of: node) ?? document
 		var data = Data()
 		withUnsafeBytes(of: UInt32(document.number).littleEndian) { data.append(contentsOf: $0) }
 		data.append(contentsOf: Array("MTCx".utf8))

@@ -105,6 +105,20 @@ struct XPathTests {
 		#expect(cleared[.code("vars")]?.numberOfItems == 0)
 	}
 
+	/// Nodes of another document (from a variable) are referred to in their own document, so they're forgotten
+	/// with it; numbered in the searched document's table, they'd have outlived it.
+	@Test func nodesFromAnotherDocument() throws {
+		let xml = XMLs()
+		let first = try xml.root(xml.open("<a/>"))
+		let second = try xml.open("<b><c/></b>")
+		let c = try #require(xml.send("XML path", ["----": second, "with": "//c"]).result?.atIndex(1))
+		let found = try #require(xml.xpath(first, "$v", ["vars": AppleEventList([NSAppleEventDescriptor(string: "v"), c])]).result?.atIndex(1))
+		#expect(xml.send("XML gtag", ["----": found]).result?.stringValue == "c")
+		#expect(found.data == c.data)
+		xml.send("XML clos", ["----": second])
+		#expect(xml.send("XML gtag", ["----": found]).error == XML.noSuchNode)
+	}
+
 	@Test func functions() throws {
 		let xml = XMLs()
 		let r = try xml.root(xml.open(library))
