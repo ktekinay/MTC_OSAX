@@ -96,6 +96,12 @@ struct DateFormattingTests {
 		#expect(try newYork.strftime(date, format: String(repeating: "%c", count: 100), gmt: false) == String(repeating: one, count: 100))
 	}
 
+	/// A raw date whose seconds overflow as a time since 1970 (Int64.min) trapped.
+	@Test func rawDatesOutOfRange() throws {
+		let raw = try #require(NSAppleEventDescriptor(descriptorType: typeLongDateTime, data: Data([0, 0, 0, 0, 0, 0, 0, 0x80])))
+		#expect((#expect(throws: OSAXError.self) { try LocalDateTime(raw) })?.number == -1700)
+	}
+
 	@Test func emptyFormat() throws {
 		#expect(try newYork.strftime(date, format: "", gmt: false) == "")
 	}

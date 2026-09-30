@@ -292,6 +292,10 @@ struct LocalDateTime {
 			throw OSAXError.coercionFailed
 		}
 		seconds = date.data.withUnsafeBytes { $0.loadUnaligned(as: Int64.self) }
+		// A raw `ldt ` can hold anything; seconds that overflow as a time since 1970 are no date (they trapped).
+		guard !seconds.subtractingReportingOverflow(Self.offsetFrom1970).overflow else {
+			throw OSAXError.coercionFailed
+		}
 	}
 
 	var descriptor: NSAppleEventDescriptor {
