@@ -64,6 +64,8 @@ extension FileAdditions {
 		return try filter.result(items, request: request)
 	}
 
+	/// Paths matching a shell pattern with `*`, `?`, `[…]`, `{a,b}` and `~`, in the order the file system lists
+	/// them.
 	static func glob(_ request: AppleEventRequest) throws -> NSAppleEventDescriptor {
 		guard let descriptor = request.descriptor(for: Keyword.directObject) else {
 			throw OSAXError.missingParameter
@@ -80,6 +82,9 @@ extension FileAdditions {
 			} else {
 				// The folder is a name, not a pattern: `g[1]` would otherwise match `g1`.
 				escaped(base?.path ?? "") + "/" + pattern
+			}
+			guard braceExpansions(pattern) <= maximumBraceExpansions else {
+				throw OSAXError(-50, "The pattern’s braces make more than \(maximumBraceExpansions) patterns to look for.")
 			}
 			for path in matches(full) {
 				let url = URL(fileURLWithPath: path)
@@ -99,8 +104,6 @@ extension FileAdditions {
 		return try filter.result(items, request: request)
 	}
 
-	/// Paths matching a shell pattern with `*`, `?`, `[…]`, `{a,b}` and `~`, in the order the file system lists
-	/// them.
 	/// A path with glob(3)'s special characters backslash-escaped, so it only matches itself.
 	static func escaped(_ path: String) -> String {
 		var result = ""
@@ -111,6 +114,47 @@ extension FileAdditions {
 			result.append(character)
 		}
 		return result
+	}
+
+	/// glob(3) looks for every pattern a pattern's braces make, one after another, with the main thread (and every
+	/// script) waiting: `{a,b}` 25 times made 33 million.
+	static let maximumBraceExpansions = 10_000
+
+	/// How many patterns `{…}` groups make (nested ones too; `\` escapes a brace), saturating far above the limit.
+	static func braceExpansions(_ pattern: String) -> Int {
+		let characters = Array(pattern)
+		let cap = 1 << 40
+		var index = 0
+		func saturating(_ a: Int, _ b: Int) -> Int {
+			let (product, overflow) = a.multipliedReportingOverflow(by: b)
+			return overflow ? cap : min(product, cap)
+		}
+		// Text and groups up to the end, or (in a group) an unnested `,` or `}`: the product of its groups.
+		func run(inGroup: Bool) -> Int {
+			var product = 1
+			while index < characters.count {
+				let character = characters[index]
+				if character == "\\" {
+					index += 2
+					continue
+				}
+				if inGroup, character == "," || character == "}" {
+					return product
+				}
+				index += 1
+				guard character == "{" else { continue }
+				var alternatives = 0
+				while true {
+					alternatives = min(alternatives + run(inGroup: true), cap)
+					guard index < characters.count else { return product }
+					index += 1
+					if characters[index - 1] == "}" { break }
+				}
+				product = saturating(product, max(alternatives, 1))
+			}
+			return product
+		}
+		return run(inGroup: false)
 	}
 
 	static func matches(_ pattern: String) -> [String] {

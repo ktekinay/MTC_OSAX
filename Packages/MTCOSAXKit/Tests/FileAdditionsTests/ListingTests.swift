@@ -133,6 +133,19 @@ struct ListFilesTests {
 struct GlobTests {
 	private let glob = "SATIGlob"
 
+	/// glob(3) looks for each pattern the braces make in turn: `{a,b}` 25 times, 33 million, held up every script.
+	@Test func braceLimit() throws {
+		#expect(FileAdditions.braceExpansions("a{b,c}d{e,f,g}") == 6)
+		#expect(FileAdditions.braceExpansions("{a,{b,c}}x") == 3)
+		#expect(FileAdditions.braceExpansions("\\{a,b}") == 1)
+		#expect(FileAdditions.braceExpansions("{a,b") == 1)
+		#expect(FileAdditions.braceExpansions(String(repeating: "{a,b}", count: 100)) > 10_000)
+		let start = Date()
+		#expect(send(glob, ["----": String(repeating: "{a,b}", count: 25), "from": FileManager.default.temporaryDirectory]).error?.number == -50)
+		#expect(Date().timeIntervalSince(start) < 5)
+		#expect(send(glob, ["----": "{x,y}{1,2}", "from": FileManager.default.temporaryDirectory]).error == nil)
+	}
+
 	private func tree() throws -> TemporaryFolder {
 		let folder = try TemporaryFolder()
 		try folder.file("a.txt")

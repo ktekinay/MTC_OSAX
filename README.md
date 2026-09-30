@@ -63,7 +63,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 - `filemove` to the same name in another case, and `filerename` to another case, rename the item (SatimageOSAX gave -48).
 - `filecopy` or `filemove … with replacing` of a symbolic link onto the item it points to is error -1, instead of deleting that item and leaving a link to nothing.
 - `mkdtemp` honors `wildcards`; `fileremove … with filesonly` reports the real count.
-- `glob "…/.*"` doesn't return `.` and `..`; `glob … not conforming to "public.folder"` excludes folders.
+- `glob "…/.*"` doesn't return `.` and `..`; a pattern whose braces make more than 10,000 patterns (`{a,b}` 14 times) is error -50, rather than holding up every script while glob looks for each; `glob … not conforming to "public.folder"` excludes folders.
 - `~` is your home folder, not SatimageOSAX's sandbox container.
 - `backup` onto a folder inside the source backs up everything but that folder (SatimageOSAX created it and then gave -50); onto the source itself is -50.
 - `backup` copies symbolic links as links, inside packages too (SatimageOSAX made an empty folder for each), and never backs up through a link in the destination: a folder where the destination has a link is error 20, rather than being copied to wherever the link points.
