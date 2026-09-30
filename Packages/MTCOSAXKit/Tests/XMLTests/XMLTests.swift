@@ -345,6 +345,34 @@ struct XMLChangeTests {
 		#expect(xml.send("XML geta", ["----": e, "pnam": "a"]).result != nil)
 	}
 
+	/// Removing the DTD freed its entities, and references to them in the document still pointed at them: XPath,
+	/// XMLFindText, XMLChild and clones read or wrote freed memory.
+	@Test func removingTheDTDDetachesEntityReferences() throws {
+		let xml = XMLs()
+		let d = try xml.open("<!DOCTYPE a [<!ENTITY e 'ent'>]><a k='v&e;'>x&e;<b/></a>")
+		let a = try xml.root(d)
+		let reference = try #require(xml.send("XML chld", ["----": a, "indx": 2]).result)
+		let entity = try #require(xml.send("XML chld", ["----": reference, "indx": 1]).result)
+		let dtd = try #require(xml.send("XML chld", ["----": d, "indx": 1]).result)
+		#expect(xml.send("XML remo", ["----": dtd]).error == nil)
+		#expect(xml.send("XML gtag", ["----": entity]).error == XML.noSuchNode)
+		#expect(xml.send("XML cunt", ["----": reference]).result?.int32Value == 0)
+		#expect(xml.send("XML path", ["----": d, "with": "//node()"]).error == nil)
+		#expect(xml.send("XML fint", ["----": "x", "in  ": a]).error == nil)
+		#expect(xml.send("XML gttx", ["----": a]).result?.stringValue == "x")
+		#expect(xml.send("XML geta", ["----": a, "pnam": "k"]).result?.stringValue == "v")
+		#expect(xml.send("XML addc", ["----": a, "at  ": a]).error == nil)
+		#expect(xml.send("XML disx", ["----": a, "smar": false]).result?.stringValue == "<a k=\"v&e;\">x&e;<b/><a k=\"v&e;\">x&e;<b/></a></a>")
+		// The same through XMLRemoveChildren and XMLSetXML of the document.
+		let e = try xml.open("<!DOCTYPE a [<!ENTITY e 'ent'>]><a>&e;</a>")
+		let f = try xml.open("<!DOCTYPE a [<!ENTITY e 'ent'>]><a>&e;</a>")
+		let g = try xml.root(e)
+		#expect(xml.send("XML remc", ["----": e]).error == nil)
+		#expect(xml.send("XML stxm", ["----": f, "to  ": "<n/>"]).error == nil)
+		#expect(xml.send("XML gtag", ["----": g]).error == XML.noSuchNode)
+		xml.send("XML clos", ["----": AppleEventList([d, e, f])])
+	}
+
 	/// Appending to a CDATA section, comment or processing instruction used to add an invisible child.
 	@Test func appendTextToLiteralNodes() throws {
 		let xml = XMLs()

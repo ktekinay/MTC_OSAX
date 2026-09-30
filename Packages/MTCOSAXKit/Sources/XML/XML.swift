@@ -180,13 +180,40 @@ struct XMLCommands {
 	}
 
 	/// Unlinks and frees nodes (their references then give -1728). A DTD's declarations are freed without
-	/// libxml2's node callback, so their numbers are forgotten first.
+	/// libxml2's node callback, so their numbers are forgotten first, and entity references to its entities are
+	/// detached from them.
 	static func remove(_ node: xmlNodePtr) {
 		if node.pointee.type == XML_DTD_NODE {
 			XMLDocument.forgetNumbers(in: node.pointee.children)
+			detachEntityReferences(from: node, in: node.pointee.doc)
 		}
 		xmlUnlinkNode(node)
 		xmlFreeNode(node)
+	}
+
+	/// An entity reference points at its entity (as its child, and its content is the entity's), so after the DTD
+	/// declaring the entity is freed, it would point at freed memory. Without them it's a reference to an entity
+	/// that isn't declared, which libxml2 looks up by name, finds nothing, and writes as it is (`&e;`).
+	private static func detachEntityReferences(from dtd: xmlNodePtr, in doc: xmlDocPtr?) {
+		func detach(_ node: xmlNodePtr) {
+			guard node.pointee.type == XML_ENTITY_REF_NODE, let entity = node.pointee.children, entity.pointee.parent == dtd else { return }
+			node.pointee.children = nil
+			node.pointee.last = nil
+			node.pointee.content = nil
+		}
+		guard let doc else { return }
+		Parsing.walk(UnsafeMutableRawPointer(doc).assumingMemoryBound(to: xmlNode.self).pointee.children) { node in
+			detach(node)
+			var attribute = node.pointee.type == XML_ELEMENT_NODE ? node.pointee.properties : nil
+			while let current = attribute {
+				var child = current.pointee.children
+				while let value = child {
+					detach(value)
+					child = value.pointee.next
+				}
+				attribute = current.pointee.next
+			}
+		}
 	}
 
 	/// The node an `xmlAddChild`, `xmlAddNextSibling` or `xmlAddPrevSibling` call left in the tree. libxml2 merges a
