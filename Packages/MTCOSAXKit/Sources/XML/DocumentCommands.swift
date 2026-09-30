@@ -375,7 +375,13 @@ extension Result where Success == Data, Failure == Error {
 	/// slow server gets 30 seconds between packets and a minute in all (URLSession's defaults are a minute and a
 	/// week), well within AppleScript's two-minute timeout for a command.
 	static let session: URLSession = {
-		let configuration = URLSessionConfiguration.default
+		// Ephemeral, and without cookies, a cache or saved credentials: documents make the fetches, and shouldn't be
+		// sent (or leave) anything another fetch set.
+		let configuration = URLSessionConfiguration.ephemeral
+		configuration.httpShouldSetCookies = false
+		configuration.httpCookieStorage = nil
+		configuration.urlCache = nil
+		configuration.urlCredentialStorage = nil
 		configuration.timeoutIntervalForRequest = 30
 		configuration.timeoutIntervalForResource = 60
 		return URLSession(configuration: configuration)
@@ -401,7 +407,7 @@ extension Result where Success == Data, Failure == Error {
 }
 
 /// What one fetch has received. Only a success status counts (a 404 page isn't the document).
-private final class Download: NSObject, URLSessionDataDelegate, @unchecked Sendable {
+final class Download: NSObject, URLSessionDataDelegate, @unchecked Sendable {
 	let limit: Int
 	let done = DispatchSemaphore(value: 0)
 	private let lock = NSLock()
@@ -426,6 +432,24 @@ private final class Download: NSObject, URLSessionDataDelegate, @unchecked Senda
 			return
 		}
 		completionHandler(.allow)
+	}
+
+	/// Redirects to http or https only, and not from https to http (which would send what TLS protected in the
+	/// clear, and let a network in between answer).
+	static func allowsRedirect(from: URL?, to: URL?) -> Bool {
+		guard let scheme = to?.scheme?.lowercased(), ["http", "https"].contains(scheme) else { return false }
+		return !(from?.scheme?.lowercased() == "https" && scheme == "http")
+	}
+
+	func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse,
+	                newRequest request: URLRequest, completionHandler: @escaping @Sendable (URLRequest?) -> Void)
+	{
+		guard Self.allowsRedirect(from: task.currentRequest?.url ?? response.url, to: request.url) else {
+			lock.withLock { failure = URLError(.redirectToNonExistentLocation) }
+			completionHandler(nil)
+			return
+		}
+		completionHandler(request)
 	}
 
 	func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {

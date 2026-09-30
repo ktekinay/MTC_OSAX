@@ -100,6 +100,27 @@ struct XMLOpenTests {
 		#expect(Result<Data, Error>.session.configuration.timeoutIntervalForResource == 60)
 	}
 
+	/// Fetches shared the app's cookies, cache and saved credentials, and followed redirects from https to http, or
+	/// to anything.
+	@Test func fetchesKeepNothingAndRedirectSafely() throws {
+		let configuration = Result<Data, Error>.session.configuration
+		#expect(configuration.httpShouldSetCookies == false && configuration.httpCookieStorage == nil)
+		#expect(configuration.urlCache == nil && configuration.urlCredentialStorage == nil)
+		#expect(Download.allowsRedirect(from: URL(string: "https://a/x"), to: URL(string: "http://a/x")) == false)
+		#expect(Download.allowsRedirect(from: URL(string: "https://a/x"), to: URL(string: "https://b/x")) == true)
+		#expect(Download.allowsRedirect(from: URL(string: "http://a/x"), to: URL(string: "https://a/x")) == true)
+		let folder = FileManager.default.temporaryDirectory.appendingPathComponent("redirect-\(UUID().uuidString)")
+		try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+		defer { try? FileManager.default.removeItem(at: folder) }
+		try Data("<ok/>".utf8).write(to: folder.appendingPathComponent("ok.xml"))
+		let server = try NetworkFixtureServer(folder: folder)
+		func redirect(to target: String) throws -> URL {
+			try #require(URL(string: "\(server.address)/redirect?\(target.addingPercentEncoding(withAllowedCharacters: .alphanumerics)!)"))
+		}
+		#expect(try Network.fetch(redirect(to: "\(server.address)/files/ok.xml"), post: false, query: nil, headers: nil) == Data("<ok/>".utf8))
+		#expect(throws: OSAXError.self) { try Network.fetch(redirect(to: "file:///etc/hosts"), post: false, query: nil, headers: nil) }
+	}
+
 	/// A fetch took whatever it was sent, however large (and URLSession decompresses as it goes), and a command's
 	/// fetches, which a document can ask for any number of, had no time limit in all while every script waited.
 	@Test func fetchLimits() throws {

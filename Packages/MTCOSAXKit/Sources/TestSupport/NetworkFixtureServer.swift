@@ -5,6 +5,7 @@ import Network
 ///   GET /files/<name>           a file from `folder`
 ///   GET or POST /echo?<query>   `<request method="…" query="…" body="…"><header name="x-…">value</header>…</request>`
 ///   GET /hang                   no answer (the connection stays open), for time limits
+///   GET /redirect?<URL>         302 to the URL (percent-encoded), for redirects
 ///   anything else               404 with an HTML body
 public final class NetworkFixtureServer: @unchecked Sendable {
 	private let listener: NWListener
@@ -63,6 +64,11 @@ public final class NetworkFixtureServer: @unchecked Sendable {
 	private func respond(_ connection: NWConnection, to request: Request) {
 		guard request.path != "/hang" else {
 			held.append(connection)
+			return
+		}
+		if request.path == "/redirect", let location = request.query.removingPercentEncoding {
+			let head = "HTTP/1.1 302 Found\r\nLocation: \(location)\r\nContent-Length: 0\r\nConnection: close\r\n\r\n"
+			connection.send(content: Data(head.utf8), completion: .contentProcessed { _ in connection.cancel() })
 			return
 		}
 		let (status, body, type) = response(request)
