@@ -413,6 +413,61 @@ struct FlattenedDescriptorTests {
 /// main thread, as the app runs commands, with its 8 MB stack (other test threads have much smaller ones).
 @MainActor
 struct NestingTests {
+	/// A binary property list whose objects are `objects` (each already encoded), with 4-byte offsets and 2-byte
+	/// references, the last object at the top.
+	private func binaryPlist(_ objects: [[UInt8]]) -> Data {
+		var data = Data("bplist00".utf8)
+		var offsets: [Int] = []
+		for object in objects {
+			offsets.append(data.count)
+			data.append(contentsOf: object)
+		}
+		let table = data.count
+		for offset in offsets { withUnsafeBytes(of: UInt32(offset).bigEndian) { data.append(contentsOf: $0) } }
+		data.append(contentsOf: [0, 0, 0, 0, 0, 0, 4, 2])
+		for value in [objects.count, objects.count - 1, table] { withUnsafeBytes(of: UInt64(value).bigEndian) { data.append(contentsOf: $0) } }
+		return data
+	}
+
+	private func reference(_ index: Int) -> [UInt8] { [UInt8(index >> 8), UInt8(index & 0xFF)] }
+
+	/// A binary file can use one array in two places, the array holding it in two places, and so on: 200 bytes
+	/// stood for 2⁴⁰ values, which PlistOpen went through for days, then ran out of memory making. Or one long
+	/// text a thousand times.
+	@Test func repeatedValues() throws {
+		let plists = Plists()
+		func open(_ data: Data) throws -> AppleEventReply {
+			let file = FileManager.default.temporaryDirectory.appendingPathComponent("repeated-\(UUID().uuidString).plist")
+			try data.write(to: file)
+			defer { try? FileManager.default.removeItem(at: file) }
+			return plists.send("PLSTopen", ["----": file])
+		}
+		func doubling(_ levels: Int) -> Data {
+			binaryPlist([[0x51, 0x78]] + (1 ... levels).map { [0xA2] + reference($0 - 1) + reference($0 - 1) })
+		}
+		#expect(doubling(40).count < 500)
+		let start = Date()
+		#expect(try open(doubling(40)).error == PropertyLists.tooRepetitive)
+		#expect(Date().timeIntervalSince(start) < 5)
+		// Up to a million repeated values is fine.
+		let fine = try #require(open(doubling(10)).result)
+		#expect(plists.xml(fine).components(separatedBy: "<string>x</string>").count == 1025)
+		#expect(try open(doubling(18)).error == nil)
+		#expect(try open(doubling(20)).error == PropertyLists.tooRepetitive)
+		// Text: a megabyte in 50 places is fine, in 200 it isn't (100 MB).
+		let megabyte = [0x5F, 0x12] + [0x00, 0x10, 0x00, 0x00] + [UInt8](repeating: 0x61, count: 1 << 20)
+		func text(_ times: Int) -> Data { binaryPlist([megabyte, [0xAF, 0x11] + reference(times) + (0 ..< times).flatMap { _ in reference(0) }]) }
+		#expect(try open(text(50)).error == nil)
+		#expect(try open(text(200)).error == PropertyLists.tooRepetitive)
+		// Shared arrays count towards the depth wherever they are.
+		var objects: [[UInt8]] = [[0xA0]]
+		for level in 1 ... 520 { objects.append([0xA1] + reference(level - 1)) }
+		#expect(try open(binaryPlist(objects)).error?.number != nil)
+		// A file Foundation writes, which stores equal text once, is fine however often it's used.
+		let records = (0 ..< 20000).map { _ in ["name": "same", "kind": "same"] } as NSArray
+		#expect(try open(try PropertyListSerialization.data(fromPropertyList: records, format: .binary, options: 0)).error == nil)
+	}
+
 	@Test func tooDeepIsAnError() throws {
 		#expect(Thread.isMainThread)
 		let plists = Plists()

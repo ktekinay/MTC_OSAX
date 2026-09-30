@@ -17,16 +17,77 @@ extension PropertyLists {
 	nonisolated static let maximumDepth = 512
 	nonisolated static let tooDeep = OSAXError(-50, "The value is nested more than \(maximumDepth) levels deep.")
 
-	/// -50 for Foundation objects (a parsed file) nested more than `maximumDepth` levels deep.
-	static func checkDepth(_ object: Any, depth: Int = 0) throws {
-		guard depth <= maximumDepth else { throw tooDeep }
-		switch object as AnyObject {
-		case let dictionary as NSDictionary:
-			for value in dictionary.allValues { try checkDepth(value, depth: depth + 1) }
-		case let array as NSArray:
-			for value in array { try checkDepth(value, depth: depth + 1) }
-		default:
-			break
+	/// How many values, and bytes of text and data, a parsed file may repeat: it becomes a tree, with a copy of each
+	/// value wherever it's used.
+	nonisolated static let maximumRepeatedValues = 1_000_000
+	nonisolated static let maximumRepeatedBytes = 100_000_000
+	nonisolated static let tooRepetitive = OSAXError(-50, "The property list uses the same values over and over: as a tree it would be too large.")
+
+	/// -50 for Foundation objects (a parsed file) nested more than `maximumDepth` levels deep, or that would repeat
+	/// more than `maximumRepeatedValues` values or `maximumRepeatedBytes` bytes when made a tree.
+	///
+	/// A binary property list refers to its values by number, so it can use one array in two places, the one
+	/// holding it in two places, and so on: a file of 200 bytes stood for 2⁴⁰ values, which reading took days
+	/// over and then ran out of memory. (YAML's aliases, as read, are the same.) Each container is measured once.
+	static func checkLimits(_ object: Any) throws {
+		var measure = Measure()
+		let size = try measure.size(of: object as AnyObject, depth: 0)
+		guard size.values - measure.values <= maximumRepeatedValues, size.bytes - measure.bytes <= maximumRepeatedBytes else {
+			throw tooRepetitive
+		}
+	}
+
+	/// Sizes of values as trees, each container measured once. `values` and `bytes` count what was measured (each
+	/// container, and what's directly in it, once); the difference from a tree's size is what it repeats.
+	private struct Measure {
+		struct Size {
+			/// Values, and bytes of text and data, in the tree; how many levels deep it goes.
+			var values = 1
+			var bytes = 0
+			var height = 0
+		}
+
+		var values = 0
+		var bytes = 0
+		private var measured: [ObjectIdentifier: Size] = [:]
+		private var leaves: Set<ObjectIdentifier> = []
+
+		mutating func size(of object: AnyObject, depth: Int) throws -> Size {
+			guard depth <= maximumDepth else { throw tooDeep }
+			let children: [Any]
+			switch object {
+			case let dictionary as NSDictionary: children = dictionary.allValues
+			case let array as NSArray: children = array as [AnyObject]
+			default:
+				values += 1
+				var size = Size()
+				switch object {
+				case let text as NSString: size.bytes = text.length
+				case let data as NSData: size.bytes = data.length
+				default: break
+				}
+				// Text used again (binary files store equal strings once) counts only once.
+				if leaves.insert(ObjectIdentifier(object)).inserted {
+					bytes += size.bytes
+				}
+				return size
+			}
+			let identity = ObjectIdentifier(object)
+			if let size = measured[identity] {
+				guard depth + size.height <= maximumDepth else { throw tooDeep }
+				return size
+			}
+			values += 1
+			var size = Size()
+			for child in children {
+				let childSize = try self.size(of: child as AnyObject, depth: depth + 1)
+				// Saturating: the counts double with each level of repetition.
+				size.values = min(size.values + childSize.values, Int.max / 4)
+				size.bytes = min(size.bytes + childSize.bytes, Int.max / 4)
+				size.height = max(size.height, childSize.height + 1)
+			}
+			measured[identity] = size
+			return size
 		}
 	}
 
@@ -168,7 +229,7 @@ extension PropertyLists {
 		}
 	}
 
-	/// An element from Foundation objects (a parsed file, checked with `checkDepth`). Dictionaries keep their key order.
+	/// An element from Foundation objects (a parsed file, checked with `checkLimits`). Dictionaries keep their key order.
 	/// Objective-C classes are checked: Swift casts such as `as String` and `as Date` are slow for Objective-C objects,
 	/// and were most of `PlistFromJSON`'s time.
 	static func node(from object: Any, in document: Document) -> Node {

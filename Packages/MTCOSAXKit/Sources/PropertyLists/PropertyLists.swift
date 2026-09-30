@@ -127,7 +127,7 @@ extension PropertyLists {
 		guard let object = try? PropertyListSerialization.propertyList(from: data, options: [], format: &format) else {
 			throw invalid
 		}
-		try checkDepth(object)
+		try checkLimits(object)
 		let document = store.newDocument(pool: pool)
 		document.isBinary = format == .binary
 		document.root = node(from: object, in: document)
@@ -554,7 +554,7 @@ struct Commands {
 	/// A new document from text in another format (`PlistFromJSON`, `PlistFromYAML`, `PlistFromTOML`), `in pool`.
 	func newDocument(_ request: AppleEventRequest, from read: (String, TimeZone) throws -> Any) throws -> NSAppleEventDescriptor {
 		let object = try read(input(request), .current)
-		try PropertyLists.checkDepth(object)
+		try PropertyLists.checkLimits(object)
 		let document = store.newDocument(pool: try request.parameter("pool", as: String.self))
 		document.root = PropertyLists.node(from: object, in: document)
 		return store.reference(document.root)

@@ -45,7 +45,7 @@ enum JSON {
 			throw PropertyLists.invalid
 		}
 		// Containers nested one level deeper than the limit can still be valid (if the innermost is empty), which
-		// `PropertyLists.checkDepth` decides.
+		// `PropertyLists.checkLimits` decides.
 		guard nesting(of: text) <= PropertyLists.maximumDepth + 1 else {
 			throw PropertyLists.tooDeep
 		}
