@@ -311,6 +311,12 @@ struct JSONTests {
 		#expect(plists.send("PLSTJSON", ["----": p]).result?.stringValue == #"{"a":1,"l":["x","y"],"d":{"e":1}}"#)
 		#expect(plists.send("PLSTJSON", ["----": p, "smar": true]).result?.stringValue == "{\n\t\"a\": 1,\n\t\"l\": [\n\t\t\"x\",\n\t\t\"y\"\n\t],\n\t\"d\": {\n\t\t\"e\": 1\n\t}\n}")
 		#expect(plists.send("PLSTJSON", ["----": p, "rplc": "function(k, v) { return typeof v === 'number' ? v * 10 : v; }"]).result?.stringValue == #"{"a":10,"l":["x","y"],"d":{"e":10}}"#)
+		// A `__proto__` key is a key (it set the object's prototype instead, and was left out); NaN is null.
+		let proto = try #require(plists.send("PLSTNOSJ", ["----": #"{"__proto__":{"x":1},"a":1}"#]).result)
+		#expect(plists.send("PLSTJSON", ["----": proto]).result?.stringValue?.contains(#""__proto__":{"x":1}"#) == true)
+		let seen = plists.send("PLSTJSON", ["----": proto, "rplc": "function(k, v) { return k === 'x' ? 'own' : v; }"]).result?.stringValue
+		#expect(seen?.contains(#""x":"own""#) == true)
+		#expect(plists.send("PLSTJSON", ["----": try plists.new(AppleEventList([Double.nan, 1]))]).result?.stringValue == "[null,1]")
 		#expect(plists.send("PLSTJSON", ["----": p, "rplc": "not ("]).error == OSAXError(-1))
 		#expect(plists.send("PLSTToJa", ["----": p]).result?.stringValue == #"{"a":1, "l":["x", "y"], "d":{"e":1}}"#)
 		let dated = try plists.new(record(["w": Date(timeIntervalSince1970: 0), "b": NSAppleEventDescriptor.missingValue]))

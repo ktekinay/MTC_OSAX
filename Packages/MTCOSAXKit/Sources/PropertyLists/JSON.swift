@@ -16,7 +16,14 @@ enum JSON {
 	/// `function(){for(;;){}}` blocks the app, and every script using it, until the app is quit.
 	static func stringify(_ object: Any, formatted: Bool, replacer: String?) throws -> String {
 		let context = JSContext(virtualMachine: machine)!
-		let value = JSValue(object: jsonReady(object), in: context)!
+		// JavaScript's value from JSON text: JSValue(object:) assigned keys as properties, and `__proto__` set the
+		// object's prototype instead of being a key (it was left out, and a replacer saw what it held as inherited).
+		guard let text = try? JSONSerialization.data(withJSONObject: jsonReady(object), options: [.fragmentsAllowed]),
+		      let value = context.objectForKeyedSubscript("JSON").objectForKeyedSubscript("parse")
+		      .call(withArguments: [String(decoding: text, as: UTF8.self)]), context.exception == nil
+		else {
+			throw PropertyLists.invalid
+		}
 		var replacerFunction: JSValue = JSValue(undefinedIn: context)
 		if let replacer {
 			guard let function = context.evaluateScript("(\(replacer))"), context.exception == nil, function.isObject else {
@@ -102,6 +109,9 @@ enum JSON {
 			return ISO8601DateFormatter().string(from: date as Date)
 		case let data as NSData:
 			return isMissingValue(data) ? NSNull() : data.base64EncodedString()
+		case let number as NSNumber where CFNumberIsFloatType(number) && !number.doubleValue.isFinite:
+			// JSON has no NaN or infinity; stringify writes them as null.
+			return NSNull()
 		default:
 			return object
 		}
