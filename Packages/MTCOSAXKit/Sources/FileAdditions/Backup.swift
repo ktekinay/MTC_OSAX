@@ -9,7 +9,8 @@ import Foundation
 ///   swapped in, so a failed copy leaves the old item, and a file never replaces a folder (or a package a file);
 ///   such a pair is an error (21 or 20). SatimageOSAX replaced a folder, and everything in it, with the file.
 /// - Folders are created as needed; `except folders` skips folders (not packages) by name at any depth.
-/// - Symbolic links are copied as links, never followed (SatimageOSAX made an empty folder for each).
+/// - Symbolic links are copied as links, never followed (SatimageOSAX made an empty folder for each), in the
+///   destination too: a folder where the destination has a link is an error (20).
 /// - Invisible items are skipped. `after`, `only extensions` and `except extensions` (case-sensitive, without
 ///   the dot) apply to files and packages.
 /// - Level 0 reports what would change, listing a missing folder once rather than its contents; level 1 syncs and
@@ -90,7 +91,14 @@ struct Backup {
 				guard recursively, !exceptFolders.contains(name), FileItem.Identity(status) != destinationIdentity else {
 					continue
 				}
-				if FileItem.status(to) == nil {
+				if let existing = FileItem.status(to) {
+					// Not through a link (one an earlier backup copied, say): the files would be written wherever it
+					// points. (Under a file, each file is an error of its own, as in SatimageOSAX.)
+					guard (existing.st_mode & S_IFMT) != S_IFLNK else {
+						errors.append((to.path, ENOTDIR))
+						continue
+					}
+				} else {
 					if reportOnly {
 						created.append(to.path)
 						continue

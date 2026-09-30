@@ -174,6 +174,23 @@ struct BackupTests {
 		#expect(try manager.destinationOfSymbolicLink(atPath: folder.path("dst/filelink")) == "../other")
 	}
 
+	/// A folder where the destination had a link (as an earlier backup of a link leaves) was backed up through the
+	/// link, into wherever it pointed.
+	@Test func linksInTheDestinationAreNotFollowed() throws {
+		let folder = try source()
+		defer { folder.remove() }
+		try folder.folder("elsewhere")
+		try FileManager.default.createSymbolicLink(atPath: folder.path("src/sub2"), withDestinationPath: "../elsewhere")
+		_ = backup(folder, ["Repo": 1])
+		#expect(try FileManager.default.destinationOfSymbolicLink(atPath: folder.path("dst/sub2")) == "../elsewhere")
+		// The link in the source becomes a folder; the one in the destination stays a link.
+		try FileManager.default.removeItem(atPath: folder.path("src/sub2"))
+		try folder.file("src/sub2/planted.txt")
+		let text = backup(folder, ["Repo": 2]).result?.stringValue
+		#expect(text?.contains(folder.path("dst/sub2") + "  Error : 20 \n") == true)
+		#expect(files(folder, in: "elsewhere").isEmpty)
+	}
+
 	/// A newer file used to replace a folder of the same name, and everything in it; and an update removed the old
 	/// item before copying, so a failed copy left nothing.
 	@Test func nothingIsDeleted() throws {
