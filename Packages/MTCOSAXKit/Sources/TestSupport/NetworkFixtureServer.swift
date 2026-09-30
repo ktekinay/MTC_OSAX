@@ -4,12 +4,15 @@ import Network
 /// The test server the XMLNetwork fixtures were recorded with (`Fixtures/XMLNetwork/serve.py`), in Swift:
 ///   GET /files/<name>           a file from `folder`
 ///   GET or POST /echo?<query>   `<request method="…" query="…" body="…"><header name="x-…">value</header>…</request>`
+///   GET /hang                   no answer (the connection stays open), for time limits
 ///   anything else               404 with an HTML body
 public final class NetworkFixtureServer: @unchecked Sendable {
 	private let listener: NWListener
 	private let folder: URL
 	private let queue = DispatchQueue(label: "NetworkFixtureServer")
 	public private(set) var port: UInt16 = 0
+	/// Connections to /hang, kept so they stay open. Used on `queue` only.
+	private var held: [NWConnection] = []
 
 	/// Listens on the loopback interface only, on a port of the system's choosing.
 	public init(folder: URL) throws {
@@ -58,6 +61,10 @@ public final class NetworkFixtureServer: @unchecked Sendable {
 	}
 
 	private func respond(_ connection: NWConnection, to request: Request) {
+		guard request.path != "/hang" else {
+			held.append(connection)
+			return
+		}
 		let (status, body, type) = response(request)
 		var head = "HTTP/1.1 \(status) \(status == 200 ? "OK" : "Not Found")\r\n"
 		head += "Content-Type: \(type)\r\nContent-Length: \(body.count)\r\nConnection: close\r\n\r\n"

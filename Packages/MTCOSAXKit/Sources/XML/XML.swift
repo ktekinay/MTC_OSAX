@@ -27,7 +27,7 @@ public enum XML {
 		return (commands.dom + commands.documents + commands.xpath + commands.xslt + commands.validation).map { command in
 			CommandDefinition(command.name, code: command.key.code) { request in
 				XMLDocument.installCallbacks()
-				return try command.handler(request)
+				return try Network.withTimeBudget { try command.handler(request) }
 			}
 		}
 	}

@@ -100,6 +100,31 @@ struct XMLOpenTests {
 		#expect(Result<Data, Error>.session.configuration.timeoutIntervalForResource == 60)
 	}
 
+	/// A fetch took whatever it was sent, however large (and URLSession decompresses as it goes), and a command's
+	/// fetches, which a document can ask for any number of, had no time limit in all while every script waited.
+	@Test func fetchLimits() throws {
+		let folder = FileManager.default.temporaryDirectory.appendingPathComponent("fetch-\(UUID().uuidString)")
+		try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+		defer { try? FileManager.default.removeItem(at: folder) }
+		try Data(repeating: 0x61, count: 2000).write(to: folder.appendingPathComponent("big.txt"))
+		let server = try NetworkFixtureServer(folder: folder)
+		let big = try #require(URL(string: "\(server.address)/files/big.txt"))
+		#expect((try? Result<Data, Error>.fetch(URLRequest(url: big), limit: 10000).get())?.count == 2000)
+		let tooLong = Result<Data, Error>.fetch(URLRequest(url: big), limit: 1000)
+		guard case let .failure(error as URLError) = tooLong else { Issue.record("A fetch past the limit worked."); return }
+		#expect(error.code == .dataLengthExceedsMaximum)
+		// A server that never answers: the command's budget ends the wait, and later fetches fail at once.
+		let hang = try #require(URL(string: "\(server.address)/hang"))
+		let start = Date()
+		Network.withTimeBudget(1) {
+			#expect(throws: OSAXError.self) { try Network.fetch(hang, post: false, query: nil, headers: nil) }
+			#expect(throws: OSAXError.self) { try Network.fetch(big, post: false, query: nil, headers: nil) }
+		}
+		#expect(Date().timeIntervalSince(start) < 5)
+		// Outside a budget (as here) a fetch works.
+		#expect(try Network.fetch(big, post: false, query: nil, headers: nil).count == 2000)
+	}
+
 	@Test func queryIsEncoded() throws {
 		let base = try #require(URL(string: "http://example.com/x?a=1"))
 		#expect(Network.appending(query: "name=hello world", to: base).absoluteString == "http://example.com/x?a=1&name=hello%20world")

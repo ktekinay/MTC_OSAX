@@ -236,11 +236,35 @@ enum Network {
 				request.setValue(text, forHTTPHeaderField: name)
 			}
 		}
-		let result = Result<Data, Error>.fetch(request)
+		let deadline = Thread.current.threadDictionary[deadlineKey] as? Date
+		guard deadline.map({ $0.timeIntervalSinceNow > 0 }) ?? true else {
+			XMLIssues.warn("Loading from the network took too long: \(target.absoluteString)")
+			throw OSAXError(1549)
+		}
+		let result = Result<Data, Error>.fetch(request, deadline: deadline)
 		guard case let .success(data) = result else {
+			if case let .failure(error as URLError) = result, [.timedOut, .dataLengthExceedsMaximum].contains(error.code) {
+				XMLIssues.warn(error.code == .timedOut ? "Loading from the network took too long: \(target.absoluteString)"
+					: "\(target.absoluteString) is more than \(Result<Data, Error>.maximumLength / 1_000_000) MB.")
+			}
 			throw OSAXError(1549)
 		}
 		return data
+	}
+
+	/// How long one command's fetches may take together, in seconds. The main thread waits for them, and with it
+	/// every script using MTC_OSAX, and a document can ask for any number (schemas, DTDs, imports): this keeps a
+	/// command within AppleScript's two-minute timeout.
+	static let budget: TimeInterval = 90
+	private static let deadlineKey = "MTCXMLFetchDeadline"
+
+	/// Runs `body` (a command) with its fetches limited to `seconds` in all. Per thread; an inner budget keeps the
+	/// outer one.
+	static func withTimeBudget<T>(_ seconds: TimeInterval = budget, _ body: () throws -> T) rethrows -> T {
+		guard Thread.current.threadDictionary[deadlineKey] == nil else { return try body() }
+		Thread.current.threadDictionary[deadlineKey] = Date().addingTimeInterval(seconds)
+		defer { Thread.current.threadDictionary[deadlineKey] = nil }
+		return try body()
 	}
 
 	/// `url` with `query` added to its query. Characters a query can't hold (spaces, quotes, non-ASCII, a `%` that
@@ -354,20 +378,69 @@ extension Result where Success == Data, Failure == Error {
 		return URLSession(configuration: configuration)
 	}()
 
-	/// A synchronous URL request (commands run one at a time on the main thread; the session works on its own).
-	static func fetch(_ request: URLRequest) -> Result<Data, Error> {
-		let semaphore = DispatchSemaphore(value: 0)
-		nonisolated(unsafe) var result: Result<Data, Error> = .failure(URLError(.unknown))
-		session.dataTask(with: request) { data, response, error in
-			// Only a success status counts; a 404 page isn't the document.
-			if let status = (response as? HTTPURLResponse)?.statusCode, !(200 ..< 300).contains(status) {
-				result = .failure(URLError(.badServerResponse))
-			} else {
-				result = data.map { .success($0) } ?? .failure(error ?? URLError(.unknown))
+	/// The most a fetch gives, as it arrives (after decompression, so a small compressed reply can't become
+	/// gigabytes): past it, the fetch stops and fails.
+	static let maximumLength = 100_000_000
+
+	/// A synchronous URL request (commands run one at a time on the main thread; the session works on its own),
+	/// of at most `limit` bytes, waiting at most until `deadline`.
+	static func fetch(_ request: URLRequest, limit: Int = maximumLength, deadline: Date? = nil) -> Result<Data, Error> {
+		let download = Download(limit: limit)
+		let task = session.dataTask(with: request)
+		task.delegate = download
+		task.resume()
+		if download.done.wait(timeout: deadline.map { .now() + max(0, $0.timeIntervalSinceNow) } ?? .distantFuture) == .timedOut {
+			task.cancel()
+			return .failure(URLError(.timedOut))
+		}
+		return download.result
+	}
+}
+
+/// What one fetch has received. Only a success status counts (a 404 page isn't the document).
+private final class Download: NSObject, URLSessionDataDelegate, @unchecked Sendable {
+	let limit: Int
+	let done = DispatchSemaphore(value: 0)
+	private let lock = NSLock()
+	private var data = Data()
+	private var failure: Error?
+
+	init(limit: Int) {
+		self.limit = limit
+	}
+
+	var result: Result<Data, Error> {
+		lock.withLock { failure.map { .failure($0) } ?? .success(data) }
+	}
+
+	func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse,
+	                completionHandler: @escaping @Sendable (URLSession.ResponseDisposition) -> Void)
+	{
+		let status = (response as? HTTPURLResponse)?.statusCode ?? 200
+		guard (200 ..< 300).contains(status), response.expectedContentLength <= Int64(limit) else {
+			lock.withLock { failure = URLError(status == 200 ? .dataLengthExceedsMaximum : .badServerResponse) }
+			completionHandler(.cancel)
+			return
+		}
+		completionHandler(.allow)
+	}
+
+	func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+		let tooLong = lock.withLock {
+			self.data.append(data)
+			if self.data.count > limit, failure == nil {
+				failure = URLError(.dataLengthExceedsMaximum)
+				self.data = Data()
 			}
-			semaphore.signal()
-		}.resume()
-		semaphore.wait()
-		return result
+			return failure != nil
+		}
+		if tooLong { dataTask.cancel() }
+	}
+
+	func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+		lock.withLock {
+			if failure == nil, let error { failure = error }
+		}
+		done.signal()
 	}
 }
