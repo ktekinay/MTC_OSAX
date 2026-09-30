@@ -55,8 +55,9 @@ enum Selector {
 			var rest = part[bracket...]
 			while !rest.isEmpty {
 				// A whole number (Int(_:) alone also takes "+1").
+				// Indices start at 1 (`[-9223372036854775808]` trapped, taking 1 from it).
 				guard rest.first == "[", let close = rest.firstIndex(of: "]"), rest[rest.index(after: rest.startIndex)] != "+",
-				      let index = Int(rest[rest.index(after: rest.startIndex) ..< close])
+				      let index = Int(rest[rest.index(after: rest.startIndex) ..< close]), index >= 1
 				else {
 					throw PropertyLists.invalid
 				}
@@ -82,7 +83,7 @@ extension PropertyLists {
 			}
 			return child
 		case let (.index(index), .array(items)):
-			guard items.indices.contains(index - 1) else {
+			guard index >= 1, index <= items.count else {
 				throw invalid
 			}
 			return items[index - 1]

@@ -428,7 +428,7 @@ struct Commands {
 			case let (.key(key), .dictionary):
 				parent.removeChild(forKey: key)
 			case let (.index(index), .array(items)):
-				if items.indices.contains(index - 1) {
+				if index >= 1, index <= items.count {
 					parent.remove(at: index - 1)
 				}
 			default:

@@ -213,6 +213,16 @@ struct SelectorTests {
 		#expect(throws: OSAXError(-1)) { try Selector.steps("a[+1]") }
 		#expect(throws: OSAXError(-1)) { try Selector.steps("a[x") }
 		#expect(throws: OSAXError(-1)) { try Selector.steps("") }
+		// Indices start at 1; the smallest Int trapped when 1 was taken from it.
+		#expect(throws: OSAXError(-1)) { try Selector.steps("a[0]") }
+		#expect(throws: OSAXError(-1)) { try Selector.steps("a[-9223372036854775808]") }
+		#expect(throws: OSAXError(-1)) { try Selector.steps("a[99999999999999999999]") }
+		let plists = Plists()
+		let p = try plists.new(record(["l": ["a", "b"]]))
+		for code in ["PLSTdisx", "PLSTchld", "PLSTremc"] {
+			#expect(plists.send(code, ["----": p, "by  ": "l[-9223372036854775808]"]).error == OSAXError(-1), "\(code)")
+		}
+		#expect(plists.send("PLSTdisx", ["----": p, "by  ": "l[9223372036854775807]"]).error == OSAXError(-1))
 	}
 
 	@Test func childrenAndErrors() throws {
