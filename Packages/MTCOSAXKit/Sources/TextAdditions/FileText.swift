@@ -41,11 +41,18 @@ enum FileText {
 	}
 
 	/// The bytes from `start`, `length` of them or to the end; only those are read. Only regular files: a device
-	/// such as /dev/zero would be read until memory ran out, and a named pipe would wait forever (-50).
+	/// such as /dev/zero would be read until memory ran out, and a named pipe would wait forever (-50). The file is
+	/// opened without waiting and then looked at, so what's checked is what's read (a path changed to a pipe between
+	/// looking and opening waited for it).
 	private static func readData(_ url: URL, from start: Int, length: Int?) throws -> Data {
+		let descriptor = open(url.path, O_RDONLY | O_NONBLOCK)
+		guard descriptor >= 0 else {
+			throw OSAXError(errno == EACCES || errno == EPERM ? -54 : -43) // permErr, fnfErr
+		}
+		let handle = FileHandle(fileDescriptor: descriptor, closeOnDealloc: true)
 		var status = stat()
-		guard stat(url.path, &status) == 0 else {
-			throw OSAXError(-43) // fnfErr
+		guard fstat(descriptor, &status) == 0 else {
+			throw OSAXError(-43)
 		}
 		switch status.st_mode & S_IFMT {
 		case S_IFDIR:
@@ -60,8 +67,6 @@ enum FileText {
 			throw OSAXError(-39) // eofErr
 		}
 		do {
-			let handle = try FileHandle(forReadingFrom: url)
-			defer { try? handle.close() }
 			try handle.seek(toOffset: UInt64(start))
 			return try handle.read(upToCount: min(length ?? size, size - start)) ?? Data()
 		} catch {

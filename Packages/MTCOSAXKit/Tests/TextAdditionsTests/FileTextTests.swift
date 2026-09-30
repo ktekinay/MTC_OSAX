@@ -152,6 +152,13 @@ struct ReadTextSpecialFileTests {
 		defer { try? FileManager.default.removeItem(at: fifo) }
 		#expect((#expect(throws: OSAXError.self) { try FileText.read(fifo) })?.number == -50)
 		#expect((#expect(throws: OSAXError.self) { try FileText.read(URL(fileURLWithPath: "/nonexistent")) })?.number == -43)
+		// The file is opened first now (without waiting), then looked at: the same errors as before.
+		#expect((#expect(throws: OSAXError.self) { try FileText.read(FileManager.default.temporaryDirectory) })?.number == 1)
+		let locked = FileManager.default.temporaryDirectory.appendingPathComponent("unreadable-\(UUID().uuidString)")
+		try Data("x".utf8).write(to: locked)
+		chmod(locked.path, 0)
+		defer { try? FileManager.default.removeItem(at: locked) }
+		#expect((#expect(throws: OSAXError.self) { try FileText.read(locked) })?.number == -54)
 	}
 
 	/// A part is read without reading the whole file first.
