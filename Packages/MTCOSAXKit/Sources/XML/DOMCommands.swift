@@ -81,7 +81,7 @@ extension XMLCommands {
 			CommandDefinition("XMLAppendText", code: "XML ApTx", handler: appendText),
 			CommandDefinition("XMLGetNameSpace", code: "XML gtn1") { request in
 				let (_, node) = try direct(request)
-				guard let ns = node.pointee.ns else { throw XML.notFound }
+				guard let ns = XMLCommands.namespace(of: node) else { throw XML.notFound }
 				return XMLCommands.namespaceRecord(ns)
 			},
 			CommandDefinition("XMLGetNameSpaces", code: "XML gtns") { request in
@@ -621,7 +621,7 @@ extension XMLCommands {
 			fields.append((.code("pnam"), NSAppleEventDescriptor(string: Parsing.name(node))))
 		}
 		if type == XML_ELEMENT_NODE {
-			if let ns = node.pointee.ns {
+			if let ns = XMLCommands.namespace(of: node) {
 				fields.append((.code("nsls"), namespaceRecord(ns).appleEventDescriptor))
 			}
 			var attributes: [String] = []

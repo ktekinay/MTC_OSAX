@@ -182,7 +182,7 @@ enum XPath {
 		}
 		switch node.pointee.type {
 		case XML_ATTRIBUTE_NODE:
-			if let prefix = node.pointee.ns?.pointee.prefix {
+			if let prefix = XMLCommands.namespace(of: node)?.pointee.prefix {
 				return "@\(String(cString: prefix)):\(name)"
 			}
 			return "@" + name
@@ -194,11 +194,14 @@ enum XPath {
 		case XML_PI_NODE:
 			let (index, count) = position { $0.pointee.type == XML_PI_NODE && Parsing.name($0) == name }
 			return "processing-instruction('\(name)')" + (count > 1 ? "[\(index)]" : "")
-		default:
+		case XML_ELEMENT_NODE:
 			if node.pointee.ns != nil {
 				return "*[\(position { XMLCommands.isElement($0) }.index)]"
 			}
 			return "\(name)[\(position { XMLCommands.isElement($0) && $0.pointee.ns == nil && Parsing.name($0) == name }.index)]"
+		default:
+			// An entity reference, or a DTD or declaration in it, which XPath can't select: its position among nodes.
+			return "node()[\(position { _ in true }.index)]"
 		}
 	}
 

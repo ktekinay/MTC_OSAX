@@ -373,6 +373,27 @@ struct XMLChangeTests {
 		xml.send("XML clos", ["----": AppleEventList([d, e, f])])
 	}
 
+	/// Only elements and attributes have a namespace; XMLGetNameSpace read the same field of any node, and of a
+	/// document (its `compression` and `standalone`) followed it to an address that crashed.
+	@Test func namespacesOfOtherNodes() throws {
+		let xml = XMLs()
+		let d = try xml.open("<!DOCTYPE n:a [<!ELEMENT n:a ANY><!ENTITY e 'x'>]><n:a xmlns:n='urn:n' n:k='v'>&e;<!--c--></n:a>")
+		let a = try xml.root(d)
+		let dtd = try #require(xml.send("XML chld", ["----": d, "indx": 1]).result)
+		let declarations = try (1 ... 2).map { try #require(xml.send("XML chld", ["----": dtd, "indx": $0]).result) }
+		let reference = try #require(xml.send("XML chld", ["----": a, "indx": 1]).result)
+		let comment = try #require(xml.send("XML chld", ["----": a, "indx": 2]).result)
+		for node in [d, dtd, reference, comment] + declarations {
+			#expect(xml.send("XML gtn1", ["----": node]).error == XML.notFound)
+		}
+		#expect(xml.send("XML gtn1", ["----": a]).result.flatMap(RecordFields.init)?[.code("PUri")]?.stringValue == "urn:n")
+		let k = try #require(xml.send("XML path", ["----": d, "with": "//@*"]).result?.atIndex(1))
+		#expect(xml.send("XML gtn1", ["----": k]).result.flatMap(RecordFields.init)?[.code("PREf")]?.stringValue == "n")
+		#expect(xml.send("XML NoPa", ["----": k]).result?.stringValue == "xpointer(/*[1]/@n:k)")
+		#expect(xml.send("XML NoPa", ["----": reference]).result?.stringValue == "xpointer(/*[1]/node()[1])")
+		#expect(xml.send("XML disp", ["----": declarations[0]]).error == nil)
+	}
+
 	/// Appending to a CDATA section, comment or processing instruction used to add an invisible child.
 	@Test func appendTextToLiteralNodes() throws {
 		let xml = XMLs()

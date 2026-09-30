@@ -136,6 +136,12 @@ struct XMLCommands {
 		node.pointee.type == XML_DOCUMENT_NODE || node.pointee.type == XML_HTML_DOCUMENT_NODE
 	}
 
+	/// An element's or attribute's namespace. Only they have one: other kinds of node keep something else in that
+	/// field (a document its `compression` and `standalone`, a DTD its notations, a declaration its type).
+	static func namespace(of node: xmlNodePtr) -> xmlNsPtr? {
+		node.pointee.type == XML_ELEMENT_NODE || node.pointee.type == XML_ATTRIBUTE_NODE ? node.pointee.ns : nil
+	}
+
 	/// Children, with or without the nodes that aren't elements (`all nodes`). An entity reference's one child is its
 	/// entity's declaration (whose siblings are the rest of the DTD, not the reference's).
 	static func children(of node: xmlNodePtr, allNodes: Bool) -> [xmlNodePtr] {
