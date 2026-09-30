@@ -13,20 +13,25 @@ public enum Arrays {
 				let count = try size(request)
 				let (low, high) = try range(request) ?? (0, Double(count - 1))
 				let step = count > 1 ? (high - low) / Double(count - 1) : 0
-				guard step.isFinite else {
-					// A range wider than a real can hold (-1.0E+308 to 1.0E+308) made NaN and infinities.
-					return ArrayOfReal((0 ..< count).map { interpolate(low, high, Double($0) / Double(count - 1)) })
+				return try ArrayOfReal.descriptor(count: count) { buffer in
+					for index in 0 ..< count {
+						// A range wider than a real can hold (-1.0E+308 to 1.0E+308) made NaN and infinities.
+						buffer[index] = step.isFinite ? low + Double(index) * step : interpolate(low, high, Double(index) / Double(count - 1))
+					}
 				}
-				return ArrayOfReal((0 ..< count).map { low + Double($0) * step })
 			},
 			CommandDefinition("randomarray", code: "SATICRRA") { request in
 				let count = try size(request)
 				let (low, high) = try range(request) ?? (0, 1)
 				let seed = try request.descriptor(for: "seed").map { try self.seed(Numbers.number($0)) }
-				return random.withGenerator(seed: seed) { generator in
-					(high - low).isFinite
-						? ArrayOfReal((0 ..< count).map { _ in low + (high - low) * generator.nextUnit() })
-						: ArrayOfReal((0 ..< count).map { _ in interpolate(low, high, generator.nextUnit()) })
+				let isFinite = (high - low).isFinite
+				return try ArrayOfReal.descriptor(count: count) { buffer in
+					random.withGenerator(seed: seed) { generator in
+						for index in 0 ..< count {
+							let unit = generator.nextUnit()
+							buffer[index] = isFinite ? low + (high - low) * unit : interpolate(low, high, unit)
+						}
+					}
 				}
 			},
 		]

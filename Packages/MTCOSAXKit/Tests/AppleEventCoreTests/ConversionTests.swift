@@ -233,6 +233,18 @@ struct WriteReplacingTests {
 
 @MainActor
 struct ArrayOfRealTests {
+	/// Arrays are made straight into the descriptor's buffer (the numbers were copied twice more on the way), and
+	/// a descriptor that can't be made is -108 rather than a trap.
+	@Test func madeInOneBuffer() throws {
+		let made = try ArrayOfReal.descriptor(count: 3) { buffer in
+			for index in 0 ..< 3 { buffer[index] = Double(index) + 0.5 }
+		}
+		#expect(ArrayOfReal.values(of: made) == [0.5, 1.5, 2.5])
+		#expect(made.data.prefix(16) == Data("Not a recordbuod".utf8))
+		#expect(try ArrayOfReal([]).descriptor().data == Data("Not a recordbuod".utf8))
+		#expect(try ArrayOfReal([1, 2]).descriptor() == ArrayOfReal([1, 2]).appleEventDescriptor)
+	}
+
 	/// Asking a list's data (to see whether it was an `array of real`) made the Apple Event Manager copy and
 	/// byte-swap the whole list, and log, each time: half of `sortlist`'s time. 1,000 checks took about 10 seconds.
 	@Test func otherDescriptorsAreRejectedWithoutReadingThem() {

@@ -56,7 +56,9 @@ public indirect enum Numbers: Equatable {
 				return try item.map(function)
 			}.appleEventDescriptor
 		case let .array(values):
-			return ArrayOfReal(values.map(function)).appleEventDescriptor
+			return try ArrayOfReal.descriptor(count: values.count) { buffer in
+				for (index, value) in values.enumerated() { buffer[index] = function(value) }
+			}
 		}
 	}
 }

@@ -41,7 +41,7 @@ enum Sorting {
 		let ascending = request.descriptor(for: "Asce").map { ListUtilities.items($0) ?? [$0] }?.map(\.booleanValue) ?? []
 
 		if let values = ArrayOfReal.values(of: descriptor) {
-			return ArrayOfReal(sortedNumbers(values, ascending: ascending.first ?? true, options: options)).appleEventDescriptor
+			return try ArrayOfReal(sortedNumbers(values, ascending: ascending.first ?? true, options: options)).descriptor()
 		}
 		// A single value is a list of one (SatimageOSAX returned an empty list).
 		let items = ListUtilities.items(descriptor) ?? [descriptor]
@@ -60,7 +60,7 @@ enum Sorting {
 		if isListOfLists {
 			return try items.map { list in
 				if let values = ArrayOfReal.values(of: list) {
-					return ArrayOfReal(sortedNumbers(values, ascending: ascending.first ?? true, options: options)).appleEventDescriptor
+					return try ArrayOfReal(sortedNumbers(values, ascending: ascending.first ?? true, options: options)).descriptor()
 				}
 				return try sortedList(ListUtilities.items(list) ?? [], ascending: ascending.first ?? true, options: options)
 			}.appleEventDescriptor
@@ -102,7 +102,7 @@ enum Sorting {
 		}
 		let directions = criteria.indices.map { ascending.indices.contains($0) ? ascending[$0] : (ascending.first ?? true) }
 		let rows = order(rows: 0 ..< count, keys: keys, ascending: directions, options: options)
-		return columns.map { $0.selecting(rows) }.appleEventDescriptor
+		return try columns.map { try $0.selecting(rows) }.appleEventDescriptor
 	}
 
 	/// The sort keys for a list, and its items as the sorted result returns them.

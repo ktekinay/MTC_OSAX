@@ -56,9 +56,11 @@ public enum ListUtilities {
 		}
 
 		/// The items at `rows`, in that order: an `array of real` for numbers, a list otherwise.
-		func selecting(_ rows: [Int]) -> NSAppleEventDescriptor {
+		func selecting(_ rows: [Int]) throws -> NSAppleEventDescriptor {
 			switch self {
-			case let .reals(values): ArrayOfReal(rows.map { values[$0] }).appleEventDescriptor
+			case let .reals(values): try ArrayOfReal.descriptor(count: rows.count) { buffer in
+					for (index, row) in rows.enumerated() { buffer[index] = values[row] }
+				}
 			case let .descriptors(items): rows.map { items[$0] }.appleEventDescriptor
 			}
 		}
@@ -203,7 +205,7 @@ public enum ListUtilities {
 		case let .reals(values): values.indices.filter { filter.matches(values[$0]) == keeping }
 		case let .descriptors(items): items.indices.filter { filter.matches(items[$0]) == keeping }
 		}
-		return columns.map { column in column.selecting(kept.filter { $0 < column.count }) }.appleEventDescriptor
+		return try columns.map { column in try column.selecting(kept.filter { $0 < column.count }) }.appleEventDescriptor
 	}
 
 	/// Items that are in a filter, compared as text (as a script would write them). Reals are looked up as numbers:
