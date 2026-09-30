@@ -99,9 +99,11 @@ enum XPath {
 	static func object(_ descriptor: NSAppleEventDescriptor, references: XMLReferences) throws -> xmlXPathObjectPtr? {
 		let items = XMLCommands.items(descriptor)
 		if !items.isEmpty, items.allSatisfy(XMLReferences.isReference) {
+			// Every reference first: a set made before one failed was never freed.
+			let nodes = try items.map { try references.resolve($0).1 }
 			let set = xmlXPathNodeSetCreate(nil)
-			for item in items {
-				xmlXPathNodeSetAdd(set, try references.resolve(item).1)
+			for node in nodes {
+				xmlXPathNodeSetAdd(set, node)
 			}
 			return xmlXPathWrapNodeSet(set)
 		}

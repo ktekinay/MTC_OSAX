@@ -285,11 +285,16 @@ extension XMLCommands {
 		let keepBlanks = try request.parameter("kbln", default: false)
 		let (items, isList) = try nodeReferences(value)
 		if XMLCommands.isXPathReference(value) || items.allSatisfy(XMLReferences.isReference) {
+			// Every reference first, so a copy isn't made (and left) before one that fails.
 			let sources = try items.map { try resolve($0).1 }
 			try sources.forEach { try XMLCommands.require($0, isOneOf: kinds) }
-			let copies = try sources.map { source -> xmlNodePtr in
-				guard let copy = XMLCommands.copy(source, into: document) else { throw XML.invalid }
-				return copy
+			var copies: [xmlNodePtr] = []
+			for source in sources {
+				guard let copy = XMLCommands.copy(source, into: document) else {
+					copies.forEach { xmlFreeNode($0) }
+					throw XML.invalid
+				}
+				copies.append(copy)
 			}
 			return (copies, isList)
 		}
@@ -313,7 +318,7 @@ extension XMLCommands {
 			throw XML.invalid
 		}
 		modified(document)
-		let added = try nodes.map { node in
+		let added = try XMLCommands.addEach(nodes) { node in
 			let added = try XMLCommands.added(node, xmlAddChild(parent, node))
 			// Only parsed XML is cleaned; clones keep their declarations, as in SatimageOSAX.
 			if nsclean, !isClone, added == node { XMLCommands.cleanNamespaces(node) }
@@ -335,7 +340,7 @@ extension XMLCommands {
 		guard !nodes.isEmpty else { throw XML.invalid }
 		modified(document)
 		var position = anchor
-		let added = try nodes.map { node in
+		let added = try XMLCommands.addEach(nodes) { node in
 			if after != nil {
 				position = try XMLCommands.added(node, xmlAddNextSibling(position, node))
 				return position
@@ -361,7 +366,7 @@ extension XMLCommands {
 			// Unlinked first: libxml2 merges a new text node into an adjacent one.
 			let next = node.pointee.next
 			XMLCommands.remove(node)
-			let added = try nodes.map { new in
+			let added = try XMLCommands.addEach(nodes) { new in
 				if let next {
 					return try XMLCommands.added(new, xmlAddPrevSibling(next, new))
 				}
@@ -370,7 +375,7 @@ extension XMLCommands {
 			return added.first.map { reference($0, document) }
 		}
 		for child in XMLCommands.children(of: node, allNodes: true) { XMLCommands.remove(child) }
-		let added = try nodes.map { new in try XMLCommands.added(new, xmlAddChild(node, new)) }
+		let added = try XMLCommands.addEach(nodes) { new in try XMLCommands.added(new, xmlAddChild(node, new)) }
 		return added.first.map { reference($0, document) }
 	}
 

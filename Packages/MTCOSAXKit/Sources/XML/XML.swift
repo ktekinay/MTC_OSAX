@@ -260,6 +260,21 @@ struct XMLCommands {
 		return result
 	}
 
+	/// Adds new nodes one by one; if one can't be added (`add` throws, having freed it), the ones after it, which
+	/// aren't in the document, are freed (they were left).
+	static func addEach(_ nodes: [xmlNodePtr], _ add: (xmlNodePtr) throws -> xmlNodePtr) throws -> [xmlNodePtr] {
+		var added: [xmlNodePtr] = []
+		for (index, node) in nodes.enumerated() {
+			do {
+				added.append(try add(node))
+			} catch {
+				nodes[(index + 1)...].forEach { xmlFreeNode($0) }
+				throw error
+			}
+		}
+		return added
+	}
+
 	/// Copies a node (and what's in it) into a document, for inserting a clone.
 	static func copy(_ node: xmlNodePtr, into document: XMLDocument) -> xmlNodePtr? {
 		xmlDocCopyNode(node, document.doc, 1)

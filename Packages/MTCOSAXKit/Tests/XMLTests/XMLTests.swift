@@ -454,6 +454,21 @@ struct XMLChangeTests {
 		#expect(xml.send("XML adds", ["----": "<x/>", "afte": t]).error == nil)
 	}
 
+	/// A list of references whose last one fails: copies (and XPath's node set of them) were made first, and left
+	/// when it failed. Each command fails, and the document is as it was.
+	@Test func failuresPartWay() throws {
+		let xml = XMLs()
+		let d = try xml.open("<a><b/><c/></a>")
+		let a = try xml.root(d)
+		let b = try #require(xml.send("XML chld", ["----": a, "indx": 1]).result)
+		let c = try #require(xml.send("XML chld", ["----": a, "indx": 2]).result)
+		xml.send("XML remo", ["----": c])
+		#expect(xml.send("XML addc", ["----": AppleEventList([b, c]), "at  ": a]).error == XML.noSuchNode)
+		#expect(xml.send("XML adds", ["----": AppleEventList([b, c]), "afte": b]).error == XML.noSuchNode)
+		#expect(xml.xpath(a, "count($v)", ["vars": AppleEventList([NSAppleEventDescriptor(string: "v"), AppleEventList([b, c]).appleEventDescriptor])]).error == XML.noSuchNode)
+		#expect(xml.send("XML disx", ["----": a, "smar": false]).result?.stringValue == "<a><b/></a>")
+	}
+
 	/// Appending to a CDATA section, comment or processing instruction used to add an invisible child.
 	@Test func appendTextToLiteralNodes() throws {
 		let xml = XMLs()
