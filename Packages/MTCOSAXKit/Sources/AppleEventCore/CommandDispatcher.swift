@@ -68,13 +68,29 @@ public struct AppleEventReply {
 		guard reply.descriptorType != typeNull else {
 			return // The sender asked for no reply.
 		}
-		if let error {
-			reply.setParam(NSAppleEventDescriptor(int32: Int32(clamping: error.number)), forKeyword: keyErrorNumber)
+		write { descriptor, keyword in
+			reply.setParam(descriptor, forKeyword: keyword)
+			return reply.paramDescriptor(forKeyword: keyword) == nil ? OSErr(errAEDescNotFound) : OSErr(noErr)
+		}
+	}
+
+	/// Writes the result or error with `put`, which puts one parameter into the reply and gives its status. The one
+	/// way replies are written, in the app and in tests (the app had its own copy, which no test ran). A result that
+	/// can't be put (too large, say) is an error, as the script otherwise got neither.
+	public func write(_ put: (NSAppleEventDescriptor, AEKeyword) -> OSErr) {
+		func putError(_ error: OSAXError) {
+			_ = put(NSAppleEventDescriptor(int32: Int32(clamping: error.number)), keyErrorNumber)
 			if let message = error.message {
-				reply.setParam(NSAppleEventDescriptor(string: message), forKeyword: keyErrorString)
+				_ = put(NSAppleEventDescriptor(string: message), keyErrorString)
 			}
+		}
+		if let error {
+			putError(error)
 		} else if let result {
-			reply.setParam(result, forKeyword: keyDirectObject)
+			let status = put(result, keyDirectObject)
+			if status != noErr {
+				putError(OSAXError(Int(status), "The result couldn’t be put in the reply (error \(status))."))
+			}
 		}
 	}
 }

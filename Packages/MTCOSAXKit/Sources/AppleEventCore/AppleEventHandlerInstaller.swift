@@ -29,22 +29,17 @@ public final class AppleEventHandlerInstaller {
 	fileprivate func handle(_ event: NSAppleEventDescriptor, reply: UnsafeMutablePointer<AppleEvent>) {
 		idleMonitor?.beginActivity()
 		defer { idleMonitor?.endActivity() }
-		let outcome = dispatcher.dispatch(event)
+		Self.write(dispatcher.dispatch(event), into: reply)
+	}
+
+	/// Writes an outcome into the reply the Apple Event Manager gave the handler.
+	static func write(_ outcome: AppleEventReply, into reply: UnsafeMutablePointer<AppleEvent>) {
 		guard reply.pointee.descriptorType != typeNull else {
 			return // The sender asked for no reply.
 		}
-		func put(_ descriptor: NSAppleEventDescriptor, _ keyword: AEKeyword) {
-			if let desc = descriptor.aeDesc {
-				AEPutParamDesc(reply, keyword, desc)
-			}
-		}
-		if let error = outcome.error {
-			put(NSAppleEventDescriptor(int32: Int32(clamping: error.number)), keyErrorNumber)
-			if let message = error.message {
-				put(NSAppleEventDescriptor(string: message), keyErrorString)
-			}
-		} else if let result = outcome.result {
-			put(result, keyDirectObject)
+		outcome.write { descriptor, keyword in
+			guard let desc = descriptor.aeDesc else { return OSErr(errAEDescNotFound) }
+			return AEPutParamDesc(reply, keyword, desc)
 		}
 	}
 }

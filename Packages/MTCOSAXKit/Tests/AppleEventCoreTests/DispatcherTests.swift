@@ -53,6 +53,29 @@ struct RequestTests {
 
 @MainActor
 struct DispatcherTests {
+	/// The app wrote replies with its own copy of the code, which no test ran, and ignored a result it couldn't put
+	/// in the reply. The app's way is tested here, on a real reply event.
+	@Test func repliesAsTheAppWritesThem() throws {
+		func reply(_ outcome: AppleEventReply) throws -> AppleEventReply {
+			let event = NSAppleEventDescriptor.appleEvent(withEventClass: AEEventClass(kCoreEventClass), eventID: AEEventID(kAEAnswer),
+			                                              targetDescriptor: nil, returnID: AEReturnID(kAutoGenerateReturnID),
+			                                              transactionID: AETransactionID(kAnyTransactionID))
+			let pointer = try #require(event.aeDesc)
+			AppleEventHandlerInstaller.write(outcome, into: UnsafeMutablePointer(mutating: pointer))
+			return AppleEventReply(replyEvent: event)
+		}
+		#expect(try reply(AppleEventReply(result: NSAppleEventDescriptor(string: "x"))).result?.stringValue == "x")
+		let failed = try reply(AppleEventReply(error: OSAXError(-50, "no")))
+		#expect(failed.error == OSAXError(-50, "no") && failed.result == nil)
+		// A result that can't be put is an error.
+		var put: [AEKeyword] = []
+		AppleEventReply(result: NSAppleEventDescriptor(string: "x")).write { _, keyword in
+			put.append(keyword)
+			return keyword == keyDirectObject ? OSErr(memFullErr) : OSErr(noErr)
+		}
+		#expect(put == [keyDirectObject, keyErrorNumber, keyErrorString])
+	}
+
 	private func dispatcher() -> CommandDispatcher {
 		let dispatcher = CommandDispatcher()
 		dispatcher.register([
