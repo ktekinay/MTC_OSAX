@@ -220,6 +220,13 @@ public enum FilesAndFolders {
 				guard replacing else { throw alreadyExists }
 				return result(source, folder: isFolder)
 			}
+			// A link to the target itself (a folder of links from elsewhere can hold one): replacing the target with
+			// it deleted what it points at, leaving a link to nothing.
+			if FileItem.isSymlink(source), FileItem.exists(target), !FileItem.isSymlink(target),
+			   let identity = FileItem.identity(source), identity == FileItem.identity(target)
+			{
+				throw OSAXError(-1, "“\(source.path)” is a link to “\(target.path)”, which it would replace.")
+			}
 			guard FileItem.exists(target) else {
 				do {
 					if move {

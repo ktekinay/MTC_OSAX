@@ -60,6 +60,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 - A `name` parameter (`filenew`, `mkdir`, `filecopy`, `filemove`, `mkstemp`, `mkdtemp`, `create symlink`) is one name: `/`, `.` and `..` are error -1 with a message, so a name taken from a document can't reach outside the folder. (SatimageOSAX took `name "sub/file"` as a path.) The same goes for a name taken from a path: `filecopy`, `filemove` and `create symlink` of a path ending in `.` or `..` without a `name`, or `filecopy … into` such a path, is error -1 (`with replacing` would otherwise have deleted the folder that path is).
 - `fileremove` of a path ending in `.` or `..` is error -1, as the shell's `rm` refuses them, and with `from`, an empty path is -1700 as it is without (it was the `from` folder itself, so a blank line in a list of names deleted the whole folder).
 - `filemove` to the same name in another case, and `filerename` to another case, rename the item (SatimageOSAX gave -48).
+- `filecopy` or `filemove … with replacing` of a symbolic link onto the item it points to is error -1, instead of deleting that item and leaving a link to nothing.
 - `mkdtemp` honors `wildcards`; `fileremove … with filesonly` reports the real count.
 - `glob "…/.*"` doesn't return `.` and `..`; `glob … not conforming to "public.folder"` excludes folders.
 - `~` is your home folder, not SatimageOSAX's sandbox container.

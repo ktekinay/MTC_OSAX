@@ -211,6 +211,23 @@ struct CopyMoveTests {
 		#expect(try FileManager.default.contentsOfDirectory(atPath: sandbox.url.path) == ["A.txt"])
 	}
 
+	/// A link to the target, copied or moved onto it with replacing, deleted it and left a link to nothing.
+	@Test func linkToTheTarget() throws {
+		let sandbox = try Sandbox()
+		_ = try sandbox.file("archive/report.txt", "keep")
+		try FileManager.default.createDirectory(at: sandbox.url.appendingPathComponent("inbox"), withIntermediateDirectories: true)
+		try FileManager.default.createSymbolicLink(atPath: sandbox.path("inbox/report.txt"), withDestinationPath: sandbox.path("archive/report.txt"))
+		for command in [copy, move] {
+			#expect(send(command, ["----": sandbox.path("inbox/report.txt"), "to  ": sandbox.path("archive"), "Repl": true]).error?.number == -1)
+			#expect(try String(contentsOfFile: sandbox.path("archive/report.txt"), encoding: .utf8) == "keep")
+			#expect(!FileItem.isSymlink(sandbox.url.appendingPathComponent("archive/report.txt")))
+		}
+		// A link replacing another link (to the same item) deletes nothing, and is fine.
+		try FileManager.default.createSymbolicLink(atPath: sandbox.path("archive/link.txt"), withDestinationPath: sandbox.path("archive/report.txt"))
+		#expect(send(copy, ["----": sandbox.path("inbox/report.txt"), "into": URL(fileURLWithPath: sandbox.path("archive/link.txt")), "Repl": true]).error == nil)
+		#expect(try String(contentsOfFile: sandbox.path("archive/report.txt"), encoding: .utf8) == "keep")
+	}
+
 	/// The new item is made first, so a failure leaves the old one (and the source of a move).
 	@Test func replacingKeepsTheOldItemOnFailure() throws {
 		let sandbox = try Sandbox()
