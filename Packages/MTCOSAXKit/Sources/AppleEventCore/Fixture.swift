@@ -157,3 +157,26 @@ extension Fixture.Reply {
 		return result?.summary ?? "no result"
 	}
 }
+
+// MARK: Recording
+
+extension Fixture {
+	/// Why a case can't have this name (nil if it can): its fixture is `<name>.json` next to the cases file, so it
+	/// must be a file name, not a path or hidden, and not the cases file's own (a case named `cases` overwrote
+	/// cases.json). On a case-insensitive disk, case doesn't count.
+	public static func problem(withCaseName name: String, casesFile: URL) -> String? {
+		if name.isEmpty || name.contains("/") || name.hasPrefix(".") {
+			return "Case name \"\(name)\" can't be a file name: no \"/\", and not starting with \".\"."
+		}
+		if name.lowercased() == casesFile.deletingPathExtension().lastPathComponent.lowercased() {
+			return "Case name \"\(name)\" would write over \(casesFile.lastPathComponent)."
+		}
+		return nil
+	}
+
+	/// Text as the inside of an AppleScript string literal (a quote or backslash in an app's name or a variable's
+	/// value broke the script).
+	public static func appleScriptStringContents(_ text: String) -> String {
+		text.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\"")
+	}
+}

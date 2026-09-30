@@ -120,9 +120,9 @@ do {
 // Fixture files are named after cases, and the disk is usually case-insensitive.
 var seenNames: [String: String] = [:]
 for testCase in cases {
-	// A name is a file name next to cases.json, not a path.
-	guard !testCase.name.isEmpty, !testCase.name.contains("/"), !testCase.name.hasPrefix(".") else {
-		fail("Case name \"\(testCase.name)\" can't be a file name: no \"/\", and not starting with \".\".")
+	// A name is a file name next to cases.json, not a path, nor cases.json itself.
+	if let problem = Fixture.problem(withCaseName: testCase.name, casesFile: casesURL) {
+		fail(problem)
 	}
 	if let other = seenNames[testCase.name.lowercased()] {
 		fail("Cases \"\(other)\" and \"\(testCase.name)\" would write the same file on a case-insensitive disk.")
@@ -141,10 +141,11 @@ for testCase in cases where onlyName == nil || testCase.name == onlyName {
 	var used: [String: String] = [:]
 	// Longest names first, so $TMP doesn't replace the start of $TMPDIR.
 	for (variable, value) in variables.sorted(by: { $0.key.count > $1.key.count }) where script.contains("$" + variable) {
-		script = script.replacingOccurrences(of: "$" + variable, with: value)
+		// Variables are used inside strings ("$TMP/a.txt").
+		script = script.replacingOccurrences(of: "$" + variable, with: Fixture.appleScriptStringContents(value))
 		used[variable] = value
 	}
-	let source = "use application \"\(appName)\"\n" + script
+	let source = "use application \"\(Fixture.appleScriptStringContents(appName))\"\n" + script
 	let outcome = run(source, language: language)
 
 	if outcome.compileFailed {

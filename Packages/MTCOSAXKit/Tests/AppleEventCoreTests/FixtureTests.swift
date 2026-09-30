@@ -4,6 +4,16 @@ import Testing
 
 @MainActor
 struct FixtureTests {
+	/// A case named after the cases file wrote over it, and quotes in the app's name or a variable broke the script.
+	@Test func recordingNamesAndText() {
+		let cases = URL(fileURLWithPath: "/x/cases.json")
+		#expect(Fixture.problem(withCaseName: "uppercase-text", casesFile: cases) == nil)
+		for name in ["cases", "Cases", "a/b", ".hidden", ""] {
+			#expect(Fixture.problem(withCaseName: name, casesFile: cases) != nil, "\(name)")
+		}
+		#expect(Fixture.appleScriptStringContents(#"a "b" \c"#) == #"a \"b\" \\c"#)
+	}
+
 	private func fixture(expecting reply: AppleEventReply) -> Fixture {
 		Fixture(
 			name: "double",
