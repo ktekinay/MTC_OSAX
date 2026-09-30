@@ -119,6 +119,17 @@ struct XPathTests {
 		#expect(value("m", "http://exslt.org/math", "m:max(//year)")?.int32Value == 1862)
 		#expect(value("c", "http://exslt.org/crypto", "c:md5('abc')")?.stringValue == "kAFQmDzST7DWlj99KOF/cg==")
 		#expect(value("s", "http://exslt.org/strings", "s:replace('a-b', '-', '+')")?.stringValue == "a+b")
+		// A namespace node's base URI is its element's. The argument's namespace nodes were freed before they were
+		// read, and a namespace node as the context was read past its end (AddressSanitizer reported both).
+		let file = FileManager.default.temporaryDirectory.appendingPathComponent("base-\(UUID().uuidString).xml")
+		try Data("<a xmlns:x='urn:x'><b/></a>".utf8).write(to: file)
+		defer { try? FileManager.default.removeItem(at: file) }
+		let a = try xml.root(#require(xml.send("XML open", ["----": file]).result))
+		func onA(_ expression: String) -> NSAppleEventDescriptor? { xml.xpath(a, expression, ["nsls": namespace("fn", fn)]).result }
+		#expect(onA("fn:base-uri(.)")?.stringValue == onA("fn:base-uri(b)")?.stringValue)
+		#expect(onA("fn:base-uri(namespace::x)")?.stringValue == onA("fn:base-uri(.)")?.stringValue)
+		#expect(onA("fn:base-uri(namespace::x)")?.stringValue?.isEmpty == false)
+		#expect(onA("count(namespace::*[fn:base-uri() != ''])")?.int32Value == 2)
 		let satimage = "http://satimage.fr/software/xpath-functions"
 		#expect(value("sat", satimage, "sat:parent-uri('http://a.com/b/c.xml')")?.stringValue == "http://a.com/b/")
 		#expect(value("sat", satimage, "sat:relative-uri('http://a.com/b/c.xml', 'http://a.com/d/e.xml')")?.stringValue == "../b/c.xml")

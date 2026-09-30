@@ -76,27 +76,39 @@ extension XPath {
 			_ = valuePush(context, xmlXPathNewBoolean(values[0].hasSuffix(values[1]) ? 1 : 0))
 		}
 
-		/// The base URI of the first node of its argument, or of the context node.
+		/// The base URI of the first node of its argument, or of the context node. It's read before the argument is
+		/// freed, which frees the namespace nodes in it (XPath makes them for the set).
 		private static let baseURI: xmlXPathFunction = { context, count in
 			guard let context else { return }
 			guard count <= 1 else {
 				xmlXPathErr(context, Int32(XPATH_INVALID_ARITY.rawValue))
 				return
 			}
-			var node = context.pointee.context.pointee.node
-			if count == 1 {
-				guard let set = xmlXPathPopNodeSet(context) else {
-					xmlXPathErr(context, Int32(XPATH_INVALID_TYPE.rawValue))
-					return
-				}
-				node = XPath.nodes(set).first
-				xmlXPathFreeNodeSet(set)
-			}
-			guard let node else {
-				push(context, "")
+			guard count == 1 else {
+				push(context, base(of: context.pointee.context.pointee.node))
 				return
 			}
-			push(context, Parsing.string(xmlNodeGetBase(node.pointee.doc, node)) ?? "")
+			guard let set = xmlXPathPopNodeSet(context) else {
+				xmlXPathErr(context, Int32(XPATH_INVALID_TYPE.rawValue))
+				return
+			}
+			let uri = base(of: XPath.nodes(set).first)
+			xmlXPathFreeNodeSet(set)
+			push(context, uri)
+		}
+
+		/// A node's base URI; a namespace node's is its element's. XPath's namespace nodes are `xmlNs`s, smaller
+		/// than a node and without a document (reading one as a node read past its end); their `next` is the element.
+		private static func base(of node: xmlNodePtr?) -> String {
+			guard var node else { return "" }
+			if node.pointee.type == XML_NAMESPACE_DECL {
+				let namespace = UnsafeMutableRawPointer(node).assumingMemoryBound(to: xmlNs.self)
+				guard let next = namespace.pointee.next else { return "" }
+				let element = UnsafeMutableRawPointer(next).assumingMemoryBound(to: xmlNode.self)
+				guard element.pointee.type == XML_ELEMENT_NODE else { return "" }
+				node = element
+			}
+			return Parsing.string(xmlNodeGetBase(node.pointee.doc, node)) ?? ""
 		}
 
 		// MARK: Digests
