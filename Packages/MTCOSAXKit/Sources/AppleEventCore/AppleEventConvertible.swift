@@ -58,7 +58,15 @@ extension String: AppleEventConvertible {
 }
 
 extension Int: AppleEventConvertible {
+	/// A 32-bit integer, as AppleScript's are. Text past that range is -1700, as a real is: the Apple Event Manager
+	/// made it -2147483648 ("3000000000" became a large negative count or index).
 	public init(appleEventDescriptor descriptor: NSAppleEventDescriptor) throws {
+		if [typeUnicodeText, typeUTF8Text, typeChar, FourCharCode(fourCharString: "ut16")].contains(descriptor.descriptorType) {
+			let real = try descriptor.coerced(to: "doub").doubleValue
+			guard real > -2_147_483_649, real < 2_147_483_648 else {
+				throw OSAXError.coercionFailed
+			}
+		}
 		self = Int(try descriptor.coerced(to: "long").int32Value)
 	}
 

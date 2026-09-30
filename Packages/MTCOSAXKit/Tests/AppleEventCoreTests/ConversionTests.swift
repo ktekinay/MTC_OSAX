@@ -97,6 +97,18 @@ struct DecodingTests {
 
 	/// Edge cases that used to slip through: another Mac's file URL, schemes in capitals, `..` in HFS paths, no
 	/// volume name, and the startup volume's name in another case.
+	/// The Apple Event Manager turned text past 32 bits into -2147483648 rather than failing.
+	@Test func integersFromText() throws {
+		func integer(_ text: String) throws -> Int { try Int(appleEventDescriptor: NSAppleEventDescriptor(string: text)) }
+		for text in ["3000000000", "-3000000000", "1e40", "2147483648"] {
+			#expect((#expect(throws: OSAXError.self) { try integer(text) })?.number == -1700, "\(text)")
+		}
+		#expect(try integer("42") == 42)
+		#expect(try integer("2147483647") == 2_147_483_647)
+		#expect(try integer("-2147483648") == -2_147_483_648)
+		#expect((#expect(throws: OSAXError.self) { try integer("forty") })?.number == -1700)
+	}
+
 	@Test func urlEdgeCases() throws {
 		func number(_ path: String) -> Int? {
 			(#expect(throws: OSAXError.self) { try URL(scriptPath: path) })?.number
