@@ -556,6 +556,14 @@ struct NestingTests {
 		func text(_ times: Int) -> Data { binaryPlist([megabyte, [0xAF, 0x11] + reference(times) + (0 ..< times).flatMap { _ in reference(0) }]) }
 		#expect(try open(text(50)).error == nil)
 		#expect(try open(text(200)).error == PropertyLists.tooRepetitive)
+		// Keys too: one key of a megabyte in 50 dictionaries is fine, in 200 it isn't (keys weren't counted, so a
+		// 2.7 MB file whose dictionaries all used a 1 MB key opened, and writing it out made 100 GB).
+		func keys(_ times: Int) -> Data {
+			binaryPlist([megabyte, [0x10, 0x01]] + (0 ..< times).map { _ in [0xD1] + reference(0) + reference(1) }
+				+ [[0xAF, 0x11] + reference(times) + (0 ..< times).map { reference(2 + $0) }.flatMap { $0 }])
+		}
+		#expect(try open(keys(50)).error == nil)
+		#expect(try open(keys(200)).error == PropertyLists.tooRepetitive)
 		// Shared arrays count towards the depth wherever they are.
 		var objects: [[UInt8]] = [[0xA0]]
 		for level in 1 ... 520 { objects.append([0xA1] + reference(level - 1)) }

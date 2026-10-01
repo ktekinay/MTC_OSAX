@@ -62,8 +62,18 @@ extension PropertyLists {
 		mutating func size(of object: AnyObject, depth: Int) throws -> Size {
 			guard depth <= maximumDepth else { throw tooDeep }
 			let children: [Any]
+			var keyBytes = 0
 			switch object {
-			case let dictionary as NSDictionary: children = dictionary.allValues
+			case let dictionary as NSDictionary:
+				children = dictionary.allValues
+				// Keys are text too (a binary file can use one long key in every dictionary), counted like other
+				// text: once as measured, and in each dictionary's size.
+				for case let key as NSString in dictionary.allKeys {
+					keyBytes += key.length
+					if leaves.insert(ObjectIdentifier(key)).inserted {
+						bytes += key.length
+					}
+				}
 			case let array as NSArray: children = array as [AnyObject]
 			default:
 				values += 1
@@ -86,6 +96,7 @@ extension PropertyLists {
 			}
 			values += 1
 			var size = Size()
+			size.bytes = keyBytes
 			for child in children {
 				let childSize = try self.size(of: child as AnyObject, depth: depth + 1)
 				// Saturating: the counts double with each level of repetition.
