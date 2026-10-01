@@ -15,6 +15,33 @@ func makeReplyEvent() -> NSAppleEventDescriptor {
 	NSAppleEventDescriptor.untargetedEvent(EventKey(eventClass: kCoreEventClass, eventID: kAEAnswer))
 }
 
+/// The app's side of a reply: what the handler the Apple Event Manager calls writes into the reply it's given.
+@MainActor
+struct InstallerTests {
+	private func written(_ outcome: AppleEventReply) throws -> AppleEventReply {
+		var reply = try #require(makeReplyEvent().aeDesc?.pointee)
+		var copy = AEDesc()
+		#expect(AEDuplicateDesc(&reply, &copy) == noErr)
+		AppleEventHandlerInstaller.write(outcome, into: &copy)
+		return AppleEventReply(replyEvent: NSAppleEventDescriptor(aeDescNoCopy: &copy))
+	}
+
+	@Test func resultsAndErrorsReachTheReply() throws {
+		#expect(try written(AppleEventReply(result: NSAppleEventDescriptor(string: "pong"))).result?.stringValue == "pong")
+		let failed = try written(AppleEventReply(error: OSAXError(-43, "No such file.")))
+		#expect(failed.error == OSAXError(-43, "No such file.") && failed.result == nil)
+		let nothing = try written(AppleEventReply())
+		#expect(nothing.result == nil && nothing.error == nil)
+	}
+
+	/// A sender that asked for no reply gives a null one, which is left alone.
+	@Test func noReplyWanted() {
+		var null = AEDesc(descriptorType: typeNull, dataHandle: nil)
+		AppleEventHandlerInstaller.write(AppleEventReply(result: NSAppleEventDescriptor(string: "x")), into: &null)
+		#expect(null.descriptorType == typeNull && null.dataHandle == nil)
+	}
+}
+
 @MainActor
 struct RequestTests {
 	@Test func requiredParameterPresent() throws {

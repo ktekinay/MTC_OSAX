@@ -613,6 +613,13 @@ struct XMLDocumentTests {
 		#expect(xml.send("XML c14n", ["----": d, "comm": false]).result?.stringValue == "<a a=\"1\" b=\"2\"><x></x></a>")
 		#expect(xml.send("XML c14n", ["----": d, "Meth": "SHA1"]).result?.stringValue?.count == 28)
 		#expect(xml.send("XML c14n", ["----": d, "Meth": "SHA256"]).error == OSAXError(-1))
+		// Exclusive: a namespace is written where it's used, unless its prefix is among the inclusive ones (the
+		// list goes to libxml2 as a NULL-ended array of C strings).
+		let n = try xml.open("<a xmlns:p=\"urn:p\" xmlns:q=\"urn:q\"><p:b/></a>")
+		#expect(xml.send("XML c14n", ["----": n]).result?.stringValue == "<a xmlns:p=\"urn:p\" xmlns:q=\"urn:q\"><p:b></p:b></a>")
+		#expect(xml.send("XML c14n", ["----": n, "Excl": true]).result?.stringValue == "<a><p:b xmlns:p=\"urn:p\"></p:b></a>")
+		#expect(xml.send("XML c14n", ["----": n, "Excl": true, "Incl": ["q"]]).result?.stringValue == "<a xmlns:q=\"urn:q\"><p:b xmlns:p=\"urn:p\"></p:b></a>")
+		#expect(xml.send("XML c14n", ["----": n, "Excl": true, "Incl": ["p", "q"]]).result?.stringValue == "<a xmlns:p=\"urn:p\" xmlns:q=\"urn:q\"><p:b></p:b></a>")
 	}
 
 	/// Document subsets, as recorded from SatimageOSAX (which ignored `nodelist`); an empty list used to trap.
