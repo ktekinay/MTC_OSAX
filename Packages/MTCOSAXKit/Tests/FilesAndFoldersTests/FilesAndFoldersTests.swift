@@ -25,10 +25,10 @@ private final class Sandbox {
 	}
 
 	deinit {
-		// Unlock anything a test locked, so it can be removed.
+		// Unlock anything a test locked, so it can be removed (the items themselves, not what a link points to).
 		if let paths = FileManager.default.enumerator(atPath: url.path) {
 			for case let path as String in paths {
-				chflags(url.appendingPathComponent(path).path, 0)
+				lchflags(url.appendingPathComponent(path).path, 0)
 			}
 		}
 		try? FileManager.default.removeItem(at: url)
@@ -541,7 +541,8 @@ struct TemporaryTests {
 		let sandbox = try Sandbox()
 		#expect(send(makeTemporaryFile, ["----": sandbox.url, "wild": 2_147_483_647]).error?.number == -1)
 		#expect(send(makeTemporaryFolder, ["----": sandbox.url, "wild": 256]).error?.number == -1)
-		#expect(send(makeTemporaryFile, ["----": sandbox.url, "wild": 200]).result?.stringValue?.count ?? 0 > 200)
+		// With a name: without, the folder itself is the template, and the file is made beside it.
+		#expect(send(makeTemporaryFile, ["----": sandbox.url, "pnam": "t", "wild": 200]).result?.stringValue?.count ?? 0 > 200)
 	}
 
 	/// Satimage always used 6 random characters for folders.
@@ -577,8 +578,8 @@ struct FailureTests {
 		chmod(sandbox.path("ro"), 0o555)
 		defer { chmod(sandbox.path("ro"), 0o755) }
 		// No permission used to be -43, like a missing folder.
-		#expect(send(createSymlink, ["----": "/etc/hosts", "in  ": sandbox.path("ro"), "pnam": "l"]).error?.number == Int(EACCES))
-		#expect(send(createSymlink, ["----": "/etc/hosts", "in  ": sandbox.path("nope"), "pnam": "l"]).error?.number == -43)
+		#expect(send(createSymlink, ["----": sandbox.path("target"), "in  ": sandbox.path("ro"), "pnam": "l"]).error?.number == Int(EACCES))
+		#expect(send(createSymlink, ["----": sandbox.path("target"), "in  ": sandbox.path("nope"), "pnam": "l"]).error?.number == -43)
 		#expect(send(fileNew, ["----": sandbox.path("ro/sub"), "pnam": "x.txt"]).error?.number == Int(EACCES))
 	}
 }
@@ -629,7 +630,7 @@ struct NameTests {
 		for (command, parameters) in [
 			(fileNew, ["----": folder]), (makeDirectory, ["----": folder]), (copy, ["----": file.path, "to  ": folder]),
 			(move, ["----": file.path, "to  ": folder]), (makeTemporaryFile, ["----": folder]), (makeTemporaryFolder, ["----": folder]),
-			(createSymlink, ["----": "/etc/hosts", "in  ": folder]),
+			(createSymlink, ["----": sandbox.path("target"), "in  ": folder]),
 		] as [(String, [String: any AppleEventEncodable])] {
 			let error = send(command, parameters.merging(["pnam": name]) { $1 }).error
 			#expect(error?.number == -1, "\(command)")

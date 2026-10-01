@@ -105,9 +105,14 @@ struct FileTextReadWriteTests {
 		#expect(try Data(contentsOf: url) == Data("onetwo".utf8))
 	}
 
-	@Test func writeToMissingFolder() {
+	@Test func writeToMissingFolder() throws {
+		// Inside a folder of the test's own: a path at the top of the disk is no place for a write, even one meant
+		// to be refused.
+		let folder = FileManager.default.temporaryDirectory.appendingPathComponent("filetext-\(UUID().uuidString)")
+		try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+		defer { try? FileManager.default.removeItem(at: folder) }
 		#expect(throws: OSAXError(-43)) {
-			try FileText.write(Data(), to: URL(fileURLWithPath: "/nonexistent/folder/file.txt"), append: false)
+			try FileText.write(Data(), to: folder.appendingPathComponent("nonexistent/folder/file.txt"), append: false)
 		}
 	}
 }

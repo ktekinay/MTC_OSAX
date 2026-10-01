@@ -230,7 +230,7 @@ A hidden suite for checking that the app works. It doesn't appear in the diction
 
 ## Tests
 
-Unit, handler, SDEF-consistency and fixture-replay tests don't send Apple events and need no permissions. Run them with `Scripts/test.sh`, which runs `swift test` (with any arguments you give it) in a sandbox: the tests and the build can write only to the package's `.build` folder, the temporary and cache folders and SwiftPM's caches. Many tests create, change and delete files, and a test that goes wrong (one once ran `fileremove "/"` against code that accepted it) then can't write, delete, rename or unlock anything else.
+Unit, handler, SDEF-consistency and fixture-replay tests don't send Apple events and need no permissions. Run them with `Scripts/test.sh`, which runs `swift test` (with any arguments you give it) in a sandbox: the tests and the build can write only to the package's `.build` folder, your temporary and cache folders, two kinds of item two tests make directly in `/private/tmp`, and SwiftPM's caches; they can't send Apple events, launch apps, signal other processes, reach the network beyond this Mac, or read your cloud folders (listing them alone makes their files download). Many tests create, change and delete files, and a test that goes wrong (one once ran `fileremove "/"` against code that accepted it) then can't write, delete, rename or unlock anything else. Every test that changes files works in a folder of its own under the temporary folder, which it removes.
 
 ```sh
 Scripts/test.sh
