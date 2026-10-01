@@ -132,9 +132,7 @@
         ],
         "type" : "aevt"
       },
-      "reply" : {
-
-      }
+      "reply" : {}
     },
     {
       "event" : {
@@ -158,9 +156,7 @@
         ],
         "type" : "aevt"
       },
-      "reply" : {
-
-      }
+      "reply" : {}
     },
     {
       "event" : {
@@ -184,9 +180,7 @@
         ],
         "type" : "aevt"
       },
-      "reply" : {
-
-      }
+      "reply" : {}
     },
     {
       "event" : {
@@ -210,9 +204,7 @@
         ],
         "type" : "aevt"
       },
-      "reply" : {
-
-      }
+      "reply" : {}
     },
     {
       "event" : {
@@ -236,9 +228,7 @@
         ],
         "type" : "aevt"
       },
-      "reply" : {
-
-      }
+      "reply" : {}
     },
     {
       "event" : {
@@ -262,9 +252,7 @@
         ],
         "type" : "aevt"
       },
-      "reply" : {
-
-      }
+      "reply" : {}
     },
     {
       "event" : {
@@ -288,9 +276,7 @@
         ],
         "type" : "aevt"
       },
-      "reply" : {
-
-      }
+      "reply" : {}
     },
     {
       "event" : {
@@ -350,9 +336,7 @@
         ],
         "type" : "aevt"
       },
-      "reply" : {
-
-      }
+      "reply" : {}
     },
     {
       "event" : {
@@ -376,9 +360,7 @@
         ],
         "type" : "aevt"
       },
-      "reply" : {
-
-      }
+      "reply" : {}
     },
     {
       "event" : {
@@ -431,9 +413,7 @@
         ],
         "type" : "aevt"
       },
-      "reply" : {
-
-      }
+      "reply" : {}
     },
     {
       "event" : {
@@ -457,9 +437,7 @@
         ],
         "type" : "aevt"
       },
-      "reply" : {
-
-      }
+      "reply" : {}
     },
     {
       "event" : {
@@ -521,7 +499,7 @@
       },
       "reply" : {
         "result" : {
-          "text" : "Items updated : \r\t/private/tmp/mtc-fixtures/tmp/backup-mixed-errors/dst/a.txt\nItems created : \r\t/private/tmp/mtc-fixtures/tmp/backup-mixed-errors/dst/new.txt\nErrors : \r/private/tmp/mtc-fixtures/tmp/backup-mixed-errors/dst/sub/c.txt  Error : 20 \n",
+          "text" : "Items updated : \r\t/private/tmp/mtc-fixtures/tmp/backup-mixed-errors/dst/a.txt\nItems created : \r\t/private/tmp/mtc-fixtures/tmp/backup-mixed-errors/dst/new.txt\nErrors : \r/private/tmp/mtc-fixtures/tmp/backup-mixed-errors/dst/sub/deep  Error : 20 \n/private/tmp/mtc-fixtures/tmp/backup-mixed-errors/dst/sub/c.txt  Error : 20 \n",
           "type" : "ut16"
         }
       }
@@ -625,7 +603,7 @@
   ],
   "name" : "backup-mixed-errors",
   "recordedAt" : "2026-09-27T23:58:20Z",
-  "recordedFrom" : "SatimageOSAX",
+  "recordedFrom" : "MTC_OSAX",
   "script" : "mkdir (POSIX file \"$TMP/backup-mixed-errors\")\nmkdir (POSIX file \"$TMP/backup-mixed-errors/src/sub/deep\")\nmkdir (POSIX file \"$TMP/backup-mixed-errors/src/skip\")\nmkdir (POSIX file \"$TMP/backup-mixed-errors/src/pkg.app/Contents\")\nmkdir (POSIX file \"$TMP/backup-mixed-errors/dst\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-mixed-errors/src/a.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-mixed-errors/src/b.md\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-mixed-errors/src/.hidden\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-mixed-errors/src/sub/c.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-mixed-errors/src/sub/deep/d.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-mixed-errors/src/skip/e.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-mixed-errors/src/pkg.app/Contents/Info.plist\")\nbackup (POSIX file \"$TMP/backup-mixed-errors/src\") onto (POSIX file \"$TMP/backup-mixed-errors/dst\") level 1\nwritetext \"x\" to (POSIX file \"$TMP/backup-mixed-errors/src/new.txt\")\nwritetext \"new\" to (POSIX file \"$TMP/backup-mixed-errors/src/a.txt\")\nfilerename (POSIX file \"$TMP/backup-mixed-errors/dst/sub\") to \"moved\"\nwritetext \"x\" to (POSIX file \"$TMP/backup-mixed-errors/dst/sub\")\nwritetext \"new\" to (POSIX file \"$TMP/backup-mixed-errors/src/sub/c.txt\")\nbackup (POSIX file \"$TMP/backup-mixed-errors/src\") onto (POSIX file \"$TMP/backup-mixed-errors/dst\")\nbackup (POSIX file \"$TMP/backup-mixed-errors/src\") onto (POSIX file \"$TMP/backup-mixed-errors/dst\") level 2\nlist files (POSIX file \"$TMP/backup-mixed-errors/dst\") with invisibles as unix path",
   "timeZone" : "America/New_York",
   "variables" : {

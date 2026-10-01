@@ -42,7 +42,12 @@ extension FileAdditions {
 			throw OSAXError(-50, "The destination is the folder being backed up.")
 		}
 		if sync.level != 0 {
-			try? FileManager.default.createDirectory(at: destination, withIntermediateDirectories: true)
+			// Without the destination nothing can be copied: an error, not "OK" (which it was at level 1).
+			do {
+				try FileManager.default.createDirectory(at: destination, withIntermediateDirectories: true)
+			} catch {
+				throw OSAXError.file(error, "make the destination folder “\(destination.lastPathComponent)”")
+			}
 		}
 		sync.destinationIdentity = FileItem.identity(destination)
 		sync.run(source, onto: destination)
@@ -79,7 +84,12 @@ struct Backup {
 	/// Everything about an item comes from one `lstat`: `appendingPathComponent(_:)` checked the disk for each name
 	/// to see whether it was a folder, and the hidden flag and dates were read again through URL resource values.
 	mutating func run(_ source: URL, onto destination: URL) {
-		for name in FileItem.names(in: source) {
+		// A folder that can't be read is reported, not taken as empty.
+		guard let names = FileItem.namesIfReadable(in: source) else {
+			errors.append((destination.path, errno))
+			return
+		}
+		for name in names {
 			var status = stat()
 			guard lstat(source.path + "/" + name, &status) == 0, !FileItem.isHidden(name: name, status: status) else {
 				continue
@@ -104,8 +114,10 @@ struct Backup {
 						continue
 					}
 					// With the source folder's permissions (mkdir's are less the umask). A folder that can't be made
-					// isn't listed itself, as in SatimageOSAX's reports (the files under it are, where they fail).
+					// is reported with its error, as nothing under it can be copied (SatimageOSAX, and this before,
+					// left it and everything under it out of the report).
 					guard mkdir(to.path, 0o700) == 0 else {
+						errors.append((to.path, errno))
 						continue
 					}
 					chmod(to.path, status.st_mode & 0o7777)
@@ -143,16 +155,27 @@ struct Backup {
 		if !reportOnly {
 			// Links are copied as links, inside packages too (following them copied what a link in an untrusted
 			// package pointed at, such as a private key, into the backup), and so is an item that became a link since
-			// it was looked at. A new item isn't written over one that appeared meanwhile.
-			let flags = copyfile_flags_t(COPYFILE_ALL | COPYFILE_NOFOLLOW | (isFolder ? COPYFILE_RECURSIVE : 0) | (isNew ? COPYFILE_EXCL : 0))
-			let target = isNew ? to : to.deletingLastPathComponent().appendingPathComponent(FileItem.temporaryName())
+			// it was looked at. A new item isn't written over one that appeared meanwhile. A package (a folder) is
+			// copied under a temporary name even when new, since a copy that fails part way leaves what it made:
+			// a partial package, newer than the source, that later runs took as up to date.
+			let viaTemporary = !isNew || isFolder
+			let flags = copyfile_flags_t(COPYFILE_ALL | COPYFILE_NOFOLLOW | (isFolder ? COPYFILE_RECURSIVE : 0) | (viaTemporary ? 0 : COPYFILE_EXCL))
+			let target = viaTemporary ? to.deletingLastPathComponent().appendingPathComponent(FileItem.temporaryName()) : to
 			guard copyfile(from.path, target.path, nil, flags) == 0 else {
 				let code = errno
-				if !isNew { try? FileManager.default.removeItem(at: target) }
+				if viaTemporary { try? FileManager.default.removeItem(at: target) }
 				errors.append((to.path, code))
 				return
 			}
-			if !isNew {
+			if isNew, isFolder {
+				// Into place only if nothing appeared there meanwhile (as COPYFILE_EXCL does for a file).
+				if renamex_np(target.path, to.path, UInt32(RENAME_EXCL)) != 0 {
+					let code = errno
+					try? FileManager.default.removeItem(at: target)
+					errors.append((to.path, code))
+					return
+				}
+			} else if !isNew {
 				// rename replaces a file or link in one step; a package (a folder) is swapped by FileManager.
 				var code: Int32 = 0
 				if !isFolder {

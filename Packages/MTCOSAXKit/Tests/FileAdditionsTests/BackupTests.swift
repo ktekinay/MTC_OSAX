@@ -129,6 +129,51 @@ struct BackupTests {
 		#expect(text?.contains("Errors : \r" + folder.path("dst/sub/c.txt") + "  Error : 20 \n") == true)
 	}
 
+	/// A folder that couldn't be made in the destination was left out of the report with everything under it, a
+	/// source folder that couldn't be read counted as empty, and a destination that couldn't be made gave "OK".
+	@Test func whatCantBeDoneIsReported() throws {
+		let folder = try source()
+		defer {
+			chmod(folder.path("dst/sub"), 0o755)
+			chmod(folder.path("src/skip"), 0o755)
+			chmod(folder.path("ro"), 0o755)
+			folder.remove()
+		}
+		try folder.file("src/sub/inner/d.txt")
+		try folder.folder("dst/sub")
+		chmod(folder.path("dst/sub"), 0o555)
+		chmod(folder.path("src/skip"), 0)
+		let text = backup(folder, ["Repo": 2]).result?.stringValue ?? ""
+		#expect(text.contains(folder.path("dst/sub/inner") + "  Error : 13 \n"))
+		#expect(text.contains(folder.path("dst/sub/c.txt") + "  Error : 13 \n"))
+		#expect(text.contains(folder.path("dst/skip") + "  Error : 13 \n"))
+		#expect(!text.contains("d.txt") && !text.contains("e.txt"))
+		try folder.folder("ro")
+		chmod(folder.path("ro"), 0o555)
+		#expect(backup(folder, ["Repo": 1], onto: "ro/dst").error?.number == Int(EACCES))
+		#expect(!FileManager.default.fileExists(atPath: folder.path("ro/dst")))
+	}
+
+	/// A new package whose copy failed part way was left partial, and newer than the source, so later runs took it
+	/// as up to date and never finished it.
+	@Test func partialPackagesAreNotLeft() throws {
+		let folder = try source()
+		defer {
+			chmod(folder.path("src/pkg.app/Contents/b.txt"), 0o644)
+			folder.remove()
+		}
+		try folder.file("src/pkg.app/Contents/b.txt")
+		chmod(folder.path("src/pkg.app/Contents/b.txt"), 0)
+		let first = backup(folder, ["Repo": 2]).result?.stringValue ?? ""
+		#expect(first.contains(folder.path("dst/pkg.app") + "  Error : 13 \n"))
+		#expect(!FileManager.default.fileExists(atPath: folder.path("dst/pkg.app")))
+		#expect(try FileManager.default.contentsOfDirectory(atPath: folder.path("dst")).filter { $0.hasPrefix(".mtc-") }.isEmpty)
+		chmod(folder.path("src/pkg.app/Contents/b.txt"), 0o644)
+		let second = backup(folder, ["Repo": 2]).result?.stringValue ?? ""
+		#expect(second.contains("Items created : \r\t" + folder.path("dst/pkg.app") + "\n"))
+		#expect(files(folder).contains("pkg.app/Contents/b.txt"))
+	}
+
 	@Test func missingDestinationIsCreated() throws {
 		let folder = try source()
 		defer { folder.remove() }

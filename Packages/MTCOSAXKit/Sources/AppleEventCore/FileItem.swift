@@ -105,10 +105,15 @@ public enum FileItem {
 	}
 
 	/// The names in a folder in the order the file system lists them (as Satimage returned them), without `.`
-	/// and `..`.
+	/// and `..`; none for a folder that can't be read.
 	public static func names(in folder: URL) -> [String] {
+		namesIfReadable(in: folder) ?? []
+	}
+
+	/// `names(in:)`, or nil (with `errno` set) for a folder that can't be read.
+	public static func namesIfReadable(in folder: URL) -> [String]? {
 		guard let directory = opendir(folder.path) else {
-			return []
+			return nil
 		}
 		defer { closedir(directory) }
 		var names: [String] = []
