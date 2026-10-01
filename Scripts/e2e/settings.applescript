@@ -30,6 +30,7 @@ on errorNumber(settingName, newValue)
 end errorNumber
 
 set saved to mtc_get all_settings
+set failure to missing value
 try
 	mtc_reset all_settings
 	check("default idle timeout", mtc_get idle_timeout, 3600)
@@ -79,7 +80,10 @@ repeat with info in saved
 		mtc_set (name of info) to (value of info)
 	end if
 end repeat
-try
-	error (item 1 of failure) number (item 2 of failure)
-end try
+-- A check that failed: now that the settings are back, raise it (inside a `try` with no `on error`, the error was
+-- swallowed, and every run said OK). Into variables first: `error (item 1 of failure)` reports "item 1 of …".
+if failure is not missing value then
+	set {failureMessage, failureNumber} to failure
+	error failureMessage number failureNumber
+end if
 "OK: " & checks & " checks passed"
