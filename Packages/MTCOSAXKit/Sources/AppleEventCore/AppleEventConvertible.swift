@@ -215,7 +215,8 @@ extension URL: AppleEventConvertible {
 
 	/// Interprets a path string given by a script: a POSIX path (`/…` or `~…`), a `file://` URL (on this Mac:
 	/// no host, or `localhost`), or an HFS path (`Volume:folder:file`). With `base` (a command's `from`), a relative
-	/// path (`isRelativeScriptPath`) is in that folder; without, it's -1700, as is any other URL (`http://…`).
+	/// path (`isRelativeScriptPath`) is in that folder, and `~` is the home folder only as `~/…`; without, a
+	/// relative path is -1700, as is any other URL (`http://…`).
 	/// An empty path is -1700 either way (in a folder, it was the folder itself: `fileremove {""} from f` deleted
 	/// `f`). Every command that takes a path as text goes through here.
 	public init(scriptPath path: String, relativeTo base: URL? = nil) throws {
@@ -244,11 +245,14 @@ extension URL: AppleEventConvertible {
 		}
 	}
 
-	/// A path with nothing to say where it starts: no `/` or `~` at the front, not a URL, and not an HFS path, whose
+	/// A path with nothing to say where it starts: no `/` or `~/` at the front, not a URL, and not an HFS path, whose
 	/// first part is a mounted volume's name. (A name with a colon, such as "Notes: 2024.txt", which is fine in a
-	/// file name, was taken for an HFS path on a volume "Notes".)
+	/// file name, was taken for an HFS path on a volume "Notes".) A name that only starts with `~` is a name too
+	/// (`~`, `~backup`, Office's `~$Budget.xlsx`): `~` was the home folder, whatever the folder, so
+	/// `fileremove {"~"} from f` deleted it.
 	public static func isRelativeScriptPath(_ path: String) -> Bool {
-		if path.hasPrefix("/") || path.hasPrefix("~") { return false }
+		if path.hasPrefix("/") || path.hasPrefix("~/") { return false }
+		if path.hasPrefix("~") { return true }
 		guard path.contains(":") else { return true }
 		if path.lowercased().hasPrefix("file:") || path.contains("://") { return false }
 		return !isVolumeName(String(path.prefix { $0 != ":" }))

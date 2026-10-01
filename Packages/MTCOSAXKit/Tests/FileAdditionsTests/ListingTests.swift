@@ -208,6 +208,18 @@ struct GlobTests {
 		#expect(texts(send(glob, ["----": "~", "rtyp": typeObject("psxP")])) == [NSHomeDirectory() + "/"])
 	}
 
+	/// With `from`, a pattern starting with `~` ignored the folder: `~` was the home folder and `~$*` nothing.
+	@Test func tildeNamesInFromFolder() throws {
+		let folder = try TemporaryFolder()
+		defer { folder.remove() }
+		try folder.file("~$Budget.xlsx")
+		try folder.file("~/inside.txt")
+		try folder.file("other.txt")
+		#expect(texts(send(glob, ["----": "~$*", "from": folder.url, "namo": true])) == ["~$Budget.xlsx"])
+		#expect(texts(send(glob, ["----": "~", "from": folder.url, "rtyp": typeObject("psxP")])) == [folder.path("~") + "/"])
+		#expect(texts(send(glob, ["----": "~*", "from": folder.url, "namo": true]))?.sorted() == ["~", "~$Budget.xlsx"])
+	}
+
 	@Test func filters() throws {
 		let folder = try tree()
 		defer { folder.remove() }

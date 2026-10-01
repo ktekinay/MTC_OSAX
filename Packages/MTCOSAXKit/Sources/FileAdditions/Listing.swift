@@ -76,8 +76,9 @@ extension FileAdditions {
 
 		var items: [ListedItem] = []
 		for pattern in patterns where !pattern.isEmpty {
-			// Without `from`, a relative pattern is relative to `/`, the working folder of a launched app.
-			let full = if pattern.hasPrefix("/") || pattern.hasPrefix("~") {
+			// Without `from`, a relative pattern is relative to `/`, the working folder of a launched app. With it,
+			// `~` is the home folder only as `~/…`, as for the file commands' paths: `~$*` is names in the folder.
+			let full = if pattern.hasPrefix("/") || pattern.hasPrefix(base == nil ? "~" : "~/") {
 				pattern
 			} else {
 				// The folder is a name, not a pattern: `g[1]` would otherwise match `g1`.

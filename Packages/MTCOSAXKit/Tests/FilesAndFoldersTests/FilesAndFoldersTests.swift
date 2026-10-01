@@ -86,6 +86,25 @@ struct PathInputTests {
 		#expect(send(getName, ["----": [hfs], "from": sandbox.url.appendingPathComponent("elsewhere")]).result?.atIndex(1)?.stringValue == "keep.txt")
 		#expect(URL.isRelativeScriptPath("Notes: 2024.txt") && !URL.isRelativeScriptPath(hfs) && !URL.isRelativeScriptPath("file:///x"))
 	}
+
+	/// With `from`, a name starting with `~` was expanded: `~` was the home folder (which `fileremove {"~"} from f`
+	/// then deleted), and `~$Budget.xlsx` a path in the working folder. Only `~/…` is the home folder now.
+	/// Checked with `filegetname` and the path parser alone, which touch nothing: a command that deletes or moves
+	/// must never be given `~`, even in a folder, since against code without this fix it means the home folder.
+	@Test func namesWithTildes() throws {
+		let sandbox = try Sandbox()
+		let names = ["~", "~root", "~$Budget.xlsx", "~backup/a.txt"]
+		let reply = send(getName, ["----": names, "from": sandbox.url])
+		#expect(reply.result.map(DescriptorSnapshot.init)?.summary == #"list [utxt "~", utxt "~root", utxt "~$Budget.xlsx", utxt "a.txt"]"#)
+		for name in names {
+			#expect(try URL(scriptPath: name, relativeTo: sandbox.url).path == sandbox.path(name), "\(name)")
+		}
+		// `~/…` is still the home folder, with `from` too, and `~` alone without it.
+		#expect(try URL(scriptPath: "~/x.txt", relativeTo: sandbox.url).path == NSHomeDirectory() + "/x.txt")
+		#expect(send(getName, ["----": ["~/x.txt"], "from": sandbox.url]).result?.atIndex(1)?.stringValue == "x.txt")
+		#expect(try URL(scriptPath: "~").path == NSHomeDirectory())
+		#expect(URL.isRelativeScriptPath("~") && URL.isRelativeScriptPath("~x") && !URL.isRelativeScriptPath("~/x"))
+	}
 }
 
 @MainActor
