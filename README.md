@@ -63,6 +63,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 - `filemove` to the same name in another case, and `filerename` to another case, rename the item (SatimageOSAX gave -48).
 - `filecopy` or `filemove … with replacing` of a symbolic link onto the item it points to is error -1, instead of deleting that item and leaving a link to nothing.
 - `mkdtemp` honors `wildcards`; `fileremove … with filesonly` reports the real count.
+- `glob` returns a symbolic link as the link itself (as a file reference, the default, or a path), so `fileremove (glob "*" from f)` deletes the links in `f`, not whatever they point to. (As an alias it's the item the link points to, as AppleScript's aliases always are.)
 - `glob "…/.*"` doesn't return `.` and `..`; a pattern whose braces make more than 10,000 patterns (`{a,b}` 14 times) is error -50, rather than holding up every script while glob looks for each; `glob … not conforming to "public.folder"` excludes folders.
 - `~` is your home folder, not SatimageOSAX's sandbox container.
 - `backup` onto a folder inside the source backs up everything but that folder (SatimageOSAX created it and then gave -50); onto the source itself is -50.

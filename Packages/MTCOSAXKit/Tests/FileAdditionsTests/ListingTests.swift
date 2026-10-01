@@ -208,6 +208,23 @@ struct GlobTests {
 		#expect(texts(send(glob, ["----": "~", "rtyp": typeObject("psxP")])) == [NSHomeDirectory() + "/"])
 	}
 
+	/// A file reference (the default result) for a symbolic link was for the link's target: deleting what `glob`
+	/// listed deleted the targets, anywhere on disk, and left the links.
+	@Test func linksAreThemselves() throws {
+		let folder = try TemporaryFolder()
+		defer { folder.remove() }
+		try folder.file("t.txt")
+		try folder.file("f/real.txt")
+		try FileManager.default.createSymbolicLink(atPath: folder.path("f/link"), withDestinationPath: "../t.txt")
+		let from = folder.url.appendingPathComponent("f")
+		#expect(matches(folder, ["----": "*", "from": from]) == ["f/link", "f/real.txt"])
+		// An alias is to what a link points at, as AppleScript's own aliases are (the Alias Manager resolves links).
+		#expect(matches(folder, ["----": "*", "from": from, "rtyp": NSAppleEventDescriptor(typeCode: typeAlias)]) == ["f/real.txt", "t.txt"])
+		#expect(matches(folder, ["----": "*", "from": from, "rtyp": typeObject("psxP")]) == ["f/link", "f/real.txt"])
+		let reference = try #require(NSAppleEventDescriptor.fileReference(from.appendingPathComponent("link")))
+		#expect(reference.fileReferencePath == folder.path("f/link"))
+	}
+
 	/// With `from`, a pattern starting with `~` ignored the folder: `~` was the home folder and `~$*` nothing.
 	@Test func tildeNamesInFromFolder() throws {
 		let folder = try TemporaryFolder()

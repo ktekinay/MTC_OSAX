@@ -10,7 +10,9 @@ _Static_assert(sizeof(FSRef) == MTC_FSREF_SIZE, "FSRef size");
 
 int32_t mtc_fsref_from_path(const char *path, uint8_t out[MTC_FSREF_SIZE]) {
 	FSRef ref;
-	OSStatus status = FSPathMakeRef((const UInt8 *)path, &ref, NULL);
+	// The item itself, not what a final symbolic link points to: glob returned, for a link, a reference to its
+	// target, so deleting what glob listed deleted the targets and left the links.
+	OSStatus status = FSPathMakeRefWithOptions((const UInt8 *)path, kFSPathMakeRefDoNotFollowLeafSymlink, &ref, NULL);
 	if (status == noErr) {
 		memcpy(out, &ref, sizeof ref);
 	}
