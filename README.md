@@ -52,6 +52,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 - `printf %c` gives a character. Widths and precisions past 512 characters work (SatimageOSAX cut each conversion's output at 512), up to a million (more is error 10, as is a width too long to be a number, which SatimageOSAX turned into nothing); `%*s` with a negative width left-justifies, as `%*d` does.
 - `change`: `only backreference` naming a group that didn't match leaves that match unchanged; `change {} into {}` returns the text unchanged; `\k<name>` inserts the named group, not the whole match (so `\k<-1>` is an unknown name, error -217); `only backreference -1` is error -208, as `find text … using -1` is.
 - `resolve entities` leaves malformed numeric entities unchanged and accepts `&#X42;`.
+- `encode entities` encodes `<`, `&`, `"` and `'` even when a combining mark follows them (as one character with the mark, they were left as they were, so text from a document could close an attribute or break the XML a script built); `unescapeURL … leaving escaped` tells its characters apart the same way.
 - `atoi "-0x10"` gives -16.
 
 **Files and folders, File Additions**

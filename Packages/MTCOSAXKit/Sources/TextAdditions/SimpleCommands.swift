@@ -121,16 +121,18 @@ extension TextAdditions {
 
 	// MARK: Entities
 
+	/// Scalar by scalar: by Characters, `"` followed by a combining mark (or `<` by U+0338) was one Character that
+	/// matched no case and was kept, closing an attribute or breaking the XML a script built from a document.
 	static func encodeEntities(_ string: String) -> String {
 		var result = ""
-		for character in string {
-			switch character {
+		for scalar in string.unicodeScalars {
+			switch scalar {
 			case "&": result += "&amp;"
 			case "<": result += "&lt;"
 			case ">": result += "&gt;"
 			case "\"": result += "&quot;"
 			case "'": result += "&apos;"
-			default: result.append(character)
+			default: result.unicodeScalars.append(scalar)
 			}
 		}
 		return result
@@ -219,12 +221,18 @@ extension TextAdditions {
 			if keeping.isEmpty {
 				result += text
 			} else {
-				// Re-escape the kept characters exactly as they were written.
+				// Re-escape the kept characters exactly as they were written (scalar by scalar: `/` followed by a
+				// combining mark was one Character, not the "/" being kept).
+				let kept = Set(keeping.unicodeScalars)
 				var originalIndex = original.startIndex
-				for character in text {
-					let length = String(character).utf8.count * 3
+				for scalar in text.unicodeScalars {
+					let length = String(scalar).utf8.count * 3
 					let end = original.index(originalIndex, offsetBy: length)
-					result += keeping.contains(character) ? String(original[originalIndex ..< end]) : String(character)
+					if kept.contains(scalar) {
+						result += String(original[originalIndex ..< end])
+					} else {
+						result.unicodeScalars.append(scalar)
+					}
 					originalIndex = end
 				}
 			}

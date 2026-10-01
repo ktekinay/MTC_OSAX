@@ -57,6 +57,8 @@ struct NumberParsingTests {
 struct EntityTests {
 	@Test func encode() {
 		#expect(TextAdditions.encodeEntities(#"'a' < "b" & c >"#) == "&apos;a&apos; &lt; &quot;b&quot; &amp; c &gt;")
+		// A combining mark after a special character made one Character that wasn't it: the quote stayed.
+		#expect(TextAdditions.encodeEntities("\"\u{301} <\u{338}b> &\u{301}") == "&quot;\u{301} &lt;\u{338}b&gt; &amp;\u{301}")
 	}
 
 	@Test func resolveNamedAndNumeric() {
@@ -106,6 +108,7 @@ struct URLEscapingTests {
 
 	@Test func keeping() throws {
 		#expect(try TextAdditions.unescapeURL("a%2Fb%20c%2f", keeping: "/") == "a%2Fb c%2f")
+		#expect(try TextAdditions.unescapeURL("%2F%CC%81x", keeping: "/") == "%2F\u{301}x") // the slash, not "/" + a mark
 		// A byte-order mark is a character like any other: dropped, it put the kept escapes out of step.
 		#expect(try TextAdditions.unescapeURL("%EF%BB%BF%41", keeping: "A") == "\u{FEFF}%41")
 		#expect(try TextAdditions.unescapeURL("%EF%BB%BFx", keeping: "") == "\u{FEFF}x")
