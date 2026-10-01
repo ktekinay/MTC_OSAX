@@ -18,9 +18,22 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 		let documents = DocumentStore()
 		// The idle timeout setting (`mtc_set idle_timeout`) is read each time the countdown starts, so a change
 		// applies after the next command.
-		let idleMonitor = IdleMonitor(timeout: { documents.hasOpenDocuments ? nil : Settings.idleTimeout(in: .standard) }) {
-			NSApplication.shared.terminate(nil)
-		}
+		// Before quitting for being idle, the commands already in the event queue are handled (taking events without
+		// waiting dispatches the Apple events among them): one that arrived as the countdown ended keeps the app
+		// running instead of failing with -609 as the app quits under it. Then the app goes at once, with `_exit`
+		// (the settings are saved first, and nothing else is pending in an idle app): `terminate` takes longer, and in
+		// a trial more commands sent meanwhile failed (13 of 300 sent a timeout apart, against 3). A command sent in the instant the process is
+		// going can still fail; nothing here can catch that one.
+		let idleMonitor = IdleMonitor(
+			timeout: { documents.hasOpenDocuments ? nil : Settings.idleTimeout(in: .standard) },
+			drain: {
+				UserDefaults.standard.synchronize()
+				while let event = NSApplication.shared.nextEvent(matching: .any, until: .distantPast, inMode: .default, dequeue: true) {
+					NSApplication.shared.sendEvent(event)
+				}
+			},
+			onIdle: { _exit(0) }
+		)
 		let dispatcher = CommandCatalog.makeDispatcher(dialogs: PanelDialogs(), documents: documents)
 		let installer = AppleEventHandlerInstaller(dispatcher: dispatcher, idleMonitor: idleMonitor)
 		installer.install()

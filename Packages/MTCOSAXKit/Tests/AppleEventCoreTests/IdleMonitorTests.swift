@@ -62,6 +62,31 @@ struct IdleMonitorTests {
 		#expect(fired == 0)
 	}
 
+	/// What's waiting when the countdown ends is handled first, and if that was a command the app isn't idle: a
+	/// command that arrived just then was left in the queue as the app quit, and failed with -609.
+	@Test func waitingActivityKeepsTheAppRunning() async throws {
+		var fired = 0
+		var drains = 0
+		final class Waiting { var commands = 1; var monitor: IdleMonitor? }
+		let waiting = Waiting()
+		let monitor = IdleMonitor(timeout: .milliseconds(50), drain: {
+			drains += 1
+			// One command is in the queue the first time.
+			if waiting.commands > 0 {
+				waiting.commands -= 1
+				waiting.monitor?.beginActivity()
+				waiting.monitor?.endActivity()
+			}
+		}) { fired += 1 }
+		waiting.monitor = monitor
+		monitor.start()
+		try await waitUntil { drains >= 1 }
+		#expect(fired == 0)
+		// The command started the countdown again; with nothing waiting at its end, the app is idle.
+		try await waitUntil { fired > 0 }
+		#expect(fired == 1 && drains == 2)
+	}
+
 	@Test func changedTimeoutAppliesToTheNextCountdown() async throws {
 		var fired = 0
 		// In an object: the closure is the main actor's, and a captured variable changed afterwards is a warning.
