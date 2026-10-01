@@ -118,6 +118,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 
 ### Other differences
 
+- MTC_OSAX only takes commands from scripts on the Mac it runs on. With Remote Apple Events turned on in Sharing, a script on another Mac gets error -10004 for every command: MTC_OSAX extends AppleScript locally, and its file commands aren't for another computer to send.
 - MTC_OSAX uses macOS's libxml2 (2.9.13) and libxslt, newer than SatimageOSAX's. HTML output has no line break after `<br>`, XInclude leaves no blank lines for its markers, and `XMLError` has a second message when a schema file can't be loaded. The content is otherwise the same.
 - `XMLChild` of a DTD gives its declarations (SatimageOSAX gave -2763); they can be read but not changed or removed (-50). `XMLNewChild` at a text node is error -1700, as at an attribute (SatimageOSAX did nothing).
 - `XMLTransform` with a stylesheet the script gives (`with`) can write files with `exsl:document`, as the script itself could (SatimageOSAX's sandbox refused, error 1535). A stylesheet the document chooses with its `xml-stylesheet` instruction is the document's code, so it can't write files, make folders or use the network, and it and everything it loads (imports, `document()`, their DTDs and entities) must come from the document's folder or folders inside it (1535). A document opened from text has no folder, so only a stylesheet inside it (`href="#id"`) works.
@@ -144,7 +145,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 | `Packages/MTCOSAXKit/Sources/MTCOSAX` | Registers every suite; the only module the app links |
 | `Packages/MTCOSAXKit/Sources/FixtureRecorder` | `fixture-recorder` command-line tool |
 | `Packages/MTCOSAXKit/Tests/Fixtures` | Recorded Apple events and replies, one folder per section |
-| `Scripts/` | End-to-end AppleScript checks and helper scripts |
+| `Scripts/` | End-to-end AppleScript checks and helper scripts (`test.sh`, `release.sh`, the iTerm runner) |
 
 ## Building
 
@@ -161,6 +162,15 @@ So that `use application "MTC_OSAX"` finds a command-line build, register it onc
 ```sh
 /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f build/DerivedData/Build/Products/Debug/MTC_OSAX.app
 ```
+
+That is the Debug build, for development: unoptimized, and signed so that a debugger can attach. To build the app to use or give out:
+
+```sh
+Scripts/release.sh                 # build, notarize, staple, and zip to build/MTC_OSAX-<version>.zip
+Scripts/release.sh --no-notarize   # build and check the signature only
+```
+
+The Release configuration is optimized and signed with the hardened runtime and a secure timestamp, without the debugging entitlement, which is what Apple's notarization requires; the script checks all of that before submitting. Notarizing needs your credentials in the keychain once (`xcrun notarytool store-credentials mtc-osax-notary --apple-id … --team-id 8A6WVHL579`).
 
 The app has no UI. It launches when a script sends it a command and quits after an hour without commands (the `idle_timeout` setting; see [Settings](#settings)).
 

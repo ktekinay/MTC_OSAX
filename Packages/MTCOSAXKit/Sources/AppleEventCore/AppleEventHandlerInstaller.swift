@@ -29,7 +29,25 @@ public final class AppleEventHandlerInstaller {
 	fileprivate func handle(_ event: NSAppleEventDescriptor, reply: UnsafeMutablePointer<AppleEvent>) {
 		idleMonitor?.beginActivity()
 		defer { idleMonitor?.endActivity() }
+		guard !Self.isFromAnotherMac(event) else {
+			Self.write(AppleEventReply(error: Self.remoteSenderRefused), into: reply)
+			return
+		}
 		Self.write(dispatcher.dispatch(event), into: reply)
+	}
+
+	/// MTC_OSAX extends AppleScript on the Mac it runs on. With Remote Apple Events turned on in Sharing, a script
+	/// on another Mac could otherwise send it the file commands; such events are refused (-10004, a privilege error).
+	static let remoteSenderRefused = OSAXError(-10004, "MTC_OSAX only takes commands from scripts on this Mac.")
+
+	/// Whether an event came from another computer, by the Apple Event Manager's own record of its source.
+	static func isFromAnotherMac(_ event: NSAppleEventDescriptor) -> Bool {
+		isRemote(source: event.attributeDescriptor(forKeyword: AEKeyword(keyEventSourceAttr))?.int32Value)
+	}
+
+	/// Whether an event source (`AEEventSource`) is another computer. An event with no source recorded is local.
+	static func isRemote(source: Int32?) -> Bool {
+		source == Int32(kAERemoteProcess)
 	}
 
 	/// Writes an outcome into the reply the Apple Event Manager gave the handler.

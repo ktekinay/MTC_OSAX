@@ -34,6 +34,17 @@ struct InstallerTests {
 		#expect(nothing.result == nil && nothing.error == nil)
 	}
 
+	/// Events from another Mac (Remote Apple Events) are refused; those made here are local.
+	@Test func onlyLocalSenders() {
+		#expect(!AppleEventHandlerInstaller.isFromAnotherMac(makeEvent("TESTtest")))
+		#expect(AppleEventHandlerInstaller.isRemote(source: Int32(kAERemoteProcess)))
+		for source in [kAEUnknownSource, kAEDirectCall, kAESameProcess, kAELocalProcess] {
+			#expect(!AppleEventHandlerInstaller.isRemote(source: Int32(source)))
+		}
+		#expect(!AppleEventHandlerInstaller.isRemote(source: nil))
+		#expect(AppleEventHandlerInstaller.remoteSenderRefused.number == -10004)
+	}
+
 	/// A sender that asked for no reply gives a null one, which is left alone.
 	@Test func noReplyWanted() {
 		var null = AEDesc(descriptorType: typeNull, dataHandle: nil)
