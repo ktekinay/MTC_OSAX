@@ -229,11 +229,10 @@ Unit, handler, SDEF-consistency and fixture-replay tests don't send Apple events
 
 ```sh
 Scripts/test.sh
-# or, without the sandbox:
-swift test --package-path Packages/MTCOSAXKit
-# or all targets through the app's scheme:
-xcodebuild -project MTC_OSAX.xcodeproj -scheme MTC_OSAX -derivedDataPath build/DerivedData test
+Scripts/test.sh --filter XMLTests
 ```
+
+The tests only run there. A test bundle loaded outside a sandbox (by bare `swift test`, `xcodebuild test` or Xcode's Test action) ends its process with a message before any test runs, so the file-command tests and fixture replays can't be started unprotected by accident. To debug a test in Xcode, set `MTC_ALLOW_UNSANDBOXED_TESTS=1` in the scheme's Test action for that session, and run only the test you're debugging.
 
 Run them with AddressSanitizer too before committing a change to code that uses C (libxml2, libxslt, Onigmo, PCRE2, libyaml, tomlc17, the Apple Event Manager): it catches memory errors that pass unnoticed otherwise, such as reading a freed libxml2 node.
 
@@ -243,7 +242,7 @@ Scripts/test.sh --sanitize=address
 
 Each test process also has a time limit of three minutes (a process's tests take seconds), after which it's stopped with a message, so a test that runs away can't go on doing damage: Swift Testing's own time limits don't stop code that doesn't check for cancellation. `MTC_TEST_TIME_LIMIT=<seconds>` changes it (0 for none), and there's none while a debugger is attached.
 
-Every test target links `AppleScriptPreload`, which loads AppleScript when the test bundle is loaded, before any test runs. Loading it while many tests ran at once sometimes made the Apple Event Manager recurse until the stack ran out (about one `AppleEventCoreTests` run in ten). The app loads it at launch, on its main thread, with nothing else running, and isn't affected; the target is for tests only.
+Every test target links `AppleScriptPreload` (which also holds the sandbox check and the time limit). It loads AppleScript when the test bundle is loaded, before any test runs. Loading it while many tests ran at once sometimes made the Apple Event Manager recurse until the stack ran out (about one `AppleEventCoreTests` run in ten). The app loads it at launch, on its main thread, with nothing else running, and isn't affected; the target is for tests only.
 
 Commands run on the main thread, one at a time, as the Apple Event Manager calls them, and the code says so: handlers, the dispatcher and the state commands share (open documents, settings, the regex cache) are `@MainActor`, so the compiler rejects any use from another thread. Tests that send commands are `@MainActor` too; they run on the main thread, with the app's 8 MB stack.
 
