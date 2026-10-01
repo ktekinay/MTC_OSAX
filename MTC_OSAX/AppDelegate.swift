@@ -1,8 +1,9 @@
 import AppKit
 import MTCOSAX
 
-/// A faceless app: installs an Apple event handler for every implemented command,
-/// then quits after an hour without events. The next script that targets it relaunches it.
+/// A faceless app: installs an Apple event handler for every implemented command, then quits once it has had no
+/// events for the `idle_timeout` setting (an hour by default; never while documents are open). The next script
+/// that targets it relaunches it.
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
 	private var installer: AppleEventHandlerInstaller?

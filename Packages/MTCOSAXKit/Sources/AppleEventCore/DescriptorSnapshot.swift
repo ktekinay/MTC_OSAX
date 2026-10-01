@@ -1,7 +1,9 @@
 import Foundation
 
-/// A lossless, JSON-friendly copy of an Apple event descriptor, keeping every descriptor type.
-/// Used to store fixtures and to describe values for debugging.
+/// A JSON-friendly copy of an Apple event descriptor, keeping every descriptor type.
+/// Used to store fixtures and to describe values for debugging. It keeps what a script can tell apart, not every
+/// byte: an alias or file reference that resolves is kept as its path, and text as a String (so a lone surrogate
+/// becomes U+FFFD).
 ///
 /// Only the properties relevant to `type` are set: text for text types, `integer` for `long`/`shor`,
 /// `real` for `doub`/`sing` (or `text` "inf", "-inf" or "nan", which JSON can't hold), `boolean` for `bool`, `code` for `type`/`enum`/`keyw`, `items` for

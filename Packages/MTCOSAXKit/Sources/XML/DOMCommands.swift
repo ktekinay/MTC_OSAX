@@ -596,8 +596,14 @@ extension XMLCommands {
 	/// element (so a file that's malformed further on still works): kind, name, line, whether it has a DTD, and the
 	/// encoding its XML declaration names. -43 for a missing file.
 	static func fileInfo(_ file: URL) throws -> RecordFields {
-		guard let data = try? Data(contentsOf: file) else { throw OSAXError(-43) }
-		guard let found = firstTag(String(decoding: data.prefix(65536), as: UTF8.self)) else { throw XML.notFound }
+		// The first 64 KB of a regular file (all of it was read, however large, to look at this much; anything else,
+		// a pipe or a device, is -43, as before).
+		var status = stat()
+		guard stat(file.path, &status) == 0, (status.st_mode & S_IFMT) == S_IFREG, let handle = try? FileHandle(forReadingFrom: file),
+		      let data = try? handle.read(upToCount: 65536) ?? Data()
+		else { throw OSAXError(-43) }
+		try? handle.close()
+		guard let found = firstTag(String(decoding: data, as: UTF8.self)) else { throw XML.notFound }
 		let isDoctype = found.isDoctype
 		var fields: [(key: RecordFields.Key, value: NSAppleEventDescriptor)] = [
 			(.code("kind"), NSAppleEventDescriptor(descriptorType: typeChar, data: Data((isDoctype ? "DOCUMENT_TYPE_NODE" : "ELEMENT_NODE").utf8))!),

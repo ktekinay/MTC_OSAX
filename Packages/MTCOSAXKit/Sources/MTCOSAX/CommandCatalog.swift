@@ -16,7 +16,7 @@ public enum CommandCatalog {
 	/// - Parameters:
 	///   - timeZone: the zone for date commands; tests pass the zone a fixture was recorded in.
 	///   - dialogs: the app's dialogs for the `navchoose` commands; without them, those commands aren't handled.
-	///   - documents: the open property lists; the app keeps it to know when documents are open.
+	///   - documents: the open property lists and XML documents; the app keeps it to know when any are open.
 	///   - settings: where MTC_OSAX's settings are kept; tests pass their own, so they don't read or change the app's.
 	@MainActor
 	public static func makeDispatcher(

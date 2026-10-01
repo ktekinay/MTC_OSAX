@@ -789,5 +789,9 @@ struct XMLFileInfoTests {
 		#expect(info[.code("cpar")]?.int32Value == 2)
 		#expect(info[.code("enco")]?.stringValue == "UTF-8")
 		#expect(xml.send("XML disp", ["----": URL(fileURLWithPath: "/nonexistent.xml")]).error == OSAXError(-43))
+		// Only the start is read: a root past the first 64 KB isn't found, and a folder isn't a file.
+		try Data((String(repeating: " ", count: 70000) + "<late/>").utf8).write(to: file)
+		#expect(xml.send("XML disp", ["----": file]).error != nil)
+		#expect(xml.send("XML disp", ["----": FileManager.default.temporaryDirectory]).error == OSAXError(-43))
 	}
 }

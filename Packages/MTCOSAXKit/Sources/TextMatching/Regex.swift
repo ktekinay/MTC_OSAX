@@ -127,8 +127,9 @@ public struct RegexFlags: OptionSet, Hashable, Sendable {
 
 /// A pattern that failed to compile, or options the engine doesn't have.
 public struct RegexError: Error, Equatable, CustomStringConvertible {
-	/// Onigmo's error code (negative), -3000 minus PCRE2's (so -3101 and down), or -1 for an option the engine
-	/// doesn't have.
+	/// Onigmo's error code (negative); for PCRE2, -3000 minus its compile error (positive: -3101 and down) or
+	/// -3000 plus its match error (negative: -3047 for the match limit, -3063 for the heap limit); or -1 for an
+	/// option the engine doesn't have.
 	public let code: Int
 	public let message: String
 	/// Whether scripts get the message with the error: PCRE's errors, which Satimage never had. Onigmo's errors

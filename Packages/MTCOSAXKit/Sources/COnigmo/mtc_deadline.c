@@ -1,6 +1,6 @@
 // MTC_OSAX: a deadline for searches, checked by the MTC_OSAX patch in regexec.c's match_at, where it backtracks. Not part of Onigmo.
 //
-// Onigmo's own limits (of memory, and for PCRE2 of backtracking at each starting position) don't bound a search's
+// Onigmo's own limit (of the memory its backtracking may take) doesn't bound a search's
 // time: a pattern that backtracks exponentially, or a lot at every position of a long text, held up every script for
 // minutes. MTC_OSAX sets a deadline for a command's searches (RegexDeadline in TextMatching); past it, the search
 // stops with the engine's limit error, and mtc_onig_took_too_long says why. Per thread, as searches are.

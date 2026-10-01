@@ -5,7 +5,9 @@
 // not line ends, unlike Onigmo's USE_UNICODE_ALL_LINE_TERMINATORS. These decide what `.`, `^`, `$` and `\Z` treat
 // as a line end. Recorded from SatimageOSAX: see the line-end-* fixtures.
 //
-// Text from a script can hold a lone surrogate. Onigmo's UTF-16LE reads a high surrogate's pair without looking
+// The text searched can end, or start, with half a surrogate pair (`starting at` and `for` count units, and can
+// cut one; text from a script itself can't hold a lone surrogate, which arrives as U+FFFD). Onigmo's UTF-16LE
+// reads a high surrogate's pair without looking
 // at where the text ends (reading past it in case-insensitive searches), and steps over a lone one by a single
 // byte. Here a surrogate without its other half is one 2-byte character, as MTC_OSAX's UTF16Text counts it.
 

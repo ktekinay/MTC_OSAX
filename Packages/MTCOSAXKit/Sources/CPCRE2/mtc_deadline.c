@@ -1,6 +1,6 @@
 // MTC_OSAX: a deadline for searches, checked by the MTC_OSAX patch in pcre2_match.c's match(), at each new frame. Not part of PCRE2.
 //
-// PCRE2's own limits (of memory, and for PCRE2 of backtracking at each starting position) don't bound a search's
+// PCRE2's own limits (of memory, and of backtracking at each starting position) don't bound a search's
 // time: a pattern that backtracks exponentially, or a lot at every position of a long text, held up every script for
 // minutes. MTC_OSAX sets a deadline for a command's searches (RegexDeadline in TextMatching); past it, the search
 // stops with the engine's limit error, and mtc_pcre2_took_too_long says why. Per thread, as searches are.

@@ -316,7 +316,7 @@ struct RegexLimitTests {
 	}
 }
 
-/// Text from a script can hold a lone surrogate. Onigmo's UTF-16 read the pair's second half anyway, past the end
+/// A search's range can cut a surrogate pair, leaving a lone surrogate at its end. Onigmo's UTF-16 read the pair's second half anyway, past the end
 /// of the text (AddressSanitizer caught it in a case-insensitive search).
 @MainActor
 struct LoneSurrogateTests {
