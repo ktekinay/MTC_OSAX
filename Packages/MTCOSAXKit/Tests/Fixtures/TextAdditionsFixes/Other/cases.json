@@ -114,5 +114,17 @@
  {
   "name": "printf-width-too-large",
   "script": "printf \"[%99999999999999999999d]\" parameters {1}"
+ },
+ {
+  "name": "line-end-dollar-crlf-all",
+  "script": "find text \"$\" in (\"a\" & return & linefeed & \"b\") with regexp and all occurrences"
+ },
+ {
+  "name": "line-end-caret-crlf-all",
+  "script": "find text \"^\" in (\"a\" & return & linefeed & \"b\") with regexp and all occurrences"
+ },
+ {
+  "name": "line-end-z-before-crlf",
+  "script": "find text \"a\\\\Z\" in (\"a\" & return & linefeed) with regexp"
  }
 ]

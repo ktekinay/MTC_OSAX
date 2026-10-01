@@ -201,9 +201,19 @@ struct RegexFlagTests {
 		#expect(try first("a.b", in: "a\(character)b") == "a\(character)b")
 	}
 
-	@Test func crlfIsTwoLineEnds() throws {
+	/// CR LF is one line end, in both engines: nothing ends or starts a line between the two. (SatimageOSAX took
+	/// them as two, and so did the PCRE search after an empty match.)
+	@Test func crlfIsOneLineEnd() throws {
 		let text = UTF16Text("a\r\nb")
-		#expect(try CompiledRegex("$").allMatches(in: text).map(\.range.lowerBound) == [1, 2, 4])
+		for syntax in [RegexSyntax.ruby, .pcre] {
+			#expect(try CompiledRegex("$", syntax: syntax).allMatches(in: text).map(\.range.lowerBound) == [1, 4], "\(syntax)")
+			#expect(try CompiledRegex("^", syntax: syntax).allMatches(in: text, searchingAtEnd: false).map(\.range.lowerBound) == [0, 3], "\(syntax)")
+			#expect(try CompiledRegex("a$", syntax: syntax).firstMatch(in: text)?.range == 0 ..< 1, "\(syntax)")
+			#expect(try CompiledRegex(#"a\Z"#, syntax: syntax).firstMatch(in: UTF16Text("a\r\n"))?.range == 0 ..< 1, "\(syntax)")
+			// A return or a linefeed alone is still a line end.
+			#expect(try CompiledRegex("$", syntax: syntax).allMatches(in: UTF16Text("a\rb\nc")).map(\.range.lowerBound) == [1, 3, 5], "\(syntax)")
+			#expect(try CompiledRegex("$", syntax: syntax).allMatches(in: UTF16Text("a\n\rb")).map(\.range.lowerBound) == [1, 2, 4], "\(syntax)")
+		}
 	}
 
 	/// Satimage's build ended (?x) comments at a return and at the escapes \n and \r, not only at a linefeed.

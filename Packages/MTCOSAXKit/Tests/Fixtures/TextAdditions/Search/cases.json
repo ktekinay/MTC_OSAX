@@ -904,24 +904,12 @@
   "script": "find text \"a.b\" in (\"a\" & (character id 8233) & \"b\") with regexp"
  },
  {
-  "name": "line-end-dollar-crlf-all",
-  "script": "find text \"$\" in (\"a\" & return & linefeed & \"b\") with regexp and all occurrences"
- },
- {
-  "name": "line-end-caret-crlf-all",
-  "script": "find text \"^\" in (\"a\" & return & linefeed & \"b\") with regexp and all occurrences"
- },
- {
   "name": "line-end-negated-class-cr",
   "script": "find text \"a[^x]b\" in (\"a\" & return & \"b\") with regexp"
  },
  {
   "name": "line-end-z-before-cr",
   "script": "find text \"a\\\\Z\" in (\"a\" & return) with regexp"
- },
- {
-  "name": "line-end-z-before-crlf",
-  "script": "find text \"a\\\\Z\" in (\"a\" & return & linefeed) with regexp"
  },
  {
   "name": "line-end-split-lines",

@@ -204,7 +204,7 @@ Each step: record fixtures → implement → unit tests → replay passes.
 
 Everything below was established from fixtures recorded from SatimageOSAX (see "Fixtures after the fixes" for where they are now).
 
-**Regex engine.** Satimage's build of Onigmo differs from stock Onigmo in two ways, both reproduced: CR, LF, NEL, U+2028 and U+2029 are line ends (not vertical tab or form feed, and CR LF counts as two), and negated classes like `[^x]` exclude `\r` as well as `\n` in every syntax. The first is our own `mtc_encoding.c`; the second is a small marked patch to `regparse.c`. Unnamed groups are numbered alongside named ones.
+**Regex engine.** Satimage's build of Onigmo differs from stock Onigmo in two ways, both reproduced: CR, LF, NEL, U+2028 and U+2029 are line ends (not vertical tab or form feed; CR LF counted as two in Satimage's build, and is one in MTC_OSAX: see the fixes), and negated classes like `[^x]` exclude `\r` as well as `\n` in every syntax. The first is our own `mtc_encoding.c`; the second is a small marked patch to `regparse.c`. Unnamed groups are numbered alongside named ones.
 
 **Search and replace.** Not found is error -2763 (an empty list with `all occurrences`, `missing value` per item for list input). Literal search is canonical (precomposed and decomposed é match). Templates accept only `\0`–`\9`, `\t`, `\n`, `\r`, `\\` and `\uXXXX`; anything else is -208, a group number too big is -207, and `\k<…>` always inserts the whole match. Empty matches are never taken at the very end unless the search started before it.
 
@@ -229,6 +229,8 @@ Decided 2026-09-27: MTC_OSAX matches Satimage's working behavior but doesn't rep
 |---|---|---|
 | `file offset` | Always -1708 | Byte offset of the text in the file, 0-based; `starting at` (bytes), `encoding` (default UTF-8), `inclusive` (offset after the text). Not found: -2763, like `find text` |
 | `filter text` | Always -1708 | Builds the XML property list: keys from `key`, values from `using` (default `\0`); `as string` (default) joins values with `separator` (default linefeed), `as list` gives arrays, `duplicates` (default true) applies to lists. `in` a string or file; `into` a file writes it and returns nothing. `into` a plist reference waits for the PropertyList suite. Takes `dollar references` |
+| CR LF in a regular expression | Two line ends: `$` and `^` matched between the CR and the LF, and `\Z` didn't match before a final CR LF (`line-end-*-crlf*`, now in `TextAdditionsFixes/Other`) | One line end, with Onigmo's `ONIG_OPTION_NEWLINE_CRLF`; with `syntax "PCRE"` too |
+| `change … only backreference` naming no group | Replaced the whole match (and crashed on a group that took no part) | Error -207 (a number) or -217 (a name) |
 | `format` | Invalid format reuses the previous one; no `into` reuses it too | Invalid format: error -50 with a message; `into` required (-1701) |
 | `format` | Three sections invalid | `f1;f2;f3`: formats for >0, <0 and =0 |
 | `format` | Second section only supplies literal text | Each section uses its own layout |

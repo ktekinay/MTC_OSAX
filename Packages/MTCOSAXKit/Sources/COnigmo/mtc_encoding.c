@@ -1,7 +1,8 @@
 // MTC_OSAX addition, not part of Onigmo.
 //
 // UTF-16LE with Satimage's line terminators: LF, CR, NEL (U+0085), LINE SEPARATOR (U+2028) and
-// PARAGRAPH SEPARATOR (U+2029), each on its own (CR LF is two line ends). Vertical tab and form feed are
+// PARAGRAPH SEPARATOR (U+2029). (In Satimage's build CR LF was two line ends; MTC_OSAX compiles patterns with
+// ONIG_OPTION_NEWLINE_CRLF, which makes it one: see RegexFlags.onigmoCompileOptions.) Vertical tab and form feed are
 // not line ends, unlike Onigmo's USE_UNICODE_ALL_LINE_TERMINATORS. These decide what `.`, `^`, `$` and `\Z` treat
 // as a line end. Recorded from SatimageOSAX: see the line-end-* fixtures.
 //

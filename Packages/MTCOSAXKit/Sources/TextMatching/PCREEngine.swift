@@ -82,6 +82,8 @@ final class PCREEngine: RegexEngine {
 		return compiled
 	}
 
+	let stepsOverCRLFTogether = true
+
 	/// PCRE's search from `start`. A match error other than "no match" (PCRE2's match, depth and heap limits, which stop runaway backtracking)
 	/// is -3000 minus its number, like compile errors: -3047 for the match limit.
 	func search(_ text: UTF16Text, bounds: Range<Int>, start: Int) throws(RegexError) -> RegexMatch? {

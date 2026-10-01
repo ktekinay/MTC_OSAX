@@ -60,6 +60,9 @@ final class OnigmoEngine: RegexEngine {
 
 	/// Runs `onig_search`: the text seen by the regex ends at `bounds.upperBound`, but starts at the beginning
 	/// of the whole text, so lookbehind and `^` see what comes before `bounds.lowerBound`.
+	/// Onigmo itself finds nothing between CR and LF (ONIG_OPTION_NEWLINE_CRLF), wherever a search starts.
+	let stepsOverCRLFTogether = false
+
 	func search(_ text: UTF16Text, bounds: Range<Int>, start: Int) throws(RegexError) -> RegexMatch? {
 		Self.setLimits()
 		guard let region = onig_region_new() else {

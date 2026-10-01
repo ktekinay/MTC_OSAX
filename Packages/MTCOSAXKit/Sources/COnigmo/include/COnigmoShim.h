@@ -49,6 +49,7 @@ static const OnigOptionType MTCOnigOptionFindLongest = ONIG_OPTION_FIND_LONGEST;
 static const OnigOptionType MTCOnigOptionFindNotEmpty = ONIG_OPTION_FIND_NOT_EMPTY;
 static const OnigOptionType MTCOnigOptionNegateSingleline = ONIG_OPTION_NEGATE_SINGLELINE;
 static const OnigOptionType MTCOnigOptionDontCaptureGroup = ONIG_OPTION_DONT_CAPTURE_GROUP;
+static const OnigOptionType MTCOnigOptionNewlineCRLF = ONIG_OPTION_NEWLINE_CRLF;
 static const OnigOptionType MTCOnigOptionNotBOL = ONIG_OPTION_NOTBOL;
 static const OnigOptionType MTCOnigOptionNotEOL = ONIG_OPTION_NOTEOL;
 

@@ -95,7 +95,9 @@ public struct RegexFlags: OptionSet, Hashable, Sendable {
 
 	/// Options given to Onigmo when compiling.
 	var onigmoCompileOptions: OnigOptionType {
-		var options: OnigOptionType = 0
+		// CR LF is one line end: `$` matches before it and `^` after it, not between the two. (SatimageOSAX's build
+		// took them as two, so `change "$" into ";"` put a `;` inside every Windows line end.)
+		var options: OnigOptionType = MTCOnigOptionNewlineCRLF
 		let mapping: [(RegexFlags, OnigOptionType)] = [
 			(.ignoreCase, MTCOnigOptionIgnoreCase),
 			(.extend, MTCOnigOptionExtend),
@@ -162,6 +164,9 @@ protocol RegexEngine: AnyObject {
 	/// lookbehind and `^` see what comes before `bounds`.
 	/// Errors are the engine's limits (runaway backtracking), not "no match".
 	func search(_ text: UTF16Text, bounds: Range<Int>, start: Int) throws(RegexError) -> RegexMatch?
+	/// Whether the search after an empty match before CR LF starts after both (PCRE's rule for finding every
+	/// match: a search started between the two would find an end of line there).
+	var stepsOverCRLFTogether: Bool { get }
 }
 
 /// A compiled pattern, with Onigmo (Satimage's engine) or, for `syntax "PCRE"`, PCRE2. Searches text as UTF-16, so
@@ -219,6 +224,9 @@ public final class CompiledRegex {
 			if match.range.isEmpty {
 				guard match.range.upperBound < bounds.upperBound else { break }
 				position = text.index(after: match.range.upperBound)
+				if engine.stepsOverCRLFTogether, position < bounds.upperBound, text.units[position - 1] == 0x0D, text.units[position] == 0x0A {
+					position += 1
+				}
 			} else {
 				position = match.range.upperBound
 			}
