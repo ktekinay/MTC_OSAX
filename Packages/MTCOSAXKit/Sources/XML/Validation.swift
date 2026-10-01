@@ -210,8 +210,7 @@ enum Validation {
 	}
 
 	static func text(_ descriptor: NSAppleEventDescriptor) throws -> String? {
-		[typeUnicodeText, typeUTF8Text, typeChar, FourCharCode(fourCharString: "ut16")].contains(descriptor.descriptorType)
-			? try XMLCommands.text(descriptor) : nil
+		descriptor.isText ? try XMLCommands.text(descriptor) : nil
 	}
 
 	/// A path or URL as a URL for libxml2: a URL with `://` other than a file URL as it is, or a path as scripts give

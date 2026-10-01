@@ -180,7 +180,7 @@ enum Stylesheets {
 	/// A stylesheet's document from XSLT text, an http(s) URL, or a file (a path, file URL, alias or file
 	/// reference; error 4 if it can't be read).
 	static func read(_ descriptor: NSAppleEventDescriptor) throws -> xmlDocPtr {
-		let isText = [typeUnicodeText, typeUTF8Text, typeChar, FourCharCode(fourCharString: "ut16")].contains(descriptor.descriptorType)
+		let isText = descriptor.isText
 		let text = isText ? try XMLCommands.text(descriptor) : nil
 		var url: URL?
 		let data: Data

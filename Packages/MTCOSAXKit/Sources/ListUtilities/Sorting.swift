@@ -112,7 +112,7 @@ enum Sorting {
 			switch item.descriptorType {
 			case typeSInt16, typeSInt32, typeSInt64: return .number
 			case typeIEEE32BitFloatingPoint, typeIEEE64BitFloatingPoint: return .real
-			case typeUnicodeText, typeUTF8Text, typeChar, FourCharCode(fourCharString: "ut16"), typeTrue, typeFalse, typeBoolean: return .text
+			case _ where item.isText, typeTrue, typeFalse, typeBoolean: return .text
 			case typeLongDateTime: return .date
 			case typeType where item.typeCodeValue.fourCharString == "msng": return .missing
 			default: throw OSAXError.coercionFailed

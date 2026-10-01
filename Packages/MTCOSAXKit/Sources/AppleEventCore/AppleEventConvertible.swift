@@ -22,6 +22,15 @@ extension NSAppleEventDescriptor: AppleEventEncodable {
 		NSAppleEventDescriptor(typeCode: FourCharCode(fourCharString: "msng"))
 	}
 
+	/// The descriptor types that hold text: AppleScript sends `utxt`; other senders may send the rest.
+	public static let textTypes: Set<DescType> = [typeUnicodeText, typeUTF8Text, typeChar, FourCharCode(fourCharString: "ut16")]
+
+	/// Whether this is text of any encoding. The one test of it: it was written out in a dozen places, two of them
+	/// without `ut16`, so a path sent that way skipped the path parser (and its rules for `..`, `~` and NUL).
+	public var isText: Bool {
+		Self.textTypes.contains(descriptorType)
+	}
+
 	/// Coerces with the Apple Event Manager, as scripts would expect. Fails with -1700.
 	public func coerced(to type: String) throws -> NSAppleEventDescriptor {
 		guard let result = coerce(toDescriptorType: FourCharCode(fourCharString: type)) else {
@@ -61,7 +70,7 @@ extension Int: AppleEventConvertible {
 	/// A 32-bit integer, as AppleScript's are. Text past that range is -1700, as a real is: the Apple Event Manager
 	/// made it -2147483648 ("3000000000" became a large negative count or index).
 	public init(appleEventDescriptor descriptor: NSAppleEventDescriptor) throws {
-		if [typeUnicodeText, typeUTF8Text, typeChar, FourCharCode(fourCharString: "ut16")].contains(descriptor.descriptorType) {
+		if descriptor.isText {
 			let real = try descriptor.coerced(to: "doub").doubleValue
 			guard real > -2_147_483_649, real < 2_147_483_648 else {
 				throw OSAXError.coercionFailed
@@ -188,9 +197,7 @@ extension URL: AppleEventConvertible {
 	/// `furl` holding a URL that isn't a file's (`http://…`) is -1700: files are read and written with APIs that
 	/// would otherwise fetch it from the network.
 	public init(appleEventDescriptor descriptor: NSAppleEventDescriptor) throws {
-		if descriptor.descriptorType == typeUnicodeText || descriptor.descriptorType == typeUTF8Text
-			|| descriptor.descriptorType == typeChar
-		{
+		if descriptor.isText {
 			self = try URL(scriptPath: try String(appleEventDescriptor: descriptor))
 			return
 		}

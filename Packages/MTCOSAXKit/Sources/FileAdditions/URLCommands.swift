@@ -58,13 +58,9 @@ extension FileAdditions {
 
 	/// A URL from a script: an alias or file reference, a POSIX path (a trailing `/` marks a folder; the disk isn't
 	/// checked), a URL (possibly relative), or an HFS path.
-	static func isText(_ descriptor: NSAppleEventDescriptor) -> Bool {
-		[typeUnicodeText, typeUTF8Text, typeChar, FourCharCode(fourCharString: "ut16")].contains(descriptor.descriptorType)
-	}
-
 	/// With a base that isn't a file URL, text starting with `/` is a URL relative to the base, not a POSIX path.
 	static func scriptURL(_ descriptor: NSAppleEventDescriptor, relativeTo base: URL? = nil) throws -> URL {
-		guard isText(descriptor) else {
+		guard descriptor.isText else {
 			guard let url = try descriptor.coerced(to: "furl").fileURLValue else {
 				throw OSAXError.coercionFailed
 			}
@@ -199,7 +195,7 @@ extension FileAdditions {
 			throw OSAXError.missingParameter
 		}
 		let withSize = try request.parameter("ptsz", default: false)
-		if isText(descriptor), let text = try? String(appleEventDescriptor: descriptor), !text.hasPrefix("/"),
+		if descriptor.isText, let text = try? String(appleEventDescriptor: descriptor), !text.hasPrefix("/"),
 		   !text.hasPrefix("~"), !text.lowercased().hasPrefix("file:")
 		{
 			if text.isEmpty {

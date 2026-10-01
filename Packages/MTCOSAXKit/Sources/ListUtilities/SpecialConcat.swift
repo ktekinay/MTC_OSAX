@@ -13,7 +13,7 @@ enum SpecialConcat {
 			return try merge(a, b).appleEventDescriptor
 		}
 		// Text with anything but text is an error (SatimageOSAX returned garbage for a record).
-		guard ListUtilities.isText(first), ListUtilities.isText(second), let a = first.stringValue, let b = second.stringValue else {
+		guard first.isText, second.isText, let a = first.stringValue, let b = second.stringValue else {
 			throw OSAXError.coercionFailed
 		}
 		return NSAppleEventDescriptor(string: sideBySide(a, b))
@@ -39,10 +39,10 @@ enum SpecialConcat {
 		if let a = RecordFields(x), let b = RecordFields(y) {
 			return try merge(a, b).appleEventDescriptor
 		}
-		if let first = try? Numbers.number(x), !ListUtilities.isText(x) {
+		if let first = try? Numbers.number(x), !x.isText {
 			let items = ListUtilities.items(y)
 			let other = items.flatMap { $0.count == 1 ? $0[0] : nil } ?? y
-			if let second = try? Numbers.number(other), !ListUtilities.isText(other) {
+			if let second = try? Numbers.number(other), !other.isText {
 				// A sum too large for a real is -50, as the math functions' results are (it was infinity).
 				let sum = first + second
 				guard sum.isFinite || !first.isFinite || !second.isFinite else {
@@ -89,11 +89,5 @@ enum SpecialConcat {
 			rows.append((row, nil))
 		}
 		return rows
-	}
-}
-
-extension ListUtilities {
-	static func isText(_ descriptor: NSAppleEventDescriptor) -> Bool {
-		[typeUnicodeText, typeUTF8Text, typeChar, FourCharCode(fourCharString: "ut16")].contains(descriptor.descriptorType)
 	}
 }

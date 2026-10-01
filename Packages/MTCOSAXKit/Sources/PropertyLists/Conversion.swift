@@ -141,7 +141,7 @@ extension PropertyLists {
 
 	static func content(of descriptor: NSAppleEventDescriptor) -> Node.Content {
 		switch descriptor.descriptorType {
-		case typeUnicodeText, typeUTF8Text, typeChar, FourCharCode(fourCharString: "ut16"):
+		case _ where descriptor.isText:
 			return .string(descriptor.stringValue ?? "")
 		case typeSInt16, typeSInt32:
 			return .integer(Int64(descriptor.int32Value))

@@ -526,7 +526,7 @@ extension XMLCommands {
 	// MARK: URLs
 
 	func urlText(_ descriptor: NSAppleEventDescriptor) throws -> String {
-		if [typeUnicodeText, typeUTF8Text, typeChar].contains(descriptor.descriptorType) {
+		if descriptor.isText {
 			return descriptor.stringValue ?? ""
 		}
 		return try URL(appleEventDescriptor: descriptor).absoluteString

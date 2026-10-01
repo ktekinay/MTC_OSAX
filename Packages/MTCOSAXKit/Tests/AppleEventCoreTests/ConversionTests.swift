@@ -135,6 +135,16 @@ struct DecodingTests {
 		#expect(try URL(scriptPath: "Backup:a:b::").path == "/Volumes/Backup/a/b/..")
 		#expect(try URL(scriptPath: "Backup:a:b::c::").path == "/Volumes/Backup/a/c/..")
 		#expect(throws: OSAXError.self) { try URL(scriptPath: "Backup:a:::") }
+		// A path sent as `ut16` text (by a sender other than AppleScript) is a path like any other: it went to the
+		// Apple Event Manager's own coercion, where `file.txt` was /file.txt and `..:etc:hosts` /../etc/hosts.
+		func ut16(_ text: String) throws -> NSAppleEventDescriptor {
+			try #require(NSAppleEventDescriptor(descriptorType: FourCharCode(fourCharString: "ut16"), data: text.data(using: .utf16BigEndian)))
+		}
+		#expect(try ut16("/tmp/x").isText && NSAppleEventDescriptor(string: "x").isText && !NSAppleEventDescriptor(int32: 1).isText)
+		#expect(try URL(appleEventDescriptor: ut16("/tmp/a b.txt")).path == "/tmp/a b.txt")
+		for text in ["file.txt", "..:etc:hosts", "a\0b"] {
+			#expect(throws: OSAXError.self) { try URL(appleEventDescriptor: ut16(text)) }
+		}
 		let volume = try #require(try URL(fileURLWithPath: "/").resourceValues(forKeys: [.volumeNameKey]).volumeName)
 		#expect(try URL(scriptPath: "\(volume.uppercased()):Users").path == "/Users")
 	}

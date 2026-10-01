@@ -206,7 +206,7 @@ extension XMLCommands {
 enum Network {
 	/// Where a document comes from: a file (alias, file reference, path, or file URL text) or a URL.
 	static func location(_ descriptor: NSAppleEventDescriptor) throws -> URL {
-		if [typeUnicodeText, typeUTF8Text, typeChar, FourCharCode(fourCharString: "ut16")].contains(descriptor.descriptorType),
+		if descriptor.isText,
 		   let text = descriptor.stringValue, let url = URL(string: text), let scheme = url.scheme?.lowercased(), ["http", "https"].contains(scheme)
 		{
 			return url

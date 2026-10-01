@@ -109,7 +109,7 @@ struct XMLCommands {
 	}
 
 	static func text(_ descriptor: NSAppleEventDescriptor) throws -> String {
-		if [typeUnicodeText, typeUTF8Text, typeChar, FourCharCode(fourCharString: "ut16")].contains(descriptor.descriptorType) {
+		if descriptor.isText {
 			return descriptor.stringValue ?? ""
 		}
 		guard let text = descriptor.coerce(toDescriptorType: typeUnicodeText)?.stringValue else {

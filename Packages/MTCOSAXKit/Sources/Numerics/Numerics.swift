@@ -8,10 +8,9 @@ public indirect enum Numbers: Equatable {
 	case list([Numbers])
 	case array([Double])
 
-	private static let numberTypes: Set<DescType> = [
+	private static let numberTypes: Set<DescType> = NSAppleEventDescriptor.textTypes.union([
 		typeSInt16, typeSInt32, typeSInt64, typeIEEE32BitFloatingPoint, typeIEEE64BitFloatingPoint,
-		typeUnicodeText, typeUTF8Text, typeChar, FourCharCode(fourCharString: "ut16"),
-	]
+	])
 
 	/// Error -1700 for anything that isn't a number, a text that reads as one, a list of those or an array;
 	/// -1701 for a record, as SatimageOSAX replied.

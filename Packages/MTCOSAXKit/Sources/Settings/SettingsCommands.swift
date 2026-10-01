@@ -65,7 +65,7 @@ extension Settings {
 			}
 			throw unknown(code)
 		}
-		guard [typeUnicodeText, typeUTF8Text, typeChar, FourCharCode(fourCharString: "ut16")].contains(descriptor.descriptorType),
+		guard descriptor.isText,
 		      let text = descriptor.stringValue
 		else {
 			throw OSAXError.coercionFailed

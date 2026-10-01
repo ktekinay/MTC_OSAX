@@ -76,7 +76,7 @@ public enum ListUtilities {
 	/// and one with an exponent has a leading space (" 1e+20", " 1e-7"). Nil for anything else.
 	static func text(_ descriptor: NSAppleEventDescriptor) -> String? {
 		switch descriptor.descriptorType {
-		case typeUnicodeText, typeUTF8Text, typeChar, FourCharCode(fourCharString: "ut16"):
+		case _ where descriptor.isText:
 			return descriptor.stringValue
 		case typeTrue, typeFalse, typeBoolean:
 			return descriptor.booleanValue ? "true" : "false"

@@ -99,7 +99,7 @@ struct Setting: @unchecked Sendable {
 			defaults.string(forKey: "RegexSyntax").flatMap(RegexSyntax.init(name:)).map { NSAppleEventDescriptor(string: $0.rawValue) }
 		},
 		normalize: { value in
-			guard [typeUnicodeText, typeUTF8Text, typeChar, FourCharCode(fourCharString: "ut16")].contains(value.descriptorType),
+			guard value.isText,
 			      let text = value.stringValue
 			else {
 				throw OSAXError(-1700, "regex syntax must be text: \(syntaxNames).")
