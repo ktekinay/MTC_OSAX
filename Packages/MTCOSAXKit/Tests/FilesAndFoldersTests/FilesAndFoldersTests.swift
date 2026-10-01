@@ -356,6 +356,30 @@ struct CopyMoveTests {
 		#expect(try FileManager.default.contentsOfDirectory(atPath: sandbox.url.path).sorted() == ["s", "t"])
 	}
 
+	/// Copying a folder into itself copied the copy into itself, deeper each time, until paths got too long: 459
+	/// items, 306 levels deep, and -1. With replacing, the same under a hidden temporary name.
+	@Test func folderCantGoInsideItself() throws {
+		let sandbox = try Sandbox()
+		_ = try sandbox.file("a/one.txt")
+		_ = try sandbox.file("a/sub/two.txt")
+		_ = try sandbox.file("a/sub/c/old.txt")
+		for command in [copy, move] {
+			for parameters in [
+				["----": sandbox.path("a"), "to  ": sandbox.path("a/sub")], ["----": sandbox.path("a"), "to  ": sandbox.path("a")],
+				["----": sandbox.path("a"), "into": sandbox.path("a/sub/c"), "Repl": true],
+				["----": sandbox.path("a"), "to  ": sandbox.path("a/sub"), "pnam": "copy"],
+			] as [[String: any AppleEventEncodable]] {
+				let error = send(command, parameters).error
+				#expect(error?.number == -1 && error?.message?.contains("is inside") == true, "\(command) \(parameters)")
+			}
+		}
+		#expect(FileManager.default.enumerator(atPath: sandbox.path("a"))?.allObjects.count == 5)
+		// A folder beside it, or a link to the folder, is fine.
+		#expect(send(copy, ["----": sandbox.path("a/sub"), "to  ": sandbox.path("a"), "pnam": "sub2"]).error == nil)
+		try FileManager.default.createSymbolicLink(atPath: sandbox.path("a/link"), withDestinationPath: sandbox.path("a"))
+		#expect(send(copy, ["----": sandbox.path("a/link"), "to  ": sandbox.path("a/sub")]).error == nil)
+	}
+
 	@Test func moveFolder() throws {
 		let sandbox = try Sandbox()
 		_ = try sandbox.file("s/a.txt")

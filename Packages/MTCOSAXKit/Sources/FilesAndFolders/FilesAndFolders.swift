@@ -226,6 +226,11 @@ public enum FilesAndFolders {
 				throw notFound
 			}
 			let isFolder = FileItem.isDirectory(source)
+			// A folder can't go inside itself: copying it there copied the copy into itself, deeper each time, until
+			// paths got too long (459 items, 306 levels deep); moving it is refused by the system.
+			if isFolder, !FileItem.isSymlink(source), FileItem.isInside(target.deletingLastPathComponent(), source) {
+				throw OSAXError(-1, "“\(target.path)” is inside “\(source.lastPathComponent)”, the folder being \(move ? "moved" : "copied").")
+			}
 			// The target is the source itself (the same path, or a case variant): removing the "existing" target
 			// would delete the source. Moving to another spelling renames it (SatimageOSAX gave -48); otherwise it's
 			// -48 without `replacing` and left as it is with it, as in SatimageOSAX.

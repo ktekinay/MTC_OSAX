@@ -56,6 +56,18 @@ public enum FileItem {
 			&& a.lastPathComponent.lowercased() == b.lastPathComponent.lowercased()
 	}
 
+	/// Whether `url` is `folder` or inside it, by the identity of each folder on the way up (so by any spelling,
+	/// and through links in the path); false if either doesn't exist.
+	public static func isInside(_ url: URL, _ folder: URL) -> Bool {
+		guard let target = identity(folder) else { return false }
+		var path = ""
+		for component in url.standardizedFileURL.pathComponents {
+			path = (path as NSString).appendingPathComponent(component)
+			if identity(URL(fileURLWithPath: path)) == target { return true }
+		}
+		return false
+	}
+
 	public static func isDirectory(_ url: URL) -> Bool {
 		var directory: ObjCBool = false
 		return FileManager.default.fileExists(atPath: url.path, isDirectory: &directory) && directory.boolValue
