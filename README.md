@@ -239,6 +239,12 @@ Scripts/test.sh --filter XMLTests
 
 The tests only run there. A test bundle loaded outside a sandbox (by bare `swift test`, `xcodebuild test` or Xcode's Test action) ends its process with a message before any test runs, so the file-command tests and fixture replays can't be started unprotected by accident. To debug a test in Xcode, set `MTC_ALLOW_UNSANDBOXED_TESTS=1` in the scheme's Test action for that session, and run only the test you're debugging.
 
+To have them run before every push, turn on the hook in `Scripts/hooks` (it's off until you do; a failure stops the push, and `git push --no-verify` skips it once):
+
+```sh
+git config core.hooksPath Scripts/hooks
+```
+
 Run them with AddressSanitizer too before committing a change to code that uses C (libxml2, libxslt, Onigmo, PCRE2, libyaml, tomlc17, the Apple Event Manager): it catches memory errors that pass unnoticed otherwise, such as reading a freed libxml2 node.
 
 ```sh
