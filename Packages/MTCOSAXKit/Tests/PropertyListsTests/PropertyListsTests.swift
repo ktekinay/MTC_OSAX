@@ -466,9 +466,11 @@ struct FlattenedDescriptorTests {
 		for (kind, wrap) in kinds {
 			#expect(FlattenedDescriptor.depth(of: nested(3, wrap)) == 3, "\(kind)")
 			#expect(PropertyLists.unflatten(nested(PropertyLists.maximumDepth, wrap)) != nil, "\(kind)")
-			let start = Date()
 			#expect(PropertyLists.unflatten(nested(PropertyLists.maximumDepth + 1, wrap)) == nil, "\(kind)")
-			#expect(PropertyLists.unflatten(nested(3000, wrap)) == nil, "\(kind)")
+			// Refused before the Apple Event Manager is asked, so at once (making the value is what takes time here).
+			let deep = nested(3000, wrap)
+			let start = Date()
+			#expect(PropertyLists.unflatten(deep) == nil, "\(kind)")
 			#expect(Date().timeIntervalSince(start) < 1, "\(kind)")
 		}
 		// A record's items are mixed values; an item with an odd length is padded.
