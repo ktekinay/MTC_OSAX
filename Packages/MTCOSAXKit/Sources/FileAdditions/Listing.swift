@@ -87,7 +87,7 @@ extension FileAdditions {
 			guard braceExpansions(pattern) <= maximumBraceExpansions else {
 				throw OSAXError(-50, "The pattern’s braces make more than \(maximumBraceExpansions) patterns to look for.")
 			}
-			for path in matches(full) {
+			for path in try matches(full) {
 				let url = URL(fileURLWithPath: path)
 				// glob(3) matches `.` and `..` with `.*`; they're the folder itself and its parent, not items in it.
 				if url.lastPathComponent == "." || url.lastPathComponent == ".." {
@@ -122,49 +122,57 @@ extension FileAdditions {
 	/// script) waiting: `{a,b}` 25 times made 33 million.
 	static let maximumBraceExpansions = 10_000
 
-	/// How many patterns `{…}` groups make (nested ones too; `\` escapes a brace), saturating far above the limit.
+	/// How many patterns `{…}` groups make (nested ones too), counted as glob(3) reads them: byte by byte, `\`
+	/// escapes the next byte, and braces inside `[…]` don't count (it counted Characters and brackets, so
+	/// `{[}],x}` repeated made 2ⁿ patterns while counting as one, and a pattern of 10,000 `{` overflowed the stack
+	/// through its recursion). Saturates far above the limit.
 	static func braceExpansions(_ pattern: String) -> Int {
-		let characters = Array(pattern)
+		let bytes = Array(pattern.utf8)
 		let cap = 1 << 40
-		var index = 0
 		func saturating(_ a: Int, _ b: Int) -> Int {
 			let (product, overflow) = a.multipliedReportingOverflow(by: b)
 			return overflow ? cap : min(product, cap)
 		}
-		// Text and groups up to the end, or (in a group) an unnested `,` or `}`: the product of its groups.
-		func run(inGroup: Bool) -> Int {
-			var product = 1
-			while index < characters.count {
-				let character = characters[index]
-				if character == "\\" {
-					index += 2
-					continue
-				}
-				if inGroup, character == "," || character == "}" {
-					return product
-				}
+		// Each open group: the product of the groups in its current alternative, and the alternatives before it.
+		var groups: [(product: Int, alternatives: Int)] = [(1, 0)]
+		var index = 0
+		while index < bytes.count {
+			let byte = bytes[index]
+			index += 1
+			switch byte {
+			case UInt8(ascii: "\\"):
 				index += 1
-				guard character == "{" else { continue }
-				var alternatives = 0
-				while true {
-					alternatives = min(alternatives + run(inGroup: true), cap)
-					guard index < characters.count else { return product }
-					index += 1
-					if characters[index - 1] == "}" { break }
-				}
-				product = saturating(product, max(alternatives, 1))
+			case UInt8(ascii: "["):
+				// To the next `]`; without one, the `[` is itself (as in glob's globexp2).
+				if let close = bytes[index...].firstIndex(of: UInt8(ascii: "]")) { index = close + 1 }
+			case UInt8(ascii: "{"):
+				groups.append((1, 0))
+			case UInt8(ascii: ",") where groups.count > 1:
+				groups[groups.count - 1].alternatives = min(groups[groups.count - 1].alternatives + groups[groups.count - 1].product, cap)
+				groups[groups.count - 1].product = 1
+			case UInt8(ascii: "}") where groups.count > 1:
+				let group = groups.removeLast()
+				groups[groups.count - 1].product = saturating(groups[groups.count - 1].product, max(min(group.alternatives + group.product, cap), 1))
+			default:
+				break
 			}
-			return product
 		}
-		return run(inGroup: false)
+		// A group left open is taken as it is by glob, with everything in it: only the groups closed before it count.
+		return groups[0].product
 	}
 
-	static func matches(_ pattern: String) -> [String] {
+	/// The paths a pattern matches. -50 for a pattern glob can't take (a NUL, which cut the pattern short; one too
+	/// long); any other failure is an error too, rather than no matches.
+	static func matches(_ pattern: String) throws -> [String] {
+		guard !pattern.containsASCII("\0") else { throw OSAXError(-50, "A pattern can’t contain a NUL character.") }
+		guard pattern.utf8.count < Int(PATH_MAX) else { throw OSAXError(-50, "The pattern is longer than a path can be.") }
 		var result = glob_t()
 		defer { globfree(&result) }
-		guard Darwin.glob(pattern, GLOB_BRACE | GLOB_TILDE | GLOB_NOSORT, nil, &result) == 0 else {
-			return []
+		let status = Darwin.glob(pattern, GLOB_BRACE | GLOB_TILDE | GLOB_NOSORT, nil, &result)
+		guard status == 0 || status == GLOB_NOMATCH else {
+			throw OSAXError(status == GLOB_NOSPACE ? -108 : -1, "Couldn’t look for “\(pattern)” (glob error \(status)).")
 		}
+		guard status == 0 else { return [] }
 		return (0 ..< Int(result.gl_pathc)).compactMap { index in
 			result.gl_pathv[index].map { String(cString: $0) }
 		}

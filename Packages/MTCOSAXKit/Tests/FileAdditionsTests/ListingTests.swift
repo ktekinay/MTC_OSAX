@@ -140,6 +140,25 @@ struct GlobTests {
 		#expect(FileAdditions.braceExpansions("\\{a,b}") == 1)
 		#expect(FileAdditions.braceExpansions("{a,b") == 1)
 		#expect(FileAdditions.braceExpansions(String(repeating: "{a,b}", count: 100)) > 10_000)
+		// As glob reads them: braces inside brackets don't count, a bracket with no `]` is itself, a group left open
+		// is taken as it is with everything in it, and a mark after a brace doesn't hide it.
+		#expect(FileAdditions.braceExpansions("{[}],x}") == 2)
+		#expect(FileAdditions.braceExpansions(String(repeating: "{[}],x}", count: 14)) == 16384)
+		#expect(FileAdditions.braceExpansions("{[a,b}") == 2)
+		#expect(FileAdditions.braceExpansions("{a,b}{c") == 2)
+		#expect(FileAdditions.braceExpansions("{a,{b,c}") == 1)
+		#expect(FileAdditions.braceExpansions("{\u{301}a,b}") == 2)
+		#expect(FileAdditions.braceExpansions(String(repeating: "{", count: 100_000)) == 1)
+		let folder = try TemporaryFolder()
+		defer { folder.remove() }
+		try folder.file("a.txt")
+		try folder.file("b.bak")
+		#expect(send(glob, ["----": String(repeating: "{[}],x}", count: 14), "from": folder.url]).error?.number == -50)
+		#expect(send(glob, ["----": String(repeating: "{", count: 100_000), "from": folder.url]).error?.number == -50) // too long for a path
+		#expect(send(glob, ["----": String(repeating: "{", count: 500), "from": folder.url, "namo": true]).result?.numberOfItems == 0)
+		// A NUL cut the pattern short: `*\0.bak` listed everything.
+		#expect(send(glob, ["----": "*\0.bak", "from": folder.url]).error?.number == -50)
+		#expect(send(glob, ["----": String(repeating: "a", count: 2000), "from": folder.url]).error?.number == -50)
 		let start = Date()
 		#expect(send(glob, ["----": String(repeating: "{a,b}", count: 25), "from": FileManager.default.temporaryDirectory]).error?.number == -50)
 		#expect(Date().timeIntervalSince(start) < 5)
