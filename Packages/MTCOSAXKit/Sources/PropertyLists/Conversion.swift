@@ -205,9 +205,12 @@ extension PropertyLists {
 	}
 
 	/// The descriptor flattened in `data`, or nil if it isn't one. The length inside the data isn't trusted (data
-	/// from a file can claim more than it holds; `AEUnflattenDesc` would read past the end).
+	/// from a file can claim more than it holds; `AEUnflattenDesc` would read past the end), and neither is its
+	/// nesting: lists or records nested more than `maximumDepth` deep are left as data, since unflattening them
+	/// takes time that grows with the square of the depth (a minute at 12,000 levels, 192 KB) and then overflows the
+	/// stack (16,000 levels, 256 KB), where a value from a document could stop or end the app.
 	nonisolated static func unflatten(_ data: Data) -> NSAppleEventDescriptor? {
-		guard data.starts(with: Array("dle2".utf8)) else {
+		guard data.starts(with: Array("dle2".utf8)), let depth = FlattenedDescriptor.depth(of: data), depth <= maximumDepth else {
 			return nil
 		}
 		var desc = AEDesc()
@@ -310,5 +313,67 @@ extension RecordFields.Key {
 		} else {
 			self = .user(key)
 		}
+	}
+}
+
+/// How deeply the lists and records in a flattened descriptor (`dle2`) nest, read without unflattening it.
+///
+/// The layout, as `AEFlattenDesc` writes it: `dle2`, four bytes, then the descriptor as its type, a 4-byte length
+/// and that many bytes of data (an item's data is padded to an even length). A list or record's data is a 4-byte
+/// count, four bytes, then its items: a list's are type, length and data; a record's have a 4-byte keyword first. At
+/// the top only, a `list` or `reco` has 16 more bytes before the count. A record coerced to another type (`docu`,
+/// an object specifier's `obj `) has a record's data under its own type, and nothing else marks it, so anything
+/// whose data reads as a whole number of record items counts as a record here: counting too deep leaves a value
+/// as data, counting too shallow would let a document's value through.
+enum FlattenedDescriptor {
+	/// The deepest nesting, or nil if the data doesn't read as a flattened descriptor.
+	static func depth(of data: Data) -> Int? {
+		let bytes = [UInt8](data)
+		guard bytes.count >= 16 else { return nil }
+		func word(_ at: Int) -> Int? {
+			guard at >= 0, at + 4 <= bytes.count else { return nil }
+			return Int(bytes[at]) << 24 | Int(bytes[at + 1]) << 16 | Int(bytes[at + 2]) << 8 | Int(bytes[at + 3])
+		}
+		func type(_ at: Int) -> String? {
+			guard at + 4 <= bytes.count else { return nil }
+			return String(decoding: bytes[at ..< at + 4], as: UTF8.self)
+		}
+		/// Whether `range` holds a whole number of record items (keyword, type, length, padded data).
+		func readsAsRecord(_ range: Range<Int>) -> Bool {
+			guard range.count >= 8, let count = word(range.lowerBound), word(range.lowerBound + 4) == 0 else { return false }
+			var at = range.lowerBound + 8
+			for _ in 0 ..< count {
+				guard let length = word(at + 8), length >= 0, length <= range.upperBound - (at + 12) else { return false }
+				at += 12 + length + (length & 1)
+			}
+			return at == range.upperBound || at - 1 == range.upperBound
+		}
+
+		guard let topType = type(8), let topLength = word(12), topLength <= bytes.count - 16 else { return nil }
+		struct Frame { var next: Int; let end: Int; let isRecord: Bool }
+		var frames: [Frame] = []
+		var deepest = 0
+		/// Enters the container (if it is one) whose data is `range`.
+		func enter(_ typeName: String, _ range: Range<Int>, top: Bool) {
+			let isList = typeName == "list", isRecord = typeName == "reco"
+			var start = range.lowerBound
+			if top, isList || isRecord, word(start + 8) == 0x18, type(start + 12) == typeName {
+				start += 16
+			}
+			guard isList || isRecord || readsAsRecord(start ..< range.upperBound), let count = word(start), count >= 0 else { return }
+			frames.append(Frame(next: start + 8, end: range.upperBound, isRecord: !isList))
+			deepest = max(deepest, frames.count)
+		}
+		enter(topType, 16 ..< 16 + topLength, top: true)
+		while let frame = frames.last {
+			let at = frame.next + (frame.isRecord ? 4 : 0)
+			guard frame.next < frame.end, let itemType = type(at), let length = word(at + 4), length >= 0, at + 8 + length <= frame.end else {
+				frames.removeLast()
+				continue
+			}
+			frames[frames.count - 1].next = at + 8 + length + (length & 1)
+			enter(itemType, at + 8 ..< at + 8 + length, top: false)
+		}
+		return deepest
 	}
 }

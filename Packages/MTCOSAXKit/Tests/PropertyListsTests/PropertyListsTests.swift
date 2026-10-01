@@ -444,6 +444,44 @@ struct FlattenedDescriptorTests {
 		#expect(PropertyLists.unflatten(bytes("646C6532000000007574787400000004006800")) == nil)
 		#expect(PropertyLists.unflatten(bytes("646C6532")) == nil)
 	}
+
+	/// Unflattening lists or records nested thousands deep took a minute, then overflowed the stack; past the
+	/// depth limit, such data stays data. Records coerced to another type are records too.
+	@Test func nestingBeyondTheLimit() throws {
+		let keyword = FourCharCode(fourCharString: "pnam")
+		func nested(_ depth: Int, _ wrap: (NSAppleEventDescriptor) -> NSAppleEventDescriptor) -> Data {
+			var value = NSAppleEventDescriptor(int32: 7)
+			for _ in 0 ..< depth { value = wrap(value) }
+			return PropertyLists.flatten(value)
+		}
+		let kinds: [(String, (NSAppleEventDescriptor) -> NSAppleEventDescriptor)] = [
+			("list", { let list = NSAppleEventDescriptor.list(); list.insert($0, at: 1); return list }),
+			("record", { let record = NSAppleEventDescriptor.record(); record.setDescriptor($0, forKeyword: keyword); return record }),
+			("coerced record", { inner in
+				let record = NSAppleEventDescriptor.record()
+				record.setDescriptor(inner, forKeyword: keyword)
+				return record.coerce(toDescriptorType: FourCharCode(fourCharString: "docu"))!
+			}),
+		]
+		for (kind, wrap) in kinds {
+			#expect(FlattenedDescriptor.depth(of: nested(3, wrap)) == 3, "\(kind)")
+			#expect(PropertyLists.unflatten(nested(PropertyLists.maximumDepth, wrap)) != nil, "\(kind)")
+			let start = Date()
+			#expect(PropertyLists.unflatten(nested(PropertyLists.maximumDepth + 1, wrap)) == nil, "\(kind)")
+			#expect(PropertyLists.unflatten(nested(3000, wrap)) == nil, "\(kind)")
+			#expect(Date().timeIntervalSince(start) < 1, "\(kind)")
+		}
+		// A record's items are mixed values; an item with an odd length is padded.
+		let record = NSAppleEventDescriptor.record()
+		record.setDescriptor(NSAppleEventDescriptor(descriptorType: typeChar, data: Data("abc".utf8))!, forKeyword: keyword)
+		record.setDescriptor(NSAppleEventDescriptor(int32: 1), forKeyword: FourCharCode(fourCharString: "usrf"))
+		let list = NSAppleEventDescriptor.list()
+		list.insert(record, at: 1)
+		list.insert(NSAppleEventDescriptor(string: "x"), at: 2)
+		#expect(FlattenedDescriptor.depth(of: PropertyLists.flatten(list)) == 2)
+		#expect(FlattenedDescriptor.depth(of: PropertyLists.flatten(NSAppleEventDescriptor(int32: 1))) == 0)
+		#expect(PropertyLists.unflatten(PropertyLists.flatten(list))?.numberOfItems == 2)
+	}
 }
 
 /// Deep nesting used to recurse until the stack ran out (a JSON file of a million `[`s crashed the app). Runs on the
