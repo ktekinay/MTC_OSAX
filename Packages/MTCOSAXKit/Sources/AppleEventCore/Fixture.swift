@@ -165,7 +165,7 @@ extension Fixture {
 	/// must be a file name, not a path or hidden, and not the cases file's own (a case named `cases` overwrote
 	/// cases.json). On a case-insensitive disk, case doesn't count.
 	public static func problem(withCaseName name: String, casesFile: URL) -> String? {
-		if name.isEmpty || name.contains("/") || name.hasPrefix(".") {
+		if name.isEmpty || name.containsASCII("/") || name.hasPrefix(".") {
 			return "Case name \"\(name)\" can't be a file name: no \"/\", and not starting with \".\"."
 		}
 		if name.lowercased() == casesFile.deletingPathExtension().lastPathComponent.lowercased() {

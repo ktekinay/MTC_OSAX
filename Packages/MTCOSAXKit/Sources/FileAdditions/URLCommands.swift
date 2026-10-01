@@ -393,7 +393,7 @@ struct URLParts {
 			query = String(rest[rest.index(after: question)...])
 			rest = rest[..<question]
 		}
-		if let colon = rest.firstIndex(of: ":"), !rest[..<colon].contains("/"), !rest[..<colon].isEmpty {
+		if let colon = rest.firstIndex(of: ":"), !rest[..<colon].containsASCII("/"), !rest[..<colon].isEmpty {
 			scheme = String(rest[..<colon])
 			rest = rest[rest.index(after: colon)...]
 		}

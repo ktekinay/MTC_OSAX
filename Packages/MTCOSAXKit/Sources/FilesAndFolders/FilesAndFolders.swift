@@ -80,7 +80,7 @@ public enum FilesAndFolders {
 	/// -1 with a message for a name that isn't one name: empty, with `/` or NUL (which became `%00` in the file
 	/// name), or `.` or `..`.
 	static func requireValidName(_ name: String) throws {
-		guard !name.contains("/"), !name.contains("\0"), isName(name) else {
+		guard !name.containsASCII("/"), !name.containsASCII("\0"), isName(name) else {
 			throw OSAXError(-1, "A name can’t be empty, contain “/” or be “.” or “..”. To use a subfolder, give its path as the folder instead.")
 		}
 	}
@@ -156,7 +156,7 @@ public enum FilesAndFolders {
 		let name = try request.requiredParameter("to  ", as: String.self)
 		// `/` or nothing is -1 without a message, as in SatimageOSAX; `.`, `..` (which was -48, the folder above
 		// existing) and NUL as for the other commands' names.
-		guard !name.contains("/"), !name.isEmpty else {
+		guard !name.containsASCII("/"), !name.isEmpty else {
 			throw invalidInput
 		}
 		try requireValidName(name)

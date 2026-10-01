@@ -105,16 +105,17 @@ extension FileAdditions {
 		return try filter.result(items, request: request)
 	}
 
-	/// A path with glob(3)'s special characters backslash-escaped, so it only matches itself.
+	/// A path with glob(3)'s special characters backslash-escaped, so it only matches itself (scalar by scalar: a
+	/// special character followed by a combining mark is one Character, which glob doesn't see as one).
 	static func escaped(_ path: String) -> String {
-		var result = ""
-		for character in path {
-			if "\\*?[]{}~".contains(character) {
+		var result = String.UnicodeScalarView()
+		for scalar in path.unicodeScalars {
+			if "\\*?[]{}~".unicodeScalars.contains(scalar) {
 				result.append("\\")
 			}
-			result.append(character)
+			result.append(scalar)
 		}
-		return result
+		return String(result)
 	}
 
 	/// glob(3) looks for every pattern a pattern's braces make, one after another, with the main thread (and every

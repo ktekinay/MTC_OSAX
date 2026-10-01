@@ -82,7 +82,7 @@ public final class NetworkFixtureServer: @unchecked Sendable {
 		if request.path.hasPrefix("/files/") {
 			// One name in the folder: nothing outside it (`/files/../../etc/passwd`), even percent-encoded.
 			let name = String(request.path.dropFirst("/files/".count)).removingPercentEncoding ?? ""
-			guard !name.isEmpty, !name.contains("/"), name != ".", name != ".." else { return notFound }
+			guard !name.isEmpty, !name.utf8.contains(UInt8(ascii: "/")), name != ".", name != ".." else { return notFound }
 			let file = folder.appendingPathComponent(name)
 			guard let data = try? Data(contentsOf: file) else { return notFound }
 			return (200, data, "application/xml")

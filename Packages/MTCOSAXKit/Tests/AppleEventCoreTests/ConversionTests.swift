@@ -83,6 +83,8 @@ struct DecodingTests {
 	@Test func urlFromHFSPathOnStartupVolume() throws {
 		let volume = try #require(try URL(fileURLWithPath: "/").resourceValues(forKeys: [.volumeNameKey]).volumeName)
 		#expect(try URL(scriptPath: "\(volume):Users:someone:a/b.txt").path == "/Users/someone/a:b.txt")
+		// Scalar by scalar: `/` followed by a combining mark is one Character, which stayed a `/` in the path.
+		#expect(try URL(scriptPath: "\(volume):Users:someone:a/\u{301}b.txt").path == "/Users/someone/a:\u{301}b.txt")
 		#expect(try URL(scriptPath: "\(volume):Users:").path == "/Users")
 	}
 

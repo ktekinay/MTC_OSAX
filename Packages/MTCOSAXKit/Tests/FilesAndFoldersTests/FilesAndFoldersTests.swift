@@ -569,7 +569,9 @@ struct SymlinkTests {
 /// A `name` from an untrusted source could write outside the folder (`../escaped`).
 @MainActor
 struct NameTests {
-	@Test(arguments: ["../escaped", "sub/file", "..", ".", ""])
+	/// The `/` check compared Characters, and `/` followed by a combining mark (or a joiner) is one Character that
+	/// isn't "/", though the file system sees a separator: `../\u{301}x` made `x́` in the folder above.
+	@Test(arguments: ["../escaped", "sub/file", "..", ".", "", "../\u{301}x", "sub/\u{301}x", "/\u{200D}x", "a\0b"])
 	func namesArePlainNames(_ name: String) throws {
 		let sandbox = try Sandbox()
 		let file = try sandbox.file("f/a.txt")
@@ -583,6 +585,7 @@ struct NameTests {
 			#expect(error?.number == -1, "\(command)")
 			#expect(error?.message?.contains("subfolder") == true, "\(command)")
 		}
+		#expect(send(rename, ["----": file.path, "to  ": name]).error?.number == -1)
 		#expect(try FileManager.default.contentsOfDirectory(atPath: sandbox.url.path) == ["f"])
 		#expect(try FileManager.default.contentsOfDirectory(atPath: folder) == ["a.txt"])
 	}

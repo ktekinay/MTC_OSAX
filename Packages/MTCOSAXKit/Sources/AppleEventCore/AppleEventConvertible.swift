@@ -221,7 +221,7 @@ extension URL: AppleEventConvertible {
 	/// `f`). Every command that takes a path as text goes through here.
 	public init(scriptPath path: String, relativeTo base: URL? = nil) throws {
 		// No file has a NUL in its path (it became `%00` in the name).
-		guard !path.contains("\0") else { throw OSAXError(-1700, "A path can’t contain a NUL character.") }
+		guard !path.containsASCII("\0") else { throw OSAXError(-1700, "A path can’t contain a NUL character.") }
 		if let base, URL.isRelativeScriptPath(path) {
 			guard !path.isEmpty else { throw OSAXError(-1700, "An empty path doesn’t name a file.") }
 			self = base.appendingPathComponent(path)
@@ -261,7 +261,7 @@ extension URL: AppleEventConvertible {
 	/// Whether a volume by that name is mounted: the startup disk (in any case, as HFS paths are read) or one in
 	/// /Volumes.
 	static func isVolumeName(_ name: String) -> Bool {
-		guard !name.isEmpty, !name.contains("/"), name != ".", name != ".." else { return false }
+		guard !name.isEmpty, !name.containsASCII("/"), name != ".", name != ".." else { return false }
 		let startup = try? URL(fileURLWithPath: "/").resourceValues(forKeys: [.volumeNameKey]).volumeName
 		if let startup, name.caseInsensitiveCompare(startup) == .orderedSame { return true }
 		return FileManager.default.fileExists(atPath: "/Volumes/" + name)
@@ -272,7 +272,7 @@ extension URL: AppleEventConvertible {
 	/// (-1700), and so is a missing volume name.
 	static func posixPath(fromHFSPath hfsPath: String) throws -> String {
 		var components = hfsPath.split(separator: ":", omittingEmptySubsequences: false).map {
-			$0.replacingOccurrences(of: "/", with: ":")
+			$0.replacingASCII("/", with: ":")
 		}
 		if components.last == "" {
 			components.removeLast()
