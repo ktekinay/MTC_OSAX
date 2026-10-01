@@ -122,7 +122,7 @@ Recorded from SatimageOSAX in `Fixtures/MathFunctions` (255 cases), `Fixtures/Ar
 - **`sortlist`.** Text sorts by character code; any text in a list makes it a text sort, turning numbers and booleans into text; numbers stay integers unless one is a real; dates can't be mixed (-1700). `comparison` 4 is case-insensitive with uppercase first. Lists of lists that differ in length, or a `with respect to` that isn't a list's index, are error -1.
 - **`masklist`.** A shorter mask repeats; a longer one is -50; a mask value that isn't a number (such as a boolean) keeps its item.
 - **`suppress item`.** A list of indices may use negatives from the end; 0 and out-of-range indices are -1719, reals and text -50; record keys are keywords, four-character codes as text, or user property names (case-sensitive).
-- **`exclude items`/`keep items`** compare as text, so `1` matches `"1"`.
+- **`exclude items`/`keep items`** compare as text, so `1` matches `"1"`. A real's text is the Apple Event Manager's, not AppleScript's: up to 15 digits and no `.0` (1.0 is `"1"`, 0.1 + 0.2 is `"0.3"`), with a leading space when it has an exponent (`" 1e+20"`). So `"1"` matches 1.0, `"1.0"` matches no number, and 0.3 matches 0.1 + 0.2; `sortlist` of reals with text returns those texts (`exclude-reals-*`, `sortlist-reals-and-text*`).
 - **`special concat`** adds numbers as reals (a one-item list counts as its number), joins lists, merges nested records, keeps the first value otherwise, and appends the second record's other properties. Tables keep their row separator; missing cells are empty.
 
 ## Fixing Satimage's bugs
@@ -137,6 +137,7 @@ Recorded from MTC_OSAX in `Fixtures/ListUtilitiesFixes` and `Fixtures/ArraysFixe
 | `sortlist` with `missing value` | Returned NaN reals (turning every number into a real), in the middle when sorting descending, and kept duplicates | `missing value`, always last, one kept with `remove duplicates` |
 | `suppress item` with one index | Error -1719, even for the dictionary's example | Removes it (-1 is the last item) |
 | `exclude items`/`keep items` `without case sensitive` | Still case-sensitive | Ignores case |
+| `exclude items`/`keep items` from an `array of real` | No result; an array among the lists was never filtered | Filtered as a list of the same reals is, and returned as a list of reals (unit tests) |
 | `keep items {}` | `{{}, {}}` | `{}` |
 | `special concat` text with a record | Garbage (the record's bytes as text) | Error -1700 |
 | `special concat` with empty text | No result | Empty cells (`"" with "b"` is tab & "b") |

@@ -77,7 +77,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 
 - `sortlist` of a single value gives a list of it; NaN in a column it sorts by sorts last, as it does alone and as `missing value` does (it left the rows unsorted); `with respect to 1.5` is error -1700, as 1.0E+19 is (SatimageOSAX left the lists unsorted); without a parameter it's error -1701; `missing value` sorts last and stays `missing value` (SatimageOSAX turned every number into a real).
 - `suppress item` with a single index works (including the dictionary's example).
-- `exclude items` and `keep items` `without case sensitive` ignore case; `keep items {}` gives `{}`.
+- `exclude items` and `keep items` `without case sensitive` ignore case; `keep items {}` gives `{}`; from an `array of real` they filter its numbers as they would a list of the same reals, and return a list (SatimageOSAX returned nothing).
 - `special concat` of text with a record is error -1700 instead of garbage; empty text gives empty cells.
 - `createarray` and `randomarray` make at most 100,000,000 items (-50 for more), instead of trying to allocate tens of gigabytes.
 - `randomarray … seed` beyond 32 bits uses the seed's low 32 bits instead of ignoring it.

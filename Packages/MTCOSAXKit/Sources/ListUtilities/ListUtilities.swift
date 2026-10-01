@@ -70,7 +70,10 @@ public enum ListUtilities {
 		descriptor.descriptorType == typeAEList || ArrayOfReal.values(of: descriptor) != nil
 	}
 
-	/// An item as text for comparing: text, or a number or boolean in the script's text form; nil otherwise.
+	/// An item as text for comparing: text, or a number or boolean as the Apple Event Manager writes it, which is
+	/// what SatimageOSAX compared and returned (recorded: `sortlist {"b", 1.0, 1.0E+20}` is `{" 1e+20", "1", "b"}`).
+	/// That isn't AppleScript's own form: a real has up to 15 digits and no `.0` (1.0 is "1", 0.1 + 0.2 is "0.3"),
+	/// and one with an exponent has a leading space (" 1e+20", " 1e-7"). Nil for anything else.
 	static func text(_ descriptor: NSAppleEventDescriptor) -> String? {
 		switch descriptor.descriptorType {
 		case typeUnicodeText, typeUTF8Text, typeChar, FourCharCode(fourCharString: "ut16"):
@@ -208,9 +211,9 @@ public enum ListUtilities {
 		return try columns.map { column in try column.selecting(kept.filter { $0 < column.count }) }.appleEventDescriptor
 	}
 
-	/// Items that are in a filter, compared as text (as a script would write them). Reals are looked up as numbers:
-	/// the filter's entries are read as the reals whose text they are, checked by writing them as text again, so
-	/// only an entry's own number matches (as with text, `"1"` isn't 1.0, whose text is `"1.0"`).
+	/// Items that are in a filter, compared as text (`text(_:)`: so `"1"` matches 1.0, whose text it is, and `"1.0"`
+	/// matches no number, as in SatimageOSAX). An array's reals are looked up as numbers instead, without making a
+	/// descriptor and its text for each: the filter's entries are read back as every real whose text they are.
 	struct TextFilter {
 		let texts: Set<String>
 		let fold: (String) -> String
@@ -219,12 +222,25 @@ public enum ListUtilities {
 		init(_ texts: Set<String>, fold: @escaping (String) -> String) {
 			self.texts = texts
 			self.fold = fold
+			func isEntry(_ value: Double, _ entry: String) -> Bool {
+				ListUtilities.text(NSAppleEventDescriptor(double: value)).map(fold) == entry
+			}
 			for entry in texts {
-				// Text for a real may have a decimal comma, and 0 two signs.
-				for number in [Double(entry), Double(entry.replacingOccurrences(of: ",", with: "."))].compactMap({ $0 }) {
-					for candidate in number == 0 ? [0.0, -0.0] : [number] where !candidate.isNaN {
-						if let written = ListUtilities.text(NSAppleEventDescriptor(double: candidate)), fold(written) == entry {
-							reals.insert(candidate.bitPattern)
+				// A real's text may have a leading space (" 1e+20") or a decimal comma, and 0 has two signs.
+				let trimmed = entry.trimmingCharacters(in: .whitespaces)
+				for number in [Double(trimmed), Double(trimmed.replacingOccurrences(of: ",", with: "."))].compactMap({ $0 }) {
+					for candidate in number == 0 ? [0.0, -0.0] : [number] where candidate.isFinite && isEntry(candidate, entry) {
+						reals.insert(candidate.bitPattern)
+						// The text has 15 digits, fewer than a real: its neighbours with the same text match too (0.3 and
+						// 0.1 + 0.2 are both "0.3"). A few dozen at most.
+						for step in [\Double.nextUp, \Double.nextDown] {
+							var neighbour = candidate[keyPath: step]
+							var steps = 0
+							while steps < 1000, neighbour.isFinite, isEntry(neighbour, entry) {
+								reals.insert(neighbour.bitPattern)
+								neighbour = neighbour[keyPath: step]
+								steps += 1
+							}
 						}
 					}
 				}

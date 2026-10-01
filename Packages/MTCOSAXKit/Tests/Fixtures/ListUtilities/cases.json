@@ -546,5 +546,49 @@
  {
   "name": "masklist-empty-with-mask",
   "script": "masklist {} with {1}"
+ },
+ {
+  "name": "sortlist-reals-and-text",
+  "script": "sortlist {\"b\", 1.0, 1.0E+20}"
+ },
+ {
+  "name": "sortlist-reals-and-text-forms",
+  "script": "sortlist {\"b\", -0.0, 0.0, 1.5E+15, 1.0E+16, 1.0E-5, 1.0E-6, 1.0E-7, 0.1 + 0.2, 123456789.123, 2.5}"
+ },
+ {
+  "name": "exclude-reals-text-1",
+  "script": "exclude items {\"1\"} from {1.0, 2.5}"
+ },
+ {
+  "name": "exclude-reals-text-1-0",
+  "script": "exclude items {\"1.0\"} from {1.0, 2.5}"
+ },
+ {
+  "name": "exclude-reals-mixed",
+  "script": "exclude items {1.0} from {1.0, 2.5, 1, \"1\", \"1.0\"}"
+ },
+ {
+  "name": "exclude-reals-large",
+  "script": "exclude items {1.0E+20} from {1.0E+20, 2.0E+20}"
+ },
+ {
+  "name": "exclude-reals-large-text",
+  "script": "exclude items {\"1.0E+20\"} from {1.0E+20, 2.0E+20}"
+ },
+ {
+  "name": "exclude-reals-small",
+  "script": "exclude items {1.0E-7} from {1.0E-7, 1.0}"
+ },
+ {
+  "name": "exclude-reals-close",
+  "script": "exclude items {0.3} from {0.1 + 0.2, 0.3, 1.0}"
+ },
+ {
+  "name": "keep-reals-close",
+  "script": "keep items {0.1 + 0.2} from {0.1 + 0.2, 0.3, 1.0}"
+ },
+ {
+  "name": "exclude-reals-decimal-comma",
+  "script": "exclude items {\"2,5\"} from {2.5, 1.0}"
  }
 ]

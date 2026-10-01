@@ -131,8 +131,13 @@ struct MaskListTests {
 @MainActor
 struct LargeArrayTests {
 	@Test func sameResultsAsLists() throws {
-		let numbers: [Double] = [1, 2.5, -0.0, 0, 1e20, 3, 2.5, .nan]
-		for filter in [AppleEventList(["2.5", "1.0", "3", "1.0E+20", "0.0"]), AppleEventList([2.5, 0])] as [AppleEventList] {
+		// Reals whose text has an exponent (and so a leading space), or fewer digits than the real: an array's
+		// numbers were looked up by reading the text back, which found neither.
+		let numbers: [Double] = [1, 2.5, -0.0, 0, 1e20, 3, 2.5, .nan, 1e-7, 0.1 + 0.2, 0.3, 123456789.123, 2e20, 1e16, 1e-5]
+		for filter in [
+			AppleEventList(["2.5", "1.0", "3", "1.0E+20", "0.0"]), AppleEventList([2.5, 0]), AppleEventList([1e20, 1e-7, 0.3]),
+			AppleEventList(["1", " 1e+20", "0.3", " 1E-7", "123456789.123"]), AppleEventList([0.1 + 0.2, 1e16, 1e-5]),
+		] as [AppleEventList] {
 			for code in ["SATIEIFL", "SATIKIFL"] {
 				let fromList = send(code, ["----": filter, "from": AppleEventList(numbers)]).result
 				let fromArray = send(code, ["----": filter, "from": ArrayOfReal(numbers)]).result
@@ -143,6 +148,21 @@ struct LargeArrayTests {
 				#expect(byArray?.atIndex(2).map(DescriptorSnapshot.init)?.summary == byList?.atIndex(1).map(DescriptorSnapshot.init)?.summary)
 			}
 		}
+	}
+
+	/// A real is compared by the text the Apple Event Manager gives it, as SatimageOSAX did (recorded in
+	/// `exclude-reals-*` and `sortlist-reals-and-text*`): 1.0 is "1", so `"1"` matches it and `"1.0"` nothing.
+	@Test func realsAsText() throws {
+		#expect(ListUtilities.text(NSAppleEventDescriptor(double: 1)) == "1")
+		#expect(ListUtilities.text(NSAppleEventDescriptor(double: 1e20)) == " 1e+20")
+		#expect(ListUtilities.text(NSAppleEventDescriptor(double: 0.1 + 0.2)) == "0.3")
+		for from: any AppleEventEncodable in [AppleEventList([1.0, 2.5]), ArrayOfReal([1.0, 2.5])] {
+			#expect(values(send("SATIEIFL", ["----": AppleEventList(["1"]), "from": from]).result) == [2.5])
+			#expect(values(send("SATIEIFL", ["----": AppleEventList(["1.0"]), "from": from]).result) == [1.0, 2.5])
+		}
+		#expect(values(send("SATIEIFL", ["----": AppleEventList([1e20]), "from": ArrayOfReal([1e20, 2e20])]).result) == [2e20])
+		#expect(values(send("SATIEIFL", ["----": AppleEventList([0.3]), "from": ArrayOfReal([0.1 + 0.2, 0.3, 1])]).result) == [1.0])
+		#expect(values(send("SATIKIFL", ["----": AppleEventList([1e-7]), "from": ArrayOfReal([1e-7, 1])]).result) == [1e-7])
 	}
 
 	@Test func largeArraysAreQuick() throws {

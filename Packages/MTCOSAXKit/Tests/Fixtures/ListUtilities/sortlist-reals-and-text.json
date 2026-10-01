@@ -1,0 +1,57 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Sort",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "b",
+                  "type" : "utxt"
+                },
+                {
+                  "real" : 1,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 1e+20,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : " 1e+20",
+              "type" : "ut16"
+            },
+            {
+              "text" : "1",
+              "type" : "ut16"
+            },
+            {
+              "text" : "b",
+              "type" : "ut16"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "sortlist-reals-and-text",
+  "recordedAt" : "2026-10-01T18:53:21Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "sortlist {\"b\", 1.0, 1.0E+20}",
+  "timeZone" : "America/New_York"
+}
