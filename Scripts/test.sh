@@ -32,6 +32,7 @@ profile="(version 1)
 	(regex #\"^/dev/ttys[0-9]+\$\")
 	(regex #\"^/dev/fd/[0-9]+\$\")
 	(subpath \"${HOME:A}/Library/Caches/org.swift.swiftpm\")
+	(subpath \"${HOME:A}/Library/Caches/swiftpm-testing-helper\")
 	(subpath \"${HOME:A}/Library/org.swift.swiftpm\"))
 (allow file-write-setugid
 	(subpath \"${temporary:A}\"))

@@ -64,10 +64,12 @@ struct IdleMonitorTests {
 
 	@Test func changedTimeoutAppliesToTheNextCountdown() async throws {
 		var fired = 0
-		var timeout: Duration? = nil
-		let monitor = IdleMonitor(timeout: { timeout }) { fired += 1 }
+		// In an object: the closure is the main actor's, and a captured variable changed afterwards is a warning.
+		final class Setting { var timeout: Duration? }
+		let setting = Setting()
+		let monitor = IdleMonitor(timeout: { setting.timeout }) { fired += 1 }
 		monitor.start()
-		timeout = .milliseconds(50)
+		setting.timeout = .milliseconds(50)
 		try await Task.sleep(for: .milliseconds(200))
 		#expect(fired == 0)
 		monitor.beginActivity()

@@ -171,8 +171,10 @@ struct NodePathTests {
 		#expect(path(try #require(xml.xpath(r, "book[2]/comment()").result?.atIndex(1))) == "xpointer(/library[1]/book[2]/comment())")
 		#expect(path(try #require(xml.xpath(r, "book[1]/*[2]").result?.atIndex(1))) == "xpointer(/library[1]/book[1]/*[2])")
 		#expect(path(year, from: r) == "book[2]/year[1]")
-		#expect(path(year, from: try #require(xml.send("XML chld", ["----": r, "indx": 2]).result)) == "year[1]")
-		#expect(path(year, from: try #require(xml.send("XML chld", ["----": r, "indx": 1]).result)) == "xpointer(/library[1]/book[2]/year[1])")
+		let first: NSAppleEventDescriptor = try #require(xml.send("XML chld", ["----": r, "indx": 1]).result)
+		let second: NSAppleEventDescriptor = try #require(xml.send("XML chld", ["----": r, "indx": 2]).result)
+		#expect(path(year, from: second) == "year[1]")
+		#expect(path(year, from: first) == "xpointer(/library[1]/book[2]/year[1])")
 
 		let several = try xml.root(xml.open("<a><!--1--><!--2--><?p x?><b/>t<b/><?p y?></a>"))
 		func child(_ index: Int) throws -> NSAppleEventDescriptor { try #require(xml.send("XML chld", ["----": several, "indx": index]).result) }

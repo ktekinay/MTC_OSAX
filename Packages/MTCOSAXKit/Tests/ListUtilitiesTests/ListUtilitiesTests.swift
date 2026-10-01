@@ -70,7 +70,8 @@ struct SortListTests {
 		for column in [AppleEventList(numbers) as any AppleEventEncodable, ArrayOfReal(numbers)] {
 			for unique in [false, true] {
 				let reply = try #require(send("SATISort", ["----": AppleEventList([column, letters]), "from": 1, "Uniq": unique]).result)
-				let sortedLetters = try #require(reply.atIndex(2)).map { list in (1 ... list.numberOfItems).map { list.atIndex($0)!.stringValue! } }
+				let list: NSAppleEventDescriptor = try #require(reply.atIndex(2))
+				let sortedLetters = (1 ... list.numberOfItems).map { list.atIndex($0)!.stringValue! }
 				// With `remove duplicates`, rows with equal keys (here both NaN, as two missing values) are one.
 				#expect(sortedLetters == ["c", "f", "a", "g", "d", "b"] + (unique ? [] : ["e"]), "unique: \(unique)")
 			}
