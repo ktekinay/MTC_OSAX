@@ -123,14 +123,21 @@ public struct Fixture: Codable {
 		// Property list references (CFRefs) differ between apps: each one the app returns in place of a recorded one
 		// replaces it in later events and replies.
 		var references: [String: DescriptorSnapshot] = [:]
+		let volume = (try? URL(fileURLWithPath: "/").resourceValues(forKeys: [.volumeNameKey]).volumeName) ?? ""
 		return exchanges.enumerated().compactMap { index, exchange in
 			var event = exchange.event
 			var reply = exchange.reply
 			for substitution in substitutions {
 				event = event.replacingText(substitution.old, with: substitution.new)
+					.replacingHFSPath(substitution.old, with: substitution.new, volume: volume)
 				reply = reply.replacingText(substitution.old, with: substitution.new)
 			}
 			event = event.replacingReferences(references)
+			// A command that changes files is given only paths inside this run's folders: a fixture holding a path
+			// in another spelling than its variables' (an HFS path, say) would otherwise act on the real place.
+			if let outside = event.pathOutside(current.values.map { $0 }) {
+				return "\(name) event \(index + 1) (\(exchange.event.eventClass ?? "")\(exchange.event.eventID ?? "")) names \(outside), outside the replay's folders; not sent."
+			}
 			let actual = Reply(dispatcher.dispatch(event.descriptor)).normalized
 			if let recorded = reply.result, let result = actual.result {
 				recorded.normalized.collectReferences(from: result, into: &references)
@@ -146,6 +153,66 @@ public struct Fixture: Codable {
 				  actual   \(actual.summary)
 				"""
 		}
+	}
+}
+
+extension DescriptorSnapshot {
+	/// Commands that make, change or delete files, whose file parameters a replay keeps inside its folders.
+	static let fileChangingCommands: Set<String> = [
+		"QuomNewF", "QuomMkDi", "QuomRenF", "Quomchmd", "QuomCopy", "QuomMove", "QuomRemo", "Quommkst", "Quommkdt", "QuomSymL",
+		"SATIWrit", "SATISYNC", "XML save", "XML c14n", "XML xslt", "PLSTsave", "PLSTJSON", "MTCpTYML", "MTCpTTML",
+	]
+
+	/// For an event of a command that changes files, the first file parameter (a file reference, or text that is an
+	/// absolute POSIX, `file:` or HFS path) that isn't inside one of `folders`; nil if every one is, or the command
+	/// doesn't change files. Names and relative paths are left to the command's `from`, which is checked itself.
+	func pathOutside(_ folders: [String]) -> String? {
+		guard let eventClass, let eventID, Self.fileChangingCommands.contains(eventClass + eventID) else { return nil }
+		func outside(_ value: DescriptorSnapshot) -> String? {
+			if let items = value.items { return items.lazy.compactMap(outside).first }
+			if value.hex != nil, ["alis", "fsrf", "bmrk"].contains(value.type) { return "a \(value.type) reference" }
+			guard let text = value.text, ["furl", "utxt", "TEXT", "utf8", "ut16"].contains(value.type) else { return nil }
+			// As the commands read it: a POSIX, `~`, `file:` or HFS path (on a mounted volume: other text with
+			// colons, a JavaScript function say, isn't a path). Anything else is a name for `from`.
+			guard value.type == "furl" || !URL.isRelativeScriptPath(text), let path = (try? URL(scriptPath: text))?.path else { return nil }
+			let resolved = Self.canonicalPath(path)
+			return canonicalFolders.contains { resolved == $0 || resolved.hasPrefix($0 + "/") } ? nil : text
+		}
+		let canonicalFolders = folders.map(Self.canonicalPath)
+		return fields?.lazy.compactMap { outside($0.value) }.first
+	}
+
+	/// A path with `.` and `..` taken out and `/private` taken off the front (`/private/tmp` and `/tmp` are one
+	/// folder), done by hand: Foundation's standardizing does this for a path that exists and not for one that
+	/// doesn't yet.
+	static func canonicalPath(_ path: String) -> String {
+		var components: [Substring] = []
+		for component in path.split(separator: "/") {
+			switch component {
+			case ".": break
+			case "..": if !components.isEmpty { components.removeLast() }
+			default: components.append(component)
+			}
+		}
+		if components.first == "private", components.count > 1 { components.removeFirst() }
+		return "/" + components.joined(separator: "/")
+	}
+
+	/// The same value with the HFS spelling of `old` (`Volume:a:b` for `/a/b`, whatever the volume was called when
+	/// it was recorded) replaced by that of `new` on this Mac's startup volume.
+	func replacingHFSPath(_ old: String, with new: String, volume: String) -> DescriptorSnapshot {
+		var copy = self
+		if let text, type != "furl" {
+			let oldHFS = ":" + old.split(separator: "/").joined(separator: ":")
+			if let range = text.range(of: oldHFS), !text[..<range.lowerBound].isEmpty, !text[..<range.lowerBound].contains(":"),
+			   range.upperBound == text.endIndex || text[range.upperBound] == ":"
+			{
+				copy.text = volume + ":" + new.split(separator: "/").joined(separator: ":") + text[range.upperBound...]
+			}
+		}
+		copy.items = items?.map { $0.replacingHFSPath(old, with: new, volume: volume) }
+		copy.fields = fields?.map { Field(key: $0.key, value: $0.value.replacingHFSPath(old, with: new, volume: volume)) }
+		return copy
 	}
 }
 

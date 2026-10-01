@@ -35,6 +35,45 @@ struct FixtureTests {
 		return dispatcher
 	}
 
+	/// A fixture's file-changing command is sent only with paths inside the replay's folders: a recorded path in a
+	/// spelling the variables don't match (an HFS path) would otherwise act on the real place. The HFS spelling of a
+	/// variable's value is itself replaced.
+	@Test func fileChangesStayInTheReplayFolders() throws {
+		let recorded = "/private/tmp/recorded-here"
+		let folder = FileManager.default.temporaryDirectory.appendingPathComponent("fixture-\(UUID().uuidString)").path
+		var sent: [String] = []
+		let dispatcher = CommandDispatcher()
+		dispatcher.register(CommandDefinition("fileremove", code: "QuomRemo") { request in
+			sent.append(try request.requiredDirectParameter(as: String.self))
+			return 1
+		})
+		dispatcher.register(CommandDefinition("filegetname", code: "QuomGFNa") { request in
+			try request.requiredDirectParameter(as: String.self)
+		})
+		func fixture(_ code: String, _ path: String) -> Fixture {
+			Fixture(
+				name: "paths", script: "", recordedFrom: "Test", recordedAt: Date(timeIntervalSince1970: 0), variables: ["TMP": recorded],
+				exchanges: [Fixture.Exchange(
+					event: DescriptorSnapshot(makeEvent(code, ["----": NSAppleEventDescriptor(string: path)])),
+					reply: Fixture.Reply(AppleEventReply(result: code == "QuomRemo" ? NSAppleEventDescriptor(int32: 1) : NSAppleEventDescriptor(string: path)))
+				)]
+			)
+		}
+		let volume = try #require(try URL(fileURLWithPath: "/").resourceValues(forKeys: [.volumeNameKey]).volumeName)
+		// Inside, by the variable's value and by its HFS spelling (whatever the volume was called).
+		#expect(fixture("QuomRemo", recorded + "/a.txt").replay(using: dispatcher, variables: ["TMP": folder]).isEmpty)
+		#expect(fixture("QuomRemo", "Elsewhere:private:tmp:recorded-here:a.txt").replay(using: dispatcher, variables: ["TMP": folder]).isEmpty)
+		#expect(sent == [folder + "/a.txt", volume + folder.replacingOccurrences(of: "/", with: ":") + ":a.txt"])
+		// Outside: not sent, and a difference.
+		for path in ["/private/tmp/other/a.txt", "file:///private/tmp/other/a.txt", "~/a.txt", volume + ":private:tmp:other:a.txt", recorded + "/../a.txt"] {
+			let differences = fixture("QuomRemo", path).replay(using: dispatcher, variables: ["TMP": folder])
+			#expect(differences.first?.contains("outside the replay's folders") == true, "\(path)")
+		}
+		#expect(sent.count == 2)
+		// A command that only reads may name anything.
+		#expect(fixture("QuomGFNa", "/private/tmp/other/a.txt").replay(using: dispatcher, variables: ["TMP": folder]).isEmpty)
+	}
+
 	@Test func matchingReplyPasses() {
 		let fixture = fixture(expecting: AppleEventReply(result: NSAppleEventDescriptor(int32: 42)))
 		#expect(fixture.replay(using: dispatcher()).isEmpty)

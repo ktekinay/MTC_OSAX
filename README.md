@@ -306,7 +306,7 @@ cp -R Packages/MTCOSAXKit/Tests/Fixtures/TextAdditions/Files/Input /private/tmp/
 Scripts/iterm-run.sh "Packages/MTCOSAXKit/.build/debug/fixture-recorder --app SatimageOSAX --cases …/cases.json --var FILES=/private/tmp/mtc-fixtures/files --var TMP=/private/tmp/mtc-fixtures/tmp"
 ```
 
-Fixtures store the values used, and replays substitute the checkout's `Input` folder and a fresh temporary folder. Input files are marked binary in `.gitattributes` so Git keeps their exact bytes.
+Fixtures store the values used, and replays substitute the checkout's `Input` folder and a fresh temporary folder (in HFS spelling too). A replay sends a command that makes, changes or deletes files only with paths inside those two folders; an event naming anything else is reported as a difference and not sent, so a fixture can't act on a real place however its paths are spelled. Input files are marked binary in `.gitattributes` so Git keeps their exact bytes.
 
 **Time zones.** Each fixture records the time zone it was recorded in, and replays run date commands in that zone.
 
