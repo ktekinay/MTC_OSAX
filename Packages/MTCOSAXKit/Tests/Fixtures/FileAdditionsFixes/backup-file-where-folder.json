@@ -18,7 +18,7 @@
       "reply" : {
         "result" : {
           "text" : "/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/",
-          "type" : "ut16"
+          "type" : "utxt"
         }
       }
     },
@@ -40,7 +40,7 @@
       "reply" : {
         "result" : {
           "text" : "/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/src/sub/deep/",
-          "type" : "ut16"
+          "type" : "utxt"
         }
       }
     },
@@ -62,7 +62,7 @@
       "reply" : {
         "result" : {
           "text" : "/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/src/skip/",
-          "type" : "ut16"
+          "type" : "utxt"
         }
       }
     },
@@ -84,7 +84,7 @@
       "reply" : {
         "result" : {
           "text" : "/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/src/pkg.app/Contents/",
-          "type" : "ut16"
+          "type" : "utxt"
         }
       }
     },
@@ -106,7 +106,7 @@
       "reply" : {
         "result" : {
           "text" : "/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/dst/",
-          "type" : "ut16"
+          "type" : "utxt"
         }
       }
     },
@@ -132,7 +132,9 @@
         ],
         "type" : "aevt"
       },
-      "reply" : {}
+      "reply" : {
+
+      }
     },
     {
       "event" : {
@@ -156,7 +158,9 @@
         ],
         "type" : "aevt"
       },
-      "reply" : {}
+      "reply" : {
+
+      }
     },
     {
       "event" : {
@@ -180,7 +184,9 @@
         ],
         "type" : "aevt"
       },
-      "reply" : {}
+      "reply" : {
+
+      }
     },
     {
       "event" : {
@@ -204,7 +210,9 @@
         ],
         "type" : "aevt"
       },
-      "reply" : {}
+      "reply" : {
+
+      }
     },
     {
       "event" : {
@@ -228,7 +236,9 @@
         ],
         "type" : "aevt"
       },
-      "reply" : {}
+      "reply" : {
+
+      }
     },
     {
       "event" : {
@@ -252,7 +262,9 @@
         ],
         "type" : "aevt"
       },
-      "reply" : {}
+      "reply" : {
+
+      }
     },
     {
       "event" : {
@@ -276,7 +288,9 @@
         ],
         "type" : "aevt"
       },
-      "reply" : {}
+      "reply" : {
+
+      }
     },
     {
       "event" : {
@@ -300,7 +314,9 @@
         ],
         "type" : "aevt"
       },
-      "reply" : {}
+      "reply" : {
+
+      }
     },
     {
       "event" : {
@@ -334,7 +350,7 @@
       "reply" : {
         "result" : {
           "text" : "Items created : \r\t/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/dst/b.md\n\t/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/dst/pkg.app\n\t/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/dst/skip/e.txt\n\t/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/dst/a.txt\nErrors : \r/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/dst/sub/deep  Error : 20 \n/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/dst/sub/c.txt  Error : 20 \n",
-          "type" : "ut16"
+          "type" : "utxt"
         }
       }
     },
@@ -399,23 +415,23 @@
           "items" : [
             {
               "text" : "/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/dst/b.md",
-              "type" : "ut16"
+              "type" : "utxt"
             },
             {
               "text" : "/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/dst/pkg.app/",
-              "type" : "ut16"
+              "type" : "utxt"
             },
             {
               "text" : "/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/dst/skip/e.txt",
-              "type" : "ut16"
+              "type" : "utxt"
             },
             {
               "text" : "/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/dst/sub",
-              "type" : "ut16"
+              "type" : "utxt"
             },
             {
               "text" : "/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/dst/a.txt",
-              "type" : "ut16"
+              "type" : "utxt"
             }
           ],
           "type" : "list"
@@ -424,7 +440,7 @@
     }
   ],
   "name" : "backup-file-where-folder",
-  "recordedAt" : "2026-09-27T23:55:26Z",
+  "recordedAt" : "2026-10-01T19:25:44Z",
   "recordedFrom" : "MTC_OSAX",
   "script" : "mkdir (POSIX file \"$TMP/backup-file-where-folder\")\nmkdir (POSIX file \"$TMP/backup-file-where-folder/src/sub/deep\")\nmkdir (POSIX file \"$TMP/backup-file-where-folder/src/skip\")\nmkdir (POSIX file \"$TMP/backup-file-where-folder/src/pkg.app/Contents\")\nmkdir (POSIX file \"$TMP/backup-file-where-folder/dst\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-file-where-folder/src/a.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-file-where-folder/src/b.md\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-file-where-folder/src/.hidden\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-file-where-folder/src/sub/c.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-file-where-folder/src/sub/deep/d.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-file-where-folder/src/skip/e.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-file-where-folder/src/pkg.app/Contents/Info.plist\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-file-where-folder/dst/sub\")\nbackup (POSIX file \"$TMP/backup-file-where-folder/src\") onto (POSIX file \"$TMP/backup-file-where-folder/dst\") level 2\nlist files (POSIX file \"$TMP/backup-file-where-folder/dst\") with invisibles as unix path",
   "timeZone" : "America/New_York",
