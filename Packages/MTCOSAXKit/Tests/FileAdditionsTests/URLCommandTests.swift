@@ -20,6 +20,14 @@ struct AbsoluteURLTests {
 		#expect(absolute(["----": "en/smile/index.html#top", "from": "http://www.satimage-software.com"]) == "http://www.satimage-software.com/en/smile/index.html#top")
 	}
 
+	/// Against a web base, `~` is part of a relative URL, as in SatimageOSAX (it was the home folder, as a file).
+	@Test func tildeWithAWebBase() {
+		#expect(absolute(["----": "~/index.html", "from": "http://example.com/dir/"]) == "http://example.com/dir/~/index.html")
+		#expect(absolute(["----": "~kem/index.html", "from": "http://example.com/dir/"]) == "http://example.com/dir/~kem/index.html")
+		#expect(absolute(["----": "~/index.html"]) == URL(fileURLWithPath: NSHomeDirectory() + "/index.html").absoluteString)
+		#expect(absolute(["----": "~/index.html", "from": URL(fileURLWithPath: "/Library", isDirectory: true)]) == URL(fileURLWithPath: NSHomeDirectory() + "/index.html").absoluteString)
+	}
+
 	@Test func relativeResolution() {
 		let base = "http://h.com/a/b/c.html"
 		#expect(absolute(["----": "../x/y.html?q=1", "from": base]) == "http://h.com/a/x/y.html?q=1")
@@ -203,6 +211,12 @@ struct URLInfoTests {
 @MainActor
 struct AliasDescriptionTests {
 	private let aliasDescription = "SATIALIS"
+
+	/// A file URL naming another computer isn't this Mac's file of that path (it was answered for the local one).
+	@Test func otherComputersAreRefused() {
+		#expect(send(aliasDescription, ["----": "file://otherhost/etc/hosts"]).error?.number == -1700)
+		#expect(send(aliasDescription, ["----": "file://localhost/etc/hosts"]).result?.stringValue == "/private/etc/hosts")
+	}
 
 	@Test func resolvesAliasFilesAndLinks() throws {
 		let folder = try TemporaryFolder()

@@ -177,13 +177,9 @@ extension TextAdditions {
 		// The template is checked even when nothing matches, as SatimageOSAX did (-208 for "\\q" either way).
 		let options = searcher.options
 		let template = options.regexp && !verbatim ? try Template(replacement, dollarReferences: options.dollarReferences) : nil
-		let text = UTF16Text(string)
-		let matches = try searcher.allMatches(in: text)
-		guard !matches.isEmpty else {
-			return (string, 0)
-		}
-
-		// `only backreference`: a group number, or a group name.
+		// `only backreference`: a group number, or a group name. One the pattern doesn't have is an error, as it
+		// is in a template (-207 for a number, -217 for a name), whether or not anything matches: it changed
+		// nothing and said nothing. (SatimageOSAX replaced the whole match instead, as if 0 were given.)
 		var groupNumbers = [0]
 		if let onlyGroup, options.regexp {
 			if onlyGroup.descriptorType == typeSInt32 || onlyGroup.descriptorType == typeSInt16 {
@@ -191,10 +187,22 @@ extension TextAdditions {
 				guard number >= 0 else {
 					throw Template.invalidBackreference
 				}
+				guard number <= searcher.groupCount else {
+					throw Template.tooBigBackreference
+				}
 				groupNumbers = [number]
 			} else {
-				groupNumbers = searcher.namedGroups[try String(appleEventDescriptor: onlyGroup)] ?? []
+				guard let numbers = searcher.namedGroups[try String(appleEventDescriptor: onlyGroup)] else {
+					throw OSAXError(-217) // ONIGERR_UNDEFINED_NAME_REFERENCE
+				}
+				groupNumbers = numbers
 			}
+		}
+
+		let text = UTF16Text(string)
+		let matches = try searcher.allMatches(in: text)
+		guard !matches.isEmpty else {
+			return (string, 0)
 		}
 
 		var result: [UInt16] = []

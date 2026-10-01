@@ -78,7 +78,9 @@ extension FileAdditions {
 		if let url = existingHFSItem(text) {
 			return url
 		}
-		if text.hasPrefix("/") || text.hasPrefix("~") {
+		// `~` is the home folder only without a web base: against one it's part of a relative URL, as in SatimageOSAX
+		// (`~/index.html` from `http://example.com/dir/` was a file in the home folder).
+		if text.hasPrefix("/") || (text.hasPrefix("~") && base.map(\.isFileURL) != false) {
 			let path = (text as NSString).expandingTildeInPath
 			return URL(fileURLWithPath: path, isDirectory: text.hasSuffix("/"))
 		}
@@ -165,6 +167,11 @@ extension FileAdditions {
 		let url = try scriptURL(descriptor)
 		guard url.isFileURL else {
 			throw OSAXError.coercionFailed
+		}
+		// A file on this Mac, as everywhere a file is expected: `file://otherhost/etc/hosts` was answered for the
+		// local /etc/hosts (as SatimageOSAX did).
+		guard url.isLocalFile else {
+			throw OSAXError(-1700, "\(url.absoluteString) isn’t a file on this Mac.")
 		}
 		var isDirectory = url.hasDirectoryPath
 		var original = url

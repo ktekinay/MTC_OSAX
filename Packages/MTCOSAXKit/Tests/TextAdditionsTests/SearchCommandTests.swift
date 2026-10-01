@@ -146,6 +146,17 @@ struct SearchRuleTests {
 		#expect(reply.result?.stringValue == "ac aXc")
 	}
 
+	/// A name or number that isn't one of the pattern's groups changed nothing and gave no error (SatimageOSAX
+	/// replaced the whole match). An error, as in a template, whether or not anything matches.
+	@Test func onlyBackreferenceToNoGroup() {
+		let parameters: [String: any AppleEventEncodable] = ["----": "x(?<n>a)(b)?", "by  ": "_", "$in ": "xab xa", "UsGR": true]
+		#expect(send(change, parameters.merging(["back": "n"]) { $1 }).result?.stringValue == "x_b x_")
+		#expect(send(change, parameters.merging(["back": 2]) { $1 }).result?.stringValue == "xa_ xa")
+		#expect(send(change, parameters.merging(["back": "nosuch"]) { $1 }).error == OSAXError(-217))
+		#expect(send(change, parameters.merging(["back": 3]) { $1 }).error == OSAXError(-207))
+		#expect(send(change, parameters.merging(["back": 3, "$in ": "nothing here"]) { $1 }).error == OSAXError(-207))
+	}
+
 	@Test func reCompileReturnsPattern() {
 		#expect(send("SATICmpi", ["----": "a(b)c"]).result?.stringValue == "a(b)c")
 	}
