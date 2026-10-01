@@ -330,6 +330,32 @@ struct CopyMoveTests {
 		#expect(!sandbox.exists("s/a.txt"))
 	}
 
+	/// Replacing a folder removed its items until one couldn't be removed, then put the new folder back: an error,
+	/// and the old folder had lost part of its contents. Now nothing of the old item goes unless all of it can.
+	@Test func replacingAFolderIsAllOrNothing() throws {
+		let sandbox = try Sandbox()
+		for name in ["a1.txt", "a2.txt", "m.txt", "z1.txt", "z2.txt", "sub/deep.txt"] { _ = try sandbox.file("t/\(name)", "old") }
+		_ = try sandbox.file("s/t/new.txt", "new")
+		let before = FileManager.default.enumerator(atPath: sandbox.path("t"))?.allObjects.count
+		for (lock, unlock) in [
+			({ chflags(sandbox.path("t/m.txt"), UInt32(UF_IMMUTABLE)) }, { chflags(sandbox.path("t/m.txt"), 0) }),
+			({ chmod(sandbox.path("t/sub"), 0o555) }, { chmod(sandbox.path("t/sub"), 0o755) }),
+		] as [(() -> Int32, () -> Int32)] {
+			_ = lock()
+			for command in [copy, move] {
+				let error = send(command, ["----": sandbox.path("s/t"), "to  ": sandbox.url, "Repl": true]).error
+				#expect(error?.number == -1 && error?.message?.contains("can’t be removed") == true, "\(command)")
+				#expect(FileManager.default.enumerator(atPath: sandbox.path("t"))?.allObjects.count == before, "\(command)")
+				#expect(sandbox.exists("s/t/new.txt"), "\(command)")
+			}
+			_ = unlock()
+		}
+		#expect(try FileManager.default.contentsOfDirectory(atPath: sandbox.url.path).sorted() == ["s", "t"])
+		#expect(send(move, ["----": sandbox.path("s/t"), "to  ": sandbox.url, "Repl": true]).error == nil)
+		#expect(try FileManager.default.contentsOfDirectory(atPath: sandbox.path("t")) == ["new.txt"])
+		#expect(try FileManager.default.contentsOfDirectory(atPath: sandbox.url.path).sorted() == ["s", "t"])
+	}
+
 	@Test func moveFolder() throws {
 		let sandbox = try Sandbox()
 		_ = try sandbox.file("s/a.txt")

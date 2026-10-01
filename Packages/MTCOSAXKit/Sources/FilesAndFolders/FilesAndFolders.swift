@@ -264,10 +264,16 @@ public enum FilesAndFolders {
 		}
 	}
 
-	/// `with replacing`: the new item is made under a temporary name next to the old one first, so if the copy or
-	/// move fails, or the old item can't be removed, the old item (and for a move, the source) is left as it was.
+	/// `with replacing`: the old item is checked for anything that can't be removed (a locked file inside it, a folder
+	/// without permission), the new item is made under a temporary name next to it, the two are swapped in one step,
+	/// and the old one is removed from its temporary name. So the target is never missing, and a failure leaves the
+	/// old item as it was (and for a move, the source): removing the old item first deleted a folder's items until
+	/// one couldn't be, and then put the new one back, so the folder lost part of its contents for an error.
 	static func replace(_ target: URL, from source: URL, move: Bool) throws {
 		let manager = FileManager.default
+		if let stuck = firstUnremovableItem(in: target) {
+			throw OSAXError(-1, "Couldn’t replace “\(target.lastPathComponent)”: “\(stuck)” is locked or can’t be removed.")
+		}
 		let temporary = target.deletingLastPathComponent().appendingPathComponent(FileItem.temporaryName())
 		do {
 			if move {
@@ -276,21 +282,52 @@ public enum FilesAndFolders {
 				try manager.copyItem(at: source, to: temporary)
 			}
 		} catch {
+			// What a copy made before failing part way stays; a move across volumes copies first, and leaves the
+			// source if it fails.
+			if FileItem.exists(temporary) {
+				if move, !FileItem.exists(source) {
+					try? manager.moveItem(at: temporary, to: source)
+				} else {
+					try? manager.removeItem(at: temporary)
+				}
+			}
 			throw OSAXError(-1, "Couldn’t \(move ? "move" : "copy") “\(source.lastPathComponent)”: \(error.localizedDescription)")
 		}
-		do {
-			try manager.removeItem(at: target)
-		} catch {
+		guard renamex_np(temporary.path, target.path, UInt32(RENAME_SWAP)) == 0 else {
+			let reason = String(cString: strerror(errno))
 			if move {
 				try? manager.moveItem(at: temporary, to: source)
 			} else {
 				try? manager.removeItem(at: temporary)
 			}
-			throw OSAXError(-1, "Couldn’t replace “\(target.lastPathComponent)”: \(error.localizedDescription)")
+			throw OSAXError(-1, "Couldn’t replace “\(target.lastPathComponent)”: \(reason).")
 		}
-		guard Darwin.rename(temporary.path, target.path) == 0 else {
-			throw OSAXError(-1, "Couldn’t name the new item “\(target.lastPathComponent)”; it’s at \(temporary.path).")
+		do {
+			try manager.removeItem(at: temporary)
+		} catch {
+			// Something changed since the check: the replacement stands, and what's left of the old item is named.
+			throw OSAXError(-1, "“\(target.lastPathComponent)” was replaced, but the old item couldn’t all be removed; what’s left of it is at \(temporary.path).")
 		}
+	}
+
+	/// The name of the first item in `url` (or `url` itself) that can't be removed: one with an immutable or
+	/// append-only flag, or whose folder can't be written. Nil if everything can be. Links aren't followed.
+	static func firstUnremovableItem(in url: URL) -> String? {
+		func check(_ path: String) -> Bool {
+			var status = stat()
+			guard lstat(path, &status) == 0 else { return true }
+			let locks = UInt32(UF_IMMUTABLE | SF_IMMUTABLE | UF_APPEND | SF_APPEND)
+			if status.st_flags & locks != 0 { return false }
+			if (status.st_mode & S_IFMT) == S_IFDIR, access(path, W_OK | X_OK) != 0 { return false }
+			return access((path as NSString).deletingLastPathComponent, W_OK) == 0
+		}
+		guard check(url.path) else { return url.lastPathComponent }
+		if FileItem.status(url).map({ ($0.st_mode & S_IFMT) == S_IFDIR }) == true, let paths = FileManager.default.enumerator(atPath: url.path) {
+			for case let relative as String in paths where !check(url.appendingPathComponent(relative).path) {
+				return (relative as NSString).lastPathComponent
+			}
+		}
+		return nil
 	}
 
 	// MARK: fileremove
