@@ -89,7 +89,10 @@ final class PCREEngine: RegexEngine {
 		let valid = text.isValidUTF16 && !text.splitsPair(at: bounds.upperBound) && !text.splitsPair(at: start)
 		let code = valid ? code : codeForInvalidText()
 		let checkOptions = valid ? UInt32(PCRE2_NO_UTF_CHECK) : 0
-		guard let data = pcre2_match_data_create_from_pattern_16(code, nil) else { return nil }
+		// Without memory for the match, an error (-3048, PCRE2's own for no memory), not "not found".
+		guard let data = pcre2_match_data_create_from_pattern_16(code, nil) else {
+			throw RegexError(code: -3000 + Int(PCRE2_ERROR_NOMEMORY), message: Self.message(for: PCRE2_ERROR_NOMEMORY), isExtension: true)
+		}
 		defer { pcre2_match_data_free_16(data) }
 		func run(_ subject: UnsafePointer<UInt16>) throws(RegexError) -> RegexMatch? {
 			func match(at position: Int, options: UInt32) throws(RegexError) -> RegexMatch? {

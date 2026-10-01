@@ -45,6 +45,11 @@ public enum FilesAndFolders {
 	static let invalidInput = OSAXError(-1)
 	static let notAllowedTogether = OSAXError(-50) // paramErr
 
+	/// "Couldn’t <what>: <the system's reason for `errno`>", for an error whose number stays SatimageOSAX's -1.
+	static func reason(_ what: String) -> String {
+		"Couldn’t \(what): \(String(cString: strerror(errno)))."
+	}
+
 	/// A POSIX error number as Satimage returned it for `mkdir` (e.g. 17 for EEXIST).
 	static func posixError(_ code: Int32) -> OSAXError {
 		OSAXError(Int(code))
@@ -123,7 +128,8 @@ public enum FilesAndFolders {
 		// Only if it's still not there (a file made since the check was overwritten).
 		let descriptor = open(url.path, O_CREAT | O_EXCL | O_WRONLY | O_NOFOLLOW, 0o666)
 		guard descriptor >= 0 else {
-			throw errno == EEXIST ? alreadyExists : invalidInput
+			// Still -1, as in SatimageOSAX, but saying why.
+			throw errno == EEXIST ? alreadyExists : OSAXError(-1, reason("make “\(url.lastPathComponent)”"))
 		}
 		close(descriptor)
 		return result(url, folder: false)
@@ -170,7 +176,7 @@ public enum FilesAndFolders {
 		}
 		let renamed = url.deletingLastPathComponent().appendingPathComponent(name)
 		if FileItem.exists(renamed), FileItem.isSameEntry(url, renamed) {
-			guard Darwin.rename(url.path, renamed.path) == 0 else { throw invalidInput }
+			guard Darwin.rename(url.path, renamed.path) == 0 else { throw OSAXError(-1, reason("rename “\(url.lastPathComponent)”")) }
 			return result(renamed, folder: false)
 		}
 		guard !FileItem.exists(renamed) else {
@@ -179,7 +185,7 @@ public enum FilesAndFolders {
 		do {
 			try FileManager.default.moveItem(at: url, to: renamed)
 		} catch {
-			throw invalidInput
+			throw OSAXError(-1, OSAXError.file(error, "rename “\(url.lastPathComponent)”").message)
 		}
 		// Satimage returns a renamed folder's path without a trailing slash.
 		return result(renamed, folder: false)
@@ -197,8 +203,12 @@ public enum FilesAndFolders {
 		}
 		let previous = String(status.st_mode & 0o777, radix: 8)
 		if let text = try request.parameter("to  ", as: String.self) {
-			guard let mode = mode_t(text, radix: 8), mode <= 0o7777, Darwin.chmod(url.path, mode) == 0 else {
+			// (Without a message, as recorded from SatimageOSAX; the failures the system reports say why.)
+			guard let mode = mode_t(text, radix: 8), mode <= 0o7777 else {
 				throw invalidInput
+			}
+			guard Darwin.chmod(url.path, mode) == 0 else {
+				throw OSAXError(-1, reason("change the permissions of “\(url.lastPathComponent)”"))
 			}
 		}
 		return previous

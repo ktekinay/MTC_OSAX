@@ -190,6 +190,21 @@ struct ChangeModeTests {
 		#expect(send(changeMode, ["----": try sandbox.file("a.txt"), "to  ": mode]).error == OSAXError(-1))
 	}
 
+	/// These were a bare -1; the number is SatimageOSAX's, and they now say what couldn't be done and why.
+	@Test func failuresSayWhy() throws {
+		let sandbox = try Sandbox()
+		_ = try sandbox.file("ro/a.txt")
+		chmod(sandbox.path("ro"), 0o555)
+		defer { chmod(sandbox.path("ro"), 0o755) }
+		for reply in [
+			send(fileNew, ["----": sandbox.path("ro/new.txt")]),
+			send(rename, ["----": sandbox.path("ro/a.txt"), "to  ": "b.txt"]),
+		] {
+			#expect(reply.error?.number == -1 && reply.error?.message?.contains("ermission") == true, "\(reply.error?.message ?? "no message")")
+		}
+		#expect(sandbox.exists("ro/a.txt") && !sandbox.exists("ro/new.txt"))
+	}
+
 	@Test func missing() throws {
 		let sandbox = try Sandbox()
 		#expect(send(changeMode, ["----": sandbox.path("nope")]).error == OSAXError(-1))

@@ -39,7 +39,7 @@ extension XMLCommands {
 		parameters += try XPath.variables(request.descriptor(for: "vaxs")).map { ($0.name, Stylesheets.quoted(try XMLCommands.text($0.value))) }
 		// libxslt removes the blank text that `xsl:strip-space` names from the document it's given, which made the
 		// script's references to those nodes invalid: such a stylesheet transforms a copy.
-		let source = Stylesheets.stripsSpace(style.pointer) ? Stylesheets.copy(doc) : doc
+		let source = Stylesheets.stripsSpace(style.pointer) ? try Stylesheets.copy(doc) : doc
 		defer { if source != doc { xmlFreeDoc(source) } }
 		let (outcome, _) = XMLIssues.collect { () -> (result: (output: xmlDocPtr?, refused: Bool), refused: [String]) in
 			guard style.chosenByDocument else {
@@ -121,7 +121,7 @@ extension XMLCommands {
 				return (compiled, false, false)
 			}
 			guard let doc = styleDocument.doc else { throw XML.noSuchNode }
-			source = Stylesheets.copy(doc)
+			source = try Stylesheets.copy(doc)
 		} else {
 			source = try Stylesheets.read(with)
 		}
@@ -163,8 +163,12 @@ enum Stylesheets {
 
 	/// A copy of a document (to compile, since libxslt keeps the document it compiles, or to transform). Like any
 	/// libxml2 copy, it has none of MTC_OSAX's node numbers.
-	static func copy(_ doc: xmlDocPtr) -> xmlDocPtr {
-		xmlCopyDoc(doc, 1)!
+	/// -108 if libxml2 can't make it (it trapped).
+	static func copy(_ doc: xmlDocPtr) throws -> xmlDocPtr {
+		guard let copy = xmlCopyDoc(doc, 1) else {
+			throw OSAXError(-108, "There isn’t enough memory to copy the document.") // memFullErr
+		}
+		return copy
 	}
 
 	/// Compiles (and takes) a document; error 3 if it isn't a stylesheet.
@@ -202,6 +206,8 @@ enum Stylesheets {
 				data = try Network.fetch(url, post: false, query: nil, headers: nil)
 			}
 		}
+		// An empty file isn't a stylesheet (and may have no address to read from, as the document parser checks).
+		guard !data.isEmpty else { throw OSAXError(4) }
 		let length = try Int32(length: data.count)
 		let (doc, issues) = XMLIssues.collect { () -> xmlDocPtr? in
 			data.withUnsafeBytes { bytes in

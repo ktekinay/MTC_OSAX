@@ -257,6 +257,11 @@ struct XSLTTests {
 		#expect(xml.send("XML lErr").result?.stringValue?.contains("value-of") == true)
 		#expect(xml.send("XML xslt", ["----": d, "with": URL(fileURLWithPath: "/nonexistent.xsl")]).error == OSAXError(4))
 		#expect(xml.send("XML xslt", ["----": d, "with": "/nonexistent.xsl"]).error == OSAXError(4))
+		// An empty file isn't a stylesheet.
+		let empty = FileManager.default.temporaryDirectory.appendingPathComponent("empty-\(UUID().uuidString).xsl")
+		try Data().write(to: empty)
+		defer { try? FileManager.default.removeItem(at: empty) }
+		#expect(xml.send("XML xslt", ["----": d, "with": empty]).error == OSAXError(4))
 	}
 
 	/// A node was found by a path counting blank text, which `xsl:strip-space` had taken out, so the text after it
