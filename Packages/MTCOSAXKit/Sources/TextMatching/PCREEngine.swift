@@ -82,14 +82,11 @@ final class PCREEngine: RegexEngine {
 		return compiled
 	}
 
-	/// Forward: PCRE's search from `start`. Backward: the last position from `start` down to `limit` where the
-	/// pattern matches (PCRE can only search forward, so each position is tried anchored).
-	/// A match error other than "no match" (PCRE2's match, depth and heap limits, which stop runaway backtracking)
+	/// PCRE's search from `start`. A match error other than "no match" (PCRE2's match, depth and heap limits, which stop runaway backtracking)
 	/// is -3000 minus its number, like compile errors: -3047 for the match limit.
-	func search(_ text: UTF16Text, bounds: Range<Int>, start: Int, limit: Int) throws(RegexError) -> RegexMatch? {
-		// No check of the text when it's known to be valid and the search neither ends nor starts inside a pair
-		// (searching backward tries every position, some of them inside pairs).
-		let valid = text.isValidUTF16 && !text.splitsPair(at: bounds.upperBound) && !text.splitsPair(at: start) && limit >= start
+	func search(_ text: UTF16Text, bounds: Range<Int>, start: Int) throws(RegexError) -> RegexMatch? {
+		// No check of the text when it's known to be valid and the search neither ends nor starts inside a pair.
+		let valid = text.isValidUTF16 && !text.splitsPair(at: bounds.upperBound) && !text.splitsPair(at: start)
 		let code = valid ? code : codeForInvalidText()
 		let checkOptions = valid ? UInt32(PCRE2_NO_UTF_CHECK) : 0
 		guard let data = pcre2_match_data_create_from_pattern_16(code, nil) else { return nil }
@@ -115,17 +112,7 @@ final class PCREEngine: RegexEngine {
 					return Int(min(begin, end)) ..< Int(end)
 				})
 			}
-			guard limit < start else {
-				return start <= limit ? try match(at: start, options: 0) : nil
-			}
-			var position = start
-			while position >= limit {
-				if let found = try match(at: position, options: UInt32(PCRE2_ANCHORED)) {
-					return found
-				}
-				position -= 1
-			}
-			return nil
+			return start <= bounds.upperBound ? try match(at: start, options: 0) : nil
 		}
 		// Empty text still needs an address.
 		let result: Result<RegexMatch?, RegexError> = text.units.isEmpty

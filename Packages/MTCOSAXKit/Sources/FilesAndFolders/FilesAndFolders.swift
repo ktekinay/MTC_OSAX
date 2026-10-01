@@ -451,7 +451,7 @@ public enum FilesAndFolders {
 	/// process's to 0 for a moment); setuid, setgid and sticky bits, which creating doesn't set, are added after.
 	/// (mkstemps and mkdtemp replace every X at the end of their template, so a prefix ending in X lost it.)
 	static func createUnique(in folder: URL, prefix: String, randomCount: Int, suffix: String, folder isFolder: Bool,
-	                         mode: mode_t = 0o600) throws -> String
+	                         mode: mode_t) throws -> String
 	{
 		let characters = Array("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
 		for _ in 0 ..< (randomCount == 0 ? 1 : 1000) {

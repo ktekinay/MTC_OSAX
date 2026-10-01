@@ -60,7 +60,7 @@ final class OnigmoEngine: RegexEngine {
 
 	/// Runs `onig_search`: the text seen by the regex ends at `bounds.upperBound`, but starts at the beginning
 	/// of the whole text, so lookbehind and `^` see what comes before `bounds.lowerBound`.
-	func search(_ text: UTF16Text, bounds: Range<Int>, start: Int, limit: Int) throws(RegexError) -> RegexMatch? {
+	func search(_ text: UTF16Text, bounds: Range<Int>, start: Int) throws(RegexError) -> RegexMatch? {
 		Self.setLimits()
 		guard let region = onig_region_new() else {
 			throw RegexError(code: Int(ONIGERR_MEMORY), message: "out of memory")
@@ -76,7 +76,7 @@ final class OnigmoEngine: RegexEngine {
 				base,
 				base + bounds.upperBound * 2,
 				base + start * 2,
-				base + limit * 2,
+				base + bounds.upperBound * 2,
 				region,
 				flags.onigmoSearchOptions
 			)

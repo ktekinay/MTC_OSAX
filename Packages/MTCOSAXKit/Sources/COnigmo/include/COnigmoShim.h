@@ -18,10 +18,6 @@ typedef enum {
 	MTCOnigSyntaxPosixExtended,
 } MTCOnigSyntax;
 
-static inline OnigEncoding mtc_onig_encoding_utf16le(void) {
-	return ONIG_ENCODING_UTF16_LE;
-}
-
 static inline const OnigSyntaxType *mtc_onig_syntax(MTCOnigSyntax syntax) {
 	switch (syntax) {
 		case MTCOnigSyntaxPerl: return ONIG_SYNTAX_PERL;
@@ -58,7 +54,6 @@ static const OnigOptionType MTCOnigOptionNotEOL = ONIG_OPTION_NOTEOL;
 
 static const unsigned int MTCOnigSynNotNewlineInNegativeCC = ONIG_SYN_NOT_NEWLINE_IN_NEGATIVE_CC;
 
-static const int MTCOnigMismatch = ONIG_MISMATCH;
 static const int MTCOnigMaxErrorMessageLength = ONIG_MAX_ERROR_MESSAGE_LEN;
 
 /// onig_error_code_to_str is variadic, which Swift can't call; this covers the case with error info.

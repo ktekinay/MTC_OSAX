@@ -168,31 +168,19 @@ struct TextSearcher {
 		guard let bounds = options.bounds(in: text) else {
 			return []
 		}
-		var matches: [TextMatch] = []
-		var position = bounds.lowerBound
-		lazy var string = Self.searchString(text)
 		// Satimage's loop: a search never starts at the end of the searched range. After an empty match
 		// the next search starts one character later.
-		while position < bounds.upperBound {
-			let match: TextMatch?
-			if let regex {
-				do {
-					match = try regex.firstMatch(in: text, from: position, within: bounds).map { TextMatch(groups: $0.groups) }
-				} catch {
-					throw OSAXError(error)
-				}
-			} else {
-				match = literalMatch(in: text, string: string, within: position ..< bounds.upperBound, backward: false)
+		if let regex {
+			do {
+				return try regex.allMatches(in: text, within: bounds, searchingAtEnd: false).map { TextMatch(groups: $0.groups) }
+			} catch {
+				throw OSAXError(error)
 			}
-			guard let match else {
-				break
-			}
-			// With `\K` in a lookbehind a match can start before the search did, and the search from where it ended
-			// finds it again: one that ends no later than the last match is left out (it was found forever).
-			if !match.range.isEmpty, let last = matches.last, match.range.upperBound <= last.range.upperBound {
-				position = text.index(after: position)
-				continue
-			}
+		}
+		var matches: [TextMatch] = []
+		var position = bounds.lowerBound
+		let string = Self.searchString(text)
+		while position < bounds.upperBound, let match = literalMatch(in: text, string: string, within: position ..< bounds.upperBound, backward: false) {
 			matches.append(match)
 			position = match.range.isEmpty ? text.index(after: match.range.upperBound) : match.range.upperBound
 		}

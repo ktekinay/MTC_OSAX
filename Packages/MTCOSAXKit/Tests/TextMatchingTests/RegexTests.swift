@@ -88,12 +88,6 @@ struct RegexTests {
 		#expect(match?.range == 3 ..< 5)
 	}
 
-	@Test func backwardSearch() throws {
-		let text = UTF16Text("ab ab")
-		let match = try CompiledRegex("ab").firstMatch(in: text, backward: true)
-		#expect(match?.range == 3 ..< 5)
-	}
-
 	@Test func boundsLimitTheMatch() throws {
 		let text = UTF16Text("abcdef")
 		#expect(try CompiledRegex("def").firstMatch(in: text, within: 0 ..< 5) == nil)

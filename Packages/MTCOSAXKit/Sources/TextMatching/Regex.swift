@@ -158,10 +158,10 @@ protocol RegexEngine: AnyObject {
 	var groupCount: Int { get }
 	/// Group numbers for each named group.
 	var namedGroups: [String: [Int]] { get }
-	/// The first match starting between `start` and `limit` (searching backward if `limit` is before `start`); the
-	/// text ends at `bounds.upperBound` but starts at 0, so lookbehind and `^` see what comes before `bounds`.
+	/// The first match starting at or after `start`; the text ends at `bounds.upperBound` but starts at 0, so
+	/// lookbehind and `^` see what comes before `bounds`.
 	/// Errors are the engine's limits (runaway backtracking), not "no match".
-	func search(_ text: UTF16Text, bounds: Range<Int>, start: Int, limit: Int) throws(RegexError) -> RegexMatch?
+	func search(_ text: UTF16Text, bounds: Range<Int>, start: Int) throws(RegexError) -> RegexMatch?
 }
 
 /// A compiled pattern, with Onigmo (Satimage's engine) or, for `syntax "PCRE"`, PCRE2. Searches text as UTF-16, so
@@ -188,26 +188,28 @@ public final class CompiledRegex {
 	/// Group numbers for each named group.
 	public var namedGroups: [String: [Int]] { engine.namedGroups }
 
-	/// The first match starting at or after `start` (or, with `backward`, the last match starting at or before it),
-	/// looking only within `bounds`. `bounds` defaults to the whole text.
-	public func firstMatch(in text: UTF16Text, from start: Int? = nil, within bounds: Range<Int>? = nil, backward: Bool = false) throws(RegexError)
-		-> RegexMatch?
-	{
+	/// The first match starting at or after `start`, looking only within `bounds`. `bounds` defaults to the whole
+	/// text. (Only forward: no command searches backward with a pattern, and the code that did was run by tests alone.)
+	public func firstMatch(in text: UTF16Text, from start: Int? = nil, within bounds: Range<Int>? = nil) throws(RegexError) -> RegexMatch? {
 		let bounds = bounds ?? 0 ..< text.count
-		let start = start ?? (backward ? bounds.upperBound : bounds.lowerBound)
-		let limit = backward ? bounds.lowerBound : bounds.upperBound
-		return try engine.search(text, bounds: bounds, start: start, limit: limit)
+		return try engine.search(text, bounds: bounds, start: start ?? bounds.lowerBound)
 	}
 
 	/// Every non-overlapping match within `bounds`, left to right. After an empty match, the search
 	/// continues one character later, so it always terminates. With `\K` in a lookbehind, a match can start before
 	/// the search did, and the search from where it ended finds it again: one that ends no later than the last
 	/// match is left out, and the search goes on one character later (it used to find it forever).
-	public func allMatches(in text: UTF16Text, within bounds: Range<Int>? = nil) throws(RegexError) -> [RegexMatch] {
+	///
+	/// `searchingAtEnd` false is Satimage's loop, which the commands use: a search never starts at the end of the
+	/// range, so there's no empty match there (and none in empty text). The one loop for both: the commands had a
+	/// copy of their own, and the tests here ran this one.
+	public func allMatches(in text: UTF16Text, within bounds: Range<Int>? = nil, searchingAtEnd: Bool = true) throws(RegexError) -> [RegexMatch] {
 		let bounds = bounds ?? 0 ..< text.count
 		var matches: [RegexMatch] = []
 		var position = bounds.lowerBound
-		while position <= bounds.upperBound, let match = try engine.search(text, bounds: bounds, start: position, limit: bounds.upperBound) {
+		while searchingAtEnd ? position <= bounds.upperBound : position < bounds.upperBound,
+		      let match = try engine.search(text, bounds: bounds, start: position)
+		{
 			if !match.range.isEmpty, let last = matches.last, match.range.upperBound <= last.range.upperBound {
 				guard position < bounds.upperBound else { break }
 				position = text.index(after: position)

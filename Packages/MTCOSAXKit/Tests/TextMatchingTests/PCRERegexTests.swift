@@ -83,11 +83,13 @@ struct PCRERegexTests {
 		#expect(try regex.firstMatch(in: text, from: 1)?.range == 3 ..< 6)
 		#expect(try regex.firstMatch(in: text, within: 0 ..< 5)?.range == 0 ..< 3)
 		#expect(try regex.firstMatch(in: text, from: 1, within: 1 ..< 5) == nil)
-		#expect(try regex.firstMatch(in: text, backward: true)?.range == 3 ..< 6)
-		#expect(try regex.firstMatch(in: text, from: 2, backward: true)?.range == 0 ..< 3)
 		// Lookbehind sees text before the bounds.
 		#expect(try pcre("(?<=a)b").firstMatch(in: text, within: 1 ..< 6)?.range == 1 ..< 2)
 		#expect(try pcre("x*").allMatches(in: UTF16Text("")).count == 1)
+		// The commands' loop never searches at the end of the range.
+		#expect(try pcre("x*").allMatches(in: UTF16Text(""), searchingAtEnd: false).isEmpty)
+		#expect(try pcre("x*").allMatches(in: UTF16Text("ax"), searchingAtEnd: false).map(\.range) == [0 ..< 0, 1 ..< 2])
+		#expect(try pcre("x*").allMatches(in: UTF16Text("ax")).map(\.range) == [0 ..< 0, 1 ..< 2, 2 ..< 2])
 	}
 
 	@Test func invalidUTF16IsSearched() throws {
@@ -102,7 +104,6 @@ struct PCRERegexTests {
 		#expect(try regex.firstMatch(in: pair, within: 0 ..< 2) == nil)
 		#expect(try regex.firstMatch(in: pair, from: 2)?.range == 3 ..< 4)
 		#expect(try regex.firstMatch(in: text)?.range == 2 ..< 3)
-		#expect(try regex.firstMatch(in: pair, backward: true)?.range == 3 ..< 4)
 	}
 
 	/// With PCRE2_MATCH_INVALID_UTF, every call checked the text to its end, and there's a call per match: a search
