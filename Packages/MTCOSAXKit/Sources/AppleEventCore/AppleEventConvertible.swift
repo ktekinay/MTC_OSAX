@@ -268,8 +268,8 @@ extension URL: AppleEventConvertible {
 	}
 
 	/// Converts `"Volume:folder:file"` to `"/folder/file"` (startup volume) or `"/Volumes/Volume/folder/file"`. As
-	/// in HFS, `::` is the parent folder (`Volume:a::b` is `b` on the volume); `.` and `..` are names, not folders
-	/// (-1700), and so is a missing volume name.
+	/// in HFS, `::` is the parent folder (`Volume:a::b` is `b` on the volume; `Volume:a:b::` is `/a/b/..`); `.` and
+	/// `..` are names, not folders (-1700), and so is a missing volume name.
 	static func posixPath(fromHFSPath hfsPath: String) throws -> String {
 		var components = hfsPath.split(separator: ":", omittingEmptySubsequences: false).map {
 			$0.replacingASCII("/", with: ":")
@@ -286,11 +286,13 @@ extension URL: AppleEventConvertible {
 			throw OSAXError(-1700, "HFS paths go up a folder with “::”, not “..”.")
 		}
 		var folders: [String] = []
-		for component in components {
+		for (index, component) in components.enumerated() {
 			if component.isEmpty {
 				// `a::b`: each extra colon goes up one folder.
-				guard !folders.isEmpty else { throw OSAXError(-1700, "\(hfsPath) goes above its volume.") }
-				folders.removeLast()
+				guard !folders.isEmpty, folders.last != ".." else { throw OSAXError(-1700, "\(hfsPath) goes above its volume.") }
+				// At the end, as `..`, so a command that needs a name sees that there isn't one: `x::` was the folder
+				// above x by name, which fileremove deleted (its POSIX spelling `x/..` is refused).
+				if index == components.count - 1 { folders.append("..") } else { folders.removeLast() }
 			} else if component == "." || component == ".." {
 				throw OSAXError(-1700, "HFS paths go up a folder with “::”, not “..”.")
 			} else {

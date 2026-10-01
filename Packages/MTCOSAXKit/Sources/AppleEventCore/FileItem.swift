@@ -68,6 +68,15 @@ public enum FileItem {
 		return false
 	}
 
+	/// Whether the path leads to a volume's root: `/`, a mount point such as `/Volumes/Backup`, or a link to one
+	/// (`/Volumes/<startup disk>` is a link to `/`).
+	public static func isVolumeRoot(_ url: URL) -> Bool {
+		guard let item = identity(url) else { return false }
+		if (try? url.resourceValues(forKeys: [.isVolumeKey]))?.isVolume == true { return true }
+		let resolved = url.resolvingSymlinksInPath()
+		return resolved.path == "/" || identity(resolved.deletingLastPathComponent())?.device != item.device
+	}
+
 	public static func isDirectory(_ url: URL) -> Bool {
 		var directory: ObjCBool = false
 		return FileManager.default.fileExists(atPath: url.path, isDirectory: &directory) && directory.boolValue

@@ -659,6 +659,13 @@ struct NameTests {
 				#expect(error?.message?.contains("doesn’t end in a name") == true, "\(command) \(parameters)")
 			}
 		}
+		// The HFS spelling of `s/..` was `s`'s folder by name, so it passed; and a volume's root is a name.
+		let volume = try #require(try URL(fileURLWithPath: "/").resourceValues(forKeys: [.volumeNameKey]).volumeName)
+		let hfs = volume + sandbox.path("top/s").replacingOccurrences(of: "/", with: ":") + "::"
+		#expect(send(remove, ["----": hfs]).error?.message?.contains("doesn’t end in a name") == true)
+		#expect(send(copy, ["----": s + "/a.txt", "into": hfs, "Repl": true]).error?.message?.contains("doesn’t end in a name") == true)
+		#expect(FileItem.isVolumeRoot(URL(fileURLWithPath: "/")) && !FileItem.isVolumeRoot(sandbox.url))
+		#expect(throws: OSAXError.self) { try FilesAndFolders.requireName(URL(fileURLWithPath: "/Volumes/" + volume)) }
 		#expect(sandbox.exists("keep.txt") && sandbox.exists("top/d/keep.txt") && sandbox.exists("top/s/a.txt"))
 		#expect(try FileManager.default.contentsOfDirectory(atPath: d) == ["keep.txt"])
 		// With a name, a source ending in `..` is the folder it names.

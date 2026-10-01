@@ -131,6 +131,10 @@ struct DecodingTests {
 		#expect(number(":folder:file") == -1700)
 		#expect(number("Vol:a:::b") == -1700)
 		#expect(try URL(scriptPath: "Backup:a:b::c").path == "/Volumes/Backup/a/c")
+		// Ending in `::` is the folder above, kept as `..` so a command that needs a name can tell.
+		#expect(try URL(scriptPath: "Backup:a:b::").path == "/Volumes/Backup/a/b/..")
+		#expect(try URL(scriptPath: "Backup:a:b::c::").path == "/Volumes/Backup/a/c/..")
+		#expect(throws: OSAXError.self) { try URL(scriptPath: "Backup:a:::") }
 		let volume = try #require(try URL(fileURLWithPath: "/").resourceValues(forKeys: [.volumeNameKey]).volumeName)
 		#expect(try URL(scriptPath: "\(volume.uppercased()):Users").path == "/Users")
 	}

@@ -98,6 +98,11 @@ public enum FilesAndFolders {
 			throw OSAXError(-1, "“\(url.path)” doesn’t end in a name. Give a path that ends in the item’s name"
 				+ (orNameParameter ? ", or a name." : "."))
 		}
+		// A volume's name is a name (`Backup:` is /Volumes/Backup), but the whole volume isn't an item to delete or
+		// replace, any more than `/` is.
+		guard !FileItem.isVolumeRoot(url) else {
+			throw OSAXError(-1, "“\(url.path)” is a volume.")
+		}
 	}
 
 	// MARK: filenew, mkdir, filerename
