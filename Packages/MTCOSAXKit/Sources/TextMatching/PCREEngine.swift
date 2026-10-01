@@ -3,12 +3,21 @@ import Foundation
 
 /// A compiled PCRE2 pattern (`syntax "PCRE"`, an MTC_OSAX extension), with PCRE's own semantics, except that `^`
 /// and `$` match at every line unless the pattern (`(?-m)`) or the `SINGLELINE` flag says otherwise. Unicode-aware
-/// (`\w`, `\d`, case), and any Unicode line ending counts. Text that isn't valid UTF-16 (a lone surrogate) is
-/// searched rather than rejected.
+/// (`\w`, `\d`, case), and any Unicode line ending counts. Text that isn't valid UTF-16 (a lone surrogate, or a
+/// pair cut by the range searched) is searched rather than rejected.
+///
+/// Valid text is searched with PCRE2_NO_UTF_CHECK, and only text that isn't with a pattern compiled for invalid
+/// UTF (made when first needed): with PCRE2_MATCH_INVALID_UTF, each call of pcre2_match checked the text from
+/// the start offset to its end, and there's one call per match, so `change … all occurrences` in a large text took
+/// time that grew with the square of its length (19 seconds for 200,000 units, a minute for 400,000) where Onigmo
+/// took under a second.
 final class PCREEngine: RegexEngine {
 	let groupCount: Int
 	let namedGroups: [String: [Int]]
 	private let code: OpaquePointer
+	private let units: [UInt16]
+	private let options: UInt32
+	private var lenientCode: OpaquePointer?
 	private let matchOptions: UInt32
 
 	/// Flags PCRE has no equivalent for: error -1, as for an unknown flag.
@@ -20,25 +29,23 @@ final class PCREEngine: RegexEngine {
 		if let (_, name) = Self.unsupported.first(where: { flags.contains($0.0) }) {
 			throw RegexError(code: -1, message: "\(name) isn't available with PCRE", isExtension: true)
 		}
-		var options = UInt32(PCRE2_UTF | PCRE2_UCP | PCRE2_MATCH_INVALID_UTF)
+		var options = UInt32(PCRE2_UTF | PCRE2_UCP)
 		if !flags.contains(.singleline) { options |= UInt32(PCRE2_MULTILINE) }
 		if flags.contains(.ignoreCase) { options |= UInt32(PCRE2_CASELESS) }
 		if flags.contains(.extend) { options |= UInt32(PCRE2_EXTENDED) }
 		if flags.contains(.dotAll) { options |= UInt32(PCRE2_DOTALL) }
 		if flags.contains(.dontCaptureGroup) { options |= UInt32(PCRE2_NO_AUTO_CAPTURE) }
 
-		let context = pcre2_compile_context_create_16(nil)
-		defer { pcre2_compile_context_free_16(context) }
-		pcre2_set_newline_16(context, UInt32(PCRE2_NEWLINE_ANY))
-
 		// A terminator, so an empty pattern still has an address.
 		let units = Array(pattern.utf16) + [0]
 		var error: Int32 = 0
 		var offset = 0
-		guard let code = pcre2_compile_16(units, units.count - 1, options, &error, &offset, context) else {
+		guard let code = Self.compile(units, options: options, error: &error, offset: &offset) else {
 			throw RegexError(code: -3000 - Int(error), message: "\(Self.message(for: error)) at offset \(offset)", isExtension: true)
 		}
 		self.code = code
+		self.units = units
+		self.options = options
 
 		var matchOptions: UInt32 = 0
 		if flags.contains(.findNotEmpty) { matchOptions |= UInt32(PCRE2_NOTEMPTY) }
@@ -54,6 +61,25 @@ final class PCREEngine: RegexEngine {
 
 	deinit {
 		pcre2_code_free_16(code)
+		if let lenientCode { pcre2_code_free_16(lenientCode) }
+	}
+
+	private static func compile(_ units: [UInt16], options: UInt32, error: inout Int32, offset: inout Int) -> OpaquePointer? {
+		let context = pcre2_compile_context_create_16(nil)
+		defer { pcre2_compile_context_free_16(context) }
+		pcre2_set_newline_16(context, UInt32(PCRE2_NEWLINE_ANY))
+		return pcre2_compile_16(units, units.count - 1, options, &error, &offset, context)
+	}
+
+	/// The pattern compiled for text that isn't valid UTF-16, made the first time such text is searched. (What
+	/// compiled once compiles again.)
+	private func codeForInvalidText() -> OpaquePointer {
+		if let lenientCode { return lenientCode }
+		var error: Int32 = 0
+		var offset = 0
+		let compiled = Self.compile(units, options: options | UInt32(PCRE2_MATCH_INVALID_UTF), error: &error, offset: &offset) ?? code
+		lenientCode = compiled
+		return compiled
 	}
 
 	/// Forward: PCRE's search from `start`. Backward: the last position from `start` down to `limit` where the
@@ -61,11 +87,16 @@ final class PCREEngine: RegexEngine {
 	/// A match error other than "no match" (PCRE2's match, depth and heap limits, which stop runaway backtracking)
 	/// is -3000 minus its number, like compile errors: -3047 for the match limit.
 	func search(_ text: UTF16Text, bounds: Range<Int>, start: Int, limit: Int) throws(RegexError) -> RegexMatch? {
+		// No check of the text when it's known to be valid and the search neither ends nor starts inside a pair
+		// (searching backward tries every position, some of them inside pairs).
+		let valid = text.isValidUTF16 && !text.splitsPair(at: bounds.upperBound) && !text.splitsPair(at: start) && limit >= start
+		let code = valid ? code : codeForInvalidText()
+		let checkOptions = valid ? UInt32(PCRE2_NO_UTF_CHECK) : 0
 		guard let data = pcre2_match_data_create_from_pattern_16(code, nil) else { return nil }
 		defer { pcre2_match_data_free_16(data) }
 		func run(_ subject: UnsafePointer<UInt16>) throws(RegexError) -> RegexMatch? {
 			func match(at position: Int, options: UInt32) throws(RegexError) -> RegexMatch? {
-				let result = pcre2_match_16(code, subject, bounds.upperBound, position, matchOptions | options, data, Self.context)
+				let result = pcre2_match_16(code, subject, bounds.upperBound, position, matchOptions | options | checkOptions, data, Self.context)
 				if result < 0, result != PCRE2_ERROR_NOMATCH {
 					if mtc_pcre2_took_too_long() != 0 {
 						throw RegexDeadline.tookTooLong(code: -3000 + Int(result))

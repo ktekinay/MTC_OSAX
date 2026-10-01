@@ -1,3 +1,4 @@
+import Foundation
 import Testing
 @testable import TextMatching
 
@@ -91,7 +92,26 @@ struct PCRERegexTests {
 
 	@Test func invalidUTF16IsSearched() throws {
 		let text = UTF16Text(units: [0x61, 0xD800, 0x62])
+		#expect(!text.isValidUTF16)
 		#expect(try pcre("b").firstMatch(in: text)?.range == 2 ..< 3)
+		// The same pattern, both ways round, and the bounds or start cutting a pair.
+		let regex = try pcre("b")
+		let pair = UTF16Text("a😀b")
+		#expect(pair.isValidUTF16 && pair.splitsPair(at: 2) && !pair.splitsPair(at: 1) && !pair.splitsPair(at: 3))
+		#expect(try regex.firstMatch(in: pair)?.range == 3 ..< 4)
+		#expect(try regex.firstMatch(in: pair, within: 0 ..< 2) == nil)
+		#expect(try regex.firstMatch(in: pair, from: 2)?.range == 3 ..< 4)
+		#expect(try regex.firstMatch(in: text)?.range == 2 ..< 3)
+		#expect(try regex.firstMatch(in: pair, backward: true)?.range == 3 ..< 4)
+	}
+
+	/// With PCRE2_MATCH_INVALID_UTF, every call checked the text to its end, and there's a call per match: a search
+	/// of a large text took time that grew with the square of its length (a minute for 400,000 units).
+	@Test func manyMatchesInALargeTextAreQuick() throws {
+		let text = UTF16Text(String(repeating: "xxxxa", count: 80_000))
+		let start = Date()
+		#expect(try pcre("a").allMatches(in: text).count == 80_000)
+		#expect(Date().timeIntervalSince(start) < 5)
 	}
 
 	@Test func cacheKeepsEnginesApart() throws {

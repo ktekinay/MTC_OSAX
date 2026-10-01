@@ -3,13 +3,36 @@ import Foundation
 /// Text as UTF-16 code units, the unit Satimage (and `NSString`) uses for positions and lengths.
 public struct UTF16Text: Equatable, Sendable {
 	public let units: [UInt16]
+	/// Whether every surrogate is half of a pair. Text from a String always is; units given as such are checked
+	/// once here, so a search needn't check the text again at every match.
+	public let isValidUTF16: Bool
 
 	public init(_ string: String) {
 		units = Array(string.utf16)
+		isValidUTF16 = true
 	}
 
 	public init(units: [UInt16]) {
 		self.units = units
+		var index = 0
+		var valid = true
+		while index < units.count {
+			let unit = units[index]
+			if UTF16.isLeadSurrogate(unit), index + 1 < units.count, UTF16.isTrailSurrogate(units[index + 1]) {
+				index += 2
+			} else if unit & 0xF800 == 0xD800 {
+				valid = false
+				break
+			} else {
+				index += 1
+			}
+		}
+		isValidUTF16 = valid
+	}
+
+	/// Whether `offset` falls between the two halves of a surrogate pair.
+	public func splitsPair(at offset: Int) -> Bool {
+		offset > 0 && offset < count && UTF16.isLeadSurrogate(units[offset - 1]) && UTF16.isTrailSurrogate(units[offset])
 	}
 
 	public var count: Int { units.count }
