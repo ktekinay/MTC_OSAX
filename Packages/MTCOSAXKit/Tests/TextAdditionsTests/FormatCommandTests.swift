@@ -7,6 +7,34 @@ private func printf(_ format: String, _ arguments: [any AppleEventEncodable]) th
 	try Printf.format(format, arguments: arguments.map(\.appleEventDescriptor))
 }
 
+/// The commands took the system's time zone once, when they were made: after the Mac's zone changed, a date was
+/// formatted with the new zone's hour and the old zone's name and offset ("17:00 EST -0500") until the app quit.
+@MainActor
+struct SystemTimeZoneTests {
+	@Test func zoneIsReadAtEachCommand() {
+		let dispatcher = CommandDispatcher()
+		dispatcher.register(TextAdditions.commands(context: TextContext(dollarReferencesDefault: { false }, regexSyntaxDefault: { .ruby })))
+		func format(_ pattern: String) -> String? {
+			let event = NSAppleEventDescriptor.untargetedEvent(EventKey(code: "SATIstrf"))
+			event.setParam(NSAppleEventDescriptor(date: Date(timeIntervalSince1970: 1_800_000_000)), forKeyword: FourCharCode(fourCharString: "----"))
+			event.setParam(NSAppleEventDescriptor(string: pattern), forKeyword: FourCharCode(fourCharString: "into"))
+			return dispatcher.dispatch(event).result?.stringValue
+		}
+		// The system's zone changes (for this process, with TZ), and goes back afterwards.
+		let previous = getenv("TZ").map { String(cString: $0) }
+		func use(_ zone: String?) {
+			if let zone { setenv("TZ", zone, 1) } else { unsetenv("TZ") }
+			tzset()
+			NSTimeZone.resetSystemTimeZone()
+		}
+		defer { use(previous) }
+		use("Asia/Tokyo")
+		#expect(format("%H:%M %Z %z") == "17:00 JST +0900")
+		use("America/New_York")
+		#expect(format("%H:%M %Z %z") == "03:00 EST -0500")
+	}
+}
+
 @MainActor
 struct PrintfTests {
 	@Test func documentationExamples() throws {

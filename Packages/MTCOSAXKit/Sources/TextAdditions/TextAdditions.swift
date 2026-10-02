@@ -11,11 +11,11 @@ public enum TextAdditions {
 
 	/// - Parameters:
 	///   - timeZone: the zone dates are formatted and parsed in. Tests replay fixtures in the zone they were
-	///     recorded in; the app uses the system's.
+	///     recorded in; the app gives none, for the system's zone as it is at each command.
 	///   - settings: where the `DollarReferences` and `RegexSyntax` settings are read; fixture replays pass their own.
 	///   - propertyLists: writes `filter text … into` a CFRef.
 	@MainActor
-	public static func commands(timeZone: TimeZone = .current, settings: UserDefaults = .standard, propertyLists: PropertyListWriter? = nil) -> [CommandDefinition] {
+	public static func commands(timeZone: TimeZone? = nil, settings: UserDefaults = .standard, propertyLists: PropertyListWriter? = nil) -> [CommandDefinition] {
 		commands(context: TextContext(
 			dollarReferencesDefault: { Settings.dollarReferences(in: settings) },
 			regexSyntaxDefault: { Settings.regexSyntax(in: settings) },
@@ -44,19 +44,23 @@ final class TextContext {
 	/// The regex syntax when a command doesn't say (the `RegexSyntax` default, e.g. `PCRE`); Satimage's `RUBY` if
 	/// it's not set or not a syntax name.
 	let regexSyntaxDefault: () -> RegexSyntax
-	/// The zone `strftime` and `strptime` work in.
-	let timeZone: TimeZone
+	/// A zone given for `strftime` and `strptime` to work in; nil for the system's.
+	private let fixedTimeZone: TimeZone?
+	/// The zone `strftime` and `strptime` work in: the one given, or the system's as it is now. (The system's was
+	/// taken once, when the commands were made: after the Mac's zone changed, dates were formatted with the new
+	/// zone's hour and the old zone's name and offset until the app quit.)
+	var timeZone: TimeZone { fixedTimeZone ?? TimeZone.current }
 	let propertyLists: TextAdditions.PropertyListWriter?
 
 	init(
 		dollarReferencesDefault: @escaping () -> Bool = { Settings.dollarReferences(in: .standard) },
 		regexSyntaxDefault: @escaping () -> RegexSyntax = { Settings.regexSyntax(in: .standard) },
-		timeZone: TimeZone = .current,
+		timeZone: TimeZone? = nil,
 		propertyLists: TextAdditions.PropertyListWriter? = nil
 	) {
 		self.dollarReferencesDefault = dollarReferencesDefault
 		self.regexSyntaxDefault = regexSyntaxDefault
-		self.timeZone = timeZone
+		self.fixedTimeZone = timeZone
 		self.propertyLists = propertyLists
 	}
 }

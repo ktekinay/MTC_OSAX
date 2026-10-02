@@ -14,14 +14,15 @@ import Foundation
 /// Every suite the app implements. Add each new suite's commands here.
 public enum CommandCatalog {
 	/// - Parameters:
-	///   - timeZone: the zone for date commands; tests pass the zone a fixture was recorded in.
+	///   - timeZone: the zone for date commands; tests pass the zone a fixture was recorded in. Nil (the app's) is the
+	///     system's zone, as it is at each command.
 	///   - dialogs: the app's dialogs for the `navchoose` commands; without them, those commands aren't handled.
 	///   - documents: the open property lists and XML documents; the app keeps it to know when any are open.
 	///   - settings: where MTC_OSAX's settings are kept; tests pass their own, so they don't read or change the app's.
 	@MainActor
 	public static func makeDispatcher(
 		version: @escaping () -> String = bundleVersion,
-		timeZone: TimeZone = .current,
+		timeZone: TimeZone? = nil,
 		dialogs: (any FileDialogs)? = nil,
 		documents: DocumentStore = DocumentStore(),
 		settings: UserDefaults = .standard
