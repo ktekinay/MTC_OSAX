@@ -29,16 +29,21 @@ extension FileAdditions {
 				items.append(ListedItem(url: url, isDirectory: isDirectory))
 			}
 		}
+		// Everything about an item from one `lstat`, as in backup: `appendingPathComponent(_:)` checked the disk for
+		// each name to see whether it was a folder, and the hidden flag was read again through URL resource values
+		// (together about half of the time a listing took).
 		func walk(_ folder: URL) {
+			let folderPath = folder.path
 			for name in FileItem.names(in: folder) {
-				let url = folder.appendingPathComponent(name)
-				guard let status = FileItem.status(url), (status.st_mode & S_IFMT) != S_IFLNK else {
+				var status = stat()
+				guard lstat(folderPath + "/" + name, &status) == 0, (status.st_mode & S_IFMT) != S_IFLNK else {
 					continue
 				}
-				if !filter.invisibles && FileItem.isHidden(url) {
+				if !filter.invisibles && FileItem.isHidden(name: name, status: status) {
 					continue
 				}
 				let isDirectory = (status.st_mode & S_IFMT) == S_IFDIR
+				let url = folder.appendingPathComponent(name, isDirectory: isDirectory)
 				if isDirectory && (ignoringPackages || !FileItem.isPackage(url)) {
 					if recursively {
 						walk(url)
