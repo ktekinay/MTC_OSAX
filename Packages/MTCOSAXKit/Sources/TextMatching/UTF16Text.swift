@@ -7,8 +7,29 @@ public struct UTF16Text: Equatable, Sendable {
 	/// once here, so a search needn't check the text again at every match.
 	public let isValidUTF16: Bool
 
+	/// A string's UTF-16, a lone surrogate becoming U+FFFD (as its `utf16` view gives it), so it's always valid.
+	/// Copied in one step through NSString: text from an Apple event is an NSString underneath, and going through
+	/// the `utf16` view unit by unit took 7 ms a megabyte, most of the time of a search that finds one match.
 	public init(_ string: String) {
-		units = Array(string.utf16)
+		let text = string as NSString
+		let length = text.length
+		var units = [UInt16](unsafeUninitializedCapacity: length) { buffer, count in
+			if length > 0 { text.getCharacters(buffer.baseAddress!, range: NSRange(location: 0, length: length)) }
+			count = length
+		}
+		var index = 0
+		while index < length {
+			let unit = units[index]
+			if unit & 0xF800 != 0xD800 {
+				index += 1
+			} else if UTF16.isLeadSurrogate(unit), index + 1 < length, UTF16.isTrailSurrogate(units[index + 1]) {
+				index += 2
+			} else {
+				units[index] = 0xFFFD
+				index += 1
+			}
+		}
+		self.units = units
 		isValidUTF16 = true
 	}
 
