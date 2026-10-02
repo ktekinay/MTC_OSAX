@@ -40,7 +40,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 **Commands that never worked in SatimageOSAX** (they replied -1708 or an error for every input) and now do:
 
 - `file offset`, `filter text` (including `into` a property list reference)
-- The `navchoose …` dialogs, `navnew folder` and `navask save`. (`navchoose file name … with menu` shows the menu, but which item is chosen isn't returned: the dictionary's result is only the file.)
+- The `navchoose …` dialogs, `navnew folder` and `navask save`. (`key` remembers the folder a dialog was left in: for `navchoose folder`, the folder chosen.) (`navchoose file name … with menu` shows the menu, but which item is chosen isn't returned: the dictionary's result is only the file.)
 - `topological sort`
 - `XMLOpen` of an http or https URL (with `query`, POST and extra headers; characters a URL can't hold in `query` are percent-encoded)
 

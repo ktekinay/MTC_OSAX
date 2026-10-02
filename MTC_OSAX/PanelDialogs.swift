@@ -9,6 +9,8 @@ import UniformTypeIdentifiers
 /// main thread (`FileDialogs` is main-actor), so the dialogs run modally there; the idle timer doesn't run while a
 /// handler is busy.
 final class PanelDialogs: FileDialogs {
+	private(set) var lastShownFolder: URL?
+
 	func choose(_ options: ChooseOptions) throws -> [URL] {
 		let panel = NSOpenPanel()
 		let filter = PanelFilter(PanelRules(showsPackages: options.showsPackages, opensPackages: options.opensPackages,
@@ -31,6 +33,7 @@ final class PanelDialogs: FileDialogs {
 		guard response == .OK else {
 			throw OSAXError(-128)
 		}
+		lastShownFolder = panel.directoryURL
 		// The startup disk appears in /Volumes as a link to /.
 		return options.kind == .volumes ? panel.urls.map { $0.resolvingSymlinksInPath() } : panel.urls
 	}

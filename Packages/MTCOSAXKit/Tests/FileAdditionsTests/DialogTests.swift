@@ -11,6 +11,7 @@ final class FakeDialogs: FileDialogs {
 	var newItem = URL(fileURLWithPath: "/private/tmp/new.txt")
 	var canceled = false
 	var saveAnswer = 1
+	var lastShownFolder: URL?
 	private(set) var chooseOptions: ChooseOptions?
 	private(set) var newItemOptions: NewItemOptions?
 	private(set) var askSaveArguments: (String?, Int)?
@@ -112,6 +113,26 @@ struct DialogTests {
 		#expect(dialogs.chooseOptions?.startingAt?.path == folder.url.path)
 		_ = send("SATIstdf", ["key ": 8])
 		#expect(dialogs.chooseOptions?.startingAt == nil)
+	}
+
+	/// The key remembered the chosen item's parent. For a folder that's the folder above the one chosen; and the
+	/// folder shown, chosen with nothing selected, went up a level each time. It's the folder the dialog reports now.
+	@Test func keyRemembersTheFolderShown() throws {
+		let folder = try TemporaryFolder()
+		defer { folder.remove() }
+		let inner = try folder.folder("a/b")
+		// Chosen in its parent's list: the next dialog opens on that list.
+		dialogs.chosen = [inner]
+		dialogs.lastShownFolder = folder.url.appendingPathComponent("a")
+		_ = send("SATIstfl", ["key ": 5])
+		_ = send("SATIstfl", ["key ": 5])
+		#expect(dialogs.chooseOptions?.startingAt?.path == folder.path("a"))
+		// Chosen from inside it, or again with nothing selected: the next dialog opens inside it, every time.
+		dialogs.lastShownFolder = inner
+		for _ in 0 ..< 3 {
+			_ = send("SATIstfl", ["key ": 5])
+		}
+		#expect(dialogs.chooseOptions?.startingAt?.path == folder.path("a/b"))
 	}
 
 	@Test func cancel() {

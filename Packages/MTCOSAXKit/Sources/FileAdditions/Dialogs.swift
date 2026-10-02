@@ -12,6 +12,9 @@ public protocol FileDialogs {
 	func chooseNewItem(_ options: NewItemOptions) throws -> URL
 	/// The "save changes?" alert: 1 Save, 2 Cancel, 3 Don't Save.
 	func askSave(fileName: String?, action: Int) -> Int
+	/// The folder the last open dialog had as its own when it was closed (a selected folder counts as it); nil if
+	/// that isn't known.
+	var lastShownFolder: URL? { get }
 }
 
 public struct ChooseOptions: Equatable, Sendable {
@@ -113,8 +116,13 @@ extension FileAdditions {
 			options.multipleSelection = false
 		}
 		let chosen = try dialogs.choose(options)
+		// What `key` remembers is the folder the dialog reports as its own when it closes, so the next one opens
+		// where this one was left: for files, the folder they're in; for a folder, that folder itself, whether it
+		// was selected in a list or gone into (the open panel reports a selected folder as its folder), which is
+		// the dictionary's "the folder that the user will select". (It was the chosen item's parent: for a folder
+		// that's the one above, and choosing the folder shown, with nothing selected, moved up a level every time.)
 		if let key, let first = chosen.first {
-			remember(first.deletingLastPathComponent(), key: key, defaults: defaults)
+			remember(dialogs.lastShownFolder ?? first.deletingLastPathComponent(), key: key, defaults: defaults)
 		}
 		return try chosen.map { url in
 			guard let alias = NSAppleEventDescriptor.alias(url) else {
