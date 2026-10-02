@@ -10,7 +10,7 @@ Three today, all in MTC_OSAX's defaults domain (`com.mactechnologies.mtc-osax`),
 
 | Constant | Friendly name | `defaults` key | Type | Default | What it does |
 |---|---|---|---|---|---|
-| `idle_timeout` | `"idle timeout"` | `IdleTimeoutSeconds` | integer, 0 or more | 3600 | Seconds without commands before the app quits; 0 means never. It doesn't quit while documents are open either way. |
+| `idle_timeout` | `"idle timeout"` | `IdleTimeoutSeconds` | integer, 0 or more | 3605 (an hour and five seconds: on the hour, an hourly job met the quit every time) | Seconds without commands before the app quits; 0 means never. It doesn't quit while documents are open either way. |
 | `dollar_references` | `"dollar references"` | `DollarReferences` | boolean | false | `$1`-style references in replacement templates when a command doesn't say. |
 | `regex_syntax` | `"regex syntax"` | `RegexSyntax` | text: a syntax name | `"RUBY"` | The regex syntax when a command doesn't say, e.g. `"PCRE"`. |
 
@@ -31,7 +31,7 @@ mtc_reset all_settings                 -- every setting back to its default
 mtc_get "regex syntax"                 -- the same setting, by its friendly name
 mtc_get "RegexSyntax"                  -- or its defaults key
 mtc_get all_settings
---> {{name:idle_timeout, key:"IdleTimeoutSeconds", value:3600, default value:3600, is default:true, description:"…"}, …}
+--> {{name:idle_timeout, key:"IdleTimeoutSeconds", value:3605, default value:3605, is default:true, description:"…"}, …}
 ```
 
 - **`mtc_get <name>`:** the value in effect: the stored value if it's valid, otherwise the default (as the command that uses it would see it).

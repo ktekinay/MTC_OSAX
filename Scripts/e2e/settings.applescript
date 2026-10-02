@@ -33,7 +33,7 @@ set saved to mtc_get all_settings
 set failure to missing value
 try
 	mtc_reset all_settings
-	check("default idle timeout", mtc_get idle_timeout, 3600)
+	check("default idle timeout", mtc_get idle_timeout, 3605)
 	check("default dollar references", mtc_get dollar_references, false)
 	check("default regex syntax", mtc_get regex_syntax, "RUBY")
 
@@ -67,7 +67,7 @@ try
 	mtc_reset regex_syntax
 	check("reset one", mtc_get regex_syntax, "RUBY")
 	mtc_reset all_settings
-	check("reset all", {mtc_get idle_timeout, mtc_get dollar_references}, {3600, false})
+	check("reset all", {mtc_get idle_timeout, mtc_get dollar_references}, {3605, false})
 on error message number n
 	set failure to {message, n}
 end try

@@ -10,7 +10,7 @@ public enum Settings {
 	// MARK: Reading
 
 	/// `IdleTimeoutSeconds`: how long the app waits without commands before quitting; nil means never (0).
-	/// Missing, negative or not a number: an hour.
+	/// Missing, negative or not a number: the default, an hour and five seconds.
 	public static func idleTimeout(in defaults: UserDefaults) -> Duration? {
 		IdleMonitor.timeout(in: defaults, key: Setting.idleTimeout.key, default: .seconds(Setting.defaultIdleTimeout))
 	}
@@ -46,7 +46,9 @@ struct Setting: @unchecked Sendable {
 	/// that isn't allowed.
 	let normalize: (NSAppleEventDescriptor) throws -> Any
 
-	static let defaultIdleTimeout = 3600
+	/// Five seconds past the hour, not the hour: a job that runs hourly would otherwise send its command just as
+	/// the app quit, every time, and a command sent to a process that is going fails with -609.
+	static let defaultIdleTimeout = 3605
 
 	static let idleTimeout = Setting(
 		constant: "idle_timeout", code: "MTsi", name: "idle timeout", key: "IdleTimeoutSeconds",

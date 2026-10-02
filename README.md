@@ -172,7 +172,7 @@ Scripts/release.sh --no-notarize   # build and check the signature only
 
 The Release configuration is optimized and signed with the hardened runtime and a secure timestamp, without the debugging entitlement, which is what Apple's notarization requires; the script checks all of that before submitting. Notarizing needs your credentials in the keychain once (`xcrun notarytool store-credentials mtc-osax-notary --apple-id … --team-id 8A6WVHL579`).
 
-The app has no UI. It launches when a script sends it a command and quits after an hour without commands (the `idle_timeout` setting; see [Settings](#settings)).
+The app has no UI. It launches when a script sends it a command and quits after an hour (and five seconds) without commands (the `idle_timeout` setting; see [Settings](#settings)).
 
 On macOS 26, AppKit's update cycle holds each incoming Apple event until the next display frame, adding about 16.5 ms to every command. `main.swift` turns it off by registering the undocumented `NSApplicationUpdateCycleEnabled` default as false, which brings a round trip to about 0.2 ms. If a later macOS ignores the key, commands are slower but work the same; the `diagnostics` end-to-end check fails if a round trip takes that long again.
 
@@ -185,7 +185,7 @@ MTC_OSAX has three settings. Scripts read and change them with the commands of t
 
 | Setting | Default | What it does |
 |---|---|---|
-| `idle_timeout` | 3600 | Seconds without commands before the app quits; 0 means never. It doesn't quit while property lists or XML documents are open either way. |
+| `idle_timeout` | 3605 | Seconds without commands before the app quits; 0 means never. It doesn't quit while property lists or XML documents are open either way. The default is five seconds past the hour so that an hourly job's command doesn't arrive just as the app quits (a command sent in that instant fails with -609); if you set it yourself, avoid the exact period of anything that runs on a schedule. |
 | `dollar_references` | false | Whether replacement templates also accept `$1`-style references when a command doesn't say. |
 | `regex_syntax` | `"RUBY"` | The regex syntax when a command doesn't give one, e.g. `"PCRE"`. |
 
@@ -194,7 +194,7 @@ mtc_get regex_syntax                    --> "RUBY"
 mtc_set regex_syntax to "PCRE"
 mtc_set idle_timeout to 300             -- quit after 5 minutes (0: never)
 mtc_reset regex_syntax                  -- back to the default
-mtc_get all_settings                    --> {{name:idle_timeout, key:"IdleTimeoutSeconds", value:300, default value:3600, …}, …}
+mtc_get all_settings                    --> {{name:idle_timeout, key:"IdleTimeoutSeconds", value:300, default value:3605, …}, …}
 mtc_reset all_settings                  -- every setting back to its default
 ```
 

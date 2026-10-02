@@ -2785,7 +2785,7 @@ PlistClose p
 	<suite name="MTC_OSAX Settings" code="MTCs" description="Read and change MTC_OSAX's settings (MTC_OSAX extension). Settings are global and permanent: a change affects every script that uses MTC_OSAX, including scripts run later and after MTC_OSAX or the Mac restarts, until it's changed again or reset. A change applies from the next command. To change how one command behaves, use its own parameter instead (syntax, dollar references). Settings are kept in MTC_OSAX's defaults (com.mactechnologies.mtc-osax).">
 		<enumeration name="setting" code="MTst" description="An MTC_OSAX setting. A setting can also be named with text: its friendly name (&quot;regex syntax&quot;), its defaults key (&quot;RegexSyntax&quot;) or the constant's name, ignoring case, spaces and underscores.">
 			<enumerator name="all_settings" code="MTsa" description="every setting (mtc_get and mtc_reset); also &quot;all settings&quot; or &quot;AllSettings&quot;"/>
-			<enumerator name="idle_timeout" code="MTsi" description="seconds without commands before MTC_OSAX quits; 0 means never (default 3600). Defaults key IdleTimeoutSeconds."/>
+			<enumerator name="idle_timeout" code="MTsi" description="seconds without commands before MTC_OSAX quits; 0 means never (default 3605). Defaults key IdleTimeoutSeconds."/>
 			<enumerator name="dollar_references" code="MTsd" description="whether replacement templates also accept $0–$9, ${name} and $$ when a command doesn't say (default false). Defaults key DollarReferences."/>
 			<enumerator name="regex_syntax" code="MTsr" description="the regular expression syntax when a command doesn't give one, e.g. &quot;PCRE&quot; (default &quot;RUBY&quot;). Defaults key RegexSyntax."/>
 		</enumeration>

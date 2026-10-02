@@ -121,7 +121,7 @@
                 {
                   "key" : "MTdv",
                   "value" : {
-                    "integer" : 3600,
+                    "integer" : 3605,
                     "type" : "long"
                   }
                 },
@@ -297,14 +297,14 @@
                 {
                   "key" : "val ",
                   "value" : {
-                    "integer" : 3600,
+                    "integer" : 3605,
                     "type" : "long"
                   }
                 },
                 {
                   "key" : "MTdv",
                   "value" : {
-                    "integer" : 3600,
+                    "integer" : 3605,
                     "type" : "long"
                   }
                 },
@@ -426,7 +426,7 @@
     }
   ],
   "name" : "all-settings",
-  "recordedAt" : "2026-09-28T18:09:50Z",
+  "recordedAt" : "2026-10-02T13:04:01Z",
   "recordedFrom" : "MTC_OSAX",
   "script" : "mtc_set idle_timeout to 0\nmtc_set dollar_references to true\nmtc_set regex_syntax to \"JAVA\"\nmtc_get all_settings\nmtc_reset \"AllSettings\"\nmtc_get \"all settings\"",
   "timeZone" : "America/New_York"

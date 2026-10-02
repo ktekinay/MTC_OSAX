@@ -45,7 +45,7 @@ private var allSettings: NSAppleEventDescriptor { constant("MTsa") }
 struct SettingsTests {
 	@Test func defaults() {
 		let settings = SettingsCommands()
-		#expect(settings.get(idleTimeout).result?.int32Value == 3600)
+		#expect(settings.get(idleTimeout).result?.int32Value == 3605)
 		#expect(settings.get(dollarReferences).result?.booleanValue == false)
 		#expect(settings.get(regexSyntax).result?.stringValue == "RUBY")
 	}
@@ -129,12 +129,12 @@ struct SettingsTests {
 		settings.defaults.set("120", forKey: "IdleTimeoutSeconds")
 		#expect(settings.get(idleTimeout).result?.int32Value == 120)
 		settings.defaults.set(-5, forKey: "IdleTimeoutSeconds")
-		#expect(settings.get(idleTimeout).result?.int32Value == 3600)
+		#expect(settings.get(idleTimeout).result?.int32Value == 3605)
 		// What the app uses too: these crashed it at launch, or meant one second.
 		for value in [1e30, true, "1e30"] as [Any] {
 			settings.defaults.set(value, forKey: "IdleTimeoutSeconds")
-			#expect(settings.get(idleTimeout).result?.int32Value == 3600, "\(value)")
-			#expect(Settings.idleTimeout(in: settings.defaults) == .seconds(3600), "\(value)")
+			#expect(settings.get(idleTimeout).result?.int32Value == 3605, "\(value)")
+			#expect(Settings.idleTimeout(in: settings.defaults) == .seconds(3605), "\(value)")
 		}
 		// The text commands and mtc_get read DollarReferences by one rule.
 		for (value, on) in [("Y", false), ("TRUE", true), ("maybe", false), ("0", false)] as [(Any, Bool)] {
