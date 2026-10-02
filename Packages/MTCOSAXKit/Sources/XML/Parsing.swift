@@ -211,7 +211,9 @@ enum ExtendedCharacters {
 	/// Rewrites references to control characters in text and attribute values (not in comments, CDATA sections
 	/// or processing instructions, or HTML's scripts and styles, where they're literal text); whether it did.
 	static func encode(_ data: Data, html: Bool = false) -> (data: Data, rewritten: Bool) {
-		guard data.firstRange(of: Data("&#".utf8)) != nil, let text = String(data: data, encoding: .utf8) else {
+		// (With memmem: Data's own search took 16 ms for a megabyte with no reference in it, more than parsing it.)
+		let hasReference = data.withUnsafeBytes { memmem($0.baseAddress, $0.count, "&#", 2) != nil }
+		guard hasReference, let text = String(data: data, encoding: .utf8) else {
 			return (data, false)
 		}
 		let markups = literalMarkup + (html ? literalHTML : [])
