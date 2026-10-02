@@ -477,6 +477,28 @@ struct RemoveTests {
 		#expect(sandbox.exists("d"))
 	}
 
+	/// A folder that can't be listed is an error, before anything is deleted (it counted as empty); and a file whose
+	/// date can't be read isn't deleted for its date (it counted as the distant past).
+	@Test func filesOnlyWithWhatCantBeRead() throws {
+		let sandbox = try Sandbox()
+		_ = try sandbox.file("d/a.txt")
+		_ = try sandbox.file("closed/b.txt")
+		chmod(sandbox.path("closed"), 0)
+		defer { chmod(sandbox.path("closed"), 0o755) }
+		let reply = send(remove, ["----": [sandbox.path("d"), sandbox.path("closed")], "FOnl": true])
+		#expect(reply.error?.number == -1)
+		#expect(reply.error?.message?.contains("closed") == true)
+		#expect(sandbox.exists("d/a.txt"))
+
+		let now = Date(), earlier = now.addingTimeInterval(-60), later = now.addingTimeInterval(60)
+		#expect(FilesAndFolders.isModified(nil, after: nil, before: nil))
+		#expect(!FilesAndFolders.isModified(nil, after: nil, before: later))
+		#expect(!FilesAndFolders.isModified(nil, after: earlier, before: nil))
+		#expect(FilesAndFolders.isModified(now, after: earlier, before: later))
+		#expect(!FilesAndFolders.isModified(now, after: later, before: nil))
+		#expect(!FilesAndFolders.isModified(now, after: nil, before: earlier))
+	}
+
 	@Test func dates() throws {
 		let sandbox = try Sandbox()
 		let old = try sandbox.file("d/old.txt")

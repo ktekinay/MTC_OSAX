@@ -32,7 +32,6 @@ These are the project's working rules. The README's Tests section has the detail
 
 | ID | Area | Issue | Evidence | Size of fix |
 |---|---|---|---|---|
-| [L41](#l41-fileremove--with-filesonly-before-deletes-a-file-whose-date-cant-be-read) | Files | `fileremove … before` deletes a file whose date can't be read | Read only | Small |
 | [L42](#l42-plistnew-builds-trees-past-the-depth-limit-through-references) | Property lists | `PlistNew` builds trees past the depth limit | Reproduced | Small |
 | [L43](#l43-yaml-timestamps-large-offsets-and-daylight-saving-gaps) | Property lists | YAML timestamps: large offsets, daylight-saving gaps | Reproduced | Small |
 | [L44](#l44-plisttojson-fails-on-text-with-a-lone-surrogate) | Property lists | `PlistToJSON` fails on text with a lone surrogate | Reproduced | Small |
@@ -55,15 +54,6 @@ These are the project's working rules. The README's Tests section has the detail
 Further down: [performance notes](#performance-notes) and [steps for the maintainer](#steps-for-the-maintainer).
 
 ---
-
-## File commands
-
-### L41. `fileremove … with filesonly before` deletes a file whose date can't be read
-
-- **What happens:** a file whose modification date can't be read counts as the distant past, so `before <date>` deletes it. A folder that can't be listed counts as empty, with no error.
-- **Where:** [FilesAndFolders.swift:389-395](Packages/MTCOSAXKit/Sources/FilesAndFolders/FilesAndFolders.swift#L389-L395).
-- **Evidence:** Read only. It's hard to make a file whose date can't be read; a test may need a seam.
-- **Suggested fix:** leave out a file whose date is unknown when `before` or `after` is given, and report a folder that can't be listed as an error (`FileItem.namesIfReadable` exists for this).
 
 ## Property lists
 

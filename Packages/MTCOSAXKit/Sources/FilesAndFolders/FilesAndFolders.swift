@@ -384,15 +384,16 @@ public enum FilesAndFolders {
 			throw notFound
 		}
 		if filesOnly {
-			urls = urls.flatMap { url -> [URL] in
+			urls = try urls.flatMap { url -> [URL] in
 				guard FileItem.isDirectory(url) else { return [url] }
-				let contents = (try? FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil)) ?? []
-				return contents.filter { !FileItem.isDirectory($0) }
+				do {
+					return try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil).filter { !FileItem.isDirectory($0) }
+				} catch {
+					// Before anything is deleted (a folder that couldn't be listed counted as empty, with no error).
+					throw OSAXError(-1, OSAXError.file(error, "list “\(url.lastPathComponent)”").message ?? "")
+				}
 			}
-			urls = urls.filter { url in
-				let modified = (try? url.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate) ?? .distantPast
-				return (after.map { modified > $0 } ?? true) && (before.map { modified < $0 } ?? true)
-			}
+			urls = urls.filter { isModified(FileItem.modificationDate($0), after: after, before: before) }
 		}
 		var removed = 0
 		for url in urls {
@@ -409,6 +410,14 @@ public enum FilesAndFolders {
 			}
 		}
 		return removed
+	}
+
+	/// Whether a file modified then is one `after` and `before` ask for. One whose date can't be read isn't, when
+	/// either is given: it counted as the distant past, so `before` deleted it.
+	static func isModified(_ modified: Date?, after: Date?, before: Date?) -> Bool {
+		guard after != nil || before != nil else { return true }
+		guard let modified else { return false }
+		return (after.map { modified > $0 } ?? true) && (before.map { modified < $0 } ?? true)
 	}
 
 	/// Clears the user and system immutable flags (a Finder-locked file), recursively for folders. A link's own
