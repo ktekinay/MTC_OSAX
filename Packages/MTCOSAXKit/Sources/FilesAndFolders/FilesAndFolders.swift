@@ -279,6 +279,12 @@ public enum FilesAndFolders {
 			guard replacing else {
 				throw alreadyExists
 			}
+			// Not with something inside it: replacing a folder deletes it, and so everything else in it, to leave
+			// only the item (`filemove a/b into a with replacing` left just what was in `b`). SatimageOSAX refuses
+			// (error 1), as the shell's mv does.
+			if !FileItem.isSymlink(target), FileItem.isInside(source.deletingLastPathComponent(), target) {
+				throw OSAXError(-1, "“\(source.lastPathComponent)” is inside “\(target.path)”, the folder it would replace.")
+			}
 			try replace(target, from: source, move: move)
 			return result(target, folder: isFolder)
 		}

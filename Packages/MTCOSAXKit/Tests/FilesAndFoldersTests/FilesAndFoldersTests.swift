@@ -395,6 +395,27 @@ struct CopyMoveTests {
 		#expect(send(copy, ["----": sandbox.path("a/link"), "to  ": sandbox.path("a/sub")]).error == nil)
 	}
 
+	/// Replacing a folder with an item inside it deleted the folder, and everything else in it, to leave that item
+	/// (SatimageOSAX refuses, error 1).
+	@Test func folderIsntReplacedByWhatsInIt() throws {
+		let sandbox = try Sandbox()
+		_ = try sandbox.file("a/keep1.txt")
+		_ = try sandbox.file("a/keep2/x.txt")
+		_ = try sandbox.file("a/b/inner.txt")
+		_ = try sandbox.file("a/b/c/deep.txt")
+		for command in [copy, move] {
+			for source in ["a/b", "a/b/c", "a/keep1.txt"] {
+				let error = send(command, ["----": sandbox.path(source), "into": sandbox.path("a"), "Repl": true]).error
+				#expect(error?.number == -1 && error?.message?.contains("would replace") == true, "\(command) \(source)")
+			}
+		}
+		#expect(FileManager.default.enumerator(atPath: sandbox.path("a"))?.allObjects.count == 7)
+		// An item beside it still replaces it.
+		_ = try sandbox.file("b/new.txt")
+		#expect(send(move, ["----": sandbox.path("b"), "into": sandbox.path("a"), "Repl": true]).error == nil)
+		#expect(try FileManager.default.contentsOfDirectory(atPath: sandbox.path("a")) == ["new.txt"])
+	}
+
 	@Test func moveFolder() throws {
 		let sandbox = try Sandbox()
 		_ = try sandbox.file("s/a.txt")
