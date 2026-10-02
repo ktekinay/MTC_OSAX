@@ -25,10 +25,14 @@ final class Node {
 	init(_ content: Content, in document: Document) {
 		self.content = content
 		self.document = document
-		number = document.register()
-		document.elements[number] = WeakNode(self)
-		for child in children {
-			child.parent = self
+		number = document.nextNumber()
+		switch content {
+		case let .dictionary(dictionary):
+			for case let child as Node in dictionary.objectEnumerator() { child.parent = self }
+		case let .array(items):
+			for child in items { child.parent = self }
+		default:
+			break
 		}
 	}
 
@@ -184,13 +188,21 @@ final class Document: StoredDocument {
 		isOpen = false
 	}
 
-	fileprivate func register() -> Int {
+	fileprivate func nextNumber() -> Int {
+		defer { nextElement += 1 }
+		return nextElement
+	}
+
+	/// Puts an element in the table its references are looked up in. Done when a reference to it is first made, not
+	/// when the element is: a document read from a file has tens of thousands of elements, a script asks for a few,
+	/// and an entry (with its weak reference) for each was most of the time PlistOpen and PlistFromJSON took.
+	func register(_ node: Node) {
+		guard elements[node.number] == nil else { return }
 		if elements.count >= compactAt {
 			elements = elements.filter { $0.value.node != nil }
 			compactAt = max(1024, elements.count * 2)
 		}
-		defer { nextElement += 1 }
-		return nextElement
+		elements[node.number] = WeakNode(node)
 	}
 
 	func element(_ number: Int) -> Node? {
@@ -269,6 +281,7 @@ public final class DocumentStore {
 	nonisolated static let referenceType = FourCharCode(fourCharString: "CFob")
 
 	func reference(_ node: Node) -> NSAppleEventDescriptor {
+		node.document.register(node)
 		var data = Data()
 		withUnsafeBytes(of: UInt32(node.document.number).littleEndian) { data.append(contentsOf: $0) }
 		data.append(contentsOf: Array("MTCp".utf8))
