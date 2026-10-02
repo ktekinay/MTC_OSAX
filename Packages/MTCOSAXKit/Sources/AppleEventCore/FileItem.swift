@@ -25,6 +25,19 @@ public enum FileItem {
 		return stat(url.path, &status) == 0 ? Identity(status) : nil
 	}
 
+	/// Changes the permissions of a folder just made, through the folder itself: by path, they'd go to whatever is
+	/// at that path by then (in a folder others can write to, the new one can be swapped for something else). `change`
+	/// gets its mode as it is. False for a folder that can't be opened (a link is, by then, or its owner can't read
+	/// it) or changed.
+	@discardableResult
+	public static func changeMode(ofNewFolder path: String, _ change: (mode_t) -> mode_t) -> Bool {
+		let descriptor = open(path, O_RDONLY | O_DIRECTORY | O_NOFOLLOW)
+		guard descriptor >= 0 else { return false }
+		defer { close(descriptor) }
+		var status = stat()
+		return fstat(descriptor, &status) == 0 && fchmod(descriptor, change(status.st_mode)) == 0
+	}
+
 	/// A hidden name for a new item made beside another before replacing it: short and the same length whatever the
 	/// other's name (its name with a UUID added made names over about 206 bytes too long to be replaced).
 	public static func temporaryName() -> String {

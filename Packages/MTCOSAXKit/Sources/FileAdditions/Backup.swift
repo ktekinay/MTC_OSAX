@@ -121,7 +121,7 @@ struct Backup {
 						errors.append((to.path, errno))
 						continue
 					}
-					chmod(to.path, status.st_mode & 0o7777)
+					FileItem.changeMode(ofNewFolder: to.path) { _ in status.st_mode & 0o7777 }
 				}
 				run(from, onto: to)
 			} else {

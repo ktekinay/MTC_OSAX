@@ -566,9 +566,29 @@ struct TemporaryTests {
 		#expect(try mode(makeTemporaryFile, "4755") == Int((0o755 & ~mask) | 0o4000))
 		#expect(try mode(makeTemporaryFolder, "777") == Int(0o777 & ~mask))
 		#expect(try mode(makeTemporaryFolder, "1777") == Int((0o777 & ~mask) | 0o1000))
+		#expect(try mode(makeTemporaryFile, "2640") == Int((0o640 & ~mask) | 0o2000))
+		#expect(try mode(makeTemporaryFolder, "3750") == Int((0o750 & ~mask) | 0o3000))
 		// filenew refuses an item made since it looked, as one already there.
 		_ = try sandbox.file("there")
 		#expect(send(fileNew, ["----": sandbox.path("there")]).error == OSAXError(-48))
+	}
+
+	/// A new folder's mode is changed through the folder, so never through a link that has taken its place.
+	@Test func newFolderModeNotThroughALink() throws {
+		let sandbox = try Sandbox()
+		func mode(_ name: String) -> mode_t {
+			var status = stat()
+			return stat(sandbox.path(name), &status) == 0 ? status.st_mode & 0o7777 : 0
+		}
+		#expect(mkdir(sandbox.path("d"), 0o700) == 0)
+		#expect(FileItem.changeMode(ofNewFolder: sandbox.path("d")) { $0 | 0o1050 })
+		#expect(mode("d") == 0o1750)
+		try FileManager.default.createSymbolicLink(atPath: sandbox.path("link"), withDestinationPath: "d")
+		#expect(!FileItem.changeMode(ofNewFolder: sandbox.path("link")) { _ in 0o700 })
+		#expect(mode("d") == 0o1750)
+		_ = try sandbox.file("f")
+		#expect(!FileItem.changeMode(ofNewFolder: sandbox.path("f")) { _ in 0o700 })
+		#expect(!FileItem.changeMode(ofNewFolder: sandbox.path("missing")) { _ in 0o700 })
 	}
 
 	/// mkstemps replaced every X at the end of the template, so a prefix ending in X lost it.

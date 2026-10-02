@@ -32,7 +32,6 @@ These are the project's working rules. The README's Tests section has the detail
 
 | ID | Area | Issue | Evidence | Size of fix |
 |---|---|---|---|---|
-| [L40](#l40-special-mode-bits-are-set-by-path-after-the-item-is-made) | Files | Special mode bits are set by path after the item is made | Read only | Small |
 | [L41](#l41-fileremove--with-filesonly-before-deletes-a-file-whose-date-cant-be-read) | Files | `fileremove … before` deletes a file whose date can't be read | Read only | Small |
 | [L42](#l42-plistnew-builds-trees-past-the-depth-limit-through-references) | Property lists | `PlistNew` builds trees past the depth limit | Reproduced | Small |
 | [L43](#l43-yaml-timestamps-large-offsets-and-daylight-saving-gaps) | Property lists | YAML timestamps: large offsets, daylight-saving gaps | Reproduced | Small |
@@ -58,13 +57,6 @@ Further down: [performance notes](#performance-notes) and [steps for the maintai
 ---
 
 ## File commands
-
-### L40. Special mode bits are set by path after the item is made
-
-- **What happens:** `mkstemp`, `mkdtemp` and `backup` create the item, then set setuid, setgid or sticky bits with `chmod` on its path. In a folder others can write to, the item could be swapped between the two steps.
-- **Where:** [FilesAndFolders.swift:486-490](Packages/MTCOSAXKit/Sources/FilesAndFolders/FilesAndFolders.swift#L486-L490), [Backup.swift:124](Packages/MTCOSAXKit/Sources/FileAdditions/Backup.swift#L124).
-- **Evidence:** Read only.
-- **Suggested fix:** `fchmod` on the descriptor that created the item, before closing it; for a folder, open it with `O_DIRECTORY | O_NOFOLLOW` and `fchmod` that.
 
 ### L41. `fileremove … with filesonly before` deletes a file whose date can't be read
 

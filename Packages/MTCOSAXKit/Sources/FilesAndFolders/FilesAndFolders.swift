@@ -464,7 +464,8 @@ public enum FilesAndFolders {
 
 	/// Creates a file or folder named prefix + random letters and digits + suffix that didn't exist, with `mode` less
 	/// the umask; its path. The system applies the umask as it creates it (reading the umask meant setting the whole
-	/// process's to 0 for a moment); setuid, setgid and sticky bits, which creating doesn't set, are added after.
+	/// process's to 0 for a moment); setuid, setgid and sticky bits, which creating doesn't set, are added after
+	/// (not to a folder its owner can't read, which can't be opened to set them).
 	/// (mkstemps and mkdtemp replace every X at the end of their template, so a prefix ending in X lost it.)
 	static func createUnique(in folder: URL, prefix: String, randomCount: Int, suffix: String, folder isFolder: Bool,
 	                         mode: mode_t) throws -> String
@@ -473,22 +474,25 @@ public enum FilesAndFolders {
 		for _ in 0 ..< (randomCount == 0 ? 1 : 1000) {
 			let random = String((0 ..< randomCount).map { _ in characters.randomElement()! })
 			let path = folder.appendingPathComponent(prefix + random + suffix).path
-			var created = false
+			// The special bits are set on the item that was made (its descriptor), not on whatever its path is by then.
+			let special = mode & 0o7000
 			if isFolder {
-				created = Darwin.mkdir(path, mode & 0o777) == 0
+				if Darwin.mkdir(path, mode & 0o777) == 0 {
+					if special != 0 {
+						FileItem.changeMode(ofNewFolder: path) { ($0 & 0o777) | special }
+					}
+					return path
+				}
 			} else {
 				let descriptor = open(path, O_CREAT | O_EXCL | O_RDWR | O_NOFOLLOW, mode & 0o777)
 				if descriptor >= 0 {
+					var status = stat()
+					if special != 0, fstat(descriptor, &status) == 0 {
+						fchmod(descriptor, (status.st_mode & 0o777) | special)
+					}
 					close(descriptor)
-					created = true
+					return path
 				}
-			}
-			if created {
-				var status = stat()
-				if mode & 0o7000 != 0, lstat(path, &status) == 0 {
-					Darwin.chmod(path, (status.st_mode & 0o777) | (mode & 0o7000))
-				}
-				return path
 			}
 			guard errno == EEXIST else { throw posixError(errno) }
 		}
