@@ -32,7 +32,6 @@ These are the project's working rules. The README's Tests section has the detail
 
 | ID | Area | Issue | Evidence | Size of fix |
 |---|---|---|---|---|
-| [L33](#l33-create-symlink-can-lose-the-existing-link) | Files | `create symlink` can lose the existing link | Reproduced | Small |
 | [L35](#l35-name-for-an-unknown-user-becomes-a-relative-path) | Files | `~name` for an unknown user becomes a relative path | Reproduced | Small |
 | [L36](#l36-with-from-a-name-starting-with-file-is-read-as-an-hfs-path) | Files | With `from`, a name starting with `File:` is read as an HFS path | Reproduced | Small |
 | [L40](#l40-special-mode-bits-are-set-by-path-after-the-item-is-made) | Files | Special mode bits are set by path after the item is made | Read only | Small |
@@ -61,13 +60,6 @@ Further down: [performance notes](#performance-notes) and [steps for the maintai
 ---
 
 ## File commands
-
-### L33. `create symlink` can lose the existing link
-
-- **What happens:** when a link of that name exists, it is deleted first and the new one made after. If the new one can't be made, the old link is gone.
-- **Where:** `createSymlink` in [FilesAndFolders.swift:520-531](Packages/MTCOSAXKit/Sources/FilesAndFolders/FilesAndFolders.swift#L520-L531).
-- **Evidence:** Reproduced, with a destination longer than a path can be (error 63).
-- **Suggested fix:** make the link under a temporary name in the same folder and `rename` it over the old one. `filecopy … with replacing` already works this way (see `replace` in the same file).
 
 ### L35. `~name` for an unknown user becomes a relative path
 

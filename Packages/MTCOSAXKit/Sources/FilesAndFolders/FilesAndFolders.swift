@@ -518,17 +518,26 @@ public enum FilesAndFolders {
 		let replacing = try request.parameter("Repl", default: true)
 		let link = folder.appendingPathComponent(name)
 
+		var replaced: URL?
 		if FileItem.exists(link) {
 			guard FileItem.isSymlink(link), replacing else {
 				throw alreadyExists
 			}
-			try? FileManager.default.removeItem(at: link)
+			replaced = link
 		}
+		// A link that replaces one is made under another name and renamed over it, so the old link stays when the
+		// new one can't be made (it was deleted first, and a target longer than a path can be then left no link).
+		let new = replaced == nil ? link : folder.appendingPathComponent(FileItem.temporaryName())
 		do {
-			try FileManager.default.createSymbolicLink(atPath: link.path, withDestinationPath: target)
+			try FileManager.default.createSymbolicLink(atPath: new.path, withDestinationPath: target)
 		} catch {
 			// A missing folder is still -43; anything else (no permission, …) its own number, not -43.
 			throw OSAXError.file(error, "make the link “\(link.lastPathComponent)”", fallback: notFound.number)
+		}
+		if replaced != nil, Darwin.rename(new.path, link.path) != 0 {
+			let code = errno
+			unlink(new.path)
+			throw posixError(code)
 		}
 		return nil
 	}

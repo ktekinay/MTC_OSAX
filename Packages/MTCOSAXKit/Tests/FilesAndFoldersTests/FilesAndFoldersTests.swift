@@ -648,6 +648,10 @@ struct SymlinkTests {
 		#expect(send(createSymlink, ["----": "b", "in  ": sandbox.url, "pnam": "l"]).error == nil)
 		#expect(send(readLink, ["----": sandbox.path("l")]).result?.stringValue == "b")
 		#expect(send(createSymlink, ["----": "c", "in  ": sandbox.url, "pnam": "l", "Repl": false]).error == OSAXError(-48))
+		// A new link that can't be made (its target is longer than a path can be) leaves the old one, and nothing else.
+		#expect(send(createSymlink, ["----": String(repeating: "t", count: 2000), "in  ": sandbox.url, "pnam": "l"]).error?.number == Int(ENAMETOOLONG))
+		#expect(try FileManager.default.destinationOfSymbolicLink(atPath: sandbox.path("l")) == "b")
+		#expect(try FileManager.default.contentsOfDirectory(atPath: sandbox.url.path) == ["l"])
 		_ = try sandbox.file("f")
 		#expect(send(createSymlink, ["----": "a", "in  ": sandbox.url, "pnam": "f"]).error == OSAXError(-48))
 	}
