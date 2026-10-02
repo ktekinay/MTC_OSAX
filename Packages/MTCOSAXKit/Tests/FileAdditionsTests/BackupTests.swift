@@ -174,6 +174,31 @@ struct BackupTests {
 		#expect(files(folder).contains("pkg.app/Contents/b.txt"))
 	}
 
+	/// On a volume that keeps times to the second (or two, or 10 ms), a copy's time is cut short, and to the
+	/// nanosecond its source was always newer: every run copied every file again. (Checked on HFS+ and exFAT disk
+	/// images, which a test can't mount.)
+	@Test func timesAreComparedAsTheVolumeKeepsThem() {
+		func time(_ seconds: Int, _ nanoseconds: Int) -> timespec { timespec(tv_sec: seconds, tv_nsec: nanoseconds) }
+		let source = time(1_800_000_001, 655_651_411)
+		// APFS: to the nanosecond.
+		#expect(!Backup.isNewer(source, than: source, granularity: 1))
+		#expect(Backup.isNewer(source, than: time(1_800_000_001, 655_651_410), granularity: 1))
+		// HFS+, exFAT and FAT: the copy's time is the source's, cut short.
+		#expect(!Backup.isNewer(source, than: time(1_800_000_001, 0), granularity: 1_000_000_000))
+		#expect(!Backup.isNewer(source, than: time(1_800_000_001, 650_000_000), granularity: 10_000_000))
+		#expect(!Backup.isNewer(source, than: time(1_800_000_000, 0), granularity: 2_000_000_000))
+		// A source changed since is still newer.
+		#expect(Backup.isNewer(time(1_800_000_002, 5), than: time(1_800_000_001, 0), granularity: 1_000_000_000))
+		#expect(Backup.isNewer(time(1_800_000_001, 665_000_000), than: time(1_800_000_001, 650_000_000), granularity: 10_000_000))
+		#expect(Backup.isNewer(time(1_800_000_002, 0), than: time(1_800_000_000, 0), granularity: 2_000_000_000))
+		// Before 1970 too, and dates too far from it to count in nanoseconds.
+		#expect(!Backup.isNewer(time(-10, 500), than: time(-10, 0), granularity: 1_000_000_000))
+		#expect(!Backup.isNewer(time(-11, 500), than: time(-12, 0), granularity: 2_000_000_000))
+		#expect(Backup.isNewer(source, than: time(-62_135_769_600, 0), granularity: 1))
+		#expect(!Backup.isNewer(time(-62_135_769_600, 0), than: source, granularity: 1_000_000_000))
+		#expect(Backup.timeGranularity(ofFileSystem: "hfs") == 1_000_000_000 && Backup.timeGranularity(ofFileSystem: "apfs") == 1)
+	}
+
 	@Test func missingDestinationIsCreated() throws {
 		let folder = try source()
 		defer { folder.remove() }

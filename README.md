@@ -71,6 +71,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 - `backup` onto a folder inside the source backs up everything but that folder (SatimageOSAX created it and then gave -50); onto the source itself is -50.
 - `backup` copies symbolic links as links, inside packages too (SatimageOSAX made an empty folder for each), and never backs up through a link in the destination: a folder where the destination has a link is error 20, rather than being copied to wherever the link points.
 - `backup` gives new folders their source folder's permissions, and a `level` other than 0, 1 or 2 is error -50 (SatimageOSAX reported as if for level 0, but still created the destination folder).
+- `backup` compares modification times as finely as the destination's volume keeps them (HFS+ to the second, FAT to two, exFAT to 10 ms), so a backup onto such a disk doesn't copy every file again on every run.
 - `backup` reports a folder it can't make or read, as an error with its code, instead of leaving it and everything under it out of the report; a new package whose copy fails part way isn't left partial (a later run then took it as done); and a destination that can't be made is an error, not "OK".
 - `backup` never deletes anything: a newer file where the destination has a folder of that name is reported as error 21 (SatimageOSAX replaced the folder and everything in it), and an update that fails leaves the old item.
 

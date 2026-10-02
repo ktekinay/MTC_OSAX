@@ -69,6 +69,7 @@ struct Backup {
 	private var updated: [String] = []
 	private var created: [String] = []
 	private var errors: [(path: String, code: Int32)] = []
+	private var granularities: [dev_t: Int64] = [:]
 
 	init(level: Int, after: Date?, recursively: Bool, exceptFolders: Set<String>, exceptExtensions: Set<String>, onlyExtensions: Set<String>?) {
 		self.level = level
@@ -135,7 +136,7 @@ struct Backup {
 					continue
 				}
 				if let existing = FileItem.status(to) {
-					if modified > FileItem.date(existing.st_mtimespec) {
+					if Self.isNewer(status.st_mtimespec, than: existing.st_mtimespec, granularity: timeGranularity(of: to, device: existing.st_dev)) {
 						copy(from, to, isNew: false, isLink: isLink)
 					}
 				} else {
@@ -143,6 +144,45 @@ struct Backup {
 				}
 			}
 		}
+	}
+
+	/// Whether a source's modification time is later than its copy's, as far as the copy's volume can tell: a
+	/// volume that keeps times to the second (HFS+), two seconds (FAT) or 10 ms (exFAT) cuts the copied time short,
+	/// so to the nanosecond every file on it was older than its source, and every run copied everything again.
+	static func isNewer(_ source: timespec, than copy: timespec, granularity: Int64) -> Bool {
+		// Seconds and nanoseconds apart: a date can be far enough from 1970 that its nanoseconds don't fit in 64 bits.
+		var seconds = Int64(source.tv_sec), nanoseconds = Int64(source.tv_nsec)
+		if granularity >= 1_000_000_000 {
+			let step = granularity / 1_000_000_000
+			seconds -= (seconds % step + step) % step
+			nanoseconds = 0
+		} else {
+			nanoseconds -= nanoseconds % granularity
+		}
+		return (seconds, nanoseconds) > (Int64(copy.tv_sec), Int64(copy.tv_nsec))
+	}
+
+	/// How finely a volume keeps modification times, in nanoseconds, by the kind of file system it is.
+	static func timeGranularity(ofFileSystem name: String) -> Int64 {
+		switch name {
+		case "hfs": 1_000_000_000
+		case "msdos": 2_000_000_000
+		case "exfat": 10_000_000
+		default: 1
+		}
+	}
+
+	/// The granularity of the volume an item is on, looked up once per volume.
+	private mutating func timeGranularity(of url: URL, device: dev_t) -> Int64 {
+		if let known = granularities[device] { return known }
+		var info = statfs()
+		var granularity: Int64 = 1
+		if statfs(url.path, &info) == 0 {
+			let name = withUnsafeBytes(of: &info.f_fstypename) { String(decoding: $0.prefix { $0 != 0 }, as: UTF8.self) }
+			granularity = Self.timeGranularity(ofFileSystem: name)
+		}
+		granularities[device] = granularity
+		return granularity
 	}
 
 	/// Copies (or, for a report, lists) a new or newer file, package or link.
