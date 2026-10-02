@@ -1,0 +1,11 @@
+// How the app is signed.
+//
+// As it comes, the app is signed to run on the Mac that builds it ("Sign to Run Locally"): no certificate or
+// developer account is needed. To sign with a certificate of your own, copy Local.xcconfig.example to
+// Local.xcconfig (which git ignores) and fill it in; what it sets replaces these.
+
+CODE_SIGN_STYLE = Manual
+CODE_SIGN_IDENTITY = -
+DEVELOPMENT_TEAM =
+
+#include? "Local.xcconfig"

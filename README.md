@@ -10,7 +10,7 @@ MTC_OSAX is a rough clone of SatimageOSAX: [Mark Alldritt](https://github.com/al
 
 Commands, parameters and codes are copied exactly from Satimage's dictionary ([SatImageOSAX SDEF/dictionary.sdef](SatImageOSAX%20SDEF/dictionary.sdef)). See [PLAN.md](PLAN.md) for which sections are planned and their order, and `PLAN-<Section>.md` for each section's plan. Plans that have been fully implemented are moved into `Implemented/`.
 
-Requires macOS 26.6 on Apple silicon.
+Requires macOS 26.6 on Apple silicon. A ready-made, notarized app is on the [releases page](https://github.com/ktekinay/MTC_OSAX/releases); to build it yourself, see [Building](#building).
 
 ## Differences from SatimageOSAX
 
@@ -113,9 +113,9 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 
 - **Native on Apple silicon**, so it keeps working after Rosetta is removed.
 - **PCRE** as a second regex engine, with `syntax "PCRE"` on `find text`, `change`, `splittext`, `filter text` and `re_compile` (`splittext` gains the `syntax` parameter for this). Patterns get PCRE2's features (`\h`, `\K`, recursion, possessive quantifiers, Unicode-aware `\w` and case), and any line ending counts. As with Onigmo, `^` and `$` match at every line unless the pattern says `(?-m)` or the call gives `regexpflag {"SINGLELINE"}`; `"DOTALL"` makes `.` match newlines. Onigmo-only flags (`FIND LONGEST`, `NEGATE SINGLELINE`, `NEWLINE IN NEGATIVE CC`) are error -1, and a pattern error is -3000 minus PCRE2's number, with PCRE2's message. So is a search that hits PCRE2's backtracking limits (-3047 for the match limit), instead of "not found". To make PCRE the default: `mtc_set regex_syntax to "PCRE"` (see [Settings](#settings); an explicit `syntax` still wins).
-- **YAML and TOML for property lists:** `PlistToYAML`, `PlistFromYAML`, `PlistToTOML` and `PlistFromTOML`, like Satimage's `PlistToJSON` and `PlistFromJSON`, in their own "MTC_OSAX Property List Formats" suite. All three formats, JSON included, can go straight to and from a file: `PlistToJSON p in (POSIX file "…")` (or a POSIX path) writes the file in UTF-8 and returns nothing, and `PlistFromJSON (POSIX file "…")` reads one; text is always the document itself, never a path. For Satimage's two JSON commands, `in` is a new parameter and a file a newly accepted direct parameter (SatimageOSAX gave an error). YAML follows YAML 1.2's rules (`yes` and `no` stay text); unquoted timestamps are dates, `null` is `missing value`, and data is `!!binary`. TOML needs a dictionary at the top, and a table or array can have at most 16,383 entries (more is -50: MTC_OSAX's TOML reader refuses them); a `missing value` in a dictionary is written as the comment `# key = NULL` (so it's absent when read back) and in a list is error -50; data is base64 text. Dates are written in UTC (`2026-09-28T14:30:00Z`), and dates without a zone are read in the Mac's time zone; a TOML time without a date is read as text.
+- **YAML and TOML for property lists:** `PlistToYAML`, `PlistFromYAML`, `PlistToTOML` and `PlistFromTOML`, like Satimage's `PlistToJSON` and `PlistFromJSON`, in their own "Property List Formats" suite. All three formats, JSON included, can go straight to and from a file: `PlistToJSON p in (POSIX file "…")` (or a POSIX path) writes the file in UTF-8 and returns nothing, and `PlistFromJSON (POSIX file "…")` reads one; text is always the document itself, never a path. For Satimage's two JSON commands, `in` is a new parameter and a file a newly accepted direct parameter (SatimageOSAX gave an error). YAML follows YAML 1.2's rules (`yes` and `no` stay text); unquoted timestamps are dates, `null` is `missing value`, and data is `!!binary`. TOML needs a dictionary at the top, and a table or array can have at most 16,383 entries (more is -50: MTC_OSAX's TOML reader refuses them); a `missing value` in a dictionary is written as the comment `# key = NULL` (so it's absent when read back) and in a list is error -50; data is base64 text. Dates are written in UTC (`2026-09-28T14:30:00Z`), and dates without a zone are read in the Mac's time zone; a TOML time without a date is read as text.
 - **Dollar references** in replacement templates (`$1`, `${12}`, `${name}`, `$$`), opt-in: `with dollar references` on `change`, `find text` and `filter text`, the `"DOLLAR REFERENCES"` regexp flag, or as the default with `mtc_set dollar_references to true`.
-- **Settings commands:** `mtc_get`, `mtc_set` and `mtc_reset`, in their own "MTC_OSAX Settings" suite, read and change MTC_OSAX's settings from a script. Settings are global and permanent: a change affects every script that uses MTC_OSAX until it's changed again or reset (see [Settings](#settings)).
+- **Settings commands:** `mtc_get`, `mtc_set` and `mtc_reset`, in their own "Settings" suite, read and change MTC_OSAX's settings from a script. Settings are global and permanent: a change affects every script that uses MTC_OSAX until it's changed again or reset (see [Settings](#settings)).
 - **Idle quit** is a setting (`idle_timeout`), and the app doesn't quit while property list or XML documents are open.
 - **Diagnostic commands** (`mtc_ping` and others; see [Diagnostic commands](#diagnostic-commands)).
 
@@ -148,32 +148,57 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 | `Packages/MTCOSAXKit/Sources/MTCOSAX` | Registers every suite; the only module the app links |
 | `Packages/MTCOSAXKit/Sources/FixtureRecorder` | `fixture-recorder` command-line tool |
 | `Packages/MTCOSAXKit/Tests/Fixtures` | Recorded Apple events and replies, one folder per section |
+| `Config/` | How the app is signed (`Signing.xcconfig`), and where your own signing settings go |
 | `Scripts/` | End-to-end AppleScript checks and helper scripts (`test.sh`, `release.sh`, the iTerm runner) |
 
 ## Building
 
-Open `MTC_OSAX.xcodeproj` and build the `MTC_OSAX` scheme, or:
+You need a Mac with Apple silicon, macOS 26.6 or later, and Xcode (the project is built and tested with Xcode 27.0; the Command Line Tools alone aren't enough). No developer account or certificate is needed.
+
+```sh
+git clone https://github.com/ktekinay/MTC_OSAX.git
+cd MTC_OSAX
+xcodebuild -project MTC_OSAX.xcodeproj -scheme MTC_OSAX -configuration Release -derivedDataPath build/DerivedData build
+cp -R build/DerivedData/Build/Products/Release/MTC_OSAX.app /Applications/
+```
+
+Or open `MTC_OSAX.xcodeproj` in Xcode, choose Product › Build For › Profiling (which builds the Release configuration), and copy the app from Product › Show Build Folder in Finder.
+
+Everything the build makes goes into `build/`, which git ignores. With the app in `/Applications`, `use application "MTC_OSAX"` finds it; check with:
+
+```sh
+osascript -e 'tell application "MTC_OSAX" to mtc_version'
+```
+
+To update, pull, build and copy again (quit the app first if it's running: `osascript -e 'tell application "MTC_OSAX" to quit'`).
+
+### Signing
+
+As it comes, the app is signed to run on the Mac that builds it ("Sign to Run Locally"). That's all it needs to work. macOS ties the permissions it gives an app (to read your Documents folder, say) to the app's signature, and this kind of signature changes with every build, so after you rebuild, macOS asks for them again.
+
+A certificate of your own gives the app a signature that stays the same. If you have one, copy [Config/Local.xcconfig.example](Config/Local.xcconfig.example) to `Config/Local.xcconfig` and fill in your certificate and team. Git ignores that file, so your settings stay out of the repository, and the next build uses them.
+
+### Developing
+
+For work on MTC_OSAX itself, build the Debug configuration (the default in Xcode, and for `xcodebuild` without `-configuration Release`): unoptimized, and signed so that a debugger can attach. Rather than copying it anywhere, register it with Launch Services once, so that `use application "MTC_OSAX"` finds it where it's built:
 
 ```sh
 xcodebuild -project MTC_OSAX.xcodeproj -scheme MTC_OSAX -derivedDataPath build/DerivedData build
-```
-
-The app is signed with the Developer ID Application certificate (team 8A6WVHL579). A stable signature matters: macOS ties Automation permission to it, so ad-hoc builds would ask for permission again after every build.
-
-So that `use application "MTC_OSAX"` finds a command-line build, register it once with Launch Services:
-
-```sh
 /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f build/DerivedData/Build/Products/Debug/MTC_OSAX.app
 ```
 
-That is the Debug build, for development: unoptimized, and signed so that a debugger can attach. To build the app to use or give out:
+### Releasing
+
+The app on the [releases page](https://github.com/ktekinay/MTC_OSAX/releases) is made with `Scripts/release.sh`, which needs a "Developer ID Application" certificate in `Config/Local.xcconfig` (with the timestamp line of the example turned on):
 
 ```sh
 Scripts/release.sh                 # build, notarize, staple, and zip to build/MTC_OSAX-<version>.zip
 Scripts/release.sh --no-notarize   # build and check the signature only
 ```
 
-The Release configuration is optimized and signed with the hardened runtime and a secure timestamp, without the debugging entitlement, which is what Apple's notarization requires; the script checks all of that before submitting. Notarizing needs your credentials in the keychain once (`xcrun notarytool store-credentials mtc-osax-notary --apple-id … --team-id 8A6WVHL579`).
+It builds the Release configuration, which has the hardened runtime and no debugging entitlement, and checks what Apple's notarization requires (a Developer ID signature with a secure timestamp among them) before submitting. Notarizing needs your credentials in the keychain once: `xcrun notarytool store-credentials mtc-osax-notary --apple-id <your Apple ID> --team-id <your team>`.
+
+## How it runs
 
 The app has no UI. It launches when a script sends it a command and quits after an hour (and five seconds) without commands (the `idle_timeout` setting; see [Settings](#settings)).
 
@@ -181,7 +206,7 @@ On macOS 26, AppKit's update cycle holds each incoming Apple event until the nex
 
 ## Settings
 
-MTC_OSAX has three settings. Scripts read and change them with the commands of the "MTC_OSAX Settings" suite, and a change applies from the next command, without restarting the app.
+MTC_OSAX has three settings. Scripts read and change them with the commands of the "Settings" suite, and a change applies from the next command, without restarting the app.
 
 **Settings are global and permanent.** A change affects every script that uses MTC_OSAX, not just the one that made it, including scripts run later and after MTC_OSAX or the Mac restarts, until it's changed again or reset. To change how a single command behaves, use its own parameter instead (`syntax "PCRE"`, `with dollar references`); a command's parameter always wins over the setting.
 
@@ -237,7 +262,7 @@ A hidden suite for checking that the app works. It doesn't appear in the diction
 | Command | Result |
 |---|---|
 | `mtc_ping` | `"pong"` |
-| `mtc_version` | e.g. `"MTC_OSAX 0.1 (1)"` |
+| `mtc_version` | e.g. `"MTC_OSAX 1.0.1 (1)"` |
 | `mtc_echo <anything>` | the value, unchanged |
 | `mtc_describe <anything>` | the Apple event descriptor received, e.g. `list [long 1, doub 2.5]` |
 | `mtc_raise_error "message" number n` | raises that error (-50 for 0, which is no error) |

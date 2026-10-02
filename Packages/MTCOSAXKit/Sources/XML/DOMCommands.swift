@@ -3,7 +3,7 @@ import CLibXML
 import Foundation
 import PropertyLists
 
-/// The "Satimage XML DOM" suite.
+/// The "XML DOM" suite.
 extension XMLCommands {
 	var dom: [CommandDefinition] {
 		[

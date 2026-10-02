@@ -3,7 +3,7 @@ import Foundation
 import Settings
 import TextMatching
 
-/// The "Satimage Text Additions" suite (event class `SATI`).
+/// The "Text Additions" suite (event class `SATI`).
 public enum TextAdditions {
 	/// Adds keys and values to the property list dictionary a CFRef refers to (from the PropertyList suite), for
 	/// `filter text … into`. Values are text or lists of text.

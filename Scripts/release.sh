@@ -4,13 +4,14 @@
 #   Scripts/release.sh                  build, notarize, staple, zip
 #   Scripts/release.sh --no-notarize    build and check the signature only
 #
-# The Release configuration is optimized and signed with the Developer ID certificate, the hardened runtime and a
-# secure timestamp, without the entitlement that lets a debugger attach (which the Debug build has, and which
-# notarization refuses).
+# The Release configuration is optimized and signed with the hardened runtime, without the entitlement that lets a
+# debugger attach (which the Debug build has, and which notarization refuses). Notarization also needs a "Developer
+# ID Application" certificate and a secure timestamp, which come from Config/Local.xcconfig (see
+# Config/Local.xcconfig.example): without it the app is signed to run locally, and this stops at the checks.
 #
 # Notarizing needs your credentials in the keychain, once:
 #
-#   xcrun notarytool store-credentials mtc-osax-notary --apple-id <you@example.com> --team-id 8A6WVHL579
+#   xcrun notarytool store-credentials mtc-osax-notary --apple-id <you@example.com> --team-id <your team>
 #
 # (it asks for an app-specific password from appleid.apple.com). MTC_NOTARY_PROFILE names another profile.
 
@@ -26,9 +27,9 @@ xcodebuild -project "$root/MTC_OSAX.xcodeproj" -scheme MTC_OSAX -configuration R
 # secure timestamp, and no debugging entitlement.
 codesign --verify --strict --deep "$app"
 details="$(codesign -d --verbose=4 --entitlements - "$app" 2>&1)"
-[[ "$details" == *"flags=0x10000(runtime)"* ]] || { echo "The hardened runtime isn't on." >&2; exit 1 }
-[[ "$details" == *"Authority=Developer ID Application"* ]] || { echo "Not signed with a Developer ID certificate." >&2; exit 1 }
-[[ "$details" == *"Timestamp="* ]] || { echo "The signature has no secure timestamp." >&2; exit 1 }
+[[ "$details" == *"Authority=Developer ID Application"* ]] || { echo "Not signed with a Developer ID certificate: set one in Config/Local.xcconfig (see Config/Local.xcconfig.example)." >&2; exit 1 }
+[[ "$details" == *"(runtime)"* ]] || { echo "The hardened runtime isn't on." >&2; exit 1 }
+[[ "$details" == *"Timestamp="* ]] || { echo "The signature has no secure timestamp: turn on the timestamp line in Config/Local.xcconfig." >&2; exit 1 }
 [[ "$details" != *"get-task-allow"* ]] || { echo "The build has the get-task-allow entitlement." >&2; exit 1 }
 
 version="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$app/Contents/Info.plist")"

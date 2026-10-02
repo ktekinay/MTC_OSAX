@@ -1,7 +1,7 @@
 import AppleEventCore
 import Foundation
 
-/// The hidden "MTC Diagnostics" suite (event class `MTCd`), for checking that the app works end to end.
+/// The hidden "Diagnostics" suite (event class `MTCd`), for checking that the app works end to end.
 public enum Diagnostics {
 	/// - Parameter version: supplies the text `mtc_version` returns.
 	@MainActor

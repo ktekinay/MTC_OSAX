@@ -3,7 +3,7 @@ import Foundation
 import TextMatching
 
 /// MTC_OSAX's settings (an MTC_OSAX extension; SatimageOSAX had none), kept in the app's defaults domain, and the
-/// "MTC_OSAX Settings" suite (event class `MTCs`) that reads and changes them: `mtc_get`, `mtc_set` and
+/// "Settings" suite (event class `MTCs`) that reads and changes them: `mtc_get`, `mtc_set` and
 /// `mtc_reset`. The code that uses a setting reads it through here, when it's needed, so a change applies from the
 /// next command.
 public enum Settings {

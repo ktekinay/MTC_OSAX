@@ -43,7 +43,7 @@ public enum CommandCatalog {
 		return dispatcher
 	}
 
-	/// e.g. `"MTC_OSAX 0.1 (1)"`, from the main bundle's Info.plist.
+	/// e.g. `"MTC_OSAX 1.0.1 (1)"`, from the main bundle's Info.plist.
 	public static func bundleVersion() -> String {
 		let info = Bundle.main.infoDictionary ?? [:]
 		let name = info["CFBundleName"] as? String ?? "MTC_OSAX"

@@ -1,7 +1,7 @@
 import AppleEventCore
 import Foundation
 
-/// Satimage's "Satimage File Additions" suite (event class `SATI`).
+/// The "File Additions" suite (event class `SATI`).
 /// Behavior recorded from SatimageOSAX in `Fixtures/FileAdditions`; where Satimage was broken, MTC_OSAX follows
 /// the dictionary (`Fixtures/FileAdditionsFixes`, listed in Implemented/PLAN-FileAdditions.md).
 ///
