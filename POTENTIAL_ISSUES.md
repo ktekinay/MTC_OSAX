@@ -32,7 +32,6 @@ These are the project's working rules. The README's Tests section has the detail
 
 | ID | Area | Issue | Evidence | Size of fix |
 |---|---|---|---|---|
-| [L36](#l36-with-from-a-name-starting-with-file-is-read-as-an-hfs-path) | Files | With `from`, a name starting with `File:` is read as an HFS path | Reproduced | Small |
 | [L40](#l40-special-mode-bits-are-set-by-path-after-the-item-is-made) | Files | Special mode bits are set by path after the item is made | Read only | Small |
 | [L41](#l41-fileremove--with-filesonly-before-deletes-a-file-whose-date-cant-be-read) | Files | `fileremove … before` deletes a file whose date can't be read | Read only | Small |
 | [L42](#l42-plistnew-builds-trees-past-the-depth-limit-through-references) | Property lists | `PlistNew` builds trees past the depth limit | Reproduced | Small |
@@ -59,14 +58,6 @@ Further down: [performance notes](#performance-notes) and [steps for the maintai
 ---
 
 ## File commands
-
-### L36. With `from`, a name starting with `File:` is read as an HFS path
-
-- **What happens:** `fileremove {"File: notes.txt"} from f` looks for a volume named "File" instead of the item named `File: notes.txt` in `f`. The README says a name with a colon is a name in the folder unless it starts with a mounted volume's name.
-- **Where:** `isRelativeScriptPath` in [AppleEventConvertible.swift:264](Packages/MTCOSAXKit/Sources/AppleEventCore/AppleEventConvertible.swift#L264) tests for `file:`.
-- **Evidence:** Reproduced.
-- **Suggested fix:** test for `file://`, as the URL branch a few lines above does.
-- **SatimageOSAX:** checked; it replies 0 and deletes nothing, a colon problem of its own. Nothing to match.
 
 ### L40. Special mode bits are set by path after the item is made
 

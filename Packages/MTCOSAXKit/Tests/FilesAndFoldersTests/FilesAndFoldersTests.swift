@@ -85,6 +85,12 @@ struct PathInputTests {
 		let hfs = volume + sandbox.path("keep.txt").replacingOccurrences(of: "/", with: ":")
 		#expect(send(getName, ["----": [hfs], "from": sandbox.url.appendingPathComponent("elsewhere")]).result?.atIndex(1)?.stringValue == "keep.txt")
 		#expect(URL.isRelativeScriptPath("Notes: 2024.txt") && !URL.isRelativeScriptPath(hfs) && !URL.isRelativeScriptPath("file:///x"))
+		// A name that starts with "File:" is a name too, not a URL or a volume "File".
+		#expect(URL.isRelativeScriptPath("File: notes.txt") && URL.isRelativeScriptPath("file:notes") && !URL.isRelativeScriptPath("FILE:///x"))
+		_ = try sandbox.file("File: notes.txt")
+		#expect(try URL(scriptPath: "File: notes.txt", relativeTo: sandbox.url).path == sandbox.path("File: notes.txt"))
+		#expect(send(remove, ["----": ["File: notes.txt"], "from": sandbox.url]).result?.int32Value == 1)
+		#expect(!sandbox.exists("File: notes.txt"))
 	}
 
 	/// With `from`, a name starting with `~` was expanded: `~` was the home folder (which `fileremove {"~"} from f`

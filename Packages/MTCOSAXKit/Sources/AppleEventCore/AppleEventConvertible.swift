@@ -267,7 +267,8 @@ extension URL: AppleEventConvertible {
 		if path.hasPrefix("/") || path.hasPrefix("~/") { return false }
 		if path.hasPrefix("~") { return true }
 		guard path.contains(":") else { return true }
-		if path.lowercased().hasPrefix("file:") || path.contains("://") { return false }
+		// (A URL has `://`; testing for `file:` made "File: notes.txt" an HFS path on a volume "File".)
+		if path.contains("://") { return false }
 		return !isVolumeName(String(path.prefix { $0 != ":" }))
 	}
 
