@@ -209,7 +209,13 @@ struct SelectorTests {
 	@Test func paths() throws {
 		#expect(try Selector.steps("a/b[2][3]/c") == [.key("a"), .key("b"), .index(2), .index(3), .key("c")])
 		#expect(try Selector.steps("/a/") == [.key("a")])
-		#expect(throws: OSAXError(-1)) { try Selector.steps("[1]") }
+		// Indices alone: an array at the top, or a step of its own.
+		#expect(try Selector.steps("[1]") == [.index(1)])
+		#expect(try Selector.steps("[2]/name") == [.index(2), .key("name")])
+		#expect(try Selector.steps("[3][2]") == [.index(3), .index(2)])
+		#expect(try Selector.steps("a/[2]/b") == [.key("a"), .index(2), .key("b")])
+		#expect(throws: OSAXError(-1)) { try Selector.steps("]") }
+		#expect(throws: OSAXError(-1)) { try Selector.steps("[]") }
 		#expect(throws: OSAXError(-1)) { try Selector.steps("a[+1]") }
 		#expect(throws: OSAXError(-1)) { try Selector.steps("a[x") }
 		#expect(throws: OSAXError(-1)) { try Selector.steps("") }

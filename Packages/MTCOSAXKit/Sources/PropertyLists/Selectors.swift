@@ -42,16 +42,20 @@ enum Selector {
 	}
 
 	/// `a/b[2][3]/c` as steps. Slashes at either end are ignored (SatimageOSAX stopped working after a trailing
-	/// one). Each part needs a key.
+	/// one). A part can be indices alone, for an array at the top or as a step of its own (`[2]/name`, `a/[2]`):
+	/// every part needed a key, so nothing in a document whose top is an array could be reached by path, as it can
+	/// in SatimageOSAX.
 	static func steps(_ path: String) throws -> [Step] {
 		var steps: [Step] = []
 		for part in path.split(separator: "/", omittingEmptySubsequences: true) {
 			let bracket = part.firstIndex(of: "[") ?? part.endIndex
 			let name = part[..<bracket]
-			guard !name.isEmpty, !name.contains("]") else {
+			guard !name.contains("]"), !name.isEmpty || bracket != part.endIndex else {
 				throw PropertyLists.invalid
 			}
-			steps.append(.key(String(name)))
+			if !name.isEmpty {
+				steps.append(.key(String(name)))
+			}
 			var rest = part[bracket...]
 			while !rest.isEmpty {
 				// A whole number (Int(_:) alone also takes "+1").

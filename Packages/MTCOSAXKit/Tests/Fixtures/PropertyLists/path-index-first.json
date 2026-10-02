@@ -1,0 +1,135 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "NOSJ",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "[{\"name\":\"a\"},{\"name\":\"b\"},[10,20,30]]",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "1600000086a9000020411d0300600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "[2]/name",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "1600000086a9000020411d0300600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "b",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "[3][2]",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "1600000086a9000020411d0300600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 20,
+          "type" : "doub"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "[1]",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "1600000086a9000020411d0300600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "usrf",
+              "value" : {
+                "items" : [
+                  {
+                    "text" : "name",
+                    "type" : "TEXT"
+                  },
+                  {
+                    "text" : "a",
+                    "type" : "ut16"
+                  }
+                ],
+                "type" : "list"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    }
+  ],
+  "name" : "path-index-first",
+  "recordedAt" : "2026-10-02T14:32:28Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set p to PlistFromJSON \"[{\\\"name\\\":\\\"a\\\"},{\\\"name\\\":\\\"b\\\"},[10,20,30]]\"\n{PlistGet p using \"[2]/name\", PlistGet p using \"[3][2]\", PlistGet p using \"[1]\"}",
+  "timeZone" : "America/New_York"
+}

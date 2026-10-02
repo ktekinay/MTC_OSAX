@@ -946,5 +946,21 @@
  {
   "name": "set-keys-too-few-values",
   "script": "set p to PlistNew {a:0}\ntry\nPlistSet p key {\"a\", \"b\"} to {1}\non error number n\nPlistClose p\nerror number n\nend try"
+ },
+ {
+  "name": "path-index-first",
+  "script": "set p to PlistFromJSON \"[{\\\"name\\\":\\\"a\\\"},{\\\"name\\\":\\\"b\\\"},[10,20,30]]\"\n{PlistGet p using \"[2]/name\", PlistGet p using \"[3][2]\", PlistGet p using \"[1]\"}"
+ },
+ {
+  "name": "path-index-first-out-of-range",
+  "script": "set p to PlistFromJSON \"[{\\\"name\\\":\\\"a\\\"},{\\\"name\\\":\\\"b\\\"},[10,20,30]]\"\nPlistGet p using \"[9]/name\""
+ },
+ {
+  "name": "path-index-own-step",
+  "script": "set p to PlistNew {a:{10, 20, 30}}\nPlistGet p using \"a/[2]\""
+ },
+ {
+  "name": "path-index-first-child",
+  "script": "set p to PlistFromJSON \"[{\\\"name\\\":\\\"a\\\"},{\\\"name\\\":\\\"b\\\"},[10,20,30]]\"\nPlistGet (PlistChild p using \"[3]\") index 3"
  }
 ]

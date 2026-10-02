@@ -1,0 +1,89 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "NOSJ",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "[{\"name\":\"a\"},{\"name\":\"b\"},[10,20,30]]",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "1900000086a9000000f91d0300600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "chld",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "[3]",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "1900000086a9000000f91d0300600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "1900000086a90000a0fb1d0300600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "indx",
+            "value" : {
+              "integer" : 3,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "1900000086a90000a0fb1d0300600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 30,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "path-index-first-child",
+  "recordedAt" : "2026-10-02T14:32:29Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set p to PlistFromJSON \"[{\\\"name\\\":\\\"a\\\"},{\\\"name\\\":\\\"b\\\"},[10,20,30]]\"\nPlistGet (PlistChild p using \"[3]\") index 3",
+  "timeZone" : "America/New_York"
+}

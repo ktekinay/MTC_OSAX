@@ -1,0 +1,90 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "make",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "a",
+                        "type" : "utxt"
+                      },
+                      {
+                        "items" : [
+                          {
+                            "integer" : 10,
+                            "type" : "long"
+                          },
+                          {
+                            "integer" : 20,
+                            "type" : "long"
+                          },
+                          {
+                            "integer" : 30,
+                            "type" : "long"
+                          }
+                        ],
+                        "type" : "list"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "1800000086a90000c0a0780200600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "a/[2]",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "1800000086a90000c0a0780200600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "integer" : 20,
+          "type" : "long"
+        }
+      }
+    }
+  ],
+  "name" : "path-index-own-step",
+  "recordedAt" : "2026-10-02T14:32:29Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set p to PlistNew {a:{10, 20, 30}}\nPlistGet p using \"a/[2]\"",
+  "timeZone" : "America/New_York"
+}
