@@ -53,6 +53,33 @@ struct DTDValidationTests {
 		#expect(xml.send("XML vali", ["----": repeated]).error != nil)
 	}
 
+	/// Validating an element leaves the document's IDs as they were: `id()` finds the same elements afterwards.
+	@Test func elementsKeepTheirIDs() throws {
+		let grouped = "<!ELEMENT people (person|group)*><!ELEMENT group (person*)><!ELEMENT person (#PCDATA)><!ATTLIST person id ID #REQUIRED>"
+		try withFiles(["plain.dtd": dtd.replacingOccurrences(of: "id ID", with: "id CDATA"), "people.xml": "<!DOCTYPE people [\(dtd)]>" + valid]) { folder in
+			let xml = XMLs()
+			@MainActor func name(_ id: String, in document: NSAppleEventDescriptor) -> String? {
+				xml.send("XML path", ["----": document, "with": "string(id('\(id)'))"]).result?.stringValue
+			}
+			// A document with a file (where reporting each ID as already defined was slow).
+			let d = try #require(xml.send("XML open", ["----": folder.appendingPathComponent("people.xml")]).result)
+			#expect(xml.send("XML vali", ["----": try xml.root(d)]).error == nil)
+			#expect(xml.send("XML lErr").result?.stringValue == "")
+			#expect(name("p1", in: d) == "Ann")
+			#expect(name("p2", in: d) == "Bob")
+			// Against a DTD in which the attribute isn't an ID.
+			#expect(xml.send("XML vali", ["----": try xml.root(d), "agai": folder.appendingPathComponent("plain.dtd")]).error == nil)
+			#expect(name("p2", in: d) == "Bob")
+			// An ID repeated outside the element: the first in the document is still the one found.
+			let text = "<!DOCTYPE people [\(grouped)]><people><person id='p1'>A</person><group><person id='p1'>B</person><person id='p3'>C</person></group></people>"
+			let repeated = try #require(xml.send("XML open", ["from": text, "ErLe": 3]).result)
+			let group = try #require(xml.send("XML path", ["----": repeated, "with": "//group"]).result?.atIndex(1))
+			#expect(xml.send("XML vali", ["----": group]).error == nil)
+			#expect(name("p1", in: repeated) == "A")
+			#expect(name("p3", in: repeated) == "C")
+		}
+	}
+
 	@Test func against() throws {
 		try withFiles(["people.dtd": dtd, "bad.dtd": "<!ELEMENT people (person*>"]) { folder in
 			let xml = XMLs()

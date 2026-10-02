@@ -53,7 +53,9 @@ extension XMLCommands {
 			if XMLCommands.isDocument(node) {
 				return dtd.map { xmlValidateDtd(context, doc, $0) } ?? xmlValidateDocument(context, doc)
 			}
-			return Validation.withSubset(dtd, of: doc) { xmlValidateElement(context, doc, node) }
+			return Validation.withSubset(dtd, of: doc) {
+				Validation.withIDsUnregistered(in: node, doc: doc) { xmlValidateElement(context, doc, node) }
+			}
 		}
 		if !XMLCommands.isDocument(node) {
 			// Validating an element registers its IDs again; only real duplicates count (SatimageOSAX gave 513 for any).
@@ -251,6 +253,44 @@ enum Validation {
 		defer {
 			doc.pointee.intSubset = internalSubset
 			doc.pointee.extSubset = externalSubset
+		}
+		return body()
+	}
+
+	/// Runs `body` with the element's IDs taken out of the document's table, and puts back any that `body` didn't.
+	/// Validating an element registers its IDs, and each one already there is an error (513); for a document with a
+	/// URL, libxml2 looks back through all the node's earlier siblings for each error it reports, so validating the
+	/// root of 20,000 items with IDs took 1.4 seconds (the document itself: 0.01).
+	static func withIDsUnregistered<T>(in node: xmlNodePtr, doc: xmlDocPtr, _ body: () -> T) -> T {
+		func value(_ attribute: xmlAttrPtr) -> UnsafeMutablePointer<xmlChar>? {
+			xmlNodeListGetString(doc, attribute.pointee.children, 1)
+		}
+		var removed: [xmlAttrPtr] = []
+		func unregister(_ element: xmlNodePtr) {
+			guard element.pointee.type == XML_ELEMENT_NODE else { return }
+			var attribute = element.pointee.properties
+			while let current = attribute {
+				// Only an ID the table has for this attribute: of two attributes with one value, it has the first.
+				if current.pointee.atype == XML_ATTRIBUTE_ID, let id = value(current) {
+					if xmlGetID(doc, id) == current, xmlRemoveID(doc, current) == 0 {
+						removed.append(current)
+					}
+					xmlRelease(id)
+				}
+				attribute = current.pointee.next
+			}
+		}
+		unregister(node)
+		Parsing.walk(node.pointee.children, unregister)
+		defer {
+			// (Against another DTD, the attributes may not be IDs, and validating didn't register them again.)
+			for attribute in removed {
+				guard let id = value(attribute) else { continue }
+				if xmlGetID(doc, id) == nil {
+					xmlAddID(nil, doc, id, attribute)
+				}
+				xmlRelease(id)
+			}
 		}
 		return body()
 	}
