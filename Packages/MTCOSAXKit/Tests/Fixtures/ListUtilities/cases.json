@@ -590,5 +590,9 @@
  {
   "name": "exclude-reals-decimal-comma",
   "script": "exclude items {\"2,5\"} from {2.5, 1.0}"
+ },
+ {
+  "name": "suppress-record-class",
+  "script": "suppress item \"abc\" from {class:document, name:\"x\", abc:3}"
  }
 ]

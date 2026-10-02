@@ -166,6 +166,19 @@ struct LargeArrayTests {
 		#expect(values(send("SATIKIFL", ["----": AppleEventList([1e-7]), "from": ArrayOfReal([1e-7, 1])]).result) == [1e-7])
 	}
 
+	/// `suppress item` from a record with a class returned a plain record; SatimageOSAX keeps the class.
+	@Test func suppressItemKeepsARecordsClass() throws {
+		var error: NSDictionary?
+		let document = try #require(NSAppleScript(source: "{class:document, name:\"x\", abc:3}")?.executeAndReturnError(&error))
+		#expect(document.descriptorType == FourCharCode(fourCharString: "docu"))
+		let result = try #require(send("SATIDLKY", ["----": "abc", "from": document]).result)
+		#expect(result.descriptorType == FourCharCode(fourCharString: "docu"))
+		#expect(DescriptorSnapshot(result).summary == #"docu {pnam: utxt "x"}"#)
+		// A plain record stays one.
+		let plain = try #require(send("SATIDLKY", ["----": "abc", "from": user(["abc": 3, "d": 4])]).result)
+		#expect(plain.descriptorType == typeAERecord)
+	}
+
 	@Test func largeArraysAreQuick() throws {
 		let large = ArrayOfReal((0 ..< 3_000_000).map(Double.init))
 		let start = Date()

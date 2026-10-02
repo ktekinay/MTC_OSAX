@@ -139,7 +139,14 @@ public enum ListUtilities {
 				removed.insert(key)
 			}
 			record.fields.removeAll { removed.contains($0.key) }
-			return record.appleEventDescriptor
+			// A record with a class (`{class:document, …}` arrives as a record of type `docu`) keeps it, as in
+			// SatimageOSAX: the fields were put in a plain record, so the result had lost its class.
+			let result = record.appleEventDescriptor
+			let type = from.descriptorType
+			if type != typeAERecord, type != typeObjectSpecifier, type != typeAppleEvent, let typed = result.coerce(toDescriptorType: type) {
+				return typed
+			}
+			return result
 		}
 		guard from.descriptorType == typeAEList, let list = items(from) else {
 			throw OSAXError.coercionFailed
