@@ -349,8 +349,11 @@ struct DateFormatting {
 	/// Formats with C `strftime`. `%s`, `%z` and `%+` are filled in here, since macOS computes them with `mktime`
 	/// and the process zone, which fail for dates before 1900 (Satimage returned error 2 for those).
 	func strftime(_ date: LocalDateTime, format: String, gmt: Bool) throws -> String {
+		// The format ends at a NUL, as in SatimageOSAX (C's does, which took the character before it with it:
+		// "abc\0def" gave "ab", and a NUL first the error for a result over 16 MB).
+		let format = String(String.UnicodeScalarView(format.unicodeScalars.prefix { $0 != "\0" }))
 		// An empty format gives empty text (Satimage returned error 1).
-		try inTimeZone {
+		return try inTimeZone {
 			var time = Self.time(fromLocal: date.wallClock)
 			var broken = tm()
 			if gmt {

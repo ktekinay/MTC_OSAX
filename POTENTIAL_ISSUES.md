@@ -35,7 +35,6 @@ These are the project's working rules. The README's Tests section has the detail
 | [L42](#l42-plistnew-builds-trees-past-the-depth-limit-through-references) | Property lists | `PlistNew` builds trees past the depth limit | Reproduced | Small |
 | [L43](#l43-yaml-timestamps-large-offsets-and-daylight-saving-gaps) | Property lists | YAML timestamps: large offsets, daylight-saving gaps | Reproduced | Small |
 | [L44](#l44-plisttojson-fails-on-text-with-a-lone-surrogate) | Property lists | `PlistToJSON` fails on text with a lone surrogate | Reproduced | Small |
-| [L45](#l45-strftime-with-a-nul-in-the-format) | Text | `strftime` with a NUL in the format | Reproduced | Small |
 | [L48](#l48-a-date-too-large-to-convert-formats-as-1899-12-31) | Text | A date too large to convert formats as 1899-12-31 | Read only | Small |
 | [L53](#l53-integer-text-just-under-the-32-bit-limit-becomes--2147483648) | Lists and numbers | Integer text just under 2³¹ becomes -2147483648 | Reproduced | Small |
 | [L55](#l55-a-huge-array-of-real-is-turned-into-one-descriptor-per-number) | Lists and numbers | A huge `array of real` becomes one descriptor per number | Read only | Medium |
@@ -82,14 +81,6 @@ Further down: [performance notes](#performance-notes) and [steps for the maintai
 - **Suggested fix:** replace lone surrogates with U+FFFD before serializing, or write them as `\uD800`-style escapes, which JSON allows. Say which in the README.
 
 ## Text
-
-### L45. `strftime` with a NUL in the format
-
-- **What happens:** `strftime d into "abc\0def"` returns `"ab"` (a character is lost), and a NUL first is error -50 with the message "more than 16 MB".
-- **Where:** `strftime` in [FormatCommands.swift:351-375](Packages/MTCOSAXKit/Sources/TextAdditions/FormatCommands.swift#L351-L375).
-- **Evidence:** Reproduced.
-- **Suggested fix:** end the format at the first NUL before formatting.
-- **SatimageOSAX:** checked; it gives `"abc"` (the format ends at the NUL), and error 1 for a NUL first, as it does for an empty format. MTC_OSAX gives empty text for an empty format, so a NUL first should too.
 
 ### L48. A date too large to convert formats as 1899-12-31
 

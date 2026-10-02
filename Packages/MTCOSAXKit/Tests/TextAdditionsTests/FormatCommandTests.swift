@@ -139,6 +139,14 @@ struct DateFormattingTests {
 		#expect(try newYork.strftime(date, format: "", gmt: false) == "")
 	}
 
+	/// A format ends at a NUL, as in SatimageOSAX ("abc\0def" gave "ab", and a NUL first error -50).
+	@Test func formatEndsAtNUL() throws {
+		#expect(try newYork.strftime(date, format: "abc\0def", gmt: false) == "abc")
+		#expect(try newYork.strftime(date, format: "%Y\0%m", gmt: false) == "2007")
+		#expect(try newYork.strftime(date, format: "%Y-%m\0", gmt: false) == "2007-01")
+		#expect(try newYork.strftime(date, format: "\0abc", gmt: false) == "")
+	}
+
 	/// Satimage failed before 1900 (error 2); MTC_OSAX works, using the zone's local mean time where it applies.
 	@Test func strftimeBefore1900() throws {
 		// 1850-06-01 12:00:00 on the wall clock.
