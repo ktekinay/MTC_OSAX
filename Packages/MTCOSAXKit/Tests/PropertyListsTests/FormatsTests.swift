@@ -280,6 +280,31 @@ struct YAMLTests {
 		#expect((object["list"] as? NSArray) == [1, "two"] as NSArray)
 	}
 
+	/// Numbers start with a sign or a point too, and nothing that starts with anything else is a number or a date
+	/// (text is settled by its first character, before the patterns).
+	@Test func plainScalarsByFirstCharacter() {
+		func real(_ text: String) -> Double? {
+			if case let .real(value) = YAML.resolve(plain: text) { value } else { nil }
+		}
+		func integer(_ text: String) -> Int64? {
+			if case let .integer(value) = YAML.resolve(plain: text) { value } else { nil }
+		}
+		#expect(integer("+12") == 12)
+		#expect(integer("-12") == -12)
+		#expect(integer("007") == 7)
+		#expect(real(".5") == 0.5)
+		#expect(real("-.5") == -0.5)
+		#expect(real("+1.5e3") == 1500)
+		#expect(real("+.inf") == .infinity)
+		#expect(real("9223372036854775808") == 9_223_372_036_854_775_808)
+		for text in ["٣", "１２", "1٣", "x12", " 12", "12 ", "e5", "-", "+", ".", "-0x1F", "1\u{301}", "\u{FEFF}1", "user1@example.com", "é"] {
+			guard case .text = YAML.resolve(plain: text) else {
+				Issue.record("\(text.debugDescription) isn't text")
+				continue
+			}
+		}
+	}
+
 	@Test func anchorsAliasesAndMerges() throws {
 		let text = """
 		base: &base

@@ -172,12 +172,14 @@ enum YAML {
 		case text
 	}
 
-	private static var integerPattern: Regex<Substring> { /[-+]?[0-9]+/ }
-	private static var octalPattern: Regex<(Substring, Substring)> { /0o([0-7]+)/ }
-	private static var hexPattern: Regex<(Substring, Substring)> { /0x([0-9a-fA-F]+)/ }
-	private static var realPattern: Regex<(Substring, Substring, Substring?, Substring?)> { /[-+]?(\.[0-9]+|[0-9]+(\.[0-9]*)?)([eE][-+]?[0-9]+)?/ }
-	private static var datePattern: Regex<(Substring, Substring, Substring, Substring)> { /([0-9]{4})-([0-9]{2})-([0-9]{2})/ }
-	private static var timestampPattern: Regex<(Substring, Substring, Substring, Substring, Substring, Substring, Substring, Substring?, Substring?)> { /([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})(?:[Tt]|[ \t]+)([0-9]{1,2}):([0-9]{2}):([0-9]{2})(\.[0-9]*)?(?:[ \t]*(Z|[-+][0-9]{1,2}(?::?[0-9]{2})?))?/ }
+	// Made once (a Regex isn't Sendable, but these are only matched against): as computed properties they were built
+	// again for every value, which took 16 seconds to write 5,000 records and 8 to read them.
+	nonisolated(unsafe) private static let integerPattern: Regex<Substring> = /[-+]?[0-9]+/
+	nonisolated(unsafe) private static let octalPattern: Regex<(Substring, Substring)> = /0o([0-7]+)/
+	nonisolated(unsafe) private static let hexPattern: Regex<(Substring, Substring)> = /0x([0-9a-fA-F]+)/
+	nonisolated(unsafe) private static let realPattern: Regex<(Substring, Substring, Substring?, Substring?)> = /[-+]?(\.[0-9]+|[0-9]+(\.[0-9]*)?)([eE][-+]?[0-9]+)?/
+	nonisolated(unsafe) private static let datePattern: Regex<(Substring, Substring, Substring, Substring)> = /([0-9]{4})-([0-9]{2})-([0-9]{2})/
+	nonisolated(unsafe) private static let timestampPattern: Regex<(Substring, Substring, Substring, Substring, Substring, Substring, Substring, Substring?, Substring?)> = /([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})(?:[Tt]|[ \t]+)([0-9]{1,2}):([0-9]{2}):([0-9]{2})(\.[0-9]*)?(?:[ \t]*(Z|[-+][0-9]{1,2}(?::?[0-9]{2})?))?/
 
 	/// A plain scalar by YAML 1.2's core schema, plus YAML 1.1's timestamps: a date without a zone is in `timeZone`.
 	static func resolve(plain text: String, timeZone: TimeZone = .current) -> Resolved {
@@ -189,6 +191,11 @@ enum YAML {
 		case "-.inf", "-.Inf", "-.INF": return .real(-.infinity)
 		case ".nan", ".NaN", ".NAN": return .real(.nan)
 		default: break
+		}
+		// Every number and date starts with an ASCII digit, a sign or a point: most text is settled here, without
+		// the patterns.
+		guard let first = text.utf8.first, (first >= 0x30 && first <= 0x39) || first == 0x2B || first == 0x2D || first == 0x2E else {
+			return .text
 		}
 		if text.wholeMatch(of: integerPattern) != nil {
 			if let integer = Int64(text.hasPrefix("+") ? String(text.dropFirst()) : text) { return .integer(integer) }
