@@ -186,22 +186,54 @@ extension TextAdditions {
 	// MARK: URLs
 
 	/// Characters escapeURL leaves alone: RFC 2396's unreserved and reserved characters, except `#`.
-	private static let urlLegal = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.!~*'();/?:@&=+$,")
+	private static let urlLegal = Array("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.!~*'();/?:@&=+$,".utf8)
 
+	/// With a table of the characters to keep (all ASCII), over the text's UTF-16 as UTF16Text copies it, every
+	/// other character escaped as its UTF-8 bytes. (Asking a CharacterSet about each scalar, and formatting each
+	/// escaped byte with String(format:), took 190 ms for a megabyte, eleven times SatimageOSAX's time; and text
+	/// from an Apple event is slow to go through by its Swift views.)
 	static func escapeURL(_ string: String, alsoEscaping extra: String) -> String {
-		var allowed = urlLegal
-		allowed.remove(charactersIn: extra)
-		var result = ""
-		for scalar in string.unicodeScalars {
-			if allowed.contains(scalar) {
-				result.unicodeScalars.append(scalar)
-			} else {
-				for byte in String(scalar).utf8 {
-					result += String(format: "%%%02X", byte)
-				}
+		var keep = [Bool](repeating: false, count: 128)
+		for byte in urlLegal { keep[Int(byte)] = true }
+		for byte in extra.utf8 where byte < 0x80 { keep[Int(byte)] = false }
+		let hex = Array("0123456789ABCDEF".utf8)
+		let units = UTF16Text(string).units
+		var result: [UInt8] = []
+		result.reserveCapacity(units.count + units.count / 4)
+		func escape(_ byte: UInt32) {
+			result.append(UInt8(ascii: "%"))
+			result.append(hex[Int(byte >> 4 & 0x0F)])
+			result.append(hex[Int(byte & 0x0F)])
+		}
+		var index = 0
+		while index < units.count {
+			var scalar = UInt32(units[index])
+			index += 1
+			if scalar < 0x80 {
+				if keep[Int(scalar)] { result.append(UInt8(scalar)) } else { escape(scalar) }
+				continue
+			}
+			// UTF16Text's units are valid: a lead surrogate has its trail.
+			if scalar & 0xFC00 == 0xD800, index < units.count {
+				scalar = 0x10000 + ((scalar - 0xD800) << 10) + (UInt32(units[index]) - 0xDC00)
+				index += 1
+			}
+			switch scalar {
+			case ..<0x800:
+				escape(0xC0 | scalar >> 6)
+				escape(0x80 | scalar & 0x3F)
+			case ..<0x10000:
+				escape(0xE0 | scalar >> 12)
+				escape(0x80 | scalar >> 6 & 0x3F)
+				escape(0x80 | scalar & 0x3F)
+			default:
+				escape(0xF0 | scalar >> 18)
+				escape(0x80 | scalar >> 12 & 0x3F)
+				escape(0x80 | scalar >> 6 & 0x3F)
+				escape(0x80 | scalar & 0x3F)
 			}
 		}
-		return result
+		return String(decoding: result, as: UTF8.self)
 	}
 
 	/// Decodes `%XX` escapes as UTF-8. Characters in `keeping` stay escaped. A bad escape or invalid UTF-8: error -1.

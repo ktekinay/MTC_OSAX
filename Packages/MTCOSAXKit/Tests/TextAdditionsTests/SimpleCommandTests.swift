@@ -100,6 +100,12 @@ struct URLEscapingTests {
 
 	@Test func extraCharacters() {
 		#expect(TextAdditions.escapeURL("a/b=c", alsoEscaping: "/=") == "a%2Fb%3Dc")
+		// Every length of UTF-8, and text as it arrives in an Apple event (an NSString underneath).
+		#expect(TextAdditions.escapeURL("é€😀\u{7F}", alsoEscaping: "") == "%C3%A9%E2%82%AC%F0%9F%98%80%7F")
+		let bridged = NSAppleEventDescriptor(string: "a b/é😀").stringValue ?? ""
+		#expect(TextAdditions.escapeURL(bridged, alsoEscaping: "/") == "a%20b%2F%C3%A9%F0%9F%98%80")
+		#expect(TextAdditions.escapeURL(String(utf16CodeUnits: [0x61, 0xD800], count: 2), alsoEscaping: "") == "a%EF%BF%BD")
+		#expect(TextAdditions.escapeURL("", alsoEscaping: "") == "")
 	}
 
 	@Test func unescapes() throws {
