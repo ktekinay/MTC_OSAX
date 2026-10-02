@@ -92,6 +92,17 @@ struct FilterTextTests {
 		#expect(try plist(send(filterText, without))["John"] as? [String] == ["is"])
 	}
 
+	/// Repeats are per key, and the values that stay are in the order found.
+	@Test func duplicatesAcrossKeys() throws {
+		let text = "a=2 b=1 a=1 a=2 b=2 a=3 b=1 a=1 c=1"
+		let parameters: [String: any AppleEventEncodable] = ["----": "(\\w)=(\\d)", "$in ": text, "key ": "\\1", "by  ": "\\2", "rtyp": NSAppleEventDescriptor(typeCode: typeAEList), "Dupl": false]
+		let result = try plist(send(filterText, parameters))
+		#expect(result["a"] as? [String] == ["2", "1", "3"])
+		#expect(result["b"] as? [String] == ["1", "2"])
+		#expect(result["c"] as? [String] == ["1"])
+		#expect(result.count == 3)
+	}
+
 	@Test func noMatchesIsEmptyDictionary() throws {
 		#expect(try plist(send(filterText, ["----": "zzz", "$in ": people, "key ": "\\0"])).isEmpty)
 	}

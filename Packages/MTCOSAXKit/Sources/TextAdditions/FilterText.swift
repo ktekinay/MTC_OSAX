@@ -35,11 +35,14 @@ extension TextAdditions {
 		// Values per key; keys in the order found.
 		var values: [String: [String]] = [:]
 		var keys: [String] = []
+		// Each key's values as a set, to drop repeats: looking through the key's array for every match took 81
+		// seconds for 50,000 different values.
+		var seen: [String: Set<String>] = [:]
 		let utf16 = UTF16Text(text)
 		for match in try searcher.allMatches(in: utf16) {
 			let keyText = try key.expand(match, in: utf16, groupCount: searcher.groupCount, namedGroups: searcher.namedGroups)
 			let valueText = try value.expand(match, in: utf16, groupCount: searcher.groupCount, namedGroups: searcher.namedGroups)
-			if asList, !duplicates, values[keyText]?.contains(valueText) == true {
+			if asList, !duplicates, !seen[keyText, default: []].insert(valueText).inserted {
 				continue
 			}
 			if values[keyText] == nil {
