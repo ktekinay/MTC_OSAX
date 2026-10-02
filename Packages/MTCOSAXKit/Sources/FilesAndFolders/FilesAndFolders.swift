@@ -13,7 +13,7 @@ public enum FilesAndFolders {
 	public static func commands() -> [CommandDefinition] {
 		[
 			CommandDefinition("filegetname", code: "QuomGFNa") { request in
-				try Paths(request, keyword: Keyword.directObject).map { $0.lastPathComponent }
+				try Paths(request, keyword: Keyword.directObject, forNames: true).map { $0.lastPathComponent }
 			},
 			CommandDefinition("filenew", code: "QuomNewF", handler: fileNew),
 			CommandDefinition("mkdir", code: "QuomMkDi", handler: makeDirectory),
@@ -548,12 +548,19 @@ enum Paths {
 	case single(URL)
 	case list([URL])
 
-	init(_ request: AppleEventRequest, keyword: String) throws {
+	/// `forNames`: only the paths' names are wanted (`filegetname`), so `~name/x.txt` for a user there isn't, which
+	/// is no file's path (-1700), still has one, as in SatimageOSAX.
+	init(_ request: AppleEventRequest, keyword: String, forNames: Bool = false) throws {
 		guard let descriptor = request.descriptor(for: keyword) else {
 			throw OSAXError.missingParameter
 		}
 		let base = try request.parameter("from", as: URL.self)
 		func url(_ item: NSAppleEventDescriptor) throws -> URL {
+			if forNames, let text = try? String(appleEventDescriptor: item), text.hasPrefix("~"),
+			   !(text as NSString).expandingTildeInPath.hasPrefix("/")
+			{
+				return URL(fileURLWithPath: text)
+			}
 			if let base, let text = try? String(appleEventDescriptor: item), URL.isRelativeScriptPath(text) {
 				return try URL(scriptPath: text, relativeTo: base)
 			}

@@ -80,6 +80,14 @@ struct DecodingTests {
 		#expect(url.path == NSHomeDirectory() + "/x.txt")
 	}
 
+	/// `~name` for a user there isn't was a path in the working folder.
+	@Test func urlFromTildePathOfUnknownUser() throws {
+		#expect((#expect(throws: OSAXError.self) { try URL(scriptPath: "~mtc-no-such-user/x.txt") })?.number == -1700)
+		#expect((#expect(throws: OSAXError.self) { try URL(scriptPath: "~mtc-no-such-user") })?.number == -1700)
+		#expect(try URL(scriptPath: "~").path == NSHomeDirectory())
+		#expect(try URL(scriptPath: "~\(NSUserName())/x.txt").path == NSHomeDirectory() + "/x.txt")
+	}
+
 	@Test func urlFromHFSPathOnStartupVolume() throws {
 		let volume = try #require(try URL(fileURLWithPath: "/").resourceValues(forKeys: [.volumeNameKey]).volumeName)
 		#expect(try URL(scriptPath: "\(volume):Users:someone:a/b.txt").path == "/Users/someone/a:b.txt")

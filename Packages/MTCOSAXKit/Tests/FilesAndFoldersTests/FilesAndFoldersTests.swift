@@ -102,6 +102,10 @@ struct PathInputTests {
 		// `~/…` is still the home folder, with `from` too, and `~` alone without it.
 		#expect(try URL(scriptPath: "~/x.txt", relativeTo: sandbox.url).path == NSHomeDirectory() + "/x.txt")
 		#expect(send(getName, ["----": ["~/x.txt"], "from": sandbox.url]).result?.atIndex(1)?.stringValue == "x.txt")
+		// `~name` for a user there isn't is no file's path (it was one in the working folder), but still has a name.
+		#expect(send(testSymlink, ["----": "~mtc-no-such-user/x.txt"]).error?.number == -1700)
+		#expect(send(getName, ["----": "~mtc-no-such-user/x.txt"]).result?.stringValue == "x.txt")
+		#expect(send(getName, ["----": ["~mtc-no-such-user/x.txt", "~/y.txt"]]).result?.atIndex(1)?.stringValue == "x.txt")
 		#expect(try URL(scriptPath: "~").path == NSHomeDirectory())
 		#expect(URL.isRelativeScriptPath("~") && URL.isRelativeScriptPath("~x") && !URL.isRelativeScriptPath("~/x"))
 	}

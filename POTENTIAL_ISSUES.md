@@ -32,7 +32,6 @@ These are the project's working rules. The README's Tests section has the detail
 
 | ID | Area | Issue | Evidence | Size of fix |
 |---|---|---|---|---|
-| [L35](#l35-name-for-an-unknown-user-becomes-a-relative-path) | Files | `~name` for an unknown user becomes a relative path | Reproduced | Small |
 | [L36](#l36-with-from-a-name-starting-with-file-is-read-as-an-hfs-path) | Files | With `from`, a name starting with `File:` is read as an HFS path | Reproduced | Small |
 | [L40](#l40-special-mode-bits-are-set-by-path-after-the-item-is-made) | Files | Special mode bits are set by path after the item is made | Read only | Small |
 | [L41](#l41-fileremove--with-filesonly-before-deletes-a-file-whose-date-cant-be-read) | Files | `fileremove … before` deletes a file whose date can't be read | Read only | Small |
@@ -60,14 +59,6 @@ Further down: [performance notes](#performance-notes) and [steps for the maintai
 ---
 
 ## File commands
-
-### L35. `~name` for an unknown user becomes a relative path
-
-- **What happens:** `"~typo/out.txt"` isn't expanded, because there is no such user, and is then used as a path relative to the app's working folder: `/~typo/out.txt`.
-- **Where:** [AppleEventConvertible.swift:244-245](Packages/MTCOSAXKit/Sources/AppleEventCore/AppleEventConvertible.swift#L244-L245) (`expandingTildeInPath` returns the text unchanged).
-- **Evidence:** Reproduced.
-- **Suggested fix:** error -1700 when the text still starts with `~` after expansion.
-- **SatimageOSAX:** checked; it only takes the name apart (`filegetname` gives `x.txt`), so there's nothing to match.
 
 ### L36. With `from`, a name starting with `File:` is read as an HFS path
 

@@ -223,7 +223,7 @@ extension URL: AppleEventConvertible {
 	/// Interprets a path string given by a script: a POSIX path (`/…` or `~…`), a `file://` URL (on this Mac:
 	/// no host, or `localhost`), or an HFS path (`Volume:folder:file`). With `base` (a command's `from`), a relative
 	/// path (`isRelativeScriptPath`) is in that folder, and `~` is the home folder only as `~/…`; without, a
-	/// relative path is -1700, as is any other URL (`http://…`).
+	/// relative path is -1700, as is any other URL (`http://…`) and `~name` for a user there isn't.
 	/// An empty path is -1700 either way (in a folder, it was the folder itself: `fileremove {""} from f` deleted
 	/// `f`). Every command that takes a path as text goes through here.
 	public init(scriptPath path: String, relativeTo base: URL? = nil) throws {
@@ -242,7 +242,13 @@ extension URL: AppleEventConvertible {
 			}
 			self = URL(fileURLWithPath: url.path)
 		} else if path.hasPrefix("/") || path.hasPrefix("~") {
-			self = URL(fileURLWithPath: (path as NSString).expandingTildeInPath)
+			// `~name` for a user there isn't stays as it is, which was then a path in the working folder
+			// (`/~typo/out.txt` in the app).
+			let expanded = (path as NSString).expandingTildeInPath
+			guard expanded.hasPrefix("/") else {
+				throw OSAXError(-1700, "“\(path)” starts with the home folder of a user this Mac doesn’t have.")
+			}
+			self = URL(fileURLWithPath: expanded)
 		} else if path.contains("://") {
 			throw OSAXError(-1700, "\(path) isn’t a file.")
 		} else if path.contains(":") {
