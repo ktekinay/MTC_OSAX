@@ -96,6 +96,47 @@ enum Output {
 
 	// MARK: Canonicalization
 
+	/// A node set's nodes, to find one at once. A namespace node is known by its element and prefix, as
+	/// `xmlXPathNodeSetContains` tells them apart (in a node set it's a copy, whose `next` is its element).
+	private final class NodeSetMembers {
+		private struct Namespace: Hashable {
+			var element: UnsafeRawPointer
+			var prefix: [UInt8]?
+		}
+
+		private var nodes = Set<UnsafeRawPointer>()
+		private var namespaces = Set<Namespace>()
+
+		init(_ set: xmlNodeSetPtr) {
+			for node in XPath.nodes(set) {
+				if node.pointee.type == XML_NAMESPACE_DECL {
+					let namespace = UnsafeRawPointer(node).assumingMemoryBound(to: xmlNs.self)
+					if let element = namespace.pointee.next {
+						namespaces.insert(Namespace(element: UnsafeRawPointer(element), prefix: Self.bytes(namespace.pointee.prefix)))
+					}
+				} else {
+					nodes.insert(UnsafeRawPointer(node))
+				}
+			}
+		}
+
+		/// `parent` is the namespace's element, or an attribute of it.
+		func contains(_ node: xmlNodePtr, parent: xmlNodePtr?) -> Bool {
+			guard node.pointee.type == XML_NAMESPACE_DECL else {
+				return nodes.contains(UnsafeRawPointer(node))
+			}
+			guard let element = parent?.pointee.type == XML_ATTRIBUTE_NODE ? parent?.pointee.parent : parent else {
+				return false
+			}
+			let namespace = UnsafeRawPointer(node).assumingMemoryBound(to: xmlNs.self)
+			return namespaces.contains(Namespace(element: UnsafeRawPointer(element), prefix: Self.bytes(namespace.pointee.prefix)))
+		}
+
+		private static func bytes(_ text: UnsafePointer<xmlChar>?) -> [UInt8]? {
+			text.map { Array(UnsafeBufferPointer(start: $0, count: Int(xmlStrlen($0)))) }
+		}
+	}
+
 	/// Canonical XML of a document: with or without comments, exclusive (with `inclusive prefixes`) or not; or its
 	/// SHA1 or MD5 digest (base64 unless written to a file). Other digests are -1.
 	static func canonical(_ doc: xmlDocPtr, nodes: xmlNodeSetPtr? = nil, comments: Bool, exclusive: Bool, prefixes: [String],
@@ -106,16 +147,31 @@ enum Output {
 		var cStrings = prefixes.map { strdup($0) }
 		defer { cStrings.forEach { free($0) } }
 		cStrings.append(nil)
+		var subset: Data?
 		let size = cStrings.withUnsafeMutableBufferPointer { buffer -> Int32 in
 			let list = exclusive && prefixes.count > 0
 				? UnsafeMutableRawPointer(buffer.baseAddress!).assumingMemoryBound(to: UnsafeMutablePointer<xmlChar>?.self) : nil
-			return xmlC14NDocDumpMemory(doc, nodes, mode, list, comments ? 1 : 0, &memory)
-		}
-		guard size >= 0, let memory else {
-			throw OSAXError(-1)
+			guard let nodes else {
+				return xmlC14NDocDumpMemory(doc, nil, mode, list, comments ? 1 : 0, &memory)
+			}
+			// As xmlC14NDocDumpMemory does with a node set, but looking each node up in a set: it looks through the
+			// whole list for every node of the document (a list of 14,000 of a document's nodes took 20 times as
+			// long as the whole document).
+			guard let output = xmlAllocOutputBuffer(nil) else { return -1 }
+			defer { xmlOutputBufferClose(output) }
+			let members = NodeSetMembers(nodes)
+			let result = xmlC14NExecute(doc, { members, node, parent in
+				guard let members, let node else { return 1 }
+				return Unmanaged<NodeSetMembers>.fromOpaque(members).takeUnretainedValue().contains(node, parent: parent) ? 1 : 0
+			}, Unmanaged.passUnretained(members).toOpaque(), mode, list, comments ? 1 : 0, output)
+			guard result >= 0, let content = xmlBufContent(output.pointee.buffer) else { return -1 }
+			subset = Data(bytes: content, count: xmlBufUse(output.pointee.buffer))
+			return result
 		}
 		defer { xmlRelease(memory) }
-		let data = Data(bytes: memory, count: Int(size))
+		guard size >= 0, let data = subset ?? memory.map({ Data(bytes: $0, count: Int(size)) }) else {
+			throw OSAXError(-1)
+		}
 		guard let digest else {
 			return data
 		}

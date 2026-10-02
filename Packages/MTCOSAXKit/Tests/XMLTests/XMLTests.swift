@@ -647,6 +647,25 @@ struct XMLDocumentTests {
 		#expect(xml.send("XML c14n", ["----": d, "Nset": try xml.root(other)]).error?.number == -50)
 	}
 
+	/// Subsets with namespace nodes, which are known by their element and prefix (libxml2's results, from before
+	/// MTC_OSAX looked nodes up in a set of its own).
+	@Test func canonicalSubsetsWithNamespaceNodes() throws {
+		let xml = XMLs()
+		let d = try xml.open("<a xmlns='urn:d' xmlns:p='urn:p' xml:lang='en' z='1'><p:b x='1' p:y='2' xmlns:q='urn:q'>t<!--c--><i xmlns=''><q:j q:k='3'/></i><?pi x?></p:b><c xmlns:p='urn:p2'><p:d/>u</c><e xmlns:r='urn:r'/></a>")
+		func c14n(_ path: String, _ extra: [String: any AppleEventEncodable] = [:]) -> String? {
+			var parameters: [String: any AppleEventEncodable] = ["----": RecordFields([(.code("XMLR"), d), (.code("xpat"), NSAppleEventDescriptor(string: path))]).appleEventDescriptor]
+			parameters.merge(extra) { $1 }
+			return xml.send("XML c14n", parameters).result?.stringValue
+		}
+		#expect(c14n("//*|//namespace::*") == "<a xmlns=\"urn:d\" xmlns:p=\"urn:p\"><p:b xmlns:q=\"urn:q\"><i xmlns=\"\"><q:j></q:j></i></p:b><c xmlns:p=\"urn:p2\"><p:d></p:d></c><e xmlns:r=\"urn:r\"></e></a>")
+		#expect(c14n("//*|//namespace::*", ["Excl": true, "Incl": ["q", "r"]]) == "<a xmlns=\"urn:d\"><p:b xmlns:p=\"urn:p\" xmlns:q=\"urn:q\"><i xmlns=\"\"><q:j></q:j></i></p:b><c><p:d xmlns:p=\"urn:p2\"></p:d></c><e xmlns:r=\"urn:r\"></e></a>")
+		#expect(c14n("/*|/*/namespace::*[name()='']") == "<a xmlns=\"urn:d\"></a>")
+		#expect(c14n("//*[local-name()='j']|//*[local-name()='j']/@*|//*[local-name()='j']/namespace::q") == "<q:j xmlns:q=\"urn:q\" xml:lang=\"en\" q:k=\"3\"></q:j>")
+		#expect(c14n("//*[local-name()='c']|//*[local-name()='d']|//*[local-name()='d']/namespace::p") == "<c xml:lang=\"en\"><p:d xmlns:p=\"urn:p2\"></p:d></c>")
+		#expect(c14n("//*[local-name()='e']/namespace::r|//*[local-name()='e']", ["Excl": true]) == "<e></e>")
+		#expect(c14n("//*[local-name()='b']/@*|//*[local-name()='b']", ["Excl": true]) == "<p:b xmlns:p=\"urn:p\" x=\"1\" p:y=\"2\"></p:b>")
+	}
+
 	/// XInclude reads local files but not the network.
 	@Test func xinclude() throws {
 		let folder = FileManager.default.temporaryDirectory.appendingPathComponent("xinclude-\(UUID().uuidString)")
