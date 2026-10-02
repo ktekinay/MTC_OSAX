@@ -105,6 +105,22 @@ struct FileTextReadWriteTests {
 		#expect(try Data(contentsOf: url) == Data("onetwo".utf8))
 	}
 
+	/// writetext replaced a file that can't be written, and with append too (the append couldn't open it, and fell
+	/// back to replacing it, losing what was there).
+	@Test func writeToReadOnlyFile() throws {
+		let url = FileManager.default.temporaryDirectory.appendingPathComponent("filetext-\(UUID().uuidString).txt")
+		try Data("old".utf8).write(to: url)
+		chmod(url.path, 0o444)
+		defer {
+			chmod(url.path, 0o644)
+			try? FileManager.default.removeItem(at: url)
+		}
+		for append in [false, true] {
+			#expect(throws: OSAXError(-54)) { try FileText.write(Data("new".utf8), to: url, append: append) }
+			#expect(try Data(contentsOf: url) == Data("old".utf8))
+		}
+	}
+
 	@Test func writeToMissingFolder() throws {
 		// Inside a folder of the test's own: a path at the top of the disk is no place for a write, even one meant
 		// to be refused.

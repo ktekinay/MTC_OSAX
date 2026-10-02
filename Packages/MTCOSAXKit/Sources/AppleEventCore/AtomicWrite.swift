@@ -7,11 +7,17 @@ extension Data {
 	/// link), and the old file's permissions are kept, other than setuid and setgid, as any write clears them. Like
 	/// any replacement, the file becomes a new one: extended attributes, other hard links to it and its owner, if
 	/// someone else, aren't carried over. An existing file that can be written in a folder that can't (where the
-	/// temporary file can't be made) is written in place, as before one-step saves, rather than not at all.
+	/// temporary file can't be made) is written in place, as before one-step saves, rather than not at all. An
+	/// existing file that can't be written isn't replaced (EACCES): renaming a new file over it only needs the
+	/// folder's permission, so a read-only file was replaced, and given its read-only mode again, as SatimageOSAX
+	/// (error 1) and any write in place refuse to.
 	public func writeReplacing(_ url: URL) throws {
 		let target = try URL.followingLinks(url)
 		var status = stat()
 		let mode = stat(target.path, &status) == 0 ? status.st_mode & 0o777 : nil
+		if mode != nil, access(target.path, W_OK) != 0 {
+			throw POSIXError(.EACCES)
+		}
 		if mode != nil, access(target.deletingLastPathComponent().path, W_OK) != 0, access(target.path, W_OK) == 0 {
 			try write(to: target)
 			return

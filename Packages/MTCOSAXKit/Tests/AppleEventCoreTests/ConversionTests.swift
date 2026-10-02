@@ -255,6 +255,26 @@ struct WriteReplacingTests {
 		#expect(throws: (any Error).self) { try Data().writeReplacing(folder.appendingPathComponent("b.txt")) }
 	}
 
+	/// A file that can't be written was replaced all the same (renaming a new file over it only needs the folder's
+	/// permission) and given its read-only mode again. It's left alone, as SatimageOSAX left it.
+	@Test func readOnlyFileIsNotReplaced() throws {
+		let folder = FileManager.default.temporaryDirectory.appendingPathComponent("replace-\(UUID().uuidString)")
+		try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+		defer { try? FileManager.default.removeItem(at: folder) }
+		let file = folder.appendingPathComponent("ro.txt")
+		try Data("old".utf8).write(to: file)
+		chmod(file.path, 0o444)
+		#expect(throws: POSIXError(.EACCES)) { try Data("new".utf8).writeReplacing(file) }
+		#expect(try String(contentsOf: file, encoding: .utf8) == "old")
+		#expect(try FileManager.default.contentsOfDirectory(atPath: folder.path) == ["ro.txt"])
+		// Through a link to it too.
+		try FileManager.default.createSymbolicLink(atPath: folder.path + "/link", withDestinationPath: "ro.txt")
+		#expect(throws: POSIXError(.EACCES)) { try Data("new".utf8).writeReplacing(folder.appendingPathComponent("link")) }
+		chmod(file.path, 0o644)
+		try Data("new".utf8).writeReplacing(file)
+		#expect(try String(contentsOf: file, encoding: .utf8) == "new")
+	}
+
 	/// A link to a file that didn't exist yet was replaced by a file (with the link's 0755) instead of the file
 	/// being made; setuid and setgid bits were put back after the write cleared them.
 	@Test func linksToNewFilesAndSpecialBits() throws {
