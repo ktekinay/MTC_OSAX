@@ -296,6 +296,13 @@ struct LocalDateTime {
 		guard !seconds.subtractingReportingOverflow(Self.offsetFrom1970).overflow else {
 			throw OSAXError.coercionFailed
 		}
+		// Nor are seconds past the years a calendar date can hold (`gmtime_r` fails, and what it left, zeros, was
+		// formatted as 1899-12-31).
+		var time = time_t(seconds - Self.offsetFrom1970)
+		var calendar = tm()
+		guard gmtime_r(&time, &calendar) != nil else {
+			throw OSAXError.coercionFailed
+		}
 	}
 
 	var descriptor: NSAppleEventDescriptor {
@@ -356,10 +363,9 @@ struct DateFormatting {
 		return try inTimeZone {
 			var time = Self.time(fromLocal: date.wallClock)
 			var broken = tm()
-			if gmt {
-				gmtime_r(&time, &broken)
-			} else {
-				localtime_r(&time, &broken)
+			// (A date at the very end of what a calendar holds can be past it in another zone.)
+			guard (gmt ? gmtime_r(&time, &broken) : localtime_r(&time, &broken)) != nil else {
+				throw OSAXError.coercionFailed
 			}
 			// A character at the end, so 0 only means the buffer was too small (a hundred `%c`s): it also meant an
 			// empty result, and a result over 16 MB came back as "" with no error.

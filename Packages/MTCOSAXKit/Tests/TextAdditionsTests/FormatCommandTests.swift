@@ -135,6 +135,19 @@ struct DateFormattingTests {
 		#expect((#expect(throws: OSAXError.self) { try LocalDateTime(raw) })?.number == -1700)
 	}
 
+	/// Nor is one past the years a calendar date can hold: it was formatted as 1899-12-31, with no error.
+	@Test func rawDatesPastTheCalendar() throws {
+		func raw(_ seconds: Int64) throws -> NSAppleEventDescriptor {
+			try #require(NSAppleEventDescriptor(descriptorType: typeLongDateTime, data: withUnsafeBytes(of: seconds) { Data($0) }))
+		}
+		for seconds in [Int64.max, Int64.max / 2, Int64.min / 2] {
+			#expect((#expect(throws: OSAXError.self) { try LocalDateTime(raw(seconds)) })?.number == -1700, "\(seconds)")
+		}
+		// A far year that a calendar does hold still formats.
+		let far = try LocalDateTime(raw(3_000_000_000_000))
+		#expect(try newYork.strftime(far, format: "%Y", gmt: true) == "96970")
+	}
+
 	@Test func emptyFormat() throws {
 		#expect(try newYork.strftime(date, format: "", gmt: false) == "")
 	}
