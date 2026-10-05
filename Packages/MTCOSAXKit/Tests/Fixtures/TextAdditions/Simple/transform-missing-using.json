@@ -1,0 +1,27 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "UnTr",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "abc",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1701
+      }
+    }
+  ],
+  "name" : "transform-missing-using",
+  "recordedAt" : "2026-09-27T18:58:51Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "transform unicode \"abc\""
+}

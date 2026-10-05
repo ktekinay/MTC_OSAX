@@ -1,0 +1,127 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/url-relative",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/url-relative/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "IURL",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "dir/file.html",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "psxP",
+              "value" : {
+                "text" : "dir/file.html",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "FTPc",
+              "value" : {
+                "text" : "dir/file.html",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "pnam",
+              "value" : {
+                "text" : "file.html",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "nmxt",
+              "value" : {
+                "text" : "html",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "utid",
+              "value" : {
+                "text" : "public.html",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "asty",
+              "value" : {
+                "text" : "",
+                "type" : "TEXT"
+              }
+            },
+            {
+              "key" : "asct",
+              "value" : {
+                "text" : "",
+                "type" : "TEXT"
+              }
+            },
+            {
+              "key" : "asdr",
+              "value" : {
+                "boolean" : false,
+                "type" : "bool"
+              }
+            },
+            {
+              "key" : "ispk",
+              "value" : {
+                "boolean" : false,
+                "type" : "bool"
+              }
+            },
+            {
+              "key" : "alis",
+              "value" : {
+                "boolean" : false,
+                "type" : "bool"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    }
+  ],
+  "name" : "url-relative",
+  "recordedAt" : "2026-09-27T23:55:22Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "mkdir (POSIX file \"$TMP/url-relative\")\nURL info for \"dir/file.html\"",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

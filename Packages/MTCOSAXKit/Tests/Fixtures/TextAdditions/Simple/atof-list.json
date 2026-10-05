@@ -1,0 +1,48 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "ATOF",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "1",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "2.5",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 2.5,
+              "type" : "doub"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "atof-list",
+  "recordedAt" : "2026-09-27T18:58:49Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "atof {\"1\", \"2.5\"}"
+}

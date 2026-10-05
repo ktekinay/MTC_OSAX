@@ -1,0 +1,182 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "make",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "d",
+                        "type" : "utxt"
+                      },
+                      {
+                        "fields" : [
+                          {
+                            "key" : "usrf",
+                            "value" : {
+                              "items" : [
+                                {
+                                  "text" : "z",
+                                  "type" : "utxt"
+                                },
+                                {
+                                  "integer" : 0,
+                                  "type" : "long"
+                                }
+                              ],
+                              "type" : "list"
+                            }
+                          }
+                        ],
+                        "type" : "reco"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "0d0000004d5443700300000000000000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "chld",
+        "fields" : [
+          {
+            "key" : "key ",
+            "value" : {
+              "text" : "d",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "0d0000004d5443700300000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "0d0000004d5443700200000000000000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "GPli",
+        "fields" : [
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "a=1\nb=2\na=3",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "key ",
+            "value" : {
+              "text" : "\\1",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "\\2",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "into",
+            "value" : {
+              "hex" : "0d0000004d5443700200000000000000",
+              "type" : "CFob"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "^(\\w+)=(.*)$",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "DISP",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "0d0000004d5443700300000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n<plist version=\"1.0\">\n<dict>\n\t<key>d</key>\n\t<dict>\n\t\t<key>a</key>\n\t\t<string>1\n3</string>\n\t\t<key>b</key>\n\t\t<string>2</string>\n\t\t<key>z</key>\n\t\t<integer>0</integer>\n\t</dict>\n</dict>\n</plist>\n",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "0d0000004d5443700300000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "filter-into-child",
+  "recordedAt" : "2026-09-28T13:30:51Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "set p to PlistNew {d:{z:0}}\nfilter text \"^(\\\\w+)=(.*)$\" in (\"a=1\" & linefeed & \"b=2\" & linefeed & \"a=3\") key \"\\\\1\" using \"\\\\2\" into (PlistChild p key \"d\")\nPlistGetXML p\nPlistClose p",
+  "timeZone" : "America/New_York"
+}

@@ -1,0 +1,66 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Schm",
+        "fields" : [
+          {
+            "key" : "With",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/people.xsd",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Schm",
+        "fields" : [
+          {
+            "key" : "With",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/bad.xsd",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : 3004
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "lErr",
+        "fields" : [
+
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "show \"file:///private/tmp/mtc-fixtures/files/bad.xsd\" selection 2:\nelement decl. 'people', attribute 'type': The QName value '{http://www.w3.org/2001/XMLSchema}nothing' does not resolve to a(n) type definition.\n\n",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "valid-schema-only",
+  "recordedAt" : "2026-09-28T15:49:01Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "try\nXMLSchema with respect to (POSIX file \"$FILES/people.xsd\")\nend try\ntry\nXMLSchema with respect to (POSIX file \"$FILES/bad.xsd\")\nend try\nXMLError",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

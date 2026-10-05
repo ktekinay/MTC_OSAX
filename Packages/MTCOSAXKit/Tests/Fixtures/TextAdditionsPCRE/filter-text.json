@@ -1,0 +1,59 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "GPli",
+        "fields" : [
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "John is ten\nAnna is twelve",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "key ",
+            "value" : {
+              "text" : "\\1",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "\\2",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "synt",
+            "value" : {
+              "text" : "PCRE",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "^(\\w+) is (.*)$",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n<plist version=\"1.0\">\n<dict>\n\t<key>Anna</key>\n\t<string>twelve</string>\n\t<key>John</key>\n\t<string>ten</string>\n</dict>\n</plist>\n",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "filter-text",
+  "recordedAt" : "2026-09-28T16:41:55Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "filter text \"^(\\\\w+) is (.*)$\" in \"John is ten\" & linefeed & \"Anna is twelve\" key \"\\\\1\" using \"\\\\2\" syntax \"PCRE\"",
+  "timeZone" : "America/New_York"
+}

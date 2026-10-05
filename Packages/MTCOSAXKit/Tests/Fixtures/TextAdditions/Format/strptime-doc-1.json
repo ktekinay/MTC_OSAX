@@ -1,0 +1,38 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "strp",
+        "fields" : [
+          {
+            "key" : "enco",
+            "value" : {
+              "text" : "%FT%T%z",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "2007-01-15T16:10:56+0100",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "b003d1c100000000",
+          "type" : "ldt "
+        }
+      }
+    }
+  ],
+  "name" : "strptime-doc-1",
+  "recordedAt" : "2026-09-27T19:12:45Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "strptime \"2007-01-15T16:10:56+0100\" encoding \"%FT%T%z\"",
+  "timeZone" : "America/New_York"
+}

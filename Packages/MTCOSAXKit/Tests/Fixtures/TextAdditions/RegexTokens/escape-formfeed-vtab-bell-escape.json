@@ -1,0 +1,77 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FINd",
+        "fields" : [
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "\f\u000b\u0007\u001b",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "WaAl",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "\\f\\v\\a\\e",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "fields" : [
+                {
+                  "key" : "mPos",
+                  "value" : {
+                    "integer" : 0,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "mLen",
+                  "value" : {
+                    "integer" : 4,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "mRes",
+                  "value" : {
+                    "text" : "\f\u000b\u0007\u001b",
+                    "type" : "utxt"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "escape-formfeed-vtab-bell-escape",
+  "recordedAt" : "2026-09-27T20:23:37Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "find text \"\\\\f\\\\v\\\\a\\\\e\" in ((character id 12) & (character id 11) & (character id 7) & (character id 27)) with regexp and all occurrences",
+  "timeZone" : "America/New_York"
+}

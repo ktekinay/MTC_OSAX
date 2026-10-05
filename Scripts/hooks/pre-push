@@ -1,0 +1,16 @@
+#!/bin/zsh
+# Runs the tests, in their sandbox, before a push; a failure stops the push. Not on unless you turn it on:
+#
+#   git config core.hooksPath Scripts/hooks
+#
+# (`git config --unset core.hooksPath` turns it off; `git push --no-verify` skips it once.)
+# MTC_PRE_PUSH_TEST_ARGS adds arguments for swift test, such as --sanitize=address.
+
+root="$(git rev-parse --show-toplevel)" || exit 1
+echo "pre-push: running Scripts/test.sh…" >&2
+if ! output=$("$root/Scripts/test.sh" ${=MTC_PRE_PUSH_TEST_ARGS} 2>&1); then
+	print -r -- "$output" | grep -E "✘|error:|recorded an issue|stopped" | head -40 >&2
+	echo "pre-push: the tests failed; not pushed. (git push --no-verify skips this.)" >&2
+	exit 1
+fi
+echo "pre-push: tests passed." >&2

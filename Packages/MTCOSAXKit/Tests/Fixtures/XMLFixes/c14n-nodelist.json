@@ -1,0 +1,118 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "text" : "<a><b x='1'>t<!--c--><i/></b><c/></a>",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "010000004d5443780000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "path",
+        "fields" : [
+          {
+            "key" : "with",
+            "value" : {
+              "text" : "//i",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "010000004d5443780000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "hex" : "010000004d5443780100000000000000",
+              "type" : "XMLR"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "c14n",
+        "fields" : [
+          {
+            "key" : "Nset",
+            "value" : {
+              "items" : [
+                {
+                  "hex" : "010000004d5443780100000000000000",
+                  "type" : "XMLR"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "010000004d5443780000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "<i></i>",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "010000004d5443780000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "c14n-nodelist",
+  "recordedAt" : "2026-09-28T21:11:33Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "set d to XMLOpen from string \"<a><b x='1'>t<!--c--><i/></b><c/></a>\"\nXMLc14n d nodelist (XMLXPath d with \"//i\")\nXMLClose d",
+  "timeZone" : "America/New_York"
+}

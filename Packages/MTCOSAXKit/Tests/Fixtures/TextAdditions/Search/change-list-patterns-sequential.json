@@ -1,0 +1,62 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RPLl",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "b",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "c",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "ab",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "a",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "b",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "cc",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "change-list-patterns-sequential",
+  "recordedAt" : "2026-09-27T18:50:58Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "change {\"a\", \"b\"} into {\"b\", \"c\"} in \"ab\""
+}

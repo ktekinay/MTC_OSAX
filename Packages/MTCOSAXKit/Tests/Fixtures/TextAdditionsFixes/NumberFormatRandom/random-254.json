@@ -1,0 +1,65 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FORM",
+        "fields" : [
+          {
+            "key" : "into",
+            "value" : {
+              "text" : "'P'0.000",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "P1.000",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FORM",
+        "fields" : [
+          {
+            "key" : "into",
+            "value" : {
+              "text" : "abc.##E00 'u';-#,##.0E+00x",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "real" : 6.421307618567789,
+              "type" : "doub"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorMessage" : "\"abc.##E00 'u';-#,##.0E+00x\" isn't a valid number format.",
+        "errorNumber" : -50
+      }
+    }
+  ],
+  "name" : "random-254",
+  "recordedAt" : "2026-09-27T19:52:38Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "format 1 into \"'P'0.000\"\nformat 6.421307618567789 into \"abc.##E00 'u';-#,##.0E+00x\"",
+  "timeZone" : "America/New_York"
+}

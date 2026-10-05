@@ -1,0 +1,66 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "rlax",
+        "fields" : [
+          {
+            "key" : "With",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/people.rng",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "rlax",
+        "fields" : [
+          {
+            "key" : "With",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/bad.rng",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : 1115
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "lErr",
+        "fields" : [
+
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "show \"file:///private/tmp/mtc-fixtures/files/bad.rng\" selection 2:\nUnexpected node nothing is not a pattern\n\n",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "valid-relaxng-only",
+  "recordedAt" : "2026-09-28T15:49:01Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "try\nXMLRelaxNG with respect to (POSIX file \"$FILES/people.rng\")\nend try\ntry\nXMLRelaxNG with respect to (POSIX file \"$FILES/bad.rng\")\nend try\nXMLError",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

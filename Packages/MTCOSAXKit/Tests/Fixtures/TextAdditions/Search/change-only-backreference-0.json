@@ -1,0 +1,57 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RPLl",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "X",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "abc",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "back",
+            "value" : {
+              "integer" : 0,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "a(b)c",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "X",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "change-only-backreference-0",
+  "recordedAt" : "2026-09-27T18:51:00Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "change \"a(b)c\" into \"X\" in \"abc\" with regexp only backreference 0"
+}

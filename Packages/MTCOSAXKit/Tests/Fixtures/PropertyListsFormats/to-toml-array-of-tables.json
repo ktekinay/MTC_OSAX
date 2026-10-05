@@ -1,0 +1,132 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "make",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "people",
+                        "type" : "utxt"
+                      },
+                      {
+                        "items" : [
+                          {
+                            "fields" : [
+                              {
+                                "key" : "usrf",
+                                "value" : {
+                                  "items" : [
+                                    {
+                                      "text" : "n",
+                                      "type" : "utxt"
+                                    },
+                                    {
+                                      "integer" : 1,
+                                      "type" : "long"
+                                    }
+                                  ],
+                                  "type" : "list"
+                                }
+                              }
+                            ],
+                            "type" : "reco"
+                          },
+                          {
+                            "fields" : [
+                              {
+                                "key" : "usrf",
+                                "value" : {
+                                  "items" : [
+                                    {
+                                      "text" : "n",
+                                      "type" : "utxt"
+                                    },
+                                    {
+                                      "integer" : 2,
+                                      "type" : "long"
+                                    }
+                                  ],
+                                  "type" : "list"
+                                }
+                              }
+                            ],
+                            "type" : "reco"
+                          }
+                        ],
+                        "type" : "list"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "050000004d5443700600000000000000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "MTCp",
+        "eventID" : "TTML",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "050000004d5443700600000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "[[people]]\nn = 1\n\n[[people]]\nn = 2\n",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "050000004d5443700600000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "to-toml-array-of-tables",
+  "recordedAt" : "2026-09-28T19:22:41Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "set p to PlistNew {people:{{n:1}, {n:2}}}\nPlistToTOML p\nPlistClose p",
+  "timeZone" : "America/New_York"
+}

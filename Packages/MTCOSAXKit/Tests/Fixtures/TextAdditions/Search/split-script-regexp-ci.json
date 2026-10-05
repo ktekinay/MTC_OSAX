@@ -1,0 +1,62 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Splt",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "<p\\s+class=\"Body\"><span\\s+class=\"style_\\d+\">",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "CaSe",
+            "value" : {
+              "type" : "fals"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x<P class=\"Body\"><SPAN class=\"style_1\">y<p class=\"Body\"><span class=\"style_22\">z",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "x",
+              "type" : "utxt"
+            },
+            {
+              "text" : "y",
+              "type" : "utxt"
+            },
+            {
+              "text" : "z",
+              "type" : "utxt"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "split-script-regexp-ci",
+  "recordedAt" : "2026-09-27T18:50:59Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "splittext \"x<P class=\\\"Body\\\"><SPAN class=\\\"style_1\\\">y<p class=\\\"Body\\\"><span class=\\\"style_22\\\">z\" using \"<p\\\\s+class=\\\"Body\\\"><span\\\\s+class=\\\"style_\\\\d+\\\">\" with regexp without case sensitive"
+}

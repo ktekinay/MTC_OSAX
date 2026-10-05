@@ -1,0 +1,56 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Splt",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "shapeimage_\\d+\\.jpg",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "a shapeimage_1.jpg b shapeimage_22.jpg c",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "a ",
+              "type" : "utxt"
+            },
+            {
+              "text" : " b ",
+              "type" : "utxt"
+            },
+            {
+              "text" : " c",
+              "type" : "utxt"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "split-script-shapeimage",
+  "recordedAt" : "2026-09-27T18:50:59Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "splittext \"a shapeimage_1.jpg b shapeimage_22.jpg c\" using \"shapeimage_\\\\d+\\\\.jpg\" with regexp"
+}

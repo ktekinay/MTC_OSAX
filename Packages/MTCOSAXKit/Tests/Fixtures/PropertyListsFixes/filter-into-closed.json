@@ -1,0 +1,84 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "make",
+        "fields" : [
+
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "0f0000004d5443700100000000000000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "0f0000004d5443700100000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "GPli",
+        "fields" : [
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "a=1\nb=2\na=3",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "key ",
+            "value" : {
+              "text" : "\\1",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "into",
+            "value" : {
+              "hex" : "0f0000004d5443700100000000000000",
+              "type" : "CFob"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "^(\\w+)=(.*)$",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1728
+      }
+    }
+  ],
+  "name" : "filter-into-closed",
+  "recordedAt" : "2026-09-28T13:30:51Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "set p to PlistNew\nPlistClose p\nfilter text \"^(\\\\w+)=(.*)$\" in (\"a=1\" & linefeed & \"b=2\" & linefeed & \"a=3\") key \"\\\\1\" into p",
+  "timeZone" : "America/New_York"
+}

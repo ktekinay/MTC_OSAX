@@ -1,0 +1,70 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "disp",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "/private/tmp/mtc-fixtures/files/page.html",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "kind",
+              "value" : {
+                "text" : "ELEMENT_NODE",
+                "type" : "TEXT"
+              }
+            },
+            {
+              "key" : "pnam",
+              "value" : {
+                "text" : "html",
+                "type" : "utf8"
+              }
+            },
+            {
+              "key" : "stnd",
+              "value" : {
+                "boolean" : true,
+                "type" : "bool"
+              }
+            },
+            {
+              "key" : "hdtd",
+              "value" : {
+                "boolean" : false,
+                "type" : "bool"
+              }
+            },
+            {
+              "key" : "cpar",
+              "value" : {
+                "integer" : 1,
+                "type" : "long"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    }
+  ],
+  "name" : "info-file-string-html",
+  "recordedAt" : "2026-09-28T15:01:57Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "XMLNodeInfo \"$FILES/page.html\"",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

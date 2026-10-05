@@ -1,0 +1,74 @@
+[
+ {
+  "name": "get",
+  "script": "set d to XMLOpen \"$HTTP/files/simple.xml\"\nXMLTagName (XMLRoot d)\nXMLURL d\nXMLURL d with parent\nXMLClose d"
+ },
+ {
+  "name": "get-base",
+  "script": "set d to XMLOpen \"$HTTP/files/simple.xml\"\nXMLBase d\nXMLAbsoluteURL \"other.xml\" from d\nXMLClose d"
+ },
+ {
+  "name": "get-latin1",
+  "script": "set d to XMLOpen \"$HTTP/files/latin1.xml\"\nXMLGetText (XMLRoot d)\nXMLClose d"
+ },
+ {
+  "name": "get-html",
+  "script": "set d to XMLOpen \"$HTTP/files/page.html\" with html4\nXMLNodeInfo d\nXMLClose d"
+ },
+ {
+  "name": "get-invalid",
+  "script": "XMLOpen \"$HTTP/files/invalid.xml\""
+ },
+ {
+  "name": "get-missing",
+  "script": "XMLOpen \"$HTTP/files/nope.xml\""
+ },
+ {
+  "name": "get-query",
+  "script": "set d to XMLOpen \"$HTTP/echo?a=1\"\nXMLDisplayXML (XMLRoot d)\nXMLClose d"
+ },
+ {
+  "name": "get-query-parameter",
+  "script": "set d to XMLOpen \"$HTTP/echo\" query \"b=2&c=3\"\nXMLDisplayXML (XMLRoot d)\nXMLClose d"
+ },
+ {
+  "name": "get-query-both",
+  "script": "set d to XMLOpen \"$HTTP/echo?a=1\" query \"b=2\"\nXMLDisplayXML (XMLRoot d)\nXMLClose d"
+ },
+ {
+  "name": "get-headers",
+  "script": "set d to XMLOpen \"$HTTP/echo\" header {|X-Test|:\"hello\", |X-Other|:\"2\"}\nXMLDisplayXML (XMLRoot d)\nXMLClose d"
+ },
+ {
+  "name": "post",
+  "script": "set d to XMLOpen \"$HTTP/echo\" query \"b=2&c=3\" with POST\nXMLDisplayXML (XMLRoot d)\nXMLClose d"
+ },
+ {
+  "name": "post-no-query",
+  "script": "set d to XMLOpen \"$HTTP/echo\" with POST\nXMLDisplayXML (XMLRoot d)\nXMLClose d"
+ },
+ {
+  "name": "post-headers",
+  "script": "set d to XMLOpen \"$HTTP/echo\" query \"x=1\" header {|X-Test|:\"hello\"} with POST\nXMLDisplayXML (XMLRoot d)\nXMLClose d"
+ },
+ {
+  "name": "unreachable",
+  "script": "XMLOpen \"http://127.0.0.1:1/nothing.xml\""
+ },
+ {
+  "name": "dtd-over-http",
+  "script": "set d to XMLOpen \"$HTTP/files/external-dtd.xml\" with validate\nXMLValidate d\nXMLClose d"
+ },
+ {
+  "name": "entity-over-http",
+  "script": "set d to XMLOpen from string \"<!DOCTYPE a [<!ENTITY e SYSTEM \\\"$HTTP/files/latin1.xml\\\">]><a>&e;</a>\" with substitute entities\nXMLGetText (XMLRoot d)\nXMLClose d"
+ },
+ {
+  "name": "schema-over-http",
+  "script": "set d to XMLOpen \"$HTTP/files/external-dtd.xml\"\nXMLSchema d with respect to \"$HTTP/files/people.xsd\"\nXMLClose d"
+ },
+ {
+  "name": "dtd-over-ftp",
+  "script": "try\nXMLOpen from string \"<!DOCTYPE a SYSTEM \\\"ftp://127.0.0.1:9/a.dtd\\\"><a/>\" with validate\non error number n\n{n, XMLError}\nend try"
+ }
+]

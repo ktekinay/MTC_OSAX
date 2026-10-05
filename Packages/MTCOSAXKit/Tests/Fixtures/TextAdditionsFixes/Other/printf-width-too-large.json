@@ -1,0 +1,40 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "prtf",
+        "fields" : [
+          {
+            "key" : "para",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "[%99999999999999999999d]",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : 10
+      }
+    }
+  ],
+  "name" : "printf-width-too-large",
+  "recordedAt" : "2026-09-28T22:12:33Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "printf \"[%99999999999999999999d]\" parameters {1}",
+  "timeZone" : "America/New_York"
+}

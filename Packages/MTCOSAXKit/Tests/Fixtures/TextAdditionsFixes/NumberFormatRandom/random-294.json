@@ -1,0 +1,67 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FORM",
+        "fields" : [
+          {
+            "key" : "into",
+            "value" : {
+              "text" : "'P'0.000",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "P1.000",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FORM",
+        "fields" : [
+          {
+            "key" : "into",
+            "value" : {
+              "text" : "abc.0;(#E+0",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "real" : -345273774022,
+              "type" : "doub"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "(3.45273774022E+11",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "random-294",
+  "recordedAt" : "2026-09-27T19:52:39Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "format 1 into \"'P'0.000\"\nformat -345273774022.0 into \"abc.0;(#E+0\"",
+  "timeZone" : "America/New_York"
+}

@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "LOG ",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 2,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 0.3010299956639812,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "log10-3",
+  "recordedAt" : "2026-09-28T04:29:07Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "log10 2",
+  "timeZone" : "America/New_York"
+}

@@ -1,0 +1,30 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "UPPE",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "abc déf",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "ABC DÉF",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "uppercase-text",
+  "recordedAt" : "2026-09-27T15:51:05Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "uppercase \"abc déf\""
+}

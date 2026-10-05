@@ -1,0 +1,48 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RPLl",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "\\k<-1>",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "a",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "(a)",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -217
+      }
+    }
+  ],
+  "name" : "change-template-negative-group",
+  "recordedAt" : "2026-09-28T21:03:15Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "change \"(a)\" into \"\\\\k<-1>\" in \"a\" with regexp",
+  "timeZone" : "America/New_York"
+}

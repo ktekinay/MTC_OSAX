@@ -1,0 +1,521 @@
+{
+  "exchanges": [
+    {
+      "event": {
+        "eventClass": "Quom",
+        "eventID": "MkDi",
+        "fields": [
+          {
+            "key": "----",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-markdown",
+              "type": "furl"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {
+        "result": {
+          "text": "/private/tmp/mtc-fixtures/tmp/url-markdown/",
+          "type": "ut16"
+        }
+      }
+    },
+    {
+      "event": {
+        "eventClass": "Quom",
+        "eventID": "MkDi",
+        "fields": [
+          {
+            "key": "----",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-markdown/sub/deep",
+              "type": "furl"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {
+        "result": {
+          "text": "/private/tmp/mtc-fixtures/tmp/url-markdown/sub/deep/",
+          "type": "ut16"
+        }
+      }
+    },
+    {
+      "event": {
+        "eventClass": "Quom",
+        "eventID": "MkDi",
+        "fields": [
+          {
+            "key": "----",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-markdown/pkg.app/Contents",
+              "type": "furl"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {
+        "result": {
+          "text": "/private/tmp/mtc-fixtures/tmp/url-markdown/pkg.app/Contents/",
+          "type": "ut16"
+        }
+      }
+    },
+    {
+      "event": {
+        "eventClass": "Quom",
+        "eventID": "MkDi",
+        "fields": [
+          {
+            "key": "----",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-markdown/Empty",
+              "type": "furl"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {
+        "result": {
+          "text": "/private/tmp/mtc-fixtures/tmp/url-markdown/Empty/",
+          "type": "ut16"
+        }
+      }
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-markdown/a.txt",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-markdown/B.TXT",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-markdown/.hidden",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-markdown/img.png",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-markdown/sub/c.txt",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-markdown/sub/deep/d.md",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-markdown/pkg.app/Contents/Info.plist",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-markdown/zeta.TXT",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-markdown/Apple.txt",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-markdown/sub/.dot.txt",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "IURL",
+        "fields": [
+          {
+            "key": "----",
+            "value": {
+              "text": "/private/tmp/mtc-fixtures/tmp/url-markdown/sub/deep/d.md",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {
+        "result": {
+          "fields": [
+            {
+              "key": "pnam",
+              "value": {
+                "text": "d.md",
+                "type": "utxt"
+              }
+            },
+            {
+              "key": "ascd",
+              "value": {
+                "type": "any"
+              }
+            },
+            {
+              "key": "asmo",
+              "value": {
+                "type": "any"
+              }
+            },
+            {
+              "key": "ptsz",
+              "value": {
+                "code": "msng",
+                "type": "type"
+              }
+            },
+            {
+              "key": "asdr",
+              "value": {
+                "boolean": false,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "alis",
+              "value": {
+                "boolean": false,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "ispk",
+              "value": {
+                "boolean": false,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "pvis",
+              "value": {
+                "boolean": true,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "hidx",
+              "value": {
+                "boolean": false,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "nmxt",
+              "value": {
+                "text": "md",
+                "type": "utxt"
+              }
+            },
+            {
+              "key": "dnam",
+              "value": {
+                "text": "d.md",
+                "type": "utxt"
+              }
+            },
+            {
+              "key": "asda",
+              "value": {
+                "type": "any"
+              }
+            },
+            {
+              "key": "kind",
+              "value": {
+                "text": "Markdown document",
+                "type": "utxt"
+              }
+            },
+            {
+              "key": "asty",
+              "value": {
+                "text": "\u0000\u0000\u0000\u0000",
+                "type": "TEXT"
+              }
+            },
+            {
+              "key": "asct",
+              "value": {
+                "text": "\u0000\u0000\u0000\u0000",
+                "type": "TEXT"
+              }
+            },
+            {
+              "key": "utid",
+              "value": {
+                "text": "public.markdown",
+                "type": "utxt"
+              }
+            },
+            {
+              "key": "aslk",
+              "value": {
+                "boolean": false,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "bzst",
+              "value": {
+                "boolean": false,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "assv",
+              "value": {
+                "text": "",
+                "type": "TEXT"
+              }
+            },
+            {
+              "key": "aslv",
+              "value": {
+                "text": "",
+                "type": "TEXT"
+              }
+            },
+            {
+              "key": "pusc",
+              "value": {
+                "text": "file",
+                "type": "ut16"
+              }
+            },
+            {
+              "key": "psxP",
+              "value": {
+                "text": "/private/tmp/mtc-fixtures/tmp/url-markdown/sub/deep/d.md",
+                "type": "ut16"
+              }
+            },
+            {
+              "key": "FTPc",
+              "value": {
+                "text": "/private/tmp/mtc-fixtures/tmp/url-markdown/sub/deep/d.md",
+                "type": "ut16"
+              }
+            }
+          ],
+          "type": "reco"
+        }
+      }
+    }
+  ],
+  "name": "url-markdown",
+  "recordedAt": "2026-09-27T23:55:22Z",
+  "recordedFrom": "SatimageOSAX",
+  "script": "mkdir (POSIX file \"$TMP/url-markdown\")\nmkdir (POSIX file \"$TMP/url-markdown/sub/deep\")\nmkdir (POSIX file \"$TMP/url-markdown/pkg.app/Contents\")\nmkdir (POSIX file \"$TMP/url-markdown/Empty\")\nwritetext \"x\" to (POSIX file \"$TMP/url-markdown/a.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/url-markdown/B.TXT\")\nwritetext \"x\" to (POSIX file \"$TMP/url-markdown/.hidden\")\nwritetext \"x\" to (POSIX file \"$TMP/url-markdown/img.png\")\nwritetext \"x\" to (POSIX file \"$TMP/url-markdown/sub/c.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/url-markdown/sub/deep/d.md\")\nwritetext \"x\" to (POSIX file \"$TMP/url-markdown/pkg.app/Contents/Info.plist\")\nwritetext \"x\" to (POSIX file \"$TMP/url-markdown/zeta.TXT\")\nwritetext \"x\" to (POSIX file \"$TMP/url-markdown/Apple.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/url-markdown/sub/.dot.txt\")\nURL info for \"$TMP/url-markdown/sub/deep/d.md\"",
+  "timeZone": "America/New_York",
+  "variables": {
+    "TMP": "/private/tmp/mtc-fixtures/tmp"
+  }
+}

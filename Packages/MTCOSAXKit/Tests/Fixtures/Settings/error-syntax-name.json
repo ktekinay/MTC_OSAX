@@ -1,0 +1,36 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MTCs",
+        "eventID" : "set ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "NOT_A_SYNTAX",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "code" : "MTsr",
+              "type" : "enum"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorMessage" : "regex syntax must be one of RUBY, PERL, JAVA, GNU_REGEX, GREP, EMACS, POSIX, POSIX_EXTENDED, PCRE.",
+        "errorNumber" : -50
+      }
+    }
+  ],
+  "name" : "error-syntax-name",
+  "recordedAt" : "2026-09-28T18:09:50Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "mtc_set regex_syntax to \"NOT_A_SYNTAX\"",
+  "timeZone" : "America/New_York"
+}

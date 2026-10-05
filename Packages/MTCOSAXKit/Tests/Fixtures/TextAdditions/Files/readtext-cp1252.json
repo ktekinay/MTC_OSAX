@@ -1,0 +1,33 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Read",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/cp1252.txt",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "ìquotedî Ä\n",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "readtext-cp1252",
+  "recordedAt" : "2026-09-27T19:03:48Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "readtext POSIX file \"$FILES/cp1252.txt\"",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

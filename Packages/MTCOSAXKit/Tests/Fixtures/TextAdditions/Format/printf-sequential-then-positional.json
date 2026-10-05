@@ -1,0 +1,43 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "prtf",
+        "fields" : [
+          {
+            "key" : "para",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "a",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "%s %1$s",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "a a",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "printf-sequential-then-positional",
+  "recordedAt" : "2026-09-27T19:17:19Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "printf \"%s %1$s\" parameters {\"a\"}",
+  "timeZone" : "America/New_York"
+}

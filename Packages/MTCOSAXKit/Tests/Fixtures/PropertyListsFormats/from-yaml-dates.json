@@ -1,0 +1,72 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MTCp",
+        "eventID" : "FYML",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "utc: 2026-09-28T14:30:00Z\noffset: 2026-09-28T10:30:00-04:00\nquoted: \"2026-09-28\"",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "0a0000004d5443700400000000000000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "JSON",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "0a0000004d5443700400000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "{\"utc\":\"2026-09-28T14:30:00Z\",\"quoted\":\"2026-09-28\",\"offset\":\"2026-09-28T14:30:00Z\"}",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "0a0000004d5443700400000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "from-yaml-dates",
+  "recordedAt" : "2026-09-28T19:22:41Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "set p to PlistFromYAML \"utc: 2026-09-28T14:30:00Z\noffset: 2026-09-28T10:30:00-04:00\nquoted: \\\"2026-09-28\\\"\"\nPlistToJSON p\nPlistClose p",
+  "timeZone" : "America/New_York"
+}

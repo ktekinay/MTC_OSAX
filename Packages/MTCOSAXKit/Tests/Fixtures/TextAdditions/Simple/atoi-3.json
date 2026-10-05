@@ -1,0 +1,30 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "ATOI",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "010",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "0a00000000000000",
+          "type" : "comp"
+        }
+      }
+    }
+  ],
+  "name" : "atoi-3",
+  "recordedAt" : "2026-09-27T18:58:49Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "atoi \"010\""
+}

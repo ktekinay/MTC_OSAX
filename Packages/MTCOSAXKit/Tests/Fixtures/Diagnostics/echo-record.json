@@ -1,0 +1,92 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MTCd",
+        "eventID" : "echo",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "pnam",
+                  "value" : {
+                    "text" : "x",
+                    "type" : "utxt"
+                  }
+                },
+                {
+                  "key" : "ptsz",
+                  "value" : {
+                    "integer" : 3,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "foo",
+                        "type" : "utxt"
+                      },
+                      {
+                        "text" : "user field",
+                        "type" : "utxt"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "pnam",
+              "value" : {
+                "text" : "x",
+                "type" : "utxt"
+              }
+            },
+            {
+              "key" : "ptsz",
+              "value" : {
+                "integer" : 3,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "usrf",
+              "value" : {
+                "items" : [
+                  {
+                    "text" : "foo",
+                    "type" : "utxt"
+                  },
+                  {
+                    "text" : "user field",
+                    "type" : "utxt"
+                  }
+                ],
+                "type" : "list"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    }
+  ],
+  "name" : "echo-record",
+  "recordedAt" : "2026-09-27T16:03:44Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "mtc_echo {name:\"x\", size:3, foo:\"user field\"}"
+}

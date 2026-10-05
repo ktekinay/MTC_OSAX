@@ -1,0 +1,97 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "make",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "t",
+                        "type" : "utxt"
+                      },
+                      {
+                        "text" : "café ☃ \"q\" /",
+                        "type" : "utxt"
+                      },
+                      {
+                        "text" : "u",
+                        "type" : "utxt"
+                      },
+                      {
+                        "text" : "line\rtwo",
+                        "type" : "utxt"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "530000009ba60000e04b430300600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "JSON",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "530000009ba60000e04b430300600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "{\"t\":\"café ☃ \\\"q\\\" /\",\"u\":\"line\\rtwo\"}",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "530000009ba60000e04b430300600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "json-unicode",
+  "recordedAt" : "2026-09-28T13:15:26Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set p to PlistNew {t:\"café ☃ \\\"q\\\" /\", u:\"line\" & return & \"two\"}\nPlistToJSON p\nPlistClose p",
+  "timeZone" : "America/New_York"
+}

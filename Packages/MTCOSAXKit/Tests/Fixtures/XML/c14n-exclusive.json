@@ -1,0 +1,78 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "text" : "<?xml version=\"1.0\"?><!-- c --><a xmlns:u=\"urn:unused\" b=\"2\" a=\"1\"><x   y=\"z\"/><!-- inner --></a>",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "520000000a1401000000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "c14n",
+        "fields" : [
+          {
+            "key" : "Excl",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "520000000a1401000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "<!-- c -->\n<a a=\"1\" b=\"2\"><x y=\"z\"></x><!-- inner --></a>",
+          "type" : "utf8"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "520000000a1401000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "c14n-exclusive",
+  "recordedAt" : "2026-09-28T14:10:07Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set d to XMLOpen from string \"<?xml version=\\\"1.0\\\"?><!-- c --><a xmlns:u=\\\"urn:unused\\\" b=\\\"2\\\" a=\\\"1\\\"><x   y=\\\"z\\\"/><!-- inner --></a>\"\nXMLc14n d with exclusive\nXMLClose d",
+  "timeZone" : "America/New_York"
+}

@@ -1,0 +1,173 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/simple.xml",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "1f0000000a1401000000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "root",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "1f0000000a1401000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "1f0000000a1401008063d30300600000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "grep",
+        "fields" : [
+          {
+            "key" : "in  ",
+            "value" : {
+              "hex" : "1f0000000a1401008063d30300600000",
+              "type" : "XMLR"
+            }
+          },
+          {
+            "key" : "WaAl",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "Wcon",
+            "value" : {
+              "type" : "fals"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "[0-9]",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "hex" : "1f0000000a1401008070d30300600000",
+              "type" : "XMLR"
+            },
+            {
+              "hex" : "1f0000000a140100806ad30300600000",
+              "type" : "XMLR"
+            },
+            {
+              "hex" : "1f0000000a1401008065d30300600000",
+              "type" : "XMLR"
+            },
+            {
+              "hex" : "1f0000000a140100806bd30300600000",
+              "type" : "XMLR"
+            },
+            {
+              "hex" : "1f0000000a1401008064d30300600000",
+              "type" : "XMLR"
+            },
+            {
+              "hex" : "1f0000000a1401008066d30300600000",
+              "type" : "XMLR"
+            },
+            {
+              "hex" : "1f0000000a1401008069d30300600000",
+              "type" : "XMLR"
+            },
+            {
+              "hex" : "1f0000000a140100006dd30300600000",
+              "type" : "XMLR"
+            },
+            {
+              "hex" : "1f0000000a1401000069d30300600000",
+              "type" : "XMLR"
+            },
+            {
+              "hex" : "1f0000000a140100006ed30300600000",
+              "type" : "XMLR"
+            },
+            {
+              "hex" : "1f0000000a1401000068d30300600000",
+              "type" : "XMLR"
+            },
+            {
+              "hex" : "1f0000000a1401008068d30300600000",
+              "type" : "XMLR"
+            },
+            {
+              "hex" : "1f0000000a1401008067d30300600000",
+              "type" : "XMLR"
+            },
+            {
+              "hex" : "1f0000000a1401008073d30300600000",
+              "type" : "XMLR"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "1f0000000a1401000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "search-regexp-not-conforming",
+  "recordedAt" : "2026-09-28T14:10:05Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLRegexp \"[0-9]\" in r with all occurrences without conforming\nXMLClose d",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

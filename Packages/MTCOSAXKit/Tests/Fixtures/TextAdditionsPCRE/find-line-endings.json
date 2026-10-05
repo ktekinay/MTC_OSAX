@@ -1,0 +1,84 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FINd",
+        "fields" : [
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "x x\rx\r\nxx",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "WaAl",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "WaMr",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "synt",
+            "value" : {
+              "text" : "PCRE",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "^x$",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "x",
+              "type" : "utxt"
+            },
+            {
+              "text" : "x",
+              "type" : "utxt"
+            },
+            {
+              "text" : "x",
+              "type" : "utxt"
+            },
+            {
+              "text" : "x",
+              "type" : "utxt"
+            },
+            {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "find-line-endings",
+  "recordedAt" : "2026-09-28T16:41:55Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "find text \"^x$\" in \"x\" & (character id 8232) & \"x\" & return & \"x\" & return & linefeed & \"x\" & (character id 133) & \"x\" with regexp, all occurrences and string result syntax \"PCRE\"",
+  "timeZone" : "America/New_York"
+}

@@ -1,0 +1,30 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "UnNo",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "ﬁ ①",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "ﬁ ①",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "normalize-compat",
+  "recordedAt" : "2026-09-27T18:58:50Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "normalize unicode \"ﬁ ①\""
+}

@@ -1,0 +1,69 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FINd",
+        "fields" : [
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/search.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "strt",
+            "value" : {
+              "integer" : 25,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "alpha",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "mPos",
+              "value" : {
+                "integer" : 25,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "mLen",
+              "value" : {
+                "integer" : 5,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "mRes",
+              "value" : {
+                "text" : "alpha",
+                "type" : "utxt"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    }
+  ],
+  "name" : "find-file-after-multibyte",
+  "recordedAt" : "2026-09-27T19:03:49Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "find text \"alpha\" in POSIX file \"$FILES/search.txt\" starting at 25",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

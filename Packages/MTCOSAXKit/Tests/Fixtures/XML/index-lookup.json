@@ -1,0 +1,332 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "text" : "<a><b name='x'/><b name='y'/><b name='x'/></a>",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "5f0000000d7001000000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "NKey",
+        "fields" : [
+          {
+            "key" : "matc",
+            "value" : {
+              "text" : "//b",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "use ",
+            "value" : {
+              "text" : "@name",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "at  ",
+            "value" : {
+              "hex" : "5f0000000d7001000000000000000000",
+              "type" : "XMLR"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "k",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "GKey",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "k",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "at  ",
+            "value" : {
+              "hex" : "5f0000000d7001000000000000000000",
+              "type" : "XMLR"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "hex" : "5f0000000d70010080e8800000600000",
+              "type" : "XMLR"
+            },
+            {
+              "hex" : "5f0000000d70010000e5800000600000",
+              "type" : "XMLR"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "GKey",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "k",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "at  ",
+            "value" : {
+              "hex" : "5f0000000d7001000000000000000000",
+              "type" : "XMLR"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "y",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "hex" : "5f0000000d70010080de800000600000",
+              "type" : "XMLR"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "GKey",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "k",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "at  ",
+            "value" : {
+              "hex" : "5f0000000d7001000000000000000000",
+              "type" : "XMLR"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "z",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "LKey",
+        "fields" : [
+          {
+            "key" : "at  ",
+            "value" : {
+              "hex" : "5f0000000d7001000000000000000000",
+              "type" : "XMLR"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "k",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "y",
+              "type" : "utf8"
+            },
+            {
+              "text" : "x",
+              "type" : "utf8"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "LKey",
+        "fields" : [
+          {
+            "key" : "at  ",
+            "value" : {
+              "hex" : "5f0000000d7001000000000000000000",
+              "type" : "XMLR"
+            }
+          },
+          {
+            "key" : "dupl",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "k",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "x",
+              "type" : "utf8"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "LKey",
+        "fields" : [
+          {
+            "key" : "at  ",
+            "value" : {
+              "hex" : "5f0000000d7001000000000000000000",
+              "type" : "XMLR"
+            }
+          },
+          {
+            "key" : "dupl",
+            "value" : {
+              "type" : "fals"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "k",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "y",
+              "type" : "utf8"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "5f0000000d7001000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "index-lookup",
+  "recordedAt" : "2026-09-28T15:05:18Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set d to XMLOpen from string \"<a><b name='x'/><b name='y'/><b name='x'/></a>\"\nXMLNewIndex \"k\" match \"//b\" use \"@name\" at d\nXMLLookup \"x\" using \"k\" at d\nXMLLookup \"y\" using \"k\" at d\nXMLLookup \"z\" using \"k\" at d\nXMLEntries \"k\" at d\nXMLEntries \"k\" at d with duplicate match\nXMLEntries \"k\" at d without duplicate match\nXMLClose d",
+  "timeZone" : "America/New_York"
+}

@@ -1,0 +1,35 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Cmpi",
+        "fields" : [
+          {
+            "key" : "synt",
+            "value" : {
+              "text" : "NOT_A_SYNTAX",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "a",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1
+      }
+    }
+  ],
+  "name" : "re-compile-syntax-unknown",
+  "recordedAt" : "2026-09-28T16:37:18Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "re_compile \"a\" syntax \"NOT_A_SYNTAX\"",
+  "timeZone" : "America/New_York"
+}

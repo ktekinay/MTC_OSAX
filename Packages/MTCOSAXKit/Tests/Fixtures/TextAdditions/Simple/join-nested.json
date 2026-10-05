@@ -1,0 +1,52 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Join",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "-",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "a",
+                  "type" : "utxt"
+                },
+                {
+                  "items" : [
+                    {
+                      "text" : "b",
+                      "type" : "utxt"
+                    },
+                    {
+                      "text" : "c",
+                      "type" : "utxt"
+                    }
+                  ],
+                  "type" : "list"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1700
+      }
+    }
+  ],
+  "name" : "join-nested",
+  "recordedAt" : "2026-09-27T18:58:51Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "join {\"a\", {\"b\", \"c\"}} using \"-\""
+}

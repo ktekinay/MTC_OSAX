@@ -1,0 +1,94 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "NOSJ",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "{\"a\": 1, \"b\": [true, false, null], \"c\": {\"d\": 2.5}, \"e\": \"text\"}",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "090000004d5443700900000000000000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disp",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "090000004d5443700900000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "dictionary",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "DISP",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "090000004d5443700900000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n<plist version=\"1.0\">\n<dict>\n\t<key>a</key>\n\t<real>1</real>\n\t<key>b</key>\n\t<array>\n\t\t<true/>\n\t\t<false/>\n\t\t<data>\n\t\tZGxlMgAAAAB0eXBlAAAABG1zbmc=\n\t\t</data>\n\t</array>\n\t<key>c</key>\n\t<dict>\n\t\t<key>d</key>\n\t\t<real>2.5</real>\n\t</dict>\n\t<key>e</key>\n\t<string>text</string>\n</dict>\n</plist>\n",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "090000004d5443700900000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "fromjson-object",
+  "recordedAt" : "2026-09-28T13:28:03Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "set p to PlistFromJSON \"{\\\"a\\\": 1, \\\"b\\\": [true, false, null], \\\"c\\\": {\\\"d\\\": 2.5}, \\\"e\\\": \\\"text\\\"}\"\nPlistType p\nPlistGetXML p\nPlistClose p",
+  "timeZone" : "America/New_York"
+}

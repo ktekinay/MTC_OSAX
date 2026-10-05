@@ -1,0 +1,55 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RPLl",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "a",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "back",
+            "value" : {
+              "integer" : -1,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "(a)",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -208
+      }
+    }
+  ],
+  "name" : "change-only-backreference-negative",
+  "recordedAt" : "2026-09-28T21:03:15Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "change \"(a)\" into \"x\" in \"a\" with regexp only backreference -1",
+  "timeZone" : "America/New_York"
+}

@@ -1,0 +1,206 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-file-over-folder/src",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/backup-file-over-folder/src/",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-file-over-folder/dst/x",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/backup-file-over-folder/dst/x/",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-file-over-folder/dst/x/keep.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "keep",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-file-over-folder/src/x",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "new",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "SYNC",
+        "fields" : [
+          {
+            "key" : "onto",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-file-over-folder/dst",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "Repo",
+            "value" : {
+              "integer" : 2,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-file-over-folder/src",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "Errors : \r/private/tmp/mtc-fixtures/tmp/backup-file-over-folder/dst/x  Error : 21 \n",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "lsfl",
+        "fields" : [
+          {
+            "key" : "rtyp",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "form",
+                  "value" : {
+                    "code" : "prop",
+                    "type" : "enum"
+                  }
+                },
+                {
+                  "key" : "want",
+                  "value" : {
+                    "code" : "prop",
+                    "type" : "type"
+                  }
+                },
+                {
+                  "key" : "seld",
+                  "value" : {
+                    "code" : "psxP",
+                    "type" : "type"
+                  }
+                },
+                {
+                  "key" : "from",
+                  "value" : {
+                    "type" : "null"
+                  }
+                }
+              ],
+              "type" : "obj "
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-file-over-folder/dst",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "/private/tmp/mtc-fixtures/tmp/backup-file-over-folder/dst/x/keep.txt",
+              "type" : "utxt"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "backup-file-over-folder",
+  "recordedAt" : "2026-09-28T21:46:20Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "mkdir (POSIX file \"$TMP/backup-file-over-folder/src\")\nmkdir (POSIX file \"$TMP/backup-file-over-folder/dst/x\")\nwritetext \"keep\" to (POSIX file \"$TMP/backup-file-over-folder/dst/x/keep.txt\")\ndelay 1.1\nwritetext \"new\" to (POSIX file \"$TMP/backup-file-over-folder/src/x\")\n{backup (POSIX file \"$TMP/backup-file-over-folder/src\") onto (POSIX file \"$TMP/backup-file-over-folder/dst\") level 2, list files (POSIX file \"$TMP/backup-file-over-folder/dst\") as unix path}",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

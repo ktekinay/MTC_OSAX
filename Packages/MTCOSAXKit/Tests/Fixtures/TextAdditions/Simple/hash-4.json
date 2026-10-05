@@ -1,0 +1,30 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "HASH",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "é",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "integer" : 794120,
+          "type" : "long"
+        }
+      }
+    }
+  ],
+  "name" : "hash-4",
+  "recordedAt" : "2026-09-27T18:58:51Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "hash \"é\""
+}

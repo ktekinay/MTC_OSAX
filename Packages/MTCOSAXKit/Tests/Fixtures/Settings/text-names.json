@@ -1,0 +1,120 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MTCs",
+        "eventID" : "set ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "PERL",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "regex syntax",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "MTCs",
+        "eventID" : "get ",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "RegexSyntax",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "PERL",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "MTCs",
+        "eventID" : "get ",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "regex_syntax",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "PERL",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "MTCs",
+        "eventID" : "get ",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "REGEX SYNTAX",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "PERL",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "MTCs",
+        "eventID" : "rset",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "regex syntax",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "text-names",
+  "recordedAt" : "2026-09-28T18:09:50Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "mtc_set \"regex syntax\" to \"PERL\"\nmtc_get \"RegexSyntax\"\nmtc_get \"regex_syntax\"\nmtc_get \"REGEX SYNTAX\"\nmtc_reset \"regex syntax\"",
+  "timeZone" : "America/New_York"
+}

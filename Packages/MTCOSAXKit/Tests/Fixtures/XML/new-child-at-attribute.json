@@ -1,0 +1,110 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "text" : "<a k='v' j='w'>x<b/></a>",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "020000005c3c01000000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "path",
+        "fields" : [
+          {
+            "key" : "with",
+            "value" : {
+              "text" : "//@j",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "020000005c3c01000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "hex" : "020000005c3c010060c0110300600000",
+              "type" : "XMLR"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "addc",
+        "fields" : [
+          {
+            "key" : "at  ",
+            "value" : {
+              "hex" : "020000005c3c010060c0110300600000",
+              "type" : "XMLR"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "<z/>",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1700
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "020000005c3c01000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "new-child-at-attribute",
+  "recordedAt" : "2026-09-28T21:36:12Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set d to XMLOpen from string \"<a k='v' j='w'>x<b/></a>\"\ntry\nXMLNewChild \"<z/>\" at (item 1 of (XMLXPath d with \"//@j\"))\non error number n\nXMLClose d\nerror number n\nend try",
+  "timeZone" : "America/New_York"
+}

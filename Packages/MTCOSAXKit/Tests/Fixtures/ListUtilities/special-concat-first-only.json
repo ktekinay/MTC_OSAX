@@ -1,0 +1,38 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CONC",
+        "fields" : [
+          {
+            "key" : "with",
+            "value" : {
+              "text" : "c",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "a\nb",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "a\tc\nb\t",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "special-concat-first-only",
+  "recordedAt" : "2026-09-28T22:59:49Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "special concat (\"a\" & linefeed & \"b\") with \"c\"",
+  "timeZone" : "America/New_York"
+}

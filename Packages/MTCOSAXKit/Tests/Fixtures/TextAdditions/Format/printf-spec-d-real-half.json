@@ -1,0 +1,43 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "prtf",
+        "fields" : [
+          {
+            "key" : "para",
+            "value" : {
+              "items" : [
+                {
+                  "real" : 2.5,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "[%d]",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "[2]",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "printf-spec-d-real-half",
+  "recordedAt" : "2026-09-27T19:12:46Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "printf \"[%d]\" parameters {2.5}",
+  "timeZone" : "America/New_York"
+}

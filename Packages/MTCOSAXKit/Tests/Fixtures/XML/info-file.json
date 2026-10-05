@@ -1,0 +1,77 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "disp",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/simple.xml",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "kind",
+              "value" : {
+                "text" : "ELEMENT_NODE",
+                "type" : "TEXT"
+              }
+            },
+            {
+              "key" : "pnam",
+              "value" : {
+                "text" : "library",
+                "type" : "utf8"
+              }
+            },
+            {
+              "key" : "stnd",
+              "value" : {
+                "boolean" : true,
+                "type" : "bool"
+              }
+            },
+            {
+              "key" : "hdtd",
+              "value" : {
+                "boolean" : false,
+                "type" : "bool"
+              }
+            },
+            {
+              "key" : "cpar",
+              "value" : {
+                "integer" : 4,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "enco",
+              "value" : {
+                "text" : "UTF-8",
+                "type" : "utf8"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    }
+  ],
+  "name" : "info-file",
+  "recordedAt" : "2026-09-28T15:01:57Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "XMLNodeInfo (POSIX file \"$FILES/simple.xml\")",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

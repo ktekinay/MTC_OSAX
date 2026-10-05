@@ -1,0 +1,41 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Read",
+        "fields" : [
+          {
+            "key" : "strt",
+            "value" : {
+              "integer" : 3,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/utf8-bom.txt",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "BOM é\n",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "readtext-bom-starting-at",
+  "recordedAt" : "2026-09-27T19:52:26Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "readtext POSIX file \"$FILES/utf8-bom.txt\" starting at 3",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

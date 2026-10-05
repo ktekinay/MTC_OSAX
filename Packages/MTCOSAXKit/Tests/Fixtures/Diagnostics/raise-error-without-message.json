@@ -1,0 +1,27 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MTCd",
+        "eventID" : "rais",
+        "fields" : [
+          {
+            "key" : "errn",
+            "value" : {
+              "integer" : -1728,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1728
+      }
+    }
+  ],
+  "name" : "raise-error-without-message",
+  "recordedAt" : "2026-09-27T16:03:45Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "mtc_raise_error number -1728"
+}

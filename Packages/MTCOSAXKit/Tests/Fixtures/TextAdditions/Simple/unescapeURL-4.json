@@ -1,0 +1,27 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Rem%",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "100%",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1
+      }
+    }
+  ],
+  "name" : "unescapeURL-4",
+  "recordedAt" : "2026-09-27T18:58:50Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "unescapeURL \"100%\""
+}

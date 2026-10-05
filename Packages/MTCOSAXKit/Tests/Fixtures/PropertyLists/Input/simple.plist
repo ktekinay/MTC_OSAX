@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>blob</key>
+	<data>
+	AAECaGVsbG8=
+	</data>
+	<key>count</key>
+	<integer>3</integer>
+	<key>dict</key>
+	<dict>
+		<key>empty</key>
+		<dict/>
+		<key>x</key>
+		<integer>1</integer>
+		<key>y</key>
+		<dict>
+			<key>z</key>
+			<string>deep</string>
+		</dict>
+	</dict>
+	<key>disabled</key>
+	<false/>
+	<key>emptyList</key>
+	<array/>
+	<key>emptyText</key>
+	<string></string>
+	<key>enabled</key>
+	<true/>
+	<key>list</key>
+	<array>
+		<string>a</string>
+		<integer>1</integer>
+		<real>2.5</real>
+		<true/>
+		<dict>
+			<key>nested</key>
+			<string>yes</string>
+		</dict>
+	</array>
+	<key>name</key>
+	<string>Simple</string>
+	<key>people</key>
+	<array>
+		<dict>
+			<key>age</key>
+			<integer>30</integer>
+			<key>first</key>
+			<string>Ann</string>
+		</dict>
+		<dict>
+			<key>age</key>
+			<integer>40</integer>
+			<key>first</key>
+			<string>Bob</string>
+		</dict>
+		<dict>
+			<key>age</key>
+			<integer>30</integer>
+			<key>first</key>
+			<string>Cy</string>
+			<key>pet</key>
+			<string>cat</string>
+		</dict>
+	</array>
+	<key>ratio</key>
+	<real>2.5</real>
+	<key>unicode</key>
+	<string>café ☃</string>
+	<key>when</key>
+	<date>2020-05-17T12:30:00Z</date>
+</dict>
+</plist>

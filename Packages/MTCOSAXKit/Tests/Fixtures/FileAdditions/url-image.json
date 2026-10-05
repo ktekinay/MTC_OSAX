@@ -1,0 +1,521 @@
+{
+  "exchanges": [
+    {
+      "event": {
+        "eventClass": "Quom",
+        "eventID": "MkDi",
+        "fields": [
+          {
+            "key": "----",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-image",
+              "type": "furl"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {
+        "result": {
+          "text": "/private/tmp/mtc-fixtures/tmp/url-image/",
+          "type": "ut16"
+        }
+      }
+    },
+    {
+      "event": {
+        "eventClass": "Quom",
+        "eventID": "MkDi",
+        "fields": [
+          {
+            "key": "----",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-image/sub/deep",
+              "type": "furl"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {
+        "result": {
+          "text": "/private/tmp/mtc-fixtures/tmp/url-image/sub/deep/",
+          "type": "ut16"
+        }
+      }
+    },
+    {
+      "event": {
+        "eventClass": "Quom",
+        "eventID": "MkDi",
+        "fields": [
+          {
+            "key": "----",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-image/pkg.app/Contents",
+              "type": "furl"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {
+        "result": {
+          "text": "/private/tmp/mtc-fixtures/tmp/url-image/pkg.app/Contents/",
+          "type": "ut16"
+        }
+      }
+    },
+    {
+      "event": {
+        "eventClass": "Quom",
+        "eventID": "MkDi",
+        "fields": [
+          {
+            "key": "----",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-image/Empty",
+              "type": "furl"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {
+        "result": {
+          "text": "/private/tmp/mtc-fixtures/tmp/url-image/Empty/",
+          "type": "ut16"
+        }
+      }
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-image/a.txt",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-image/B.TXT",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-image/.hidden",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-image/img.png",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-image/sub/c.txt",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-image/sub/deep/d.md",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-image/pkg.app/Contents/Info.plist",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-image/zeta.TXT",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-image/Apple.txt",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "Writ",
+        "fields": [
+          {
+            "key": "to  ",
+            "value": {
+              "text": "file:///private/tmp/mtc-fixtures/tmp/url-image/sub/.dot.txt",
+              "type": "furl"
+            }
+          },
+          {
+            "key": "----",
+            "value": {
+              "text": "x",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {}
+    },
+    {
+      "event": {
+        "eventClass": "SATI",
+        "eventID": "IURL",
+        "fields": [
+          {
+            "key": "----",
+            "value": {
+              "text": "/private/tmp/mtc-fixtures/tmp/url-image/img.png",
+              "type": "utxt"
+            }
+          }
+        ],
+        "type": "aevt"
+      },
+      "reply": {
+        "result": {
+          "fields": [
+            {
+              "key": "pnam",
+              "value": {
+                "text": "img.png",
+                "type": "utxt"
+              }
+            },
+            {
+              "key": "ascd",
+              "value": {
+                "type": "any"
+              }
+            },
+            {
+              "key": "asmo",
+              "value": {
+                "type": "any"
+              }
+            },
+            {
+              "key": "ptsz",
+              "value": {
+                "code": "msng",
+                "type": "type"
+              }
+            },
+            {
+              "key": "asdr",
+              "value": {
+                "boolean": false,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "alis",
+              "value": {
+                "boolean": false,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "ispk",
+              "value": {
+                "boolean": false,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "pvis",
+              "value": {
+                "boolean": true,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "hidx",
+              "value": {
+                "boolean": false,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "nmxt",
+              "value": {
+                "text": "png",
+                "type": "utxt"
+              }
+            },
+            {
+              "key": "dnam",
+              "value": {
+                "text": "img.png",
+                "type": "utxt"
+              }
+            },
+            {
+              "key": "asda",
+              "value": {
+                "type": "any"
+              }
+            },
+            {
+              "key": "kind",
+              "value": {
+                "text": "PNG image",
+                "type": "utxt"
+              }
+            },
+            {
+              "key": "asty",
+              "value": {
+                "text": "\u0000\u0000\u0000\u0000",
+                "type": "TEXT"
+              }
+            },
+            {
+              "key": "asct",
+              "value": {
+                "text": "\u0000\u0000\u0000\u0000",
+                "type": "TEXT"
+              }
+            },
+            {
+              "key": "utid",
+              "value": {
+                "text": "public.png",
+                "type": "utxt"
+              }
+            },
+            {
+              "key": "aslk",
+              "value": {
+                "boolean": false,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "bzst",
+              "value": {
+                "boolean": false,
+                "type": "bool"
+              }
+            },
+            {
+              "key": "assv",
+              "value": {
+                "text": "",
+                "type": "TEXT"
+              }
+            },
+            {
+              "key": "aslv",
+              "value": {
+                "text": "",
+                "type": "TEXT"
+              }
+            },
+            {
+              "key": "pusc",
+              "value": {
+                "text": "file",
+                "type": "ut16"
+              }
+            },
+            {
+              "key": "psxP",
+              "value": {
+                "text": "/private/tmp/mtc-fixtures/tmp/url-image/img.png",
+                "type": "ut16"
+              }
+            },
+            {
+              "key": "FTPc",
+              "value": {
+                "text": "/private/tmp/mtc-fixtures/tmp/url-image/img.png",
+                "type": "ut16"
+              }
+            }
+          ],
+          "type": "reco"
+        }
+      }
+    }
+  ],
+  "name": "url-image",
+  "recordedAt": "2026-09-27T23:55:22Z",
+  "recordedFrom": "SatimageOSAX",
+  "script": "mkdir (POSIX file \"$TMP/url-image\")\nmkdir (POSIX file \"$TMP/url-image/sub/deep\")\nmkdir (POSIX file \"$TMP/url-image/pkg.app/Contents\")\nmkdir (POSIX file \"$TMP/url-image/Empty\")\nwritetext \"x\" to (POSIX file \"$TMP/url-image/a.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/url-image/B.TXT\")\nwritetext \"x\" to (POSIX file \"$TMP/url-image/.hidden\")\nwritetext \"x\" to (POSIX file \"$TMP/url-image/img.png\")\nwritetext \"x\" to (POSIX file \"$TMP/url-image/sub/c.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/url-image/sub/deep/d.md\")\nwritetext \"x\" to (POSIX file \"$TMP/url-image/pkg.app/Contents/Info.plist\")\nwritetext \"x\" to (POSIX file \"$TMP/url-image/zeta.TXT\")\nwritetext \"x\" to (POSIX file \"$TMP/url-image/Apple.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/url-image/sub/.dot.txt\")\nURL info for \"$TMP/url-image/img.png\"",
+  "timeZone": "America/New_York",
+  "variables": {
+    "TMP": "/private/tmp/mtc-fixtures/tmp"
+  }
+}

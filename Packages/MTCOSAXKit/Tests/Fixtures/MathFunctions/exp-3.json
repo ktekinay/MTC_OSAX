@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "EXP ",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : -1,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 0.36787944117144233,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "exp-3",
+  "recordedAt" : "2026-09-28T04:29:06Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "exp -1",
+  "timeZone" : "America/New_York"
+}

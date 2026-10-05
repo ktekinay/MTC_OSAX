@@ -1,0 +1,141 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/url-http-escaped",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/url-http-escaped/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "IURL",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "http://www.example.com/a%20b/c%C3%A9.html",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "pusc",
+              "value" : {
+                "text" : "http",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "HOST",
+              "value" : {
+                "text" : "www.example.com",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "psxP",
+              "value" : {
+                "text" : "/a b/cé.html",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "FTPc",
+              "value" : {
+                "text" : "/a%20b/c%C3%A9.html",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "pnam",
+              "value" : {
+                "text" : "cé.html",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "nmxt",
+              "value" : {
+                "text" : "html",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "utid",
+              "value" : {
+                "text" : "public.html",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "asty",
+              "value" : {
+                "text" : "",
+                "type" : "TEXT"
+              }
+            },
+            {
+              "key" : "asct",
+              "value" : {
+                "text" : "",
+                "type" : "TEXT"
+              }
+            },
+            {
+              "key" : "asdr",
+              "value" : {
+                "boolean" : false,
+                "type" : "bool"
+              }
+            },
+            {
+              "key" : "ispk",
+              "value" : {
+                "boolean" : false,
+                "type" : "bool"
+              }
+            },
+            {
+              "key" : "alis",
+              "value" : {
+                "boolean" : false,
+                "type" : "bool"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    }
+  ],
+  "name" : "url-http-escaped",
+  "recordedAt" : "2026-09-27T23:55:22Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "mkdir (POSIX file \"$TMP/url-http-escaped\")\nURL info for \"http://www.example.com/a%20b/c%C3%A9.html\"",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

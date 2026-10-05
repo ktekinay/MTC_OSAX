@@ -1,0 +1,81 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Sort",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "é",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "e",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "f",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "E",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "è",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "d",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "E",
+              "type" : "ut16"
+            },
+            {
+              "text" : "d",
+              "type" : "ut16"
+            },
+            {
+              "text" : "e",
+              "type" : "ut16"
+            },
+            {
+              "text" : "f",
+              "type" : "ut16"
+            },
+            {
+              "text" : "è",
+              "type" : "ut16"
+            },
+            {
+              "text" : "é",
+              "type" : "ut16"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "sortlist-accents",
+  "recordedAt" : "2026-09-28T04:34:13Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "sortlist {\"é\", \"e\", \"f\", \"E\", \"è\", \"d\"}",
+  "timeZone" : "America/New_York"
+}

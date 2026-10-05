@@ -1,0 +1,30 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CAPI",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "straße éclair ǆ",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "Straße Éclair ǅ",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "titlecase-unicode",
+  "recordedAt" : "2026-09-27T18:58:49Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "titlecase \"straße éclair ǆ\""
+}

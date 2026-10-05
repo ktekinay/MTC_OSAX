@@ -1,0 +1,102 @@
+[
+ {
+  "name": "filter-doc-list",
+  "script": "filter text \"^([A-z]+) is (.*)\" in \"John is ten\" & linefeed & \"Anna is twelve\" & linefeed & \"John is at school\" & linefeed & \"Anna sleeps\" key \"\\\\1\" using \"\\\\2\" as list"
+ },
+ {
+  "name": "filter-default-string",
+  "script": "filter text \"^([A-z]+) is (.*)\" in \"John is ten\" & linefeed & \"Anna is twelve\" & linefeed & \"John is at school\" & linefeed & \"Anna sleeps\" key \"\\\\1\" using \"\\\\2\""
+ },
+ {
+  "name": "filter-as-string",
+  "script": "filter text \"^([A-z]+) is (.*)\" in \"John is ten\" & linefeed & \"Anna is twelve\" & linefeed & \"John is at school\" & linefeed & \"Anna sleeps\" key \"\\\\1\" using \"\\\\2\" as string"
+ },
+ {
+  "name": "filter-separator",
+  "script": "filter text \"^([A-z]+) is (.*)\" in \"John is ten\" & linefeed & \"Anna is twelve\" & linefeed & \"John is at school\" & linefeed & \"Anna sleeps\" key \"\\\\1\" using \"\\\\2\" separator \", \""
+ },
+ {
+  "name": "filter-default-using",
+  "script": "filter text \"^([A-z]+) is\" in \"John is ten\" & linefeed & \"Anna is twelve\" & linefeed & \"John is at school\" & linefeed & \"Anna sleeps\" key \"\\\\1\""
+ },
+ {
+  "name": "filter-duplicates-false",
+  "script": "filter text \"^([A-z]+) (is)\" in \"John is ten\" & linefeed & \"Anna is twelve\" & linefeed & \"John is at school\" & linefeed & \"Anna sleeps\" key \"\\\\1\" using \"\\\\2\" as list without duplicates"
+ },
+ {
+  "name": "filter-duplicates-true",
+  "script": "filter text \"^([A-z]+) (is)\" in \"John is ten\" & linefeed & \"Anna is twelve\" & linefeed & \"John is at school\" & linefeed & \"Anna sleeps\" key \"\\\\1\" using \"\\\\2\" as list with duplicates"
+ },
+ {
+  "name": "filter-duplicates-string",
+  "script": "filter text \"^([A-z]+) (is)\" in \"John is ten\" & linefeed & \"Anna is twelve\" & linefeed & \"John is at school\" & linefeed & \"Anna sleeps\" key \"\\\\1\" using \"\\\\2\" without duplicates"
+ },
+ {
+  "name": "filter-no-match",
+  "script": "filter text \"zzz\" in \"John is ten\" & linefeed & \"Anna is twelve\" & linefeed & \"John is at school\" & linefeed & \"Anna sleeps\" key \"\\\\0\""
+ },
+ {
+  "name": "filter-key-template",
+  "script": "filter text \"^([A-z]+) is (\\\\w+)\" in \"John is ten\" & linefeed & \"Anna is twelve\" & linefeed & \"John is at school\" & linefeed & \"Anna sleeps\" key \"[\\\\1-\\\\2]\" using \"\\\\0\""
+ },
+ {
+  "name": "filter-case-insensitive",
+  "script": "filter text \"^(john) is (.*)\" in \"John is ten\" & linefeed & \"Anna is twelve\" & linefeed & \"John is at school\" & linefeed & \"Anna sleeps\" key \"\\\\1\" using \"\\\\2\" without case sensitive"
+ },
+ {
+  "name": "filter-regexpflag",
+  "script": "filter text \"(A.*)\" in \"John is ten\" & linefeed & \"Anna is twelve\" & linefeed & \"John is at school\" & linefeed & \"Anna sleeps\" key \"k\" using \"\\\\1\" regexpflag {\"MULTILINE\"}"
+ },
+ {
+  "name": "filter-syntax",
+  "script": "filter text \"\\\\(J[a-z]*\\\\)\" in \"John is ten\" & linefeed & \"Anna is twelve\" & linefeed & \"John is at school\" & linefeed & \"Anna sleeps\" key \"\\\\1\" syntax \"GREP\""
+ },
+ {
+  "name": "filter-invalid-regexp",
+  "script": "filter text \"(\" in \"John is ten\" & linefeed & \"Anna is twelve\" & linefeed & \"John is at school\" & linefeed & \"Anna sleeps\" key \"a\""
+ },
+ {
+  "name": "filter-missing-key",
+  "script": "filter text \"a\" in \"John is ten\" & linefeed & \"Anna is twelve\" & linefeed & \"John is at school\" & linefeed & \"Anna sleeps\""
+ },
+ {
+  "name": "filter-missing-in",
+  "script": "filter text \"a\" key \"b\""
+ },
+ {
+  "name": "filter-unicode-keys",
+  "script": "filter text \"(\\\\S+)\" in \"é e z É a Z\" key \"\\\\1\""
+ },
+ {
+  "name": "filter-empty-key",
+  "script": "filter text \"(x)?a\" in \"a a\" key \"\\\\1\""
+ },
+ {
+  "name": "filter-special-chars",
+  "script": "filter text \"(.+)\" in \"<a & b>\" key \"k<&>\" using \"\\\\1\""
+ },
+ {
+  "name": "filter-in-file",
+  "script": "filter text \"^([A-z]+) is (.*)\" in POSIX file \"$FILES/people.txt\" key \"\\\\1\" using \"\\\\2\" as list"
+ },
+ {
+  "name": "filter-into-file",
+  "script": "filter text \"^([A-z]+) is (.*)\" in POSIX file \"$FILES/people.txt\" key \"\\\\1\" using \"\\\\2\" into POSIX file \"$TMP/out.plist\"\nreadtext POSIX file \"$TMP/out.plist\""
+ },
+ {
+  "name": "filter-template-error",
+  "script": "filter text \"^([A-z]+) is\" in \"John is ten\" & linefeed & \"Anna is twelve\" & linefeed & \"John is at school\" & linefeed & \"Anna sleeps\" key \"\\\\5\""
+ },
+ {
+  "name": "filter-as-other",
+  "script": "filter text \"^([A-z]+) is\" in \"John is ten\" & linefeed & \"Anna is twelve\" & linefeed & \"John is at school\" & linefeed & \"Anna sleeps\" key \"\\\\1\" as record"
+ },
+ {
+  "name": "filter-whole-word",
+  "script": "filter text \"(is)\" in \"this is\" key \"\\\\1\" with whole word"
+ },
+ {
+  "name": "filter-numbers-in-text",
+  "script": "filter text \"([0-9]+)\" in \"a1 b22 c1\" key \"n\" using \"\\\\1\" as list"
+ }
+]

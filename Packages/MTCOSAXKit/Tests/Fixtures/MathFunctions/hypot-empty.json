@@ -1,0 +1,30 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "HYPO",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -50
+      }
+    }
+  ],
+  "name" : "hypot-empty",
+  "recordedAt" : "2026-09-28T04:29:10Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "hypot {}",
+  "timeZone" : "America/New_York"
+}

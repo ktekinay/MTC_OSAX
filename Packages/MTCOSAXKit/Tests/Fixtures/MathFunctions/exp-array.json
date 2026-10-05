@@ -1,0 +1,132 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CRAR",
+        "fields" : [
+          {
+            "key" : "rang",
+            "value" : {
+              "items" : [
+                {
+                  "real" : -12.5,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 12.5,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 5,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : -12.5,
+              "type" : "doub"
+            },
+            {
+              "real" : -6.25,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 6.25,
+              "type" : "doub"
+            },
+            {
+              "real" : 12.5,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "EXP ",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "real" : -12.5,
+                  "type" : "doub"
+                },
+                {
+                  "real" : -6.25,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 6.25,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 12.5,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "Lido"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 3.726653172078671e-06,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.0019304541362277093,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 518.012824668342,
+              "type" : "doub"
+            },
+            {
+              "real" : 268337.2865208745,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    }
+  ],
+  "name" : "exp-array",
+  "recordedAt" : "2026-09-28T04:29:06Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "exp (createarray 5 range {-12.5, 12.5})",
+  "timeZone" : "America/New_York"
+}

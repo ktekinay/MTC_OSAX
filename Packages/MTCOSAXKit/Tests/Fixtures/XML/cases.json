@@ -1,0 +1,994 @@
+[
+ {
+  "name": "script-kml",
+  "script": "set xmlTop to XMLOpen (POSIX file \"$FILES/places.kml\")\nset xml to XMLChild xmlTop index 1\nset xml to XMLChild xml index 1\nset cnt to XMLCount xml\nset xml to XMLFind xml name \"Placemark\"\nset node to XMLChild xml index 1\nXMLGetText node\nset node to XMLChild xml index 2\nXMLGetText node\nset pointNode to XMLChild xml index 4\nset node to XMLChild pointNode index 1\nXMLGetText node\nset xml to XMLNextSibling xml\nset node to XMLChild xml index 1\nXMLGetText node\nXMLClose xmlTop"
+ },
+ {
+  "name": "script-kml-end",
+  "script": "set xmlTop to XMLOpen (POSIX file \"$FILES/places.kml\")\nset xml to XMLFind (XMLChild xmlTop index 1) name \"Placemark\"\nset xml to XMLNextSibling xml\nXMLNextSibling xml"
+ },
+ {
+  "name": "open-file",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLNodeInfo d\nXMLClose d"
+ },
+ {
+  "name": "open-alias",
+  "script": "set d to XMLOpen ((POSIX file \"$FILES/simple.xml\") as alias)\nXMLTagName (XMLRoot d)\nXMLClose d"
+ },
+ {
+  "name": "open-path-string",
+  "script": "set d to XMLOpen \"$FILES/simple.xml\"\nXMLTagName (XMLRoot d)\nXMLClose d"
+ },
+ {
+  "name": "open-file-url-string",
+  "script": "set d to XMLOpen \"file://$FILES/simple.xml\"\nXMLTagName (XMLRoot d)\nXMLClose d"
+ },
+ {
+  "name": "open-missing",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/nope.xml\")"
+ },
+ {
+  "name": "open-invalid",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/invalid.xml\")"
+ },
+ {
+  "name": "open-invalid-error",
+  "script": "try\nset d to XMLOpen (POSIX file \"$FILES/invalid.xml\")\nend try\nXMLError"
+ },
+ {
+  "name": "open-invalid-level-3",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/invalid.xml\") failure level 3\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "open-invalid-verbose",
+  "script": "try\nset d to XMLOpen (POSIX file \"$FILES/invalid.xml\") with verbose\nend try\nXMLError"
+ },
+ {
+  "name": "open-from-string",
+  "script": "set d to XMLOpen from string \"<a x='1'><b>text</b></a>\"\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "open-from-string-invalid",
+  "script": "set d to XMLOpen from string \"<a><b></a>\""
+ },
+ {
+  "name": "open-from-string-empty",
+  "script": "set d to XMLOpen from string \"\""
+ },
+ {
+  "name": "open-keep-blanks",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\") with keep blanks\nset r to XMLRoot d\nXMLCount r\nXMLCountElement r\nXMLNodeInfo (XMLChild r index 1)\nXMLClose d"
+ },
+ {
+  "name": "open-no-keep-blanks",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLCount r\nXMLCount r without all nodes\nXMLClose d"
+ },
+ {
+  "name": "open-dtd",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/dtd.xml\")\nXMLNodeInfo d\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "open-substitute-entities",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/dtd.xml\") with substitute entities\nXMLGetText (XMLChild (XMLRoot d) index 1)\nXMLDisplayXML (XMLRoot d)\nXMLClose d"
+ },
+ {
+  "name": "open-no-substitute-entities",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/dtd.xml\")\nXMLGetText (XMLChild (XMLRoot d) index 1)\nXMLCount (XMLChild (XMLRoot d) index 1)\nXMLClose d"
+ },
+ {
+  "name": "open-validate",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/dtd.xml\") with validate\nXMLTagName (XMLRoot d)\nXMLClose d"
+ },
+ {
+  "name": "open-validate-invalid",
+  "script": "set d to XMLOpen from string \"<!DOCTYPE a [<!ELEMENT a (b)><!ELEMENT b EMPTY>]><a><c/></a>\" with validate"
+ },
+ {
+  "name": "open-validate-invalid-error",
+  "script": "try\nset d to XMLOpen from string \"<!DOCTYPE a [<!ELEMENT a (b)><!ELEMENT b EMPTY>]><a><c/></a>\" with validate\nend try\nXMLError"
+ },
+ {
+  "name": "open-no-cdata",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\") with noCDATA\nXMLDisplayXML (XMLFind (XMLRoot d) name \"note\")\nXMLClose d"
+ },
+ {
+  "name": "open-html-as-xml",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/page.html\")"
+ },
+ {
+  "name": "open-html-script",
+  "script": "set d to XMLOpen from string \"<html><body><script>if (a < b) x();</script></body></html>\" with html4 and xmlscript\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "open-html-no-script",
+  "script": "set d to XMLOpen from string \"<html><body><script>if (a < b) x();</script></body></html>\" with html4\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "open-latin1",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/latin1.xml\")\nXMLGetText (XMLRoot d)\nXMLGetEncoding d\nXMLClose d"
+ },
+ {
+  "name": "open-encoding",
+  "script": "set d to XMLOpen from string \"<a>café</a>\" encoding \"ISO-8859-1\"\nXMLGetText (XMLRoot d)\nXMLClose d"
+ },
+ {
+  "name": "open-bypassing-namespace",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/namespaces.xml\") with bypassing namespace\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "open-in-pool",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\") in pool \"mtc-x1\"\nGetPool d\nXMLListDocuments \"mtc-x1\"\nXMLClose d"
+ },
+ {
+  "name": "open-no-parameter",
+  "script": "XMLOpen"
+ },
+ {
+  "name": "open-twice",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset e to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLTagName (XMLRoot e)\nXMLClose d\nXMLClose e"
+ },
+ {
+  "name": "close-then-use",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLClose d\nXMLTagName r"
+ },
+ {
+  "name": "close-twice",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLClose d\nXMLClose d"
+ },
+ {
+  "name": "close-node",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLClose r\nXMLTagName (XMLRoot d)"
+ },
+ {
+  "name": "not-a-reference",
+  "script": "XMLTagName \"text\""
+ },
+ {
+  "name": "nav-root",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLTagName r\nXMLClose d"
+ },
+ {
+  "name": "nav-count",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLCount r\nXMLCount r with all nodes\nXMLCount r without all nodes\nXMLCountElement r\nXMLCount d\nXMLCount d without all nodes\nXMLClose d"
+ },
+ {
+  "name": "nav-count-text",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLCount (XMLFind r name \"note\")\nXMLCountElement (XMLFind r name \"note\")\nXMLClose d"
+ },
+ {
+  "name": "nav-child",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLTagName (XMLChild r index 3)\nXMLTagName (XMLChild r index 3 without all nodes)\nXMLTagName (XMLElement r index 3)\nXMLClose d"
+ },
+ {
+  "name": "nav-child-of-document",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLNodeInfo (XMLChild d index 1)\nXMLNodeInfo (XMLChild d index 2)\nXMLNodeInfo (XMLChild d index 3)\nXMLChild d index 1 without all nodes\nXMLClose d"
+ },
+ {
+  "name": "nav-child-text-nodes",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset n to XMLFind r name \"note\"\nXMLNodeInfo (XMLChild n index 1)\nXMLNodeInfo (XMLChild n index 2)\nXMLNodeInfo (XMLChild n index 5)\nXMLTagName (XMLChild n index 1 without all nodes)\nXMLClose d"
+ },
+ {
+  "name": "nav-child-out-of-range",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLChild r index 6\nXMLClose d"
+ },
+ {
+  "name": "nav-child-zero",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLChild r index 0\nXMLClose d"
+ },
+ {
+  "name": "nav-child-negative",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLChild r index -1\nXMLClose d"
+ },
+ {
+  "name": "nav-child-no-index",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLChild r\nXMLClose d"
+ },
+ {
+  "name": "nav-child-list",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLChild r index {1, 2}\nXMLClose d"
+ },
+ {
+  "name": "nav-element-out-of-range",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLElement r index 6\nXMLClose d"
+ },
+ {
+  "name": "nav-parent",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLTagName (XMLParent b)\nXMLNodeInfo (XMLParent r)\nXMLParent d\nXMLClose d"
+ },
+ {
+  "name": "nav-parent-list",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLParent {b, XMLChild b index 1}\nXMLClose d"
+ },
+ {
+  "name": "nav-siblings",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLTagName (XMLNextSibling b)\nXMLTagName (XMLNextElement b)\nset l to XMLChild r index 5\nXMLTagName (XMLPrevSibling l)\nXMLTagName (XMLPrevElement l)\nXMLClose d"
+ },
+ {
+  "name": "nav-siblings-end",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLNextSibling (XMLChild r index 5)\nXMLClose d"
+ },
+ {
+  "name": "nav-siblings-start",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLPrevSibling (XMLChild r index 1)\nXMLClose d"
+ },
+ {
+  "name": "nav-siblings-of-root",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLNodeInfo (XMLPrevSibling r)\nXMLPrevElement r\nXMLClose d"
+ },
+ {
+  "name": "nav-siblings-text",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset n to XMLFind r name \"note\"\nXMLNodeInfo (XMLNextSibling (XMLChild n index 1))\nXMLTagName (XMLNextElement (XMLChild n index 1))\nXMLClose d"
+ },
+ {
+  "name": "nav-siblings-list",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLNextSibling {b, XMLChild r index 2}\nXMLClose d"
+ },
+ {
+  "name": "nav-keep-blanks",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\") with keep blanks\nset r to XMLRoot d\nXMLNodeInfo (XMLChild r index 1)\nXMLTagName (XMLChild r index 1 without all nodes)\nXMLNodeInfo (XMLNextSibling (XMLChild r index 2))\nXMLClose d"
+ },
+ {
+  "name": "read-tag-name",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLTagName r\nXMLTagName (XMLChild (XMLChild r index 1) index 2)\nXMLTagName d\nXMLClose d"
+ },
+ {
+  "name": "read-tag-name-text",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLTagName (XMLChild (XMLFind r name \"note\") index 1)\nXMLClose d"
+ },
+ {
+  "name": "read-tag-name-list",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLTagName {r, XMLChild r index 1}\nXMLClose d"
+ },
+ {
+  "name": "read-attribute",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLGetAttribute b name \"id\"\nXMLGetAttribute r name \"version\"\nXMLClose d"
+ },
+ {
+  "name": "read-attribute-missing",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLGetAttribute b name \"nope\"\nXMLClose d"
+ },
+ {
+  "name": "read-attribute-no-name",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLGetAttribute b\nXMLClose d"
+ },
+ {
+  "name": "read-attribute-list-names",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLGetAttribute b name {\"id\", \"lang\", \"nope\"}\nXMLClose d"
+ },
+ {
+  "name": "read-attribute-list-nodes",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLGetAttribute {XMLChild r index 1, XMLChild r index 2} name \"id\"\nXMLClose d"
+ },
+ {
+  "name": "read-attribute-of-text",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLGetAttribute (XMLChild (XMLFind r name \"note\") index 1) name \"x\"\nXMLClose d"
+ },
+ {
+  "name": "read-node-info-document",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLNodeInfo d\nXMLClose d"
+ },
+ {
+  "name": "read-node-info-element",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLNodeInfo r\nXMLNodeInfo (XMLChild r index 1)\nXMLNodeInfo (XMLFind r name \"empty\")\nXMLClose d"
+ },
+ {
+  "name": "read-node-info-namespaced",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLNodeInfo (XMLChild (XMLChild r index 1) index 2)\nXMLClose d"
+ },
+ {
+  "name": "read-node-info-kinds",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLNodeInfo (XMLChild d index 1)\nXMLNodeInfo (XMLChild d index 2)\nset r to XMLRoot d\nset n to XMLFind r name \"note\"\nXMLNodeInfo (XMLChild n index 1)\nXMLNodeInfo (XMLChild n index 4)\nXMLNodeInfo (XMLChild n index 5)\nXMLClose d"
+ },
+ {
+  "name": "read-node-info-list",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLNodeInfo {d, r}\nXMLClose d"
+ },
+ {
+  "name": "read-text",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLGetText (XMLFind b name \"title\")\nXMLGetText (XMLFind r name \"note\")\nXMLGetText (XMLFind r name \"empty\")\nXMLGetText (XMLFind r name \"spaces\")\nXMLClose d"
+ },
+ {
+  "name": "read-text-of-parent",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLGetText (XMLChild r index 1)\nXMLGetText r\nXMLClose d"
+ },
+ {
+  "name": "read-text-of-text-node",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLGetText (XMLChild (XMLFind r name \"note\") index 1)\nXMLClose d"
+ },
+ {
+  "name": "read-text-of-document",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLGetText d\nXMLClose d"
+ },
+ {
+  "name": "read-text-list",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLGetText {XMLFind b name \"title\", XMLFind b name \"year\"}\nXMLClose d"
+ },
+ {
+  "name": "read-text-comment",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLGetText (XMLChild d index 1)\nXMLClose d"
+ },
+ {
+  "name": "read-text-entities",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/dtd.xml\")\nXMLGetText (XMLChild (XMLRoot d) index 1)\nXMLClose d"
+ },
+ {
+  "name": "read-text-latin1",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/latin1.xml\")\nXMLGetText (XMLRoot d)\nXMLClose d"
+ },
+ {
+  "name": "info-file",
+  "script": "XMLNodeInfo (POSIX file \"$FILES/simple.xml\")"
+ },
+ {
+  "name": "info-file-alias-dtd",
+  "script": "XMLNodeInfo ((POSIX file \"$FILES/dtd.xml\") as alias)"
+ },
+ {
+  "name": "info-file-string-html",
+  "script": "XMLNodeInfo \"$FILES/page.html\""
+ },
+ {
+  "name": "info-file-invalid",
+  "script": "XMLNodeInfo (POSIX file \"$FILES/invalid.xml\")"
+ },
+ {
+  "name": "info-file-latin1",
+  "script": "XMLNodeInfo (POSIX file \"$FILES/latin1.xml\")"
+ },
+ {
+  "name": "info-file-missing",
+  "script": "XMLNodeInfo (POSIX file \"$FILES/nope.xml\")"
+ },
+ {
+  "name": "display-document",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "display-no-formatting",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLDisplayXML d without formatting\nXMLClose d"
+ },
+ {
+  "name": "display-no-declaration",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLDisplayXML d without xml declaration\nXMLClose d"
+ },
+ {
+  "name": "display-encoding",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLDisplayXML d encoding \"ISO-8859-1\"\nXMLClose d"
+ },
+ {
+  "name": "display-no-nsclean",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLDisplayXML d without nsclean\nXMLClose d"
+ },
+ {
+  "name": "display-element",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLDisplayXML (XMLChild r index 1)\nXMLDisplayXML (XMLChild r index 1) without formatting\nXMLClose d"
+ },
+ {
+  "name": "display-namespaced",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/namespaces.xml\")\nXMLDisplayXML (XMLChild (XMLRoot d) index 3)\nXMLDisplayXML (XMLChild (XMLRoot d) index 3) without nsclean\nXMLClose d"
+ },
+ {
+  "name": "display-text",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLDisplayXML (XMLChild (XMLFind r name \"note\") index 1)\nXMLClose d"
+ },
+ {
+  "name": "display-list",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLDisplayXML {XMLChild r index 1, XMLChild r index 4}\nXMLClose d"
+ },
+ {
+  "name": "display-keep-blanks",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\") with keep blanks\nXMLDisplayXML d\nXMLDisplayXML d without formatting\nXMLClose d"
+ },
+ {
+  "name": "display-dtd",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/dtd.xml\")\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "display-unicode",
+  "script": "set d to XMLOpen from string \"<a>é ☃ &#x1F600;</a>\"\nXMLDisplayXML d\nXMLDisplayXML d encoding \"US-ASCII\"\nXMLClose d"
+ },
+ {
+  "name": "display-indent-string",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset old to XMLSetIndentString \"  \"\nXMLDisplayXML (XMLChild (XMLRoot d) index 1)\nXMLSetIndentString old\nXMLClose d"
+ },
+ {
+  "name": "change-set-attribute",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLSetAttribute b name \"id\" to \"new\"\nXMLSetAttribute b name \"extra\" to \"x\"\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-set-attribute-number",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLSetAttribute b name \"n\" to 42\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-set-attribute-lists",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLSetAttribute b name {\"a1\", \"a2\"} to {\"1\", \"2\"}\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-set-attribute-missing-value",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLSetAttribute b name {\"id\", \"lang\"} to {missing value, \"de\"}\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-set-attribute-suppressing",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLSetAttribute b name {\"id\", \"lang\"} to {missing value, \"de\"} with suppressing\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-set-attribute-namespace",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLSetAttribute b name \"lang\" to \"en\" namespace \"http://www.w3.org/XML/1998/namespace\"\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-set-attribute-escaping",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLSetAttribute b name \"q\" to \"a<b & \\\"c\\\"\"\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-set-attribute-no-to",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLSetAttribute b name \"q\"\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-remove-attribute",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLRemoveAttribute b name \"lang\"\nXMLRemoveAttribute b name \"nope\"\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-remove-attribute-list",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLRemoveAttribute b name {\"id\", \"lang\"}\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-remove",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLRemove b\nXMLCount r\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-remove-then-use",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nset t to XMLChild b index 1\nXMLRemove b\nXMLTagName t\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-remove-root",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLRemove r\nXMLRoot d\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-remove-list",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLRemove {XMLChild r index 1, XMLChild r index 2}\nXMLCount r\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-remove-children",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLRemoveChildren b\nXMLCount b\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-new-child-string",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nset c to XMLNewChild \"<isbn>123</isbn>\" at b\nXMLTagName c\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-new-child-text",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nset c to XMLNewChild \"plain text\" at b\nXMLNodeInfo c\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-new-child-several",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLNewChild \"<x/><y/>\" at b\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-new-child-clone",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nset c to XMLNewChild (XMLChild r index 2) at b\nXMLNodeInfo c\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-new-child-clone-list",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLNewChild {XMLChild r index 2, XMLChild r index 3} at b\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-new-child-invalid",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLNewChild \"<a><b></a>\" at b\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-new-child-namespace",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nset c to XMLNewChild \"<dc:subject>whale</dc:subject>\" at b\nXMLNodeInfo c\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-new-child-no-nsclean",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLNewChild \"<dc:subject xmlns:dc=\\\"http://purl.org/dc/elements/1.1/\\\">whale</dc:subject>\" at b without nsclean\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-new-child-keep-blanks",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLNewChild \"<a>  <b/>  </a>\" at b with keep blanks\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-new-child-no-at",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLNewChild \"<a/>\"\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-new-sibling-after",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nset s to XMLNewSibling \"<book id=\\\"b0\\\"/>\" after b\nXMLGetAttribute (XMLChild r index 2) name \"id\"\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-new-sibling-before",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLNewSibling \"<book id=\\\"b0\\\"/>\" before b\nXMLGetAttribute (XMLChild r index 1) name \"id\"\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-new-sibling-clone",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLNewSibling (XMLChild r index 3) before b\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-new-sibling-neither",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLNewSibling \"<x/>\"\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-new-sibling-of-root",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLNewSibling \"<x/>\" after r\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-set-xml",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLSetXML b to \"<t>new</t><u/>\"\nXMLCount b\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-set-xml-invalid",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLSetXML b to \"<t>\"\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-set-text",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLSetText (XMLChild b index 1) to \"New & <title>\"\nXMLGetText (XMLChild b index 1)\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-set-text-element",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLSetText b to \"just text\"\nXMLCount b\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-set-text-list",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLSetText {XMLChild b index 1, XMLChild b index 3} to {\"T\", \"Y\"}\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-set-text-missing-value",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLSetText {XMLChild b index 1, XMLChild b index 3} to {missing value, \"Y\"}\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-set-text-suppressing",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLSetText {XMLChild b index 1, XMLChild b index 3} to {missing value, \"Y\"} with suppressing\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-set-text-number",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLSetText (XMLChild b index 3) to 1900\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-append-text",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLAppendText \" (novel)\" at (XMLChild b index 1)\nXMLGetText (XMLChild b index 1)\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "change-append-text-empty-element",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLAppendText \"filled\" at (XMLFind r name \"empty\")\nXMLGetText (XMLFind r name \"empty\")\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "ns-get",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/namespaces.xml\")\nset r to XMLRoot d\nXMLGetNameSpace r\nXMLGetNameSpace (XMLChild r index 1)\nXMLGetNameSpace (XMLChild r index 2)\nXMLClose d"
+ },
+ {
+  "name": "ns-get-none",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/namespaces.xml\")\nset r to XMLRoot d\nXMLGetNameSpace (XMLRoot (XMLOpen from string \"<a/>\"))\nXMLClose d"
+ },
+ {
+  "name": "ns-get-attribute",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/namespaces.xml\")\nset r to XMLRoot d\nXMLGetNameSpace (XMLChild r index 1)\nXMLClose d"
+ },
+ {
+  "name": "ns-get-all",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/namespaces.xml\")\nset r to XMLRoot d\nXMLGetNameSpaces r\nXMLGetNameSpaces (XMLChild (XMLChild r index 3) index 1)\nXMLClose d"
+ },
+ {
+  "name": "ns-from-prefix",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/namespaces.xml\")\nset r to XMLRoot d\nXMLGetNameSpaceFromPrefix r prefix \"a\"\nXMLGetNameSpaceFromPrefix r prefix \"\"\nXMLGetNameSpaceFromPrefix (XMLChild (XMLChild r index 3) index 1) prefix \"c\"\nXMLClose d"
+ },
+ {
+  "name": "ns-from-prefix-missing",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/namespaces.xml\")\nset r to XMLRoot d\nXMLGetNameSpaceFromPrefix r prefix \"zz\"\nXMLClose d"
+ },
+ {
+  "name": "ns-add",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/namespaces.xml\")\nset r to XMLRoot d\nXMLAddNamespace {nsprefix:\"n\", nsurl:\"urn:new\"} at r\nXMLGetNameSpaces r\nXMLDisplayXML r without formatting\nXMLClose d"
+ },
+ {
+  "name": "ns-add-default",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/namespaces.xml\")\nset r to XMLRoot d\nXMLAddNamespace {nsprefix:\"\", nsurl:\"urn:other\"} at (XMLChild r index 2)\nXMLDisplayXML r without formatting\nXMLClose d"
+ },
+ {
+  "name": "ns-add-existing-prefix",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/namespaces.xml\")\nset r to XMLRoot d\nXMLAddNamespace {nsprefix:\"a\", nsurl:\"urn:changed\"} at r\nXMLClose d"
+ },
+ {
+  "name": "ns-attribute-with-namespace",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/namespaces.xml\")\nset r to XMLRoot d\nXMLGetAttribute (XMLChild r index 1) name \"attr\" namespace \"urn:b\"\nXMLGetAttribute (XMLChild r index 1) name \"attr\"\nXMLClose d"
+ },
+ {
+  "name": "search-find-name",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLTagName (XMLFind r name \"book\")\nXMLClose d"
+ },
+ {
+  "name": "search-find-all",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLFind r name \"book\" with all occurrences\nXMLClose d"
+ },
+ {
+  "name": "search-find-deep",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLGetText (XMLFind r name \"title\")\nXMLFind r name \"title\" with all occurrences\nXMLClose d"
+ },
+ {
+  "name": "search-find-attribute",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLGetAttribute (XMLFind r key \"lang\" value \"fr\") name \"id\"\nXMLClose d"
+ },
+ {
+  "name": "search-find-key-only",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLFind r key \"currency\" with all occurrences\nXMLClose d"
+ },
+ {
+  "name": "search-find-name-and-key",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLFind r name \"book\" key \"id\" value \"b2\"\nXMLClose d"
+ },
+ {
+  "name": "search-find-prefixed",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset b to XMLChild r index 1\nXMLTagName (XMLFind b name \"creator\")\nXMLFind b name \"dc:creator\"\nXMLClose d"
+ },
+ {
+  "name": "search-find-missing",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLFind r name \"nope\"\nXMLClose d"
+ },
+ {
+  "name": "search-find-missing-all",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLFind r name \"nope\" with all occurrences\nXMLClose d"
+ },
+ {
+  "name": "search-find-self",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLFind r name \"library\"\nXMLClose d"
+ },
+ {
+  "name": "search-find-in-document",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLTagName (XMLFind d name \"title\")\nXMLClose d"
+ },
+ {
+  "name": "search-find-nothing",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLFind r\nXMLClose d"
+ },
+ {
+  "name": "search-find-text",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nset t to XMLFindText \"Hugo\" in r\nXMLNodeInfo t\nXMLTagName (XMLParent t)\nXMLClose d"
+ },
+ {
+  "name": "search-find-text-all",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLFindText \"e\" in r with all occurrences\nXMLClose d"
+ },
+ {
+  "name": "search-find-text-missing",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLFindText \"zzz\" in r\nXMLClose d"
+ },
+ {
+  "name": "search-find-text-case",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLFindText \"hugo\" in r\nXMLClose d"
+ },
+ {
+  "name": "search-find-text-cdata",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLFindText \"cdata\" in r with all occurrences\nXMLClose d"
+ },
+ {
+  "name": "search-regexp",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLGetText (XMLRegexp \"^[0-9]{4}$\" in r)\nXMLClose d"
+ },
+ {
+  "name": "search-regexp-all",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLRegexp \"[0-9]\" in r with all occurrences\nXMLClose d"
+ },
+ {
+  "name": "search-regexp-not-conforming",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLRegexp \"[0-9]\" in r with all occurrences without conforming\nXMLClose d"
+ },
+ {
+  "name": "search-regexp-invalid",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLRegexp \"([\" in r\nXMLClose d"
+ },
+ {
+  "name": "search-regexp-missing",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLRegexp \"^zzz$\" in r\nXMLClose d"
+ },
+ {
+  "name": "url-base",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/base.xml\")\nset r to XMLRoot d\nset leaf to XMLChild (XMLChild r index 1) index 1\nXMLBase d\nXMLBase r\nXMLBase leaf\nXMLClose d"
+ },
+ {
+  "name": "url-base-as-alias",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/base.xml\")\nset r to XMLRoot d\nset leaf to XMLChild (XMLChild r index 1) index 1\nXMLBase d as alias\nXMLClose d"
+ },
+ {
+  "name": "url-set-base",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/base.xml\")\nset r to XMLRoot d\nset leaf to XMLChild (XMLChild r index 1) index 1\nXMLSetBase leaf to \"other/\"\nXMLBase leaf\nXMLDisplayXML r without formatting\nXMLClose d"
+ },
+ {
+  "name": "url-set-base-empty",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/base.xml\")\nset r to XMLRoot d\nset leaf to XMLChild (XMLChild r index 1) index 1\nXMLSetBase (XMLChild r index 1) to \"\"\nXMLBase leaf\nXMLClose d"
+ },
+ {
+  "name": "url-absolute",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/base.xml\")\nset r to XMLRoot d\nset leaf to XMLChild (XMLChild r index 1) index 1\nXMLAbsoluteURL \"file.html\" from leaf\nXMLAbsoluteURL \"../x.html\" from leaf\nXMLAbsoluteURL \"http://other.com/y\" from leaf\nXMLClose d"
+ },
+ {
+  "name": "url-absolute-from-url",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/base.xml\")\nset r to XMLRoot d\nset leaf to XMLChild (XMLChild r index 1) index 1\nXMLAbsoluteURL \"b.html\" from \"http://h.com/a/\"\nXMLClose d"
+ },
+ {
+  "name": "url-absolute-as-alias",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/base.xml\")\nset r to XMLRoot d\nset leaf to XMLChild (XMLChild r index 1) index 1\nXMLAbsoluteURL \"simple.xml\" from d as alias\nXMLClose d"
+ },
+ {
+  "name": "url-relative",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/base.xml\")\nset r to XMLRoot d\nset leaf to XMLChild (XMLChild r index 1) index 1\nXMLRelativeURL \"http://example.com/dir/sub/other.html\" from leaf\nXMLRelativeURL \"http://example.com/x.html\" from leaf\nXMLClose d"
+ },
+ {
+  "name": "error-level",
+  "script": "set old to XMLErrorLevel\nXMLErrorLevel 3\nXMLErrorLevel old"
+ },
+ {
+  "name": "error-level-3-opens-invalid",
+  "script": "set old to XMLErrorLevel 3\ntry\nset d to XMLOpen (POSIX file \"$FILES/invalid.xml\")\nXMLDisplayXML d\nXMLClose d\nend try\nXMLErrorLevel old"
+ },
+ {
+  "name": "error-level-1-warning",
+  "script": "set old to XMLErrorLevel 1\ntry\nset d to XMLOpen from string \"<?xml version=\\\"1.0\\\" encoding=\\\"nonsense\\\"?><a/>\"\nXMLClose d\nend try\nXMLError\nXMLErrorLevel old"
+ },
+ {
+  "name": "extended-char",
+  "script": "set old to XMLExtendedChar true\nset d to XMLOpen from string \"<a>x&#1;y</a>\"\nXMLGetText (XMLRoot d)\nXMLClose d\nXMLExtendedChar old"
+ },
+ {
+  "name": "extended-char-off",
+  "script": "set old to XMLExtendedChar false\nset d to XMLOpen from string \"<a>x&#1;y</a>\"\nXMLExtendedChar old"
+ },
+ {
+  "name": "indent-string",
+  "script": "set old to XMLSetIndentString \"    \"\nXMLSetIndentString old"
+ },
+ {
+  "name": "doc-url",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLURL d\nXMLURL d with parent\nXMLURL (XMLRoot d)\nXMLClose d"
+ },
+ {
+  "name": "doc-url-as-text",
+  "script": "set d to XMLOpen from string \"<a/>\"\nXMLSave d in (POSIX file \"$TMP/url-as-text.xml\")\nXMLURL d as text\nXMLClose d"
+ },
+ {
+  "name": "doc-url-as-alias",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLURL d as alias\nXMLClose d"
+ },
+ {
+  "name": "doc-url-string",
+  "script": "set d to XMLOpen from string \"<a/>\"\nXMLURL d"
+ },
+ {
+  "name": "doc-set-url",
+  "script": "set d to XMLOpen from string \"<a/>\"\nXMLSetURL d to (POSIX file \"$TMP/set-url.xml\")\nXMLURL d\nXMLSave d\nXMLClose d\nreadtext (POSIX file \"$TMP/set-url.xml\")"
+ },
+ {
+  "name": "doc-document",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/latin1.xml\") in pool \"mtc-x7\"\nset e to XMLDocument (POSIX file \"$FILES/latin1.xml\") in pool \"mtc-x7\"\nXMLTagName (XMLRoot e)\nXMLClose d"
+ },
+ {
+  "name": "doc-document-twice",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/latin1.xml\") in pool \"mtc-x8\"\nset e to XMLOpen (POSIX file \"$FILES/latin1.xml\") in pool \"mtc-x8\"\nXMLDocument (POSIX file \"$FILES/latin1.xml\") in pool \"mtc-x8\"\nDeletePool \"mtc-x8\""
+ },
+ {
+  "name": "doc-document-not-open",
+  "script": "XMLDocument (POSIX file \"$FILES/latin1.xml\") in pool \"mtc-x9\""
+ },
+ {
+  "name": "doc-save",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLSave d in (POSIX file \"$TMP/save.xml\")\nXMLClose d\nreadtext (POSIX file \"$TMP/save.xml\")"
+ },
+ {
+  "name": "doc-save-options",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLSave d in (POSIX file \"$TMP/save-options.xml\") without formatting and xml declaration\nXMLClose d\nreadtext (POSIX file \"$TMP/save-options.xml\")"
+ },
+ {
+  "name": "doc-save-encoding",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/latin1.xml\")\nXMLSave d in (POSIX file \"$TMP/save-latin1.xml\")\nXMLClose d\nreadtext (POSIX file \"$TMP/save-latin1.xml\")"
+ },
+ {
+  "name": "doc-save-encoding-parameter",
+  "script": "set d to XMLOpen from string \"<a>café</a>\"\nXMLSave d in (POSIX file \"$TMP/save-encoding.xml\") encoding \"ISO-8859-1\"\nXMLClose d\nreadtext (POSIX file \"$TMP/save-encoding.xml\")"
+ },
+ {
+  "name": "doc-save-without-in",
+  "script": "set d to XMLOpen from string \"<a/>\"\nXMLSave d in (POSIX file \"$TMP/again.xml\")\nXMLSetAttribute (XMLRoot d) name \"x\" to \"1\"\nXMLSave d\nXMLClose d\nreadtext (POSIX file \"$TMP/again.xml\")"
+ },
+ {
+  "name": "doc-save-new-without-in",
+  "script": "set d to XMLOpen from string \"<a/>\"\nXMLSave d"
+ },
+ {
+  "name": "doc-save-element",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLSave (XMLChild (XMLRoot d) index 1) in (POSIX file \"$TMP/element.xml\")\nXMLClose d\nreadtext (POSIX file \"$TMP/element.xml\")"
+ },
+ {
+  "name": "doc-save-missing-folder",
+  "script": "set d to XMLOpen from string \"<a/>\"\nXMLSave d in (POSIX file \"$TMP/nope/x.xml\")"
+ },
+ {
+  "name": "doc-encoding",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLGetEncoding d\nXMLSetEncoding d to \"ISO-8859-1\"\nXMLGetEncoding d\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "doc-encoding-none",
+  "script": "set d to XMLOpen from string \"<a/>\"\nXMLGetEncoding d\nXMLClose d"
+ },
+ {
+  "name": "doc-encoding-invalid",
+  "script": "set d to XMLOpen from string \"<a/>\"\nXMLSetEncoding d to \"nonsense\"\nXMLDisplayXML d\nXMLClose d"
+ },
+ {
+  "name": "doc-clone",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset e to XMLCloneDocument d\nXMLDisplayXML e\nXMLURL e\nXMLClose e\nXMLClose d"
+ },
+ {
+  "name": "doc-clone-in-pool",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset e to XMLCloneDocument d in pool \"mtc-x2\"\nGetPool e\nXMLClose e\nXMLClose d"
+ },
+ {
+  "name": "doc-clone-independent",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset e to XMLCloneDocument d\nXMLRemove (XMLRoot e)\nXMLTagName (XMLRoot d)\nXMLClose e\nXMLClose d"
+ },
+ {
+  "name": "doc-xinclude-none",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLXInclude d\nXMLClose d"
+ },
+ {
+  "name": "doc-xinclude-missing",
+  "script": "set d to XMLOpen from string \"<doc xmlns:xi=\\\"http://www.w3.org/2001/XInclude\\\"><xi:include href=\\\"nope.xml\\\"/></doc>\"\nXMLXInclude d\nXMLClose d"
+ },
+ {
+  "name": "doc-catalog",
+  "script": "XMLCatalog \"-//W3C//DTD XHTML 1.0 Strict//EN\""
+ },
+ {
+  "name": "doc-catalog-unknown",
+  "script": "XMLCatalog \"urn:nothing\""
+ },
+ {
+  "name": "doc-list",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\") in pool \"mtc-x3\"\nset e to XMLOpen from string \"<a/>\" in pool \"mtc-x3\"\nXMLListDocuments \"mtc-x3\"\nXMLListDocuments \"mtc-x3\" as string\nDeletePool \"mtc-x3\"\nXMLListDocuments \"mtc-x3\""
+ },
+ {
+  "name": "doc-list-plists-separate",
+  "script": "set p to PlistNew {a:1} in pool \"mtc-x4\"\nset d to XMLOpen from string \"<a/>\" in pool \"mtc-x4\"\nXMLListDocuments \"mtc-x4\"\nPlistListDocuments \"mtc-x4\"\nDeletePool \"mtc-x4\""
+ },
+ {
+  "name": "doc-id",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLSetDocID d to \"mine\"\nXMLTagName (XMLRoot (XMLGetDocByID \"mine\"))\nXMLSetDocID d to \"other\"\nXMLClose d"
+ },
+ {
+  "name": "doc-id-missing",
+  "script": "XMLGetDocByID \"mtc-no-such-id\""
+ },
+ {
+  "name": "doc-id-plist-separate",
+  "script": "set p to PlistNew {a:1}\nPlistSetDocID p to \"shared-id\"\nXMLGetDocByID \"shared-id\""
+ },
+ {
+  "name": "doc-extras",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLSetExtras d to {a:1, b:{\"x\"}}\nXMLGetExtras d\nXMLClose d"
+ },
+ {
+  "name": "doc-extras-none",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLGetExtras d\nXMLClose d"
+ },
+ {
+  "name": "doc-extras-node",
+  "script": "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLSetExtras (XMLRoot d) to \"x\"\nXMLGetExtras d\nXMLClose d"
+ },
+ {
+  "name": "c14n-default",
+  "script": "set d to XMLOpen from string \"<?xml version=\\\"1.0\\\"?><!-- c --><a xmlns:u=\\\"urn:unused\\\" b=\\\"2\\\" a=\\\"1\\\"><x   y=\\\"z\\\"/><!-- inner --></a>\"\nXMLc14n d\nXMLClose d"
+ },
+ {
+  "name": "c14n-no-comments",
+  "script": "set d to XMLOpen from string \"<?xml version=\\\"1.0\\\"?><!-- c --><a xmlns:u=\\\"urn:unused\\\" b=\\\"2\\\" a=\\\"1\\\"><x   y=\\\"z\\\"/><!-- inner --></a>\"\nXMLc14n d without comments\nXMLClose d"
+ },
+ {
+  "name": "c14n-exclusive",
+  "script": "set d to XMLOpen from string \"<?xml version=\\\"1.0\\\"?><!-- c --><a xmlns:u=\\\"urn:unused\\\" b=\\\"2\\\" a=\\\"1\\\"><x   y=\\\"z\\\"/><!-- inner --></a>\"\nXMLc14n d with exclusive\nXMLClose d"
+ },
+ {
+  "name": "c14n-exclusive-prefixes",
+  "script": "set d to XMLOpen from string \"<?xml version=\\\"1.0\\\"?><!-- c --><a xmlns:u=\\\"urn:unused\\\" b=\\\"2\\\" a=\\\"1\\\"><x   y=\\\"z\\\"/><!-- inner --></a>\"\nXMLc14n d with exclusive inclusive prefixes {\"u\"}\nXMLClose d"
+ },
+ {
+  "name": "c14n-digest-sha1",
+  "script": "set d to XMLOpen from string \"<?xml version=\\\"1.0\\\"?><!-- c --><a xmlns:u=\\\"urn:unused\\\" b=\\\"2\\\" a=\\\"1\\\"><x   y=\\\"z\\\"/><!-- inner --></a>\"\nXMLc14n d digest \"SHA1\"\nXMLClose d"
+ },
+ {
+  "name": "c14n-digest-md5",
+  "script": "set d to XMLOpen from string \"<?xml version=\\\"1.0\\\"?><!-- c --><a xmlns:u=\\\"urn:unused\\\" b=\\\"2\\\" a=\\\"1\\\"><x   y=\\\"z\\\"/><!-- inner --></a>\"\nXMLc14n d digest \"MD5\"\nXMLClose d"
+ },
+ {
+  "name": "c14n-digest-invalid",
+  "script": "set d to XMLOpen from string \"<?xml version=\\\"1.0\\\"?><!-- c --><a xmlns:u=\\\"urn:unused\\\" b=\\\"2\\\" a=\\\"1\\\"><x   y=\\\"z\\\"/><!-- inner --></a>\"\nXMLc14n d digest \"SHA256\"\nXMLClose d"
+ },
+ {
+  "name": "c14n-in-file",
+  "script": "set d to XMLOpen from string \"<?xml version=\\\"1.0\\\"?><!-- c --><a xmlns:u=\\\"urn:unused\\\" b=\\\"2\\\" a=\\\"1\\\"><x   y=\\\"z\\\"/><!-- inner --></a>\"\nXMLc14n d in (POSIX file \"$TMP/c14n.xml\")\nXMLClose d\nreadtext (POSIX file \"$TMP/c14n.xml\")"
+ },
+ {
+  "name": "c14n-digest-in-file",
+  "script": "set d to XMLOpen from string \"<?xml version=\\\"1.0\\\"?><!-- c --><a xmlns:u=\\\"urn:unused\\\" b=\\\"2\\\" a=\\\"1\\\"><x   y=\\\"z\\\"/><!-- inner --></a>\"\nXMLc14n d in (POSIX file \"$TMP/digest.bin\") digest \"SHA1\"\nXMLClose d"
+ },
+ {
+  "name": "c14n-element",
+  "script": "set d to XMLOpen from string \"<?xml version=\\\"1.0\\\"?><!-- c --><a xmlns:u=\\\"urn:unused\\\" b=\\\"2\\\" a=\\\"1\\\"><x   y=\\\"z\\\"/><!-- inner --></a>\"\nXMLc14n (XMLRoot d)\nXMLClose d"
+ },
+ {
+  "name": "pool-get",
+  "script": "set d to XMLOpen from string \"<a/>\" in pool \"mtc-x5\"\nGetPool d\nGetPool (XMLRoot d)\nXMLClose d"
+ },
+ {
+  "name": "pool-delete",
+  "script": "set d to XMLOpen from string \"<a/>\" in pool \"mtc-x6\"\nDeletePool \"mtc-x6\"\nXMLRoot d"
+ },
+ {
+  "name": "c14n-subset-list",
+  "script": "set d to XMLOpen from string \"<a><b x='1'>t<!--c--><i/></b><c/></a>\"\nXMLc14n (XMLXPath d with \"//b|//b/@x|//i\")\nXMLClose d"
+ },
+ {
+  "name": "c14n-subset-xpathref",
+  "script": "set d to XMLOpen from string \"<a><b x='1'>t<!--c--><i/></b><c/></a>\"\nXMLc14n {XMLRef:(XMLChild (XMLRoot d) index 1), xpath pattern:\"descendant-or-self::node()|.//@*\"}\nXMLClose d"
+ },
+ {
+  "name": "c14n-empty-list",
+  "script": "XMLc14n {}"
+ },
+ {
+  "name": "new-child-at-attribute",
+  "script": "set d to XMLOpen from string \"<a k='v' j='w'>x<b/></a>\"\ntry\nXMLNewChild \"<z/>\" at (item 1 of (XMLXPath d with \"//@j\"))\non error number n\nXMLClose d\nerror number n\nend try"
+ },
+ {
+  "name": "new-child-second-root",
+  "script": "set d to XMLOpen from string \"<a k='v' j='w'>x<b/></a>\"\ntry\nXMLNewChild \"<z/>\" at d\non error number n\nXMLClose d\nerror number n\nend try"
+ },
+ {
+  "name": "remove-attribute-node",
+  "script": "set d to XMLOpen from string \"<a k='v' j='w'>x<b/></a>\"\nXMLRemove (item 1 of (XMLXPath d with \"//@k\"))\nset x to XMLDisplayXML (XMLRoot d)\nXMLClose d\nx"
+ },
+ {
+  "name": "set-text-attribute-node",
+  "script": "set d to XMLOpen from string \"<a k='v' j='w'>x<b/></a>\"\nXMLSetText (item 1 of (XMLXPath d with \"//@j\")) to \"new\"\nset x to XMLDisplayXML (XMLRoot d)\nXMLClose d\nx"
+ },
+ {
+  "name": "extended-char-literal-markup",
+  "script": "set d to XMLOpen from string \"<a t='&#1;'><!-- &#1; --><![CDATA[&#2;]]><?p &#3;?>x&#4;</a>\"\nset a to XMLRoot d\nset r to {XMLGetAttribute a name \"t\", XMLGetText (XMLChild a index 1), XMLGetText (XMLChild a index 2), XMLGetText (XMLChild a index 3), XMLGetText (XMLChild a index 4)}\nXMLClose d\nr"
+ },
+ {
+  "name": "xpathref-get-text",
+  "script": "set d to XMLOpen from string \"<a><b n='1'>one</b><b n='2'>two</b><c/></a>\"\nset r to XMLRoot d\nset x to XMLGetText {XMLRef:r, xpath pattern:\"b\"}\nXMLClose d\nx"
+ },
+ {
+  "name": "xpathref-single",
+  "script": "set d to XMLOpen from string \"<a><b n='1'>one</b><b n='2'>two</b><c/></a>\"\nset r to XMLRoot d\nset x to XMLGetText {XMLRef:r, xpath pattern:\"c\"}\nXMLClose d\nx"
+ },
+ {
+  "name": "xpathref-empty",
+  "script": "set d to XMLOpen from string \"<a><b n='1'>one</b><b n='2'>two</b><c/></a>\"\nset r to XMLRoot d\nset x to XMLGetText {XMLRef:r, xpath pattern:\"zzz\"}\nXMLClose d\nx"
+ },
+ {
+  "name": "xpathref-not-nodes",
+  "script": "set d to XMLOpen from string \"<a><b n='1'>one</b><b n='2'>two</b><c/></a>\"\nset r to XMLRoot d\nset x to XMLGetText {XMLRef:r, xpath pattern:\"count(b)\"}\nXMLClose d\nx"
+ },
+ {
+  "name": "xpathref-attributes",
+  "script": "set d to XMLOpen from string \"<a><b n='1'>one</b><b n='2'>two</b><c/></a>\"\nset r to XMLRoot d\nset x to XMLGetAttribute {XMLRef:r, xpath pattern:\"b\"} name \"n\"\nXMLClose d\nx"
+ },
+ {
+  "name": "xpathref-exists",
+  "script": "set d to XMLOpen from string \"<a><b n='1'>one</b><b n='2'>two</b><c/></a>\"\nset r to XMLRoot d\nset x to XMLExists {XMLRef:r, xpath pattern:\"b\"}\nXMLClose d\nx"
+ },
+ {
+  "name": "xpathref-xpath",
+  "script": "set d to XMLOpen from string \"<a><b n='1'>one</b><b n='2'>two</b><c/></a>\"\nset r to XMLRoot d\nset x to XMLXPath {XMLRef:r, xpath pattern:\"b\"} with \"string(@n)\"\nXMLClose d\nx"
+ },
+ {
+  "name": "xpathref-set-text",
+  "script": "set d to XMLOpen from string \"<a><b n='1'>one</b><b n='2'>two</b><c/></a>\"\nset r to XMLRoot d\nXMLSetText {XMLRef:r, xpath pattern:\"b\"} to \"z\"\nset x to XMLDisplayXML r\nXMLClose d\nx"
+ },
+ {
+  "name": "xpathref-clone",
+  "script": "set d to XMLOpen from string \"<a><b n='1'>one</b><b n='2'>two</b><c/></a>\"\nset r to XMLRoot d\nXMLNewChild {XMLRef:r, xpath pattern:\"b\"} at (XMLChild r index 3)\nset x to XMLDisplayXML r\nXMLClose d\nx"
+ },
+ {
+  "name": "xpathref-remove",
+  "script": "set d to XMLOpen from string \"<a><b n='1'>one</b><b n='2'>two</b><c/></a>\"\nset r to XMLRoot d\nXMLRemove {XMLRef:r, xpath pattern:\"b\"}\nset x to XMLDisplayXML r\nXMLClose d\nx"
+ }
+]

@@ -1,0 +1,51 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "strp",
+        "fields" : [
+          {
+            "key" : "enco",
+            "value" : {
+              "text" : "%Y-%m-%d",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "rtyp",
+            "value" : {
+              "code" : "doub",
+              "type" : "type"
+            }
+          },
+          {
+            "key" : "GMT ",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "1850-06-01",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : -4752086400,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "strptime-1850-as-real",
+  "recordedAt" : "2026-09-27T19:52:27Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "strptime \"1850-06-01\" encoding \"%Y-%m-%d\" as real with GMT",
+  "timeZone" : "America/New_York"
+}

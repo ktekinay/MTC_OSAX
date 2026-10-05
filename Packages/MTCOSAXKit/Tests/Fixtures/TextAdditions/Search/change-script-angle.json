@@ -1,0 +1,56 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RPLl",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "\\1",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "<http://x.com>",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "CaSe",
+            "value" : {
+              "type" : "fals"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "^<(.*)>$",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "http://x.com",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "change-script-angle",
+  "recordedAt" : "2026-09-27T18:50:58Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "change \"^<(.*)>$\" into \"\\\\1\" in \"<http://x.com>\" with regexp without case sensitive"
+}

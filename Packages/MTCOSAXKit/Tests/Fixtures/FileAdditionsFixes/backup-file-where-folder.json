@@ -1,0 +1,450 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-file-where-folder",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-file-where-folder/src/sub/deep",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/src/sub/deep/",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-file-where-folder/src/skip",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/src/skip/",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-file-where-folder/src/pkg.app/Contents",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/src/pkg.app/Contents/",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-file-where-folder/dst",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/dst/",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-file-where-folder/src/a.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-file-where-folder/src/b.md",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-file-where-folder/src/.hidden",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-file-where-folder/src/sub/c.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-file-where-folder/src/sub/deep/d.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-file-where-folder/src/skip/e.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-file-where-folder/src/pkg.app/Contents/Info.plist",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-file-where-folder/dst/sub",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "SYNC",
+        "fields" : [
+          {
+            "key" : "onto",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-file-where-folder/dst",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "Repo",
+            "value" : {
+              "integer" : 2,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-file-where-folder/src",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "Items created : \r\t/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/dst/b.md\n\t/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/dst/pkg.app\n\t/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/dst/skip/e.txt\n\t/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/dst/a.txt\nErrors : \r/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/dst/sub/deep  Error : 20 \n/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/dst/sub/c.txt  Error : 20 \n",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "lsfl",
+        "fields" : [
+          {
+            "key" : "invi",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "rtyp",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "form",
+                  "value" : {
+                    "code" : "prop",
+                    "type" : "enum"
+                  }
+                },
+                {
+                  "key" : "want",
+                  "value" : {
+                    "code" : "prop",
+                    "type" : "type"
+                  }
+                },
+                {
+                  "key" : "seld",
+                  "value" : {
+                    "code" : "psxP",
+                    "type" : "type"
+                  }
+                },
+                {
+                  "key" : "from",
+                  "value" : {
+                    "type" : "null"
+                  }
+                }
+              ],
+              "type" : "obj "
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/backup-file-where-folder/dst",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/dst/b.md",
+              "type" : "utxt"
+            },
+            {
+              "text" : "/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/dst/pkg.app/",
+              "type" : "utxt"
+            },
+            {
+              "text" : "/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/dst/skip/e.txt",
+              "type" : "utxt"
+            },
+            {
+              "text" : "/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/dst/sub",
+              "type" : "utxt"
+            },
+            {
+              "text" : "/private/tmp/mtc-fixtures/tmp/backup-file-where-folder/dst/a.txt",
+              "type" : "utxt"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "backup-file-where-folder",
+  "recordedAt" : "2026-10-01T19:25:44Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "mkdir (POSIX file \"$TMP/backup-file-where-folder\")\nmkdir (POSIX file \"$TMP/backup-file-where-folder/src/sub/deep\")\nmkdir (POSIX file \"$TMP/backup-file-where-folder/src/skip\")\nmkdir (POSIX file \"$TMP/backup-file-where-folder/src/pkg.app/Contents\")\nmkdir (POSIX file \"$TMP/backup-file-where-folder/dst\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-file-where-folder/src/a.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-file-where-folder/src/b.md\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-file-where-folder/src/.hidden\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-file-where-folder/src/sub/c.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-file-where-folder/src/sub/deep/d.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-file-where-folder/src/skip/e.txt\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-file-where-folder/src/pkg.app/Contents/Info.plist\")\nwritetext \"x\" to (POSIX file \"$TMP/backup-file-where-folder/dst/sub\")\nbackup (POSIX file \"$TMP/backup-file-where-folder/src\") onto (POSIX file \"$TMP/backup-file-where-folder/dst\") level 2\nlist files (POSIX file \"$TMP/backup-file-where-folder/dst\") with invisibles as unix path",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

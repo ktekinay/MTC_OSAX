@@ -1,0 +1,66 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/w-number.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 12,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Read",
+        "fields" : [
+          {
+            "key" : "enco",
+            "value" : {
+              "text" : "ISO-8859-1",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/w-number.txt",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "12",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "writetext-number",
+  "recordedAt" : "2026-09-27T19:03:49Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "writetext 12 to POSIX file \"$TMP/w-number.txt\"\nreadtext POSIX file \"$TMP/w-number.txt\" encoding \"ISO-8859-1\"",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

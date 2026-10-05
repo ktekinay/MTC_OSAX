@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "prtf",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "no specs",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "no specs",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "printf-no-params",
+  "recordedAt" : "2026-09-27T19:12:44Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "printf \"no specs\"",
+  "timeZone" : "America/New_York"
+}

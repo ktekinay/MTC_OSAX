@@ -1,0 +1,70 @@
+[
+ {
+  "name": "file-offset-basic",
+  "script": "file offset \"abc\" in POSIX file \"$FILES/offset.txt\""
+ },
+ {
+  "name": "file-offset-inclusive",
+  "script": "file offset \"abc\" in POSIX file \"$FILES/offset.txt\" with inclusive"
+ },
+ {
+  "name": "file-offset-after-multibyte",
+  "script": "file offset \"123\" in POSIX file \"$FILES/offset.txt\""
+ },
+ {
+  "name": "file-offset-multibyte-needle",
+  "script": "file offset \"é\" in POSIX file \"$FILES/offset.txt\""
+ },
+ {
+  "name": "file-offset-starting-at",
+  "script": "file offset \"1\" in POSIX file \"$FILES/offset.txt\" starting at 5"
+ },
+ {
+  "name": "file-offset-not-found",
+  "script": "file offset \"zzz\" in POSIX file \"$FILES/offset.txt\""
+ },
+ {
+  "name": "file-offset-first",
+  "script": "file offset \"0\" in POSIX file \"$FILES/offset.txt\""
+ },
+ {
+  "name": "file-offset-utf16",
+  "script": "file offset \"é\" in POSIX file \"$FILES/utf16le-bom.txt\" encoding \"UTF-16\""
+ },
+ {
+  "name": "file-offset-utf16le",
+  "script": "file offset \"é\" in POSIX file \"$FILES/utf16le-bom.txt\" encoding \"UTF-16LE\""
+ },
+ {
+  "name": "file-offset-latin1",
+  "script": "file offset \"é\" in POSIX file \"$FILES/latin1.txt\" encoding \"ISO-8859-1\""
+ },
+ {
+  "name": "file-offset-missing-file",
+  "script": "file offset \"a\" in POSIX file \"$FILES/nope.txt\""
+ },
+ {
+  "name": "readtext-starting-at-to-end",
+  "script": "readtext POSIX file \"$FILES/utf8.txt\" starting at 6"
+ },
+ {
+  "name": "readtext-starting-at-end",
+  "script": "readtext POSIX file \"$FILES/utf8.txt\" starting at 21"
+ },
+ {
+  "name": "readtext-starting-past-end",
+  "script": "readtext POSIX file \"$FILES/utf8.txt\" starting at 22"
+ },
+ {
+  "name": "readtext-bom-starting-at",
+  "script": "readtext POSIX file \"$FILES/utf8-bom.txt\" starting at 3"
+ },
+ {
+  "name": "writetext-posix-path",
+  "script": "writetext \"abc\" to \"$TMP/w-path.txt\"\nreadtext POSIX file \"$TMP/w-path.txt\""
+ },
+ {
+  "name": "writetext-tilde-free-posix-append",
+  "script": "writetext \"a\" to \"$TMP/w-append.txt\"\nwritetext \"b\" to \"$TMP/w-append.txt\" with append\nreadtext \"$TMP/w-append.txt\""
+ }
+]

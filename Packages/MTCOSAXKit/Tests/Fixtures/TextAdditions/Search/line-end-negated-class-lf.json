@@ -1,0 +1,40 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FINd",
+        "fields" : [
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "a\nb",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "a[^x]b",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -2763
+      }
+    }
+  ],
+  "name" : "line-end-negated-class-lf",
+  "recordedAt" : "2026-09-27T18:51:41Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "find text \"a[^x]b\" in (\"a\" & linefeed & \"b\") with regexp"
+}

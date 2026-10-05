@@ -1,0 +1,50 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RPLl",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "aBbB",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "CaSe",
+            "value" : {
+              "type" : "fals"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "B",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "axxx",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "change-case-insensitive-literal",
+  "recordedAt" : "2026-09-27T18:50:58Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "change \"B\" into \"x\" in \"aBbB\" without case sensitive"
+}

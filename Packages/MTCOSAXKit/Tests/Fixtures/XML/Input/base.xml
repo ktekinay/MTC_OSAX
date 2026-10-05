@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<root xml:base="http://example.com/dir/">
+	<child xml:base="sub/"><leaf href="file.html"/></child>
+</root>

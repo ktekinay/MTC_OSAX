@@ -1,0 +1,46 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Splt",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "aXbxc",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "aXb",
+              "type" : "utxt"
+            },
+            {
+              "text" : "c",
+              "type" : "utxt"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "split-literal-case-sensitive",
+  "recordedAt" : "2026-09-27T18:51:01Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "splittext \"aXbxc\" using \"x\""
+}

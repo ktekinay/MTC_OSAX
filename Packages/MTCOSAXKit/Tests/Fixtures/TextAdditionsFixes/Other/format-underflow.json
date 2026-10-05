@@ -1,0 +1,44 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FORM",
+        "fields" : [
+          {
+            "key" : "into",
+            "value" : {
+              "text" : "#.##",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "ZeTe",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "real" : 0.0001,
+              "type" : "doub"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "1E-04",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "format-underflow",
+  "recordedAt" : "2026-09-27T19:52:28Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "format 1.0E-4 into \"#.##\" with underflow test",
+  "timeZone" : "America/New_York"
+}

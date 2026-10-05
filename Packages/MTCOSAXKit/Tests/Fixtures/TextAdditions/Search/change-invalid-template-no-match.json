@@ -1,0 +1,48 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RPLl",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "\\q",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "abc",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -208
+      }
+    }
+  ],
+  "name" : "change-invalid-template-no-match",
+  "recordedAt" : "2026-09-28T23:20:17Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "change \"x\" into \"\\\\q\" in \"abc\" with regexp",
+  "timeZone" : "America/New_York"
+}

@@ -1,0 +1,37 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Rem%",
+        "fields" : [
+          {
+            "key" : "leav",
+            "value" : {
+              "text" : " /",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "a%2Fb%20c",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "a%2Fb%20c",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "unescapeURL-keeping-space",
+  "recordedAt" : "2026-09-27T18:58:50Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "unescapeURL \"a%2Fb%20c\" keeping \" /\""
+}

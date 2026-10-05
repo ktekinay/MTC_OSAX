@@ -1,0 +1,129 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "head",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "X-Test",
+                        "type" : "utxt"
+                      },
+                      {
+                        "text" : "hello",
+                        "type" : "utxt"
+                      },
+                      {
+                        "text" : "X-Other",
+                        "type" : "utxt"
+                      },
+                      {
+                        "text" : "2",
+                        "type" : "utxt"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "http://127.0.0.1:8765/echo",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "080000004d5443780000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "root",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "080000004d5443780000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "080000004d5443780100000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "080000004d5443780100000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "<request method=\"GET\" query=\"\" body=\"\">\n\t<header name=\"x-other\">2</header>\n\t<header name=\"x-test\">hello</header>\n</request>",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "080000004d5443780000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "get-headers",
+  "recordedAt" : "2026-09-28T14:28:51Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "set d to XMLOpen \"$HTTP/echo\" header {|X-Test|:\"hello\", |X-Other|:\"2\"}\nXMLDisplayXML (XMLRoot d)\nXMLClose d",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "HTTP" : "http://127.0.0.1:8765"
+  }
+}

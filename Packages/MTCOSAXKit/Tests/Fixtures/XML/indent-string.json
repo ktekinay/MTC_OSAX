@@ -1,0 +1,53 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Indt",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "    ",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "\t",
+          "type" : "utf8"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "Indt",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "\t",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "    ",
+          "type" : "utf8"
+        }
+      }
+    }
+  ],
+  "name" : "indent-string",
+  "recordedAt" : "2026-09-28T14:10:06Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set old to XMLSetIndentString \"    \"\nXMLSetIndentString old",
+  "timeZone" : "America/New_York"
+}

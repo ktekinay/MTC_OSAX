@@ -1,0 +1,33 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Read",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/utf16be-bom.txt",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "UTF16 é\n",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "readtext-utf16be-bom",
+  "recordedAt" : "2026-09-27T19:03:48Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "readtext POSIX file \"$FILES/utf16be-bom.txt\"",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

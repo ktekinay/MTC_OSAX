@@ -1,0 +1,97 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/simple.xml",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "3f0000000a1401000000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "cdoc",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "3f0000000a1401000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "400000000a1401000000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "400000000a1401000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- a comment before the root -->\n<?app setting=\"1\"?>\n<library xmlns:dc=\"http://purl.org/dc/elements/1.1/\" version=\"2\">\n\t<book id=\"b1\" lang=\"en\">\n\t\t<title>Moby-Dick</title>\n\t\t<dc:creator>Herman Melville</dc:creator>\n\t\t<year>1851</year>\n\t\t<price currency=\"USD\">9.99</price>\n\t</book>\n\t<book id=\"b2\" lang=\"fr\">\n\t\t<title>Les Misérables</title>\n\t\t<dc:creator>Victor Hugo</dc:creator>\n\t\t<year>1862</year>\n\t\t<!-- no price -->\n\t</book>\n\t<note>Mixed <em>content</em> with &amp; entities &lt;here&gt; and a <![CDATA[<cdata> section]]>.</note>\n\t<empty/>\n\t<spaces>   padded   </spaces>\n</library>\n",
+          "type" : "utf8"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "gurl",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "400000000a1401000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -2763
+      }
+    }
+  ],
+  "name" : "doc-clone",
+  "recordedAt" : "2026-09-28T14:10:06Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset e to XMLCloneDocument d\nXMLDisplayXML e\nXMLURL e\nXMLClose e\nXMLClose d",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

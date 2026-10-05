@@ -1,0 +1,38 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "strp",
+        "fields" : [
+          {
+            "key" : "enco",
+            "value" : {
+              "text" : "%FT%T%z",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "2012-07-01T01:02:03-0700",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "3b7c15cc00000000",
+          "type" : "ldt "
+        }
+      }
+    }
+  ],
+  "name" : "strptime-summer-z",
+  "recordedAt" : "2026-09-27T19:12:46Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "strptime \"2012-07-01T01:02:03-0700\" encoding \"%FT%T%z\"",
+  "timeZone" : "America/New_York"
+}

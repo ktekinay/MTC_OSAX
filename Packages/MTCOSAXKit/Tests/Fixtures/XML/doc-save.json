@@ -1,0 +1,102 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/simple.xml",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "320000000a1401000000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "save",
+        "fields" : [
+          {
+            "key" : "kfil",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/save.xml",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "320000000a1401000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "320000000a1401000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Read",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/save.xml",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- a comment before the root -->\n<?app setting=\"1\"?>\n<library xmlns:dc=\"http://purl.org/dc/elements/1.1/\" version=\"2\">\n\t<book id=\"b1\" lang=\"en\">\n\t\t<title>Moby-Dick</title>\n\t\t<dc:creator>Herman Melville</dc:creator>\n\t\t<year>1851</year>\n\t\t<price currency=\"USD\">9.99</price>\n\t</book>\n\t<book id=\"b2\" lang=\"fr\">\n\t\t<title>Les Misérables</title>\n\t\t<dc:creator>Victor Hugo</dc:creator>\n\t\t<year>1862</year>\n\t\t<!-- no price -->\n\t</book>\n\t<note>Mixed <em>content</em> with &amp; entities &lt;here&gt; and a <![CDATA[<cdata> section]]>.</note>\n\t<empty/>\n\t<spaces>   padded   </spaces>\n</library>\n",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "doc-save",
+  "recordedAt" : "2026-09-28T14:10:06Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLSave d in (POSIX file \"$TMP/save.xml\")\nXMLClose d\nreadtext (POSIX file \"$TMP/save.xml\")",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files",
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

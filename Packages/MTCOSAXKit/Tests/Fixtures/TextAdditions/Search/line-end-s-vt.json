@@ -1,0 +1,65 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FINd",
+        "fields" : [
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "a\u000bb",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "a\\sb",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "mPos",
+              "value" : {
+                "integer" : 0,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "mLen",
+              "value" : {
+                "integer" : 3,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "mRes",
+              "value" : {
+                "text" : "a\u000bb",
+                "type" : "utxt"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    }
+  ],
+  "name" : "line-end-s-vt",
+  "recordedAt" : "2026-09-27T18:51:44Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "find text \"a\\\\sb\" in (\"a\" & (character id 11) & \"b\") with regexp"
+}

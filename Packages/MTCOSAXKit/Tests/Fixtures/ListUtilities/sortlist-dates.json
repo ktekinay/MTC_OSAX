@@ -1,0 +1,49 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Sort",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "hex" : "c05cb1c700000000",
+                  "type" : "ldt "
+                },
+                {
+                  "hex" : "00f492b400000000",
+                  "type" : "ldt "
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "hex" : "00f492b400000000",
+              "type" : "ldt "
+            },
+            {
+              "hex" : "c05cb1c700000000",
+              "type" : "ldt "
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "sortlist-dates",
+  "recordedAt" : "2026-09-28T04:34:13Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "sortlist {date \"Monday, March 1, 2010 at 12:00:00 PM\", date \"Saturday, January 1, 2000 at 12:00:00 AM\"}",
+  "timeZone" : "America/New_York"
+}

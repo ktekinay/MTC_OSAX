@@ -1,0 +1,130 @@
+[
+ {
+  "name": "strftime-1850",
+  "script": "strftime date \"Saturday, June 1, 1850 at 12:00:00 PM\" into \"%FT%T %z %s\""
+ },
+ {
+  "name": "strftime-1850-gmt",
+  "script": "strftime date \"Saturday, June 1, 1850 at 12:00:00 PM\" into \"%FT%T %z %Z\" with GMT"
+ },
+ {
+  "name": "strptime-1850",
+  "script": "strptime \"1850-06-01\" encoding \"%Y-%m-%d\""
+ },
+ {
+  "name": "strptime-1850-as-real",
+  "script": "strptime \"1850-06-01\" encoding \"%Y-%m-%d\" as real with GMT"
+ },
+ {
+  "name": "strptime-time-only",
+  "script": "strptime \"04:10 PM\" encoding \"%I:%M %p\""
+ },
+ {
+  "name": "strftime-empty-format",
+  "script": "strftime date \"Monday, January 15, 2007 at 4:10:56 PM\" into \"\""
+ },
+ {
+  "name": "printf-c",
+  "script": "printf \"[%c][%c][%3c]\" parameters {65, \"Bé\", 128512}"
+ },
+ {
+  "name": "change-only-backreference-unmatched",
+  "script": "change \"a(x)?c\" into \"X\" in \"ac axc\" with regexp only backreference 1"
+ },
+ {
+  "name": "change-empty-lists",
+  "script": "change {} into {} in \"abc\""
+ },
+ {
+  "name": "template-k-named",
+  "script": "change \"a(?<n>b)\" into \"[\\\\k<n>]\" in \"abc\" with regexp"
+ },
+ {
+  "name": "template-k-number",
+  "script": "change \"a(b)\" into \"[\\\\k<1>][\\\\k<0>]\" in \"abc\" with regexp"
+ },
+ {
+  "name": "template-k-unknown",
+  "script": "change \"a(b)\" into \"[\\\\k<nope>]\" in \"abc\" with regexp"
+ },
+ {
+  "name": "resolve-entities-malformed",
+  "script": "resolve entities \"&#;&#xZZ;&#0;&#1114112;&#12a;\""
+ },
+ {
+  "name": "resolve-entities-uppercase-x",
+  "script": "resolve entities \"&#65;&#x41;&#X42;\""
+ },
+ {
+  "name": "atoi-signed-hex",
+  "script": "atoi {\"-0x10\", \"+0x10\"}"
+ },
+ {
+  "name": "format-caret",
+  "script": "format pi into \"^##.##^\""
+ },
+ {
+  "name": "format-three-sections-positive",
+  "script": "format 5 into \"+#;-#;'zero'\""
+ },
+ {
+  "name": "format-three-sections-negative",
+  "script": "format -5 into \"+#;-#;'zero'\""
+ },
+ {
+  "name": "format-three-sections-zero",
+  "script": "format 0 into \"+#;-#;'zero'\""
+ },
+ {
+  "name": "format-underflow",
+  "script": "format 1.0E-4 into \"#.##\" with underflow test"
+ },
+ {
+  "name": "format-underflow-not-needed",
+  "script": "format 0.5 into \"#.##\" with underflow test"
+ },
+ {
+  "name": "format-invalid",
+  "script": "format 12.5 into \"##^##\""
+ },
+ {
+  "name": "format-missing-into",
+  "script": "format 12.5"
+ },
+ {
+  "name": "change-only-backreference-negative",
+  "script": "change \"(a)\" into \"x\" in \"a\" with regexp only backreference -1"
+ },
+ {
+  "name": "change-template-negative-group",
+  "script": "change \"(a)\" into \"\\\\k<-1>\" in \"a\" with regexp"
+ },
+ {
+  "name": "change-template-plus-group",
+  "script": "change \"(a)\" into \"\\\\k<+1>\" in \"a\" with regexp"
+ },
+ {
+  "name": "printf-negative-star-string",
+  "script": "printf \"[%*s]\" parameters {-4, \"ab\"}"
+ },
+ {
+  "name": "printf-wide",
+  "script": "length of (printf \"[%600d][%.600f]\" parameters {1, 1})"
+ },
+ {
+  "name": "printf-width-too-large",
+  "script": "printf \"[%99999999999999999999d]\" parameters {1}"
+ },
+ {
+  "name": "line-end-dollar-crlf-all",
+  "script": "find text \"$\" in (\"a\" & return & linefeed & \"b\") with regexp and all occurrences"
+ },
+ {
+  "name": "line-end-caret-crlf-all",
+  "script": "find text \"^\" in (\"a\" & return & linefeed & \"b\") with regexp and all occurrences"
+ },
+ {
+  "name": "line-end-z-before-crlf",
+  "script": "find text \"a\\\\Z\" in (\"a\" & return & linefeed) with regexp"
+ }
+]

@@ -1,0 +1,67 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FORM",
+        "fields" : [
+          {
+            "key" : "into",
+            "value" : {
+              "text" : "'P'0.000",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "P1.000",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FORM",
+        "fields" : [
+          {
+            "key" : "into",
+            "value" : {
+              "text" : "'q'.#E0x",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "real" : 532684527205.00916,
+              "type" : "doub"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "q.5E12x",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "random-423",
+  "recordedAt" : "2026-09-27T19:31:58Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "format 1 into \"'P'0.000\"\nformat 532684527205.00916 into \"'q'.#E0x\"",
+  "timeZone" : "America/New_York"
+}

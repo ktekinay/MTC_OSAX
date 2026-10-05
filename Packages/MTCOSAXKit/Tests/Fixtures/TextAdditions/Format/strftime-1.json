@@ -1,0 +1,38 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "strf",
+        "fields" : [
+          {
+            "key" : "into",
+            "value" : {
+              "text" : "%GW%V-%uT%T%z",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "1058d1c100000000",
+              "type" : "ldt "
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "2007W03-1T16:10:56-0500",
+          "type" : "utf8"
+        }
+      }
+    }
+  ],
+  "name" : "strftime-1",
+  "recordedAt" : "2026-09-27T19:12:45Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "strftime date \"Monday, January 15, 2007 at 4:10:56 PM\" into \"%GW%V-%uT%T%z\"",
+  "timeZone" : "America/New_York"
+}

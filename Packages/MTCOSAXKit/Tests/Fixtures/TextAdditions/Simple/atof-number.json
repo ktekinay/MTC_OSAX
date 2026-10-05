@@ -1,0 +1,30 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "ATOF",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 3,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 3,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "atof-number",
+  "recordedAt" : "2026-09-27T18:58:49Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "atof 3"
+}

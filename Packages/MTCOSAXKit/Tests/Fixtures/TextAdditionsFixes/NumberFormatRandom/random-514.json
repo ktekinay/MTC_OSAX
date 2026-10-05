@@ -1,0 +1,65 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FORM",
+        "fields" : [
+          {
+            "key" : "into",
+            "value" : {
+              "text" : "'P'0.000",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "P1.000",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FORM",
+        "fields" : [
+          {
+            "key" : "into",
+            "value" : {
+              "text" : "E#,0.##E+00's'",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "real" : 260187111487.57446,
+              "type" : "doub"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorMessage" : "\"E#,0.##E+00's'\" isn't a valid number format.",
+        "errorNumber" : -50
+      }
+    }
+  ],
+  "name" : "random-514",
+  "recordedAt" : "2026-09-27T19:52:43Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "format 1 into \"'P'0.000\"\nformat 260187111487.57446 into \"E#,0.##E+00's'\"",
+  "timeZone" : "America/New_York"
+}

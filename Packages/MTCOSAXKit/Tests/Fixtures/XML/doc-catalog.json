@@ -1,0 +1,28 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "cata",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "-//W3C//DTD XHTML 1.0 Strict//EN",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -2763
+      }
+    }
+  ],
+  "name" : "doc-catalog",
+  "recordedAt" : "2026-09-28T14:10:06Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "XMLCatalog \"-//W3C//DTD XHTML 1.0 Strict//EN\"",
+  "timeZone" : "America/New_York"
+}

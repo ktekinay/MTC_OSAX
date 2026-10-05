@@ -1,0 +1,46 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Join",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "-",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "a",
+                  "type" : "utxt"
+                },
+                {
+                  "code" : "msng",
+                  "type" : "type"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "a-",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "join-missing-value",
+  "recordedAt" : "2026-09-27T18:58:51Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "join {\"a\", missing value} using \"-\""
+}

@@ -1,0 +1,41 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Read",
+        "fields" : [
+          {
+            "key" : "strt",
+            "value" : {
+              "integer" : 6,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/utf8.txt",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "é 😀\nLine 2\n",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "readtext-starting-at-to-end",
+  "recordedAt" : "2026-09-27T19:52:26Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "readtext POSIX file \"$FILES/utf8.txt\" starting at 6",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

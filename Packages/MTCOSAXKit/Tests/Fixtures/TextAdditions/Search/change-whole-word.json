@@ -1,0 +1,50 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RPLl",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "dog",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "concat cat cats",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "WhWo",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "cat",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "concat dog cats",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "change-whole-word",
+  "recordedAt" : "2026-09-27T18:50:58Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "change \"cat\" into \"dog\" in \"concat cat cats\" with whole word"
+}

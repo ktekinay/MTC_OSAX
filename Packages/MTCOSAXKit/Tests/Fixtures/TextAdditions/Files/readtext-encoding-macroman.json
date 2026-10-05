@@ -1,0 +1,40 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Read",
+        "fields" : [
+          {
+            "key" : "enco",
+            "value" : {
+              "text" : "MACINTOSH",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/macroman.txt",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "Café\n",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "readtext-encoding-macroman",
+  "recordedAt" : "2026-09-27T19:03:48Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "readtext POSIX file \"$FILES/macroman.txt\" encoding \"MACINTOSH\"",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

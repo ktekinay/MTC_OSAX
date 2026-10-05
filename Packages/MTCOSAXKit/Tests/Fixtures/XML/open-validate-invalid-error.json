@@ -1,0 +1,50 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "text" : "<!DOCTYPE a [<!ELEMENT a (b)><!ELEMENT b EMPTY>]><a><c/></a>",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "Vali",
+            "value" : {
+              "type" : "true"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : 534
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "lErr",
+        "fields" : [
+
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "line 1\nNo declaration for element c\n\nline 1\nElement a content does not follow the DTD, expecting (b), got (c)\n\n",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "open-validate-invalid-error",
+  "recordedAt" : "2026-09-28T14:10:00Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "try\nset d to XMLOpen from string \"<!DOCTYPE a [<!ELEMENT a (b)><!ELEMENT b EMPTY>]><a><c/></a>\" with validate\nend try\nXMLError",
+  "timeZone" : "America/New_York"
+}

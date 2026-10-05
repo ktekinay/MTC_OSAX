@@ -1,0 +1,54 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MTCd",
+        "eventID" : "desc",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "pnam",
+                  "value" : {
+                    "text" : "x",
+                    "type" : "utxt"
+                  }
+                },
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "foo",
+                        "type" : "utxt"
+                      },
+                      {
+                        "integer" : 1,
+                        "type" : "long"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "reco {pnam: utxt \"x\", usrf: list [utxt \"foo\", long 1]}",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "describe-record",
+  "recordedAt" : "2026-09-27T16:03:45Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "mtc_describe {name:\"x\", foo:1}"
+}

@@ -1,0 +1,36 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MTCs",
+        "eventID" : "set ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "code" : "MTsa",
+              "type" : "enum"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorMessage" : "mtc_set changes one setting; mtc_reset all_settings puts them all back to their defaults.",
+        "errorNumber" : -50
+      }
+    }
+  ],
+  "name" : "error-set-all",
+  "recordedAt" : "2026-09-28T18:09:50Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "mtc_set all_settings to 1",
+  "timeZone" : "America/New_York"
+}

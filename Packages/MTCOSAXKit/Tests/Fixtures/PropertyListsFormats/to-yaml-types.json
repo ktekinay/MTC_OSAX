@@ -1,0 +1,138 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "make",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "t",
+                        "type" : "utxt"
+                      },
+                      {
+                        "type" : "true"
+                      },
+                      {
+                        "text" : "n",
+                        "type" : "utxt"
+                      },
+                      {
+                        "integer" : 3,
+                        "type" : "long"
+                      },
+                      {
+                        "text" : "r",
+                        "type" : "utxt"
+                      },
+                      {
+                        "real" : 2.5,
+                        "type" : "doub"
+                      },
+                      {
+                        "text" : "s",
+                        "type" : "utxt"
+                      },
+                      {
+                        "text" : "yes",
+                        "type" : "utxt"
+                      },
+                      {
+                        "text" : "q",
+                        "type" : "utxt"
+                      },
+                      {
+                        "text" : "a: b",
+                        "type" : "utxt"
+                      },
+                      {
+                        "text" : "m",
+                        "type" : "utxt"
+                      },
+                      {
+                        "code" : "msng",
+                        "type" : "type"
+                      },
+                      {
+                        "text" : "e",
+                        "type" : "utxt"
+                      },
+                      {
+                        "items" : [
+
+                        ],
+                        "type" : "list"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "020000004d5443700800000000000000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "MTCp",
+        "eventID" : "TYML",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "020000004d5443700800000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "t: true\nq: \"a: b\"\nm: null\nr: 2.5\n\"n\": 3\ne: []\ns: \"yes\"\n",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "020000004d5443700800000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "to-yaml-types",
+  "recordedAt" : "2026-09-28T19:22:41Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "set p to PlistNew {t:true, n:3, r:2.5, s:\"yes\", q:\"a: b\", m:missing value, e:{}}\nPlistToYAML p\nPlistClose p",
+  "timeZone" : "America/New_York"
+}

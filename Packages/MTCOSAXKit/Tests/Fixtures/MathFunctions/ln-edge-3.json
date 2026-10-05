@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "LN  ",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "real" : 1e-300,
+              "type" : "doub"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : -690.7755278982137,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "ln-edge-3",
+  "recordedAt" : "2026-09-28T04:29:07Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "ln 1E-300",
+  "timeZone" : "America/New_York"
+}

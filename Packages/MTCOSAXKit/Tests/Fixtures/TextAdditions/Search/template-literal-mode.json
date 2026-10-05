@@ -1,0 +1,44 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RPLl",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "[\\q]",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "abc",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "b",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "a[\\q]c",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "template-literal-mode",
+  "recordedAt" : "2026-09-27T18:51:01Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "change \"b\" into \"[\\\\q]\" in \"abc\""
+}

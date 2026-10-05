@@ -1,0 +1,114 @@
+[
+ {
+  "name": "find-horizontal-space",
+  "script": "find text \"\\\\h+\" in \"x \" & tab & \" y\" with regexp and string result syntax \"PCRE\""
+ },
+ {
+  "name": "find-lines",
+  "script": "find text \"^\\\\w+$\" in \"one\" & linefeed & \"two\" & return & linefeed & \"three\" with regexp, all occurrences and string result syntax \"PCRE\""
+ },
+ {
+  "name": "find-singleline-flag",
+  "script": "find text \"^\\\\w+$\" in \"one\" & linefeed & \"two\" with regexp, all occurrences and string result regexpflag {\"SINGLELINE\"} syntax \"PCRE\""
+ },
+ {
+  "name": "find-pattern-not-multiline",
+  "script": "find text \"(?-m)^\\\\w+\" in \"one\" & linefeed & \"two\" with regexp, all occurrences and string result syntax \"PCRE\""
+ },
+ {
+  "name": "find-line-endings",
+  "script": "find text \"^x$\" in \"x\" & (character id 8232) & \"x\" & return & \"x\" & return & linefeed & \"x\" & (character id 133) & \"x\" with regexp, all occurrences and string result syntax \"PCRE\""
+ },
+ {
+  "name": "find-dot-newline",
+  "script": "find text \"a.b\" in \"a\" & linefeed & \"b\" with regexp and string result syntax \"PCRE\""
+ },
+ {
+  "name": "find-dotall-flag",
+  "script": "find text \"a.b\" in \"a\" & linefeed & \"b\" with regexp and string result regexpflag {\"DOTALL\"} syntax \"PCRE\""
+ },
+ {
+  "name": "find-word-accents",
+  "script": "find text \"\\\\w+\" in \"café naïve\" with regexp, all occurrences and string result syntax \"PCRE\""
+ },
+ {
+  "name": "find-case-insensitive",
+  "script": "find text \"élan\" in \"ÉLAN\" with regexp and string result without case sensitive syntax \"PCRE\""
+ },
+ {
+  "name": "find-emoji-position",
+  "script": "find text \"b+\" in \"😀bb\" with regexp syntax \"PCRE\""
+ },
+ {
+  "name": "find-lookbehind",
+  "script": "find text \"(?<=\\\\$)\\\\d+\" in \"cost $42\" with regexp and string result syntax \"PCRE\""
+ },
+ {
+  "name": "find-keep-out",
+  "script": "find text \"foo\\\\Kbar\" in \"foobar\" with regexp syntax \"PCRE\""
+ },
+ {
+  "name": "find-possessive",
+  "script": "find text \"a++b\" in \"aaab\" with regexp and string result syntax \"PCRE\""
+ },
+ {
+  "name": "find-recursion",
+  "script": "find text \"\\\\((?:[^()]|(?R))*\\\\)\" in \"x(a(b)c)y\" with regexp and string result syntax \"PCRE\""
+ },
+ {
+  "name": "find-negated-class-newline",
+  "script": "find text \"a[^x]b\" in \"a\" & linefeed & \"b\" with regexp and string result syntax \"PCRE\""
+ },
+ {
+  "name": "find-named-using",
+  "script": "find text \"(?<y>\\\\d{4})-(?<m>\\\\d\\\\d)\" in \"on 2026-09\" using \"\\\\k<m>/\\\\k<y>\" with regexp and string result syntax \"PCRE\""
+ },
+ {
+  "name": "find-not-found",
+  "script": "find text \"z\" in \"abc\" with regexp syntax \"PCRE\""
+ },
+ {
+  "name": "change-backreferences",
+  "script": "change \"(\\\\w+)@(\\\\w+)\" into \"\\\\2 at \\\\1\" in \"me@home you@work\" with regexp syntax \"PCRE\""
+ },
+ {
+  "name": "change-dollar-references",
+  "script": "change \"(?<user>\\\\w+)@(\\\\w+)\" into \"${2}:${user}\" in \"me@home\" with regexp and dollar references syntax \"PCRE\""
+ },
+ {
+  "name": "change-empty-matches",
+  "script": "change \"x*\" into \"-\" in \"abc\" with regexp syntax \"PCRE\""
+ },
+ {
+  "name": "change-lines",
+  "script": "change \"^\" into \"> \" in \"one\" & linefeed & \"two\" with regexp syntax \"PCRE\""
+ },
+ {
+  "name": "splittext",
+  "script": "splittext \"a1b22c\" using \"\\\\d+\" with regexp syntax \"PCRE\""
+ },
+ {
+  "name": "filter-text",
+  "script": "filter text \"^(\\\\w+) is (.*)$\" in \"John is ten\" & linefeed & \"Anna is twelve\" key \"\\\\1\" using \"\\\\2\" syntax \"PCRE\""
+ },
+ {
+  "name": "re-compile",
+  "script": "re_compile \"(?<=\\\\$)\\\\d++\" syntax \"PCRE\""
+ },
+ {
+  "name": "re-compile-error",
+  "script": "re_compile \"(unclosed\" syntax \"PCRE\""
+ },
+ {
+  "name": "flag-find-longest",
+  "script": "find text \"a\" in \"a\" with regexp regexpflag {\"FIND LONGEST\"} syntax \"PCRE\""
+ },
+ {
+  "name": "flag-dotall-onigmo",
+  "script": "find text \"a\" in \"a\" with regexp regexpflag {\"DOTALL\"}"
+ },
+ {
+  "name": "syntax-lowercase",
+  "script": "find text \"\\\\h\" in \"x y\" with regexp and string result syntax \"pcre\""
+ }
+]

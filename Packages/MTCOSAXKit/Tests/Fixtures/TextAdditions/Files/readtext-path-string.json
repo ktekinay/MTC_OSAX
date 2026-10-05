@@ -1,0 +1,33 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Read",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "/private/tmp/mtc-fixtures/files/utf8.txt",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "Hello é 😀\nLine 2\n",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "readtext-path-string",
+  "recordedAt" : "2026-09-27T19:03:48Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "readtext \"$FILES/utf8.txt\"",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CRRA",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "type" : "null"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1701
+      }
+    }
+  ],
+  "name" : "randomarray-no-parameter",
+  "recordedAt" : "2026-09-28T04:32:12Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "randomarray",
+  "timeZone" : "America/New_York"
+}

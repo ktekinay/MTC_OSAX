@@ -1,0 +1,26 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Read",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "type" : "null"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1701
+      }
+    }
+  ],
+  "name" : "readtext-missing",
+  "recordedAt" : "2026-09-27T19:03:48Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "readtext"
+}

@@ -1,0 +1,606 @@
+[
+ {
+  "name": "uppercase-basic",
+  "script": "uppercase \"hello World\""
+ },
+ {
+  "name": "uppercase-list",
+  "script": "uppercase {\"abc\", \"XyZ\"}"
+ },
+ {
+  "name": "uppercase-unicode",
+  "script": "uppercase \"straße éclair ǆ\""
+ },
+ {
+  "name": "uppercase-empty",
+  "script": "uppercase \"\""
+ },
+ {
+  "name": "uppercase-number",
+  "script": "uppercase 12"
+ },
+ {
+  "name": "uppercase-missing",
+  "script": "uppercase"
+ },
+ {
+  "name": "uppercase-list-mixed",
+  "script": "uppercase {\"a\", 1}"
+ },
+ {
+  "name": "lowercase-basic",
+  "script": "lowercase \"hello World\""
+ },
+ {
+  "name": "lowercase-list",
+  "script": "lowercase {\"abc\", \"XyZ\"}"
+ },
+ {
+  "name": "lowercase-unicode",
+  "script": "lowercase \"straße éclair ǆ\""
+ },
+ {
+  "name": "lowercase-empty",
+  "script": "lowercase \"\""
+ },
+ {
+  "name": "lowercase-number",
+  "script": "lowercase 12"
+ },
+ {
+  "name": "lowercase-missing",
+  "script": "lowercase"
+ },
+ {
+  "name": "lowercase-list-mixed",
+  "script": "lowercase {\"a\", 1}"
+ },
+ {
+  "name": "titlecase-basic",
+  "script": "titlecase \"hello World\""
+ },
+ {
+  "name": "titlecase-list",
+  "script": "titlecase {\"abc\", \"XyZ\"}"
+ },
+ {
+  "name": "titlecase-unicode",
+  "script": "titlecase \"straße éclair ǆ\""
+ },
+ {
+  "name": "titlecase-empty",
+  "script": "titlecase \"\""
+ },
+ {
+  "name": "titlecase-number",
+  "script": "titlecase 12"
+ },
+ {
+  "name": "titlecase-missing",
+  "script": "titlecase"
+ },
+ {
+  "name": "titlecase-list-mixed",
+  "script": "titlecase {\"a\", 1}"
+ },
+ {
+  "name": "titlecase-words-0",
+  "script": "titlecase \"o'neil mcdonald\""
+ },
+ {
+  "name": "titlecase-words-1",
+  "script": "titlecase \"hello-world foo_bar\""
+ },
+ {
+  "name": "titlecase-words-2",
+  "script": "titlecase \"HELLO WORLD\""
+ },
+ {
+  "name": "titlecase-words-3",
+  "script": "titlecase \"123abc a.b\""
+ },
+ {
+  "name": "titlecase-words-4",
+  "script": "titlecase \"the quick\" & tab & \"brown\""
+ },
+ {
+  "name": "titlecase-words-5",
+  "script": "titlecase \"élan vital\""
+ },
+ {
+  "name": "titlecase-words-6",
+  "script": "titlecase \"x\""
+ },
+ {
+  "name": "capitalize-synonym",
+  "script": "capitalize \"abc def\""
+ },
+ {
+  "name": "uppercase-turkish",
+  "script": "uppercase \"ı i\""
+ },
+ {
+  "name": "lowercase-sigma",
+  "script": "lowercase \"ΣΑΣ\""
+ },
+ {
+  "name": "atof-0",
+  "script": "atof \"1.5\""
+ },
+ {
+  "name": "atof-1",
+  "script": "atof \" 2.5\""
+ },
+ {
+  "name": "atof-2",
+  "script": "atof \"1e3\""
+ },
+ {
+  "name": "atof-3",
+  "script": "atof \"-3\""
+ },
+ {
+  "name": "atof-4",
+  "script": "atof \"0x10\""
+ },
+ {
+  "name": "atof-5",
+  "script": "atof \"1.5abc\""
+ },
+ {
+  "name": "atof-6",
+  "script": "atof \"abc\""
+ },
+ {
+  "name": "atof-7",
+  "script": "atof \"\""
+ },
+ {
+  "name": "atof-8",
+  "script": "atof \"inf\""
+ },
+ {
+  "name": "atof-9",
+  "script": "atof \"nan\""
+ },
+ {
+  "name": "atof-10",
+  "script": "atof \"1,5\""
+ },
+ {
+  "name": "atof-11",
+  "script": "atof \".5\""
+ },
+ {
+  "name": "atof-12",
+  "script": "atof \"+7\""
+ },
+ {
+  "name": "atof-13",
+  "script": "atof \"1e400\""
+ },
+ {
+  "name": "atof-list",
+  "script": "atof {\"1\", \"2.5\"}"
+ },
+ {
+  "name": "atof-number",
+  "script": "atof 3"
+ },
+ {
+  "name": "atof-missing",
+  "script": "atof"
+ },
+ {
+  "name": "atoi-0",
+  "script": "atoi \"0xa0\""
+ },
+ {
+  "name": "atoi-1",
+  "script": "atoi \"42\""
+ },
+ {
+  "name": "atoi-2",
+  "script": "atoi \"-7\""
+ },
+ {
+  "name": "atoi-3",
+  "script": "atoi \"010\""
+ },
+ {
+  "name": "atoi-4",
+  "script": "atoi \"abc\""
+ },
+ {
+  "name": "atoi-5",
+  "script": "atoi \"12abc\""
+ },
+ {
+  "name": "atoi-6",
+  "script": "atoi \"  5\""
+ },
+ {
+  "name": "atoi-7",
+  "script": "atoi \"\""
+ },
+ {
+  "name": "atoi-8",
+  "script": "atoi \"2147483648\""
+ },
+ {
+  "name": "atoi-9",
+  "script": "atoi \"1.9\""
+ },
+ {
+  "name": "atoi-10",
+  "script": "atoi \"0X1F\""
+ },
+ {
+  "name": "atoi-12",
+  "script": "atoi \"08\""
+ },
+ {
+  "name": "atoi-base-0",
+  "script": "atoi \"101\" base 2"
+ },
+ {
+  "name": "atoi-base-1",
+  "script": "atoi \"ff\" base 16"
+ },
+ {
+  "name": "atoi-base-2",
+  "script": "atoi \"z\" base 36"
+ },
+ {
+  "name": "atoi-base-3",
+  "script": "atoi \"Z\" base 36"
+ },
+ {
+  "name": "atoi-base-4",
+  "script": "atoi \"12\" base 1"
+ },
+ {
+  "name": "atoi-base-5",
+  "script": "atoi \"12\" base 37"
+ },
+ {
+  "name": "atoi-base-6",
+  "script": "atoi \"12\" base 0"
+ },
+ {
+  "name": "atoi-base-7",
+  "script": "atoi \"19\" base 8"
+ },
+ {
+  "name": "atoi-base-8",
+  "script": "atoi \"0x1f\" base 16"
+ },
+ {
+  "name": "atoi-list",
+  "script": "atoi {\"1\", \"0x10\"}"
+ },
+ {
+  "name": "atoi-list-bad",
+  "script": "atoi {\"1\", \"x\"}"
+ },
+ {
+  "name": "atoi-missing",
+  "script": "atoi"
+ },
+ {
+  "name": "encode-entities-0",
+  "script": "encode entities \"'foo' > 'Foo'\""
+ },
+ {
+  "name": "encode-entities-1",
+  "script": "encode entities \"<a & b>\""
+ },
+ {
+  "name": "encode-entities-2",
+  "script": "encode entities \"\\\"q\\\"\""
+ },
+ {
+  "name": "encode-entities-3",
+  "script": "encode entities \"é ü 😀\""
+ },
+ {
+  "name": "encode-entities-4",
+  "script": "encode entities \"\""
+ },
+ {
+  "name": "encode-entities-5",
+  "script": "encode entities \"already &amp; encoded\""
+ },
+ {
+  "name": "resolve-entities-0",
+  "script": "resolve entities \"&apos;foo&apos; &gt; &apos;Foo&apos;\""
+ },
+ {
+  "name": "resolve-entities-1",
+  "script": "resolve entities \"&lt;&amp;&quot;\""
+ },
+ {
+  "name": "resolve-entities-3",
+  "script": "resolve entities \"&#x1F600;\""
+ },
+ {
+  "name": "resolve-entities-4",
+  "script": "resolve entities \"&eacute;\""
+ },
+ {
+  "name": "resolve-entities-5",
+  "script": "resolve entities \"&amp;amp;\""
+ },
+ {
+  "name": "resolve-entities-6",
+  "script": "resolve entities \"&foo;\""
+ },
+ {
+  "name": "resolve-entities-7",
+  "script": "resolve entities \"a & b\""
+ },
+ {
+  "name": "resolve-entities-12",
+  "script": "resolve entities \"&lt\""
+ },
+ {
+  "name": "resolve-entities-13",
+  "script": "resolve entities \"&AMP;\""
+ },
+ {
+  "name": "encode-entities-missing",
+  "script": "encode entities"
+ },
+ {
+  "name": "resolve-entities-list",
+  "script": "resolve entities {\"&lt;\"}"
+ },
+ {
+  "name": "escapeURL-0",
+  "script": "escapeURL \"a b\""
+ },
+ {
+  "name": "escapeURL-1",
+  "script": "escapeURL \"é\""
+ },
+ {
+  "name": "escapeURL-2",
+  "script": "escapeURL \"a/b?c=d&e=f#g\""
+ },
+ {
+  "name": "escapeURL-3",
+  "script": "escapeURL \"~!*'()\""
+ },
+ {
+  "name": "escapeURL-4",
+  "script": "escapeURL \"100%\""
+ },
+ {
+  "name": "escapeURL-5",
+  "script": "escapeURL \"[]{}|^`\""
+ },
+ {
+  "name": "escapeURL-6",
+  "script": "escapeURL \"😀\""
+ },
+ {
+  "name": "escapeURL-7",
+  "script": "escapeURL \"a+b\""
+ },
+ {
+  "name": "escapeURL-8",
+  "script": "escapeURL \"\""
+ },
+ {
+  "name": "escapeURL-9",
+  "script": "escapeURL \"http://x.com/a b?q=1 2\""
+ },
+ {
+  "name": "escapeURL-escaping",
+  "script": "escapeURL \"a/b?c=d&e\" escaping \";,/?:@&=+$\""
+ },
+ {
+  "name": "escapeURL-escaping-letters",
+  "script": "escapeURL \"abc\" escaping \"b\""
+ },
+ {
+  "name": "unescapeURL-0",
+  "script": "unescapeURL \"a%20b\""
+ },
+ {
+  "name": "unescapeURL-1",
+  "script": "unescapeURL \"%C3%A9\""
+ },
+ {
+  "name": "unescapeURL-2",
+  "script": "unescapeURL \"%zz\""
+ },
+ {
+  "name": "unescapeURL-3",
+  "script": "unescapeURL \"a+b\""
+ },
+ {
+  "name": "unescapeURL-4",
+  "script": "unescapeURL \"100%\""
+ },
+ {
+  "name": "unescapeURL-5",
+  "script": "unescapeURL \"%2F%2f\""
+ },
+ {
+  "name": "unescapeURL-6",
+  "script": "unescapeURL \"%E9\""
+ },
+ {
+  "name": "unescapeURL-7",
+  "script": "unescapeURL \"%F0%9F%98%80\""
+ },
+ {
+  "name": "unescapeURL-8",
+  "script": "unescapeURL \"\""
+ },
+ {
+  "name": "unescapeURL-keeping",
+  "script": "unescapeURL \"a%2Fb%20c\" keeping \"/\""
+ },
+ {
+  "name": "unescapeURL-keeping-space",
+  "script": "unescapeURL \"a%2Fb%20c\" keeping \" /\""
+ },
+ {
+  "name": "escapeURL-list",
+  "script": "escapeURL {\"a b\"}"
+ },
+ {
+  "name": "normalize-compose",
+  "script": "normalize unicode (\"e\" & (character id 769))"
+ },
+ {
+  "name": "normalize-decompose",
+  "script": "normalize unicode \"é\" with decomposition"
+ },
+ {
+  "name": "normalize-decompose-false",
+  "script": "normalize unicode (\"e\" & (character id 769)) without decomposition"
+ },
+ {
+  "name": "normalize-compat",
+  "script": "normalize unicode \"ﬁ ①\""
+ },
+ {
+  "name": "normalize-hangul",
+  "script": "normalize unicode \"한\" with decomposition"
+ },
+ {
+  "name": "normalize-missing",
+  "script": "normalize unicode"
+ },
+ {
+  "name": "transform-doc-1",
+  "script": "transform unicode \"éç\" using \"NFD; [:Nonspacing Mark:] Remove\""
+ },
+ {
+  "name": "transform-doc-2",
+  "script": "transform unicode \"ec\" using \"Any-Hex/XML\""
+ },
+ {
+  "name": "transform-doc-3",
+  "script": "transform unicode \"&#x65;&#x63;\" using \"Any-Hex/XML\" with inverse"
+ },
+ {
+  "name": "transform-latin-ascii",
+  "script": "transform unicode \"Ærøskøbing – “quotes”\" using \"Latin-ASCII\""
+ },
+ {
+  "name": "transform-upper",
+  "script": "transform unicode \"abc\" using \"Any-Upper\""
+ },
+ {
+  "name": "transform-greek",
+  "script": "transform unicode \"αβγ\" using \"Greek-Latin\""
+ },
+ {
+  "name": "transform-list",
+  "script": "transform unicode {\"é\", \"ç\"} using \"NFD; [:Nonspacing Mark:] Remove\""
+ },
+ {
+  "name": "transform-invalid",
+  "script": "transform unicode \"abc\" using \"Nope-Nope\""
+ },
+ {
+  "name": "transform-missing-using",
+  "script": "transform unicode \"abc\""
+ },
+ {
+  "name": "transform-inverse-upper",
+  "script": "transform unicode \"ABC\" using \"Any-Upper\" with inverse"
+ },
+ {
+  "name": "hash-0",
+  "script": "hash \"\""
+ },
+ {
+  "name": "hash-1",
+  "script": "hash \"abc\""
+ },
+ {
+  "name": "hash-2",
+  "script": "hash \"ABC\""
+ },
+ {
+  "name": "hash-3",
+  "script": "hash \"abd\""
+ },
+ {
+  "name": "hash-4",
+  "script": "hash \"é\""
+ },
+ {
+  "name": "hash-5",
+  "script": "hash \"ﬁ\""
+ },
+ {
+  "name": "hash-6",
+  "script": "hash \"😀\""
+ },
+ {
+  "name": "hash-7",
+  "script": "hash \"hello world, this is a longer string to hash\""
+ },
+ {
+  "name": "hash-8",
+  "script": "hash \"a\""
+ },
+ {
+  "name": "hash-decomposed",
+  "script": "hash (\"e\" & (character id 769))"
+ },
+ {
+  "name": "hash-number",
+  "script": "hash 12"
+ },
+ {
+  "name": "hash-missing",
+  "script": "hash"
+ },
+ {
+  "name": "join-dash",
+  "script": "join {\"a\", \"b\", \"c\"} using \"-\""
+ },
+ {
+  "name": "join-empty-delimiter",
+  "script": "join {\"a\", \"b\"} using \"\""
+ },
+ {
+  "name": "join-numbers",
+  "script": "join {1, 2.5, \"x\"} using \",\""
+ },
+ {
+  "name": "join-empty-list",
+  "script": "join {} using \"-\""
+ },
+ {
+  "name": "join-single",
+  "script": "join {\"a\"} using \"-\""
+ },
+ {
+  "name": "join-return",
+  "script": "join {\"a\", \"b\"} using return"
+ },
+ {
+  "name": "join-nested",
+  "script": "join {\"a\", {\"b\", \"c\"}} using \"-\""
+ },
+ {
+  "name": "join-string",
+  "script": "join \"abc\" using \"-\""
+ },
+ {
+  "name": "join-missing-using",
+  "script": "join {\"a\", \"b\"}"
+ },
+ {
+  "name": "join-missing-value",
+  "script": "join {\"a\", missing value} using \"-\""
+ }
+]

@@ -1,0 +1,13 @@
+// Your own signing settings. Copy this file to Local.xcconfig, in this folder, and fill it in; git ignores
+// Local.xcconfig, so your team and certificate stay out of the repository.
+//
+// A certificate gives the app a signature that stays the same from one build to the next, so macOS doesn't ask
+// again for the permissions it has given the app. `security find-identity -v -p codesigning` lists yours.
+
+// "Apple Development" to use the app yourself, "Developer ID Application" to give it to others.
+CODE_SIGN_IDENTITY = Apple Development
+// Your team's ID (ten letters and digits; the one in parentheses in the certificate's name).
+DEVELOPMENT_TEAM = XXXXXXXXXX
+
+// A secure timestamp, which notarization requires. Only needed with "Developer ID Application".
+// OTHER_CODE_SIGN_FLAGS[config=Release] = --timestamp

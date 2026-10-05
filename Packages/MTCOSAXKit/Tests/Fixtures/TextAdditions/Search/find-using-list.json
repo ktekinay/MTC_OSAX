@@ -1,0 +1,98 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FINd",
+        "fields" : [
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "x abc-123 y",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "by  ",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "\\2",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "\\1",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "[\\0]",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "([a-z]+)-([0-9]+)",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "mPos",
+              "value" : {
+                "integer" : 2,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "mLen",
+              "value" : {
+                "integer" : 7,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "mRes",
+              "value" : {
+                "items" : [
+                  {
+                    "text" : "123",
+                    "type" : "utxt"
+                  },
+                  {
+                    "text" : "abc",
+                    "type" : "utxt"
+                  },
+                  {
+                    "text" : "[abc-123]",
+                    "type" : "utxt"
+                  }
+                ],
+                "type" : "list"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    }
+  ],
+  "name" : "find-using-list",
+  "recordedAt" : "2026-09-27T18:50:57Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "find text \"([a-z]+)-([0-9]+)\" in \"x abc-123 y\" using {\"\\\\2\", \"\\\\1\", \"[\\\\0]\"} with regexp"
+}

@@ -1,0 +1,2 @@
+# Fixture input files are test data: keep their exact bytes (line endings, encodings).
+Packages/MTCOSAXKit/Tests/Fixtures/**/Input/** -text

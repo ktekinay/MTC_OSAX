@@ -1,0 +1,28 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "GDbK",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "mtc-no-such-id",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -2763
+      }
+    }
+  ],
+  "name" : "doc-id-missing",
+  "recordedAt" : "2026-09-28T14:10:06Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "XMLGetDocByID \"mtc-no-such-id\"",
+  "timeZone" : "America/New_York"
+}

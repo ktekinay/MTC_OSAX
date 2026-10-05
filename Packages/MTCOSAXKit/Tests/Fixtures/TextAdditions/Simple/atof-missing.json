@@ -1,0 +1,26 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "ATOF",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "type" : "null"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1701
+      }
+    }
+  ],
+  "name" : "atof-missing",
+  "recordedAt" : "2026-09-27T18:58:49Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "atof"
+}

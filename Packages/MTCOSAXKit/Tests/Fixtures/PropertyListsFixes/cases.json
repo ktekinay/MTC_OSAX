@@ -1,0 +1,86 @@
+[
+ {
+  "name": "new-untyped-record",
+  "script": "set p to PlistNew {a:1} without typed\nPlistGetXML p\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "new-untyped-text",
+  "script": "set p to PlistNew {t:\"x\"} without typed\nPlistGetXML p\nPlistGet p key \"t\" as text\nPlistClose p"
+ },
+ {
+  "name": "new-untyped-real",
+  "script": "set p to PlistNew {v:2.5} without typed\nPlistGetXML p\nPlistGet p key \"v\"\nPlistClose p"
+ },
+ {
+  "name": "new-untyped-boolean",
+  "script": "set p to PlistNew {v:true} without typed\nPlistGetXML p\nPlistGet p key \"v\"\nPlistClose p"
+ },
+ {
+  "name": "new-untyped-date",
+  "script": "set p to PlistNew {v:date \"Saturday, January 1, 2000 at 12:00:00 AM\"} without typed\nPlistGetXML p\nPlistGet p key \"v\"\nPlistClose p"
+ },
+ {
+  "name": "new-untyped-list",
+  "script": "set p to PlistNew {v:{1, 2}} without typed\nPlistGetXML p\nPlistGet p key \"v\"\nPlistClose p"
+ },
+ {
+  "name": "new-untyped-integer",
+  "script": "set p to PlistNew {v:7} without typed\nPlistGetXML p\nPlistGet p key \"v\"\nPlistClose p"
+ },
+ {
+  "name": "open-big-numbers",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/big.plist\")\nPlistGet p\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "get-big-numbers",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/big.plist\")\nPlistGet p key \"big\"\nPlistGet p key \"huge\"\nPlistGet p key \"small\"\nPlistClose p"
+ },
+ {
+  "name": "set-key-list-missing-value-kept",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSet p key {\"a\", \"b\"} to {5, missing value} without suppressing\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "remove-then-use-removed",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nset c to PlistChild p key \"d\"\nPlistRemoveChild p key \"d\"\nPlistGet c\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "save-string-path",
+  "script": "set p to PlistNew {a:1, l:{\"x\", \"y\"}, d:{e:1}}\nPlistSave p in \"$TMP/string-path.plist\"\nPlistClose p\nreadtext (POSIX file \"$TMP/string-path.plist\")"
+ },
+ {
+  "name": "json-types",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistToJSON p\nPlistClose p"
+ },
+ {
+  "name": "json-types-formatted",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistToJSON p with formatting\nPlistClose p"
+ },
+ {
+  "name": "fromjson-object",
+  "script": "set p to PlistFromJSON \"{\\\"a\\\": 1, \\\"b\\\": [true, false, null], \\\"c\\\": {\\\"d\\\": 2.5}, \\\"e\\\": \\\"text\\\"}\"\nPlistType p\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "filter-into",
+  "script": "set p to PlistNew {z:0}\nfilter text \"^(\\\\w+)=(.*)$\" in (\"a=1\" & linefeed & \"b=2\" & linefeed & \"a=3\") key \"\\\\1\" using \"\\\\2\" into p\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "filter-into-list",
+  "script": "set p to PlistNew {a:\"old\"}\nfilter text \"^(\\\\w+)=(.*)$\" in (\"a=1\" & linefeed & \"b=2\" & linefeed & \"a=3\") key \"\\\\1\" using \"\\\\2\" as list into p\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "filter-into-child",
+  "script": "set p to PlistNew {d:{z:0}}\nfilter text \"^(\\\\w+)=(.*)$\" in (\"a=1\" & linefeed & \"b=2\" & linefeed & \"a=3\") key \"\\\\1\" using \"\\\\2\" into (PlistChild p key \"d\")\nPlistGetXML p\nPlistClose p"
+ },
+ {
+  "name": "filter-into-array",
+  "script": "set p to PlistNew {1, 2}\nfilter text \"^(\\\\w+)=(.*)$\" in (\"a=1\" & linefeed & \"b=2\" & linefeed & \"a=3\") key \"\\\\1\" into p\nPlistClose p"
+ },
+ {
+  "name": "filter-into-closed",
+  "script": "set p to PlistNew\nPlistClose p\nfilter text \"^(\\\\w+)=(.*)$\" in (\"a=1\" & linefeed & \"b=2\" & linefeed & \"a=3\") key \"\\\\1\" into p"
+ },
+ {
+  "name": "child-using-trailing-slash",
+  "script": "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nset c to PlistChild p using \"dict/\"\nPlistGet c\nPlistClose p"
+ }
+]

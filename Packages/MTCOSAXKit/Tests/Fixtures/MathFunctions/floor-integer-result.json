@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "FLOO",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 2,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 2,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "floor-integer-result",
+  "recordedAt" : "2026-09-28T04:29:09Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "floor 2",
+  "timeZone" : "America/New_York"
+}

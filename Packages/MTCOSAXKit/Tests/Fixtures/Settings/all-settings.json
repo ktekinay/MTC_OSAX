@@ -1,0 +1,433 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MTCs",
+        "eventID" : "set ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "integer" : 0,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "code" : "MTsi",
+              "type" : "enum"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "MTCs",
+        "eventID" : "set ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "code" : "MTsd",
+              "type" : "enum"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "MTCs",
+        "eventID" : "set ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "JAVA",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "code" : "MTsr",
+              "type" : "enum"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "MTCs",
+        "eventID" : "get ",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "code" : "MTsa",
+              "type" : "enum"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "fields" : [
+                {
+                  "key" : "pnam",
+                  "value" : {
+                    "code" : "MTsi",
+                    "type" : "enum"
+                  }
+                },
+                {
+                  "key" : "key ",
+                  "value" : {
+                    "text" : "IdleTimeoutSeconds",
+                    "type" : "utxt"
+                  }
+                },
+                {
+                  "key" : "val ",
+                  "value" : {
+                    "integer" : 0,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "MTdv",
+                  "value" : {
+                    "integer" : 3605,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "dscr",
+                  "value" : {
+                    "text" : "Seconds without commands before MTC_OSAX quits; 0 means never. It doesn't quit while property lists or XML documents are open.",
+                    "type" : "utxt"
+                  }
+                },
+                {
+                  "key" : "MTid",
+                  "value" : {
+                    "boolean" : false,
+                    "type" : "bool"
+                  }
+                }
+              ],
+              "type" : "reco"
+            },
+            {
+              "fields" : [
+                {
+                  "key" : "pnam",
+                  "value" : {
+                    "code" : "MTsd",
+                    "type" : "enum"
+                  }
+                },
+                {
+                  "key" : "key ",
+                  "value" : {
+                    "text" : "DollarReferences",
+                    "type" : "utxt"
+                  }
+                },
+                {
+                  "key" : "val ",
+                  "value" : {
+                    "boolean" : true,
+                    "type" : "bool"
+                  }
+                },
+                {
+                  "key" : "MTdv",
+                  "value" : {
+                    "boolean" : false,
+                    "type" : "bool"
+                  }
+                },
+                {
+                  "key" : "dscr",
+                  "value" : {
+                    "text" : "Whether replacement templates also accept $0–$9, ${name} and $$ when a command doesn't say (the dollar references parameter).",
+                    "type" : "utxt"
+                  }
+                },
+                {
+                  "key" : "MTid",
+                  "value" : {
+                    "boolean" : false,
+                    "type" : "bool"
+                  }
+                }
+              ],
+              "type" : "reco"
+            },
+            {
+              "fields" : [
+                {
+                  "key" : "pnam",
+                  "value" : {
+                    "code" : "MTsr",
+                    "type" : "enum"
+                  }
+                },
+                {
+                  "key" : "key ",
+                  "value" : {
+                    "text" : "RegexSyntax",
+                    "type" : "utxt"
+                  }
+                },
+                {
+                  "key" : "val ",
+                  "value" : {
+                    "text" : "JAVA",
+                    "type" : "utxt"
+                  }
+                },
+                {
+                  "key" : "MTdv",
+                  "value" : {
+                    "text" : "RUBY",
+                    "type" : "utxt"
+                  }
+                },
+                {
+                  "key" : "dscr",
+                  "value" : {
+                    "text" : "The regular expression syntax when a command doesn't give one: RUBY, PERL, JAVA, GNU_REGEX, GREP, EMACS, POSIX, POSIX_EXTENDED, PCRE (PCRE is MTC_OSAX's PCRE2 engine).",
+                    "type" : "utxt"
+                  }
+                },
+                {
+                  "key" : "MTid",
+                  "value" : {
+                    "boolean" : false,
+                    "type" : "bool"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "MTCs",
+        "eventID" : "rset",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "AllSettings",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "MTCs",
+        "eventID" : "get ",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "all settings",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "fields" : [
+                {
+                  "key" : "pnam",
+                  "value" : {
+                    "code" : "MTsi",
+                    "type" : "enum"
+                  }
+                },
+                {
+                  "key" : "key ",
+                  "value" : {
+                    "text" : "IdleTimeoutSeconds",
+                    "type" : "utxt"
+                  }
+                },
+                {
+                  "key" : "val ",
+                  "value" : {
+                    "integer" : 3605,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "MTdv",
+                  "value" : {
+                    "integer" : 3605,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "dscr",
+                  "value" : {
+                    "text" : "Seconds without commands before MTC_OSAX quits; 0 means never. It doesn't quit while property lists or XML documents are open.",
+                    "type" : "utxt"
+                  }
+                },
+                {
+                  "key" : "MTid",
+                  "value" : {
+                    "boolean" : true,
+                    "type" : "bool"
+                  }
+                }
+              ],
+              "type" : "reco"
+            },
+            {
+              "fields" : [
+                {
+                  "key" : "pnam",
+                  "value" : {
+                    "code" : "MTsd",
+                    "type" : "enum"
+                  }
+                },
+                {
+                  "key" : "key ",
+                  "value" : {
+                    "text" : "DollarReferences",
+                    "type" : "utxt"
+                  }
+                },
+                {
+                  "key" : "val ",
+                  "value" : {
+                    "boolean" : false,
+                    "type" : "bool"
+                  }
+                },
+                {
+                  "key" : "MTdv",
+                  "value" : {
+                    "boolean" : false,
+                    "type" : "bool"
+                  }
+                },
+                {
+                  "key" : "dscr",
+                  "value" : {
+                    "text" : "Whether replacement templates also accept $0–$9, ${name} and $$ when a command doesn't say (the dollar references parameter).",
+                    "type" : "utxt"
+                  }
+                },
+                {
+                  "key" : "MTid",
+                  "value" : {
+                    "boolean" : true,
+                    "type" : "bool"
+                  }
+                }
+              ],
+              "type" : "reco"
+            },
+            {
+              "fields" : [
+                {
+                  "key" : "pnam",
+                  "value" : {
+                    "code" : "MTsr",
+                    "type" : "enum"
+                  }
+                },
+                {
+                  "key" : "key ",
+                  "value" : {
+                    "text" : "RegexSyntax",
+                    "type" : "utxt"
+                  }
+                },
+                {
+                  "key" : "val ",
+                  "value" : {
+                    "text" : "RUBY",
+                    "type" : "utxt"
+                  }
+                },
+                {
+                  "key" : "MTdv",
+                  "value" : {
+                    "text" : "RUBY",
+                    "type" : "utxt"
+                  }
+                },
+                {
+                  "key" : "dscr",
+                  "value" : {
+                    "text" : "The regular expression syntax when a command doesn't give one: RUBY, PERL, JAVA, GNU_REGEX, GREP, EMACS, POSIX, POSIX_EXTENDED, PCRE (PCRE is MTC_OSAX's PCRE2 engine).",
+                    "type" : "utxt"
+                  }
+                },
+                {
+                  "key" : "MTid",
+                  "value" : {
+                    "boolean" : true,
+                    "type" : "bool"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "all-settings",
+  "recordedAt" : "2026-10-02T13:04:01Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "mtc_set idle_timeout to 0\nmtc_set dollar_references to true\nmtc_set regex_syntax to \"JAVA\"\nmtc_get all_settings\nmtc_reset \"AllSettings\"\nmtc_get \"all settings\"",
+  "timeZone" : "America/New_York"
+}

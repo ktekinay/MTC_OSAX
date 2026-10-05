@@ -1,0 +1,36 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "UnNo",
+        "fields" : [
+          {
+            "key" : "Deco",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "한",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "한",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "normalize-hangul",
+  "recordedAt" : "2026-09-27T18:58:50Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "normalize unicode \"한\" with decomposition"
+}

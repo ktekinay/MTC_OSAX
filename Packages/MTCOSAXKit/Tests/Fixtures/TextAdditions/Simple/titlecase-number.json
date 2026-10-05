@@ -1,0 +1,30 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CAPI",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 12,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "12",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "titlecase-number",
+  "recordedAt" : "2026-09-27T18:58:49Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "titlecase 12"
+}

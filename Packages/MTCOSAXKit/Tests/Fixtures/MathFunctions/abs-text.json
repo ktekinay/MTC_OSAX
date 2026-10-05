@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "ABS ",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "-2.5",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 2.5,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "abs-text",
+  "recordedAt" : "2026-09-28T04:29:09Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "abs \"-2.5\"",
+  "timeZone" : "America/New_York"
+}

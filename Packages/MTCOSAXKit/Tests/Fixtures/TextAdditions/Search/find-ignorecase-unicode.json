@@ -1,0 +1,71 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FINd",
+        "fields" : [
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "café",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "CaSe",
+            "value" : {
+              "type" : "fals"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "CAFÉ",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "mPos",
+              "value" : {
+                "integer" : 0,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "mLen",
+              "value" : {
+                "integer" : 4,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "mRes",
+              "value" : {
+                "text" : "café",
+                "type" : "utxt"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    }
+  ],
+  "name" : "find-ignorecase-unicode",
+  "recordedAt" : "2026-09-27T18:51:00Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "find text \"CAFÉ\" in \"café\" with regexp without case sensitive"
+}

@@ -1,0 +1,80 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Sort",
+        "fields" : [
+          {
+            "key" : "Cfla",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "b",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "B",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "a",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "A",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "c",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "a",
+              "type" : "ut16"
+            },
+            {
+              "text" : "A",
+              "type" : "ut16"
+            },
+            {
+              "text" : "b",
+              "type" : "ut16"
+            },
+            {
+              "text" : "B",
+              "type" : "ut16"
+            },
+            {
+              "text" : "c",
+              "type" : "ut16"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "sortlist-comparison-1",
+  "recordedAt" : "2026-09-28T04:34:13Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "sortlist {\"b\", \"B\", \"a\", \"A\", \"c\"} comparison 1",
+  "timeZone" : "America/New_York"
+}

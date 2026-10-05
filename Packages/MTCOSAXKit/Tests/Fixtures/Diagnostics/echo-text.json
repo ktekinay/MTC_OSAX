@@ -1,0 +1,30 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MTCd",
+        "eventID" : "echo",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "abc déf",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "abc déf",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "echo-text",
+  "recordedAt" : "2026-09-27T16:03:44Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "mtc_echo \"abc déf\""
+}

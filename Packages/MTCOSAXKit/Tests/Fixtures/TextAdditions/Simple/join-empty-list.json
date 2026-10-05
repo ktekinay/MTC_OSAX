@@ -1,0 +1,39 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Join",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "-",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "join-empty-list",
+  "recordedAt" : "2026-09-27T18:58:51Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "join {} using \"-\""
+}

@@ -1,0 +1,30 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Add%",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "http://x.com/a b?q=1 2",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "http://x.com/a%20b?q=1%202",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "escapeURL-9",
+  "recordedAt" : "2026-09-27T18:58:50Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "escapeURL \"http://x.com/a b?q=1 2\""
+}

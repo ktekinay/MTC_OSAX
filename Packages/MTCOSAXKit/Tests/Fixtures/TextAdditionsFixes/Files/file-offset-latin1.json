@@ -1,0 +1,48 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Foff",
+        "fields" : [
+          {
+            "key" : "in  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/latin1.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "enco",
+            "value" : {
+              "text" : "ISO-8859-1",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "é",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "integer" : 3,
+          "type" : "long"
+        }
+      }
+    }
+  ],
+  "name" : "file-offset-latin1",
+  "recordedAt" : "2026-09-27T19:52:26Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "file offset \"é\" in POSIX file \"$FILES/latin1.txt\" encoding \"ISO-8859-1\"",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

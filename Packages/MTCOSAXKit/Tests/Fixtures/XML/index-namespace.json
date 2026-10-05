@@ -1,0 +1,156 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/simple.xml",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "650000000d7001000000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "NKey",
+        "fields" : [
+          {
+            "key" : "matc",
+            "value" : {
+              "text" : "//book",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "use ",
+            "value" : {
+              "text" : "dc:creator",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "at  ",
+            "value" : {
+              "hex" : "650000000d7001000000000000000000",
+              "type" : "XMLR"
+            }
+          },
+          {
+            "key" : "nsls",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "PREf",
+                  "value" : {
+                    "text" : "dc",
+                    "type" : "utxt"
+                  }
+                },
+                {
+                  "key" : "PUri",
+                  "value" : {
+                    "text" : "http://purl.org/dc/elements/1.1/",
+                    "type" : "utxt"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "k",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "GKey",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "k",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "at  ",
+            "value" : {
+              "hex" : "650000000d7001000000000000000000",
+              "type" : "XMLR"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "Victor Hugo",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "hex" : "650000000d70010000c8840000600000",
+              "type" : "XMLR"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "650000000d7001000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "index-namespace",
+  "recordedAt" : "2026-09-28T15:05:18Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLNewIndex \"k\" match \"//book\" use \"dc:creator\" at d namespace {nsprefix:\"dc\", nsurl:\"http://purl.org/dc/elements/1.1/\"}\nXMLLookup \"Victor Hugo\" using \"k\" at d\nXMLClose d",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

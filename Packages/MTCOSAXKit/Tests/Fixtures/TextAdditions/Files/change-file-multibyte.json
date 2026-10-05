@@ -1,0 +1,95 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/c5.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "alpha beta\ngamma alpha\né alpha\n",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RPLl",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "e",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/c5.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "é",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "integer" : 1,
+          "type" : "long"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Read",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/c5.txt",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "alpha beta\ngamma alpha\ne alpha\n",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "change-file-multibyte",
+  "recordedAt" : "2026-09-27T19:03:49Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "writetext (\"alpha beta\" & linefeed & \"gamma alpha\" & linefeed & \"é alpha\" & linefeed) to POSIX file \"$TMP/c5.txt\"\nchange \"é\" into \"e\" in POSIX file \"$TMP/c5.txt\"\nreadtext POSIX file \"$TMP/c5.txt\"",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "ReEn",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "&#;&#xZZ;&#0;&#1114112;&#12a;",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "&#;&#xZZ;&#0;&#1114112;&#12a;",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "resolve-entities-malformed",
+  "recordedAt" : "2026-09-27T19:52:28Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "resolve entities \"&#;&#xZZ;&#0;&#1114112;&#12a;\"",
+  "timeZone" : "America/New_York"
+}

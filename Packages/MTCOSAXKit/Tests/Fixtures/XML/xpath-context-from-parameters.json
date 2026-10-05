@@ -1,0 +1,368 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/simple.xml",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "8d0000000d7001000000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "root",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "8d0000000d7001000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "8d0000000d7001008055850000600000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "path",
+        "fields" : [
+          {
+            "key" : "with",
+            "value" : {
+              "text" : "book[@id=$v]/dc:creator",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "nsls",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "PREf",
+                  "value" : {
+                    "text" : "dc",
+                    "type" : "utxt"
+                  }
+                },
+                {
+                  "key" : "PUri",
+                  "value" : {
+                    "text" : "http://purl.org/dc/elements/1.1/",
+                    "type" : "utxt"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          },
+          {
+            "key" : "vars",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "v",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "b1",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "8d0000000d7001008055850000600000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "hex" : "8d0000000d7001000059850000600000",
+              "type" : "XMLR"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "xpNS",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "8d0000000d7001000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "nsls",
+              "value" : {
+                "items" : [
+                  {
+                    "fields" : [
+                      {
+                        "key" : "PREf",
+                        "value" : {
+                          "text" : "dc",
+                          "type" : "utf8"
+                        }
+                      },
+                      {
+                        "key" : "PUri",
+                        "value" : {
+                          "text" : "http://purl.org/dc/elements/1.1/",
+                          "type" : "utf8"
+                        }
+                      }
+                    ],
+                    "type" : "reco"
+                  }
+                ],
+                "type" : "list"
+              }
+            },
+            {
+              "key" : "vars",
+              "value" : {
+                "items" : [
+                  {
+                    "items" : [
+                      {
+                        "text" : "v",
+                        "type" : "utf8"
+                      },
+                      {
+                        "text" : "b1",
+                        "type" : "utf8"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                ],
+                "type" : "list"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "path",
+        "fields" : [
+          {
+            "key" : "with",
+            "value" : {
+              "text" : "book[@id=$v]/dc:creator",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "8d0000000d7001008055850000600000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "hex" : "8d0000000d7001000059850000600000",
+              "type" : "XMLR"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "path",
+        "fields" : [
+          {
+            "key" : "with",
+            "value" : {
+              "text" : "count(book[@id=$v])",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "vars",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "v",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "b2",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "8d0000000d7001008055850000600000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "integer" : 1,
+          "type" : "long"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "xpNS",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "8d0000000d7001000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "nsls",
+              "value" : {
+                "items" : [
+                  {
+                    "fields" : [
+                      {
+                        "key" : "PREf",
+                        "value" : {
+                          "text" : "dc",
+                          "type" : "utf8"
+                        }
+                      },
+                      {
+                        "key" : "PUri",
+                        "value" : {
+                          "text" : "http://purl.org/dc/elements/1.1/",
+                          "type" : "utf8"
+                        }
+                      }
+                    ],
+                    "type" : "reco"
+                  }
+                ],
+                "type" : "list"
+              }
+            },
+            {
+              "key" : "vars",
+              "value" : {
+                "items" : [
+                  {
+                    "items" : [
+                      {
+                        "text" : "v",
+                        "type" : "utf8"
+                      },
+                      {
+                        "text" : "b2",
+                        "type" : "utf8"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                ],
+                "type" : "list"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "8d0000000d7001000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "xpath-context-from-parameters",
+  "recordedAt" : "2026-09-28T15:26:16Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLXPath r with \"book[@id=$v]/dc:creator\" namespace {nsprefix:\"dc\", nsurl:\"http://purl.org/dc/elements/1.1/\"} xpath variables {\"v\", \"b1\"}\nXMLGetContext d\nXMLXPath r with \"book[@id=$v]/dc:creator\"\nXMLXPath r with \"count(book[@id=$v])\" xpath variables {\"v\", \"b2\"}\nXMLGetContext d\nXMLClose d",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

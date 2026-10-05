@@ -1,0 +1,73 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Writ",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/w-utf16le.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "enco",
+            "value" : {
+              "text" : "UTF-16LE",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "é",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Read",
+        "fields" : [
+          {
+            "key" : "enco",
+            "value" : {
+              "text" : "ISO-8859-1",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/w-utf16le.txt",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "é\u0000",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "writetext-utf16le",
+  "recordedAt" : "2026-09-27T19:03:48Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "writetext \"é\" to POSIX file \"$TMP/w-utf16le.txt\" encoding \"UTF-16LE\"\nreadtext POSIX file \"$TMP/w-utf16le.txt\" encoding \"ISO-8859-1\"",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

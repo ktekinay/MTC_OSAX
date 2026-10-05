@@ -1,0 +1,4 @@
+John is ten
+Anna is twelve
+John is at school
+Anna sleeps

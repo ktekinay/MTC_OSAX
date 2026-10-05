@@ -1,0 +1,37 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FINd",
+        "fields" : [
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/nope.txt",
+              "type" : "furl"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "a",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -43
+      }
+    }
+  ],
+  "name" : "find-file-missing",
+  "recordedAt" : "2026-09-27T19:03:49Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "find text \"a\" in POSIX file \"$FILES/nope.txt\"",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

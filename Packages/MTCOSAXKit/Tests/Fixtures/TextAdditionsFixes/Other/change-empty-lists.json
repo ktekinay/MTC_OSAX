@@ -1,0 +1,49 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RPLl",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "items" : [
+
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "abc",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "abc",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "change-empty-lists",
+  "recordedAt" : "2026-09-27T19:52:27Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "change {} into {} in \"abc\"",
+  "timeZone" : "America/New_York"
+}

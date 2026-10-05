@@ -1,0 +1,121 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Sort",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "b",
+                  "type" : "utxt"
+                },
+                {
+                  "real" : -0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : -0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 1500000000000000,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 1e+16,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 1e-05,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 1e-06,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 1e-07,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0.30000000000000004,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 123456789.123,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 2.5,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : " 1e+16",
+              "type" : "ut16"
+            },
+            {
+              "text" : " 1e-7",
+              "type" : "ut16"
+            },
+            {
+              "text" : "0",
+              "type" : "ut16"
+            },
+            {
+              "text" : "0",
+              "type" : "ut16"
+            },
+            {
+              "text" : "0.000001",
+              "type" : "ut16"
+            },
+            {
+              "text" : "0.00001",
+              "type" : "ut16"
+            },
+            {
+              "text" : "0.3",
+              "type" : "ut16"
+            },
+            {
+              "text" : "123456789.123",
+              "type" : "ut16"
+            },
+            {
+              "text" : "1500000000000000",
+              "type" : "ut16"
+            },
+            {
+              "text" : "2.5",
+              "type" : "ut16"
+            },
+            {
+              "text" : "b",
+              "type" : "ut16"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "sortlist-reals-and-text-forms",
+  "recordedAt" : "2026-10-01T18:53:21Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "sortlist {\"b\", -0.0, 0.0, 1.5E+15, 1.0E+16, 1.0E-5, 1.0E-6, 1.0E-7, 0.1 + 0.2, 123456789.123, 2.5}",
+  "timeZone" : "America/New_York"
+}

@@ -1,0 +1,56 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RPLl",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "\\1\\n",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "abc",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "RStr",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "(b)",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "a\\1\\nc",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "change-verbatim",
+  "recordedAt" : "2026-09-27T18:50:58Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "change \"(b)\" into \"\\\\1\\\\n\" in \"abc\" with regexp and verbatim"
+}

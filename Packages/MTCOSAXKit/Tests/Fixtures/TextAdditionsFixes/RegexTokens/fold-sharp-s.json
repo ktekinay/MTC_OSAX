@@ -1,0 +1,161 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FINd",
+        "fields" : [
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "SS ss ß ẞ",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "WaAl",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "CaSe",
+            "value" : {
+              "type" : "fals"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "ß",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "fields" : [
+                {
+                  "key" : "mPos",
+                  "value" : {
+                    "integer" : 0,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "mLen",
+                  "value" : {
+                    "integer" : 2,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "mRes",
+                  "value" : {
+                    "text" : "SS",
+                    "type" : "utxt"
+                  }
+                }
+              ],
+              "type" : "reco"
+            },
+            {
+              "fields" : [
+                {
+                  "key" : "mPos",
+                  "value" : {
+                    "integer" : 3,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "mLen",
+                  "value" : {
+                    "integer" : 2,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "mRes",
+                  "value" : {
+                    "text" : "ss",
+                    "type" : "utxt"
+                  }
+                }
+              ],
+              "type" : "reco"
+            },
+            {
+              "fields" : [
+                {
+                  "key" : "mPos",
+                  "value" : {
+                    "integer" : 6,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "mLen",
+                  "value" : {
+                    "integer" : 1,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "mRes",
+                  "value" : {
+                    "text" : "ß",
+                    "type" : "utxt"
+                  }
+                }
+              ],
+              "type" : "reco"
+            },
+            {
+              "fields" : [
+                {
+                  "key" : "mPos",
+                  "value" : {
+                    "integer" : 8,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "mLen",
+                  "value" : {
+                    "integer" : 1,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "mRes",
+                  "value" : {
+                    "text" : "ẞ",
+                    "type" : "utxt"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "fold-sharp-s",
+  "recordedAt" : "2026-09-27T20:26:21Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "find text \"ß\" in \"SS ss ß ẞ\" with regexp and all occurrences without case sensitive",
+  "timeZone" : "America/New_York"
+}

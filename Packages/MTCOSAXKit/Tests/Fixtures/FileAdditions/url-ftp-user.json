@@ -1,0 +1,148 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "Quom",
+        "eventID" : "MkDi",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/url-ftp-user",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "/private/tmp/mtc-fixtures/tmp/url-ftp-user/",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "IURL",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "ftp://anonymous@ftp.example.com/pub/file.tar.gz",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "pusc",
+              "value" : {
+                "text" : "ftp",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "HOST",
+              "value" : {
+                "text" : "ftp.example.com",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "RAun",
+              "value" : {
+                "text" : "anonymous",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "psxP",
+              "value" : {
+                "text" : "/pub/file.tar.gz",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "FTPc",
+              "value" : {
+                "text" : "/pub/file.tar.gz",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "pnam",
+              "value" : {
+                "text" : "file.tar.gz",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "nmxt",
+              "value" : {
+                "text" : "gz",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "utid",
+              "value" : {
+                "text" : "org.gnu.gnu-zip-archive",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "asty",
+              "value" : {
+                "text" : "",
+                "type" : "TEXT"
+              }
+            },
+            {
+              "key" : "asct",
+              "value" : {
+                "text" : "",
+                "type" : "TEXT"
+              }
+            },
+            {
+              "key" : "asdr",
+              "value" : {
+                "boolean" : false,
+                "type" : "bool"
+              }
+            },
+            {
+              "key" : "ispk",
+              "value" : {
+                "boolean" : false,
+                "type" : "bool"
+              }
+            },
+            {
+              "key" : "alis",
+              "value" : {
+                "boolean" : false,
+                "type" : "bool"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    }
+  ],
+  "name" : "url-ftp-user",
+  "recordedAt" : "2026-09-28T00:07:57Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "mkdir (POSIX file \"$TMP/url-ftp-user\")\nURL info for \"ftp://anonymous@ftp.example.com/pub/file.tar.gz\"",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

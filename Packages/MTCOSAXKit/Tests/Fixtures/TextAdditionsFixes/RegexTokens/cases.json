@@ -1,0 +1,26 @@
+[
+ {
+  "name": "type-linebreak",
+  "script": "find text \"\\\\R\" in (\"a\" & (character id 13) & (character id 10) & \"b\" & (character id 10) & \"c\" & (character id 13) & \"d\" & (character id 8232) & \"e\" & (character id 11) & \"f\") with regexp and all occurrences"
+ },
+ {
+  "name": "type-grapheme",
+  "script": "find text \"\\\\X\" in \"éa🇺🇸👍🏽\" with regexp and all occurrences"
+ },
+ {
+  "name": "prop-emoji",
+  "script": "find text \"\\\\p{Emoji}\" in \"a😀1#\" with regexp and all occurrences"
+ },
+ {
+  "name": "prop-lower-case-name",
+  "script": "find text \"\\\\p{alpha}+\" in \"ab1\" with regexp and all occurrences"
+ },
+ {
+  "name": "option-absent",
+  "script": "find text \"/\\\\*(?~\\\\*/)\\\\*/\" in \"/* a */ b */\" with regexp and all occurrences"
+ },
+ {
+  "name": "fold-sharp-s",
+  "script": "find text \"ß\" in \"SS ss ß ẞ\" with regexp and all occurrences without case sensitive"
+ }
+]

@@ -1,0 +1,175 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/simple.xml",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "45000000df0501000000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "root",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "45000000df0501000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "45000000df05010000198e0300600000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "disp",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "hex" : "45000000df0501000000000000000000",
+                  "type" : "XMLR"
+                },
+                {
+                  "hex" : "45000000df05010000198e0300600000",
+                  "type" : "XMLR"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "fields" : [
+                {
+                  "key" : "kind",
+                  "value" : {
+                    "text" : "DOCUMENT_NODE",
+                    "type" : "TEXT"
+                  }
+                },
+                {
+                  "key" : "hdtd",
+                  "value" : {
+                    "boolean" : false,
+                    "type" : "bool"
+                  }
+                },
+                {
+                  "key" : "imod",
+                  "value" : {
+                    "boolean" : false,
+                    "type" : "bool"
+                  }
+                }
+              ],
+              "type" : "reco"
+            },
+            {
+              "fields" : [
+                {
+                  "key" : "kind",
+                  "value" : {
+                    "text" : "ELEMENT_NODE",
+                    "type" : "TEXT"
+                  }
+                },
+                {
+                  "key" : "pnam",
+                  "value" : {
+                    "text" : "library",
+                    "type" : "utf8"
+                  }
+                },
+                {
+                  "key" : "attr",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "version",
+                        "type" : "utf8"
+                      },
+                      {
+                        "text" : "2",
+                        "type" : "utf8"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                },
+                {
+                  "key" : "cpar",
+                  "value" : {
+                    "integer" : 4,
+                    "type" : "long"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "45000000df0501000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "read-node-info-list",
+  "recordedAt" : "2026-09-28T14:10:01Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nset r to XMLRoot d\nXMLNodeInfo {d, r}\nXMLClose d",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

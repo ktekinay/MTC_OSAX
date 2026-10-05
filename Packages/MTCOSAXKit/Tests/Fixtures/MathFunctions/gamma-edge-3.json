@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "GAMM",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "real" : -1.5,
+              "type" : "doub"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 2.363271801207355,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "gamma-edge-3",
+  "recordedAt" : "2026-09-28T04:29:09Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "gamma -1.5",
+  "timeZone" : "America/New_York"
+}

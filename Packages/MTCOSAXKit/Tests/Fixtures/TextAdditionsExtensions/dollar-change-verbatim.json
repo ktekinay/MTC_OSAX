@@ -1,0 +1,62 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RPLl",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "$1",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "xa",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "RStr",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "DlRf",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "(a)",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "x$1",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "dollar-change-verbatim",
+  "recordedAt" : "2026-09-27T18:56:37Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "change \"(a)\" into \"$1\" in \"xa\" with regexp, verbatim and dollar references"
+}

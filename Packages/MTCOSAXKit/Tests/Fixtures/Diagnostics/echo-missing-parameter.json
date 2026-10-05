@@ -1,0 +1,26 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MTCd",
+        "eventID" : "echo",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "type" : "null"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1701
+      }
+    }
+  ],
+  "name" : "echo-missing-parameter",
+  "recordedAt" : "2026-09-27T16:03:45Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "mtc_echo"
+}

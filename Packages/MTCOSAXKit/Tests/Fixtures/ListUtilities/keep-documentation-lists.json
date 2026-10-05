@@ -1,0 +1,191 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "KIFL",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "items" : [
+                {
+                  "items" : [
+                    {
+                      "text" : "a",
+                      "type" : "utxt"
+                    },
+                    {
+                      "text" : "z",
+                      "type" : "utxt"
+                    },
+                    {
+                      "text" : "e",
+                      "type" : "utxt"
+                    },
+                    {
+                      "text" : "r",
+                      "type" : "utxt"
+                    },
+                    {
+                      "text" : "t",
+                      "type" : "utxt"
+                    },
+                    {
+                      "text" : "y",
+                      "type" : "utxt"
+                    }
+                  ],
+                  "type" : "list"
+                },
+                {
+                  "items" : [
+                    {
+                      "integer" : 1,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 2,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 3,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 4,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 5,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 6,
+                      "type" : "long"
+                    }
+                  ],
+                  "type" : "list"
+                },
+                {
+                  "items" : [
+                    {
+                      "text" : "one",
+                      "type" : "utxt"
+                    },
+                    {
+                      "text" : "two",
+                      "type" : "utxt"
+                    },
+                    {
+                      "text" : "three",
+                      "type" : "utxt"
+                    },
+                    {
+                      "text" : "four",
+                      "type" : "utxt"
+                    },
+                    {
+                      "text" : "five",
+                      "type" : "utxt"
+                    },
+                    {
+                      "text" : "six",
+                      "type" : "utxt"
+                    }
+                  ],
+                  "type" : "list"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "r",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "t",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "z",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "items" : [
+                {
+                  "text" : "z",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "r",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "t",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            },
+            {
+              "items" : [
+                {
+                  "integer" : 2,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 4,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 5,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            },
+            {
+              "items" : [
+                {
+                  "text" : "two",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "four",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "five",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "keep-documentation-lists",
+  "recordedAt" : "2026-09-28T04:34:15Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "keep items {\"r\", \"t\", \"z\"} from {{\"a\", \"z\", \"e\", \"r\", \"t\", \"y\"}, {1, 2, 3, 4, 5, 6}, {\"one\", \"two\", \"three\", \"four\", \"five\", \"six\"}}",
+  "timeZone" : "America/New_York"
+}

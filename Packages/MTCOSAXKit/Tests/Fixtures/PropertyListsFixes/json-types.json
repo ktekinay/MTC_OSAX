@@ -1,0 +1,75 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/simple.plist",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "070000004d5443702200000000000000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "JSON",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "070000004d5443702200000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "{\"people\":[{\"age\":30,\"first\":\"Ann\"},{\"age\":40,\"first\":\"Bob\"},{\"age\":30,\"first\":\"Cy\",\"pet\":\"cat\"}],\"blob\":\"AAECaGVsbG8=\",\"unicode\":\"café ☃\",\"dict\":{\"empty\":{},\"x\":1,\"y\":{\"z\":\"deep\"}},\"count\":3,\"emptyList\":[],\"ratio\":2.5,\"disabled\":false,\"when\":\"2020-05-17T12:30:00Z\",\"enabled\":true,\"list\":[\"a\",1,2.5,true,{\"nested\":\"yes\"}],\"emptyText\":\"\",\"name\":\"Simple\"}",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "070000004d5443702200000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "json-types",
+  "recordedAt" : "2026-09-28T13:28:03Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistToJSON p\nPlistClose p",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

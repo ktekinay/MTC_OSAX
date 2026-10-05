@@ -1,0 +1,72 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FINd",
+        "fields" : [
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "ab",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "synt",
+            "value" : {
+              "text" : "ruby",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "a",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "mPos",
+              "value" : {
+                "integer" : 0,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "mLen",
+              "value" : {
+                "integer" : 1,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "mRes",
+              "value" : {
+                "text" : "a",
+                "type" : "utxt"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    }
+  ],
+  "name" : "find-syntax-lowercase",
+  "recordedAt" : "2026-09-27T18:50:57Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "find text \"a\" in \"ab\" with regexp syntax \"ruby\""
+}

@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "http://127.0.0.1:8765/files/nope.xml",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : 1549
+      }
+    }
+  ],
+  "name" : "get-missing",
+  "recordedAt" : "2026-09-28T14:28:50Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "XMLOpen \"$HTTP/files/nope.xml\"",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "HTTP" : "http://127.0.0.1:8765"
+  }
+}

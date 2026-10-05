@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "TANG",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "real" : 0.7853981633974483,
+              "type" : "doub"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 0.9999999999999999,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "tan-3",
+  "recordedAt" : "2026-09-28T04:29:07Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "tan 0.7853981633974483",
+  "timeZone" : "America/New_York"
+}

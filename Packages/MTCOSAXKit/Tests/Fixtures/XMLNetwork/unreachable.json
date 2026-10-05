@@ -1,0 +1,28 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "http://127.0.0.1:1/nothing.xml",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : 1549
+      }
+    }
+  ],
+  "name" : "unreachable",
+  "recordedAt" : "2026-09-28T14:28:51Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "XMLOpen \"http://127.0.0.1:1/nothing.xml\"",
+  "timeZone" : "America/New_York"
+}

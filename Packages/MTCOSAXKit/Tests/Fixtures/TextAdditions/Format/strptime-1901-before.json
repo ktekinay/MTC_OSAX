@@ -1,0 +1,38 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "strp",
+        "fields" : [
+          {
+            "key" : "enco",
+            "value" : {
+              "text" : "%Y-%m-%d",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "1901-12-13",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "808c24fcffffffff",
+          "type" : "ldt "
+        }
+      }
+    }
+  ],
+  "name" : "strptime-1901-before",
+  "recordedAt" : "2026-09-27T19:12:47Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "strptime \"1901-12-13\" encoding \"%Y-%m-%d\"",
+  "timeZone" : "America/New_York"
+}

@@ -1,0 +1,36 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FORM",
+        "fields" : [
+          {
+            "key" : "into",
+            "value" : {
+              "text" : "##^##",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "real" : 12.5,
+              "type" : "doub"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorMessage" : "\"##^##\" isn't a valid number format.",
+        "errorNumber" : -50
+      }
+    }
+  ],
+  "name" : "format-invalid",
+  "recordedAt" : "2026-09-27T19:52:28Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "format 12.5 into \"##^##\"",
+  "timeZone" : "America/New_York"
+}

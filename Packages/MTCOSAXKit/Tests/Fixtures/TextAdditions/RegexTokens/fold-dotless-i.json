@@ -1,0 +1,83 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FINd",
+        "fields" : [
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "I ı İ",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "WaAl",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "CaSe",
+            "value" : {
+              "type" : "fals"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "i",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "fields" : [
+                {
+                  "key" : "mPos",
+                  "value" : {
+                    "integer" : 0,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "mLen",
+                  "value" : {
+                    "integer" : 1,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "mRes",
+                  "value" : {
+                    "text" : "I",
+                    "type" : "utxt"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "fold-dotless-i",
+  "recordedAt" : "2026-09-27T20:23:40Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "find text \"i\" in \"I ı İ\" with regexp and all occurrences without case sensitive",
+  "timeZone" : "America/New_York"
+}

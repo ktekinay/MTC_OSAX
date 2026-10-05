@@ -1,0 +1,420 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/simple.plist",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "2000000075a6000060e4200000600000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disp",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "2000000075a6000060e4200000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "dictionary",
+          "type" : "utf8"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "cunt",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "2000000075a6000060e4200000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "integer" : 13,
+          "type" : "long"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "2000000075a6000060e4200000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "usrf",
+              "value" : {
+                "items" : [
+                  {
+                    "text" : "people",
+                    "type" : "TEXT"
+                  },
+                  {
+                    "items" : [
+                      {
+                        "fields" : [
+                          {
+                            "key" : "usrf",
+                            "value" : {
+                              "items" : [
+                                {
+                                  "text" : "age",
+                                  "type" : "TEXT"
+                                },
+                                {
+                                  "integer" : 30,
+                                  "type" : "long"
+                                },
+                                {
+                                  "text" : "first",
+                                  "type" : "TEXT"
+                                },
+                                {
+                                  "text" : "Ann",
+                                  "type" : "ut16"
+                                }
+                              ],
+                              "type" : "list"
+                            }
+                          }
+                        ],
+                        "type" : "reco"
+                      },
+                      {
+                        "fields" : [
+                          {
+                            "key" : "usrf",
+                            "value" : {
+                              "items" : [
+                                {
+                                  "text" : "age",
+                                  "type" : "TEXT"
+                                },
+                                {
+                                  "integer" : 40,
+                                  "type" : "long"
+                                },
+                                {
+                                  "text" : "first",
+                                  "type" : "TEXT"
+                                },
+                                {
+                                  "text" : "Bob",
+                                  "type" : "ut16"
+                                }
+                              ],
+                              "type" : "list"
+                            }
+                          }
+                        ],
+                        "type" : "reco"
+                      },
+                      {
+                        "fields" : [
+                          {
+                            "key" : "usrf",
+                            "value" : {
+                              "items" : [
+                                {
+                                  "text" : "age",
+                                  "type" : "TEXT"
+                                },
+                                {
+                                  "integer" : 30,
+                                  "type" : "long"
+                                },
+                                {
+                                  "text" : "first",
+                                  "type" : "TEXT"
+                                },
+                                {
+                                  "text" : "Cy",
+                                  "type" : "ut16"
+                                },
+                                {
+                                  "text" : "pet",
+                                  "type" : "TEXT"
+                                },
+                                {
+                                  "text" : "cat",
+                                  "type" : "ut16"
+                                }
+                              ],
+                              "type" : "list"
+                            }
+                          }
+                        ],
+                        "type" : "reco"
+                      }
+                    ],
+                    "type" : "list"
+                  },
+                  {
+                    "text" : "blob",
+                    "type" : "TEXT"
+                  },
+                  {
+                    "text" : "\u0000\u0001\u0002hello",
+                    "type" : "TEXT"
+                  },
+                  {
+                    "text" : "unicode",
+                    "type" : "TEXT"
+                  },
+                  {
+                    "text" : "café ☃",
+                    "type" : "ut16"
+                  },
+                  {
+                    "text" : "dict",
+                    "type" : "TEXT"
+                  },
+                  {
+                    "fields" : [
+                      {
+                        "key" : "usrf",
+                        "value" : {
+                          "items" : [
+                            {
+                              "text" : "empty",
+                              "type" : "TEXT"
+                            },
+                            {
+                              "fields" : [
+
+                              ],
+                              "type" : "reco"
+                            },
+                            {
+                              "text" : "x",
+                              "type" : "TEXT"
+                            },
+                            {
+                              "integer" : 1,
+                              "type" : "long"
+                            },
+                            {
+                              "text" : "y",
+                              "type" : "TEXT"
+                            },
+                            {
+                              "fields" : [
+                                {
+                                  "key" : "usrf",
+                                  "value" : {
+                                    "items" : [
+                                      {
+                                        "text" : "z",
+                                        "type" : "TEXT"
+                                      },
+                                      {
+                                        "text" : "deep",
+                                        "type" : "ut16"
+                                      }
+                                    ],
+                                    "type" : "list"
+                                  }
+                                }
+                              ],
+                              "type" : "reco"
+                            }
+                          ],
+                          "type" : "list"
+                        }
+                      }
+                    ],
+                    "type" : "reco"
+                  },
+                  {
+                    "text" : "count",
+                    "type" : "TEXT"
+                  },
+                  {
+                    "integer" : 3,
+                    "type" : "long"
+                  },
+                  {
+                    "text" : "emptyList",
+                    "type" : "TEXT"
+                  },
+                  {
+                    "items" : [
+
+                    ],
+                    "type" : "list"
+                  },
+                  {
+                    "text" : "ratio",
+                    "type" : "TEXT"
+                  },
+                  {
+                    "real" : 2.5,
+                    "type" : "doub"
+                  },
+                  {
+                    "text" : "disabled",
+                    "type" : "TEXT"
+                  },
+                  {
+                    "boolean" : false,
+                    "type" : "bool"
+                  },
+                  {
+                    "text" : "when",
+                    "type" : "TEXT"
+                  },
+                  {
+                    "hex" : "88a6e6da00000000",
+                    "type" : "ldt "
+                  },
+                  {
+                    "text" : "enabled",
+                    "type" : "TEXT"
+                  },
+                  {
+                    "boolean" : true,
+                    "type" : "bool"
+                  },
+                  {
+                    "text" : "list",
+                    "type" : "TEXT"
+                  },
+                  {
+                    "items" : [
+                      {
+                        "text" : "a",
+                        "type" : "ut16"
+                      },
+                      {
+                        "integer" : 1,
+                        "type" : "long"
+                      },
+                      {
+                        "real" : 2.5,
+                        "type" : "doub"
+                      },
+                      {
+                        "boolean" : true,
+                        "type" : "bool"
+                      },
+                      {
+                        "fields" : [
+                          {
+                            "key" : "usrf",
+                            "value" : {
+                              "items" : [
+                                {
+                                  "text" : "nested",
+                                  "type" : "TEXT"
+                                },
+                                {
+                                  "text" : "yes",
+                                  "type" : "ut16"
+                                }
+                              ],
+                              "type" : "list"
+                            }
+                          }
+                        ],
+                        "type" : "reco"
+                      }
+                    ],
+                    "type" : "list"
+                  },
+                  {
+                    "text" : "emptyText",
+                    "type" : "TEXT"
+                  },
+                  {
+                    "text" : "",
+                    "type" : "ut16"
+                  },
+                  {
+                    "text" : "name",
+                    "type" : "TEXT"
+                  },
+                  {
+                    "text" : "Simple",
+                    "type" : "ut16"
+                  }
+                ],
+                "type" : "list"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "2000000075a6000060e4200000600000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "open-xml",
+  "recordedAt" : "2026-09-28T13:15:20Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set p to PlistOpen (POSIX file \"$FILES/simple.plist\")\nPlistType p\nPlistCount p\nPlistGet p\nPlistClose p",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

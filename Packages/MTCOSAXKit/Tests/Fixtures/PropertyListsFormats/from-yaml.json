@@ -1,0 +1,171 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MTCp",
+        "eventID" : "FYML",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "name: Ann\ncountry: no\nn: 12\nr: 1.5\nt: true\nnothing: null\ntags: [a, b]\naddress:\n  city: Paris",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "090000004d5443700c00000000000000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "disx",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "090000004d5443700c00000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "usrf",
+              "value" : {
+                "items" : [
+                  {
+                    "text" : "address",
+                    "type" : "utxt"
+                  },
+                  {
+                    "fields" : [
+                      {
+                        "key" : "usrf",
+                        "value" : {
+                          "items" : [
+                            {
+                              "text" : "city",
+                              "type" : "utxt"
+                            },
+                            {
+                              "text" : "Paris",
+                              "type" : "utxt"
+                            }
+                          ],
+                          "type" : "list"
+                        }
+                      }
+                    ],
+                    "type" : "reco"
+                  },
+                  {
+                    "text" : "t",
+                    "type" : "utxt"
+                  },
+                  {
+                    "boolean" : true,
+                    "type" : "bool"
+                  },
+                  {
+                    "text" : "country",
+                    "type" : "utxt"
+                  },
+                  {
+                    "text" : "no",
+                    "type" : "utxt"
+                  },
+                  {
+                    "text" : "nothing",
+                    "type" : "utxt"
+                  },
+                  {
+                    "code" : "msng",
+                    "type" : "type"
+                  },
+                  {
+                    "text" : "r",
+                    "type" : "utxt"
+                  },
+                  {
+                    "real" : 1.5,
+                    "type" : "doub"
+                  },
+                  {
+                    "text" : "n",
+                    "type" : "utxt"
+                  },
+                  {
+                    "integer" : 12,
+                    "type" : "long"
+                  },
+                  {
+                    "text" : "tags",
+                    "type" : "utxt"
+                  },
+                  {
+                    "items" : [
+                      {
+                        "text" : "a",
+                        "type" : "utxt"
+                      },
+                      {
+                        "text" : "b",
+                        "type" : "utxt"
+                      }
+                    ],
+                    "type" : "list"
+                  },
+                  {
+                    "text" : "name",
+                    "type" : "utxt"
+                  },
+                  {
+                    "text" : "Ann",
+                    "type" : "utxt"
+                  }
+                ],
+                "type" : "list"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "090000004d5443700c00000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "from-yaml",
+  "recordedAt" : "2026-09-28T19:22:41Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "set p to PlistFromYAML \"name: Ann\ncountry: no\nn: 12\nr: 1.5\nt: true\nnothing: null\ntags: [a, b]\naddress:\n  city: Paris\"\nPlistGet p\nPlistClose p",
+  "timeZone" : "America/New_York"
+}

@@ -1,0 +1,170 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "open",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/files/simple.xml",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "290000000d7001000000000000000000",
+          "type" : "XMLR"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "xpns",
+        "fields" : [
+          {
+            "key" : "vars",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "v",
+                        "type" : "utxt"
+                      },
+                      {
+                        "text" : "b1",
+                        "type" : "utxt"
+                      },
+                      {
+                        "text" : "n",
+                        "type" : "utxt"
+                      },
+                      {
+                        "integer" : 2,
+                        "type" : "long"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "290000000d7001000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "xpNS",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "290000000d7001000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "nsls",
+              "value" : {
+                "items" : [
+
+                ],
+                "type" : "list"
+              }
+            },
+            {
+              "key" : "vars",
+              "value" : {
+                "items" : [
+                  {
+                    "items" : [
+                      {
+                        "text" : "v",
+                        "type" : "utf8"
+                      },
+                      {
+                        "text" : "b1",
+                        "type" : "utf8"
+                      }
+                    ],
+                    "type" : "list"
+                  },
+                  {
+                    "items" : [
+                      {
+                        "text" : "n",
+                        "type" : "utf8"
+                      },
+                      {
+                        "integer" : 2,
+                        "type" : "long"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                ],
+                "type" : "list"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "290000000d7001000000000000000000",
+              "type" : "XMLR"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "xpath-context-record",
+  "recordedAt" : "2026-09-28T15:05:17Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set d to XMLOpen (POSIX file \"$FILES/simple.xml\")\nXMLSetContext d xpath variables {v:\"b1\", n:2}\nXMLGetContext d\nXMLClose d",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "FILES" : "/private/tmp/mtc-fixtures/files"
+  }
+}

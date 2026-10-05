@@ -1,0 +1,1738 @@
+[
+ {
+  "name": "format-hash2-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat pi into \"##.##\""
+ },
+ {
+  "name": "format-hash2-zero",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"##.##\""
+ },
+ {
+  "name": "format-hash2-neg-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat -pi into \"##.##\""
+ },
+ {
+  "name": "format-hash2-big",
+  "script": "format 1 into \"'P'0.000\"\nformat 1234567.891 into \"##.##\""
+ },
+ {
+  "name": "format-hash2-small",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.001 into \"##.##\""
+ },
+ {
+  "name": "format-hash2-tiny",
+  "script": "format 1 into \"'P'0.000\"\nformat 5.0E-4 into \"##.##\""
+ },
+ {
+  "name": "format-hash2-huge",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+20 into \"##.##\""
+ },
+ {
+  "name": "format-hash2-int",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"##.##\""
+ },
+ {
+  "name": "format-hash2-neg-int",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"##.##\""
+ },
+ {
+  "name": "format-hash2-half",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"##.##\""
+ },
+ {
+  "name": "format-hash2-round-up",
+  "script": "format 1 into \"'P'0.000\"\nformat 99.995 into \"##.##\""
+ },
+ {
+  "name": "format-hash2-mid",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.345 into \"##.##\""
+ },
+ {
+  "name": "format-zero2-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat pi into \"00.00\""
+ },
+ {
+  "name": "format-zero2-zero",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"00.00\""
+ },
+ {
+  "name": "format-zero2-neg-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat -pi into \"00.00\""
+ },
+ {
+  "name": "format-zero2-big",
+  "script": "format 1 into \"'P'0.000\"\nformat 1234567.891 into \"00.00\""
+ },
+ {
+  "name": "format-zero2-small",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.001 into \"00.00\""
+ },
+ {
+  "name": "format-zero2-tiny",
+  "script": "format 1 into \"'P'0.000\"\nformat 5.0E-4 into \"00.00\""
+ },
+ {
+  "name": "format-zero2-huge",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+20 into \"00.00\""
+ },
+ {
+  "name": "format-zero2-int",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"00.00\""
+ },
+ {
+  "name": "format-zero2-neg-int",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"00.00\""
+ },
+ {
+  "name": "format-zero2-half",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"00.00\""
+ },
+ {
+  "name": "format-zero2-round-up",
+  "script": "format 1 into \"'P'0.000\"\nformat 99.995 into \"00.00\""
+ },
+ {
+  "name": "format-zero2-mid",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.345 into \"00.00\""
+ },
+ {
+  "name": "format-hash1-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat pi into \"#.#\""
+ },
+ {
+  "name": "format-hash1-zero",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"#.#\""
+ },
+ {
+  "name": "format-hash1-neg-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat -pi into \"#.#\""
+ },
+ {
+  "name": "format-hash1-big",
+  "script": "format 1 into \"'P'0.000\"\nformat 1234567.891 into \"#.#\""
+ },
+ {
+  "name": "format-hash1-small",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.001 into \"#.#\""
+ },
+ {
+  "name": "format-hash1-tiny",
+  "script": "format 1 into \"'P'0.000\"\nformat 5.0E-4 into \"#.#\""
+ },
+ {
+  "name": "format-hash1-huge",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+20 into \"#.#\""
+ },
+ {
+  "name": "format-hash1-int",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"#.#\""
+ },
+ {
+  "name": "format-hash1-neg-int",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"#.#\""
+ },
+ {
+  "name": "format-hash1-half",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"#.#\""
+ },
+ {
+  "name": "format-hash1-round-up",
+  "script": "format 1 into \"'P'0.000\"\nformat 99.995 into \"#.#\""
+ },
+ {
+  "name": "format-hash1-mid",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.345 into \"#.#\""
+ },
+ {
+  "name": "format-hash-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat pi into \"#\""
+ },
+ {
+  "name": "format-hash-zero",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"#\""
+ },
+ {
+  "name": "format-hash-neg-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat -pi into \"#\""
+ },
+ {
+  "name": "format-hash-big",
+  "script": "format 1 into \"'P'0.000\"\nformat 1234567.891 into \"#\""
+ },
+ {
+  "name": "format-hash-small",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.001 into \"#\""
+ },
+ {
+  "name": "format-hash-tiny",
+  "script": "format 1 into \"'P'0.000\"\nformat 5.0E-4 into \"#\""
+ },
+ {
+  "name": "format-hash-huge",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+20 into \"#\""
+ },
+ {
+  "name": "format-hash-int",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"#\""
+ },
+ {
+  "name": "format-hash-neg-int",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"#\""
+ },
+ {
+  "name": "format-hash-half",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"#\""
+ },
+ {
+  "name": "format-hash-round-up",
+  "script": "format 1 into \"'P'0.000\"\nformat 99.995 into \"#\""
+ },
+ {
+  "name": "format-hash-mid",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.345 into \"#\""
+ },
+ {
+  "name": "format-zero-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat pi into \"0\""
+ },
+ {
+  "name": "format-zero-zero",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"0\""
+ },
+ {
+  "name": "format-zero-neg-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat -pi into \"0\""
+ },
+ {
+  "name": "format-zero-big",
+  "script": "format 1 into \"'P'0.000\"\nformat 1234567.891 into \"0\""
+ },
+ {
+  "name": "format-zero-small",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.001 into \"0\""
+ },
+ {
+  "name": "format-zero-tiny",
+  "script": "format 1 into \"'P'0.000\"\nformat 5.0E-4 into \"0\""
+ },
+ {
+  "name": "format-zero-huge",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+20 into \"0\""
+ },
+ {
+  "name": "format-zero-int",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"0\""
+ },
+ {
+  "name": "format-zero-neg-int",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"0\""
+ },
+ {
+  "name": "format-zero-half",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"0\""
+ },
+ {
+  "name": "format-zero-round-up",
+  "script": "format 1 into \"'P'0.000\"\nformat 99.995 into \"0\""
+ },
+ {
+  "name": "format-zero-mid",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.345 into \"0\""
+ },
+ {
+  "name": "format-hash4-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat pi into \"####\""
+ },
+ {
+  "name": "format-hash4-zero",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"####\""
+ },
+ {
+  "name": "format-hash4-neg-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat -pi into \"####\""
+ },
+ {
+  "name": "format-hash4-big",
+  "script": "format 1 into \"'P'0.000\"\nformat 1234567.891 into \"####\""
+ },
+ {
+  "name": "format-hash4-small",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.001 into \"####\""
+ },
+ {
+  "name": "format-hash4-tiny",
+  "script": "format 1 into \"'P'0.000\"\nformat 5.0E-4 into \"####\""
+ },
+ {
+  "name": "format-hash4-huge",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+20 into \"####\""
+ },
+ {
+  "name": "format-hash4-int",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"####\""
+ },
+ {
+  "name": "format-hash4-neg-int",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"####\""
+ },
+ {
+  "name": "format-hash4-half",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"####\""
+ },
+ {
+  "name": "format-hash4-round-up",
+  "script": "format 1 into \"'P'0.000\"\nformat 99.995 into \"####\""
+ },
+ {
+  "name": "format-hash4-mid",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.345 into \"####\""
+ },
+ {
+  "name": "format-zero4-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat pi into \"0000\""
+ },
+ {
+  "name": "format-zero4-zero",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"0000\""
+ },
+ {
+  "name": "format-zero4-neg-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat -pi into \"0000\""
+ },
+ {
+  "name": "format-zero4-big",
+  "script": "format 1 into \"'P'0.000\"\nformat 1234567.891 into \"0000\""
+ },
+ {
+  "name": "format-zero4-small",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.001 into \"0000\""
+ },
+ {
+  "name": "format-zero4-tiny",
+  "script": "format 1 into \"'P'0.000\"\nformat 5.0E-4 into \"0000\""
+ },
+ {
+  "name": "format-zero4-huge",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+20 into \"0000\""
+ },
+ {
+  "name": "format-zero4-int",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"0000\""
+ },
+ {
+  "name": "format-zero4-neg-int",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"0000\""
+ },
+ {
+  "name": "format-zero4-half",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"0000\""
+ },
+ {
+  "name": "format-zero4-round-up",
+  "script": "format 1 into \"'P'0.000\"\nformat 99.995 into \"0000\""
+ },
+ {
+  "name": "format-zero4-mid",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.345 into \"0000\""
+ },
+ {
+  "name": "format-comma-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat pi into \"#,###.##\""
+ },
+ {
+  "name": "format-comma-zero",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"#,###.##\""
+ },
+ {
+  "name": "format-comma-neg-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat -pi into \"#,###.##\""
+ },
+ {
+  "name": "format-comma-big",
+  "script": "format 1 into \"'P'0.000\"\nformat 1234567.891 into \"#,###.##\""
+ },
+ {
+  "name": "format-comma-small",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.001 into \"#,###.##\""
+ },
+ {
+  "name": "format-comma-tiny",
+  "script": "format 1 into \"'P'0.000\"\nformat 5.0E-4 into \"#,###.##\""
+ },
+ {
+  "name": "format-comma-huge",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+20 into \"#,###.##\""
+ },
+ {
+  "name": "format-comma-int",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"#,###.##\""
+ },
+ {
+  "name": "format-comma-neg-int",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"#,###.##\""
+ },
+ {
+  "name": "format-comma-half",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"#,###.##\""
+ },
+ {
+  "name": "format-comma-round-up",
+  "script": "format 1 into \"'P'0.000\"\nformat 99.995 into \"#,###.##\""
+ },
+ {
+  "name": "format-comma-mid",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.345 into \"#,###.##\""
+ },
+ {
+  "name": "format-comma-zero-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat pi into \"#,##0.00\""
+ },
+ {
+  "name": "format-comma-zero-zero",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"#,##0.00\""
+ },
+ {
+  "name": "format-comma-zero-neg-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat -pi into \"#,##0.00\""
+ },
+ {
+  "name": "format-comma-zero-big",
+  "script": "format 1 into \"'P'0.000\"\nformat 1234567.891 into \"#,##0.00\""
+ },
+ {
+  "name": "format-comma-zero-small",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.001 into \"#,##0.00\""
+ },
+ {
+  "name": "format-comma-zero-tiny",
+  "script": "format 1 into \"'P'0.000\"\nformat 5.0E-4 into \"#,##0.00\""
+ },
+ {
+  "name": "format-comma-zero-huge",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+20 into \"#,##0.00\""
+ },
+ {
+  "name": "format-comma-zero-int",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"#,##0.00\""
+ },
+ {
+  "name": "format-comma-zero-neg-int",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"#,##0.00\""
+ },
+ {
+  "name": "format-comma-zero-half",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"#,##0.00\""
+ },
+ {
+  "name": "format-comma-zero-round-up",
+  "script": "format 1 into \"'P'0.000\"\nformat 99.995 into \"#,##0.00\""
+ },
+ {
+  "name": "format-comma-zero-mid",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.345 into \"#,##0.00\""
+ },
+ {
+  "name": "format-percent-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat pi into \"#%\""
+ },
+ {
+  "name": "format-percent-zero",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"#%\""
+ },
+ {
+  "name": "format-percent-neg-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat -pi into \"#%\""
+ },
+ {
+  "name": "format-percent-big",
+  "script": "format 1 into \"'P'0.000\"\nformat 1234567.891 into \"#%\""
+ },
+ {
+  "name": "format-percent-small",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.001 into \"#%\""
+ },
+ {
+  "name": "format-percent-tiny",
+  "script": "format 1 into \"'P'0.000\"\nformat 5.0E-4 into \"#%\""
+ },
+ {
+  "name": "format-percent-huge",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+20 into \"#%\""
+ },
+ {
+  "name": "format-percent-int",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"#%\""
+ },
+ {
+  "name": "format-percent-neg-int",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"#%\""
+ },
+ {
+  "name": "format-percent-half",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"#%\""
+ },
+ {
+  "name": "format-percent-round-up",
+  "script": "format 1 into \"'P'0.000\"\nformat 99.995 into \"#%\""
+ },
+ {
+  "name": "format-percent-mid",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.345 into \"#%\""
+ },
+ {
+  "name": "format-percent-dec-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat pi into \"##.#%\""
+ },
+ {
+  "name": "format-percent-dec-zero",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"##.#%\""
+ },
+ {
+  "name": "format-percent-dec-neg-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat -pi into \"##.#%\""
+ },
+ {
+  "name": "format-percent-dec-big",
+  "script": "format 1 into \"'P'0.000\"\nformat 1234567.891 into \"##.#%\""
+ },
+ {
+  "name": "format-percent-dec-small",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.001 into \"##.#%\""
+ },
+ {
+  "name": "format-percent-dec-tiny",
+  "script": "format 1 into \"'P'0.000\"\nformat 5.0E-4 into \"##.#%\""
+ },
+ {
+  "name": "format-percent-dec-huge",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+20 into \"##.#%\""
+ },
+ {
+  "name": "format-percent-dec-int",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"##.#%\""
+ },
+ {
+  "name": "format-percent-dec-neg-int",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"##.#%\""
+ },
+ {
+  "name": "format-percent-dec-half",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"##.#%\""
+ },
+ {
+  "name": "format-percent-dec-round-up",
+  "script": "format 1 into \"'P'0.000\"\nformat 99.995 into \"##.#%\""
+ },
+ {
+  "name": "format-percent-dec-mid",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.345 into \"##.#%\""
+ },
+ {
+  "name": "format-quote-prefix-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat pi into \"'$'##.##\""
+ },
+ {
+  "name": "format-quote-prefix-zero",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"'$'##.##\""
+ },
+ {
+  "name": "format-quote-prefix-neg-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat -pi into \"'$'##.##\""
+ },
+ {
+  "name": "format-quote-prefix-big",
+  "script": "format 1 into \"'P'0.000\"\nformat 1234567.891 into \"'$'##.##\""
+ },
+ {
+  "name": "format-quote-prefix-small",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.001 into \"'$'##.##\""
+ },
+ {
+  "name": "format-quote-prefix-tiny",
+  "script": "format 1 into \"'P'0.000\"\nformat 5.0E-4 into \"'$'##.##\""
+ },
+ {
+  "name": "format-quote-prefix-huge",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+20 into \"'$'##.##\""
+ },
+ {
+  "name": "format-quote-prefix-int",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"'$'##.##\""
+ },
+ {
+  "name": "format-quote-prefix-neg-int",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"'$'##.##\""
+ },
+ {
+  "name": "format-quote-prefix-half",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"'$'##.##\""
+ },
+ {
+  "name": "format-quote-prefix-round-up",
+  "script": "format 1 into \"'P'0.000\"\nformat 99.995 into \"'$'##.##\""
+ },
+ {
+  "name": "format-quote-prefix-mid",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.345 into \"'$'##.##\""
+ },
+ {
+  "name": "format-quote-suffix-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat pi into \"##.## 'units'\""
+ },
+ {
+  "name": "format-quote-suffix-zero",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"##.## 'units'\""
+ },
+ {
+  "name": "format-quote-suffix-neg-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat -pi into \"##.## 'units'\""
+ },
+ {
+  "name": "format-quote-suffix-big",
+  "script": "format 1 into \"'P'0.000\"\nformat 1234567.891 into \"##.## 'units'\""
+ },
+ {
+  "name": "format-quote-suffix-small",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.001 into \"##.## 'units'\""
+ },
+ {
+  "name": "format-quote-suffix-tiny",
+  "script": "format 1 into \"'P'0.000\"\nformat 5.0E-4 into \"##.## 'units'\""
+ },
+ {
+  "name": "format-quote-suffix-huge",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+20 into \"##.## 'units'\""
+ },
+ {
+  "name": "format-quote-suffix-int",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"##.## 'units'\""
+ },
+ {
+  "name": "format-quote-suffix-neg-int",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"##.## 'units'\""
+ },
+ {
+  "name": "format-quote-suffix-half",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"##.## 'units'\""
+ },
+ {
+  "name": "format-quote-suffix-round-up",
+  "script": "format 1 into \"'P'0.000\"\nformat 99.995 into \"##.## 'units'\""
+ },
+ {
+  "name": "format-quote-suffix-mid",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.345 into \"##.## 'units'\""
+ },
+ {
+  "name": "format-parens-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat pi into \"(##.##)\""
+ },
+ {
+  "name": "format-parens-zero",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"(##.##)\""
+ },
+ {
+  "name": "format-parens-neg-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat -pi into \"(##.##)\""
+ },
+ {
+  "name": "format-parens-big",
+  "script": "format 1 into \"'P'0.000\"\nformat 1234567.891 into \"(##.##)\""
+ },
+ {
+  "name": "format-parens-small",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.001 into \"(##.##)\""
+ },
+ {
+  "name": "format-parens-tiny",
+  "script": "format 1 into \"'P'0.000\"\nformat 5.0E-4 into \"(##.##)\""
+ },
+ {
+  "name": "format-parens-huge",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+20 into \"(##.##)\""
+ },
+ {
+  "name": "format-parens-int",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"(##.##)\""
+ },
+ {
+  "name": "format-parens-neg-int",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"(##.##)\""
+ },
+ {
+  "name": "format-parens-half",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"(##.##)\""
+ },
+ {
+  "name": "format-parens-round-up",
+  "script": "format 1 into \"'P'0.000\"\nformat 99.995 into \"(##.##)\""
+ },
+ {
+  "name": "format-parens-mid",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.345 into \"(##.##)\""
+ },
+ {
+  "name": "format-neg-parens-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat pi into \"#;(#)\""
+ },
+ {
+  "name": "format-neg-parens-zero",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"#;(#)\""
+ },
+ {
+  "name": "format-neg-parens-neg-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat -pi into \"#;(#)\""
+ },
+ {
+  "name": "format-neg-parens-big",
+  "script": "format 1 into \"'P'0.000\"\nformat 1234567.891 into \"#;(#)\""
+ },
+ {
+  "name": "format-neg-parens-small",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.001 into \"#;(#)\""
+ },
+ {
+  "name": "format-neg-parens-tiny",
+  "script": "format 1 into \"'P'0.000\"\nformat 5.0E-4 into \"#;(#)\""
+ },
+ {
+  "name": "format-neg-parens-huge",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+20 into \"#;(#)\""
+ },
+ {
+  "name": "format-neg-parens-int",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"#;(#)\""
+ },
+ {
+  "name": "format-neg-parens-neg-int",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"#;(#)\""
+ },
+ {
+  "name": "format-neg-parens-half",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"#;(#)\""
+ },
+ {
+  "name": "format-neg-parens-round-up",
+  "script": "format 1 into \"'P'0.000\"\nformat 99.995 into \"#;(#)\""
+ },
+ {
+  "name": "format-neg-parens-mid",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.345 into \"#;(#)\""
+ },
+ {
+  "name": "format-O-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat pi into \"O##\""
+ },
+ {
+  "name": "format-O-zero",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"O##\""
+ },
+ {
+  "name": "format-O-neg-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat -pi into \"O##\""
+ },
+ {
+  "name": "format-O-big",
+  "script": "format 1 into \"'P'0.000\"\nformat 1234567.891 into \"O##\""
+ },
+ {
+  "name": "format-O-small",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.001 into \"O##\""
+ },
+ {
+  "name": "format-O-tiny",
+  "script": "format 1 into \"'P'0.000\"\nformat 5.0E-4 into \"O##\""
+ },
+ {
+  "name": "format-O-huge",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+20 into \"O##\""
+ },
+ {
+  "name": "format-O-int",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"O##\""
+ },
+ {
+  "name": "format-O-neg-int",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"O##\""
+ },
+ {
+  "name": "format-O-half",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"O##\""
+ },
+ {
+  "name": "format-O-round-up",
+  "script": "format 1 into \"'P'0.000\"\nformat 99.995 into \"O##\""
+ },
+ {
+  "name": "format-O-mid",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.345 into \"O##\""
+ },
+ {
+  "name": "format-dot-lead-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat pi into \".##\""
+ },
+ {
+  "name": "format-dot-lead-zero",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \".##\""
+ },
+ {
+  "name": "format-dot-lead-neg-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat -pi into \".##\""
+ },
+ {
+  "name": "format-dot-lead-big",
+  "script": "format 1 into \"'P'0.000\"\nformat 1234567.891 into \".##\""
+ },
+ {
+  "name": "format-dot-lead-small",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.001 into \".##\""
+ },
+ {
+  "name": "format-dot-lead-tiny",
+  "script": "format 1 into \"'P'0.000\"\nformat 5.0E-4 into \".##\""
+ },
+ {
+  "name": "format-dot-lead-huge",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+20 into \".##\""
+ },
+ {
+  "name": "format-dot-lead-int",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \".##\""
+ },
+ {
+  "name": "format-dot-lead-neg-int",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \".##\""
+ },
+ {
+  "name": "format-dot-lead-half",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \".##\""
+ },
+ {
+  "name": "format-dot-lead-round-up",
+  "script": "format 1 into \"'P'0.000\"\nformat 99.995 into \".##\""
+ },
+ {
+  "name": "format-dot-lead-mid",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.345 into \".##\""
+ },
+ {
+  "name": "format-dot-trail-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat pi into \"#.\""
+ },
+ {
+  "name": "format-dot-trail-zero",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"#.\""
+ },
+ {
+  "name": "format-dot-trail-neg-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat -pi into \"#.\""
+ },
+ {
+  "name": "format-dot-trail-big",
+  "script": "format 1 into \"'P'0.000\"\nformat 1234567.891 into \"#.\""
+ },
+ {
+  "name": "format-dot-trail-small",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.001 into \"#.\""
+ },
+ {
+  "name": "format-dot-trail-tiny",
+  "script": "format 1 into \"'P'0.000\"\nformat 5.0E-4 into \"#.\""
+ },
+ {
+  "name": "format-dot-trail-huge",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+20 into \"#.\""
+ },
+ {
+  "name": "format-dot-trail-int",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"#.\""
+ },
+ {
+  "name": "format-dot-trail-neg-int",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"#.\""
+ },
+ {
+  "name": "format-dot-trail-half",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"#.\""
+ },
+ {
+  "name": "format-dot-trail-round-up",
+  "script": "format 1 into \"'P'0.000\"\nformat 99.995 into \"#.\""
+ },
+ {
+  "name": "format-dot-trail-mid",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.345 into \"#.\""
+ },
+ {
+  "name": "format-mixed-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat pi into \"#0.0#\""
+ },
+ {
+  "name": "format-mixed-zero",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"#0.0#\""
+ },
+ {
+  "name": "format-mixed-neg-pi",
+  "script": "format 1 into \"'P'0.000\"\nformat -pi into \"#0.0#\""
+ },
+ {
+  "name": "format-mixed-big",
+  "script": "format 1 into \"'P'0.000\"\nformat 1234567.891 into \"#0.0#\""
+ },
+ {
+  "name": "format-mixed-small",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.001 into \"#0.0#\""
+ },
+ {
+  "name": "format-mixed-tiny",
+  "script": "format 1 into \"'P'0.000\"\nformat 5.0E-4 into \"#0.0#\""
+ },
+ {
+  "name": "format-mixed-huge",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+20 into \"#0.0#\""
+ },
+ {
+  "name": "format-mixed-int",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"#0.0#\""
+ },
+ {
+  "name": "format-mixed-neg-int",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"#0.0#\""
+ },
+ {
+  "name": "format-mixed-half",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"#0.0#\""
+ },
+ {
+  "name": "format-mixed-round-up",
+  "script": "format 1 into \"'P'0.000\"\nformat 99.995 into \"#0.0#\""
+ },
+ {
+  "name": "format-mixed-mid",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.345 into \"#0.0#\""
+ },
+ {
+  "name": "format-odd-0",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.5 into \"\""
+ },
+ {
+  "name": "format-odd-1",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.5 into \"abc\""
+ },
+ {
+  "name": "format-odd-2",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.5 into \"'text'\""
+ },
+ {
+  "name": "format-odd-4",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.5 into \"#,#\""
+ },
+ {
+  "name": "format-odd-6",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.5 into \"E\""
+ },
+ {
+  "name": "format-odd-7",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.5 into \"0.00E+00\""
+ },
+ {
+  "name": "format-odd-9",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.5 into \"-##\""
+ },
+ {
+  "name": "format-odd-10",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.5 into \"+##\""
+ },
+ {
+  "name": "format-odd-11",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.5 into \"--#\""
+ },
+ {
+  "name": "format-odd-12",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.5 into \"%##\""
+ },
+ {
+  "name": "format-odd-13",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.5 into \"#.##%%\""
+ },
+ {
+  "name": "format-odd-18",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.5 into \"O\""
+ },
+ {
+  "name": "format-odd-19",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.5 into \"OO.OO\""
+ },
+ {
+  "name": "format-odd-20",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.5 into \"#;\""
+ },
+ {
+  "name": "format-odd-23",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.5 into \"(#\""
+ },
+ {
+  "name": "format-odd-24",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.5 into \"#)\""
+ },
+ {
+  "name": "format-underflow-false",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E-4 into \"#.##\" without underflow test"
+ },
+ {
+  "name": "format-underflow-large",
+  "script": "format 1 into \"'P'0.000\"\nformat 12345 into \"#.##\" with underflow test"
+ },
+ {
+  "name": "format-underflow-zero",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"#.##\" with underflow test"
+ },
+ {
+  "name": "format-overflow",
+  "script": "format 1 into \"'P'0.000\"\nformat 12345 into \"##.##\""
+ },
+ {
+  "name": "format-overflow-zero",
+  "script": "format 1 into \"'P'0.000\"\nformat 12345 into \"00.00\""
+ },
+ {
+  "name": "format-integer-param",
+  "script": "format 1 into \"'P'0.000\"\nformat 42 into \"#.##\""
+ },
+ {
+  "name": "format-text-param",
+  "script": "format 1 into \"'P'0.000\"\nformat \"3.5\" into \"#.##\""
+ },
+ {
+  "name": "format-bad-text",
+  "script": "format 1 into \"'P'0.000\"\nformat \"abc\" into \"#.##\""
+ },
+ {
+  "name": "format-list",
+  "script": "format 1 into \"'P'0.000\"\nformat {1, 2} into \"#.##\""
+ },
+ {
+  "name": "format-missing-number",
+  "script": "format 1 into \"'P'0.000\"\nformat into \"#\""
+ },
+ {
+  "name": "format-negative-zero",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.0001 into \"#.##\""
+ },
+ {
+  "name": "format-banker",
+  "script": "format 1 into \"'P'0.000\"\nformat 2.5 into \"#\""
+ },
+ {
+  "name": "format-banker-2",
+  "script": "format 1 into \"'P'0.000\"\nformat 3.5 into \"#\""
+ },
+ {
+  "name": "format-banker-dec",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.125 into \"#.##\""
+ },
+ {
+  "name": "format-g016",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"#;-#\""
+ },
+ {
+  "name": "format-g017",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"#;-#\""
+ },
+ {
+  "name": "format-g018",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"#;-#\""
+ },
+ {
+  "name": "format-g019",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.001 into \"#;-#\""
+ },
+ {
+  "name": "format-g020",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.001 into \"#;-#\""
+ },
+ {
+  "name": "format-g021",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"+#;#\""
+ },
+ {
+  "name": "format-g022",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"+#;#\""
+ },
+ {
+  "name": "format-g023",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"+#;#\""
+ },
+ {
+  "name": "format-g024",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.001 into \"+#;#\""
+ },
+ {
+  "name": "format-g025",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.001 into \"+#;#\""
+ },
+ {
+  "name": "format-g026",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"(#);#\""
+ },
+ {
+  "name": "format-g027",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"(#);#\""
+ },
+ {
+  "name": "format-g028",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"(#);#\""
+ },
+ {
+  "name": "format-g029",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.001 into \"(#);#\""
+ },
+ {
+  "name": "format-g030",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.001 into \"(#);#\""
+ },
+ {
+  "name": "format-g031",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"#.#;(#.#)\""
+ },
+ {
+  "name": "format-g032",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"#.#;(#.#)\""
+ },
+ {
+  "name": "format-g033",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"#.#;(#.#)\""
+ },
+ {
+  "name": "format-g034",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.001 into \"#.#;(#.#)\""
+ },
+ {
+  "name": "format-g035",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.001 into \"#.#;(#.#)\""
+ },
+ {
+  "name": "format-g051",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"#0\""
+ },
+ {
+  "name": "format-g052",
+  "script": "format 1 into \"'P'0.000\"\nformat 12345.6 into \"#0\""
+ },
+ {
+  "name": "format-g053",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"#0\""
+ },
+ {
+  "name": "format-g054",
+  "script": "format 1 into \"'P'0.000\"\nformat 1234567 into \"#0\""
+ },
+ {
+  "name": "format-g059",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"#,##0\""
+ },
+ {
+  "name": "format-g060",
+  "script": "format 1 into \"'P'0.000\"\nformat 12345.6 into \"#,##0\""
+ },
+ {
+  "name": "format-g061",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"#,##0\""
+ },
+ {
+  "name": "format-g062",
+  "script": "format 1 into \"'P'0.000\"\nformat 1234567 into \"#,##0\""
+ },
+ {
+  "name": "format-g063",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"0,000\""
+ },
+ {
+  "name": "format-g064",
+  "script": "format 1 into \"'P'0.000\"\nformat 12345.6 into \"0,000\""
+ },
+ {
+  "name": "format-g065",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"0,000\""
+ },
+ {
+  "name": "format-g066",
+  "script": "format 1 into \"'P'0.000\"\nformat 1234567 into \"0,000\""
+ },
+ {
+  "name": "format-g067",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"#,##\""
+ },
+ {
+  "name": "format-g068",
+  "script": "format 1 into \"'P'0.000\"\nformat 12345.6 into \"#,##\""
+ },
+ {
+  "name": "format-g069",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"#,##\""
+ },
+ {
+  "name": "format-g070",
+  "script": "format 1 into \"'P'0.000\"\nformat 1234567 into \"#,##\""
+ },
+ {
+  "name": "format-g071",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"##,#\""
+ },
+ {
+  "name": "format-g072",
+  "script": "format 1 into \"'P'0.000\"\nformat 12345.6 into \"##,#\""
+ },
+ {
+  "name": "format-g073",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"##,#\""
+ },
+ {
+  "name": "format-g074",
+  "script": "format 1 into \"'P'0.000\"\nformat 1234567 into \"##,#\""
+ },
+ {
+  "name": "format-g075",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"#,###,###\""
+ },
+ {
+  "name": "format-g076",
+  "script": "format 1 into \"'P'0.000\"\nformat 12345.6 into \"#,###,###\""
+ },
+ {
+  "name": "format-g077",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"#,###,###\""
+ },
+ {
+  "name": "format-g078",
+  "script": "format 1 into \"'P'0.000\"\nformat 1234567 into \"#,###,###\""
+ },
+ {
+  "name": "format-g079",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \",###\""
+ },
+ {
+  "name": "format-g080",
+  "script": "format 1 into \"'P'0.000\"\nformat 12345.6 into \",###\""
+ },
+ {
+  "name": "format-g081",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \",###\""
+ },
+ {
+  "name": "format-g082",
+  "script": "format 1 into \"'P'0.000\"\nformat 1234567 into \",###\""
+ },
+ {
+  "name": "format-g093",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \".0#\""
+ },
+ {
+  "name": "format-g094",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \".0#\""
+ },
+ {
+  "name": "format-g095",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.05 into \".0#\""
+ },
+ {
+  "name": "format-g096",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.15 into \".0#\""
+ },
+ {
+  "name": "format-g097",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.25 into \".0#\""
+ },
+ {
+  "name": "format-g098",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.3456 into \".0#\""
+ },
+ {
+  "name": "format-g105",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"0.0#\""
+ },
+ {
+  "name": "format-g106",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"0.0#\""
+ },
+ {
+  "name": "format-g107",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.05 into \"0.0#\""
+ },
+ {
+  "name": "format-g108",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.15 into \"0.0#\""
+ },
+ {
+  "name": "format-g109",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.25 into \"0.0#\""
+ },
+ {
+  "name": "format-g110",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.3456 into \"0.0#\""
+ },
+ {
+  "name": "format-g111",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"#.0\""
+ },
+ {
+  "name": "format-g112",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"#.0\""
+ },
+ {
+  "name": "format-g113",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.05 into \"#.0\""
+ },
+ {
+  "name": "format-g114",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.15 into \"#.0\""
+ },
+ {
+  "name": "format-g115",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.25 into \"#.0\""
+ },
+ {
+  "name": "format-g116",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.3456 into \"#.0\""
+ },
+ {
+  "name": "format-g117",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"0.#\""
+ },
+ {
+  "name": "format-g118",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"0.#\""
+ },
+ {
+  "name": "format-g119",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.05 into \"0.#\""
+ },
+ {
+  "name": "format-g120",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.15 into \"0.#\""
+ },
+ {
+  "name": "format-g121",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.25 into \"0.#\""
+ },
+ {
+  "name": "format-g122",
+  "script": "format 1 into \"'P'0.000\"\nformat 12.3456 into \"0.#\""
+ },
+ {
+  "name": "format-g123",
+  "script": "format 1 into \"'P'0.000\"\nformat pi into \"\""
+ },
+ {
+  "name": "format-g124",
+  "script": "format 1 into \"'P'0.000\"\nformat 12345 into \"\""
+ },
+ {
+  "name": "format-g125",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.00123 into \"\""
+ },
+ {
+  "name": "format-g126",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"\""
+ },
+ {
+  "name": "format-g127",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"\""
+ },
+ {
+  "name": "format-g128",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+20 into \"\""
+ },
+ {
+  "name": "format-g129",
+  "script": "format 1 into \"'P'0.000\"\nformat 5.0E-4 into \"\""
+ },
+ {
+  "name": "format-g130",
+  "script": "format 1 into \"'P'0.000\"\nformat pi into \"0.0E+0\""
+ },
+ {
+  "name": "format-g131",
+  "script": "format 1 into \"'P'0.000\"\nformat 12345 into \"0.0E+0\""
+ },
+ {
+  "name": "format-g132",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.00123 into \"0.0E+0\""
+ },
+ {
+  "name": "format-g133",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"0.0E+0\""
+ },
+ {
+  "name": "format-g134",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"0.0E+0\""
+ },
+ {
+  "name": "format-g135",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+20 into \"0.0E+0\""
+ },
+ {
+  "name": "format-g136",
+  "script": "format 1 into \"'P'0.000\"\nformat 5.0E-4 into \"0.0E+0\""
+ },
+ {
+  "name": "format-g137",
+  "script": "format 1 into \"'P'0.000\"\nformat pi into \"#.##E+00\""
+ },
+ {
+  "name": "format-g138",
+  "script": "format 1 into \"'P'0.000\"\nformat 12345 into \"#.##E+00\""
+ },
+ {
+  "name": "format-g139",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.00123 into \"#.##E+00\""
+ },
+ {
+  "name": "format-g140",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"#.##E+00\""
+ },
+ {
+  "name": "format-g141",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"#.##E+00\""
+ },
+ {
+  "name": "format-g142",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+20 into \"#.##E+00\""
+ },
+ {
+  "name": "format-g143",
+  "script": "format 1 into \"'P'0.000\"\nformat 5.0E-4 into \"#.##E+00\""
+ },
+ {
+  "name": "format-g144",
+  "script": "format 1 into \"'P'0.000\"\nformat pi into \"0E+00\""
+ },
+ {
+  "name": "format-g145",
+  "script": "format 1 into \"'P'0.000\"\nformat 12345 into \"0E+00\""
+ },
+ {
+  "name": "format-g146",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.00123 into \"0E+00\""
+ },
+ {
+  "name": "format-g147",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"0E+00\""
+ },
+ {
+  "name": "format-g148",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"0E+00\""
+ },
+ {
+  "name": "format-g149",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+20 into \"0E+00\""
+ },
+ {
+  "name": "format-g150",
+  "script": "format 1 into \"'P'0.000\"\nformat 5.0E-4 into \"0E+00\""
+ },
+ {
+  "name": "format-g151",
+  "script": "format 1 into \"'P'0.000\"\nformat pi into \"##0.0E+0\""
+ },
+ {
+  "name": "format-g152",
+  "script": "format 1 into \"'P'0.000\"\nformat 12345 into \"##0.0E+0\""
+ },
+ {
+  "name": "format-g153",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.00123 into \"##0.0E+0\""
+ },
+ {
+  "name": "format-g154",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"##0.0E+0\""
+ },
+ {
+  "name": "format-g155",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"##0.0E+0\""
+ },
+ {
+  "name": "format-g156",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+20 into \"##0.0E+0\""
+ },
+ {
+  "name": "format-g157",
+  "script": "format 1 into \"'P'0.000\"\nformat 5.0E-4 into \"##0.0E+0\""
+ },
+ {
+  "name": "format-g172",
+  "script": "format 1 into \"'P'0.000\"\nformat pi into \"0.0E0\""
+ },
+ {
+  "name": "format-g173",
+  "script": "format 1 into \"'P'0.000\"\nformat 12345 into \"0.0E0\""
+ },
+ {
+  "name": "format-g174",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.00123 into \"0.0E0\""
+ },
+ {
+  "name": "format-g175",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"0.0E0\""
+ },
+ {
+  "name": "format-g176",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"0.0E0\""
+ },
+ {
+  "name": "format-g177",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+20 into \"0.0E0\""
+ },
+ {
+  "name": "format-g178",
+  "script": "format 1 into \"'P'0.000\"\nformat 5.0E-4 into \"0.0E0\""
+ },
+ {
+  "name": "format-g179",
+  "script": "format 1 into \"'P'0.000\"\nformat pi into \"#E+0\""
+ },
+ {
+  "name": "format-g180",
+  "script": "format 1 into \"'P'0.000\"\nformat 12345 into \"#E+0\""
+ },
+ {
+  "name": "format-g181",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.00123 into \"#E+0\""
+ },
+ {
+  "name": "format-g182",
+  "script": "format 1 into \"'P'0.000\"\nformat -5 into \"#E+0\""
+ },
+ {
+  "name": "format-g183",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"#E+0\""
+ },
+ {
+  "name": "format-g184",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+20 into \"#E+0\""
+ },
+ {
+  "name": "format-g185",
+  "script": "format 1 into \"'P'0.000\"\nformat 5.0E-4 into \"#E+0\""
+ },
+ {
+  "name": "format-g186",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.123 into \"#.#%\""
+ },
+ {
+  "name": "format-g187",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.5 into \"#.#%\""
+ },
+ {
+  "name": "format-g188",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"#.#%\""
+ },
+ {
+  "name": "format-g189",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.123 into \"%#\""
+ },
+ {
+  "name": "format-g190",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.5 into \"%#\""
+ },
+ {
+  "name": "format-g191",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"%#\""
+ },
+ {
+  "name": "format-g192",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.123 into \"0.0%\""
+ },
+ {
+  "name": "format-g193",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.5 into \"0.0%\""
+ },
+ {
+  "name": "format-g194",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"0.0%\""
+ },
+ {
+  "name": "format-g195",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.123 into \"'x'#'y'\""
+ },
+ {
+  "name": "format-g196",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.5 into \"'x'#'y'\""
+ },
+ {
+  "name": "format-g197",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"'x'#'y'\""
+ },
+ {
+  "name": "format-g198",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.123 into \"'a''b'#\""
+ },
+ {
+  "name": "format-g199",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.5 into \"'a''b'#\""
+ },
+ {
+  "name": "format-g200",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"'a''b'#\""
+ },
+ {
+  "name": "format-g201",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.123 into \"'#'#\""
+ },
+ {
+  "name": "format-g202",
+  "script": "format 1 into \"'P'0.000\"\nformat -0.5 into \"'#'#\""
+ },
+ {
+  "name": "format-g203",
+  "script": "format 1 into \"'P'0.000\"\nformat 5 into \"'#'#\""
+ },
+ {
+  "name": "format-g222",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"0\""
+ },
+ {
+  "name": "format-g223",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.5 into \"0\""
+ },
+ {
+  "name": "format-g224",
+  "script": "format 1 into \"'P'0.000\"\nformat 2.5 into \"0\""
+ },
+ {
+  "name": "format-g225",
+  "script": "format 1 into \"'P'0.000\"\nformat -2.5 into \"0\""
+ },
+ {
+  "name": "format-g226",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.05 into \"0\""
+ },
+ {
+  "name": "format-g227",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.15 into \"0\""
+ },
+ {
+  "name": "format-g228",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.25 into \"0\""
+ },
+ {
+  "name": "format-g229",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+15 into \"0\""
+ },
+ {
+  "name": "format-g230",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+16 into \"0\""
+ },
+ {
+  "name": "format-g231",
+  "script": "format 1 into \"'P'0.000\"\nformat 123456789012 into \"0\""
+ },
+ {
+  "name": "format-g232",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"#\""
+ },
+ {
+  "name": "format-g233",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.5 into \"#\""
+ },
+ {
+  "name": "format-g234",
+  "script": "format 1 into \"'P'0.000\"\nformat 2.5 into \"#\""
+ },
+ {
+  "name": "format-g235",
+  "script": "format 1 into \"'P'0.000\"\nformat -2.5 into \"#\""
+ },
+ {
+  "name": "format-g236",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.05 into \"#\""
+ },
+ {
+  "name": "format-g237",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.15 into \"#\""
+ },
+ {
+  "name": "format-g238",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.25 into \"#\""
+ },
+ {
+  "name": "format-g239",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+15 into \"#\""
+ },
+ {
+  "name": "format-g240",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+16 into \"#\""
+ },
+ {
+  "name": "format-g241",
+  "script": "format 1 into \"'P'0.000\"\nformat 123456789012 into \"#\""
+ },
+ {
+  "name": "format-g242",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.5 into \"#.#\""
+ },
+ {
+  "name": "format-g243",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.5 into \"#.#\""
+ },
+ {
+  "name": "format-g244",
+  "script": "format 1 into \"'P'0.000\"\nformat 2.5 into \"#.#\""
+ },
+ {
+  "name": "format-g245",
+  "script": "format 1 into \"'P'0.000\"\nformat -2.5 into \"#.#\""
+ },
+ {
+  "name": "format-g246",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.05 into \"#.#\""
+ },
+ {
+  "name": "format-g247",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.15 into \"#.#\""
+ },
+ {
+  "name": "format-g248",
+  "script": "format 1 into \"'P'0.000\"\nformat 0.25 into \"#.#\""
+ },
+ {
+  "name": "format-g249",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+15 into \"#.#\""
+ },
+ {
+  "name": "format-g250",
+  "script": "format 1 into \"'P'0.000\"\nformat 1.0E+16 into \"#.#\""
+ },
+ {
+  "name": "format-g251",
+  "script": "format 1 into \"'P'0.000\"\nformat 123456789012 into \"#.#\""
+ },
+ {
+  "name": "format-scientific-01",
+  "script": "format 1 into \"'P'0.000\"\nformat 9.941 into \"#.##E+0\""
+ },
+ {
+  "name": "format-scientific-02",
+  "script": "format 1 into \"'P'0.000\"\nformat 9.941 into \"0.0#E+0\""
+ },
+ {
+  "name": "format-scientific-13",
+  "script": "format 1 into \"'P'0.000\"\nformat 0 into \"#.##E+0\""
+ },
+ {
+  "name": "format-scientific-14",
+  "script": "format 1 into \"'P'0.000\"\nformat 9.95 into \"#.##E+0\""
+ },
+ {
+  "name": "format-percent-overflow-scientific",
+  "script": "format 1.0E+307 into \"00E0%\""
+ },
+ {
+  "name": "format-percent-overflow",
+  "script": "format 1.0E+307 into \"0%\""
+ },
+ {
+  "name": "format-percent-overflow-negative",
+  "script": "format -1.0E+307 into \"#,##0.00%\""
+ }
+]

@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<element name="people" xmlns="http://relaxng.org/ns/structure/1.0">
+	<zeroOrMore><element name="person"><attribute name="id"><text/></attribute><text/></element></zeroOrMore>
+</element>

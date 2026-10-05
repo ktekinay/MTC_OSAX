@@ -1,0 +1,102 @@
+[
+ {
+  "name": "to-yaml",
+  "script": "set p to PlistNew {person:\"Ann\", tags:{\"a\", \"b\"}, address:{city:\"Paris\"}}\nPlistToYAML p\nPlistClose p"
+ },
+ {
+  "name": "to-yaml-types",
+  "script": "set p to PlistNew {t:true, n:3, r:2.5, s:\"yes\", q:\"a: b\", m:missing value, e:{}}\nPlistToYAML p\nPlistClose p"
+ },
+ {
+  "name": "to-yaml-element",
+  "script": "set p to PlistNew {tags:{\"a\", \"b\"}}\nPlistToYAML (PlistChild p key \"tags\")\nPlistClose p"
+ },
+ {
+  "name": "to-toml",
+  "script": "set p to PlistNew {person:\"Ann\", tags:{\"a\", \"b\"}, address:{city:\"Paris\"}}\nPlistToTOML p\nPlistClose p"
+ },
+ {
+  "name": "to-toml-array-of-tables",
+  "script": "set p to PlistNew {people:{{n:1}, {n:2}}}\nPlistToTOML p\nPlistClose p"
+ },
+ {
+  "name": "to-toml-missing-value",
+  "script": "set p to PlistNew {a:1, phone:missing value}\nPlistToTOML p\nPlistClose p"
+ },
+ {
+  "name": "to-toml-missing-in-list",
+  "script": "set p to PlistNew {l:{1, missing value}}\ntry\nPlistToTOML p\nend try\nPlistClose p"
+ },
+ {
+  "name": "to-toml-not-a-table",
+  "script": "set p to PlistNew {1, 2}\ntry\nPlistToTOML p\nend try\nPlistClose p"
+ },
+ {
+  "name": "from-yaml",
+  "script": "set p to PlistFromYAML \"name: Ann\ncountry: no\nn: 12\nr: 1.5\nt: true\nnothing: null\ntags: [a, b]\naddress:\n  city: Paris\"\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "from-yaml-dates",
+  "script": "set p to PlistFromYAML \"utc: 2026-09-28T14:30:00Z\noffset: 2026-09-28T10:30:00-04:00\nquoted: \\\"2026-09-28\\\"\"\nPlistToJSON p\nPlistClose p"
+ },
+ {
+  "name": "from-yaml-merge",
+  "script": "set p to PlistFromYAML \"base: &b\n  a: 1\n  b: 2\nderived:\n  <<: *b\n  b: 3\"\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "from-yaml-pool",
+  "script": "set p to PlistFromYAML \"a: 1\" in pool \"mtc-yaml\"\nGetPool p\nPlistClose p"
+ },
+ {
+  "name": "from-yaml-invalid",
+  "script": "try\nPlistFromYAML \"a: [1, 2\"\nend try"
+ },
+ {
+  "name": "from-yaml-documents",
+  "script": "try\nPlistFromYAML \"a: 1\n---\nb: 2\"\nend try"
+ },
+ {
+  "name": "from-toml",
+  "script": "set p to PlistFromTOML \"# comment\nname = \\\"Ann\\\"\nn = 12\ntags = [\\\"a\\\", \\\"b\\\"]\ntime = 14:30:00\n[address]\ncity = \\\"Paris\\\"\"\nPlistGet p\nPlistClose p"
+ },
+ {
+  "name": "from-toml-dates",
+  "script": "set p to PlistFromTOML \"utc = 2026-09-28T14:30:00Z\noffset = 2026-09-28T10:30:00-04:00\"\nPlistToJSON p\nPlistClose p"
+ },
+ {
+  "name": "from-toml-invalid",
+  "script": "try\nPlistFromTOML \"a = 1\na = 2\"\nend try"
+ },
+ {
+  "name": "round-trip-toml",
+  "script": "set p to PlistNew {person:\"Ann\", tags:{\"a\", \"b\"}, address:{city:\"Paris\"}}\nset q to PlistFromTOML (PlistToTOML p)\nPlistEqual p to q\nPlistClose q\nPlistClose p"
+ },
+ {
+  "name": "round-trip-yaml",
+  "script": "set p to PlistNew {person:\"Ann\", n:missing value, sample:{1, {k:\"v\"}, {\"deep\"}}}\nset q to PlistFromYAML (PlistToYAML p)\nPlistEqual p to q\nPlistClose q\nPlistClose p"
+ },
+ {
+  "name": "file-json",
+  "script": "set p to PlistNew {person:\"Ann\", sample:{1, 2}}\nPlistToJSON p in (POSIX file \"$TMP/data.json\")\nreadtext (POSIX file \"$TMP/data.json\")\nset q to PlistFromJSON (POSIX file \"$TMP/data.json\")\nPlistEqual p to q\nPlistClose q\nPlistClose p"
+ },
+ {
+  "name": "file-yaml",
+  "script": "set p to PlistNew {person:\"Ann\", sample:{1, 2}}\nPlistToYAML p in (POSIX file \"$TMP/data.yaml\")\nreadtext (POSIX file \"$TMP/data.yaml\")\nset q to PlistFromYAML (POSIX file \"$TMP/data.yaml\")\nPlistEqual p to q\nPlistClose q\nPlistClose p"
+ },
+ {
+  "name": "file-toml",
+  "script": "set p to PlistNew {person:\"Ann\", sample:{1, 2}}\nPlistToTOML p in (POSIX file \"$TMP/data.toml\")\nreadtext (POSIX file \"$TMP/data.toml\")\nset q to PlistFromTOML (POSIX file \"$TMP/data.toml\")\nPlistEqual p to q\nPlistClose q\nPlistClose p"
+ },
+ {
+  "name": "file-path-string",
+  "script": "set p to PlistNew {person:\"Ann\"}\nPlistToTOML p in \"$TMP/path.toml\"\nreadtext (POSIX file \"$TMP/path.toml\")\nPlistClose p"
+ },
+ {
+  "name": "file-missing",
+  "script": "try\nPlistFromTOML (POSIX file \"$TMP/nope.toml\")\nend try"
+ },
+ {
+  "name": "file-text-is-json",
+  "script": "try\nPlistFromJSON \"$TMP/data.json\"\nend try"
+ }
+]

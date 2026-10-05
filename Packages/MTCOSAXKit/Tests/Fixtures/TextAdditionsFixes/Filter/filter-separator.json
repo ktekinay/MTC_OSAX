@@ -1,0 +1,59 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "GPli",
+        "fields" : [
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "John is ten\nAnna is twelve\nJohn is at school\nAnna sleeps",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "key ",
+            "value" : {
+              "text" : "\\1",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "\\2",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "sepa",
+            "value" : {
+              "text" : ", ",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "^([A-z]+) is (.*)",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n<plist version=\"1.0\">\n<dict>\n\t<key>Anna</key>\n\t<string>twelve</string>\n\t<key>John</key>\n\t<string>ten, at school</string>\n</dict>\n</plist>\n",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "filter-separator",
+  "recordedAt" : "2026-09-27T19:52:26Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "filter text \"^([A-z]+) is (.*)\" in \"John is ten\" & linefeed & \"Anna is twelve\" & linefeed & \"John is at school\" & linefeed & \"Anna sleeps\" key \"\\\\1\" using \"\\\\2\" separator \", \"",
+  "timeZone" : "America/New_York"
+}

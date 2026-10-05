@@ -1,0 +1,38 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "strf",
+        "fields" : [
+          {
+            "key" : "into",
+            "value" : {
+              "text" : "%s %z",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "7f07ac7001000000",
+              "type" : "ldt "
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "4102462799 -0500",
+          "type" : "utf8"
+        }
+      }
+    }
+  ],
+  "name" : "strftime-2099-epoch",
+  "recordedAt" : "2026-09-27T19:12:47Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "strftime date \"Thursday, December 31, 2099 at 11:59:59 PM\" into \"%s %z\"",
+  "timeZone" : "America/New_York"
+}

@@ -1,0 +1,201 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "make",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "person",
+                        "type" : "utxt"
+                      },
+                      {
+                        "text" : "Ann",
+                        "type" : "utxt"
+                      },
+                      {
+                        "text" : "tags",
+                        "type" : "utxt"
+                      },
+                      {
+                        "items" : [
+                          {
+                            "text" : "a",
+                            "type" : "utxt"
+                          },
+                          {
+                            "text" : "b",
+                            "type" : "utxt"
+                          }
+                        ],
+                        "type" : "list"
+                      },
+                      {
+                        "text" : "address",
+                        "type" : "utxt"
+                      },
+                      {
+                        "fields" : [
+                          {
+                            "key" : "usrf",
+                            "value" : {
+                              "items" : [
+                                {
+                                  "text" : "city",
+                                  "type" : "utxt"
+                                },
+                                {
+                                  "text" : "Paris",
+                                  "type" : "utxt"
+                                }
+                              ],
+                              "type" : "list"
+                            }
+                          }
+                        ],
+                        "type" : "reco"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "150000004d5443700700000000000000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "MTCp",
+        "eventID" : "TTML",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "150000004d5443700700000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "tags = [\"a\", \"b\"]\nperson = \"Ann\"\n\n[address]\ncity = \"Paris\"\n",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "MTCp",
+        "eventID" : "FTML",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "tags = [\"a\", \"b\"]\nperson = \"Ann\"\n\n[address]\ncity = \"Paris\"\n",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "160000004d5443700700000000000000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "equa",
+        "fields" : [
+          {
+            "key" : "to  ",
+            "value" : {
+              "hex" : "160000004d5443700700000000000000",
+              "type" : "CFob"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "150000004d5443700700000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "boolean" : true,
+          "type" : "bool"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "160000004d5443700700000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "150000004d5443700700000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "round-trip-toml",
+  "recordedAt" : "2026-09-28T19:23:01Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "set p to PlistNew {person:\"Ann\", tags:{\"a\", \"b\"}, address:{city:\"Paris\"}}\nset q to PlistFromTOML (PlistToTOML p)\nPlistEqual p to q\nPlistClose q\nPlistClose p",
+  "timeZone" : "America/New_York"
+}

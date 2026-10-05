@@ -1,0 +1,64 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Splt",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "\\d+",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "synt",
+            "value" : {
+              "text" : "PCRE",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "a1b22c",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "a",
+              "type" : "utxt"
+            },
+            {
+              "text" : "b",
+              "type" : "utxt"
+            },
+            {
+              "text" : "c",
+              "type" : "utxt"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "splittext",
+  "recordedAt" : "2026-09-28T16:41:55Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "splittext \"a1b22c\" using \"\\\\d+\" with regexp syntax \"PCRE\"",
+  "timeZone" : "America/New_York"
+}

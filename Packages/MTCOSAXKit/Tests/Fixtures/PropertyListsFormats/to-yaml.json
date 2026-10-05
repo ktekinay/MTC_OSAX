@@ -1,0 +1,131 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "make",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "person",
+                        "type" : "utxt"
+                      },
+                      {
+                        "text" : "Ann",
+                        "type" : "utxt"
+                      },
+                      {
+                        "text" : "tags",
+                        "type" : "utxt"
+                      },
+                      {
+                        "items" : [
+                          {
+                            "text" : "a",
+                            "type" : "utxt"
+                          },
+                          {
+                            "text" : "b",
+                            "type" : "utxt"
+                          }
+                        ],
+                        "type" : "list"
+                      },
+                      {
+                        "text" : "address",
+                        "type" : "utxt"
+                      },
+                      {
+                        "fields" : [
+                          {
+                            "key" : "usrf",
+                            "value" : {
+                              "items" : [
+                                {
+                                  "text" : "city",
+                                  "type" : "utxt"
+                                },
+                                {
+                                  "text" : "Paris",
+                                  "type" : "utxt"
+                                }
+                              ],
+                              "type" : "list"
+                            }
+                          }
+                        ],
+                        "type" : "reco"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "130000004d5443700700000000000000",
+          "type" : "CFob"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "MTCp",
+        "eventID" : "TYML",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "130000004d5443700700000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "address:\n  city: Paris\ntags:\n- a\n- b\nperson: Ann\n",
+          "type" : "utxt"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "PLST",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "130000004d5443700700000000000000",
+              "type" : "CFob"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "to-yaml",
+  "recordedAt" : "2026-09-28T19:23:01Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "set p to PlistNew {person:\"Ann\", tags:{\"a\", \"b\"}, address:{city:\"Paris\"}}\nPlistToYAML p\nPlistClose p",
+  "timeZone" : "America/New_York"
+}

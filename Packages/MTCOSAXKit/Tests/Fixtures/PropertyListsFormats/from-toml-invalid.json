@@ -1,0 +1,29 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MTCp",
+        "eventID" : "FTML",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "a = 1\na = 2",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorMessage" : "Not TOML: (line 2) duplicate key",
+        "errorNumber" : -1
+      }
+    }
+  ],
+  "name" : "from-toml-invalid",
+  "recordedAt" : "2026-09-28T19:22:41Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "try\nPlistFromTOML \"a = 1\na = 2\"\nend try",
+  "timeZone" : "America/New_York"
+}

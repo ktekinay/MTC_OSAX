@@ -1,0 +1,84 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FINd",
+        "fields" : [
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "aa a+",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "WaAl",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "synt",
+            "value" : {
+              "text" : "GREP",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "a+",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "fields" : [
+                {
+                  "key" : "mPos",
+                  "value" : {
+                    "integer" : 3,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "mLen",
+                  "value" : {
+                    "integer" : 2,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "mRes",
+                  "value" : {
+                    "text" : "a+",
+                    "type" : "utxt"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "grep-plus-is-literal",
+  "recordedAt" : "2026-09-27T20:23:40Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "find text \"a+\" in \"aa a+\" with regexp and all occurrences syntax \"GREP\"",
+  "timeZone" : "America/New_York"
+}

@@ -1,0 +1,103 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FINd",
+        "fields" : [
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "a\r\nb",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "WaAl",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "^",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "fields" : [
+                {
+                  "key" : "mPos",
+                  "value" : {
+                    "integer" : 0,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "mLen",
+                  "value" : {
+                    "integer" : 0,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "mRes",
+                  "value" : {
+                    "text" : "",
+                    "type" : "utxt"
+                  }
+                }
+              ],
+              "type" : "reco"
+            },
+            {
+              "fields" : [
+                {
+                  "key" : "mPos",
+                  "value" : {
+                    "integer" : 3,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "mLen",
+                  "value" : {
+                    "integer" : 0,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "mRes",
+                  "value" : {
+                    "text" : "",
+                    "type" : "utxt"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "line-end-caret-crlf-all",
+  "recordedAt" : "2026-10-01T21:22:19Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "find text \"^\" in (\"a\" & return & linefeed & \"b\") with regexp and all occurrences",
+  "timeZone" : "America/New_York"
+}

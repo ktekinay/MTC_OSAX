@@ -1,0 +1,30 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "ATOF",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "inf",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "inf",
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "atof-8",
+  "recordedAt" : "2026-09-27T18:58:49Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "atof \"inf\""
+}

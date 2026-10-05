@@ -1,0 +1,40 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Splt",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "(",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "a-b",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -117
+      }
+    }
+  ],
+  "name" : "split-invalid-regexp",
+  "recordedAt" : "2026-09-27T18:50:59Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "splittext \"a-b\" using \"(\" with regexp"
+}

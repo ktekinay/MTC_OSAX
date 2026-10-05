@@ -1,0 +1,28 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CRAR",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 0,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -50
+      }
+    }
+  ],
+  "name" : "createarray-zero",
+  "recordedAt" : "2026-09-28T04:32:11Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "createarray 0",
+  "timeZone" : "America/New_York"
+}

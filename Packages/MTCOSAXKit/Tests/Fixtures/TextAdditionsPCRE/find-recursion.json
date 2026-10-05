@@ -1,0 +1,57 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FINd",
+        "fields" : [
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "x(a(b)c)y",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "UsGR",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "WaMr",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "synt",
+            "value" : {
+              "text" : "PCRE",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "\\((?:[^()]|(?R))*\\)",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "(a(b)c)",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "find-recursion",
+  "recordedAt" : "2026-09-28T16:41:55Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "find text \"\\\\((?:[^()]|(?R))*\\\\)\" in \"x(a(b)c)y\" with regexp and string result syntax \"PCRE\"",
+  "timeZone" : "America/New_York"
+}

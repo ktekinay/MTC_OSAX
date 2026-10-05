@@ -1,0 +1,53 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "ExXp",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "it's (a) test ^ here",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "it's ^(a^) test ^^ here",
+          "type" : "ut16"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "XML ",
+        "eventID" : "ExXp",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "plain",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "plain",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "xptr-escape",
+  "recordedAt" : "2026-09-28T15:05:17Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "XMLEscapeXPointer \"it's (a) test ^ here\"\nXMLEscapeXPointer \"plain\"",
+  "timeZone" : "America/New_York"
+}

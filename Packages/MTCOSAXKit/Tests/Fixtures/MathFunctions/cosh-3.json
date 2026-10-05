@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "COSH",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : -1,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 1.5430806348152437,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "cosh-3",
+  "recordedAt" : "2026-09-28T04:29:08Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "cosh -1",
+  "timeZone" : "America/New_York"
+}

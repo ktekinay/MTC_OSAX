@@ -1,0 +1,45 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "GPli",
+        "fields" : [
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "é e z É a Z",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "key ",
+            "value" : {
+              "text" : "\\1",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "(\\S+)",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n<plist version=\"1.0\">\n<dict>\n\t<key>Z</key>\n\t<string>Z</string>\n\t<key>a</key>\n\t<string>a</string>\n\t<key>e</key>\n\t<string>e</string>\n\t<key>z</key>\n\t<string>z</string>\n\t<key>É</key>\n\t<string>É</string>\n\t<key>é</key>\n\t<string>é</string>\n</dict>\n</plist>\n",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "filter-unicode-keys",
+  "recordedAt" : "2026-09-27T19:52:27Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "filter text \"(\\\\S+)\" in \"é e z É a Z\" key \"\\\\1\"",
+  "timeZone" : "America/New_York"
+}

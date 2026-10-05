@@ -1,0 +1,31 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "MATH",
+        "eventID" : "ACOH",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "real" : 1e+300,
+              "type" : "doub"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 691.4686750787736,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "acosh-edge-3",
+  "recordedAt" : "2026-09-28T04:29:08Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "acosh 1E+300",
+  "timeZone" : "America/New_York"
+}

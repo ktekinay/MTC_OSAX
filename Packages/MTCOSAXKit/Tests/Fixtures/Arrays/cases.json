@@ -1,0 +1,156 @@
+[
+ {
+  "name": "createarray-1",
+  "script": "createarray 1"
+ },
+ {
+  "name": "createarray-2",
+  "script": "createarray 2"
+ },
+ {
+  "name": "createarray-3",
+  "script": "createarray 3"
+ },
+ {
+  "name": "createarray-10",
+  "script": "createarray 10"
+ },
+ {
+  "name": "createarray-range",
+  "script": "createarray 5 range {2, 3}"
+ },
+ {
+  "name": "createarray-range-one",
+  "script": "createarray 1 range {2, 3}"
+ },
+ {
+  "name": "createarray-range-reversed",
+  "script": "createarray 3 range {3, 1}"
+ },
+ {
+  "name": "createarray-range-equal",
+  "script": "createarray 3 range {2, 2}"
+ },
+ {
+  "name": "createarray-range-negative",
+  "script": "createarray 4 range {-1.5, 1.5}"
+ },
+ {
+  "name": "createarray-range-fraction",
+  "script": "createarray 7 range {0.1, 0.7}"
+ },
+ {
+  "name": "createarray-range-thirds",
+  "script": "createarray 4 range {0, 1}"
+ },
+ {
+  "name": "createarray-range-large",
+  "script": "createarray 11 range {-1.0E+10, 1.0E+10}"
+ },
+ {
+  "name": "createarray-range-text",
+  "script": "createarray 3 range {\"1\", \"2\"}"
+ },
+ {
+  "name": "createarray-range-one-item",
+  "script": "createarray 3 range {1}"
+ },
+ {
+  "name": "createarray-range-three-items",
+  "script": "createarray 3 range {1, 2, 3}"
+ },
+ {
+  "name": "createarray-range-number",
+  "script": "createarray 3 range 1"
+ },
+ {
+  "name": "createarray-real-size",
+  "script": "createarray 2.7"
+ },
+ {
+  "name": "createarray-real-size-half",
+  "script": "createarray 2.5"
+ },
+ {
+  "name": "createarray-real-size-low",
+  "script": "createarray 2.2"
+ },
+ {
+  "name": "createarray-text-size",
+  "script": "createarray \"3\""
+ },
+ {
+  "name": "createarray-zero",
+  "script": "createarray 0"
+ },
+ {
+  "name": "createarray-negative",
+  "script": "createarray -2"
+ },
+ {
+  "name": "createarray-no-parameter",
+  "script": "createarray"
+ },
+ {
+  "name": "createarray-list",
+  "script": "createarray {3}"
+ },
+ {
+  "name": "randomarray-seed",
+  "script": "randomarray 3 seed 12345"
+ },
+ {
+  "name": "randomarray-seed-repeats",
+  "script": "randomarray 3 seed 12345\nrandomarray 3 seed 12345"
+ },
+ {
+  "name": "randomarray-seed-range",
+  "script": "randomarray 4 range {10, 20} seed 1"
+ },
+ {
+  "name": "randomarray-seed-zero",
+  "script": "randomarray 5 seed 0"
+ },
+ {
+  "name": "randomarray-seed-negative",
+  "script": "randomarray 5 seed -7"
+ },
+ {
+  "name": "randomarray-seed-long",
+  "script": "randomarray 700 seed 42"
+ },
+ {
+  "name": "randomarray-seed-range-reversed",
+  "script": "randomarray 3 range {1, 0} seed 3"
+ },
+ {
+  "name": "randomarray-seed-real",
+  "script": "randomarray 3 seed 2.6"
+ },
+ {
+  "name": "randomarray-zero",
+  "script": "randomarray 0"
+ },
+ {
+  "name": "randomarray-negative",
+  "script": "randomarray -1"
+ },
+ {
+  "name": "randomarray-no-parameter",
+  "script": "randomarray"
+ },
+ {
+  "name": "randomarray-range-bad",
+  "script": "randomarray 3 range {1} seed 1"
+ },
+ {
+  "name": "randomarray-unseeded",
+  "script": "randomarray 5",
+  "random": true
+ },
+ {
+  "name": "randomarray-unseeded-range",
+  "script": "randomarray 5 range {100, 101}",
+  "random": true
+ }
+]

@@ -1,0 +1,37 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "UnTr",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "Greek-Latin",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "αβγ",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "abg",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "transform-greek",
+  "recordedAt" : "2026-09-27T18:58:51Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "transform unicode \"αβγ\" using \"Greek-Latin\""
+}

@@ -1,0 +1,51 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RPLl",
+        "fields" : [
+          {
+            "key" : "by  ",
+            "value" : {
+              "text" : "x",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "$in ",
+            "value" : {
+              "text" : "abbc",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "Opti",
+            "value" : {
+              "text" : "rc",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "B+",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "axc",
+          "type" : "utxt"
+        }
+      }
+    }
+  ],
+  "name" : "change-options-rc",
+  "recordedAt" : "2026-09-27T18:50:59Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "change \"B+\" into \"x\" in \"abbc\" options \"rc\""
+}

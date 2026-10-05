@@ -1,0 +1,50 @@
+[
+ {
+  "name": "get-set-reset",
+  "script": "mtc_set regex_syntax to \"PCRE\"\nmtc_get regex_syntax\nmtc_reset regex_syntax\nmtc_get regex_syntax"
+ },
+ {
+  "name": "set-normalizes",
+  "script": "mtc_set regex_syntax to \"pcre\"\nmtc_get regex_syntax\nmtc_set idle_timeout to 300.0\nmtc_get idle_timeout\nmtc_reset all_settings"
+ },
+ {
+  "name": "text-names",
+  "script": "mtc_set \"regex syntax\" to \"PERL\"\nmtc_get \"RegexSyntax\"\nmtc_get \"regex_syntax\"\nmtc_get \"REGEX SYNTAX\"\nmtc_reset \"regex syntax\""
+ },
+ {
+  "name": "all-settings",
+  "script": "mtc_set idle_timeout to 0\nmtc_set dollar_references to true\nmtc_set regex_syntax to \"JAVA\"\nmtc_get all_settings\nmtc_reset \"AllSettings\"\nmtc_get \"all settings\""
+ },
+ {
+  "name": "dollar-references-applies",
+  "script": "mtc_set dollar_references to true\nchange \"(b)\" into \"[$1]\" in \"abc\" with regexp\nmtc_reset dollar_references\nchange \"(b)\" into \"[$1]\" in \"abc\" with regexp"
+ },
+ {
+  "name": "regex-syntax-applies",
+  "script": "mtc_set regex_syntax to \"PCRE\"\nfind text \"\\\\h+\" in \"x y\" with regexp and string result\nmtc_reset regex_syntax\ntry\nfind text \"\\\\h+\" in \"x y\" with regexp and string result\nend try"
+ },
+ {
+  "name": "error-unknown",
+  "script": "mtc_get \"nope\""
+ },
+ {
+  "name": "error-missing-value",
+  "script": "mtc_set regex_syntax to missing value"
+ },
+ {
+  "name": "error-wrong-kind",
+  "script": "mtc_set idle_timeout to \"300\""
+ },
+ {
+  "name": "error-negative",
+  "script": "mtc_set idle_timeout to -1"
+ },
+ {
+  "name": "error-syntax-name",
+  "script": "mtc_set regex_syntax to \"NOT_A_SYNTAX\""
+ },
+ {
+  "name": "error-set-all",
+  "script": "mtc_set all_settings to 1"
+ }
+]

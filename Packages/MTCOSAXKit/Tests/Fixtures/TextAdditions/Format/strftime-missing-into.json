@@ -1,0 +1,28 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "strf",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "1058d1c100000000",
+              "type" : "ldt "
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1701
+      }
+    }
+  ],
+  "name" : "strftime-missing-into",
+  "recordedAt" : "2026-09-27T19:12:45Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "strftime date \"Monday, January 15, 2007 at 4:10:56 PM\"",
+  "timeZone" : "America/New_York"
+}

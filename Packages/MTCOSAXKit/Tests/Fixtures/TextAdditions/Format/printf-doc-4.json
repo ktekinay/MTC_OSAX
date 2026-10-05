@@ -1,0 +1,47 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "prtf",
+        "fields" : [
+          {
+            "key" : "para",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "car",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "red",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "The %2$s %1$s.",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "text" : "The red car.",
+          "type" : "ut16"
+        }
+      }
+    }
+  ],
+  "name" : "printf-doc-4",
+  "recordedAt" : "2026-09-27T19:12:44Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "printf \"The %2$s %1$s.\" parameters {\"car\", \"red\"}",
+  "timeZone" : "America/New_York"
+}

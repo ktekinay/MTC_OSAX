@@ -1,0 +1,962 @@
+[
+ {
+  "name": "find-script-ldjson",
+  "script": "find text \"<script type=\\\"application/ld\\\\+json\\\">([\\\\s\\\\S]*)</script>\" in \"<html><head>\" & linefeed & \"<TITLE>  Welcome &amp; Hello  </TITLE>\" & linefeed & \"<script type=\\\"application/ld+json\\\">{\\\"a\\\": 1}</script>\" & linefeed & \"<a href='page.html' title='x'>link</a><img src=\\\"a.jpg\\\"><div class=\\\"c\\\">text</div>\" & linefeed & \"<!-- Server IP: 10.0.0.1 -->\" & linefeed & \"</html>\" using \"\\\\1\" with regexp and string result"
+ },
+ {
+  "name": "find-script-ps-all",
+  "script": "find text \"^ *(\\\\d+) [^\\\\r\\\\n]+minirosetta_\\\\d+\\\\.\\\\d+\" in \"  PID TTY  TIME CMD\" & linefeed & \"  123 ??   0:01.00 minirosetta_3.14\" & linefeed & \"  456 ??   0:02.00 Finder\" & linefeed & \" 7890 ??   0:03.00 minirosetta_3.15\" using \"\\\\1\" with regexp, all occurrences and string result"
+ },
+ {
+  "name": "find-script-title",
+  "script": "find text \"<title>(?:\\\\s|[^[:alnum:]'\\\"])*(.*?)[\\\\s]*</title>\" in \"<html><head>\" & linefeed & \"<TITLE>  Welcome &amp; Hello  </TITLE>\" & linefeed & \"<script type=\\\"application/ld+json\\\">{\\\"a\\\": 1}</script>\" & linefeed & \"<a href='page.html' title='x'>link</a><img src=\\\"a.jpg\\\"><div class=\\\"c\\\">text</div>\" & linefeed & \"<!-- Server IP: 10.0.0.1 -->\" & linefeed & \"</html>\" using \"\\\\1\" with regexp and string result without case sensitive regexpflag {\"MULTILINE\"}"
+ },
+ {
+  "name": "find-script-server-ip",
+  "script": "find text \"<!-- Server IP: (\\\\d{1,3}\\\\.){3}\\\\d{1,3} -->\\\\s*\\\\Z\" in \"<html><head>\" & linefeed & \"<TITLE>  Welcome &amp; Hello  </TITLE>\" & linefeed & \"<script type=\\\"application/ld+json\\\">{\\\"a\\\": 1}</script>\" & linefeed & \"<a href='page.html' title='x'>link</a><img src=\\\"a.jpg\\\"><div class=\\\"c\\\">text</div>\" & linefeed & \"<!-- Server IP: 10.0.0.1 -->\" & linefeed & \"</html>\" with regexp"
+ },
+ {
+  "name": "find-script-server-ip-missing",
+  "script": "find text \"<!-- Server IP: (\\\\d{1,3}\\\\.){3}\\\\d{1,3} -->\\\\s*\\\\Z\" in \"<html></html>\" with regexp"
+ },
+ {
+  "name": "find-script-ichat-date",
+  "script": "find text \"on (\\\\d{4}-\\\\d{2}-\\\\d{2}) at (\\\\d{2}\\\\.\\\\d{2})\" in \"Chat with Bob on 2008-03-04 at 12.30.ichat\" using (\"\\\\1\" & return & \"\\\\2\") with regexp and string result"
+ },
+ {
+  "name": "find-script-url-tag",
+  "script": "find text \"\\\\[url=([^\\\\]]+)\" in \"see [url=http://x.com/a]here[/url]\" using \"\\\\1\" with regexp and string result"
+ },
+ {
+  "name": "find-script-feedback",
+  "script": "find text \"^feedback://showreport\\\\?report_id=(\\\\d+)\" in \"FEEDBACK://showreport?report_id=4567\" using \"\\\\1\" with regexp and string result without case sensitive"
+ },
+ {
+  "name": "find-script-bailamos-record",
+  "script": "find text \"<p\\\\s+class=\\\"Body\\\"><span\\\\s+class=\\\"style_\\\\d\\\">((Sunday|Monday)\\\\s+(January|February))\\\\s+(\\\\d{1,2}\\\\w{2})\" in \"xx<p class=\\\"Body\\\"><span class=\\\"style_3\\\">Sunday January 21st</span>\" with regexp"
+ },
+ {
+  "name": "find-literal",
+  "script": "find text \"b\" in \"abcabc\""
+ },
+ {
+  "name": "find-literal-not-found",
+  "script": "find text \"z\" in \"abc\""
+ },
+ {
+  "name": "find-regexp-not-found",
+  "script": "find text \"z+\" in \"abc\" with regexp"
+ },
+ {
+  "name": "find-regexp-not-found-string-result",
+  "script": "find text \"z+\" in \"abc\" with regexp and string result"
+ },
+ {
+  "name": "find-regexp-all-not-found",
+  "script": "find text \"z+\" in \"abc\" with regexp and all occurrences"
+ },
+ {
+  "name": "find-literal-all",
+  "script": "find text \"b\" in \"abcabc\" with all occurrences"
+ },
+ {
+  "name": "find-literal-all-string",
+  "script": "find text \"b\" in \"abcabc\" with all occurrences and string result"
+ },
+ {
+  "name": "find-regexp-record",
+  "script": "find text \"[0-9]+\" in \"a 2007-12-24 b\" with regexp"
+ },
+ {
+  "name": "find-regexp-all",
+  "script": "find text \"([0-9]+)\" in \"a 2007-12-24 b\" with regexp and all occurrences"
+ },
+ {
+  "name": "find-regexp-all-using",
+  "script": "find text \"([0-9]+)\" in \"2007-12-24\" using \"\\\\1\" with regexp, all occurrences and string result"
+ },
+ {
+  "name": "find-using-integer",
+  "script": "find text \"([a-z]+)-([0-9]+)\" in \"x abc-123 y\" using 2 with regexp"
+ },
+ {
+  "name": "find-using-integer-string",
+  "script": "find text \"([a-z]+)-([0-9]+)\" in \"x abc-123 y\" using 2 with regexp and string result"
+ },
+ {
+  "name": "find-using-list",
+  "script": "find text \"([a-z]+)-([0-9]+)\" in \"x abc-123 y\" using {\"\\\\2\", \"\\\\1\", \"[\\\\0]\"} with regexp"
+ },
+ {
+  "name": "find-using-list-string",
+  "script": "find text \"([a-z]+)-([0-9]+)\" in \"x abc-123 y\" using {\"\\\\2\", \"\\\\1\"} with regexp and string result"
+ },
+ {
+  "name": "find-using-template-literal-text",
+  "script": "find text \"([a-z]+)-([0-9]+)\" in \"x abc-123 y\" using \"name: \\\\1, id: \\\\2\" with regexp and string result"
+ },
+ {
+  "name": "find-using-unmatched-group",
+  "script": "find text \"(a)|(b)\" in \"b\" using \"[\\\\1][\\\\2]\" with regexp and string result"
+ },
+ {
+  "name": "find-using-missing-group",
+  "script": "find text \"(a)\" in \"a\" using \"[\\\\5]\" with regexp and string result"
+ },
+ {
+  "name": "find-using-escapes",
+  "script": "find text \"(b)\" in \"abc\" using \"t\\\\tn\\\\nr\\\\rbs\\\\\\\\q\\\\qd\\\\$\" with regexp and string result"
+ },
+ {
+  "name": "find-using-named",
+  "script": "find text \"(?<word>[a-z]+)\" in \"12 abc\" using \"[\\\\k<word>]\" with regexp and string result"
+ },
+ {
+  "name": "find-using-dollar-literal",
+  "script": "find text \"(b)\" in \"abc\" using \"$1 $0\" with regexp and string result"
+ },
+ {
+  "name": "find-using-without-regexp",
+  "script": "find text \"b\" in \"abc\" using \"\\\\0x\""
+ },
+ {
+  "name": "find-case-insensitive-literal",
+  "script": "find text \"B\" in \"abc\" without case sensitive"
+ },
+ {
+  "name": "find-case-sensitive-literal-miss",
+  "script": "find text \"B\" in \"abc\""
+ },
+ {
+  "name": "find-case-insensitive-regexp",
+  "script": "find text \"B+\" in \"abbc\" with regexp without case sensitive"
+ },
+ {
+  "name": "find-diacritic-insensitive",
+  "script": "find text \"e\" in \"café\" without diacritic sensitive"
+ },
+ {
+  "name": "find-diacritic-sensitive-miss",
+  "script": "find text \"e\" in \"café\""
+ },
+ {
+  "name": "find-precomposed-vs-decomposed",
+  "script": "find text \"é\" in (\"cafe\" & (character id 769))"
+ },
+ {
+  "name": "find-whole-word",
+  "script": "find text \"cat\" in \"concat cat\" with whole word"
+ },
+ {
+  "name": "find-whole-word-miss",
+  "script": "find text \"cat\" in \"concat\" with whole word"
+ },
+ {
+  "name": "find-backward",
+  "script": "find text \"b\" in \"abcabc\" with backward"
+ },
+ {
+  "name": "find-starting-at",
+  "script": "find text \"b\" in \"abcabc\" starting at 2"
+ },
+ {
+  "name": "find-starting-at-regexp",
+  "script": "find text \"b\" in \"abcabc\" starting at 2 with regexp"
+ },
+ {
+  "name": "find-starting-at-anchor",
+  "script": "find text \"^b\" in \"abcabc\" starting at 1 with regexp"
+ },
+ {
+  "name": "find-starting-at-for",
+  "script": "find text \"c\" in \"abcabc\" starting at 1 for 3"
+ },
+ {
+  "name": "find-for-excludes",
+  "script": "find text \"c\" in \"abcabc\" starting at 3 for 2"
+ },
+ {
+  "name": "find-for-only",
+  "script": "find text \"b\" in \"abcabc\" for 3 with regexp and all occurrences"
+ },
+ {
+  "name": "find-options-ras",
+  "script": "find text \"[0-9]+\" in \"a1b22\" options \"ras\""
+ },
+ {
+  "name": "find-options-c",
+  "script": "find text \"B\" in \"abc\" options \"c\""
+ },
+ {
+  "name": "find-regexpflag-multiline",
+  "script": "find text \"a.b\" in (\"a\" & linefeed & \"b\") with regexp and string result regexpflag {\"MULTILINE\"}"
+ },
+ {
+  "name": "find-regexpflag-singleline",
+  "script": "find text \"^b\" in (\"a\" & linefeed & \"b\") with regexp regexpflag {\"SINGLELINE\"}"
+ },
+ {
+  "name": "find-regexpflag-ignorecase",
+  "script": "find text \"B\" in \"abc\" with regexp and string result regexpflag {\"IGNORECASE\"}"
+ },
+ {
+  "name": "find-regexpflag-underscore",
+  "script": "find text \"a|ab\" in \"ab\" with regexp and string result regexpflag {\"FIND_LONGEST\"}"
+ },
+ {
+  "name": "find-regexpflag-space",
+  "script": "find text \"a|ab\" in \"ab\" with regexp and string result regexpflag {\"FIND LONGEST\"}"
+ },
+ {
+  "name": "find-regexpflag-unknown",
+  "script": "find text \"a\" in \"ab\" with regexp regexpflag {\"NOPE\"}"
+ },
+ {
+  "name": "find-syntax-perl",
+  "script": "find text \"\\\\h\" in \"a b\" with regexp and string result syntax \"PERL\""
+ },
+ {
+  "name": "find-syntax-grep",
+  "script": "find text \"\\\\(ab\\\\)c\" in \"xabc\" with regexp and string result syntax \"GREP\""
+ },
+ {
+  "name": "find-syntax-lowercase",
+  "script": "find text \"a\" in \"ab\" with regexp syntax \"ruby\""
+ },
+ {
+  "name": "find-syntax-unknown",
+  "script": "find text \"a\" in \"ab\" with regexp syntax \"NOT_A_SYNTAX\""
+ },
+ {
+  "name": "find-invalid-regexp",
+  "script": "find text \"(abc\" in \"abc\" with regexp"
+ },
+ {
+  "name": "find-empty-pattern",
+  "script": "find text \"\" in \"abc\""
+ },
+ {
+  "name": "find-empty-pattern-regexp",
+  "script": "find text \"\" in \"abc\" with regexp"
+ },
+ {
+  "name": "find-empty-text",
+  "script": "find text \"a\" in \"\""
+ },
+ {
+  "name": "find-empty-match-all",
+  "script": "find text \"x*\" in \"ab\" with regexp and all occurrences"
+ },
+ {
+  "name": "find-emoji-position",
+  "script": "find text \"b\" in \"😀b\""
+ },
+ {
+  "name": "find-emoji-regexp",
+  "script": "find text \".\" in \"😀b\" with regexp and all occurrences"
+ },
+ {
+  "name": "find-decomposed-position",
+  "script": "find text \"b\" in (\"e\" & (character id 769) & \"b\") with regexp"
+ },
+ {
+  "name": "find-word-unicode",
+  "script": "find text \"\\\\w+\" in \"café crème\" with regexp, all occurrences and string result"
+ },
+ {
+  "name": "find-digit-unicode",
+  "script": "find text \"\\\\d+\" in (\"x\" & (character id 1633) & (character id 1634) & \"12\") with regexp and string result"
+ },
+ {
+  "name": "find-posix-alpha-unicode",
+  "script": "find text \"[[:alpha:]]+\" in \"café\" with regexp and string result"
+ },
+ {
+  "name": "find-in-number",
+  "script": "find text \"2\" in 123"
+ },
+ {
+  "name": "find-in-list",
+  "script": "find text \"a\" in {\"a\", \"b\"}"
+ },
+ {
+  "name": "find-missing-in",
+  "script": "find text \"a\""
+ },
+ {
+  "name": "find-regexp-caret-lines",
+  "script": "find text \"^b.*$\" in (\"a\" & linefeed & \"bc\" & linefeed & \"d\") with regexp and string result"
+ },
+ {
+  "name": "find-regexp-dollar-crlf",
+  "script": "find text \"c$\" in (\"bc\" & return & linefeed & \"d\") with regexp and string result"
+ },
+ {
+  "name": "find-regexp-caret-cr",
+  "script": "find text \"^d\" in (\"bc\" & return & \"d\") with regexp and string result"
+ },
+ {
+  "name": "find-regexp-z-trailing-newline",
+  "script": "find text \"c\\\\Z\" in (\"abc\" & linefeed) with regexp and string result"
+ },
+ {
+  "name": "find-ufind-synonym",
+  "script": "ufind text \"b\" in \"abc\""
+ },
+ {
+  "name": "change-doc-1",
+  "script": "change \"e\" into \"u\" in \"hello\""
+ },
+ {
+  "name": "change-doc-2",
+  "script": "change {\"e\", \"o\"} into {\"E\", \"O\"} in \"hello world\""
+ },
+ {
+  "name": "change-doc-3",
+  "script": "change {\"e.\", \"o.\"} into \"O\" in \"hello world\" with regexp"
+ },
+ {
+  "name": "change-doc-4",
+  "script": "change \"([0-9]{1,2})/([0-9]{1,2})\" into \"\\\\2/\\\\1\" in {\"31/12/2007\", \"29/2/2008\"} with regexp"
+ },
+ {
+  "name": "change-script-return-linefeed",
+  "script": "change return into linefeed in (\"a\" & return & \"b\" & return)"
+ },
+ {
+  "name": "change-script-crlf",
+  "script": "change \"\\\\r\\\\n|\\\\n\" into \"\\\\r\" in (\"a\" & return & linefeed & \"b\" & linefeed & \"c\") with regexp"
+ },
+ {
+  "name": "change-script-double-returns",
+  "script": "change \"([^\\\\r])(\\\\u0020*\\\\r\\\\u0020*)([^\\\\r]+)\" into \"\\\\1\\\\r\\\\r\\\\3\" in (\"line1 \" & return & \" line2\" & return & return & \"line3\") with regexp"
+ },
+ {
+  "name": "change-script-trim-end",
+  "script": "change \"\\\\s+\\\\z\" into \"\" in (\"  abc  \" & linefeed & tab) with regexp"
+ },
+ {
+  "name": "change-script-trim-start",
+  "script": "change \"\\\\A\\\\s+\" into \"\" in (tab & \"  abc  \") with regexp"
+ },
+ {
+  "name": "change-script-collapse-space",
+  "script": "change \"\\\\s+\" into \" \" in (\"a  b\" & tab & linefeed & \"c\") with regexp"
+ },
+ {
+  "name": "change-script-non-alnum",
+  "script": "change \"[^a-zA-Z0-9 ]\" into \"-\" in \"Inbox/Sub.Folder (2)\" with regexp"
+ },
+ {
+  "name": "change-script-img",
+  "script": "change \"<img\\\\s[^>]*>\" into \"\" in \"a<IMG src=\\\"x\\\">b<img alt=y>c\" with regexp without case sensitive"
+ },
+ {
+  "name": "change-script-href",
+  "script": "change \"(<a\\\\s+[^>]*href=['\\\"])(?!http)([^'\\\"]+[\\\"'])\" into (\"\\\\1\" & \"http://root.com/\" & \"\\\\2\") in \"<a href='page.html'>x</a><A HREF='http://ok.com'>y</A>\" with regexp without case sensitive"
+ },
+ {
+  "name": "change-script-div-literal-ci",
+  "script": "change \"</div>\" into \"\" in \"a</DIV>b</div>\" without case sensitive"
+ },
+ {
+  "name": "change-script-trim-ci",
+  "script": "change \"\\\\s*(.*)\\\\s*\\\\z\" into \"\\\\1\" in \"  Event Data  \" with regexp without case sensitive"
+ },
+ {
+  "name": "change-script-angle",
+  "script": "change \"^<(.*)>$\" into \"\\\\1\" in \"<http://x.com>\" with regexp without case sensitive"
+ },
+ {
+  "name": "change-script-date-literal",
+  "script": "change \"2008-03-04 at 12.30\" into \"2008-03-04 12-30\" in \"Chat on 2008-03-04 at 12.30.ichat\""
+ },
+ {
+  "name": "change-literal-no-match",
+  "script": "change \"z\" into \"y\" in \"abc\""
+ },
+ {
+  "name": "change-regexp-no-match",
+  "script": "change \"z+\" into \"y\" in \"abc\" with regexp"
+ },
+ {
+  "name": "change-literal-special-chars",
+  "script": "change \"a.b\" into \"\\\\1$1\" in \"a.b axb\""
+ },
+ {
+  "name": "change-regexp-escapes",
+  "script": "change \"(b)\" into \"t\\\\tn\\\\nbs\\\\\\\\q\\\\qd\\\\$\" in \"abc\" with regexp"
+ },
+ {
+  "name": "change-regexp-dollar-literal",
+  "script": "change \"(a)(b)\" into \"[$1|$2|$0|$$|${1}]\" in \"xaby\" with regexp"
+ },
+ {
+  "name": "change-regexp-named",
+  "script": "change \"(?<w>b)\" into \"[\\\\k<w>]\" in \"abc\" with regexp"
+ },
+ {
+  "name": "change-regexp-group-10",
+  "script": "change \"(a)(b)(c)(d)(e)(f)(g)(h)(i)(j)\" into \"\\\\10\" in \"abcdefghij\" with regexp"
+ },
+ {
+  "name": "change-verbatim",
+  "script": "change \"(b)\" into \"\\\\1\\\\n\" in \"abc\" with regexp and verbatim"
+ },
+ {
+  "name": "change-only-backreference",
+  "script": "change \"a(b)c\" into \"X\" in \"abc abc\" with regexp only backreference 1"
+ },
+ {
+  "name": "change-only-backreference-named",
+  "script": "change \"a(?<m>b)c\" into \"X\" in \"abc\" with regexp only backreference \"m\""
+ },
+ {
+  "name": "change-case-insensitive-literal",
+  "script": "change \"B\" into \"x\" in \"aBbB\" without case sensitive"
+ },
+ {
+  "name": "change-diacritic-insensitive",
+  "script": "change \"e\" into \"x\" in \"eéè\" without diacritic sensitive"
+ },
+ {
+  "name": "change-whole-word",
+  "script": "change \"cat\" into \"dog\" in \"concat cat cats\" with whole word"
+ },
+ {
+  "name": "change-starting-at",
+  "script": "change \"a\" into \"x\" in \"aaaa\" starting at 2"
+ },
+ {
+  "name": "change-starting-at-for",
+  "script": "change \"a\" into \"x\" in \"aaaaaa\" starting at 1 for 3"
+ },
+ {
+  "name": "change-list-patterns-list-replacements",
+  "script": "change {\"a\", \"b\"} into {\"1\", \"2\"} in \"abab\""
+ },
+ {
+  "name": "change-list-patterns-short-replacements",
+  "script": "change {\"a\", \"b\", \"c\"} into {\"1\", \"2\"} in \"abc\""
+ },
+ {
+  "name": "change-list-patterns-sequential",
+  "script": "change {\"a\", \"b\"} into {\"b\", \"c\"} in \"ab\""
+ },
+ {
+  "name": "change-list-in",
+  "script": "change \"a\" into \"x\" in {\"abc\", \"aa\", \"\"}"
+ },
+ {
+  "name": "change-empty-pattern",
+  "script": "change \"\" into \"x\" in \"abc\""
+ },
+ {
+  "name": "change-empty-match-regexp",
+  "script": "change \"x*\" into \"-\" in \"ab\" with regexp"
+ },
+ {
+  "name": "change-emoji",
+  "script": "change \".\" into \"[\\\\0]\" in \"a😀\" with regexp"
+ },
+ {
+  "name": "change-options-rc",
+  "script": "change \"B+\" into \"x\" in \"abbc\" options \"rc\""
+ },
+ {
+  "name": "change-regexpflag",
+  "script": "change \"a.b\" into \"x\" in (\"a\" & linefeed & \"b\") with regexp regexpflag {\"MULTILINE\"}"
+ },
+ {
+  "name": "change-syntax",
+  "script": "change \"\\\\(a\\\\)\" into \"[\\\\1]\" in \"abc\" with regexp syntax \"GREP\""
+ },
+ {
+  "name": "change-invalid-regexp",
+  "script": "change \"(a\" into \"x\" in \"abc\" with regexp"
+ },
+ {
+  "name": "change-missing-into",
+  "script": "change \"a\" in \"abc\""
+ },
+ {
+  "name": "change-missing-in",
+  "script": "change \"a\" into \"b\""
+ },
+ {
+  "name": "change-in-number",
+  "script": "change \"1\" into \"x\" in 212"
+ },
+ {
+  "name": "change-uchange-synonym",
+  "script": "uchange \"a\" into \"b\" in \"abc\""
+ },
+ {
+  "name": "split-literal",
+  "script": "splittext \"a-b-c\" using \"-\""
+ },
+ {
+  "name": "split-script-return",
+  "script": "splittext (\"2008-03-04\" & return & \"12.30\") using return"
+ },
+ {
+  "name": "split-not-found",
+  "script": "splittext \"abc\" using \"-\""
+ },
+ {
+  "name": "split-empty-items",
+  "script": "splittext \"-a--b-\" using \"-\""
+ },
+ {
+  "name": "split-regexp",
+  "script": "splittext \"a1b22c\" using \"[0-9]+\" with regexp"
+ },
+ {
+  "name": "split-script-regexp-ci",
+  "script": "splittext \"x<P class=\\\"Body\\\"><SPAN class=\\\"style_1\\\">y<p class=\\\"Body\\\"><span class=\\\"style_22\\\">z\" using \"<p\\\\s+class=\\\"Body\\\"><span\\\\s+class=\\\"style_\\\\d+\\\">\" with regexp without case sensitive"
+ },
+ {
+  "name": "split-script-shapeimage",
+  "script": "splittext \"a shapeimage_1.jpg b shapeimage_22.jpg c\" using \"shapeimage_\\\\d+\\\\.jpg\" with regexp"
+ },
+ {
+  "name": "split-case-insensitive-literal",
+  "script": "splittext \"aXbxc\" using \"x\" without case sensitive"
+ },
+ {
+  "name": "split-whole-word",
+  "script": "splittext \"a and band and c\" using \"and\" with whole word"
+ },
+ {
+  "name": "split-regexp-groups",
+  "script": "splittext \"a1b2c\" using \"([0-9])\" with regexp"
+ },
+ {
+  "name": "split-empty-separator",
+  "script": "splittext \"abc\" using \"\""
+ },
+ {
+  "name": "split-empty-text",
+  "script": "splittext \"\" using \"-\""
+ },
+ {
+  "name": "split-empty-match-regexp",
+  "script": "splittext \"abc\" using \"x*\" with regexp"
+ },
+ {
+  "name": "split-options",
+  "script": "splittext \"a1B2c\" using \"b\" options \"c\""
+ },
+ {
+  "name": "split-missing-using",
+  "script": "splittext \"a-b\""
+ },
+ {
+  "name": "split-invalid-regexp",
+  "script": "splittext \"a-b\" using \"(\" with regexp"
+ },
+ {
+  "name": "re-compile-valid",
+  "script": "re_compile \"a(b)c\""
+ },
+ {
+  "name": "re-compile-invalid",
+  "script": "re_compile \"a(b\""
+ },
+ {
+  "name": "re-compile-invalid-class",
+  "script": "re_compile \"[z-a]\""
+ },
+ {
+  "name": "re-compile-syntax-grep",
+  "script": "re_compile \"\\\\(a\\\\)\" syntax \"GREP\""
+ },
+ {
+  "name": "re-compile-syntax-unknown",
+  "script": "re_compile \"a\" syntax \"NOT_A_SYNTAX\""
+ },
+ {
+  "name": "re-compile-missing",
+  "script": "re_compile"
+ },
+ {
+  "name": "template-escape-t",
+  "script": "change \"(b)\" into \"[\\\\t]\" in \"abc\" with regexp"
+ },
+ {
+  "name": "template-escape-n",
+  "script": "change \"(b)\" into \"[\\\\n]\" in \"abc\" with regexp"
+ },
+ {
+  "name": "template-escape-r",
+  "script": "change \"(b)\" into \"[\\\\r]\" in \"abc\" with regexp"
+ },
+ {
+  "name": "template-escape-backslash",
+  "script": "change \"(b)\" into \"[\\\\\\\\]\" in \"abc\" with regexp"
+ },
+ {
+  "name": "template-escape-q",
+  "script": "change \"(b)\" into \"[\\\\q]\" in \"abc\" with regexp"
+ },
+ {
+  "name": "template-escape-dollar",
+  "script": "change \"(b)\" into \"[\\\\$]\" in \"abc\" with regexp"
+ },
+ {
+  "name": "template-escape-a",
+  "script": "change \"(b)\" into \"[\\\\a]\" in \"abc\" with regexp"
+ },
+ {
+  "name": "template-escape-e",
+  "script": "change \"(b)\" into \"[\\\\e]\" in \"abc\" with regexp"
+ },
+ {
+  "name": "template-escape-f",
+  "script": "change \"(b)\" into \"[\\\\f]\" in \"abc\" with regexp"
+ },
+ {
+  "name": "template-escape-v",
+  "script": "change \"(b)\" into \"[\\\\v]\" in \"abc\" with regexp"
+ },
+ {
+  "name": "template-escape-x41",
+  "script": "change \"(b)\" into \"[\\\\x41]\" in \"abc\" with regexp"
+ },
+ {
+  "name": "template-escape-u0041",
+  "script": "change \"(b)\" into \"[\\\\u0041]\" in \"abc\" with regexp"
+ },
+ {
+  "name": "template-escape-quote",
+  "script": "change \"(b)\" into \"[\\\\\\\"]\" in \"abc\" with regexp"
+ },
+ {
+  "name": "template-escape-amp",
+  "script": "change \"(b)\" into \"[\\\\&]\" in \"abc\" with regexp"
+ },
+ {
+  "name": "template-escape-trailing",
+  "script": "change \"(b)\" into \"[\\\\]\" in \"abc\" with regexp"
+ },
+ {
+  "name": "template-escape-zero",
+  "script": "change \"(b)\" into \"[\\\\0]\" in \"abc\" with regexp"
+ },
+ {
+  "name": "template-escape-g1",
+  "script": "change \"(b)\" into \"[\\\\g<1>]\" in \"abc\" with regexp"
+ },
+ {
+  "name": "template-escape-k1",
+  "script": "change \"(b)\" into \"[\\\\k<1>]\" in \"abc\" with regexp"
+ },
+ {
+  "name": "template-escape-in-using",
+  "script": "find text \"(b)\" in \"abc\" using \"[\\\\t]\" with regexp and string result"
+ },
+ {
+  "name": "find-dollar-end",
+  "script": "find text \"$\" in \"abc\" with regexp"
+ },
+ {
+  "name": "find-dollar-end-all",
+  "script": "find text \"$\" in (\"a\" & linefeed & \"b\") with regexp and all occurrences"
+ },
+ {
+  "name": "find-empty-text-regexp-all",
+  "script": "find text \"x*\" in \"\" with regexp and all occurrences"
+ },
+ {
+  "name": "find-empty-text-regexp",
+  "script": "find text \"x*\" in \"\" with regexp"
+ },
+ {
+  "name": "change-empty-text-regexp",
+  "script": "change \"x*\" into \"-\" in \"\" with regexp"
+ },
+ {
+  "name": "change-dollar-end",
+  "script": "change \"$\" into \"!\" in (\"a\" & linefeed & \"b\") with regexp"
+ },
+ {
+  "name": "find-in-list-string-result",
+  "script": "find text \"a+\" in {\"xa\", \"b\"} with regexp and string result"
+ },
+ {
+  "name": "find-in-list-all",
+  "script": "find text \"a\" in {\"aa\", \"b\"} with all occurrences"
+ },
+ {
+  "name": "find-in-record",
+  "script": "find text \"a\" in {x:\"a\"}"
+ },
+ {
+  "name": "find-word-boundary-unicode",
+  "script": "find text \"\\\\bcr\" in \"écrit crème\" with regexp and all occurrences"
+ },
+ {
+  "name": "find-space-unicode",
+  "script": "find text \"\\\\s\" in (\"a\" & (character id 160) & \"b\") with regexp"
+ },
+ {
+  "name": "find-ignorecase-unicode",
+  "script": "find text \"CAFÉ\" in \"café\" with regexp without case sensitive"
+ },
+ {
+  "name": "find-ignorecase-literal-unicode",
+  "script": "find text \"CAFÉ\" in \"café\" without case sensitive"
+ },
+ {
+  "name": "find-literal-case-and-diacritic",
+  "script": "find text \"CAFE\" in \"café\" without case sensitive and diacritic sensitive"
+ },
+ {
+  "name": "find-literal-expansion",
+  "script": "find text \"ss\" in \"straße\" without case sensitive"
+ },
+ {
+  "name": "find-starting-at-past-end",
+  "script": "find text \"a\" in \"abc\" starting at 10"
+ },
+ {
+  "name": "find-starting-at-negative",
+  "script": "find text \"a\" in \"abc\" starting at -1"
+ },
+ {
+  "name": "find-for-past-end",
+  "script": "find text \"c\" in \"abc\" starting at 1 for 99"
+ },
+ {
+  "name": "find-backward-regexp",
+  "script": "find text \"b\" in \"abcabc\" with regexp and backward"
+ },
+ {
+  "name": "find-backward-starting-at",
+  "script": "find text \"b\" in \"abcabc\" starting at 3 with backward"
+ },
+ {
+  "name": "find-whole-word-regexp",
+  "script": "find text \"cat\" in \"concat\" with regexp and whole word"
+ },
+ {
+  "name": "find-whole-word-punctuation",
+  "script": "find text \"cat\" in \"(cat)\" with whole word"
+ },
+ {
+  "name": "find-whole-word-underscore",
+  "script": "find text \"cat\" in \"cat_x\" with whole word"
+ },
+ {
+  "name": "find-string-result-record-false",
+  "script": "find text \"b\" in \"abc\" without string result"
+ },
+ {
+  "name": "find-all-false",
+  "script": "find text \"b\" in \"abcb\" without all occurrences"
+ },
+ {
+  "name": "find-regexp-false-with-flag",
+  "script": "find text \"a.b\" in \"a.b axb\" regexpflag {\"IGNORECASE\"}"
+ },
+ {
+  "name": "find-options-empty",
+  "script": "find text \"b\" in \"abc\" options \"\""
+ },
+ {
+  "name": "find-options-unknown",
+  "script": "find text \"b\" in \"abc\" options \"z\""
+ },
+ {
+  "name": "find-options-with-param",
+  "script": "find text \"B\" in \"abc\" options \"c\" with case sensitive"
+ },
+ {
+  "name": "change-only-backreference-0",
+  "script": "change \"a(b)c\" into \"X\" in \"abc\" with regexp only backreference 0"
+ },
+ {
+  "name": "change-backward-ignored",
+  "script": "change \"a\" into \"x\" in \"aa\" with regexp"
+ },
+ {
+  "name": "change-into-list-regexp",
+  "script": "change {\"(a)\", \"(b)\"} into {\"\\\\1\\\\1\", \"[\\\\1]\"} in \"ab\" with regexp"
+ },
+ {
+  "name": "change-into-list-single-pattern",
+  "script": "change \"a\" into {\"x\", \"y\"} in \"aa\""
+ },
+ {
+  "name": "change-literal-overlap",
+  "script": "change \"aa\" into \"b\" in \"aaaaa\""
+ },
+ {
+  "name": "change-regexp-caret",
+  "script": "change \"^\" into \"> \" in (\"a\" & linefeed & \"b\") with regexp"
+ },
+ {
+  "name": "change-regexp-lookbehind",
+  "script": "change \"(?<=a)b\" into \"X\" in \"ab cb\" with regexp"
+ },
+ {
+  "name": "change-starting-at-lookbehind",
+  "script": "change \"(?<=a)b\" into \"X\" in \"abab\" starting at 1 with regexp"
+ },
+ {
+  "name": "split-regexp-lookahead",
+  "script": "splittext \"aBcDe\" using \"(?=[A-Z])\" with regexp"
+ },
+ {
+  "name": "split-literal-case-sensitive",
+  "script": "splittext \"aXbxc\" using \"x\""
+ },
+ {
+  "name": "split-diacritic",
+  "script": "splittext \"aébec\" using \"e\" without diacritic sensitive"
+ },
+ {
+  "name": "split-list",
+  "script": "splittext {\"a-b\", \"c\"} using \"-\""
+ },
+ {
+  "name": "re-compile-lowercase-syntax",
+  "script": "re_compile \"a\" syntax \"perl\""
+ },
+ {
+  "name": "template-distinct-zero",
+  "script": "change \"a(b)\" into \"[\\\\0]\" in \"abc\" with regexp"
+ },
+ {
+  "name": "template-distinct-k-unclosed",
+  "script": "change \"a(b)\" into \"[\\\\k<1]\" in \"abc\" with regexp"
+ },
+ {
+  "name": "template-u-short",
+  "script": "change \"a(b)\" into \"[\\\\u41]\" in \"abc\" with regexp"
+ },
+ {
+  "name": "template-u-emoji",
+  "script": "change \"a(b)\" into \"[\\\\uD83D\\\\uDE00]\" in \"abc\" with regexp"
+ },
+ {
+  "name": "template-named-numbered-mix",
+  "script": "change \"(?<n>a)(b)\" into \"[\\\\1\\\\2]\" in \"abc\" with regexp"
+ },
+ {
+  "name": "template-literal-mode",
+  "script": "change \"b\" into \"[\\\\q]\" in \"abc\""
+ },
+ {
+  "name": "line-end-caret-after-cr",
+  "script": "find text \"^b\" in (\"a\" & (character id 13) & \"b\") with regexp"
+ },
+ {
+  "name": "line-end-dot-cr",
+  "script": "find text \"a.b\" in (\"a\" & (character id 13) & \"b\") with regexp"
+ },
+ {
+  "name": "line-end-caret-after-lf",
+  "script": "find text \"^b\" in (\"a\" & (character id 10) & \"b\") with regexp"
+ },
+ {
+  "name": "line-end-dot-lf",
+  "script": "find text \"a.b\" in (\"a\" & (character id 10) & \"b\") with regexp"
+ },
+ {
+  "name": "line-end-caret-after-vt",
+  "script": "find text \"^b\" in (\"a\" & (character id 11) & \"b\") with regexp"
+ },
+ {
+  "name": "line-end-dot-vt",
+  "script": "find text \"a.b\" in (\"a\" & (character id 11) & \"b\") with regexp"
+ },
+ {
+  "name": "line-end-caret-after-ff",
+  "script": "find text \"^b\" in (\"a\" & (character id 12) & \"b\") with regexp"
+ },
+ {
+  "name": "line-end-dot-ff",
+  "script": "find text \"a.b\" in (\"a\" & (character id 12) & \"b\") with regexp"
+ },
+ {
+  "name": "line-end-caret-after-nel",
+  "script": "find text \"^b\" in (\"a\" & (character id 133) & \"b\") with regexp"
+ },
+ {
+  "name": "line-end-dot-nel",
+  "script": "find text \"a.b\" in (\"a\" & (character id 133) & \"b\") with regexp"
+ },
+ {
+  "name": "line-end-caret-after-ls",
+  "script": "find text \"^b\" in (\"a\" & (character id 8232) & \"b\") with regexp"
+ },
+ {
+  "name": "line-end-dot-ls",
+  "script": "find text \"a.b\" in (\"a\" & (character id 8232) & \"b\") with regexp"
+ },
+ {
+  "name": "line-end-caret-after-ps",
+  "script": "find text \"^b\" in (\"a\" & (character id 8233) & \"b\") with regexp"
+ },
+ {
+  "name": "line-end-dot-ps",
+  "script": "find text \"a.b\" in (\"a\" & (character id 8233) & \"b\") with regexp"
+ },
+ {
+  "name": "line-end-negated-class-cr",
+  "script": "find text \"a[^x]b\" in (\"a\" & return & \"b\") with regexp"
+ },
+ {
+  "name": "line-end-z-before-cr",
+  "script": "find text \"a\\\\Z\" in (\"a\" & return) with regexp"
+ },
+ {
+  "name": "line-end-split-lines",
+  "script": "splittext (\"a\" & return & \"b\" & linefeed & \"c\") using \"$\\\\R?\" with regexp"
+ },
+ {
+  "name": "named-only-numbered-count",
+  "script": "find text \"(?<n>a)(b)\" in \"ab\" using 2 with regexp and string result"
+ },
+ {
+  "name": "named-dont-capture",
+  "script": "find text \"(?<n>a)(b)\" in \"ab\" using \"[\\\\1][\\\\2]\" with regexp and string result regexpflag {\"DONT_CAPTURE_GROUP\"}"
+ },
+ {
+  "name": "line-end-negated-class-lf",
+  "script": "find text \"a[^x]b\" in (\"a\" & linefeed & \"b\") with regexp"
+ },
+ {
+  "name": "line-end-negated-class-nel",
+  "script": "find text \"a[^x]b\" in (\"a\" & (character id 133) & \"b\") with regexp"
+ },
+ {
+  "name": "line-end-negated-class-flag",
+  "script": "find text \"a[^x]b\" in (\"a\" & return & \"b\") with regexp regexpflag {\"NEWLINE IN NEGATIVE CC\"}"
+ },
+ {
+  "name": "line-end-negated-class-perl",
+  "script": "find text \"a[^x]b\" in (\"a\" & linefeed & \"b\") with regexp syntax \"PERL\""
+ },
+ {
+  "name": "line-end-s-cr",
+  "script": "find text \"a\\\\sb\" in (\"a\" & return & \"b\") with regexp"
+ },
+ {
+  "name": "line-end-s-vt",
+  "script": "find text \"a\\\\sb\" in (\"a\" & (character id 11) & \"b\") with regexp"
+ },
+ {
+  "name": "line-end-multiline-dot-cr",
+  "script": "find text \"a.b\" in (\"a\" & return & \"b\") with regexp regexpflag {\"MULTILINE\"}"
+ },
+ {
+  "name": "find-using-negative-group",
+  "script": "find text \"(a)\" in \"a\" using -1 with regexp"
+ },
+ {
+  "name": "change-invalid-template-no-match",
+  "script": "change \"x\" into \"\\\\q\" in \"abc\" with regexp"
+ }
+]
