@@ -1,0 +1,58 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Sort",
+        "fields" : [
+          {
+            "key" : "Cfla",
+            "value" : {
+              "integer" : 0,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "Uniq",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "é",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "é",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "é",
+              "type" : "utxt"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "sortlist-decomposed-accents",
+  "recordedAt" : "2026-10-14T18:50:43Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "sortlist {\"é\", \"e\" & (character id 769)} comparison 0 with remove duplicates",
+  "timeZone" : "America/New_York"
+}

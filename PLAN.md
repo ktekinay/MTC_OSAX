@@ -38,6 +38,7 @@ Additions that Satimage never had, planned separately:
 - ✓ [PCRE as an alternative regex engine](Implemented/PLAN-PCRE.md), selected with `syntax "PCRE"` or the `RegexSyntax` setting.
 - ✓ **YAML and TOML for property lists** ([done](Implemented/PLAN-YAMLTOML.md)): `PlistToYAML`, `PlistFromYAML`, `PlistToTOML` and `PlistFromTOML`, and files for these and Satimage's JSON pair.
 - ✓ **Settings from AppleScript** ([done](Implemented/PLAN-Settings.md)): `mtc_get`, `mtc_set` and `mtc_reset` in their own visible "MTC_OSAX Settings" suite, for `idle_timeout`, `dollar_references` and `regex_syntax`.
+- ✓ **A faster `sortlist`** ([done](Implemented/PLAN-FastSort.md)): radix and merge sorts of our own and lists read without a descriptor for each item (2.5 to 16 times as fast), with text compared by full case folding however its accents are typed.
 
 ## May Do Later
 

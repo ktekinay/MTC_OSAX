@@ -88,6 +88,90 @@ struct SortListTests {
 		#expect(sort(AppleEventList(["b", 2, "a", 1])) == ["1", "2", "a", "b"])
 	}
 
+	/// Case is ignored by full case folding, not lowercasing; uppercase first goes by letter case, not character code;
+	/// and accents compare the same however they're typed. By character codes (Swift's `==` ignores how accents are
+	/// typed), in short lists and in lists long enough for the radix sort.
+	@Test func caseAndAccents() {
+		func sorted(_ list: [String], _ parameters: [String: any AppleEventEncodable] = [:]) -> [[UInt32]] {
+			let reply = send("SATISort", parameters.merging(["----": list]) { $1 })
+			return (1 ... (reply.result?.numberOfItems ?? 0)).map { reply.result!.atIndex($0)!.stringValue!.unicodeScalars.map(\.value) }
+		}
+		func codes(_ texts: [String]) -> [[UInt32]] {
+			texts.map { $0.unicodeScalars.map(\.value) }
+		}
+		let ignoringCase: [String: any AppleEventEncodable] = ["Cfla": 1, "Uniq": true]
+		for copies in [1, 40] {
+			func many(_ texts: [String]) -> [String] { Array(repeating: texts, count: copies).flatMap { $0 } }
+			#expect(sorted(many(["straße", "STRASSE", "STRAẞE", "strasse"]), ignoringCase) == codes(["straße"]))
+			#expect(sorted(many(["ος", "ΟΣ", "οσ"]), ignoringCase) == codes(["ος"]))
+			#expect(sorted(many(["ﬀ", "FF", "ff"]), ignoringCase) == codes(["ﬀ"]))
+			#expect(sorted(many(["\u{212A}", "k"]), ignoringCase) == codes(["\u{212A}"]))
+			#expect(sorted(many(["i", "I", "ı", "İ"]), ignoringCase) == codes(["i", "İ", "ı"]))
+			#expect(sorted(many(["e\u{301}", "é"]), ["Uniq": true]) == codes(["e\u{301}"]))
+			#expect(sorted(many(["É", "e\u{301}"]), ignoringCase) == codes(["É"]))
+			#expect(sorted(many(["e\u{301}", "f", "e"])) == codes(many(["e"]) + many(["f"]) + many(["e\u{301}"])))
+			#expect(sorted(many(["ÿ", "Ÿ", "z"]), ["Cfla": 4]) == codes(many(["z"]) + many(["Ÿ"]) + many(["ÿ"])))
+			#expect(sorted(many(["ǆ", "ǅ", "Ǆ"]), ["Cfla": 4]) == codes(many(["Ǆ"]) + many(["ǅ"]) + many(["ǆ"])))
+			#expect(sorted(many(["straße", "STRASSE"]), ["Cfla": 4]) == codes(many(["STRASSE"]) + many(["straße"])))
+			#expect(sorted(many(["ab", "aB", "Ab", "AB"]), ["Cfla": 4, "Uniq": true]) == codes(["AB", "Ab", "aB", "ab"]))
+		}
+	}
+
+	/// Items of every type sortlist reads from the list's data rather than as descriptors, in short lists and long
+	/// ones: as text, they sort and come back as `ListUtilities.text` makes them from each descriptor; `utxt` text
+	/// comes back as it was, and the rest as text.
+	@Test func itemsOfEveryTypeAsText() {
+		func descriptor(_ type: String, _ bytes: [UInt8]) -> NSAppleEventDescriptor {
+			NSAppleEventDescriptor(descriptorType: FourCharCode(fourCharString: type), bytes: bytes, length: bytes.count)!
+		}
+		func bytes<Value>(_ value: Value) -> [UInt8] {
+			withUnsafeBytes(of: value) { Array($0) }
+		}
+		let items = [
+			descriptor("comp", bytes(Int64(1 << 60) + 1)), descriptor("shor", bytes(Int16(-3))), descriptor("long", bytes(Int32(70))),
+			descriptor("bool", [1]), descriptor("bool", [0]), NSAppleEventDescriptor(boolean: true), descriptor("fals", []),
+			descriptor("utf8", Array("utf-8 é".utf8)), descriptor("ut16", [0xFF, 0xFE] + Array("ut16".utf16).flatMap(bytes)),
+			descriptor("utxt", Array("\u{FEFF}mark".utf16).flatMap(bytes)), descriptor("TEXT", Array("mac".utf8)),
+			NSAppleEventDescriptor(string: ""), NSAppleEventDescriptor(string: "Zé"), NSAppleEventDescriptor(double: 2.5),
+			NSAppleEventDescriptor(double: 1e20), NSAppleEventDescriptor(double: .nan), .missingValue,
+		]
+		for copies in [1, 5] {
+			let list = Array(repeating: items, count: copies).flatMap { $0 }
+			let reply = send("SATISort", ["----": AppleEventList(list)])
+			let result = try! #require(reply.result)
+			let sorted = (1 ... result.numberOfItems).map { result.atIndex($0)! }
+			let texts = list.map { ListUtilities.text($0) }
+			let expected = texts.indices.sorted { a, b in
+				switch (texts[a], texts[b]) {
+				case (nil, _): false
+				case (_, nil): true
+				case let (x?, y?): x.unicodeScalars.map(\.value).lexicographicallyPrecedes(y.unicodeScalars.map(\.value)) || (x.unicodeScalars.elementsEqual(y.unicodeScalars) && a < b)
+				}
+			}
+			#expect(sorted.map { $0.descriptorType == typeType ? nil : $0.stringValue } == expected.map { texts[$0] })
+			#expect(sorted.map(\.descriptorType) == expected.map { list[$0].descriptorType == typeType ? typeType : typeUnicodeText })
+			#expect(sorted.contains { $0.stringValue == "1152921504606846977" })
+		}
+	}
+
+	/// With a real, integers of every size come back as reals; without one, as they were.
+	@Test func integersOfEverySize() {
+		func descriptor<Value>(_ type: String, _ value: Value) -> NSAppleEventDescriptor {
+			withUnsafeBytes(of: value) { NSAppleEventDescriptor(descriptorType: FourCharCode(fourCharString: type), bytes: $0.baseAddress, length: $0.count)! }
+		}
+		let integers = [descriptor("comp", Int64(-5)), descriptor("shor", Int16(3)), descriptor("long", Int32(1))]
+		for copies in [1, 30] {
+			let repeated: [NSAppleEventDescriptor] = Array(repeating: integers, count: copies).flatMap { $0 }
+			let withoutReal = try! #require(send("SATISort", ["----": AppleEventList(repeated)]).result)
+			#expect((1 ... withoutReal.numberOfItems).map { withoutReal.atIndex($0)!.descriptorType } == Array(repeating: FourCharCode(fourCharString: "comp"), count: copies) + Array(repeating: typeSInt32, count: copies) + Array(repeating: FourCharCode(fourCharString: "shor"), count: copies))
+			let list: [NSAppleEventDescriptor] = Array(repeating: integers + [NSAppleEventDescriptor(double: 2.5), .missingValue], count: copies).flatMap { $0 }
+			let withReal = try! #require(send("SATISort", ["----": AppleEventList(list)]).result)
+			let items = (1 ... withReal.numberOfItems).map { withReal.atIndex($0)! }
+			#expect(items.dropLast(copies).allSatisfy { $0.descriptorType == typeIEEE64BitFloatingPoint })
+			#expect(items.map { $0.descriptorType == typeType ? nil : $0.doubleValue } == [-5, 1, 2.5, 3].flatMap { Array(repeating: $0, count: copies) } + Array(repeating: nil, count: copies))
+		}
+	}
+
 	@Test func missingValuesComeLast() {
 		let list = AppleEventList([3, NSAppleEventDescriptor.missingValue, 1, 2])
 		#expect(sort(list) == [1, 2, 3, "missing"])

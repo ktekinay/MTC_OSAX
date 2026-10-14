@@ -594,5 +594,57 @@
  {
   "name": "suppress-record-class",
   "script": "suppress item \"abc\" from {class:document, name:\"x\", abc:3}"
+ },
+ {
+  "name": "sortlist-sigma-case-insensitive",
+  "script": "sortlist {\"οσ\", \"ος\", \"ΟΣ\", \"οα\"} comparison 1 with remove duplicates"
+ },
+ {
+  "name": "sortlist-sharp-s-case-insensitive",
+  "script": "sortlist {\"straße\", \"STRASSE\", \"strasse\", \"STRAẞE\"} comparison 1 with remove duplicates"
+ },
+ {
+  "name": "sortlist-ligature-case-insensitive",
+  "script": "sortlist {\"ﬀ\", \"FF\", \"ff\"} comparison 1 with remove duplicates"
+ },
+ {
+  "name": "sortlist-kelvin-case-insensitive",
+  "script": "sortlist {\"k\", \"K\", \"K\"} comparison 1 with remove duplicates"
+ },
+ {
+  "name": "sortlist-turkish-i-case-insensitive",
+  "script": "sortlist {\"i\", \"I\", \"ı\", \"İ\"} comparison 1 with remove duplicates"
+ },
+ {
+  "name": "sortlist-y-diaeresis",
+  "script": "sortlist {\"ÿ\", \"Ÿ\", \"z\"} comparison 0"
+ },
+ {
+  "name": "sortlist-y-diaeresis-case-insensitive",
+  "script": "sortlist {\"ÿ\", \"Ÿ\", \"z\"} comparison 1 with remove duplicates"
+ },
+ {
+  "name": "sortlist-mixed-case-uppercase-first",
+  "script": "sortlist {\"ab\", \"aB\", \"Ab\", \"AB\"} comparison 4"
+ },
+ {
+  "name": "sortlist-mixed-case-uppercase-first-unique",
+  "script": "sortlist {\"ab\", \"aB\", \"Ab\", \"AB\"} comparison 4 with remove duplicates"
+ },
+ {
+  "name": "sortlist-digraphs-uppercase-first",
+  "script": "sortlist {\"ǆ\", \"ǅ\", \"Ǆ\"} comparison 4"
+ },
+ {
+  "name": "sortlist-digraphs-case-insensitive",
+  "script": "sortlist {\"ǆ\", \"ǅ\", \"Ǆ\"} comparison 1 with remove duplicates"
+ },
+ {
+  "name": "sortlist-greek-uppercase-first",
+  "script": "sortlist {\"ω\", \"Ω\", \"ά\", \"Ά\"} comparison 4"
+ },
+ {
+  "name": "sortlist-accents-and-case-insensitive",
+  "script": "sortlist {\"É\", \"é\", \"E\", \"e\", \"F\", \"f\"} comparison 1"
  }
 ]

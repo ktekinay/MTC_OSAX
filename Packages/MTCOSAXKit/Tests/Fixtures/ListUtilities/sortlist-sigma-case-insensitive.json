@@ -1,0 +1,70 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Sort",
+        "fields" : [
+          {
+            "key" : "Cfla",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "Uniq",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "οσ",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "ος",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "ΟΣ",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "οα",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "οα",
+              "type" : "ut16"
+            },
+            {
+              "text" : "οσ",
+              "type" : "ut16"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "sortlist-sigma-case-insensitive",
+  "recordedAt" : "2026-10-14T18:39:34Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "sortlist {\"οσ\", \"ος\", \"ΟΣ\", \"οα\"} comparison 1 with remove duplicates",
+  "timeZone" : "America/New_York"
+}

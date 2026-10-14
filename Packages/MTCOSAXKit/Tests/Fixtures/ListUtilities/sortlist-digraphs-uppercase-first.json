@@ -1,0 +1,64 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Sort",
+        "fields" : [
+          {
+            "key" : "Cfla",
+            "value" : {
+              "integer" : 4,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "ǆ",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "ǅ",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "Ǆ",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "Ǆ",
+              "type" : "ut16"
+            },
+            {
+              "text" : "ǅ",
+              "type" : "ut16"
+            },
+            {
+              "text" : "ǆ",
+              "type" : "ut16"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "sortlist-digraphs-uppercase-first",
+  "recordedAt" : "2026-10-14T18:39:34Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "sortlist {\"ǆ\", \"ǅ\", \"Ǆ\"} comparison 4",
+  "timeZone" : "America/New_York"
+}

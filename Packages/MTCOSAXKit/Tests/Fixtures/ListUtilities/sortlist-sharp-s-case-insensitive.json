@@ -1,0 +1,66 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Sort",
+        "fields" : [
+          {
+            "key" : "Cfla",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "Uniq",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "straße",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "STRASSE",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "strasse",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "STRAẞE",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "straße",
+              "type" : "ut16"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "sortlist-sharp-s-case-insensitive",
+  "recordedAt" : "2026-10-14T18:39:34Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "sortlist {\"straße\", \"STRASSE\", \"strasse\", \"STRAẞE\"} comparison 1 with remove duplicates",
+  "timeZone" : "America/New_York"
+}

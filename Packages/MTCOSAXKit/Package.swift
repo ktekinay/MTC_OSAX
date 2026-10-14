@@ -8,6 +8,7 @@ let package = Package(
 	products: [
 		.library(name: "MTCOSAX", targets: ["MTCOSAX"]),
 		.executable(name: "fixture-recorder", targets: ["FixtureRecorder"]),
+		.executable(name: "sort-benchmark", targets: ["SortBenchmark"]),
 	],
 	targets: [
 		// Apple event plumbing shared by every suite: dispatch, parameters, conversion, errors.
@@ -90,6 +91,9 @@ let package = Package(
 		.target(name: "MTCOSAX", dependencies: ["AppleEventCore", "Diagnostics", "TextAdditions", "FilesAndFolders", "FileAdditions", "MathFunctions", "ListUtilities", "Arrays", "PropertyLists", "XML", "Settings"]),
 
 		.executableTarget(name: "FixtureRecorder", dependencies: ["AppleEventCore"]),
+
+		// Times sortlist (Scripts/sort-benchmark.sh).
+		.executableTarget(name: "SortBenchmark", dependencies: ["AppleEventCore", "ListUtilities"]),
 
 		// For tests: defaults kept in memory, and a local HTTP server.
 		.target(name: "TestSupport"),

@@ -1,0 +1,74 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Sort",
+        "fields" : [
+          {
+            "key" : "Cfla",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "Uniq",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "i",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "I",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "ı",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "İ",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "i",
+              "type" : "ut16"
+            },
+            {
+              "text" : "İ",
+              "type" : "ut16"
+            },
+            {
+              "text" : "ı",
+              "type" : "ut16"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "sortlist-turkish-i-case-insensitive",
+  "recordedAt" : "2026-10-14T18:39:34Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "sortlist {\"i\", \"I\", \"ı\", \"İ\"} comparison 1 with remove duplicates",
+  "timeZone" : "America/New_York"
+}

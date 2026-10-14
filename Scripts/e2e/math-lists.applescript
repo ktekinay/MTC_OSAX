@@ -59,6 +59,8 @@ check("sort numbers", (sortlist {2, 5, 1, 3}), {1, 2, 3, 5})
 check("sort descending", (sortlist {2, 5, 1, 3} without ascending), {5, 3, 2, 1})
 check("sort text", (sortlist {"abc", "ABC", "xyz", "123"}), {"123", "ABC", "abc", "xyz"})
 check("sort case-insensitive", (sortlist {"b", "B", "a", "A"} comparison 1), {"a", "A", "b", "B"})
+set sorted to sortlist {"straße", "ος", "STRASSE", "ﬀ", "ΟΣ", "FF"} comparison 1 with remove duplicates
+check("sort case folding", {count sorted, id of item 1 of sorted, id of item 3 of sorted}, {3, 64256, {959, 962}})
 check("sort numeric", (sortlist {"a1", "a10", "a2"} comparison 2), {"a1", "a2", "a10"})
 check("sort unique", (sortlist {3, 1, 3, 2} with remove duplicates), {1, 2, 3})
 check("sort with respect to", (sortlist {{2, 1, 3}, {"b", "a", "c"}} with respect to 1), {{1, 2, 3}, {"a", "b", "c"}})

@@ -80,6 +80,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 **Math and list utilities**
 
 - `sortlist` of a single value gives a list of it; NaN in a column it sorts by sorts last, as it does alone and as `missing value` does (it left the rows unsorted); `with respect to 1.5` is error -1700, as 1.0E+19 is (SatimageOSAX left the lists unsorted); without a parameter it's error -1701; `missing value` sorts last and stays `missing value` (SatimageOSAX turned every number into a real).
+- `sortlist` compares texts however their accents are typed: "é" and "e" followed by a combining accent are the same text under every `comparison` (SatimageOSAX kept both, even `with remove duplicates`). With `comparison 4`, texts that differ only in case are ordered uppercase first by the letters' case, not their character codes: "Ÿ" before "ÿ" (SatimageOSAX put "ÿ" first).
 - `suppress item` with a single index works (including the dictionary's example).
 - `exclude items` and `keep items` `without case sensitive` ignore case; `keep items {}` gives `{}`; from an `array of real` they filter its numbers as they would a list of the same reals, and return a list (SatimageOSAX returned nothing).
 - `special concat` of text with a record is error -1700 instead of garbage; empty text gives empty cells.
@@ -149,7 +150,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 | `Packages/MTCOSAXKit/Sources/FixtureRecorder` | `fixture-recorder` command-line tool |
 | `Packages/MTCOSAXKit/Tests/Fixtures` | Recorded Apple events and replies, one folder per section |
 | `Config/` | How the app is signed (`Signing.xcconfig`), and where your own signing settings go |
-| `Scripts/` | End-to-end AppleScript checks and helper scripts (`test.sh`, `release.sh`, the iTerm runner) |
+| `Scripts/` | End-to-end AppleScript checks and helper scripts (`test.sh`, `release.sh`, `sort-benchmark.sh`, the iTerm runner) |
 
 ## Building
 
@@ -320,6 +321,8 @@ Scripts/iterm-run.sh Scripts/run-e2e.sh diagnostics
 
 Dialogs need a person: `Scripts/manual/dialogs.sh [MTC_OSAX|SatimageOSAX]` opens each `navchoose` dialog and the `navask save` alert in turn (each prompt says what to do) and prints the results, to check them by hand. (SatimageOSAX's dialogs never worked; they all reply -1708.) Run it in iTerm or Terminal.
 
+`Scripts/sort-benchmark.sh` builds `sort-benchmark` in release and times `sortlist` in process (no Apple events, so it runs anywhere) for each kind of list (including lists 95% sorted and 95% duplicates) at 1,000, 100,000 and 1,000,000 items: the whole command, making the keys and ordering, and ordering alone. `--sizes 1000,100000` and `--only text` narrow it. [PLAN-FastSort.md](Implemented/PLAN-FastSort.md) has its times.
+
 ### Recording fixtures
 
 While SatimageOSAX still runs, record its behavior so the tests keep working after it's gone (it's Intel-only and will stop working once Rosetta is removed).
@@ -367,3 +370,16 @@ Fixtures store the values used, and replays substitute the checkout's `Input` fo
 - **PCRE2 10.49** (`Packages/MTCOSAXKit/Sources/CPCRE2`), the engine for `syntax "PCRE"`, by Philip Hazel and the PCRE2 project. BSD 3-clause license (with the PCRE2 exemption); see [LICENCE.md](Packages/MTCOSAXKit/Sources/CPCRE2/LICENCE.md). Only the 16-bit library's sources are included, without JIT. `config.h` is PCRE2's `config.h.generic` with the changes marked `MTC_OSAX` (16-bit and Unicode support, macOS's headers, any line ending by default), `pcre2.h` is `pcre2.h.generic`, `pcre2_chartables.c` is `pcre2_chartables.c.dist`, and `include/CPCRE2Shim.h` is ours. `pcre2_match.c` has one change, marked `MTC_OSAX patch`: it checks a deadline for searches (our `mtc_deadline.c`) every 65,536 steps, since its own limit starts again at each starting position.
 
 - **Onigmo 6.2.0** (`Packages/MTCOSAXKit/Sources/COnigmo`), the regular expression engine Satimage used, by K.Kosako and K.Takata. BSD 2-clause license; see [COPYING](Packages/MTCOSAXKit/Sources/COnigmo/COPYING). Only the engine and the encodings it needs are included. Changes to match Satimage's build: `regparse.c` has two small patches (marked `MTC_SATIMAGE_COMPATIBILITY`) so negated classes also exclude `\r` and `(?x)` comments also end at `\r` and the escapes `\n`/`\r`; our own `mtc_encoding.c` defines Satimage's line terminators, and treats a lone surrogate as one character. (Patterns are compiled with Onigmo's `ONIG_OPTION_NEWLINE_CRLF`, so CR LF is one line end, which it wasn't in Satimage's build.) `regexec.c` has three fixes for reading past a buffer (marked `MTC_OSAX patch`, and always on): in case-insensitive matching of a character that folds to more than is left of the pattern, and in two places where it peeks at the next character at the end of the text, and it checks a deadline for searches (our `mtc_deadline.c`) every 65,536 backtracks, also marked `MTC_OSAX patch`. `include/COnigmoShim.h` is also ours.
+
+## Release Notes
+
+### 1.1
+
+- `sortlist` is much faster on long lists: 2.5 to 7 times for lists, and about 15 times for an `array of real`. `exclude items` and `keep items` also compare numbers as text faster.
+- `comparison 1` ignores case by full Unicode case folding, as SatimageOSAX did: "ß" equals "ss", "ς" equals "σ", and "ﬀ" equals "ff".
+- `sortlist` compares text the same however its accents are typed ("é" as one character or as "e" and a combining accent).
+- `comparison 4` puts uppercase first by the letters' case, not their character codes ("Ÿ" before "ÿ").
+
+### 1.0.1
+
+Initial public release.
