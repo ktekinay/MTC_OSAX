@@ -268,6 +268,18 @@ for name, script in [
     ("divlist-doc", "divlist 1 with {-2, -1, 0, 1, 2}"),
     ("addlist-polynomials", "addlist (composepolynomial {1, 1} with {0, 2}) with {1, 2, 3}"),
     ("multlist-polynomials", "multlist (composepolynomial {1, 1} with {0, 2}) with 3"),
+    ("multlist-polynomial-polynomial", "set p to composepolynomial {1, 1} with {0, 2}\nmultlist p with p"),
+    ("multlist-polynomial-list", "set p to composepolynomial {1, 1} with {0, 2}\nmultlist p with {1, 2, 3}"),
+    ("addlist-polynomial-polynomial", "set p to composepolynomial {1, 1} with {0, 2}\nset q to composepolynomial {0, 0, 1} with {1, 1}\naddlist p with q"),
+    ("sublist-list-polynomial", "set p to composepolynomial {1, 1} with {0, 2}\nsublist {5} with p"),
+    ("divlist-polynomial-number", "set p to composepolynomial {1, 1} with {0, 2}\ndivlist p with 2"),
+    ("addlist-polynomial-array", "set p to composepolynomial {1, 1} with {0, 2}\naddlist p with (createarray 3)"),
+    ("addlist-polynomial-number", "set p to composepolynomial {1, 1} with {0, 2}\naddlist p with 10"),
+    ("addlist-list-array-different", "addlist {1, 2} with (createarray 3)"),
+    ("addlist-matrix-different-shape", "addlist {class:matrix, ncols:2, nrows:1, array of real:{1, 2}} with {class:matrix, ncols:1, nrows:2, array of real:{1, 2}}"),
+    ("addlist-list-nested-array", "addlist {1, (createarray 2)} with {1, {2, 3}}"),
+    ("addlist-integers", "addlist {1, 2} with {3, 4}"),
+    ("addlist-boolean", "addlist {true} with {1}"),
 ]:
     case(name, script)
 
@@ -570,6 +582,7 @@ MTC_OSAX_FIXES = {
     "composepolynomial-empty": "Satimage returned nothing; the zero polynomial",
     "evalformula-fn-sqr": "Satimage didn't know sqr (error 5), which its dictionary lists",
     "evalformula-comment": "Satimage gave a syntax error (16) for a // comment after an expression",
+    "divlist-polynomial-number": "Satimage refused to divide a polynomial by a number (-50), which its dictionary lists",
 }
 assert MTC_OSAX_FIXES.keys() <= names
 os.makedirs("../ArraysFixes", exist_ok=True)

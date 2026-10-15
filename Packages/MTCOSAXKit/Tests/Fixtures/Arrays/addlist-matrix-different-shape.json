@@ -1,0 +1,97 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "LST+",
+        "fields" : [
+          {
+            "key" : "with",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "ncol",
+                  "value" : {
+                    "integer" : 1,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "nrow",
+                  "value" : {
+                    "integer" : 2,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "Lido",
+                  "value" : {
+                    "items" : [
+                      {
+                        "integer" : 1,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 2,
+                        "type" : "long"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "Matr"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "ncol",
+                  "value" : {
+                    "integer" : 2,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "nrow",
+                  "value" : {
+                    "integer" : 1,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "Lido",
+                  "value" : {
+                    "items" : [
+                      {
+                        "integer" : 1,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 2,
+                        "type" : "long"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "Matr"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1
+      }
+    }
+  ],
+  "name" : "addlist-matrix-different-shape",
+  "recordedAt" : "2026-10-15T13:46:17Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "addlist {class:matrix, ncols:2, nrows:1, array of real:{1, 2}} with {class:matrix, ncols:1, nrows:2, array of real:{1, 2}}",
+  "timeZone" : "America/New_York"
+}

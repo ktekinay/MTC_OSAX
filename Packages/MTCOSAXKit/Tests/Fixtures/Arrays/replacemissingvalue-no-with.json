@@ -1,0 +1,125 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "LST/",
+        "fields" : [
+          {
+            "key" : "with",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : -1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "code" : "msng",
+              "type" : "type"
+            },
+            {
+              "real" : -1,
+              "type" : "doub"
+            },
+            {
+              "code" : "msng",
+              "type" : "type"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FILL",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "real" : 1,
+                  "type" : "doub"
+                },
+                {
+                  "code" : "msng",
+                  "type" : "type"
+                },
+                {
+                  "real" : -1,
+                  "type" : "doub"
+                },
+                {
+                  "code" : "msng",
+                  "type" : "type"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1701
+      }
+    }
+  ],
+  "name" : "replacemissingvalue-no-with",
+  "recordedAt" : "2026-10-15T13:37:30Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "replacemissingvalue (divlist {1, 0, -1, 0} with {1, 0, 1, 0})",
+  "timeZone" : "America/New_York"
+}

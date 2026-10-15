@@ -1094,6 +1094,50 @@
   "script": "multlist (composepolynomial {1, 1} with {0, 2}) with 3"
  },
  {
+  "name": "multlist-polynomial-polynomial",
+  "script": "set p to composepolynomial {1, 1} with {0, 2}\nmultlist p with p"
+ },
+ {
+  "name": "multlist-polynomial-list",
+  "script": "set p to composepolynomial {1, 1} with {0, 2}\nmultlist p with {1, 2, 3}"
+ },
+ {
+  "name": "addlist-polynomial-polynomial",
+  "script": "set p to composepolynomial {1, 1} with {0, 2}\nset q to composepolynomial {0, 0, 1} with {1, 1}\naddlist p with q"
+ },
+ {
+  "name": "sublist-list-polynomial",
+  "script": "set p to composepolynomial {1, 1} with {0, 2}\nsublist {5} with p"
+ },
+ {
+  "name": "addlist-polynomial-array",
+  "script": "set p to composepolynomial {1, 1} with {0, 2}\naddlist p with (createarray 3)"
+ },
+ {
+  "name": "addlist-polynomial-number",
+  "script": "set p to composepolynomial {1, 1} with {0, 2}\naddlist p with 10"
+ },
+ {
+  "name": "addlist-list-array-different",
+  "script": "addlist {1, 2} with (createarray 3)"
+ },
+ {
+  "name": "addlist-matrix-different-shape",
+  "script": "addlist {class:matrix, ncols:2, nrows:1, array of real:{1, 2}} with {class:matrix, ncols:1, nrows:2, array of real:{1, 2}}"
+ },
+ {
+  "name": "addlist-list-nested-array",
+  "script": "addlist {1, (createarray 2)} with {1, {2, 3}}"
+ },
+ {
+  "name": "addlist-integers",
+  "script": "addlist {1, 2} with {3, 4}"
+ },
+ {
+  "name": "addlist-boolean",
+  "script": "addlist {true} with {1}"
+ },
+ {
   "name": "runningsum-list",
   "script": "runningsum {1, 2, 3, 4}"
  },

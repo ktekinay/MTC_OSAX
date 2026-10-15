@@ -1,0 +1,38 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "LST/",
+        "fields" : [
+          {
+            "key" : "with",
+            "value" : {
+              "integer" : 0,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "code" : "msng",
+          "type" : "type"
+        }
+      }
+    }
+  ],
+  "name" : "divlist-zero-number",
+  "recordedAt" : "2026-10-15T13:37:32Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "divlist 1 with 0",
+  "timeZone" : "America/New_York"
+}

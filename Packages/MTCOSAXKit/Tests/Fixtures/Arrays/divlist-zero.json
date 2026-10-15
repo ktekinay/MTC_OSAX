@@ -1,0 +1,64 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "LST/",
+        "fields" : [
+          {
+            "key" : "with",
+            "value" : {
+              "integer" : 0,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : -1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "code" : "msng",
+              "type" : "type"
+            },
+            {
+              "code" : "msng",
+              "type" : "type"
+            },
+            {
+              "code" : "msng",
+              "type" : "type"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "divlist-zero",
+  "recordedAt" : "2026-10-15T13:37:32Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "divlist {1, -1, 0} with 0",
+  "timeZone" : "America/New_York"
+}

@@ -1,0 +1,65 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "LST*",
+        "fields" : [
+          {
+            "key" : "with",
+            "value" : {
+              "items" : [
+                {
+                  "real" : 1e+308,
+                  "type" : "doub"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "real" : 1e+308,
+                  "type" : "doub"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "code" : "msng",
+              "type" : "type"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "multlist-overflow",
+  "recordedAt" : "2026-10-15T13:37:31Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "multlist {1.0E+308, 1} with {1.0E+308, 1}",
+  "timeZone" : "America/New_York"
+}
