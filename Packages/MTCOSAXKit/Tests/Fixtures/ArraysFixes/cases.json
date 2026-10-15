@@ -24,8 +24,28 @@
   "script": "set p to composepolynomial {1, 1} with {0, 2}\ndivlist p with 2"
  },
  {
+  "name": "histogram-minimum",
+  "script": "histogram (createarray 10) samples 2 minimum 4"
+ },
+ {
+  "name": "histogram-range-inside",
+  "script": "histogram (createarray 10) samples 2 minimum 3 maximum 6"
+ },
+ {
   "name": "resamplematrix-blocksize-zero",
   "script": "resamplematrix {class:matrix, ncols:4, nrows:4, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}} blocksize {0, 2}"
+ },
+ {
+  "name": "filter-not-reduced",
+  "script": "filter {class:matrix, ncols:3, nrows:3, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9}} using {0, 0, 0, 0, 1, 0, 0, 0, 0} reduced false"
+ },
+ {
+  "name": "filter-not-reduced-blur",
+  "script": "filter {class:matrix, ncols:4, nrows:4, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}} using {1, 1, 1, 1, 1, 1, 1, 1, 1} reduced false"
+ },
+ {
+  "name": "filter-small",
+  "script": "filter {class:matrix, ncols:2, nrows:2, array of real:{1, 2, 3, 4}} using {1, 1, 1, 1, 1, 1, 1, 1, 1}"
  },
  {
   "name": "evalformula-comment",

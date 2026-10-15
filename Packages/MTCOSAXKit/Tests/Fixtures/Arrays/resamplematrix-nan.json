@@ -1,0 +1,120 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "ReMa",
+        "fields" : [
+          {
+            "key" : "bloc",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 2,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 2,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "WANT",
+            "value" : {
+              "text" : "missing value",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "ncol",
+                  "value" : {
+                    "integer" : 2,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "nrow",
+                  "value" : {
+                    "integer" : 2,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "Lido",
+                  "value" : {
+                    "items" : [
+                      {
+                        "integer" : 1,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 2,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 3,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 4,
+                        "type" : "long"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "Matr"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "ncol",
+              "value" : {
+                "integer" : 1,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "nrow",
+              "value" : {
+                "integer" : 1,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "Lido",
+              "value" : {
+                "items" : [
+                  {
+                    "real" : 0,
+                    "type" : "doub"
+                  }
+                ],
+                "type" : "Lido"
+              }
+            }
+          ],
+          "type" : "Matr"
+        }
+      }
+    }
+  ],
+  "name" : "resamplematrix-nan",
+  "recordedAt" : "2026-10-15T13:37:33Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "resamplematrix {class:matrix, ncols:2, nrows:2, array of real:{1, 2, 3, 4}} blocksize {2, 2} wanted \"missing value\"",
+  "timeZone" : "America/New_York"
+}

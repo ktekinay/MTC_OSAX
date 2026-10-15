@@ -1,0 +1,79 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "ReMa",
+        "fields" : [
+          {
+            "key" : "bloc",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "ncol",
+                  "value" : {
+                    "integer" : 2,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "nrow",
+                  "value" : {
+                    "integer" : 2,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "Lido",
+                  "value" : {
+                    "items" : [
+                      {
+                        "integer" : 1,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 2,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 3,
+                        "type" : "long"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "Matr"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -50
+      }
+    }
+  ],
+  "name" : "resamplematrix-wrong-size",
+  "recordedAt" : "2026-10-15T13:37:34Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "resamplematrix {class:matrix, ncols:2, nrows:2, array of real:{1, 2, 3}} blocksize {1, 1}",
+  "timeZone" : "America/New_York"
+}

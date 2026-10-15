@@ -583,6 +583,11 @@ MTC_OSAX_FIXES = {
     "evalformula-fn-sqr": "Satimage didn't know sqr (error 5), which its dictionary lists",
     "evalformula-comment": "Satimage gave a syntax error (16) for a // comment after an expression",
     "divlist-polynomial-number": "Satimage refused to divide a polynomial by a number (-50), which its dictionary lists",
+    "histogram-minimum": "Satimage also counted numbers up to an interval below the minimum in the first interval",
+    "histogram-range-inside": "Satimage also counted numbers up to an interval below the minimum in the first interval",
+    "filter-not-reduced": "Satimage put some border values in the wrong places (the identity filter changed the matrix)",
+    "filter-not-reduced-blur": "Satimage put some border values in the wrong places",
+    "filter-small": "Satimage gave -108 (out of memory) for a matrix too small to reduce; -50",
 }
 assert MTC_OSAX_FIXES.keys() <= names
 os.makedirs("../ArraysFixes", exist_ok=True)

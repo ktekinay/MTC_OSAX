@@ -9,7 +9,7 @@ public enum Arrays {
 	@MainActor
 	public static func commands() -> [CommandDefinition] {
 		let random = RandomSource()
-		return placeholders + Editing.commands() + Arithmetic.commands() + [
+		return placeholders + Editing.commands() + Arithmetic.commands() + Statistics.commands() + [
 			CommandDefinition("createarray", code: "SATICRAR") { request in
 				let count = try size(request)
 				let (low, high) = try range(request) ?? (0, Double(count - 1))
@@ -41,8 +41,7 @@ public enum Arrays {
 	/// Commands not written yet: error -1708 (the event isn't handled), as before they were in the dictionary.
 	@MainActor
 	static let placeholders: [CommandDefinition] = [
-		("resamplematrix", "SATIReMa"), ("runningsum", "SATIRSum"), ("statlist", "SATIStat"),
-		("histogram", "SATIHisT"), ("evalformula", "SATILSOP"), ("filter", "SATIBLUR"),
+		("evalformula", "SATILSOP"),
 		("evalpolynomial", "SATIEvPo"), ("roots of", "SATIRoot"), ("composepolynomial", "SATICoPo"),
 		("pade approximant", "SATIPade"), ("fitpolynomial", "SATIFiPo"), ("fitrational", "SATIRatF"),
 		("read binary", "SATIRdBF"), ("write binary", "SATIWrBF"),

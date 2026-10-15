@@ -1,0 +1,139 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Stat",
+        "fields" : [
+          {
+            "key" : "Krts",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "code" : "msng",
+                  "type" : "type"
+                },
+                {
+                  "integer" : 3,
+                  "type" : "long"
+                },
+                {
+                  "code" : "msng",
+                  "type" : "type"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "MAX ",
+              "value" : {
+                "real" : 3,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "MAXi",
+              "value" : {
+                "integer" : 3,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "MIN ",
+              "value" : {
+                "real" : 1,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "MINi",
+              "value" : {
+                "integer" : 1,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "SUM ",
+              "value" : {
+                "real" : 4,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "MEAN",
+              "value" : {
+                "real" : 2,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "Sigm",
+              "value" : {
+                "real" : 1,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "StDe",
+              "value" : {
+                "real" : 1,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "msng",
+              "value" : {
+                "integer" : 2,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "Skew",
+              "value" : {
+                "real" : 0,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "Krts",
+              "value" : {
+                "real" : 1,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "MEDI",
+              "value" : {
+                "text" : "nan",
+                "type" : "doub"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    }
+  ],
+  "name" : "statlist-missing",
+  "recordedAt" : "2026-10-15T13:37:32Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "statlist {1, missing value, 3, missing value} with kurtosis",
+  "timeZone" : "America/New_York"
+}

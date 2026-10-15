@@ -1,0 +1,104 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Stat",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "1",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "2",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "MAX ",
+              "value" : {
+                "real" : 2,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "MAXi",
+              "value" : {
+                "integer" : 2,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "MIN ",
+              "value" : {
+                "real" : 1,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "MINi",
+              "value" : {
+                "integer" : 1,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "SUM ",
+              "value" : {
+                "real" : 3,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "MEAN",
+              "value" : {
+                "real" : 1.5,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "Sigm",
+              "value" : {
+                "real" : 0.25,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "StDe",
+              "value" : {
+                "real" : 0.5,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "msng",
+              "value" : {
+                "integer" : 0,
+                "type" : "long"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    }
+  ],
+  "name" : "statlist-text",
+  "recordedAt" : "2026-10-15T13:37:32Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "statlist {\"1\", \"2\"}",
+  "timeZone" : "America/New_York"
+}

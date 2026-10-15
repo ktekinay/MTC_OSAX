@@ -1,0 +1,138 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "ReMa",
+        "fields" : [
+          {
+            "key" : "bloc",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 2,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 2,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "WANT",
+            "value" : {
+              "text" : "mode",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "ncol",
+                  "value" : {
+                    "integer" : 4,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "nrow",
+                  "value" : {
+                    "integer" : 4,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "Lido",
+                  "value" : {
+                    "items" : [
+                      {
+                        "integer" : 1,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 2,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 3,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 4,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 5,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 6,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 7,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 8,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 9,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 10,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 11,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 12,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 13,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 14,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 15,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 16,
+                        "type" : "long"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "Matr"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -50
+      }
+    }
+  ],
+  "name" : "resamplematrix-unknown",
+  "recordedAt" : "2026-10-15T13:37:33Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "resamplematrix {class:matrix, ncols:4, nrows:4, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}} blocksize {2, 2} wanted \"mode\"",
+  "timeZone" : "America/New_York"
+}
