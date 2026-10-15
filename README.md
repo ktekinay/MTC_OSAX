@@ -24,6 +24,7 @@ These suites aren't implemented and aren't in MTC_OSAX's dictionary, so a script
 - Linear algebra, FFT and convolution
 - Image files, 3D array handling, FITS, XNF Additions
 - Resource Suite
+- The hidden Arrays commands `listvariables`, `smootharray`, `find peaks` and `arrays auto filling` (so lists of unequal length are always an error, as they are by default in SatimageOSAX)
 - The hidden legacy text commands (`find text obsolete`, `replace obsolete`, `extract string`, `findxmlstag`, `gziptext`, `gunziptext`)
 - The unnamed hidden suite of obsolete commands (old XML variants, `XMLCookie`, `PlistCopy`, `XMLGetArray`/`XMLSetArray`, …)
 
