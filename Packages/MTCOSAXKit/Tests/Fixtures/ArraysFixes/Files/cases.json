@@ -1,5 +1,13 @@
 [
  {
+  "name": "binary-integer-big-endian",
+  "script": "write binary POSIX file \"$TMP/integer-big.bin\" with data {1, -2, 3} as integer with big endian\nread binary POSIX file \"$TMP/integer-big.bin\" as integer with big endian\nread binary POSIX file \"$TMP/integer-big.bin\" as integer without big endian"
+ },
+ {
+  "name": "binary-bad-type",
+  "script": "write binary POSIX file \"$TMP/bad.bin\" with data {1} as text"
+ },
+ {
   "name": "binary-path-text",
   "script": "write binary \"$TMP/text-path.bin\" with data {1, 2} as byte\nread binary \"$TMP/text-path.bin\" as byte"
  }

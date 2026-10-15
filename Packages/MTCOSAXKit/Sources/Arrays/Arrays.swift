@@ -9,7 +9,7 @@ public enum Arrays {
 	@MainActor
 	public static func commands() -> [CommandDefinition] {
 		let random = RandomSource()
-		return placeholders + Editing.commands() + Arithmetic.commands() + Statistics.commands() + [Formula.command()] + Polynomials.commands() + [
+		return Editing.commands() + Arithmetic.commands() + Statistics.commands() + [Formula.command()] + Polynomials.commands() + BinaryFiles.commands() + [
 			CommandDefinition("createarray", code: "SATICRAR") { request in
 				let count = try size(request)
 				let (low, high) = try range(request) ?? (0, Double(count - 1))
@@ -37,12 +37,6 @@ public enum Arrays {
 			},
 		]
 	}
-
-	/// Commands not written yet: error -1708 (the event isn't handled), as before they were in the dictionary.
-	@MainActor
-	static let placeholders: [CommandDefinition] = [
-		("read binary", "SATIRdBF"), ("write binary", "SATIWrBF"),
-	].map { name, code in CommandDefinition(name, code: code) { _ in throw OSAXError.eventNotHandled } }
 
 	/// The point `fraction` of the way from `low` to `high`, for a range wider than a real can hold (where
 	/// `high - low` is infinite).

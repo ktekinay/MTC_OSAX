@@ -719,6 +719,8 @@ json.dump([c for c in cases if c["name"] not in MTC_OSAX_FIXES], open("cases.jso
 json.dump([c for c in cases if c["name"] in MTC_OSAX_FIXES], open("../ArraysFixes/cases.json", "w"), indent=1, ensure_ascii=False)
 FILE_FIXES = {
     "binary-path-text": "Satimage gave error 1 for a path as text; the file commands take one",
+    "binary-bad-type": "Satimage accepted as text without saying what it wrote; -50",
+    "binary-integer-big-endian": "Satimage read integers into 4-byte reals, so -16777217 came back as -16777216",
 }
 assert FILE_FIXES.keys() <= file_names
 os.makedirs("Files", exist_ok=True)
