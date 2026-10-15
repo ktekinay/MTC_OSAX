@@ -4,7 +4,35 @@
   "script": "randomarray 3 seed 4000000000\nrandomarray 3 seed 4000000000"
  },
  {
-  "name": "randomarray-seed-huge",
-  "script": "randomarray 3 seed 1.0E+30"
+  "name": "extractarray-as-list-of-integer-huge",
+  "script": "extractarray (createarray 2 range {1.0E+10, -1.0E+10}) for -1 as list of integer"
+ },
+ {
+  "name": "removemissingvalue-list",
+  "script": "removemissingvalue {1, missing value, 2}"
+ },
+ {
+  "name": "removemissingvalue-array",
+  "script": "removemissingvalue (divlist (createarray 4) with (createarray 4))"
+ },
+ {
+  "name": "removemissingvalue-none",
+  "script": "removemissingvalue {1, 2}"
+ },
+ {
+  "name": "resamplematrix-blocksize-zero",
+  "script": "resamplematrix {class:matrix, ncols:4, nrows:4, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}} blocksize {0, 2}"
+ },
+ {
+  "name": "evalformula-comment",
+  "script": "evalformula \"x+1//a comment\\n\" with {x:2}"
+ },
+ {
+  "name": "evalformula-fn-sqr",
+  "script": "evalformula \"sqr(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "composepolynomial-empty",
+  "script": "composepolynomial {} with {1}"
  }
 ]

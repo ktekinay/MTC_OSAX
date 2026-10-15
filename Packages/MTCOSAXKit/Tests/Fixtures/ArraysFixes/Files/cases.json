@@ -1,0 +1,6 @@
+[
+ {
+  "name": "binary-path-text",
+  "script": "write binary \"$TMP/text-path.bin\" with data {1, 2} as byte\nread binary \"$TMP/text-path.bin\" as byte"
+ }
+]

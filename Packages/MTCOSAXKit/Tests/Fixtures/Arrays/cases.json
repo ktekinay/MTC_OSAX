@@ -152,5 +152,1953 @@
   "name": "randomarray-unseeded-range",
   "script": "randomarray 5 range {100, 101}",
   "random": true
+ },
+ {
+  "name": "creatematrix-1",
+  "script": "creatematrix \"1\" ncols 3 nrows 2"
+ },
+ {
+  "name": "creatematrix-1-as-matrix",
+  "script": "creatematrix \"1\" ncols 3 nrows 2 as matrix"
+ },
+ {
+  "name": "creatematrix-x",
+  "script": "creatematrix \"x\" ncols 3 nrows 2"
+ },
+ {
+  "name": "creatematrix-x-as-matrix",
+  "script": "creatematrix \"x\" ncols 3 nrows 2 as matrix"
+ },
+ {
+  "name": "creatematrix-y",
+  "script": "creatematrix \"y\" ncols 3 nrows 2"
+ },
+ {
+  "name": "creatematrix-y-as-matrix",
+  "script": "creatematrix \"y\" ncols 3 nrows 2 as matrix"
+ },
+ {
+  "name": "creatematrix-d",
+  "script": "creatematrix \"d\" ncols 3 nrows 2"
+ },
+ {
+  "name": "creatematrix-d-as-matrix",
+  "script": "creatematrix \"d\" ncols 3 nrows 2 as matrix"
+ },
+ {
+  "name": "creatematrix-x-range",
+  "script": "creatematrix \"x\" ncols 3 nrows 2 range {-1, 1}"
+ },
+ {
+  "name": "creatematrix-y-range",
+  "script": "creatematrix \"y\" ncols 2 nrows 3 range {-1, 1} as matrix"
+ },
+ {
+  "name": "creatematrix-x-list",
+  "script": "creatematrix \"x\" ncols {5, 7, 9} nrows 2 as matrix"
+ },
+ {
+  "name": "creatematrix-y-list",
+  "script": "creatematrix \"y\" ncols 2 nrows {5, 7} as matrix"
+ },
+ {
+  "name": "creatematrix-x-array",
+  "script": "creatematrix \"x\" ncols (createarray 3 range {-1, 1}) nrows 2 as matrix"
+ },
+ {
+  "name": "creatematrix-x-one-column",
+  "script": "creatematrix \"x\" ncols 1 nrows 3 range {2, 5}"
+ },
+ {
+  "name": "creatematrix-d-diagonal",
+  "script": "creatematrix \"d\" diagonal {1, 2, 3} as matrix"
+ },
+ {
+  "name": "creatematrix-d-diagonal-array",
+  "script": "creatematrix \"d\" diagonal (createarray 2 range {5, 6})"
+ },
+ {
+  "name": "creatematrix-d-diagonal-number",
+  "script": "creatematrix \"d\" diagonal 2.5 ncols 3 nrows 3 as matrix"
+ },
+ {
+  "name": "creatematrix-d-identity",
+  "script": "creatematrix \"d\" ncols 3 nrows 3 as matrix"
+ },
+ {
+  "name": "creatematrix-d-not-square",
+  "script": "creatematrix \"d\" ncols 3 nrows 2 as matrix"
+ },
+ {
+  "name": "creatematrix-uppercase",
+  "script": "creatematrix \"X\" ncols 2 nrows 2"
+ },
+ {
+  "name": "creatematrix-unknown",
+  "script": "creatematrix \"z\" ncols 2 nrows 2"
+ },
+ {
+  "name": "creatematrix-no-ncols",
+  "script": "creatematrix \"1\" nrows 2"
+ },
+ {
+  "name": "creatematrix-zero",
+  "script": "creatematrix \"1\" ncols 0 nrows 2"
+ },
+ {
+  "name": "creatematrix-negative",
+  "script": "creatematrix \"1\" ncols -1 nrows 2"
+ },
+ {
+  "name": "creatematrix-real-size",
+  "script": "creatematrix \"1\" ncols 2.5 nrows 2"
+ },
+ {
+  "name": "creatematrix-as-array",
+  "script": "creatematrix \"x\" ncols 2 nrows 2 as array of real"
+ },
+ {
+  "name": "creatematrix-as-list",
+  "script": "creatematrix \"x\" ncols 2 nrows 2 as list"
+ },
+ {
+  "name": "creatematrix-no-parameter",
+  "script": "creatematrix"
+ },
+ {
+  "name": "extractarray-default",
+  "script": "extractarray (createarray 5)"
+ },
+ {
+  "name": "extractarray-at",
+  "script": "extractarray (createarray 5) at 3"
+ },
+ {
+  "name": "extractarray-at-for",
+  "script": "extractarray (createarray 5) at 2 for 3"
+ },
+ {
+  "name": "extractarray-all",
+  "script": "extractarray (createarray 5) for -1"
+ },
+ {
+  "name": "extractarray-at-all",
+  "script": "extractarray (createarray 5) at 3 for -1"
+ },
+ {
+  "name": "extractarray-for-minus-two",
+  "script": "extractarray (createarray 5) at 2 for -2"
+ },
+ {
+  "name": "extractarray-doc",
+  "script": "extractarray (createarray 50) for 3 at 1 step 10 blocksize 2"
+ },
+ {
+  "name": "extractarray-step",
+  "script": "extractarray (createarray 12) for 3 step 4"
+ },
+ {
+  "name": "extractarray-blocksize",
+  "script": "extractarray (createarray 12) for 2 blocksize 3"
+ },
+ {
+  "name": "extractarray-blocks-all",
+  "script": "extractarray (createarray 12) for -1 step 5 blocksize 2"
+ },
+ {
+  "name": "extractarray-blocks-partial",
+  "script": "extractarray (createarray 12) at 10 for 2 step 2 blocksize 2"
+ },
+ {
+  "name": "extractarray-blocksize-over-step",
+  "script": "extractarray (createarray 12) for 2 step 2 blocksize 3"
+ },
+ {
+  "name": "extractarray-indexes",
+  "script": "extractarray (createarray 5) at {1, 3, 5}"
+ },
+ {
+  "name": "extractarray-indexes-reversed",
+  "script": "extractarray (createarray 5) at {5, 1}"
+ },
+ {
+  "name": "extractarray-indexes-repeated",
+  "script": "extractarray (createarray 5) at {2, 2}"
+ },
+ {
+  "name": "extractarray-indexes-with-for",
+  "script": "extractarray (createarray 5) at {1, 2} for 3 step 2"
+ },
+ {
+  "name": "extractarray-indexes-empty",
+  "script": "extractarray (createarray 5) at {}"
+ },
+ {
+  "name": "extractarray-indexes-out",
+  "script": "extractarray (createarray 5) at {1, 9}"
+ },
+ {
+  "name": "extractarray-at-zero",
+  "script": "extractarray (createarray 5) at 0"
+ },
+ {
+  "name": "extractarray-at-negative",
+  "script": "extractarray (createarray 5) at -1"
+ },
+ {
+  "name": "extractarray-at-beyond",
+  "script": "extractarray (createarray 5) at 6"
+ },
+ {
+  "name": "extractarray-for-beyond",
+  "script": "extractarray (createarray 5) at 4 for 5"
+ },
+ {
+  "name": "extractarray-at-real",
+  "script": "extractarray (createarray 5) at 2.5"
+ },
+ {
+  "name": "extractarray-for-zero",
+  "script": "extractarray (createarray 5) for 0"
+ },
+ {
+  "name": "extractarray-as-real",
+  "script": "extractarray (createarray 5) at 2 as real"
+ },
+ {
+  "name": "extractarray-as-real-several",
+  "script": "extractarray (createarray 5) for 2 as real"
+ },
+ {
+  "name": "extractarray-as-small-real",
+  "script": "extractarray (createarray 5) at 2 as small real"
+ },
+ {
+  "name": "extractarray-as-list-of-real",
+  "script": "extractarray (createarray 5) for -1 as list of real"
+ },
+ {
+  "name": "extractarray-as-list-of-integer",
+  "script": "extractarray (createarray 7 range {-1.5, 1.5}) for -1 as list of integer"
+ },
+ {
+  "name": "extractarray-as-list-of-integer-halves",
+  "script": "extractarray (createarray 6 range {0.5, 5.5}) for -1 as list of integer"
+ },
+ {
+  "name": "extractarray-as-list",
+  "script": "extractarray (createarray 5) for -1 as list"
+ },
+ {
+  "name": "extractarray-as-array",
+  "script": "extractarray (createarray 5) for -1 as array of real"
+ },
+ {
+  "name": "extractarray-as-integer",
+  "script": "extractarray (createarray 5) at 2 as integer"
+ },
+ {
+  "name": "extractarray-nan-as-list",
+  "script": "extractarray (divlist (createarray 4) with (createarray 4)) for -1 as list of real"
+ },
+ {
+  "name": "extractarray-nan-as-integers",
+  "script": "extractarray (divlist (createarray 4) with (createarray 4)) for -1 as list of integer"
+ },
+ {
+  "name": "extractarray-list",
+  "script": "extractarray {1, 2.5, 3} for -1"
+ },
+ {
+  "name": "extractarray-list-as-list",
+  "script": "extractarray {1, 2.5, 3} at 2 for -1 as list of real"
+ },
+ {
+  "name": "extractarray-list-text",
+  "script": "extractarray {\"1\", \"2.5\"} for -1 as list of real"
+ },
+ {
+  "name": "extractarray-list-missing",
+  "script": "extractarray {1, missing value, 3} for -1 as list of real"
+ },
+ {
+  "name": "extractarray-list-nested",
+  "script": "extractarray {1, {2, 3}} for -1"
+ },
+ {
+  "name": "extractarray-empty-list",
+  "script": "extractarray {} for -1"
+ },
+ {
+  "name": "extractarray-number",
+  "script": "extractarray 7 for -1"
+ },
+ {
+  "name": "extractarray-matrix",
+  "script": "extractarray {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}} at 3 for 2"
+ },
+ {
+  "name": "extractarray-text",
+  "script": "extractarray \"abc\""
+ },
+ {
+  "name": "extractarray-no-parameter",
+  "script": "extractarray"
+ },
+ {
+  "name": "changearray-doc",
+  "script": "changearray (createarray 50) at 1 step 10 blocksize 2 into (createarray 6 range {-99, -99})"
+ },
+ {
+  "name": "changearray-one",
+  "script": "changearray (createarray 5) at 3 into {9}"
+ },
+ {
+  "name": "changearray-default-at",
+  "script": "changearray (createarray 5) into {7, 8}"
+ },
+ {
+  "name": "changearray-several",
+  "script": "changearray (createarray 5) at 2 into {7, 8, 9}"
+ },
+ {
+  "name": "changearray-indexes",
+  "script": "changearray (createarray 5) at {1, 4} into {7, 8}"
+ },
+ {
+  "name": "changearray-indexes-short",
+  "script": "changearray (createarray 5) at {1, 4} into {7}"
+ },
+ {
+  "name": "changearray-indexes-long",
+  "script": "changearray (createarray 5) at {1} into {7, 8}"
+ },
+ {
+  "name": "changearray-step",
+  "script": "changearray (createarray 12) at 2 step 3 into {-1, -2, -3}"
+ },
+ {
+  "name": "changearray-blocks",
+  "script": "changearray (createarray 12) step 4 blocksize 2 into {-1, -2, -3, -4}"
+ },
+ {
+  "name": "changearray-blocks-not-multiple",
+  "script": "changearray (createarray 12) step 4 blocksize 2 into {-1, -2, -3}"
+ },
+ {
+  "name": "changearray-past-end",
+  "script": "changearray (createarray 5) at 4 into {7, 8, 9}"
+ },
+ {
+  "name": "changearray-at-zero",
+  "script": "changearray (createarray 5) at 0 into {7}"
+ },
+ {
+  "name": "changearray-at-beyond",
+  "script": "changearray (createarray 5) at 6 into {7}"
+ },
+ {
+  "name": "changearray-into-array",
+  "script": "changearray (createarray 5) at 2 into (createarray 2 range {9, 8})"
+ },
+ {
+  "name": "changearray-into-number",
+  "script": "changearray (createarray 5) at 2 into 9"
+ },
+ {
+  "name": "changearray-list",
+  "script": "changearray {1, 2, 3} at 2 into {9}"
+ },
+ {
+  "name": "changearray-matrix",
+  "script": "changearray {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}} at 2 into {9}"
+ },
+ {
+  "name": "changearray-no-into",
+  "script": "changearray (createarray 5) at 2"
+ },
+ {
+  "name": "insertarray-doc",
+  "script": "insertarray (createarray 10 range {-10, -1}) blocksize 2 into (createarray 30) step 5 at 1 for 3"
+ },
+ {
+  "name": "insertarray-default",
+  "script": "insertarray {7, 8} into (createarray 5)"
+ },
+ {
+  "name": "insertarray-at-zero",
+  "script": "insertarray {7, 8} into (createarray 5) at 0"
+ },
+ {
+  "name": "insertarray-at",
+  "script": "insertarray {7, 8} into (createarray 5) at 2"
+ },
+ {
+  "name": "insertarray-at-end",
+  "script": "insertarray {7} into (createarray 5) at 5"
+ },
+ {
+  "name": "insertarray-at-minus-one",
+  "script": "insertarray {7} into (createarray 5) at -1"
+ },
+ {
+  "name": "insertarray-at-beyond",
+  "script": "insertarray {7} into (createarray 5) at 9"
+ },
+ {
+  "name": "insertarray-indexes",
+  "script": "insertarray {7, 8} into (createarray 5) at {0, 3}"
+ },
+ {
+  "name": "insertarray-indexes-same",
+  "script": "insertarray {7, 8} into (createarray 5) at {2, 2}"
+ },
+ {
+  "name": "insertarray-indexes-mismatch",
+  "script": "insertarray {7, 8} into (createarray 5) at {1}"
+ },
+ {
+  "name": "insertarray-for",
+  "script": "insertarray {7, 8, 9} into (createarray 12) at 0 for 3 step 2"
+ },
+ {
+  "name": "insertarray-for-blocks",
+  "script": "insertarray {7, 8, 9, 10} into (createarray 12) at 1 for 2 step 3 blocksize 2"
+ },
+ {
+  "name": "insertarray-for-too-many",
+  "script": "insertarray {7, 8} into (createarray 5) at 0 for 3"
+ },
+ {
+  "name": "insertarray-step-past-end",
+  "script": "insertarray {7, 8, 9} into (createarray 5) at 2 for 3 step 2"
+ },
+ {
+  "name": "insertarray-number",
+  "script": "insertarray 7 into (createarray 5) at 1"
+ },
+ {
+  "name": "insertarray-array",
+  "script": "insertarray (createarray 2 range {8, 9}) into {1, 2}"
+ },
+ {
+  "name": "insertarray-into-list",
+  "script": "insertarray {7} into {1, 2, 3} at 1"
+ },
+ {
+  "name": "insertarray-no-into",
+  "script": "insertarray {7}"
+ },
+ {
+  "name": "reversearray-list",
+  "script": "reversearray {1, 2, 3}"
+ },
+ {
+  "name": "reversearray-array",
+  "script": "reversearray (createarray 5)"
+ },
+ {
+  "name": "reversearray-one",
+  "script": "reversearray {7}"
+ },
+ {
+  "name": "reversearray-number",
+  "script": "reversearray 7"
+ },
+ {
+  "name": "reversearray-empty",
+  "script": "reversearray {}"
+ },
+ {
+  "name": "reversearray-missing",
+  "script": "reversearray {1, missing value, 3}"
+ },
+ {
+  "name": "reversearray-matrix",
+  "script": "reversearray {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}}"
+ },
+ {
+  "name": "reversearray-text",
+  "script": "reversearray {\"1\", \"2\"}"
+ },
+ {
+  "name": "maskarray-array",
+  "script": "maskarray (createarray 5) with {1, 0, 1, 0, 1}"
+ },
+ {
+  "name": "maskarray-list",
+  "script": "maskarray {5, 6, 7} with {0, 1, 1}"
+ },
+ {
+  "name": "maskarray-mask-array",
+  "script": "maskarray (createarray 5) with (createarray 5 range {1, 0})"
+ },
+ {
+  "name": "maskarray-mask-values",
+  "script": "maskarray (createarray 5) with {2, -1, 0.5, 0, 0}"
+ },
+ {
+  "name": "maskarray-mask-nan",
+  "script": "maskarray {1, 2, 3, 4} with (divlist (createarray 4) with (createarray 4))"
+ },
+ {
+  "name": "maskarray-mask-short",
+  "script": "maskarray (createarray 5) with {1, 0}"
+ },
+ {
+  "name": "maskarray-mask-long",
+  "script": "maskarray {1, 2} with {1, 0, 1}"
+ },
+ {
+  "name": "maskarray-none",
+  "script": "maskarray (createarray 5) with {0, 0, 0, 0, 0}"
+ },
+ {
+  "name": "maskarray-matrix",
+  "script": "maskarray {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}} with {1, 0, 1}"
+ },
+ {
+  "name": "maskarray-matrix-wrong",
+  "script": "maskarray {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}} with {1, 0}"
+ },
+ {
+  "name": "maskarray-several",
+  "script": "maskarray {(createarray 5), {5, 6, 7, 8, 9}} with {1, 1, 0, 0, 1}"
+ },
+ {
+  "name": "maskarray-no-with",
+  "script": "maskarray (createarray 5)"
+ },
+ {
+  "name": "replacemissingvalue-list",
+  "script": "replacemissingvalue (divlist {1, 0, -1, 0} with {1, 0, 1, 0}) with 999"
+ },
+ {
+  "name": "replacemissingvalue-array",
+  "script": "replacemissingvalue (divlist (createarray 4) with (createarray 4)) with -1"
+ },
+ {
+  "name": "replacemissingvalue-literal",
+  "script": "replacemissingvalue {1, missing value, 3} with 0"
+ },
+ {
+  "name": "replacemissingvalue-none",
+  "script": "replacemissingvalue {1, 2} with 0"
+ },
+ {
+  "name": "replacemissingvalue-text-with",
+  "script": "replacemissingvalue (divlist {1, 0, -1, 0} with {1, 0, 1, 0}) with \"999\""
+ },
+ {
+  "name": "replacemissingvalue-several",
+  "script": "replacemissingvalue {(divlist (createarray 4) with (createarray 4)), {missing value, 2}} with 5"
+ },
+ {
+  "name": "replacemissingvalue-with-nan",
+  "script": "replacemissingvalue {1, missing value} with (divlist 0 with 0)"
+ },
+ {
+  "name": "replacemissingvalue-no-with",
+  "script": "replacemissingvalue (divlist {1, 0, -1, 0} with {1, 0, 1, 0})"
+ },
+ {
+  "name": "addlist-number-number",
+  "script": "addlist 2 with 3"
+ },
+ {
+  "name": "addlist-number-list",
+  "script": "addlist 2 with {1, 2, 3}"
+ },
+ {
+  "name": "addlist-list-number",
+  "script": "addlist {1, 2, 3} with 2"
+ },
+ {
+  "name": "addlist-list-list",
+  "script": "addlist {1, 2, 3} with {10, 20, 30}"
+ },
+ {
+  "name": "addlist-array-array",
+  "script": "addlist (createarray 5) with (createarray 5 range {10, 14})"
+ },
+ {
+  "name": "addlist-array-list",
+  "script": "addlist (createarray 5) with {1, 1, 1, 1, 1}"
+ },
+ {
+  "name": "addlist-list-array",
+  "script": "addlist {1, 1, 1, 1, 1} with (createarray 5)"
+ },
+ {
+  "name": "addlist-number-array",
+  "script": "addlist 2 with (createarray 5)"
+ },
+ {
+  "name": "addlist-array-number",
+  "script": "addlist (createarray 5) with 2"
+ },
+ {
+  "name": "addlist-matrix-number",
+  "script": "addlist {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}} with 2"
+ },
+ {
+  "name": "addlist-number-matrix",
+  "script": "addlist 2 with {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}}"
+ },
+ {
+  "name": "addlist-matrix-matrix",
+  "script": "addlist {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}} with {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}}"
+ },
+ {
+  "name": "addlist-matrix-array",
+  "script": "addlist {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}} with (createarray 6)"
+ },
+ {
+  "name": "addlist-matrix-list",
+  "script": "addlist {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}} with {1, 2, 3, 4, 5, 6}"
+ },
+ {
+  "name": "addlist-mismatch",
+  "script": "addlist {1, 2} with {1, 2, 3}"
+ },
+ {
+  "name": "addlist-array-mismatch",
+  "script": "addlist (createarray 5) with (createarray 3)"
+ },
+ {
+  "name": "addlist-text",
+  "script": "addlist {\"1\", \"2\"} with \"3\""
+ },
+ {
+  "name": "addlist-missing",
+  "script": "addlist {1, missing value} with {2, 3}"
+ },
+ {
+  "name": "addlist-nested",
+  "script": "addlist {1, {2, 3}} with {1, {2, 3}}"
+ },
+ {
+  "name": "addlist-empty",
+  "script": "addlist {} with {}"
+ },
+ {
+  "name": "addlist-one-item-list",
+  "script": "addlist {5} with {1, 2, 3}"
+ },
+ {
+  "name": "addlist-overflow",
+  "script": "addlist {1.0E+308, 1} with {1.0E+308, 1}"
+ },
+ {
+  "name": "addlist-no-with",
+  "script": "addlist {1, 2}"
+ },
+ {
+  "name": "sublist-number-number",
+  "script": "sublist 2 with 3"
+ },
+ {
+  "name": "sublist-number-list",
+  "script": "sublist 2 with {1, 2, 3}"
+ },
+ {
+  "name": "sublist-list-number",
+  "script": "sublist {1, 2, 3} with 2"
+ },
+ {
+  "name": "sublist-list-list",
+  "script": "sublist {1, 2, 3} with {10, 20, 30}"
+ },
+ {
+  "name": "sublist-array-array",
+  "script": "sublist (createarray 5) with (createarray 5 range {10, 14})"
+ },
+ {
+  "name": "sublist-array-list",
+  "script": "sublist (createarray 5) with {1, 1, 1, 1, 1}"
+ },
+ {
+  "name": "sublist-list-array",
+  "script": "sublist {1, 1, 1, 1, 1} with (createarray 5)"
+ },
+ {
+  "name": "sublist-number-array",
+  "script": "sublist 2 with (createarray 5)"
+ },
+ {
+  "name": "sublist-array-number",
+  "script": "sublist (createarray 5) with 2"
+ },
+ {
+  "name": "sublist-matrix-number",
+  "script": "sublist {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}} with 2"
+ },
+ {
+  "name": "sublist-number-matrix",
+  "script": "sublist 2 with {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}}"
+ },
+ {
+  "name": "sublist-matrix-matrix",
+  "script": "sublist {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}} with {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}}"
+ },
+ {
+  "name": "sublist-matrix-array",
+  "script": "sublist {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}} with (createarray 6)"
+ },
+ {
+  "name": "sublist-matrix-list",
+  "script": "sublist {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}} with {1, 2, 3, 4, 5, 6}"
+ },
+ {
+  "name": "sublist-mismatch",
+  "script": "sublist {1, 2} with {1, 2, 3}"
+ },
+ {
+  "name": "sublist-array-mismatch",
+  "script": "sublist (createarray 5) with (createarray 3)"
+ },
+ {
+  "name": "sublist-text",
+  "script": "sublist {\"1\", \"2\"} with \"3\""
+ },
+ {
+  "name": "sublist-missing",
+  "script": "sublist {1, missing value} with {2, 3}"
+ },
+ {
+  "name": "sublist-nested",
+  "script": "sublist {1, {2, 3}} with {1, {2, 3}}"
+ },
+ {
+  "name": "sublist-empty",
+  "script": "sublist {} with {}"
+ },
+ {
+  "name": "sublist-one-item-list",
+  "script": "sublist {5} with {1, 2, 3}"
+ },
+ {
+  "name": "sublist-overflow",
+  "script": "sublist {1.0E+308, 1} with {1.0E+308, 1}"
+ },
+ {
+  "name": "sublist-no-with",
+  "script": "sublist {1, 2}"
+ },
+ {
+  "name": "multlist-number-number",
+  "script": "multlist 2 with 3"
+ },
+ {
+  "name": "multlist-number-list",
+  "script": "multlist 2 with {1, 2, 3}"
+ },
+ {
+  "name": "multlist-list-number",
+  "script": "multlist {1, 2, 3} with 2"
+ },
+ {
+  "name": "multlist-list-list",
+  "script": "multlist {1, 2, 3} with {10, 20, 30}"
+ },
+ {
+  "name": "multlist-array-array",
+  "script": "multlist (createarray 5) with (createarray 5 range {10, 14})"
+ },
+ {
+  "name": "multlist-array-list",
+  "script": "multlist (createarray 5) with {1, 1, 1, 1, 1}"
+ },
+ {
+  "name": "multlist-list-array",
+  "script": "multlist {1, 1, 1, 1, 1} with (createarray 5)"
+ },
+ {
+  "name": "multlist-number-array",
+  "script": "multlist 2 with (createarray 5)"
+ },
+ {
+  "name": "multlist-array-number",
+  "script": "multlist (createarray 5) with 2"
+ },
+ {
+  "name": "multlist-matrix-number",
+  "script": "multlist {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}} with 2"
+ },
+ {
+  "name": "multlist-number-matrix",
+  "script": "multlist 2 with {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}}"
+ },
+ {
+  "name": "multlist-matrix-matrix",
+  "script": "multlist {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}} with {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}}"
+ },
+ {
+  "name": "multlist-matrix-array",
+  "script": "multlist {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}} with (createarray 6)"
+ },
+ {
+  "name": "multlist-matrix-list",
+  "script": "multlist {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}} with {1, 2, 3, 4, 5, 6}"
+ },
+ {
+  "name": "multlist-mismatch",
+  "script": "multlist {1, 2} with {1, 2, 3}"
+ },
+ {
+  "name": "multlist-array-mismatch",
+  "script": "multlist (createarray 5) with (createarray 3)"
+ },
+ {
+  "name": "multlist-text",
+  "script": "multlist {\"1\", \"2\"} with \"3\""
+ },
+ {
+  "name": "multlist-missing",
+  "script": "multlist {1, missing value} with {2, 3}"
+ },
+ {
+  "name": "multlist-nested",
+  "script": "multlist {1, {2, 3}} with {1, {2, 3}}"
+ },
+ {
+  "name": "multlist-empty",
+  "script": "multlist {} with {}"
+ },
+ {
+  "name": "multlist-one-item-list",
+  "script": "multlist {5} with {1, 2, 3}"
+ },
+ {
+  "name": "multlist-overflow",
+  "script": "multlist {1.0E+308, 1} with {1.0E+308, 1}"
+ },
+ {
+  "name": "multlist-no-with",
+  "script": "multlist {1, 2}"
+ },
+ {
+  "name": "divlist-number-number",
+  "script": "divlist 2 with 3"
+ },
+ {
+  "name": "divlist-number-list",
+  "script": "divlist 2 with {1, 2, 3}"
+ },
+ {
+  "name": "divlist-list-number",
+  "script": "divlist {1, 2, 3} with 2"
+ },
+ {
+  "name": "divlist-list-list",
+  "script": "divlist {1, 2, 3} with {10, 20, 30}"
+ },
+ {
+  "name": "divlist-array-array",
+  "script": "divlist (createarray 5) with (createarray 5 range {10, 14})"
+ },
+ {
+  "name": "divlist-array-list",
+  "script": "divlist (createarray 5) with {1, 1, 1, 1, 1}"
+ },
+ {
+  "name": "divlist-list-array",
+  "script": "divlist {1, 1, 1, 1, 1} with (createarray 5)"
+ },
+ {
+  "name": "divlist-number-array",
+  "script": "divlist 2 with (createarray 5)"
+ },
+ {
+  "name": "divlist-array-number",
+  "script": "divlist (createarray 5) with 2"
+ },
+ {
+  "name": "divlist-matrix-number",
+  "script": "divlist {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}} with 2"
+ },
+ {
+  "name": "divlist-number-matrix",
+  "script": "divlist 2 with {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}}"
+ },
+ {
+  "name": "divlist-matrix-matrix",
+  "script": "divlist {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}} with {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}}"
+ },
+ {
+  "name": "divlist-matrix-array",
+  "script": "divlist {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}} with (createarray 6)"
+ },
+ {
+  "name": "divlist-matrix-list",
+  "script": "divlist {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}} with {1, 2, 3, 4, 5, 6}"
+ },
+ {
+  "name": "divlist-mismatch",
+  "script": "divlist {1, 2} with {1, 2, 3}"
+ },
+ {
+  "name": "divlist-array-mismatch",
+  "script": "divlist (createarray 5) with (createarray 3)"
+ },
+ {
+  "name": "divlist-text",
+  "script": "divlist {\"1\", \"2\"} with \"3\""
+ },
+ {
+  "name": "divlist-missing",
+  "script": "divlist {1, missing value} with {2, 3}"
+ },
+ {
+  "name": "divlist-nested",
+  "script": "divlist {1, {2, 3}} with {1, {2, 3}}"
+ },
+ {
+  "name": "divlist-empty",
+  "script": "divlist {} with {}"
+ },
+ {
+  "name": "divlist-one-item-list",
+  "script": "divlist {5} with {1, 2, 3}"
+ },
+ {
+  "name": "divlist-overflow",
+  "script": "divlist {1.0E+308, 1} with {1.0E+308, 1}"
+ },
+ {
+  "name": "divlist-no-with",
+  "script": "divlist {1, 2}"
+ },
+ {
+  "name": "divlist-zero",
+  "script": "divlist {1, -1, 0} with 0"
+ },
+ {
+  "name": "divlist-zero-array",
+  "script": "divlist (createarray 5) with 0"
+ },
+ {
+  "name": "divlist-zero-number",
+  "script": "divlist 1 with 0"
+ },
+ {
+  "name": "divlist-doc",
+  "script": "divlist 1 with {-2, -1, 0, 1, 2}"
+ },
+ {
+  "name": "addlist-polynomials",
+  "script": "addlist (composepolynomial {1, 1} with {0, 2}) with {1, 2, 3}"
+ },
+ {
+  "name": "multlist-polynomials",
+  "script": "multlist (composepolynomial {1, 1} with {0, 2}) with 3"
+ },
+ {
+  "name": "runningsum-list",
+  "script": "runningsum {1, 2, 3, 4}"
+ },
+ {
+  "name": "runningsum-array",
+  "script": "runningsum (createarray 5)"
+ },
+ {
+  "name": "runningsum-one",
+  "script": "runningsum {7}"
+ },
+ {
+  "name": "runningsum-number",
+  "script": "runningsum 7"
+ },
+ {
+  "name": "runningsum-empty",
+  "script": "runningsum {}"
+ },
+ {
+  "name": "runningsum-missing",
+  "script": "runningsum {1, missing value, 3}"
+ },
+ {
+  "name": "runningsum-matrix",
+  "script": "runningsum {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}}"
+ },
+ {
+  "name": "statlist-list",
+  "script": "statlist {1, 2, 3, 4, 10}"
+ },
+ {
+  "name": "statlist-kurtosis",
+  "script": "statlist {1, 2, 3, 4, 10} with kurtosis"
+ },
+ {
+  "name": "statlist-kurtosis-false",
+  "script": "statlist {1, 2, 3, 4, 10} without kurtosis"
+ },
+ {
+  "name": "statlist-even-median",
+  "script": "statlist {4, 1, 3, 2} with kurtosis"
+ },
+ {
+  "name": "statlist-array",
+  "script": "statlist (randomarray 100 range {-10, 10} seed 1) with kurtosis"
+ },
+ {
+  "name": "statlist-one",
+  "script": "statlist {5} with kurtosis"
+ },
+ {
+  "name": "statlist-constant",
+  "script": "statlist {2, 2, 2} with kurtosis"
+ },
+ {
+  "name": "statlist-ties",
+  "script": "statlist {3, 1, 3, 1} with kurtosis"
+ },
+ {
+  "name": "statlist-missing",
+  "script": "statlist {1, missing value, 3, missing value} with kurtosis"
+ },
+ {
+  "name": "statlist-nan-array",
+  "script": "statlist (divlist (createarray 4) with (createarray 4)) with kurtosis"
+ },
+ {
+  "name": "statlist-all-missing",
+  "script": "statlist {missing value} with kurtosis"
+ },
+ {
+  "name": "statlist-empty",
+  "script": "statlist {}"
+ },
+ {
+  "name": "statlist-number",
+  "script": "statlist 5"
+ },
+ {
+  "name": "statlist-text",
+  "script": "statlist {\"1\", \"2\"}"
+ },
+ {
+  "name": "statlist-matrix",
+  "script": "statlist {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}}"
+ },
+ {
+  "name": "statlist-negative",
+  "script": "statlist {-5, -1, -3}"
+ },
+ {
+  "name": "statlist-infinite",
+  "script": "statlist {1, 1.0E+308, 1.0E+308}"
+ },
+ {
+  "name": "histogram-raw",
+  "script": "histogram {1, 1, 2, 5}"
+ },
+ {
+  "name": "histogram-raw-array",
+  "script": "histogram (createarray 4 range {3, 0})"
+ },
+ {
+  "name": "histogram-raw-reals",
+  "script": "histogram {0.5, 0.25, 0.5, 2}"
+ },
+ {
+  "name": "histogram-samples",
+  "script": "histogram (createarray 10) samples 3"
+ },
+ {
+  "name": "histogram-samples-one",
+  "script": "histogram (createarray 10) samples 1"
+ },
+ {
+  "name": "histogram-samples-random",
+  "script": "histogram (randomarray 200 range {0, 1} seed 3) samples 10"
+ },
+ {
+  "name": "histogram-minimum",
+  "script": "histogram (createarray 10) samples 2 minimum 4"
+ },
+ {
+  "name": "histogram-maximum",
+  "script": "histogram (createarray 10) samples 2 maximum 5"
+ },
+ {
+  "name": "histogram-range",
+  "script": "histogram (createarray 10) samples 4 minimum -2 maximum 12"
+ },
+ {
+  "name": "histogram-range-inside",
+  "script": "histogram (createarray 10) samples 2 minimum 3 maximum 6"
+ },
+ {
+  "name": "histogram-on-edges",
+  "script": "histogram {0, 1, 2, 3, 4} samples 2 minimum 0 maximum 4"
+ },
+ {
+  "name": "histogram-minimum-only",
+  "script": "histogram {1, 2} minimum 0"
+ },
+ {
+  "name": "histogram-samples-zero",
+  "script": "histogram {1, 2} samples 0"
+ },
+ {
+  "name": "histogram-equal-values",
+  "script": "histogram {2, 2, 2} samples 3"
+ },
+ {
+  "name": "histogram-missing",
+  "script": "histogram {1, missing value, 2, 2} samples 2"
+ },
+ {
+  "name": "histogram-empty",
+  "script": "histogram {} samples 2"
+ },
+ {
+  "name": "histogram-number",
+  "script": "histogram 5"
+ },
+ {
+  "name": "resamplematrix-mean",
+  "script": "resamplematrix {class:matrix, ncols:4, nrows:4, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}} blocksize {2, 2} wanted \"mean\""
+ },
+ {
+  "name": "resamplematrix-minimum",
+  "script": "resamplematrix {class:matrix, ncols:4, nrows:4, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}} blocksize {2, 2} wanted \"minimum\""
+ },
+ {
+  "name": "resamplematrix-maximum",
+  "script": "resamplematrix {class:matrix, ncols:4, nrows:4, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}} blocksize {2, 2} wanted \"maximum\""
+ },
+ {
+  "name": "resamplematrix-stdev",
+  "script": "resamplematrix {class:matrix, ncols:4, nrows:4, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}} blocksize {2, 2} wanted \"stdev\""
+ },
+ {
+  "name": "resamplematrix-missing-value",
+  "script": "resamplematrix {class:matrix, ncols:4, nrows:4, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}} blocksize {2, 2} wanted \"missing value\""
+ },
+ {
+  "name": "resamplematrix-sum",
+  "script": "resamplematrix {class:matrix, ncols:4, nrows:4, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}} blocksize {2, 2} wanted \"sum\""
+ },
+ {
+  "name": "resamplematrix-median",
+  "script": "resamplematrix {class:matrix, ncols:4, nrows:4, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}} blocksize {2, 2} wanted \"median\""
+ },
+ {
+  "name": "resamplematrix-dispersion",
+  "script": "resamplematrix {class:matrix, ncols:4, nrows:4, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}} blocksize {2, 2} wanted \"dispersion\""
+ },
+ {
+  "name": "resamplematrix-default",
+  "script": "resamplematrix {class:matrix, ncols:4, nrows:4, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}} blocksize {2, 2}"
+ },
+ {
+  "name": "resamplematrix-rows",
+  "script": "resamplematrix {class:matrix, ncols:4, nrows:4, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}} blocksize {4, 1}"
+ },
+ {
+  "name": "resamplematrix-columns",
+  "script": "resamplematrix {class:matrix, ncols:4, nrows:4, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}} blocksize {1, 4}"
+ },
+ {
+  "name": "resamplematrix-uneven",
+  "script": "resamplematrix {class:matrix, ncols:3, nrows:3, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9}} blocksize {2, 2}"
+ },
+ {
+  "name": "resamplematrix-irregular",
+  "script": "resamplematrix {class:matrix, ncols:4, nrows:4, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}} blocksize {{1, 3}, {2, 2}}"
+ },
+ {
+  "name": "resamplematrix-irregular-short",
+  "script": "resamplematrix {class:matrix, ncols:4, nrows:4, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}} blocksize {{1, 1}, 2}"
+ },
+ {
+  "name": "resamplematrix-several",
+  "script": "resamplematrix {class:matrix, ncols:4, nrows:4, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}} blocksize {2, 2} wanted {\"mean\", \"sum\"}"
+ },
+ {
+  "name": "resamplematrix-nan",
+  "script": "resamplematrix {class:matrix, ncols:2, nrows:2, array of real:{1, 2, 3, 4}} blocksize {2, 2} wanted \"missing value\""
+ },
+ {
+  "name": "resamplematrix-unknown",
+  "script": "resamplematrix {class:matrix, ncols:4, nrows:4, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}} blocksize {2, 2} wanted \"mode\""
+ },
+ {
+  "name": "resamplematrix-blocksize-one",
+  "script": "resamplematrix {class:matrix, ncols:4, nrows:4, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}} blocksize 2"
+ },
+ {
+  "name": "resamplematrix-too-big",
+  "script": "resamplematrix {class:matrix, ncols:4, nrows:4, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}} blocksize {5, 5}"
+ },
+ {
+  "name": "resamplematrix-array-data",
+  "script": "resamplematrix {class:matrix, ncols:2, nrows:2, array of real:(createarray 4)} blocksize {1, 2}"
+ },
+ {
+  "name": "resamplematrix-not-matrix",
+  "script": "resamplematrix (createarray 5) blocksize {1, 1}"
+ },
+ {
+  "name": "resamplematrix-wrong-size",
+  "script": "resamplematrix {class:matrix, ncols:2, nrows:2, array of real:{1, 2, 3}} blocksize {1, 1}"
+ },
+ {
+  "name": "filter-identity",
+  "script": "filter {class:matrix, ncols:3, nrows:3, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9}} using {0, 0, 0, 0, 1, 0, 0, 0, 0}"
+ },
+ {
+  "name": "filter-blur",
+  "script": "filter {class:matrix, ncols:4, nrows:4, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}} using {1, 2, 1, 2, 4, 2, 1, 2, 1}"
+ },
+ {
+  "name": "filter-edges",
+  "script": "filter {class:matrix, ncols:4, nrows:4, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}} using {0, 1, 0, 1, -4, 1, 0, 1, 0}"
+ },
+ {
+  "name": "filter-not-reduced",
+  "script": "filter {class:matrix, ncols:3, nrows:3, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9}} using {0, 0, 0, 0, 1, 0, 0, 0, 0} reduced false"
+ },
+ {
+  "name": "filter-not-reduced-blur",
+  "script": "filter {class:matrix, ncols:4, nrows:4, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}} using {1, 1, 1, 1, 1, 1, 1, 1, 1} reduced false"
+ },
+ {
+  "name": "filter-asymmetric",
+  "script": "filter {class:matrix, ncols:4, nrows:4, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}} using {1, 2, 3, 4, 5, 6, 7, 8, 9}"
+ },
+ {
+  "name": "filter-array-kernel",
+  "script": "filter {class:matrix, ncols:3, nrows:3, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9}} using (createarray 9)"
+ },
+ {
+  "name": "filter-small",
+  "script": "filter {class:matrix, ncols:2, nrows:2, array of real:{1, 2, 3, 4}} using {1, 1, 1, 1, 1, 1, 1, 1, 1}"
+ },
+ {
+  "name": "filter-short-kernel",
+  "script": "filter {class:matrix, ncols:3, nrows:3, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9}} using {1, 2, 3}"
+ },
+ {
+  "name": "filter-not-matrix",
+  "script": "filter (createarray 5) using {0, 0, 0, 0, 1, 0, 0, 0, 0}"
+ },
+ {
+  "name": "evalformula-number",
+  "script": "evalformula \"1+2*3\" with {}"
+ },
+ {
+  "name": "evalformula-doc-atan2",
+  "script": "evalformula \"atan2(y,x)\" with {y:1.7320508075688772, x:1}"
+ },
+ {
+  "name": "evalformula-list-variables",
+  "script": "evalformula \"a*x^2+y^2\" with {\"a\", 2.4, \"x\", {1, 2, 3}, \"y\", (createarray 3)}"
+ },
+ {
+  "name": "evalformula-record-variables",
+  "script": "evalformula \"a*x^2+y^2\" with {a:2.4, x:{1, 2, 3}, y:(createarray 3)}"
+ },
+ {
+  "name": "evalformula-array",
+  "script": "evalformula \"2*x+1\" with {\"x\", createarray 3}"
+ },
+ {
+  "name": "evalformula-precedence",
+  "script": "evalformula \"1+2*3-4/2\" with {}"
+ },
+ {
+  "name": "evalformula-unary-minus",
+  "script": "evalformula \"-x^2\" with {x:3}"
+ },
+ {
+  "name": "evalformula-unary-minus-product",
+  "script": "evalformula \"-2*-3\" with {}"
+ },
+ {
+  "name": "evalformula-power",
+  "script": "evalformula \"2^3^2\" with {}"
+ },
+ {
+  "name": "evalformula-power-negative",
+  "script": "evalformula \"(-8)^(1/3)\" with {}"
+ },
+ {
+  "name": "evalformula-parentheses",
+  "script": "evalformula \"(1+2)*3\" with {}"
+ },
+ {
+  "name": "evalformula-comparisons",
+  "script": "evalformula \"(x<2)+(x<=2)*10+(x>2)*100+(x>=2)*1000+(x==2)*10000+(x!=2)*100000\" with {x:{1, 2, 3}}"
+ },
+ {
+  "name": "evalformula-logic",
+  "script": "evalformula \"(x>1)&(x<3)|(x==0)\" with {x:{0, 1, 2, 3}}"
+ },
+ {
+  "name": "evalformula-not",
+  "script": "evalformula \"!x\" with {x:{0, 1, 2}}"
+ },
+ {
+  "name": "evalformula-not-comparison",
+  "script": "evalformula \"!(x>1)\" with {x:{0, 2}}"
+ },
+ {
+  "name": "evalformula-numbers",
+  "script": "evalformula \"1e3+.5+2.5E-1\" with {}"
+ },
+ {
+  "name": "evalformula-statements",
+  "script": "evalformula \"r=hypot(x,y);r*2\" with {x:3, y:4}"
+ },
+ {
+  "name": "evalformula-statements-return",
+  "script": "evalformula \"r=x+1\\nr*r\" with {x:2}"
+ },
+ {
+  "name": "evalformula-comment-line",
+  "script": "evalformula \"//first\\nx*3\" with {x:2}"
+ },
+ {
+  "name": "evalformula-spaces",
+  "script": "evalformula \" x  +   1 \" with {x:2}"
+ },
+ {
+  "name": "evalformula-matrix",
+  "script": "evalformula \"x*2\" with {x:{class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}}}"
+ },
+ {
+  "name": "evalformula-text-number",
+  "script": "evalformula \"x+1\" with {x:\"2\"}"
+ },
+ {
+  "name": "evalformula-missing",
+  "script": "evalformula \"x+1\" with {x:{1, missing value}}"
+ },
+ {
+  "name": "evalformula-division-by-zero",
+  "script": "evalformula \"1/x\" with {x:{1, 0, -1}}"
+ },
+ {
+  "name": "evalformula-division-by-zero-number",
+  "script": "evalformula \"1/0\" with {}"
+ },
+ {
+  "name": "evalformula-nan",
+  "script": "evalformula \"sqrt(x)\" with {x:{4, -1}}"
+ },
+ {
+  "name": "evalformula-mismatch",
+  "script": "evalformula \"x+y\" with {x:{1, 2}, y:{1, 2, 3}}"
+ },
+ {
+  "name": "evalformula-number-array",
+  "script": "evalformula \"x+y\" with {x:1, y:(createarray 3)}"
+ },
+ {
+  "name": "evalformula-unknown-variable",
+  "script": "evalformula \"x+z\" with {x:1}"
+ },
+ {
+  "name": "evalformula-unknown-function",
+  "script": "evalformula \"foo(x)\" with {x:1}"
+ },
+ {
+  "name": "evalformula-syntax-error",
+  "script": "evalformula \"x+*2\" with {x:1}"
+ },
+ {
+  "name": "evalformula-unbalanced",
+  "script": "evalformula \"(x+1\" with {x:1}"
+ },
+ {
+  "name": "evalformula-empty",
+  "script": "evalformula \"\" with {}"
+ },
+ {
+  "name": "evalformula-pi",
+  "script": "evalformula \"pi\" with {}"
+ },
+ {
+  "name": "evalformula-e",
+  "script": "evalformula \"e\" with {}"
+ },
+ {
+  "name": "evalformula-case",
+  "script": "evalformula \"X+x\" with {x:1}"
+ },
+ {
+  "name": "evalformula-reserved-name",
+  "script": "evalformula \"count+1\" with {\"count\", 2}"
+ },
+ {
+  "name": "evalformula-variable-name-digits",
+  "script": "evalformula \"x1+x_2\" with {\"x1\", 1, \"x_2\", 2}"
+ },
+ {
+  "name": "evalformula-assign-variable",
+  "script": "evalformula \"x=x+1;x\" with {x:1}"
+ },
+ {
+  "name": "evalformula-odd-list",
+  "script": "evalformula \"x\" with {\"x\"}"
+ },
+ {
+  "name": "evalformula-no-with",
+  "script": "evalformula \"1+1\""
+ },
+ {
+  "name": "evalformula-formulas",
+  "script": "evalformula {\"x+1\", \"x*2\"} with {x:{1, 2}}"
+ },
+ {
+  "name": "evalformula-formulas-numbers",
+  "script": "evalformula {\"x+1\", \"x*2\"} with {x:1}"
+ },
+ {
+  "name": "evalformula-as-matrix",
+  "script": "evalformula \"x+1\" with {x:{class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}}} as matrix"
+ },
+ {
+  "name": "evalformula-as-matrix-two",
+  "script": "evalformula \"x+y\" with {x:{class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}}, y:{class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}}} as matrix"
+ },
+ {
+  "name": "evalformula-as-matrix-no-matrix",
+  "script": "evalformula \"x+1\" with {x:{1, 2}} as matrix"
+ },
+ {
+  "name": "evalformula-as-array",
+  "script": "evalformula \"x+1\" with {x:{class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}}} as array of real"
+ },
+ {
+  "name": "evalformula-fn-cbrt",
+  "script": "evalformula \"cbrt(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-sqrt",
+  "script": "evalformula \"sqrt(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-hypot",
+  "script": "evalformula \"hypot(x,y)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-pow",
+  "script": "evalformula \"pow(x,y)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-sign",
+  "script": "evalformula \"sign(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-abs",
+  "script": "evalformula \"abs(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-ceil",
+  "script": "evalformula \"ceil(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-floor",
+  "script": "evalformula \"floor(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-trunc",
+  "script": "evalformula \"trunc(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-max",
+  "script": "evalformula \"max(x,y)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-min",
+  "script": "evalformula \"min(x,y)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-mod",
+  "script": "evalformula \"mod(x,y)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-remainder",
+  "script": "evalformula \"remainder(x,y)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-isnan",
+  "script": "evalformula \"isnan(sqrt(x))\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-replacenan",
+  "script": "evalformula \"replacenan(sqrt(x),y)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-ln",
+  "script": "evalformula \"ln(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-log",
+  "script": "evalformula \"log(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-log10",
+  "script": "evalformula \"log10(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-log1p",
+  "script": "evalformula \"log1p(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-exp",
+  "script": "evalformula \"exp(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-expm1",
+  "script": "evalformula \"expm1(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-cos",
+  "script": "evalformula \"cos(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-sin",
+  "script": "evalformula \"sin(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-tan",
+  "script": "evalformula \"tan(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-acos",
+  "script": "evalformula \"acos(x/10)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-asin",
+  "script": "evalformula \"asin(x/10)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-atan",
+  "script": "evalformula \"atan(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-atan2",
+  "script": "evalformula \"atan2(y,x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-cosh",
+  "script": "evalformula \"cosh(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-sinh",
+  "script": "evalformula \"sinh(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-tanh",
+  "script": "evalformula \"tanh(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-acosh",
+  "script": "evalformula \"acosh(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-asinh",
+  "script": "evalformula \"asinh(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-atanh",
+  "script": "evalformula \"atanh(x/10)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-erf",
+  "script": "evalformula \"erf(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-erfc",
+  "script": "evalformula \"erfc(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-gamma",
+  "script": "evalformula \"gamma(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-lgamma",
+  "script": "evalformula \"lgamma(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-j0",
+  "script": "evalformula \"j0(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-j1",
+  "script": "evalformula \"j1(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-jn",
+  "script": "evalformula \"jn(3,x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-y0",
+  "script": "evalformula \"y0(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-y1",
+  "script": "evalformula \"y1(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-yn",
+  "script": "evalformula \"yn(2,x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-elliptice",
+  "script": "evalformula \"EllipticE(x/10)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-elliptick",
+  "script": "evalformula \"EllipticK(x/10)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-incelliptice",
+  "script": "evalformula \"IncEllipticE(x,y/10)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-incellipticf",
+  "script": "evalformula \"IncEllipticF(x,y/10)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-ellipticp",
+  "script": "evalformula \"EllipticP(x/10,y/20)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-incellipticp",
+  "script": "evalformula \"IncEllipticP(x,y/10,x/20)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-lambertw0",
+  "script": "evalformula \"lambertW0(x)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-fn-lambertwm1",
+  "script": "evalformula \"lambertWm1(-abs(x)/30)\" with {x:(randomarray 200 range {-10, 10} seed 7), y:(randomarray 200 range {-10, 10} seed 8)}"
+ },
+ {
+  "name": "evalformula-norm",
+  "script": "evalformula \"norm(x)\" with {x:{1, 2, 4, 8}, y:{0, 1, 3, 6}, z:{5}}"
+ },
+ {
+  "name": "evalformula-norm2",
+  "script": "evalformula \"norm2(x)\" with {x:{1, 2, 4, 8}, y:{0, 1, 3, 6}, z:{5}}"
+ },
+ {
+  "name": "evalformula-sum",
+  "script": "evalformula \"sum(x)\" with {x:{1, 2, 4, 8}, y:{0, 1, 3, 6}, z:{5}}"
+ },
+ {
+  "name": "evalformula-runsum",
+  "script": "evalformula \"runsum(x)\" with {x:{1, 2, 4, 8}, y:{0, 1, 3, 6}, z:{5}}"
+ },
+ {
+  "name": "evalformula-diff",
+  "script": "evalformula \"diff(x)\" with {x:{1, 2, 4, 8}, y:{0, 1, 3, 6}, z:{5}}"
+ },
+ {
+  "name": "evalformula-int",
+  "script": "evalformula \"int(x,y)\" with {x:{1, 2, 4, 8}, y:{0, 1, 3, 6}, z:{5}}"
+ },
+ {
+  "name": "evalformula-count",
+  "script": "evalformula \"count(x)\" with {x:{1, 2, 4, 8}, y:{0, 1, 3, 6}, z:{5}}"
+ },
+ {
+  "name": "evalformula-rest",
+  "script": "evalformula \"rest(x)\" with {x:{1, 2, 4, 8}, y:{0, 1, 3, 6}, z:{5}}"
+ },
+ {
+  "name": "evalformula-butlast",
+  "script": "evalformula \"butlast(x)\" with {x:{1, 2, 4, 8}, y:{0, 1, 3, 6}, z:{5}}"
+ },
+ {
+  "name": "evalformula-concat",
+  "script": "evalformula \"concat(x,y)\" with {x:{1, 2, 4, 8}, y:{0, 1, 3, 6}, z:{5}}"
+ },
+ {
+  "name": "evalformula-doc-norm",
+  "script": "evalformula \"norm(cos(x))/sqrt(count(x))\" with {x:{1, 2, 4, 8}, y:{0, 1, 3, 6}, z:{5}}"
+ },
+ {
+  "name": "evalformula-sum-number",
+  "script": "evalformula \"sum(2)\" with {x:{1, 2, 4, 8}, y:{0, 1, 3, 6}, z:{5}}"
+ },
+ {
+  "name": "evalformula-count-number",
+  "script": "evalformula \"count(2)\" with {x:{1, 2, 4, 8}, y:{0, 1, 3, 6}, z:{5}}"
+ },
+ {
+  "name": "evalformula-diff-one",
+  "script": "evalformula \"diff(z)\" with {x:{1, 2, 4, 8}, y:{0, 1, 3, 6}, z:{5}}"
+ },
+ {
+  "name": "evalformula-int-number",
+  "script": "evalformula \"int(2,y)\" with {x:{1, 2, 4, 8}, y:{0, 1, 3, 6}, z:{5}}"
+ },
+ {
+  "name": "evalpolynomial-number",
+  "script": "evalpolynomial {1, 2, 3} at 2"
+ },
+ {
+  "name": "evalpolynomial-array",
+  "script": "evalpolynomial {1, 2, 3} at (createarray 5)"
+ },
+ {
+  "name": "evalpolynomial-list",
+  "script": "evalpolynomial {1, 2, 3} at {0, 1, -1}"
+ },
+ {
+  "name": "evalpolynomial-polynomial",
+  "script": "evalpolynomial (composepolynomial {1, 1} with {0, 2}) at 3"
+ },
+ {
+  "name": "evalpolynomial-array-coefficients",
+  "script": "evalpolynomial (createarray 3 range {1, 3}) at 2"
+ },
+ {
+  "name": "evalpolynomial-constant",
+  "script": "evalpolynomial {5} at 9"
+ },
+ {
+  "name": "evalpolynomial-empty",
+  "script": "evalpolynomial {} at 2"
+ },
+ {
+  "name": "evalpolynomial-number-coefficients",
+  "script": "evalpolynomial 5 at 2"
+ },
+ {
+  "name": "evalpolynomial-text",
+  "script": "evalpolynomial {\"1\", \"2\"} at \"3\""
+ },
+ {
+  "name": "evalpolynomial-no-at",
+  "script": "evalpolynomial {1, 2}"
+ },
+ {
+  "name": "evalpolynomial-doc",
+  "script": "evalpolynomial {1, 0.5, 0.25, -1} at (randomarray 20 range {-2, 2} seed 4)"
+ },
+ {
+  "name": "roots-quadratic",
+  "script": "roots of {-2, 0, 1}"
+ },
+ {
+  "name": "roots-linear",
+  "script": "roots of {-3, 2}"
+ },
+ {
+  "name": "roots-constant",
+  "script": "roots of {5}"
+ },
+ {
+  "name": "roots-cubic",
+  "script": "roots of {-6, 11, -6, 1}"
+ },
+ {
+  "name": "roots-repeated",
+  "script": "roots of {1, -2, 1}"
+ },
+ {
+  "name": "roots-complex-false",
+  "script": "roots of {1, 0, 1}"
+ },
+ {
+  "name": "roots-complex",
+  "script": "roots of {1, 0, 1} with complex"
+ },
+ {
+  "name": "roots-mixed",
+  "script": "roots of {-1, 0, 0, 1} with complex"
+ },
+ {
+  "name": "roots-mixed-real-only",
+  "script": "roots of {-1, 0, 0, 1}"
+ },
+ {
+  "name": "roots-degree-five",
+  "script": "roots of {1, -3, 0.5, 2, -1, 0.25} with complex"
+ },
+ {
+  "name": "roots-leading-zero",
+  "script": "roots of {-2, 0, 1, 0}"
+ },
+ {
+  "name": "roots-zero-root",
+  "script": "roots of {0, -1, 1}"
+ },
+ {
+  "name": "roots-array",
+  "script": "roots of (createarray 3 range {-1, 1})"
+ },
+ {
+  "name": "roots-polynomial",
+  "script": "roots of (composepolynomial {1, 1} with {0, 2})"
+ },
+ {
+  "name": "roots-empty",
+  "script": "roots of {}"
+ },
+ {
+  "name": "roots-zero",
+  "script": "roots of {0, 0}"
+ },
+ {
+  "name": "composepolynomial-doc",
+  "script": "composepolynomial {1, 1} with {0, 2}"
+ },
+ {
+  "name": "composepolynomial-square",
+  "script": "composepolynomial {0, 0, 1} with {1, 1}"
+ },
+ {
+  "name": "composepolynomial-cubic",
+  "script": "composepolynomial {1, -2, 0, 3} with {2, 1, 1}"
+ },
+ {
+  "name": "composepolynomial-constant",
+  "script": "composepolynomial {5} with {1, 2}"
+ },
+ {
+  "name": "composepolynomial-with-constant",
+  "script": "composepolynomial {1, 2, 3} with {2}"
+ },
+ {
+  "name": "composepolynomial-arrays",
+  "script": "composepolynomial (createarray 3) with (createarray 2 range {1, 1})"
+ },
+ {
+  "name": "composepolynomial-no-with",
+  "script": "composepolynomial {1, 2}"
+ },
+ {
+  "name": "pade-doc",
+  "script": "pade approximant {1, 1, 0.5, 0.16666666666666666} numerator 1 denominator 1"
+ },
+ {
+  "name": "pade-exp",
+  "script": "pade approximant {1, 1, 0.5, 0.16666666666666666, 0.041666666666666664} numerator 2 denominator 2"
+ },
+ {
+  "name": "pade-numerator-only",
+  "script": "pade approximant {1, 2, 3} numerator 2 denominator 0"
+ },
+ {
+  "name": "pade-denominator-only",
+  "script": "pade approximant {1, 1, 1} numerator 0 denominator 2"
+ },
+ {
+  "name": "pade-too-few",
+  "script": "pade approximant {1, 1} numerator 2 denominator 2"
+ },
+ {
+  "name": "pade-singular",
+  "script": "pade approximant {1, 0, 0, 0} numerator 1 denominator 2"
+ },
+ {
+  "name": "pade-synonym",
+  "script": "pade {1, 1, 0.5} numerator 1 denominator 1"
+ },
+ {
+  "name": "pade-no-degrees",
+  "script": "pade approximant {1, 1, 0.5}"
+ },
+ {
+  "name": "fitpolynomial-doc",
+  "script": "fitpolynomial {{0, 1, 2, 3}, {1, 3, 7, 13}} degree 2 number formatting \"%.3g\""
+ },
+ {
+  "name": "fitpolynomial-exact",
+  "script": "fitpolynomial {{0, 1, 2, 3}, {1, 3, 7, 13}} degree 2"
+ },
+ {
+  "name": "fitpolynomial-line",
+  "script": "fitpolynomial {{0, 1, 2, 3}, {1, 3, 7, 13}} degree 1 number formatting \"%.4f\""
+ },
+ {
+  "name": "fitpolynomial-degree-zero",
+  "script": "fitpolynomial {{0, 1, 2, 3}, {1, 3, 7, 13}} degree 0"
+ },
+ {
+  "name": "fitpolynomial-degree-too-high",
+  "script": "fitpolynomial {{0, 1, 2, 3}, {1, 3, 7, 13}} degree 4"
+ },
+ {
+  "name": "fitpolynomial-degree-points",
+  "script": "fitpolynomial {{0, 1, 2, 3}, {1, 3, 7, 13}} degree 3"
+ },
+ {
+  "name": "fitpolynomial-noisy",
+  "script": "fitpolynomial {(randomarray 30 range {0, 5} seed 5), (randomarray 30 range {-1, 1} seed 6)} degree 3 number formatting \"%.6g\""
+ },
+ {
+  "name": "fitpolynomial-arrays",
+  "script": "fitpolynomial {createarray 5, createarray 5 range {1, 9}} degree 1"
+ },
+ {
+  "name": "fitpolynomial-constraint",
+  "script": "fitpolynomial {(randomarray 30 range {0, 5} seed 5), (randomarray 30 range {-1, 1} seed 6)} degree 2 constraints {{1, 0, 0, 0}}"
+ },
+ {
+  "name": "fitpolynomial-constraints",
+  "script": "fitpolynomial {(randomarray 30 range {0, 5} seed 5), (randomarray 30 range {-1, 1} seed 6)} degree 3 constraints {{1, 0, 0, 0, 1}, {1, 1, 1, 1, 0}}"
+ },
+ {
+  "name": "fitpolynomial-constraint-wrong-size",
+  "script": "fitpolynomial {(randomarray 30 range {0, 5} seed 5), (randomarray 30 range {-1, 1} seed 6)} degree 2 constraints {{1, 0}}"
+ },
+ {
+  "name": "fitpolynomial-formatting-signs",
+  "script": "fitpolynomial {{0, 1, 2}, {-1, -3, -7}} degree 2 number formatting \"%g\""
+ },
+ {
+  "name": "fitpolynomial-formatting-plain",
+  "script": "fitpolynomial {{0, 1, 2, 3}, {1, 3, 7, 13}} degree 2 number formatting \"\""
+ },
+ {
+  "name": "fitpolynomial-mismatch",
+  "script": "fitpolynomial {{0, 1, 2}, {1, 2}} degree 1"
+ },
+ {
+  "name": "fitpolynomial-one-array",
+  "script": "fitpolynomial {{0, 1, 2}} degree 1"
+ },
+ {
+  "name": "fitpolynomial-no-degree",
+  "script": "fitpolynomial {{0, 1, 2, 3}, {1, 3, 7, 13}}"
+ },
+ {
+  "name": "fitpolynomial-missing",
+  "script": "fitpolynomial {{0, 1, 2, 3}, {1, missing value, 7, 13}} degree 1"
+ },
+ {
+  "name": "fitrational-exact",
+  "script": "fitrational {{0, 1, 2, 3, 4}, {1, 0.5, 0.333333333333, 0.25, 0.2}} numerator 0 denominator 1"
+ },
+ {
+  "name": "fitrational-noisy",
+  "script": "fitrational {(randomarray 30 range {0, 5} seed 5), (randomarray 30 range {-1, 1} seed 6)} numerator 1 denominator 1 number formatting \"%.4g\""
+ },
+ {
+  "name": "fitrational-two-two",
+  "script": "fitrational {(randomarray 30 range {0, 5} seed 5), (randomarray 30 range {-1, 1} seed 6)} numerator 2 denominator 2"
+ },
+ {
+  "name": "fitrational-polynomial",
+  "script": "fitrational {{0, 1, 2, 3}, {1, 3, 7, 13}} numerator 2 denominator 0 number formatting \"%.3g\""
+ },
+ {
+  "name": "fitrational-too-few",
+  "script": "fitrational {{0, 1}, {1, 2}} numerator 2 denominator 2"
+ },
+ {
+  "name": "fitrational-no-degrees",
+  "script": "fitrational {{0, 1, 2, 3}, {1, 3, 7, 13}}"
  }
 ]

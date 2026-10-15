@@ -1,0 +1,122 @@
+[
+ {
+  "name": "binary-real",
+  "script": "write binary POSIX file \"$TMP/real.bin\" with data {1, -2.5, 300, 70000} as real\nread binary POSIX file \"$TMP/real.bin\" as real"
+ },
+ {
+  "name": "binary-real-big-endian",
+  "script": "write binary POSIX file \"$TMP/real-big.bin\" with data {1, -2, 3} as real with big endian\nread binary POSIX file \"$TMP/real-big.bin\" as real with big endian\nread binary POSIX file \"$TMP/real-big.bin\" as real without big endian"
+ },
+ {
+  "name": "binary-small-real",
+  "script": "write binary POSIX file \"$TMP/small-real.bin\" with data {1, -2.5, 300, 70000} as small real\nread binary POSIX file \"$TMP/small-real.bin\" as small real"
+ },
+ {
+  "name": "binary-small-real-big-endian",
+  "script": "write binary POSIX file \"$TMP/small-real-big.bin\" with data {1, -2, 3} as small real with big endian\nread binary POSIX file \"$TMP/small-real-big.bin\" as small real with big endian\nread binary POSIX file \"$TMP/small-real-big.bin\" as small real without big endian"
+ },
+ {
+  "name": "binary-integer",
+  "script": "write binary POSIX file \"$TMP/integer.bin\" with data {1, -2.5, 300, 70000} as integer\nread binary POSIX file \"$TMP/integer.bin\" as integer"
+ },
+ {
+  "name": "binary-integer-big-endian",
+  "script": "write binary POSIX file \"$TMP/integer-big.bin\" with data {1, -2, 3} as integer with big endian\nread binary POSIX file \"$TMP/integer-big.bin\" as integer with big endian\nread binary POSIX file \"$TMP/integer-big.bin\" as integer without big endian"
+ },
+ {
+  "name": "binary-small-integer",
+  "script": "write binary POSIX file \"$TMP/small-integer.bin\" with data {1, -2.5, 300, 70000} as small integer\nread binary POSIX file \"$TMP/small-integer.bin\" as small integer"
+ },
+ {
+  "name": "binary-small-integer-big-endian",
+  "script": "write binary POSIX file \"$TMP/small-integer-big.bin\" with data {1, -2, 3} as small integer with big endian\nread binary POSIX file \"$TMP/small-integer-big.bin\" as small integer with big endian\nread binary POSIX file \"$TMP/small-integer-big.bin\" as small integer without big endian"
+ },
+ {
+  "name": "binary-byte",
+  "script": "write binary POSIX file \"$TMP/byte.bin\" with data {1, -2.5, 300, 70000} as byte\nread binary POSIX file \"$TMP/byte.bin\" as byte"
+ },
+ {
+  "name": "binary-byte-big-endian",
+  "script": "write binary POSIX file \"$TMP/byte-big.bin\" with data {1, -2, 3} as byte with big endian\nread binary POSIX file \"$TMP/byte-big.bin\" as byte with big endian\nread binary POSIX file \"$TMP/byte-big.bin\" as byte without big endian"
+ },
+ {
+  "name": "binary-default-type",
+  "script": "write binary POSIX file \"$TMP/default.bin\" with data {1.5, 2.5}\nread binary POSIX file \"$TMP/default.bin\" as real"
+ },
+ {
+  "name": "binary-append",
+  "script": "write binary POSIX file \"$TMP/append.bin\" with data {1, 2} as small integer\nwrite binary POSIX file \"$TMP/append.bin\" with data {3} as small integer\nread binary POSIX file \"$TMP/append.bin\" as small integer"
+ },
+ {
+  "name": "binary-starting-at",
+  "script": "write binary POSIX file \"$TMP/start.bin\" with data {1, 2, 3} as byte\nwrite binary POSIX file \"$TMP/start.bin\" with data {9} as byte starting at 1\nread binary POSIX file \"$TMP/start.bin\" as byte"
+ },
+ {
+  "name": "binary-starting-at-beyond",
+  "script": "write binary POSIX file \"$TMP/beyond.bin\" with data {1} as byte\nwrite binary POSIX file \"$TMP/beyond.bin\" with data {9} as byte starting at 3\nread binary POSIX file \"$TMP/beyond.bin\" as byte"
+ },
+ {
+  "name": "binary-array",
+  "script": "write binary POSIX file \"$TMP/array.bin\" with data (createarray 5) as integer\nread binary POSIX file \"$TMP/array.bin\" as integer"
+ },
+ {
+  "name": "binary-skip",
+  "script": "write binary POSIX file \"$TMP/skip.bin\" with data {1, 2, 3, 4} as small integer\nread binary POSIX file \"$TMP/skip.bin\" as small integer skip 2"
+ },
+ {
+  "name": "binary-length",
+  "script": "write binary POSIX file \"$TMP/length.bin\" with data {1, 2, 3, 4} as small integer\nread binary POSIX file \"$TMP/length.bin\" as small integer length 2"
+ },
+ {
+  "name": "binary-step",
+  "script": "write binary POSIX file \"$TMP/step.bin\" with data {1, 2, 3, 4, 5, 6} as small integer\nread binary POSIX file \"$TMP/step.bin\" as small integer step 4"
+ },
+ {
+  "name": "binary-blocks",
+  "script": "write binary POSIX file \"$TMP/blocks.bin\" with data {1, 2, 3, 4, 5, 6, 7, 8} as byte\nread binary POSIX file \"$TMP/blocks.bin\" as byte step 4 blocksize 2"
+ },
+ {
+  "name": "binary-blocks-length",
+  "script": "write binary POSIX file \"$TMP/blength.bin\" with data {1, 2, 3, 4, 5, 6, 7, 8} as byte\nread binary POSIX file \"$TMP/blength.bin\" as byte step 3 blocksize 2 length 2"
+ },
+ {
+  "name": "binary-unsigned",
+  "script": "write binary POSIX file \"$TMP/unsigned.bin\" with data {-1, -2} as small integer\nread binary POSIX file \"$TMP/unsigned.bin\" as small integer without signed\nread binary POSIX file \"$TMP/unsigned.bin\" as byte without signed\nread binary POSIX file \"$TMP/unsigned.bin\" as byte with signed"
+ },
+ {
+  "name": "binary-rounding",
+  "script": "write binary POSIX file \"$TMP/round.bin\" with data {1.5, 2.5, -1.5, 1.4} as integer\nread binary POSIX file \"$TMP/round.bin\" as integer"
+ },
+ {
+  "name": "binary-out-of-range",
+  "script": "write binary POSIX file \"$TMP/range.bin\" with data {300, -129, 1.0E+10} as byte\nread binary POSIX file \"$TMP/range.bin\" as byte"
+ },
+ {
+  "name": "binary-nan",
+  "script": "write binary POSIX file \"$TMP/nan.bin\" with data (divlist {0, 1} with {0, 1}) as integer\nread binary POSIX file \"$TMP/nan.bin\" as integer"
+ },
+ {
+  "name": "binary-partial",
+  "script": "write binary POSIX file \"$TMP/partial.bin\" with data {1, 2, 3} as byte\nread binary POSIX file \"$TMP/partial.bin\" as small integer"
+ },
+ {
+  "name": "binary-read-missing",
+  "script": "read binary POSIX file \"$TMP/no-such.bin\" as real"
+ },
+ {
+  "name": "binary-read-empty",
+  "script": "write binary POSIX file \"$TMP/empty.bin\" with data {} as real\nread binary POSIX file \"$TMP/empty.bin\" as real"
+ },
+ {
+  "name": "binary-no-as",
+  "script": "write binary POSIX file \"$TMP/noas.bin\" with data {1}\nread binary POSIX file \"$TMP/noas.bin\""
+ },
+ {
+  "name": "binary-bad-type",
+  "script": "write binary POSIX file \"$TMP/bad.bin\" with data {1} as text"
+ },
+ {
+  "name": "binary-no-data",
+  "script": "write binary POSIX file \"$TMP/nodata.bin\""
+ }
+]

@@ -57,8 +57,9 @@ public struct DescriptorSnapshot: Codable, Hashable {
 			fields = Self.fields(of: descriptor, hexLimit: hexLimit)
 		case "list":
 			items = (0 ..< descriptor.numberOfItems).map { DescriptorSnapshot(descriptor.atIndex($0 + 1)!, hexLimit: hexLimit) }
-		case "Lido" where ArrayOfReal.values(of: descriptor) != nil:
-			items = ArrayOfReal.values(of: descriptor)!.map { DescriptorSnapshot(NSAppleEventDescriptor(double: $0)) }
+		case "Lido" where ArrayOfReal.values(of: descriptor) != nil, "Poly" where ArrayOfReal.values(of: descriptor, type: ArrayOfReal.polynomialType) != nil:
+			// The numbers, whether 8 or 4 bytes each.
+			items = ArrayOfReal.values(of: descriptor, type: descriptor.descriptorType)!.map { DescriptorSnapshot(NSAppleEventDescriptor(double: $0)) }
 		case "utxt", "ut16", "utf8", "TEXT":
 			text = descriptor.stringValue
 		case "furl":
@@ -136,8 +137,9 @@ public struct DescriptorSnapshot: Codable, Hashable {
 				list.insert(item.descriptor, at: index + 1)
 			}
 			return list
-		case "Lido" where items != nil:
-			return ArrayOfReal(items!.map(\.realValue)).appleEventDescriptor
+		case "Lido" where items != nil, "Poly" where items != nil:
+			let values = items!.map(\.realValue)
+			return (try? ArrayOfReal.descriptor(count: values.count, type: typeCode) { _ = $0.initialize(from: values) }) ?? .missingValue
 		case "utxt":
 			return NSAppleEventDescriptor(string: text ?? "")
 		case "ut16":
