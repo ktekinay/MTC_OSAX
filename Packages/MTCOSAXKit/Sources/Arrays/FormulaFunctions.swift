@@ -181,10 +181,12 @@ extension Formula {
 	}
 
 	/// A variable's value: a number (text that reads as one; other text is -50, anything else -1700) or several
-	/// (a list, whose items that aren't numbers are NaN, an array, a polynomial or a matrix).
+	/// (a list, whose items that aren't numbers are NaN, an array, a polynomial or a matrix). One number in a list is
+	/// a number, as recorded (`IncEllipticF(x,k)` with `{x:{0.5}, k:{0.5}}` is a real).
 	private static func value(_ descriptor: NSAppleEventDescriptor) throws -> Value? {
 		if Values.isSeveral(descriptor) {
-			return .array(try lenientNumbers(descriptor))
+			let values = try lenientNumbers(descriptor)
+			return values.count == 1 ? .number(values[0]) : .array(values)
 		}
 		if descriptor.descriptorType == typeType, descriptor.typeCodeValue == Values.missingValue {
 			return .number(.nan)

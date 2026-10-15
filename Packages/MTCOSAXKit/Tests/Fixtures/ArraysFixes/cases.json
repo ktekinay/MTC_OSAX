@@ -60,6 +60,18 @@
   "script": "evalformula \"int(x,y)\" with {x:{1, 2, 4, 8}, y:{0, 1, 3, 6}, z:{5}}"
  },
  {
+  "name": "evalformula-probe-021",
+  "script": "evalformula \"int(f,x)\" with {f:{1, 1, 1}, x:{0, 1, 2}}"
+ },
+ {
+  "name": "evalformula-probe-022",
+  "script": "evalformula \"int(f,x)\" with {f:{0, 1, 2}, x:{1, 1, 1}}"
+ },
+ {
+  "name": "evalformula-probe-107",
+  "script": "evalformula \"x // c\" with {x:1}"
+ },
+ {
   "name": "composepolynomial-empty",
   "script": "composepolynomial {} with {1}"
  }

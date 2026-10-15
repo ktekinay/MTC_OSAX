@@ -1862,6 +1862,446 @@
   "script": "evalformula \"int(2,y)\" with {x:{1, 2, 4, 8}, y:{0, 1, 3, 6}, z:{5}}"
  },
  {
+  "name": "evalformula-probe-001",
+  "script": "evalformula \"2*3^2\" with {}"
+ },
+ {
+  "name": "evalformula-probe-002",
+  "script": "evalformula \"1+2^2\" with {}"
+ },
+ {
+  "name": "evalformula-probe-003",
+  "script": "evalformula \"2^2*3\" with {}"
+ },
+ {
+  "name": "evalformula-probe-004",
+  "script": "evalformula \"-2^2\" with {}"
+ },
+ {
+  "name": "evalformula-probe-005",
+  "script": "evalformula \"2^-1\" with {}"
+ },
+ {
+  "name": "evalformula-probe-006",
+  "script": "evalformula \"1+-2\" with {}"
+ },
+ {
+  "name": "evalformula-probe-007",
+  "script": "evalformula \"(-2)*3\" with {}"
+ },
+ {
+  "name": "evalformula-probe-008",
+  "script": "evalformula \"1<2+1\" with {}"
+ },
+ {
+  "name": "evalformula-probe-009",
+  "script": "evalformula \"!0+1\" with {}"
+ },
+ {
+  "name": "evalformula-probe-010",
+  "script": "evalformula \"1&0|1\" with {}"
+ },
+ {
+  "name": "evalformula-probe-011",
+  "script": "evalformula \"0|1&0\" with {}"
+ },
+ {
+  "name": "evalformula-probe-012",
+  "script": "evalformula \"2>1&3>4\" with {}"
+ },
+ {
+  "name": "evalformula-probe-013",
+  "script": "evalformula \"1==1+0\" with {}"
+ },
+ {
+  "name": "evalformula-probe-014",
+  "script": "evalformula \"2*-3\" with {}"
+ },
+ {
+  "name": "evalformula-probe-015",
+  "script": "evalformula \"-(2)\" with {}"
+ },
+ {
+  "name": "evalformula-probe-016",
+  "script": "evalformula \"- 2\" with {}"
+ },
+ {
+  "name": "evalformula-probe-017",
+  "script": "evalformula \"3-2-1\" with {}"
+ },
+ {
+  "name": "evalformula-probe-018",
+  "script": "evalformula \"8/2/2\" with {}"
+ },
+ {
+  "name": "evalformula-probe-019",
+  "script": "evalformula \"2^0.5\" with {}"
+ },
+ {
+  "name": "evalformula-probe-020",
+  "script": "evalformula \"!1==0\" with {}"
+ },
+ {
+  "name": "evalformula-probe-023",
+  "script": "evalformula \"int(x,x)\" with {x:{0, 1, 3}}"
+ },
+ {
+  "name": "evalformula-probe-024",
+  "script": "evalformula \"max(x)\" with {x:{3, 1, 2}}"
+ },
+ {
+  "name": "evalformula-probe-025",
+  "script": "evalformula \"min(x,2)\" with {x:{3, 1, 2}}"
+ },
+ {
+  "name": "evalformula-probe-026",
+  "script": "evalformula \"max(x,y)\" with {x:{3, 1}, y:{2, 5}}"
+ },
+ {
+  "name": "evalformula-probe-027",
+  "script": "evalformula \"sign(x)\" with {x:{-2, 0, 3}}"
+ },
+ {
+  "name": "evalformula-probe-028",
+  "script": "evalformula \"mod(x,3)\" with {x:{-7, 7, 7.5}}"
+ },
+ {
+  "name": "evalformula-probe-029",
+  "script": "evalformula \"remainder(x,3)\" with {x:{-7, 7, 8}}"
+ },
+ {
+  "name": "evalformula-probe-030",
+  "script": "evalformula \"isnan(x)\" with {x:{1, missing value}}"
+ },
+ {
+  "name": "evalformula-probe-031",
+  "script": "evalformula \"replacenan(x,9)\" with {x:{1, missing value}}"
+ },
+ {
+  "name": "evalformula-probe-032",
+  "script": "evalformula \"jn(2,x)\" with {x:{1, 2}}"
+ },
+ {
+  "name": "evalformula-probe-033",
+  "script": "evalformula \"yn(2,x)\" with {x:{1, 2}}"
+ },
+ {
+  "name": "evalformula-probe-034",
+  "script": "evalformula \"EllipticK(x)\" with {x:{0, 0.5}}"
+ },
+ {
+  "name": "evalformula-probe-035",
+  "script": "evalformula \"EllipticE(x)\" with {x:{0, 0.5}}"
+ },
+ {
+  "name": "evalformula-probe-036",
+  "script": "evalformula \"IncEllipticF(x,k)\" with {x:{0.5}, k:{0.5}}"
+ },
+ {
+  "name": "evalformula-probe-037",
+  "script": "evalformula \"EllipticP(n,k)\" with {n:{0.25}, k:{0.5}}"
+ },
+ {
+  "name": "evalformula-probe-038",
+  "script": "evalformula \"lambertW0(x)\" with {x:{1, -0.3}}"
+ },
+ {
+  "name": "evalformula-probe-039",
+  "script": "evalformula \"lambertWm1(x)\" with {x:{-0.3, -0.1}}"
+ },
+ {
+  "name": "evalformula-probe-040",
+  "script": "evalformula \"sum(x)\" with {x:{1, missing value, 2}}"
+ },
+ {
+  "name": "evalformula-probe-041",
+  "script": "evalformula \"count(x)\" with {x:{1, missing value, 2}}"
+ },
+ {
+  "name": "evalformula-probe-042",
+  "script": "evalformula \"x\" with {x:{}}"
+ },
+ {
+  "name": "evalformula-probe-043",
+  "script": "evalformula \"diff(x)\" with {x:3}"
+ },
+ {
+  "name": "evalformula-probe-044",
+  "script": "evalformula \"rest(x)\" with {x:3}"
+ },
+ {
+  "name": "evalformula-probe-045",
+  "script": "evalformula \"concat(x,2)\" with {x:{1}}"
+ },
+ {
+  "name": "evalformula-probe-046",
+  "script": "evalformula \"runsum(2)\" with {}"
+ },
+ {
+  "name": "evalformula-probe-047",
+  "script": "evalformula \"a=1\" with {}"
+ },
+ {
+  "name": "evalformula-probe-048",
+  "script": "evalformula \"x;\" with {x:1}"
+ },
+ {
+  "name": "evalformula-probe-049",
+  "script": "evalformula \"x\\n\\n\" with {x:1}"
+ },
+ {
+  "name": "evalformula-probe-050",
+  "script": "evalformula \"2x\" with {x:3}"
+ },
+ {
+  "name": "evalformula-probe-051",
+  "script": "evalformula \"x(2)\" with {x:3}"
+ },
+ {
+  "name": "evalformula-probe-052",
+  "script": "evalformula \"sin x\" with {x:3}"
+ },
+ {
+  "name": "evalformula-probe-053",
+  "script": "evalformula \"1.5e\" with {}"
+ },
+ {
+  "name": "evalformula-probe-054",
+  "script": "evalformula \"1..2\" with {}"
+ },
+ {
+  "name": "evalformula-probe-055",
+  "script": "evalformula \"$\" with {}"
+ },
+ {
+  "name": "evalformula-probe-056",
+  "script": "evalformula \"cos()\" with {}"
+ },
+ {
+  "name": "evalformula-probe-057",
+  "script": "evalformula \"atan2(1)\" with {}"
+ },
+ {
+  "name": "evalformula-probe-058",
+  "script": "evalformula \"hypot(1,2,3)\" with {}"
+ },
+ {
+  "name": "evalformula-probe-059",
+  "script": "evalformula \"x+1\" with {x:true}"
+ },
+ {
+  "name": "evalformula-probe-060",
+  "script": "evalformula \"x+1\" with {x:\"abc\"}"
+ },
+ {
+  "name": "evalformula-probe-061",
+  "script": "evalformula \"x+1\" with {x:{1, \"abc\"}}"
+ },
+ {
+  "name": "evalformula-probe-062",
+  "script": "evalformula \"-2+3\" with {}"
+ },
+ {
+  "name": "evalformula-probe-063",
+  "script": "evalformula \"-2*3+1\" with {}"
+ },
+ {
+  "name": "evalformula-probe-064",
+  "script": "evalformula \"-x+1\" with {x:{1, 2}}"
+ },
+ {
+  "name": "evalformula-probe-065",
+  "script": "evalformula \"!1+1\" with {}"
+ },
+ {
+  "name": "evalformula-probe-066",
+  "script": "evalformula \"!x==1\" with {x:{0, 1}}"
+ },
+ {
+  "name": "evalformula-probe-067",
+  "script": "evalformula \"-(2)^2\" with {}"
+ },
+ {
+  "name": "evalformula-probe-068",
+  "script": "evalformula \"1-(-2)\" with {}"
+ },
+ {
+  "name": "evalformula-probe-069",
+  "script": "evalformula \"x=-1\" with {}"
+ },
+ {
+  "name": "evalformula-probe-070",
+  "script": "evalformula \"abs(-2)\" with {}"
+ },
+ {
+  "name": "evalformula-probe-071",
+  "script": "evalformula \"max(-1,2)\" with {}"
+ },
+ {
+  "name": "evalformula-probe-072",
+  "script": "evalformula \"-2<1\" with {}"
+ },
+ {
+  "name": "evalformula-probe-073",
+  "script": "evalformula \"-1&0\" with {}"
+ },
+ {
+  "name": "evalformula-probe-074",
+  "script": "evalformula \"!-1\" with {}"
+ },
+ {
+  "name": "evalformula-probe-075",
+  "script": "evalformula \"-!1\" with {}"
+ },
+ {
+  "name": "evalformula-probe-076",
+  "script": "evalformula \"--2\" with {}"
+ },
+ {
+  "name": "evalformula-probe-077",
+  "script": "evalformula \"+2\" with {}"
+ },
+ {
+  "name": "evalformula-probe-078",
+  "script": "evalformula \"2^3^2^0\" with {}"
+ },
+ {
+  "name": "evalformula-probe-079",
+  "script": "evalformula \"1|0&0\" with {}"
+ },
+ {
+  "name": "evalformula-probe-080",
+  "script": "evalformula \"2>1>0\" with {}"
+ },
+ {
+  "name": "evalformula-probe-081",
+  "script": "evalformula \"x*(-1)\" with {x:2}"
+ },
+ {
+  "name": "evalformula-probe-082",
+  "script": "evalformula \"(x)\" with {x:2}"
+ },
+ {
+  "name": "evalformula-probe-083",
+  "script": "evalformula \"((x))+(1)\" with {x:2}"
+ },
+ {
+  "name": "evalformula-probe-084",
+  "script": "evalformula \"x;;y\" with {x:1, y:2}"
+ },
+ {
+  "name": "evalformula-probe-085",
+  "script": "evalformula \";x\" with {x:1}"
+ },
+ {
+  "name": "evalformula-probe-086",
+  "script": "evalformula \"x=1;\" with {}"
+ },
+ {
+  "name": "evalformula-probe-087",
+  "script": "evalformula \"1 2\" with {}"
+ },
+ {
+  "name": "evalformula-probe-088",
+  "script": "evalformula \"x y\" with {x:1, y:2}"
+ },
+ {
+  "name": "evalformula-probe-089",
+  "script": "evalformula \"1e+2\" with {}"
+ },
+ {
+  "name": "evalformula-probe-090",
+  "script": "evalformula \"1E2\" with {}"
+ },
+ {
+  "name": "evalformula-probe-091",
+  "script": "evalformula \"0x10\" with {}"
+ },
+ {
+  "name": "evalformula-probe-092",
+  "script": "evalformula \"1.\" with {}"
+ },
+ {
+  "name": "evalformula-probe-093",
+  "script": "evalformula \".\" with {}"
+ },
+ {
+  "name": "evalformula-probe-094",
+  "script": "evalformula \"sqrt(4\" with {}"
+ },
+ {
+  "name": "evalformula-probe-095",
+  "script": "evalformula \"sqrt 4)\" with {}"
+ },
+ {
+  "name": "evalformula-probe-096",
+  "script": "evalformula \")\" with {}"
+ },
+ {
+  "name": "evalformula-probe-097",
+  "script": "evalformula \"x=\" with {}"
+ },
+ {
+  "name": "evalformula-probe-098",
+  "script": "evalformula \"=1\" with {}"
+ },
+ {
+  "name": "evalformula-probe-099",
+  "script": "evalformula \"PI\" with {}"
+ },
+ {
+  "name": "evalformula-probe-100",
+  "script": "evalformula \"Pi*2\" with {}"
+ },
+ {
+  "name": "evalformula-probe-101",
+  "script": "evalformula \"pi=3;pi\" with {}"
+ },
+ {
+  "name": "evalformula-probe-102",
+  "script": "evalformula \"cos=1;cos\" with {}"
+ },
+ {
+  "name": "evalformula-probe-103",
+  "script": "evalformula \"COS(0)\" with {}"
+ },
+ {
+  "name": "evalformula-probe-104",
+  "script": "evalformula \"Sqrt(4)\" with {}"
+ },
+ {
+  "name": "evalformula-probe-105",
+  "script": "evalformula \"x#1\" with {x:1}"
+ },
+ {
+  "name": "evalformula-probe-106",
+  "script": "evalformula \"x//c\\ny\" with {x:1, y:2}"
+ },
+ {
+  "name": "evalformula-probe-108",
+  "script": "evalformula \"/*c*/x\" with {x:1}"
+ },
+ {
+  "name": "evalformula-probe-109",
+  "script": "evalformula \"x\\ry\" with {x:1, y:2}"
+ },
+ {
+  "name": "evalformula-probe-110",
+  "script": "evalformula \"x\\r\\ny\" with {x:1, y:2}"
+ },
+ {
+  "name": "evalformula-probe-111",
+  "script": "evalformula \"1/x\" with {x:0}"
+ },
+ {
+  "name": "evalformula-probe-112",
+  "script": "evalformula \"0/0\" with {}"
+ },
+ {
+  "name": "evalformula-probe-113",
+  "script": "evalformula \"x^0\" with {x:0}"
+ },
+ {
   "name": "evalpolynomial-number",
   "script": "evalpolynomial {1, 2, 3} at 2"
  },
