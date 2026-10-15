@@ -25,7 +25,7 @@ enum Arithmetic {
 	}
 
 	/// What the commands take, as given.
-	indirect enum Operand {
+	enum Operand {
 		case number(Double)
 		case list([Operand])
 		case array([Double])
@@ -49,7 +49,7 @@ enum Arithmetic {
 
 	/// An item that isn't a number (`true`, text that isn't one) is NaN, as recorded; a record other than a matrix
 	/// is -1700.
-	static func operand(_ descriptor: NSAppleEventDescriptor) throws -> Operand {
+	static func operand(_ descriptor: NSAppleEventDescriptor, depth: Int = 0) throws -> Operand {
 		if let values = ArrayOfReal.values(of: descriptor) {
 			return .array(values)
 		}
@@ -60,15 +60,13 @@ enum Arithmetic {
 			return .matrix(matrix)
 		}
 		if let list = RawList(descriptor) {
-			return .list(try (0 ..< list.count).map { index in
-				let (type, _) = list.info(index)
-				switch type {
-				case typeSInt16: return .number(Double(list.value(index, type: type, as: Int16.self)))
-				case typeSInt32: return .number(Double(list.value(index, type: type, as: Int32.self)))
-				case typeIEEE64BitFloatingPoint: return .number(list.value(index, type: type, as: Double.self))
-				default: return try operand(list.descriptor(index))
-				}
-			})
+			try Values.checkNesting(depth)
+			var items: [Operand] = []
+			items.reserveCapacity(list.count)
+			try list.forEachItem { item in
+				try items.append(Values.number(item).map(Operand.number) ?? operand(list.descriptor(item.index), depth: depth + 1))
+			}
+			return .list(items)
 		}
 		if descriptor.isRecordDescriptor {
 			throw OSAXError.coercionFailed
@@ -147,20 +145,10 @@ enum Arithmetic {
 	private static func polynomial(_ p: [Double], _ q: [Double], _ operation: Operation) throws -> [Double] {
 		switch operation {
 		case .add, .subtract:
-			return (0 ..< max(p.count, q.count)).map { index in
-				operation(index < p.count ? p[index] : 0, index < q.count ? q[index] : 0)
-			}
+			return Polynomials.termwise(p, q) { operation($0, $1) }
 		case .multiply:
-			guard !p.isEmpty, !q.isEmpty else {
-				return []
-			}
-			var product = [Double](repeating: 0, count: p.count + q.count - 1)
-			for (i, a) in p.enumerated() {
-				for (j, b) in q.enumerated() {
-					product[i + j] += a * b
-				}
-			}
-			return product
+			try Arrays.check(p.count.multipliedReportingOverflow(by: q.count), atMost: Polynomials.maximumProducts, "The number of products of coefficients")
+			return Polynomials.multiply(p, q)
 		case .divide:
 			throw OSAXError.parameterError
 		}
@@ -180,7 +168,15 @@ enum Arithmetic {
 		case let .number(value):
 			return value.isFinite ? NSAppleEventDescriptor(double: value) : .missingValue
 		case let .list(items):
-			return try items.map(descriptor).appleEventDescriptor
+			let list = try ListBuilder()
+			for item in items {
+				if case let .number(value) = item {
+					try value.isFinite ? list.append(value) : list.appendMissingValue()
+				} else {
+					try list.append(descriptor(item))
+				}
+			}
+			return list.descriptor()
 		case let .array(values):
 			return try Values.array(values)
 		case let .matrix(matrix):

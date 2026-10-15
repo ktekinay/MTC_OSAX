@@ -69,4 +69,39 @@ struct EditingTests {
 		#expect(send("SATILiRe", ["----": wrong]).error?.number == -50)
 		#expect(send("SATICRMT", ["----": "1", "ncol": 20_000, "nrow": 20_000]).error?.number == -50)
 	}
+
+	/// A diagonal list of more than 10,000 numbers is -50, as `ncols` is (100,000 tried 80 GB), and two axes too
+	/// large together are refused before either is made.
+	@Test func matrixLimits() {
+		#expect(send("SATICRMT", ["----": "d", "Diag": ArrayOfReal(Array(repeating: 1, count: 10_001))]).error?.number == -50)
+		#expect(values(send("SATICRMT", ["----": "d", "Diag": ArrayOfReal([1, 2])])) == [1, 0, 0, 2])
+		let start = Date()
+		#expect(send("SATICRMT", ["----": "1", "ncol": 100_000_000, "nrow": 100_000_000]).error?.number == -50)
+		#expect(Date().timeIntervalSince(start) < 1)
+		#expect(values(send("SATICRMT", ["----": "x", "ncol": 3, "nrow": 2])) == [0, 1, 2, 0, 1, 2])
+		#expect(values(send("SATICRMT", ["----": "y", "ncol": 2, "nrow": AppleEventList([5, 7])])) == [5, 5, 7, 7])
+	}
+
+	/// Other items stay as they were (an integer an integer, text text); missing values and NaN are replaced, in
+	/// nested lists too, which may nest at most 512 levels (-50).
+	@Test func replaceMissingValuesInLists() throws {
+		let list = AppleEventList([1, NSAppleEventDescriptor.missingValue, NSAppleEventDescriptor(double: .nan), 2.5, "a", AppleEventList([NSAppleEventDescriptor.missingValue])])
+		let replaced = try #require(self.list(send("SATIFILL", ["----": list, "with": 0])))
+		#expect(replaced.map(\.descriptorType) == [typeSInt32, typeIEEE64BitFloatingPoint, typeIEEE64BitFloatingPoint, typeIEEE64BitFloatingPoint, typeUnicodeText, typeAEList])
+		#expect(replaced.prefix(4).map(\.doubleValue) == [1, 0, 0, 2.5])
+		#expect(replaced[4].stringValue == "a")
+		#expect(replaced[5].atIndex(1)?.doubleValue == 0)
+		#expect(send("SATIRmMv", ["----": nested(NSAppleEventDescriptor.maximumNesting + 1)]).error?.number == -50)
+		#expect(send("SATIRmMv", ["----": nested(NSAppleEventDescriptor.maximumNesting)]).error == nil)
+	}
+
+	/// Lists made from arrays: reals (`missing value` for NaN) or integers.
+	@Test func listsFromArrays() throws {
+		let reals = try #require(list(send("SATIExLF", ["----": ArrayOfReal([1.5, .nan, -2]), "for ": -1, "rtyp": NSAppleEventDescriptor(typeCode: FourCharCode(fourCharString: "LiDo"))])))
+		#expect(reals.map(\.descriptorType) == [typeIEEE64BitFloatingPoint, typeType, typeIEEE64BitFloatingPoint])
+		#expect(reals[0].doubleValue == 1.5 && reals[1].typeCodeValue == Values.missingValue && reals[2].doubleValue == -2)
+		let integers = try #require(list(send("SATIExLF", ["----": ArrayOfReal([1.5, .nan, -2]), "for ": -1, "rtyp": NSAppleEventDescriptor(typeCode: FourCharCode(fourCharString: "LiIn"))])))
+		#expect(integers.map(\.descriptorType) == [typeSInt32, typeType, typeSInt32])
+		#expect(integers[0].int32Value == 2 && integers[2].int32Value == -2)
+	}
 }

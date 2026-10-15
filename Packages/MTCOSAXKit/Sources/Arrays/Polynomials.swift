@@ -15,13 +15,24 @@ enum Polynomials {
 				guard let with = request.descriptor(for: "with") else {
 					throw OSAXError.missingParameter
 				}
-				return try descriptor(compose(p, try coefficients(with)))
+				let q = try coefficients(with)
+				// Its time grows as the square of the result's degree.
+				try Arrays.check(max(0, p.count - 1).multipliedReportingOverflow(by: max(0, q.count - 1)), atMost: maximumComposedDegree, "The composed polynomial's degree")
+				return try descriptor(compose(p, q))
 			},
 			CommandDefinition("pade approximant", code: "SATIPade", handler: pade),
 			CommandDefinition("fitpolynomial", code: "SATIFiPo", handler: fitPolynomial),
 			CommandDefinition("fitrational", code: "SATIRatF", handler: fitRational),
 		]
 	}
+
+	// Limits that keep the slower algorithms to seconds (and their matrices to megabytes): their time grows as the
+	// cube of the degree, or as the product of the polynomials' lengths.
+	static let maximumRootsDegree = 1000
+	static let maximumPadeDegree = 1000
+	static let maximumFitDegree = 100
+	static let maximumComposedDegree = 100_000
+	static let maximumProducts = 10_000_000_000
 
 	static func coefficients(_ descriptor: NSAppleEventDescriptor) throws -> [Double] {
 		try Values.numbers(descriptor)
@@ -59,6 +70,7 @@ enum Polynomials {
 		return result
 	}
 
+	/// The product of two polynomials (their lengths' product is the time it takes).
 	static func multiply(_ p: [Double], _ q: [Double]) -> [Double] {
 		guard !p.isEmpty, !q.isEmpty else {
 			return []
@@ -73,22 +85,29 @@ enum Polynomials {
 	}
 
 	static func add(_ p: [Double], _ q: [Double]) -> [Double] {
-		(0 ..< max(p.count, q.count)).map { (($0 < p.count) ? p[$0] : 0) + (($0 < q.count) ? q[$0] : 0) }
+		termwise(p, q, +)
+	}
+
+	/// Coefficient by coefficient, the shorter padded with zeros.
+	static func termwise(_ p: [Double], _ q: [Double], _ operation: (Double, Double) -> Double) -> [Double] {
+		(0 ..< max(p.count, q.count)).map { operation($0 < p.count ? p[$0] : 0, $0 < q.count ? q[$0] : 0) }
 	}
 
 	// MARK: roots of
 
 	/// The roots, in the order SatimageOSAX found them (see `RootFinder`): real roots as reals, and `with complex`
-	/// complex ones as `{real, imaginary}`. Zero leading coefficients are left out; a polynomial of degree 0 is -50;
-	/// QR that doesn't converge is -1.
+	/// complex ones as `{real, imaginary}`. Zero leading coefficients are left out; a polynomial of degree 0, or with
+	/// a coefficient that isn't finite (one infinite made the balancing loop forever), is -50; QR that doesn't
+	/// converge is -1.
 	static func roots(_ request: AppleEventRequest) throws -> NSAppleEventDescriptor {
 		var p = try coefficients(request.requiredDirectParameter(as: AnyDescriptor.self).descriptor)
 		while let last = p.last, last == 0 {
 			p.removeLast()
 		}
-		guard p.count >= 2 else {
+		guard p.count >= 2, p.allSatisfy(\.isFinite) else {
 			throw OSAXError.parameterError
 		}
+		try Arrays.check((p.count - 1, false), atMost: maximumRootsDegree, "The degree")
 		let complex = try request.parameter("Comp", default: false)
 		guard let roots = RootFinder.roots(p) else {
 			throw OSAXError(-1)
@@ -114,6 +133,7 @@ enum Polynomials {
 		guard m >= 0, n >= 0, c.count >= m + n + 1 else {
 			throw OSAXError(-1)
 		}
+		try Arrays.check((max(m, n), false), atMost: maximumPadeDegree, "The numerator's and denominator's degrees")
 		func coefficient(_ index: Int) -> Double {
 			index >= 0 ? c[index] : 0
 		}
@@ -171,6 +191,7 @@ enum Polynomials {
 		guard degree >= 0 else {
 			throw OSAXError(-1)
 		}
+		try checkFitSize(points.x.count, coefficients: degree + 1, degree: degree)
 		let constraints = try request.descriptor(for: "cons").map { descriptor -> [[Double]] in
 			guard let list = RawList(descriptor) else { throw OSAXError(-1) }
 			return try (0 ..< list.count).map { index in
@@ -188,7 +209,7 @@ enum Polynomials {
 			(.code("FRes"), c.map(NSAppleEventDescriptor.init(double:)).appleEventDescriptor),
 		]
 		if let format = try formatting(request) {
-			fields.append((.code("FStr"), NSAppleEventDescriptor(string: try formula(c, format: format))))
+			fields.append((.code("FStr"), NSAppleEventDescriptor(string: formula(c, format: format))))
 		}
 		return RecordFields(fields).appleEventDescriptor
 	}
@@ -208,6 +229,7 @@ enum Polynomials {
 		guard m >= 0, n >= 0, !points.x.isEmpty else {
 			throw OSAXError(-1)
 		}
+		try checkFitSize(points.x.count, coefficients: m + n + 1, degree: max(m, n))
 		let (x, y) = points
 		var weights = [Double](repeating: 1, count: x.count)
 		var errors = [Double](repeating: 1, count: x.count)
@@ -260,28 +282,35 @@ enum Polynomials {
 			(.code("FRes"), [try descriptor(numerator), try descriptor(denominator)].appleEventDescriptor),
 		]
 		if let format = try formatting(request) {
-			let text = "(\(try formula(numerator, format: format)))/(\(try formula(denominator, format: format)))"
+			let text = "(\(formula(numerator, format: format)))/(\(formula(denominator, format: format)))"
 			fields.append((.code("FStr"), NSAppleEventDescriptor(string: text)))
 		}
 		return RecordFields(fields).appleEventDescriptor
 	}
 
+	/// A fit's degree at most `maximumFitDegree` (-50), and its matrix of points by coefficients at most
+	/// `Arrays.maximumSize` numbers.
+	private static func checkFitSize(_ points: Int, coefficients: Int, degree: Int) throws {
+		try Arrays.check((degree, false), atMost: maximumFitDegree, "The degree")
+		try Arrays.check(points.multipliedReportingOverflow(by: coefficients), atMost: Arrays.maximumSize, "The number of points times the number of coefficients")
+	}
+
 	/// The `number formatting`: nil without one (or with an empty one), as SatimageOSAX then gave no fit string.
-	private static func formatting(_ request: AppleEventRequest) throws -> String? {
+	private static func formatting(_ request: AppleEventRequest) throws -> RealFormat? {
 		guard let descriptor = request.descriptor(for: "Form") else {
 			return nil
 		}
 		let format = try String(appleEventDescriptor: descriptor)
-		return format.isEmpty ? nil : format
+		return format.isEmpty ? nil : try RealFormat(format)
 	}
 
 	/// A polynomial as text: each coefficient by the format (but those written without a nonzero digit, "0.0000"),
 	/// then `*x` or `*x^k`; a coefficient written "1" leaves out "1*" ("-1" leaves "-"), and terms after the first are
 	/// joined with "+" unless they start with "-".
-	static func formula(_ c: [Double], format: String) throws -> String {
+	static func formula(_ c: [Double], format: RealFormat) -> String {
 		var text = ""
 		for (power, coefficient) in c.enumerated() {
-			var number = try RealFormat(format).format(coefficient)
+			var number = format.format(coefficient)
 			guard number.contains(where: { ("1" ... "9").contains($0) }) else {
 				continue
 			}
@@ -291,7 +320,7 @@ enum Polynomials {
 			}
 			text += text.isEmpty || number.hasPrefix("-") ? number : "+" + number
 		}
-		return text.isEmpty ? (try RealFormat(format).format(0)) : text
+		return text.isEmpty ? format.format(0) : text
 	}
 }
 

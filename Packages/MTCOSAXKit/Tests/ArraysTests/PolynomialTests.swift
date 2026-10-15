@@ -80,13 +80,37 @@ struct PolynomialTests {
 	/// The fit string: coefficients by the format, "1" and "-1" written as x, zeros left out; a format with another
 	/// conversion than a real's, or two, is -50 (they'd read past the coefficient).
 	@Test func formulas() throws {
-		#expect(try Polynomials.formula([1, 0.9999999999999973, 1.0000000000000009], format: "%.3g") == "1+x+x^2")
-		#expect(try Polynomials.formula([-2.220446049250313e-16, 4], format: "%.4f") == "4.0000*x")
-		#expect(try Polynomials.formula([-1, -1, -1], format: "%g") == "-1-x-x^2")
-		#expect(try Polynomials.formula([0.5, -2], format: "%+.1e") == "+5.0e-01-2.0e+00*x")
+		#expect(try Polynomials.formula([1, 0.9999999999999973, 1.0000000000000009], format: RealFormat("%.3g")) == "1+x+x^2")
+		#expect(try Polynomials.formula([-2.220446049250313e-16, 4], format: RealFormat("%.4f")) == "4.0000*x")
+		#expect(try Polynomials.formula([-1, -1, -1], format: RealFormat("%g")) == "-1-x-x^2")
+		#expect(try Polynomials.formula([0.5, -2], format: RealFormat("%+.1e")) == "+5.0e-01-2.0e+00*x")
 		for bad in ["%d", "%s", "%n", "%g %g", "%.3g%x", "%lld"] {
 			#expect(throws: OSAXError.parameterError, "\(bad)") { try RealFormat(bad) }
 		}
 		#expect(try RealFormat("%5.2f%%").format(1.5) == " 1.50%")
+	}
+
+	/// A coefficient that isn't finite is -50 (an infinite one made the balancing loop forever); one so much larger
+	/// than the last that dividing by it overflows is -1.
+	@Test func rootsOfNonFiniteCoefficients() {
+		#expect(send("SATIRoot", ["----": ArrayOfReal([.infinity, 1, 1])]).error?.number == -50)
+		#expect(send("SATIRoot", ["----": ArrayOfReal([1, .nan, 1])]).error?.number == -50)
+		#expect(send("SATIRoot", ["----": ArrayOfReal([1e300, 1, 1e-300])]).error?.number == -1)
+		#expect(RootFinder.roots([1e300, 1, 1e-300]) == nil)
+	}
+
+	/// Limits that keep the slower algorithms to seconds, and the fits' matrices within 100,000,000 numbers.
+	@Test func limits() {
+		#expect(send("SATIRoot", ["----": ArrayOfReal(Array(repeating: 1, count: 1002))]).error?.number == -50)
+		#expect(send("SATIPade", ["----": ArrayOfReal(Array(repeating: 1, count: 2003)), "nume": 1001, "deno": 1]).error?.number == -50)
+		#expect(send("SATIPade", ["----": ArrayOfReal(Array(repeating: 1, count: 2003)), "nume": 1, "deno": 1001]).error?.number == -50)
+		let x = ArrayOfReal((0 ..< 200).map(Double.init))
+		#expect(send("SATIFiPo", ["----": AppleEventList([x, x]), "degr": 101]).error?.number == -50)
+		#expect(send("SATIFiPo", ["----": AppleEventList([x, x]), "degr": 3]).error == nil)
+		#expect(send("SATIRatF", ["----": AppleEventList([x, x]), "nume": 101, "deno": 1]).error?.number == -50)
+		let many = ArrayOfReal((0 ..< 1_000_000).map(Double.init))
+		#expect(send("SATIFiPo", ["----": AppleEventList([many, many]), "degr": 100]).error?.number == -50)
+		#expect(send("SATICoPo", ["----": ArrayOfReal(Array(repeating: 1, count: 401)), "with": ArrayOfReal(Array(repeating: 1, count: 301))]).error?.number == -50)
+		#expect(send("SATICoPo", ["----": ArrayOfReal([1, 1]), "with": ArrayOfReal([0, 2])]).error == nil)
 	}
 }

@@ -61,4 +61,36 @@ struct StatisticsTests {
 		#expect(send("SATIHisT", ["----": array, "samp": 100]).error == nil)
 		#expect(Date().timeIntervalSince(start) < 5)
 	}
+
+	/// A range wider than a real can hold, or so narrow its intervals are 0 wide, crashed (NaN made an integer).
+	@Test func histogramExtremeRanges() throws {
+		let wide = try #require(send("SATIHisT", ["----": AppleEventList([1e308, 0, -1e308]), "samp": 2, "MIN ": -1.7e308, "MAX ": 1.7e308]).result)
+		#expect(ArrayOfReal.values(of: wide.atIndex(2)!) == [1, 2])
+		let centers = try #require(ArrayOfReal.values(of: wide.atIndex(1)!))
+		#expect(zip(centers, [-0.85e308, 0.85e308]).allSatisfy { abs($0 - $1) <= 1e-15 * abs($1) })
+		let narrow = try #require(send("SATIHisT", ["----": AppleEventList([0]), "samp": 3, "MIN ": 0, "MAX ": 5e-324]).result)
+		#expect(ArrayOfReal.values(of: narrow.atIndex(2)!) == [1, 0, 0])
+	}
+
+	/// The median by selection is the item a sort puts in the middle (the upper of an even count, NaN last), with
+	/// duplicates, negatives and missing values.
+	@Test func medianMatchesSorting() {
+		var generator = SystemRandomNumberGenerator()
+		for count in [1, 2, 3, 4, 10, 101, 1000] {
+			for _ in 0 ..< 50 {
+				let values = (0 ..< count).map { _ in
+					Int.random(in: 0 ..< 8, using: &generator) == 0 ? Double.nan : Double(Int.random(in: -5 ... 5, using: &generator))
+				}
+				let expected = values.sorted { a, b in b.isNaN ? !a.isNaN : a < b }[count / 2]
+				let median = Statistics.upperMedian(values)
+				#expect(median == expected || (median.isNaN && expected.isNaN), "\(values)")
+			}
+		}
+	}
+
+	/// A matrix's running sum goes column by column; a list's in order.
+	@Test func runningSums() throws {
+		#expect(values(send("SATIRSum", ["----": try matrix(2, 2, [1, 2, 3, 4])])) == [1, 4, 6, 10])
+		#expect(values(send("SATIRSum", ["----": AppleEventList([1, 2, 3])])) == [1, 3, 6])
+	}
 }

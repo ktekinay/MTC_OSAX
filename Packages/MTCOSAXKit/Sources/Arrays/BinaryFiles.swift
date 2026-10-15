@@ -4,7 +4,8 @@ import Foundation
 /// `read binary` and `write binary`: numbers as reals (8 bytes), small reals (4), integers (4), small integers (2)
 /// or bytes, in the Mac's byte order (little endian) or `big endian`, as recorded from SatimageOSAX in
 /// `Fixtures/Arrays/Files`. The file is a file reference or a POSIX or HFS path, as for the file commands
-/// (SatimageOSAX gave error 1 for a path).
+/// (SatimageOSAX gave error 1 for a path), and must be a regular file: -50 for a device, a pipe or a socket (writing
+/// to a named pipe waited forever for something to read it).
 enum BinaryFiles {
 	/// A number format in a file.
 	enum Format: String {
@@ -65,27 +66,24 @@ enum BinaryFiles {
 		guard !values.isEmpty else {
 			return nil
 		}
-		var bytes = [UInt8]()
-		bytes.reserveCapacity(values.count * format.size)
-		for value in values {
-			append(value, as: format, bigEndian: bigEndian, to: &bytes)
+		// Straight into the buffer: appending each number's bytes took more than twice as long.
+		let bytes = [UInt8](unsafeUninitializedCapacity: values.count * format.size) { buffer, initialized in
+			let raw = UnsafeMutableRawBufferPointer(buffer)
+			for (index, value) in values.enumerated() {
+				store(value, as: format, bigEndian: bigEndian, into: raw, at: index * format.size)
+			}
+			initialized = values.count * format.size
 		}
-		let descriptor = open(url.path, O_WRONLY | O_CREAT | O_CLOEXEC, 0o666)
-		guard descriptor >= 0 else {
-			throw OSAXError.file(POSIXError(POSIXErrorCode(rawValue: errno) ?? .EIO), "write “\(url.lastPathComponent)”")
-		}
+		let what = "write “\(url.lastPathComponent)”"
+		let (descriptor, size) = try openRegularFile(url, O_WRONLY | O_CREAT, what)
 		defer { close(descriptor) }
-		var offset = try start.map(Int64.init) ?? {
-			let end = lseek(descriptor, 0, SEEK_END)
-			guard end >= 0 else { throw OSAXError.file(POSIXError(POSIXErrorCode(rawValue: errno) ?? .EIO), "write “\(url.lastPathComponent)”") }
-			return Int64(end)
-		}()
+		var offset = Int64(start ?? size)
 		try bytes.withUnsafeBytes { buffer in
 			var written = 0
 			while written < buffer.count {
 				let count = pwrite(descriptor, buffer.baseAddress! + written, buffer.count - written, off_t(offset))
 				guard count > 0 else {
-					throw OSAXError.file(POSIXError(POSIXErrorCode(rawValue: errno) ?? .EIO), "write “\(url.lastPathComponent)”")
+					throw posixError(what)
 				}
 				written += count
 				offset += Int64(count)
@@ -94,10 +92,40 @@ enum BinaryFiles {
 		return nil
 	}
 
-	private static func append(_ value: Double, as format: Format, bigEndian: Bool, to bytes: inout [UInt8]) {
+	private static func posixError(_ what: String) -> OSAXError {
+		OSAXError.file(POSIXError(POSIXErrorCode(rawValue: errno) ?? .EIO), what)
+	}
+
+	/// The file opened without waiting (a named pipe would wait for its other end), and its size; only a regular
+	/// file (-50 for a device, a pipe or a socket, as for `readtext`).
+	private static func openRegularFile(_ url: URL, _ flags: Int32, _ what: String) throws -> (descriptor: Int32, size: Int) {
+		let notAFile = OSAXError(-50, "“\(url.lastPathComponent)” isn’t a file that can be read or written as numbers (it’s a device, a pipe or a socket).")
+		let descriptor = open(url.path, flags | O_NONBLOCK | O_CLOEXEC, 0o666)
+		guard descriptor >= 0 else {
+			// A named pipe with nothing reading it, opened for writing.
+			throw errno == ENXIO ? notAFile : posixError(what)
+		}
+		var status = stat()
+		guard fstat(descriptor, &status) == 0 else {
+			let error = posixError(what)
+			close(descriptor)
+			throw error
+		}
+		switch status.st_mode & S_IFMT {
+		case S_IFREG:
+			return (descriptor, Int(status.st_size))
+		case S_IFDIR:
+			close(descriptor)
+			throw OSAXError.file(POSIXError(.EISDIR), what)
+		default:
+			close(descriptor)
+			throw notAFile
+		}
+	}
+
+	private static func store(_ value: Double, as format: Format, bigEndian: Bool, into bytes: UnsafeMutableRawBufferPointer, at offset: Int) {
 		func put<Value: FixedWidthInteger>(_ integer: Value) {
-			let ordered = bigEndian ? integer.bigEndian : integer.littleEndian
-			withUnsafeBytes(of: ordered) { bytes.append(contentsOf: $0) }
+			bytes.storeBytes(of: bigEndian ? integer.bigEndian : integer.littleEndian, toByteOffset: offset, as: Value.self)
 		}
 		// Rounded half away from zero (cut toward zero for a byte); NaN, and numbers beyond 64 bits, are 0.
 		let rule: FloatingPointRoundingRule = format == .byte ? .towardZero : .toNearestOrAwayFromZero
@@ -129,27 +157,44 @@ enum BinaryFiles {
 		guard skip >= 0, blocksize >= 1, step >= 1, (length ?? 0) >= 0 else {
 			throw OSAXError.parameterError
 		}
-		let data: Data
+		let what = "read “\(url.lastPathComponent)”"
+		let descriptor: Int32, size: Int
 		do {
-			data = try Data(contentsOf: url, options: .mappedIfSafe)
-		} catch let error as CocoaError where error.code == .fileReadNoSuchFile {
-			throw OSAXError(-43)
-		} catch {
-			throw OSAXError.file(error, "read “\(url.lastPathComponent)”")
+			(descriptor, size) = try openRegularFile(url, O_RDONLY, what)
+		} catch let error as OSAXError where error.number == -43 {
+			throw OSAXError(-43) // As recorded, without a message.
 		}
-		guard !data.isEmpty else {
+		defer { close(descriptor) }
+		guard size > 0 else {
 			throw OSAXError(-43)
 		}
-		let available = max(0, (data.count - skip) / format.size)
+		let available = max(0, (size - skip) / format.size)
 		let fitting = available >= blocksize ? (available - blocksize) / step + 1 : 0
 		let blocks = min(length ?? fitting, fitting)
-		return try ArrayOfReal.descriptor(count: blocks * blocksize) { buffer in
-			data.withUnsafeBytes { bytes in
+		// Overlapping blocks (`step` less than `blocksize`) can ask for many times the file: a 20 KB file made 600 MB,
+		// and a larger one overflowed.
+		let (count, overflow) = blocks.multipliedReportingOverflow(by: blocksize)
+		guard !overflow, count <= Arrays.maximumSize else {
+			throw Arrays.tooLarge
+		}
+		// Only the bytes the blocks cover, read rather than mapped (a mapped file cut short while it's read can crash
+		// the process).
+		let byteCount = blocks == 0 ? 0 : ((blocks - 1) * step + blocksize) * format.size
+		let bytes = try [UInt8](unsafeUninitializedCapacity: byteCount) { buffer, initialized in
+			while initialized < byteCount {
+				let count = pread(descriptor, buffer.baseAddress! + initialized, byteCount - initialized, off_t(skip + initialized))
+				guard count > 0 else {
+					throw count == 0 ? OSAXError.file(POSIXError(.EIO), what) : posixError(what)
+				}
+				initialized += count
+			}
+		}
+		return try ArrayOfReal.descriptor(count: count) { buffer in
+			bytes.withUnsafeBytes { bytes in
 				var index = 0
 				for block in 0 ..< blocks {
 					for item in 0 ..< blocksize {
-						let offset = skip + (block * step + item) * format.size
-						buffer[index] = number(bytes, at: offset, as: format, bigEndian: bigEndian, signed: signed)
+						buffer[index] = number(bytes, at: (block * step + item) * format.size, as: format, bigEndian: bigEndian, signed: signed)
 						index += 1
 					}
 				}

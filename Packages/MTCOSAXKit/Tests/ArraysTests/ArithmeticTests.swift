@@ -53,4 +53,33 @@ struct ArithmeticTests {
 		#expect(send("SATILST/", ["----": 1, "with": 0]).result?.typeCodeValue == FourCharCode(fourCharString: "msng"))
 		#expect(send("SATILST+", ["----": AppleEventRecord(["abcd": 1]), "with": 1]).error == .coercionFailed)
 	}
+
+	/// Lists nested more than 512 levels are -50, as they are for the other commands (deeper ran out of stack).
+	@Test func deeplyNestedLists() {
+		#expect(send("SATILST+", ["----": nested(NSAppleEventDescriptor.maximumNesting + 1), "with": 1]).error?.number == -50)
+		#expect(send("SATILST+", ["----": nested(NSAppleEventDescriptor.maximumNesting), "with": 1]).error == nil)
+	}
+
+	/// Multiplying polynomials takes the product of their lengths: more than 10,000,000,000 is -50.
+	@Test func longPolynomials() throws {
+		let long = try polynomial(Array(repeating: 1, count: 100_001))
+		#expect(send("SATILST*", ["----": long, "with": ArrayOfReal(Array(repeating: 1, count: 100_000))]).error?.number == -50)
+		#expect(coefficients(send("SATILST*", ["----": long, "with": try polynomial([2])]))?.count == 100_001)
+	}
+
+	/// Lists of every kind of number, and a list as long as a million.
+	@Test func lists() throws {
+		func typed<Value>(_ value: Value, _ type: DescType) -> NSAppleEventDescriptor {
+			withUnsafeBytes(of: value) { NSAppleEventDescriptor(descriptorType: type, bytes: $0.baseAddress, length: $0.count)! }
+		}
+		let items = [typed(Int16(2), typeSInt16), typed(Int32(3), typeSInt32), typed(Int64(4), typeSInt64), typed(Float32(0.5), typeIEEE32BitFloatingPoint), typed(1.5, typeIEEE64BitFloatingPoint)]
+		let result = try #require(send("SATILST*", ["----": AppleEventList(items), "with": 2]).result)
+		#expect((1 ... 5).map { result.atIndex($0)!.doubleValue } == [4, 6, 8, 1, 3])
+		let count = 1_000_000
+		let list = (0 ..< count).map(Double.init).appleEventDescriptor
+		let start = Date()
+		let sum = try #require(send("SATILST+", ["----": list, "with": list]).result)
+		#expect(sum.numberOfItems == count && sum.atIndex(count)?.doubleValue == Double(2 * (count - 1)))
+		#expect(Date().timeIntervalSince(start) < 5)
+	}
 }

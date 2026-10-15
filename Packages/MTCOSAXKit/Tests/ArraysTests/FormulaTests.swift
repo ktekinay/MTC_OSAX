@@ -99,4 +99,27 @@ struct FormulaTests {
 		#expect(try result.result.flatMap { try Matrix($0) }?.rows == 1000)
 		#expect(Date().timeIntervalSince(start) < 5)
 	}
+
+	/// Parentheses, unary operators and calls nest at most 512 levels (-50; 10,000 parentheses ran out of stack), and
+	/// a long run of operators doesn't nest (a sum of 100,000 terms did).
+	@Test func deepAndLongFormulas() {
+		let depth = Formula.maximumNesting
+		#expect(number(String(repeating: "(", count: depth) + "1" + String(repeating: ")", count: depth)) == 1)
+		#expect(evaluate(String(repeating: "(", count: depth + 1) + "1" + String(repeating: ")", count: depth + 1)).error?.number == -50)
+		#expect(evaluate(String(repeating: "(", count: 10_000) + "1" + String(repeating: ")", count: 10_000)).error?.number == -50)
+		#expect(number(String(repeating: "!", count: depth - 1) + "0") == 1)
+		#expect(evaluate(String(repeating: "!", count: 100_000) + "1").error?.number == -50)
+		#expect(evaluate(String(repeating: "sqrt(", count: 1000) + "1" + String(repeating: ")", count: 1000)).error?.number == -50)
+		#expect(number("1" + String(repeating: "+1", count: 200_000)) == 200_001)
+		#expect(number("2" + String(repeating: "^1", count: 200_000)) == 2)
+		#expect(number("10-1-2-3") == 4)
+		#expect(number("64/4/2") == 8)
+		#expect(number("-2^2^3+1") == -63)
+	}
+
+	/// A variable nested more than 512 lists deep is -50.
+	@Test func deeplyNestedVariables() {
+		#expect(evaluate("sum(x)", ["x", AppleEventList([2, nested(NSAppleEventDescriptor.maximumNesting + 1)])]).error?.number == -50)
+		#expect(number("sum(x)", ["x", AppleEventList([2, nested(10)])]) == 3)
+	}
 }

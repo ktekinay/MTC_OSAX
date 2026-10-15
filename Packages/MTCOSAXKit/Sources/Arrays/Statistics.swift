@@ -10,13 +10,21 @@ enum Statistics {
 		[
 			CommandDefinition("runningsum", code: "SATIRSum") { request in
 				let descriptor = try request.requiredDirectParameter(as: AnyDescriptor.self).descriptor
-				var values = try Values.numbers(descriptor)
 				// A matrix's numbers are summed column by column, as recorded (the dictionary doesn't say).
-				if let matrix = try Matrix(descriptor) {
-					values = (0 ..< matrix.columns).flatMap { column in (0 ..< matrix.rows).map { matrix.values[$0 * matrix.columns + column] } }
+				let matrix = try Matrix(descriptor)
+				let values = try matrix?.values ?? Values.numbers(descriptor)
+				let (columns, rows) = matrix.map { ($0.columns, $0.rows) } ?? (1, values.count)
+				// A loop, not `map` with a closure adding to a captured sum, which took 30 times as long.
+				return try ArrayOfReal.descriptor(count: values.count) { buffer in
+					var sum = 0.0, index = 0
+					for column in 0 ..< columns {
+						for row in 0 ..< rows {
+							sum += values[row * columns + column]
+							buffer[index] = sum
+							index += 1
+						}
+					}
 				}
-				var sum = 0.0
-				return try Values.array(values.map { sum += $0; return sum })
 			},
 			CommandDefinition("statlist", code: "SATIStat", handler: statList),
 			CommandDefinition("histogram", code: "SATIHisT", handler: histogram),
@@ -99,9 +107,36 @@ enum Statistics {
 
 	/// The item at half the count (of every item, missing ones too) once they're sorted, NaN last: the upper median
 	/// of an even count. With missing values it can be NaN, as recorded (`{1, missing value, 3, missing value}`).
+	/// Found by selection (Hoare's), not by sorting them all, which took six times as long.
 	static func upperMedian(_ values: [Double]) -> Double {
-		let sorted = values.sorted { a, b in b.isNaN ? !a.isNaN : a < b }
-		return sorted[sorted.count / 2]
+		var numbers = values.filter { !$0.isNaN }
+		let k = values.count / 2
+		guard k < numbers.count else {
+			return .nan
+		}
+		var low = 0, high = numbers.count - 1
+		while low < high {
+			let pivot = numbers[(low + high) / 2]
+			var i = low, j = high
+			while i <= j {
+				while numbers[i] < pivot { i += 1 }
+				while numbers[j] > pivot { j -= 1 }
+				if i <= j {
+					numbers.swapAt(i, j)
+					i += 1
+					j -= 1
+				}
+			}
+			// The k-th is in the part below the pivot, the part above it, or between them (equal to the pivot).
+			if k <= j {
+				high = j
+			} else if k >= i {
+				low = i
+			} else {
+				break
+			}
+		}
+		return numbers[k]
 	}
 
 	// MARK: histogram
@@ -136,11 +171,26 @@ enum Statistics {
 			if value == high {
 				counts[samples - 1] += 1
 			} else if value >= low, value < high {
-				counts[min(samples - 1, Int((value - low) / width))] += 1
+				counts[interval(of: value, low: low, high: high, width: width, samples: samples)] += 1
 			}
 		}
-		let centers = (0 ..< samples).map { low + (Double($0) + 0.5) * width }
+		let centers = (0 ..< samples).map { index in
+			let fraction = (Double(index) + 0.5) / Double(samples)
+			return width.isFinite ? low + (Double(index) + 0.5) * width : Arrays.interpolate(low, high, fraction)
+		}
 		return [try Values.array(centers), try Values.array(counts)].appleEventDescriptor
+	}
+
+	/// The interval a number from `low` up to (not including) `high` falls in. A range wider than a real can hold
+	/// (an infinite width) put every number in the first interval or gave NaN, and one so narrow its width is 0 gave
+	/// 0/0: converting NaN to an integer crashed. Those are worked out from halves of the numbers, and if that fails
+	/// too (a range below the smallest real), the number is in the first interval.
+	static func interval(of value: Double, low: Double, high: Double, width: Double, samples: Int) -> Int {
+		var position = width.isFinite && width > 0 ? (value - low) / width : .nan
+		if !position.isFinite {
+			position = (value / 2 - low / 2) / (high / 2 - low / 2) * Double(samples)
+		}
+		return position.isFinite ? min(samples - 1, max(0, Int(position))) : 0
 	}
 
 	// MARK: resamplematrix

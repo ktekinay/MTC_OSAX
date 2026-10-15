@@ -141,13 +141,17 @@ enum RootFinder {
 		var imaginary: Double
 	}
 
-	/// The roots of a polynomial (coefficients, constant term first, the last not zero); nil if QR doesn't converge.
+	/// The roots of a polynomial (coefficients, constant term first, the last not zero); nil if QR doesn't converge,
+	/// or if a coefficient divided by the last one isn't finite (balancing an infinity never ended).
 	static func roots(_ coefficients: [Double]) -> [Root]? {
 		let n = coefficients.count - 1
 		// 1-based, as in EISPACK: row 1 is -aₙ₋ₖ/aₙ, with ones below the diagonal.
 		var a = [[Double]](repeating: [Double](repeating: 0, count: n + 1), count: n + 1)
 		for k in 1 ... n {
 			a[1][k] = -coefficients[n - k] / coefficients[n]
+			guard a[1][k].isFinite else {
+				return nil
+			}
 			if k != n {
 				a[k + 1][k] = 1
 			}

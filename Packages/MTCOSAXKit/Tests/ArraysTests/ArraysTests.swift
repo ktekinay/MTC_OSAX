@@ -18,6 +18,17 @@ func values(_ reply: AppleEventReply) -> [Double]? {
 	reply.result.flatMap(ArrayOfReal.values(of:))
 }
 
+/// The number 1 in `levels` lists, each the only item of the one around it.
+func nested(_ levels: Int) -> NSAppleEventDescriptor {
+	var deep = NSAppleEventDescriptor(int32: 1)
+	for _ in 0 ..< levels {
+		let list = NSAppleEventDescriptor.list()
+		list.insert(deep, at: 1)
+		deep = list
+	}
+	return deep
+}
+
 @MainActor
 struct CreateArrayTests {
 	/// The size from a list's first item was found recursively; now it's found however deep.

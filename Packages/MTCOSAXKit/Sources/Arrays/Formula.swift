@@ -40,13 +40,20 @@ enum Formula {
 		}
 	}
 
+	/// A formula's tree. Operators of one precedence in a row (`1+2-3+…`, `2^3^2`) are one `chain`, applied left to
+	/// right, so a long sum doesn't nest (as a tree of pairs, 100,000 terms ran out of stack); only parentheses,
+	/// unary operators and calls nest, at most `maximumNesting` levels.
 	indirect enum Node {
 		case number(Double)
 		case variable(String)
 		case unary(UInt8, Node)
-		case binary(Operator, Node, Node)
+		case chain(Node, [(Operator, Node)])
 		case call(Function, [Node])
 	}
+
+	/// How deeply parentheses, unary operators and calls may nest (-50 deeper): 10,000 parentheses ran out of stack.
+	static let maximumNesting = NSAppleEventDescriptor.maximumNesting
+	static let nestedTooDeep = OSAXError(-50, "The formula is nested more than \(maximumNesting) levels deep.")
 
 	struct Statement {
 		var target: String?
@@ -159,6 +166,7 @@ enum Formula {
 	struct Parser {
 		var tokens: [Token]
 		var position = 0
+		var depth = 0
 
 		var current: Token { tokens[position] }
 
@@ -191,31 +199,43 @@ enum Formula {
 			guard level < Operator.levels.count else {
 				return try operand(unary: unary)
 			}
-			var left = try expression(level: level + 1, unary: unary)
+			let first = try expression(level: level + 1, unary: unary)
+			var rest: [(Operator, Node)] = []
 			while case let .symbol(symbol) = current, let op = Operator(rawValue: symbol), Operator.levels[level].contains(op) {
 				position += 1
-				left = .binary(op, left, try expression(level: level + 1, unary: false))
+				rest.append((op, try expression(level: level + 1, unary: false)))
 			}
-			return left
+			return rest.isEmpty ? first : .chain(first, rest)
+		}
+
+		/// `body` one level deeper; -50 past `maximumNesting`.
+		mutating func nested<T>(_ body: (inout Parser) throws -> T) throws -> T {
+			guard depth < Formula.maximumNesting else {
+				throw Formula.nestedTooDeep
+			}
+			depth += 1
+			defer { depth -= 1 }
+			return try body(&self)
+		}
+
+		/// `node` with any `^` after it, left to right.
+		mutating func powers(of node: Node) throws -> Node {
+			var exponents: [(Operator, Node)] = []
+			while case let .symbol(next) = current, next == "^" {
+				position += 1
+				exponents.append((.power, try primary()))
+			}
+			return exponents.isEmpty ? node : .chain(node, exponents)
 		}
 
 		/// A value, with the unary operators before it (where they're allowed) applying to it and any `^` after it.
 		mutating func operand(unary: Bool) throws -> Node {
 			if unary, case let .symbol(symbol) = current, ["-", "+", "!"].contains(symbol) {
 				position += 1
-				var node = try operand(unary: true)
-				while case let .symbol(next) = current, next == "^" {
-					position += 1
-					node = .binary(.power, node, try primary())
-				}
-				return .unary(symbol.utf8.first!, node)
+				let node = try nested { try $0.operand(unary: true) }
+				return .unary(symbol.utf8.first!, try powers(of: node))
 			}
-			var node = try primary()
-			while case let .symbol(next) = current, next == "^" {
-				position += 1
-				node = .binary(.power, node, try primary())
-			}
-			return node
+			return try powers(of: primary())
 		}
 
 		mutating func primary() throws -> Node {
@@ -235,7 +255,7 @@ enum Formula {
 				var arguments: [Node] = []
 				if current != .symbol(")") {
 					while true {
-						arguments.append(try expression(level: 0, unary: true))
+						arguments.append(try nested { try $0.expression(level: 0, unary: true) })
 						guard current == .symbol(",") else { break }
 						position += 1
 					}
@@ -250,7 +270,7 @@ enum Formula {
 				return .call(function, arguments)
 			case .symbol("("):
 				position += 1
-				let node = try expression(level: 0, unary: true)
+				let node = try nested { try $0.expression(level: 0, unary: true) }
 				guard current == .symbol(")") else {
 					throw Failure(number: current == .end || current == .separator ? 2 : 16)
 				}
@@ -303,8 +323,12 @@ enum Formula {
 				case UInt8(ascii: "!"): return Formula.map(value) { $0 == 0 ? 1 : 0 }
 				default: return value
 				}
-			case let .binary(op, left, right):
-				return try Formula.combine(value(left), value(right)) { op($0, $1) }
+			case let .chain(first, rest):
+				var result = try value(first)
+				for (op, node) in rest {
+					result = try Formula.combine(result, value(node)) { op($0, $1) }
+				}
+				return result
 			case let .call(function, arguments):
 				return try function.evaluate(arguments.map(value))
 			}

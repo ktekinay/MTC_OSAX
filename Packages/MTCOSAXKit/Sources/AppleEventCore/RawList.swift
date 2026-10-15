@@ -64,6 +64,35 @@ package struct RawList {
 		}
 	}
 
+	/// An item seen by `forEachItem`: its type and size, and for a number or a type (eight bytes or fewer) its data.
+	package struct Item {
+		package var index: Int
+		package var type: DescType
+		package var size: Int
+		/// The data of a `shor`, `long`, `comp`, `sing`, `doub` or `type` item, little-endian from the low byte; 0
+		/// for other items, whose data isn't read (a list's would be copied whole).
+		package var bits: UInt64
+	}
+
+	private static let scalarTypes: Set<DescType> = [typeSInt16, typeSInt32, typeSInt64, typeIEEE32BitFloatingPoint, typeIEEE64BitFloatingPoint, typeType]
+
+	/// Each item in order, with one look at the list: reading 1,000,000 reals through `info` and `value` took 127 ms,
+	/// and this takes about 93. (One `AEGetNthPtr` of any type for each item would be quicker, but for an item that
+	/// is a list it copies the whole list: 50 ms for one of 100,000.)
+	package func forEachItem(_ body: (Item) throws -> Void) rethrows {
+		try withList { list in
+			var keyword: AEKeyword = 0, actualType: DescType = 0, actualSize = 0
+			for index in 0 ..< count {
+				var item = Item(index: index, type: 0, size: 0, bits: 0)
+				AESizeOfNthItem(list, index + 1, &item.type, &item.size)
+				if item.size <= 8, Self.scalarTypes.contains(item.type) {
+					AEGetNthPtr(list, index + 1, item.type, &keyword, &actualType, &item.bits, 8, &actualSize)
+				}
+				try body(item)
+			}
+		}
+	}
+
 	/// An item as a descriptor, for the kinds read no other way.
 	package func descriptor(_ index: Int) -> NSAppleEventDescriptor {
 		list.atIndex(index + 1)!

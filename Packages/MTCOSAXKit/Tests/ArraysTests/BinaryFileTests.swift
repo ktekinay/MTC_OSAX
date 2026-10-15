@@ -75,4 +75,29 @@ struct BinaryFileTests {
 		#expect(values(send("SATIRdBF", ["----": url, "rtyp": type("long"), "for ": 3])) == [0, -1, 2])
 		try? FileManager.default.removeItem(at: folder)
 	}
+
+	/// Only regular files: a named pipe is -50 both ways (writing waited forever for something to read it), and a
+	/// folder is error 21.
+	@Test func onlyRegularFiles() {
+		let pipe = file("pipe")
+		#expect(mkfifo(pipe.path, 0o600) == 0)
+		#expect(send("SATIWrBF", ["----": pipe, "data": AppleEventList([1])]).error?.number == -50)
+		#expect(send("SATIRdBF", ["----": pipe, "rtyp": type("doub")]).error?.number == -50)
+		#expect(send("SATIRdBF", ["----": folder, "rtyp": type("doub")]).error?.number == 21)
+		#expect(send("SATIWrBF", ["----": folder, "data": AppleEventList([1])]).error?.number == 21)
+		try? FileManager.default.removeItem(at: folder)
+	}
+
+	/// Overlapping blocks read at most 100,000,000 numbers (a 20 KB file made 600 MB, and a file over 4 GB overflowed
+	/// and crashed).
+	@Test func overlappingBlocksAreLimited() {
+		let url = file("overlap.bin")
+		#expect(send("SATIWrBF", ["----": url, "data": ArrayOfReal(Array(repeating: 7, count: 30_000)), "rtyp": type("byte")]).error == nil)
+		#expect(send("SATIRdBF", ["----": url, "rtyp": type("byte"), "bloc": 20_000, "jump": 1]).error?.number == -50)
+		let overlapping = (30_000 - 100 + 1) * 100
+		#expect(values(send("SATIRdBF", ["----": url, "rtyp": type("byte"), "bloc": 100, "jump": 1]))?.count == overlapping)
+		#expect(values(send("SATIRdBF", ["----": url, "rtyp": type("byte"), "skip": 29_998])) == [7, 7])
+		#expect(values(send("SATIRdBF", ["----": url, "rtyp": type("byte"), "skip": 30_000])) == [])
+		try? FileManager.default.removeItem(at: url)
+	}
 }

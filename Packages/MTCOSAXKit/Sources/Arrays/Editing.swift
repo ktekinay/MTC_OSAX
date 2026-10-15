@@ -9,6 +9,7 @@ import Numerics
 enum Editing {
 	static let invalidIndex = OSAXError(-1719)
 	static let pastTheEnd = OSAXError(2000)
+	static let matrixTooLarge = OSAXError(-50, "A matrix can have at most \(Arrays.grouped(Arrays.maximumSize)) items.")
 
 	@MainActor
 	static func commands() -> [CommandDefinition] {
@@ -49,10 +50,11 @@ enum Editing {
 			let columns = try axis(request, "ncol", isValues: kind == "x")
 			let rows = try axis(request, "nrow", isValues: kind == "y")
 			guard columns.count * rows.count <= Arrays.maximumSize else {
-				throw OSAXError(-50, "An array can have at most 100,000,000 items.")
+				throw Arrays.tooLarge
 			}
 			var values = [Double](repeating: 1, count: columns.count * rows.count)
 			if kind != "1" {
+				let (columns, rows) = (columns.values, rows.values)
 				for row in 0 ..< rows.count {
 					for column in 0 ..< columns.count {
 						values[row * columns.count + column] = kind == "x" ? columns[column] : rows[row]
@@ -66,25 +68,45 @@ enum Editing {
 		return asMatrix ? try matrix.descriptor() : try Values.array(matrix.values)
 	}
 
-	/// A dimension's values: the numbers given (for "x"'s `ncols` or "y"'s `nrows`), or a size, as 0, 1, 2, …
-	/// or spread over `range`. A size below 1 is -1700, as recorded.
-	private static func axis(_ request: AppleEventRequest, _ keyword: String, isValues: Bool) throws -> [Double] {
+	/// A dimension's values: the numbers given, or `count` of them from `low`, `step` apart, made only once they're
+	/// needed (so that two axes too large together are refused before either is made).
+	private enum Axis {
+		case values([Double])
+		case spread(count: Int, low: Double, step: Double)
+
+		var count: Int {
+			switch self {
+			case let .values(values): values.count
+			case let .spread(count, _, _): count
+			}
+		}
+
+		var values: [Double] {
+			switch self {
+			case let .values(values): values
+			case let .spread(count, low, step): (0 ..< count).map { low + Double($0) * step }
+			}
+		}
+	}
+
+	/// The numbers given (for "x"'s `ncols` or "y"'s `nrows`), or a size, as 0, 1, 2, … or spread over `range`. A
+	/// size below 1 is -1700, as recorded.
+	private static func axis(_ request: AppleEventRequest, _ keyword: String, isValues: Bool) throws -> Axis {
 		guard let descriptor = request.descriptor(for: keyword) else {
 			throw OSAXError.missingParameter
 		}
 		if isValues, Values.isSeveral(descriptor) {
-			return try Values.numbers(descriptor)
+			return .values(try Values.numbers(descriptor))
 		}
 		let count = try Values.integer(descriptor)
 		guard count >= 1 else {
 			throw OSAXError.coercionFailed
 		}
 		guard count <= Arrays.maximumSize else {
-			throw OSAXError(-50, "An array can have at most 100,000,000 items.")
+			throw Arrays.tooLarge
 		}
 		let (low, high) = try Arrays.range(request) ?? (0, Double(count - 1))
-		let step = count > 1 ? (high - low) / Double(count - 1) : 0
-		return (0 ..< count).map { low + Double($0) * step }
+		return .spread(count: count, low: low, step: count > 1 ? (high - low) / Double(count - 1) : 0)
 	}
 
 	/// "d": the `diagonal` numbers (a list or array makes the size), or one number (default 1) on the diagonal of
@@ -94,6 +116,9 @@ enum Editing {
 		var diagonal: [Double]
 		if let given, Values.isSeveral(given) {
 			diagonal = try Values.numbers(given)
+			guard diagonal.count <= Arrays.maximumSide else {
+				throw matrixTooLarge
+			}
 		} else {
 			let value = try given.map(Values.number) ?? 1
 			let columns = try request.descriptor(for: "ncol").map(Values.integer)
@@ -104,8 +129,8 @@ enum Editing {
 			guard size >= 1 else {
 				throw OSAXError.coercionFailed
 			}
-			guard size <= 10000 else {
-				throw OSAXError(-50, "A matrix can have at most 100,000,000 items.")
+			guard size <= Arrays.maximumSide else {
+				throw matrixTooLarge
 			}
 			diagonal = Array(repeating: value, count: size)
 		}
@@ -132,31 +157,25 @@ enum Editing {
 				return values[position]
 			}
 		} else {
-			let blocksize = try request.descriptor(for: "bloc").map(Values.integer) ?? 1
-			let step = try request.descriptor(for: "step").map(Values.integer) ?? blocksize
-			let at = try request.descriptor(for: "at  ").map(Values.integer) ?? 1
-			let start = at < 0 ? values.count + at : at - 1
-			var blocks = try request.descriptor(for: "for ").map(Values.integer) ?? 1
-			if blocks < 0 {
+			let blocks = try Blocks(request, count: values.count)
+			var count = try request.descriptor(for: "for ").map(Values.integer) ?? 1
+			if count < 0 {
 				// As many blocks as fit; none is error 2000, as recorded.
-				blocks = step > 0 ? (values.count - start - blocksize) / step + 1 : 1
-				guard blocks > 0, values.count - start - blocksize >= 0 else {
+				count = blocks.step > 0 ? (values.count - blocks.start - blocks.size) / blocks.step + 1 : 1
+				guard count > 0, values.count - blocks.start - blocks.size >= 0 else {
 					throw pastTheEnd
 				}
 			}
-			guard (0 ..< values.count).contains(start) || blocks == 0 else {
+			guard blocks.contains(start: values.count) || count == 0, blocks.isValid else {
 				throw invalidIndex
 			}
-			guard blocksize >= 1, step >= blocksize else {
-				throw invalidIndex
-			}
-			guard blocks == 0 || start + (blocks - 1) * step + blocksize <= values.count else {
+			guard blocks.fit(count, in: values.count) else {
 				throw pastTheEnd
 			}
 			var result: [Double] = []
-			result.reserveCapacity(max(0, blocks) * blocksize)
-			for block in 0 ..< max(0, blocks) {
-				result += values[start + block * step ..< start + block * step + blocksize]
+			result.reserveCapacity(count * blocks.size)
+			for block in 0 ..< count {
+				result += values[blocks.range(block)]
 			}
 			picked = result
 		}
@@ -164,7 +183,7 @@ enum Editing {
 			return NSAppleEventDescriptor.list()
 		}
 		switch request.descriptor(for: "rtyp")?.typeCodeValue.fourCharString {
-		case "LiDo": return Values.listOfReals(picked)
+		case "LiDo": return try Values.listOfReals(picked)
 		case "LiIn": return try listOfIntegers(picked)
 		case "doub", "sing": return picked[0].isNaN ? .missingValue : NSAppleEventDescriptor(double: picked[0])
 		case "long": return try listOfIntegers([picked[0]]).atIndex(1)!
@@ -188,16 +207,19 @@ enum Editing {
 	/// Integers rounded half to even (as AppleScript's `as integer`); NaN is `missing value`. SatimageOSAX wrapped
 	/// numbers beyond 32 bits (1.0E+10 became 1410065408); that's -1700, as `as integer` is in AppleScript.
 	private static func listOfIntegers(_ values: [Double]) throws -> NSAppleEventDescriptor {
-		try values.map { value -> NSAppleEventDescriptor in
+		let list = try ListBuilder()
+		for value in values {
 			guard !value.isNaN else {
-				return .missingValue
+				try list.appendMissingValue()
+				continue
 			}
 			let rounded = value.rounded(.toNearestOrEven)
 			guard rounded >= Double(Int32.min), rounded <= Double(Int32.max) else {
 				throw OSAXError.coercionFailed
 			}
-			return NSAppleEventDescriptor(int32: Int32(rounded))
-		}.appleEventDescriptor
+			try list.append(Int32(rounded))
+		}
+		return list.descriptor()
 	}
 
 	// MARK: changearray
@@ -221,23 +243,56 @@ enum Editing {
 			}
 			return try Values.array(values)
 		}
-		let blocksize = try request.descriptor(for: "bloc").map(Values.integer) ?? 1
-		let step = try request.descriptor(for: "step").map(Values.integer) ?? blocksize
-		let at = try request.descriptor(for: "at  ").map(Values.integer) ?? 1
-		let start = at < 0 ? values.count + at : at - 1
-		guard blocksize >= 1, step >= blocksize, into.count % blocksize == 0, (0 ..< values.count).contains(start) else {
+		let blocks = try Blocks(request, count: values.count)
+		guard blocks.isValid, into.count % blocks.size == 0, blocks.contains(start: values.count) else {
 			throw invalidIndex
 		}
-		let blocks = into.count / blocksize
-		guard blocks == 0 || start + (blocks - 1) * step + blocksize <= values.count else {
+		let count = into.count / blocks.size
+		guard blocks.fit(count, in: values.count) else {
 			throw invalidIndex
 		}
-		for block in 0 ..< blocks {
-			for offset in 0 ..< blocksize {
-				values[start + block * step + offset] = into[block * blocksize + offset]
+		// Item by item: assigning a slice for each block took twice as long for blocks of one.
+		for block in 0 ..< count {
+			let start = blocks.range(block).lowerBound
+			for offset in 0 ..< blocks.size {
+				values[start + offset] = into[block * blocks.size + offset]
 			}
 		}
 		return try Values.array(values)
+	}
+
+	/// `blocksize` (default 1), `step` (default `blocksize`) and `at` (default 1, negative from the end), as
+	/// `extractarray` and `changearray` read them, for an array of `count` items.
+	private struct Blocks {
+		var size: Int
+		var step: Int
+		var start: Int
+
+		init(_ request: AppleEventRequest, count: Int) throws {
+			size = try request.descriptor(for: "bloc").map(Values.integer) ?? 1
+			step = try request.descriptor(for: "step").map(Values.integer) ?? size
+			let at = try request.descriptor(for: "at  ").map(Values.integer) ?? 1
+			start = at < 0 ? count + at : at - 1
+		}
+
+		/// At least one item long, and not overlapping.
+		var isValid: Bool {
+			size >= 1 && step >= size
+		}
+
+		/// Whether the first block starts inside `count` items.
+		func contains(start count: Int) -> Bool {
+			(0 ..< count).contains(start)
+		}
+
+		/// Whether `blocks` of them end inside `count` items.
+		func fit(_ blocks: Int, in count: Int) -> Bool {
+			blocks == 0 || start + (blocks - 1) * step + size <= count
+		}
+
+		func range(_ block: Int) -> Range<Int> {
+			start + block * step ..< start + block * step + size
+		}
 	}
 
 	// MARK: insertarray
@@ -334,7 +389,7 @@ enum Editing {
 			let rows = (0 ..< matrix.rows).filter { mask[$0] }
 			return try Matrix(columns: matrix.columns, rows: rows.count, values: rows.flatMap { matrix.row($0) }).descriptor()
 		}
-		if let list = RawList(descriptor), list.count > 0, (0 ..< list.count).allSatisfy({ Values.isSeveral(list.descriptor($0)) }) {
+		if let list = RawList(descriptor), list.count > 0, (0 ..< list.count).allSatisfy({ Values.severalTypes.contains(list.info($0).type) }) {
 			return try (0 ..< list.count).map { try Values.array(masked(Values.numbers(list.descriptor($0)))) }.appleEventDescriptor
 		}
 		return try Values.array(masked(Values.numbers(descriptor)))
@@ -344,7 +399,7 @@ enum Editing {
 
 	/// `missing value` and NaN replaced by `value`, or removed when it's nil. Arrays stay arrays; lists stay lists,
 	/// their other items as they were (a list of arrays has each done).
-	static func replacingMissing(_ descriptor: NSAppleEventDescriptor, with value: Double?) throws -> NSAppleEventDescriptor {
+	static func replacingMissing(_ descriptor: NSAppleEventDescriptor, with value: Double?, depth: Int = 0) throws -> NSAppleEventDescriptor {
 		if let values = ArrayOfReal.values(of: descriptor) {
 			let result = value.map { value in values.map { $0.isNaN ? value : $0 } } ?? values.filter { !$0.isNaN }
 			return try Values.array(result)
@@ -353,30 +408,26 @@ enum Editing {
 			return try Matrix(columns: matrix.columns, rows: matrix.rows, values: matrix.values.map { $0.isNaN ? value : $0 }).descriptor()
 		}
 		guard let list = RawList(descriptor) else {
-			if descriptor.isMissing || (descriptor.descriptorType == typeIEEE64BitFloatingPoint && descriptor.doubleValue.isNaN) {
+			if Values.isMissingValue(descriptor) || (descriptor.descriptorType == typeIEEE64BitFloatingPoint && descriptor.doubleValue.isNaN) {
 				return value.map(NSAppleEventDescriptor.init(double:)) ?? NSAppleEventDescriptor.list()
 			}
 			return descriptor
 		}
-		var items: [NSAppleEventDescriptor] = []
-		for index in 0 ..< list.count {
-			let item = list.descriptor(index)
-			if item.isMissing || (item.descriptorType == typeIEEE64BitFloatingPoint && item.doubleValue.isNaN) {
+		try Values.checkNesting(depth)
+		let result = try ListBuilder()
+		try list.forEachItem { item in
+			if item.type == typeIEEE64BitFloatingPoint, !Double(bitPattern: item.bits).isNaN {
+				try result.append(Double(bitPattern: item.bits))
+			} else if Values.isMissingValue(item) || item.type == typeIEEE64BitFloatingPoint {
 				if let value {
-					items.append(NSAppleEventDescriptor(double: value))
+					try result.append(value)
 				}
-			} else if Values.isSeveral(item) {
-				items.append(try replacingMissing(item, with: value))
+			} else if Values.severalTypes.contains(item.type) {
+				try result.append(replacingMissing(list.descriptor(item.index), with: value, depth: depth + 1))
 			} else {
-				items.append(item)
+				try result.append(list.descriptor(item.index))
 			}
 		}
-		return items.appleEventDescriptor
-	}
-}
-
-private extension NSAppleEventDescriptor {
-	var isMissing: Bool {
-		descriptorType == typeType && typeCodeValue == Values.missingValue
+		return result.descriptor()
 	}
 }

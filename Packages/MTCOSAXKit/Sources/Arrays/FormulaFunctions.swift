@@ -169,11 +169,12 @@ extension Formula {
 		}
 		var variables: [String: Value] = [:]
 		for (name, descriptor) in pairs {
-			if let matrix = try Matrix(descriptor) {
+			let matrix = try Matrix(descriptor)
+			if let matrix {
 				shape = shape ?? matrix
 			}
 			// An empty list leaves the variable undefined, as recorded (error 7 where it's used).
-			if let value = try value(descriptor), value.count > 0 || value.isNumber {
+			if let value = try matrix.map({ several($0.values) }) ?? value(descriptor), value.count > 0 || value.isNumber {
 				variables[name.lowercased()] = value
 			}
 		}
@@ -185,10 +186,9 @@ extension Formula {
 	/// a number, as recorded (`IncEllipticF(x,k)` with `{x:{0.5}, k:{0.5}}` is a real).
 	private static func value(_ descriptor: NSAppleEventDescriptor) throws -> Value? {
 		if Values.isSeveral(descriptor) {
-			let values = try lenientNumbers(descriptor)
-			return values.count == 1 ? .number(values[0]) : .array(values)
+			return several(try lenientNumbers(descriptor, depth: 0))
 		}
-		if descriptor.descriptorType == typeType, descriptor.typeCodeValue == Values.missingValue {
+		if Values.isMissingValue(descriptor) {
 			return .number(.nan)
 		}
 		if descriptor.isText {
@@ -197,18 +197,26 @@ extension Formula {
 		return .number(try Numbers.number(descriptor))
 	}
 
+	/// Several numbers, but one as a number.
+	private static func several(_ values: [Double]) -> Value {
+		values.count == 1 ? .number(values[0]) : .array(values)
+	}
+
 	/// The numbers in a list, NaN for an item that isn't one.
-	private static func lenientNumbers(_ descriptor: NSAppleEventDescriptor) throws -> [Double] {
-		guard let list = RawList(descriptor), ArrayOfReal.values(of: descriptor) == nil else {
+	private static func lenientNumbers(_ descriptor: NSAppleEventDescriptor, depth: Int) throws -> [Double] {
+		guard let list = RawList(descriptor) else {
 			return try Values.numbers(descriptor)
 		}
+		try Values.checkNesting(depth)
 		var result: [Double] = []
-		for index in 0 ..< list.count {
-			let item = list.descriptor(index)
-			if Values.isSeveral(item) {
-				result += try lenientNumbers(item)
+		result.reserveCapacity(list.count)
+		try list.forEachItem { item in
+			if let number = Values.number(item) {
+				result.append(number)
+			} else if Values.severalTypes.contains(item.type) {
+				result += try lenientNumbers(list.descriptor(item.index), depth: depth + 1)
 			} else {
-				result.append((try? Values.number(item)) ?? .nan)
+				result.append((try? Values.number(list.descriptor(item.index))) ?? .nan)
 			}
 		}
 		return result
