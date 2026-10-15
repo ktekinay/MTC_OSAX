@@ -711,6 +711,7 @@ MTC_OSAX_FIXES = {
     "evalformula-probe-021": "Satimage's int(f,x) computed the integral of x by f, not of f by x as its dictionary says",
     "evalformula-probe-022": "Satimage's int(f,x) computed the integral of x by f, not of f by x as its dictionary says",
     "evalformula-probe-107": "Satimage gave a syntax error (16) for a // comment with a space in it",
+    "fitpolynomial-arrays": "Satimage's fit error for an exact fit was 3.8e-8 (its computation lost precision), not about 1e-15",
 }
 assert MTC_OSAX_FIXES.keys() <= names
 os.makedirs("../ArraysFixes", exist_ok=True)

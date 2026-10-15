@@ -1,0 +1,97 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CoPo",
+        "fields" : [
+          {
+            "key" : "with",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 2,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : -2,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 3,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 21,
+              "type" : "doub"
+            },
+            {
+              "real" : 34,
+              "type" : "doub"
+            },
+            {
+              "real" : 52,
+              "type" : "doub"
+            },
+            {
+              "real" : 39,
+              "type" : "doub"
+            },
+            {
+              "real" : 27,
+              "type" : "doub"
+            },
+            {
+              "real" : 9,
+              "type" : "doub"
+            },
+            {
+              "real" : 3,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Poly"
+        }
+      }
+    }
+  ],
+  "name" : "composepolynomial-cubic",
+  "recordedAt" : "2026-10-15T13:37:37Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "composepolynomial {1, -2, 0, 3} with {2, 1, 1}",
+  "timeZone" : "America/New_York"
+}

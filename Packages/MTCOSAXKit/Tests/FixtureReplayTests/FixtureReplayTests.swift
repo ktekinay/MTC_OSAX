@@ -21,6 +21,10 @@ enum Fixtures {
 	/// (`lgamma` near 2 is a few units of 1 away, hundreds of units of the tiny result).
 	static let absoluteTolerances = ["Arrays": 16 * Double.ulpOfOne, "ArraysFixes": 16 * Double.ulpOfOne]
 
+	/// Least-squares fits, whose last digits depend on the method (SatimageOSAX's coefficients for an exact
+	/// interpolation came out 1e-14 from 1): within 1e-12 of the recorded ones.
+	static let fixtureAbsoluteTolerances = ["Arrays/fitpolynomial-": 1e-12, "Arrays/fitrational-": 1e-12, "ArraysFixes/fitpolynomial-": 1e-12]
+
 	/// Paths relative to the Fixtures folder, e.g. "Diagnostics/ping.json". `cases*.json` files are inputs, not fixtures.
 	static func paths(in folder: String? = nil) -> [String] {
 		let root = folder.map { directory.appendingPathComponent($0) } ?? directory
@@ -67,7 +71,8 @@ enum Fixtures {
 		}
 		return fixture.replay(
 			using: dispatcher, variables: ["FILES": files.path, "TMP": temporary.path],
-			realTolerance: realTolerances[folder] ?? 0, absoluteTolerance: absoluteTolerances[folder] ?? 0
+			realTolerance: realTolerances[folder] ?? 0,
+			absoluteTolerance: fixtureAbsoluteTolerances.first { path.hasPrefix($0.key) }?.value ?? absoluteTolerances[folder] ?? 0
 		)
 	}
 }

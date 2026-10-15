@@ -1,0 +1,33 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Root",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 5,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -50
+      }
+    }
+  ],
+  "name" : "roots-constant",
+  "recordedAt" : "2026-10-15T13:37:37Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "roots of {5}",
+  "timeZone" : "America/New_York"
+}

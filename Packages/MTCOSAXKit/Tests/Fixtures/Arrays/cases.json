@@ -2498,10 +2498,6 @@
   "script": "fitpolynomial {(randomarray 30 range {0, 5} seed 5), (randomarray 30 range {-1, 1} seed 6)} degree 3 number formatting \"%.6g\""
  },
  {
-  "name": "fitpolynomial-arrays",
-  "script": "fitpolynomial {createarray 5, createarray 5 range {1, 9}} degree 1"
- },
- {
   "name": "fitpolynomial-constraint",
   "script": "fitpolynomial {(randomarray 30 range {0, 5} seed 5), (randomarray 30 range {-1, 1} seed 6)} degree 2 constraints {{1, 0, 0, 0}}"
  },

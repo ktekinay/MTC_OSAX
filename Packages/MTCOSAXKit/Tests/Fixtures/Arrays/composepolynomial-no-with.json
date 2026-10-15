@@ -1,0 +1,37 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CoPo",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 2,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1701
+      }
+    }
+  ],
+  "name" : "composepolynomial-no-with",
+  "recordedAt" : "2026-10-15T13:37:38Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "composepolynomial {1, 2}",
+  "timeZone" : "America/New_York"
+}

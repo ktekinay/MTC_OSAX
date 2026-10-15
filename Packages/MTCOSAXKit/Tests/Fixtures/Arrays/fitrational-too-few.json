@@ -1,0 +1,122 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RatF",
+        "fields" : [
+          {
+            "key" : "nume",
+            "value" : {
+              "integer" : 2,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "deno",
+            "value" : {
+              "integer" : 2,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "items" : [
+                    {
+                      "integer" : 0,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 1,
+                      "type" : "long"
+                    }
+                  ],
+                  "type" : "list"
+                },
+                {
+                  "items" : [
+                    {
+                      "integer" : 1,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 2,
+                      "type" : "long"
+                    }
+                  ],
+                  "type" : "list"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "Ferr",
+              "value" : {
+                "real" : 1.7763568394002505e-15,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "FRes",
+              "value" : {
+                "items" : [
+                  {
+                    "items" : [
+                      {
+                        "real" : 1,
+                        "type" : "doub"
+                      },
+                      {
+                        "real" : 0.09999999999999995,
+                        "type" : "doub"
+                      },
+                      {
+                        "real" : 0.0999999999999999,
+                        "type" : "doub"
+                      }
+                    ],
+                    "type" : "Poly"
+                  },
+                  {
+                    "items" : [
+                      {
+                        "real" : 1,
+                        "type" : "doub"
+                      },
+                      {
+                        "real" : -0.1999999999999998,
+                        "type" : "doub"
+                      },
+                      {
+                        "real" : -0.1999999999999998,
+                        "type" : "doub"
+                      }
+                    ],
+                    "type" : "Poly"
+                  }
+                ],
+                "type" : "list"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    }
+  ],
+  "name" : "fitrational-too-few",
+  "recordedAt" : "2026-10-15T13:37:39Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "fitrational {{0, 1}, {1, 2}} numerator 2 denominator 2",
+  "timeZone" : "America/New_York"
+}

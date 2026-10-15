@@ -1,0 +1,134 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RatF",
+        "fields" : [
+          {
+            "key" : "nume",
+            "value" : {
+              "integer" : 0,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "deno",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "items" : [
+                    {
+                      "integer" : 0,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 1,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 2,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 3,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 4,
+                      "type" : "long"
+                    }
+                  ],
+                  "type" : "list"
+                },
+                {
+                  "items" : [
+                    {
+                      "integer" : 1,
+                      "type" : "long"
+                    },
+                    {
+                      "real" : 0.5,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.333333333333,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.25,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.2,
+                      "type" : "doub"
+                    }
+                  ],
+                  "type" : "list"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "Ferr",
+              "value" : {
+                "real" : 1.978417429882029e-13,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "FRes",
+              "value" : {
+                "items" : [
+                  {
+                    "items" : [
+                      {
+                        "real" : 1.0000000000001978,
+                        "type" : "doub"
+                      }
+                    ],
+                    "type" : "Poly"
+                  },
+                  {
+                    "items" : [
+                      {
+                        "real" : 1,
+                        "type" : "doub"
+                      },
+                      {
+                        "real" : 1.000000000001174,
+                        "type" : "doub"
+                      }
+                    ],
+                    "type" : "Poly"
+                  }
+                ],
+                "type" : "list"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    }
+  ],
+  "name" : "fitrational-exact",
+  "recordedAt" : "2026-10-15T13:37:39Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "fitrational {{0, 1, 2, 3, 4}, {1, 0.5, 0.333333333333, 0.25, 0.2}} numerator 0 denominator 1",
+  "timeZone" : "America/New_York"
+}

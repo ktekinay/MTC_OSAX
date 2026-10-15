@@ -1,0 +1,119 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FiPo",
+        "fields" : [
+          {
+            "key" : "degr",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "Form",
+            "value" : {
+              "text" : "%.4f",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "items" : [
+                    {
+                      "integer" : 0,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 1,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 2,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 3,
+                      "type" : "long"
+                    }
+                  ],
+                  "type" : "list"
+                },
+                {
+                  "items" : [
+                    {
+                      "integer" : 1,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 3,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 7,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 13,
+                      "type" : "long"
+                    }
+                  ],
+                  "type" : "list"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "Ferr",
+              "value" : {
+                "real" : 0.9999999999999982,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "FRes",
+              "value" : {
+                "items" : [
+                  {
+                    "real" : 0,
+                    "type" : "doub"
+                  },
+                  {
+                    "real" : 4,
+                    "type" : "doub"
+                  }
+                ],
+                "type" : "list"
+              }
+            },
+            {
+              "key" : "FStr",
+              "value" : {
+                "text" : "4.0000*x",
+                "type" : "ut16"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    }
+  ],
+  "name" : "fitpolynomial-line",
+  "recordedAt" : "2026-10-15T13:37:38Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "fitpolynomial {{0, 1, 2, 3}, {1, 3, 7, 13}} degree 1 number formatting \"%.4f\"",
+  "timeZone" : "America/New_York"
+}
