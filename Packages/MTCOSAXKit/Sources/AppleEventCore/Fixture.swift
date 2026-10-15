@@ -44,13 +44,13 @@ public struct Fixture: Codable {
 			return copy
 		}
 
-		func matches(_ actual: Reply, realTolerance: Int = 0) -> Bool {
+		func matches(_ actual: Reply, realTolerance: Int = 0, absoluteTolerance: Double = 0) -> Bool {
 			guard errorNumber == actual.errorNumber, errorMessage == actual.errorMessage else {
 				return false
 			}
 			switch (result, actual.result) {
 			case (nil, nil): return true
-			case let (expected?, actual?): return expected.matches(actual, realTolerance: realTolerance)
+			case let (expected?, actual?): return expected.matches(actual, realTolerance: realTolerance, absoluteTolerance: absoluteTolerance)
 			default: return false
 			}
 		}
@@ -101,9 +101,9 @@ public struct Fixture: Codable {
 	/// `variables` gives this run's value for each variable the fixture was recorded with; recorded values
 	/// are replaced in the events and the expected replies. Returns a description of each difference;
 	/// empty means the dispatcher behaves as recorded. `realTolerance` lets reals differ by that many units in the
-	/// last place (math libraries differ slightly between Intel and Apple silicon).
+	/// last place (math libraries differ slightly between Intel and Apple silicon), or by `absoluteTolerance`.
 	@MainActor
-	public func replay(using dispatcher: CommandDispatcher, variables current: [String: String] = [:], realTolerance: Int = 0) -> [String] {
+	public func replay(using dispatcher: CommandDispatcher, variables current: [String: String] = [:], realTolerance: Int = 0, absoluteTolerance: Double = 0) -> [String] {
 		guard !exchanges.isEmpty else {
 			return ["\(name): fixture has no recorded events"]
 		}
@@ -144,7 +144,7 @@ public struct Fixture: Codable {
 			}
 			reply.result = reply.result?.replacingReferences(references)
 			let expected = reply.normalized
-			guard !expected.matches(actual, realTolerance: realTolerance) else {
+			guard !expected.matches(actual, realTolerance: realTolerance, absoluteTolerance: absoluteTolerance) else {
 				return nil
 			}
 			return """

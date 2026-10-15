@@ -588,6 +588,7 @@ MTC_OSAX_FIXES = {
     "filter-not-reduced": "Satimage put some border values in the wrong places (the identity filter changed the matrix)",
     "filter-not-reduced-blur": "Satimage put some border values in the wrong places",
     "filter-small": "Satimage gave -108 (out of memory) for a matrix too small to reduce; -50",
+    "evalformula-int": "Satimage's int(f,x) computed the integral of x by f, not of f by x as its dictionary says",
 }
 assert MTC_OSAX_FIXES.keys() <= names
 os.makedirs("../ArraysFixes", exist_ok=True)

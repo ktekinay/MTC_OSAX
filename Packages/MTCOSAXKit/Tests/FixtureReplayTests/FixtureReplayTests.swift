@@ -15,7 +15,11 @@ enum Fixtures {
 
 	/// Folders whose reals may differ from SatimageOSAX's by a few units in the last place: Intel's and Apple
 	/// silicon's math libraries differ slightly (up to 15 units for `lgamma` near its roots).
-	static let realTolerances = ["MathFunctions": 16, "MathFunctionsFixes": 16]
+	static let realTolerances = ["MathFunctions": 16, "MathFunctionsFixes": 16, "Arrays": 16, "ArraysFixes": 16]
+
+	/// Folders whose reals may also differ by that much in absolute terms: `evalformula`'s functions near a root
+	/// (`lgamma` near 2 is a few units of 1 away, hundreds of units of the tiny result).
+	static let absoluteTolerances = ["Arrays": 16 * Double.ulpOfOne, "ArraysFixes": 16 * Double.ulpOfOne]
 
 	/// Paths relative to the Fixtures folder, e.g. "Diagnostics/ping.json". `cases*.json` files are inputs, not fixtures.
 	static func paths(in folder: String? = nil) -> [String] {
@@ -61,7 +65,10 @@ enum Fixtures {
 		if FileManager.default.fileExists(atPath: input.path) {
 			try FileManager.default.copyItem(at: input, to: files)
 		}
-		return fixture.replay(using: dispatcher, variables: ["FILES": files.path, "TMP": temporary.path], realTolerance: realTolerances[folder] ?? 0)
+		return fixture.replay(
+			using: dispatcher, variables: ["FILES": files.path, "TMP": temporary.path],
+			realTolerance: realTolerances[folder] ?? 0, absoluteTolerance: absoluteTolerances[folder] ?? 0
+		)
 	}
 }
 
