@@ -11,7 +11,7 @@ Goal: implement the rest of Satimage's **Arrays** suite (in "May Do Later" in [P
 39 cases, one or two for each command, the hidden ones too (not kept; the fixtures come in step 2):
 
 - **Every command works but one.** `removemissingvalue {1, missing value, 2}` gives -1708; it gets implemented from the dictionary.
-- **Scripts read arrays with `extractarray … as list of real`**, which returns a list of reals (`as real` returns one number). `anArray as list of real` itself still can't work: coercions run in the script's own process (see the Math and Lists plan).
+- **Scripts convert arrays with `extractarray`:** `extractarray anArray for -1 as list of real` returns a list of reals (`as list of integer` rounds halves to even: 0.5 is 0, 1.5 is 2; `as real` returns one number), and `extractarray aList for -1` an array. `anArray as list of real` and `{1, 2, 3} as array of real` themselves can't work: coercions run in the script's own process (see the Math and Lists plan). The README says so under "Other differences", since the dictionary shows the coercions.
 - **Results keep the kind they're given:** `addlist` of lists returns a list, of an array an array, of a matrix a matrix (`{class:matrix, ncols, nrows, array of real}`, the numbers as an `array of real`). Lists of unequal length are -50 (the hidden `arrays auto filling`'s default, 0).
 - **`polynomial`** is stored as an `array of real` is ("Not a record", `buod`, little-endian doubles), with the type `Poly`: `composepolynomial` returns one, `pade approximant` a list of two.
 - **Missing values:** division by zero in a list gives `missing value` (NaN in an array); `replacemissingvalue` replaces both.

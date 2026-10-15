@@ -138,6 +138,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 - `chmod` of a symbolic link reads and changes the permissions of the item it points to, as the shell's `chmod` does.
 - In XPath, EXSLT's math, sets, strings and dates functions can also be called with the prefixes `mtc-exslt-math`, `mtc-exslt-sets`, `mtc-exslt-strings` and `mtc-exslt-dates`, which MTC_OSAX declares on every context to register them.
 - Math results can differ from SatimageOSAX's Intel math library in the last digits (up to 15 units in the last place for `lgamma` near its roots).
+- An `array of real` can't be converted with AppleScript's `as`, as the dictionary shows (`anArray as list of real`, `{1, 2, 3} as array of real`): a coercion runs in the script's own process, which only Satimage's old scripting addition could reach, so it fails in SatimageOSAX too. Use `extractarray anArray for -1 as list of real` for a list (or `as list of integer`, which rounds halves to even), and `extractarray aList for -1` for an array. Commands that take an `array of real` also take a list of numbers.
 
 ## Layout
 
