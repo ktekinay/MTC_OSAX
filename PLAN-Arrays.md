@@ -41,9 +41,9 @@ Arrays stay numbers throughout: no descriptor for each number (a hundred million
 2. Record the fixtures from SatimageOSAX; settle the behaviors they show.
 3. Implement in the order above, each group with its tests, committed as it's done.
 4. Fixes for anything Satimage gets wrong, recorded from MTC_OSAX.
-5. README (move Arrays out of "Not implemented", the differences, release notes), PLAN.md, e2e scripts; full test suite.
+5. README (move Arrays out of "Not implemented", the differences, the 1.1 release notes), PLAN.md, e2e scripts; full test suite.
 
 ## Questions for you
 
 1. **`arrays auto filling`:** Satimage kept it in the scripting addition, so it lasted while the script's process did. MTC_OSAX is one app for every script, which quits when idle. Make it an MTC_OSAX setting (`mtc_get arrays_auto_filling`, kept until changed, with the hidden command still working and returning the previous value)? Or keep it in memory until the app quits?
-2. **Version:** is this for 1.1 (with the faster `sortlist`, not yet released), or a later version?
+2. ~~Version~~ Decided 2026-10-15: this is part of 1.1, with the faster `sortlist`; its changes go in the README's 1.1 release notes.
