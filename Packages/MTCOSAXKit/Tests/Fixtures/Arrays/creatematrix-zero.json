@@ -1,0 +1,42 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CRMT",
+        "fields" : [
+          {
+            "key" : "ncol",
+            "value" : {
+              "integer" : 0,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "nrow",
+            "value" : {
+              "integer" : 2,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "1",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1700
+      }
+    }
+  ],
+  "name" : "creatematrix-zero",
+  "recordedAt" : "2026-10-15T13:37:27Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "creatematrix \"1\" ncols 0 nrows 2",
+  "timeZone" : "America/New_York"
+}

@@ -1,0 +1,35 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "LiRe",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+
+          ],
+          "type" : "Lido"
+        }
+      }
+    }
+  ],
+  "name" : "reversearray-empty",
+  "recordedAt" : "2026-10-15T13:37:29Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "reversearray {}",
+  "timeZone" : "America/New_York"
+}

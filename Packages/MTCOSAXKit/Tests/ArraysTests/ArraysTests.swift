@@ -4,7 +4,7 @@ import Testing
 @testable import Arrays
 
 @MainActor
-private func send(_ code: String, _ parameters: [String: any AppleEventEncodable]) -> AppleEventReply {
+func send(_ code: String, _ parameters: [String: any AppleEventEncodable]) -> AppleEventReply {
 	let dispatcher = CommandDispatcher()
 	dispatcher.register(Arrays.commands())
 	let event = NSAppleEventDescriptor.untargetedEvent(EventKey(code: code))
@@ -14,7 +14,7 @@ private func send(_ code: String, _ parameters: [String: any AppleEventEncodable
 	return dispatcher.dispatch(event)
 }
 
-private func values(_ reply: AppleEventReply) -> [Double]? {
+func values(_ reply: AppleEventReply) -> [Double]? {
 	reply.result.flatMap(ArrayOfReal.values(of:))
 }
 

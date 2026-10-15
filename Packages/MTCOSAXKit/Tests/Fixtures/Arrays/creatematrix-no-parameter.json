@@ -1,0 +1,27 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CRMT",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "type" : "null"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1701
+      }
+    }
+  ],
+  "name" : "creatematrix-no-parameter",
+  "recordedAt" : "2026-10-15T13:37:27Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "creatematrix",
+  "timeZone" : "America/New_York"
+}

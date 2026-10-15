@@ -1,0 +1,125 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "LiRe",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "ncol",
+                  "value" : {
+                    "integer" : 2,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "nrow",
+                  "value" : {
+                    "integer" : 3,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "Lido",
+                  "value" : {
+                    "items" : [
+                      {
+                        "integer" : 1,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 2,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 3,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 4,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 5,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 6,
+                        "type" : "long"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "Matr"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "ncol",
+              "value" : {
+                "integer" : 2,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "nrow",
+              "value" : {
+                "integer" : 3,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "Lido",
+              "value" : {
+                "items" : [
+                  {
+                    "real" : 5,
+                    "type" : "doub"
+                  },
+                  {
+                    "real" : 6,
+                    "type" : "doub"
+                  },
+                  {
+                    "real" : 3,
+                    "type" : "doub"
+                  },
+                  {
+                    "real" : 4,
+                    "type" : "doub"
+                  },
+                  {
+                    "real" : 1,
+                    "type" : "doub"
+                  },
+                  {
+                    "real" : 2,
+                    "type" : "doub"
+                  }
+                ],
+                "type" : "Lido"
+              }
+            }
+          ],
+          "type" : "Matr"
+        }
+      }
+    }
+  ],
+  "name" : "reversearray-matrix",
+  "recordedAt" : "2026-10-15T13:37:29Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "reversearray {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}}",
+  "timeZone" : "America/New_York"
+}

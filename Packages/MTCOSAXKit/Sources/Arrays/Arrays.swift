@@ -9,7 +9,7 @@ public enum Arrays {
 	@MainActor
 	public static func commands() -> [CommandDefinition] {
 		let random = RandomSource()
-		return placeholders + [
+		return placeholders + Editing.commands() + [
 			CommandDefinition("createarray", code: "SATICRAR") { request in
 				let count = try size(request)
 				let (low, high) = try range(request) ?? (0, Double(count - 1))
@@ -41,11 +41,9 @@ public enum Arrays {
 	/// Commands not written yet: error -1708 (the event isn't handled), as before they were in the dictionary.
 	@MainActor
 	static let placeholders: [CommandDefinition] = [
-		("creatematrix", "SATICRMT"), ("replacemissingvalue", "SATIFILL"), ("removemissingvalue", "SATIRmMv"),
-		("extractarray", "SATIExLF"), ("changearray", "SATISeLF"), ("insertarray", "SATIInLF"),
-		("resamplematrix", "SATIReMa"), ("reversearray", "SATILiRe"), ("multlist", "SATILST*"), ("divlist", "SATILST/"),
+		("resamplematrix", "SATIReMa"), ("multlist", "SATILST*"), ("divlist", "SATILST/"),
 		("addlist", "SATILST+"), ("sublist", "SATILST-"), ("runningsum", "SATIRSum"), ("statlist", "SATIStat"),
-		("histogram", "SATIHisT"), ("evalformula", "SATILSOP"), ("maskarray", "SATIMASK"), ("filter", "SATIBLUR"),
+		("histogram", "SATIHisT"), ("evalformula", "SATILSOP"), ("filter", "SATIBLUR"),
 		("evalpolynomial", "SATIEvPo"), ("roots of", "SATIRoot"), ("composepolynomial", "SATICoPo"),
 		("pade approximant", "SATIPade"), ("fitpolynomial", "SATIFiPo"), ("fitrational", "SATIRatF"),
 		("read binary", "SATIRdBF"), ("write binary", "SATIWrBF"),
