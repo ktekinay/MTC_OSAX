@@ -1149,9 +1149,50 @@ a as list of real
 </html>
 </documentation>
 		</value-type>
-		<value-type name="list of real" code="LiDo" description="an abstract type provided to coerce arrays of real into list of real" plural="list of real"/>
-		<value-type name="list of integer" code="LiIn" description="an abstract type provided to coerce arrays of real into list of integer" plural="list of integer"/>
-		<command name="createarray" code="SATICRAR" description="create an array of real ">
+		<record-type name="matrix" code="Matr" description="An AppleScript representation of a 2D array of real numbers as a record:">
+				<property name="ncols" code="ncol" type="integer" description="the number of columns"/>
+				<property name="nrows" code="nrow" type="integer" description="the number of rows"/>
+				<property name="array of real" code="Lido" type="array of real" description="the data, as an array of real or as a standard AppleScript list of real numbers. Ordering: the first numbers are the data for the first row."/>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">
+set m to {class:matrix, ncols:10, nrows:3, array of real:(createarray 3 * 10)}
+</div>
+</div>
+</html>
+</documentation>
+		</record-type>
+      <value-type name="list of real" code="LiDo" description="an abstract type provided to coerce arrays of real into list of real" plural="list of real"/>
+      <value-type name="list of integer" code="LiIn" description="an abstract type provided to coerce arrays of real into list of integer" plural="list of integer"/>
+	      <value-type name="polynomial" code="Poly" description="list of its coefficients, 0th degree first. Supports &quot;as string&quot; and &quot;as list of real&quot; coercions.">
+	<responds-to command="addlist"/>
+	<responds-to command="sublist"/>
+	<responds-to command="multlist"/>
+	<responds-to command="divlist"/>
+	<responds-to command="evalpolynomial"/>
+	<responds-to command="composepolynomial"/>
+	<responds-to command="fitpolynomial"/>
+	</value-type>
+		<record-type name="fitrecord" code="FRec" description="result of &quot;fitpolynomial&quot;">
+			<property name="fit error" code="Ferr" type="real" description="the mean error"/>
+			<property name="fit result" code="FRes" type="anything" description="the list of the coefficients (constant term first)"/>
+			<property name="fit string" code="FStr" type="string" description="the polynomial formula as text"/>
+		</record-type>
+		<record-type name="statsrecord" code="SRec" description="result of &quot;statlist&quot;">
+			<property name="maximum" code="MAX " type="real"/>
+			<property name="minimum" code="MIN " type="real"/>
+			<property name="sum" code="SUM " type="real"/>
+			<property name="mean" code="MEAN" type="real"/>
+			<property name="variance" code="Sigm" type="real"/>
+			<property name="stdev" code="StDe" type="real"/>
+			<property name="median" code="MEDI" type="real"/>
+			<property name="skewness" code="Skew" type="real"/>
+			<property name="kurtosis" code="Krts" type="real"/>
+			<property name="maximum index" code="MAXi"  type="integer"/>
+			<property name="minimum index" code="MINi"  type="integer"/>
+		</record-type>
+			<command name="createarray" code="SATICRAR" description="create an array of real ">
 				<direct-parameter type="integer" description="the requested size of the array"/>
 				<parameter name="range" code="rang" type="list of real"  optional="yes" description="{min,max}"/>
 				<result type="array of real"/>
@@ -1167,7 +1208,49 @@ set x to createarray 10 range {2, 3}
 </html>
 </documentation>
 			</command>
-		<command name="randomarray" code="SATICRRA" description="create a random array of real">
+			<command name="creatematrix" code="SATICRMT" description="create an array of real of size ncols*nrows ">
+				<direct-parameter type="string" description="&quot;1&quot;: array of 1.0, &quot;x&quot;: array of x values, &quot;y&quot;: array of y values, &quot;d&quot;: diagonal square matrix"/>
+				<parameter name="ncols" code="ncol" type="integer" description="or a list of real with the &quot;x&quot; option, will make an array with identical rows"/>
+				<parameter name="nrows" code="nrow" type="integer" description="or a list of real with the &quot;y&quot; option, will make an array with identical columns"/>
+				<parameter name="range" code="rang" type="list of real"  optional="yes" description="a range {min,max} for the &quot;x&quot; and &quot;y&quot; options"/>
+				<parameter name="diagonal" code="Diag" type="array of real"  optional="yes" description="the diagonal values for the &quot;d&quot; option. You can also provide a real, in which case the matrix dimensions are specified by ncols=nrows. Default: 1.0 (identity matrix)."/>
+				<parameter name="as" code="rtyp" type="type"  optional="yes"  description="array of real or matrix, default: array of real"/>
+				<result type="array of real" description="or matrix"/>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">
+set x to creatematrix "x" ncols 12 nrows 15
+--result is an array of real:  «data Lido4E6F74206120...»
+
+set m to creatematrix "x" ncols 12 nrows 15 as matrix
+--result is a matrix: {class:matrix, ncols:12, nrows:15, array of real:«data Lido4E6F74206120...»}
+
+display (creatematrix "d" diagonal {1, 3, 5, 7, 9} as matrix)
+-- "1.0000000	0.0	0.0	0.0	0.0
+0.0	3.0000000	0.0	0.0	0.0
+0.0	0.0	5.0000000	0.0	0.0
+0.0	0.0	0.0	7.0000000	0.0
+0.0	0.0	0.0	0.0	9.0000000"
+
+set a to createarray 5 range {-1, 1}
+display (creatematrix "x" ncols a nrows 3 as matrix)
+-- "-1.0000000	-0.50000000	0.0	0.50000000	1.0000000
+-1.0000000	-0.50000000	0.0	0.50000000	1.0000000
+-1.0000000	-0.50000000	0.0	0.50000000	1.0000000"
+
+set a to createarray 4 range {0, 1}
+display (creatematrix "y" ncols 3 nrows a as matrix)
+-- "0.0	0.0	0.0
+0.33333333	0.33333333	0.33333333
+0.66666667	0.66666667	0.66666667
+1.0000000	1.0000000	1.0000000"
+</div>
+</div>
+</html>
+</documentation>
+			</command>
+			<command name="randomarray" code="SATICRRA" description="create a random array of real">
 				<direct-parameter type="integer" description="the requested size of the array"/>
 				<parameter name="range" code="rang" type="list of real"  optional="yes" description="{min,max}"/>
 				<parameter name="seed" code="seed" type="integer"  optional="yes"/>
@@ -1184,7 +1267,400 @@ set x to randomarray 10 range {2, 3} seed 12345
 </html>
 </documentation>
 			</command>
-	</suite>
+			<command name="replacemissingvalue" code="SATIFILL" description="replace missing values (or NaN's) in a list, or an array of real, or a list of such.">
+				<direct-parameter type="array of real" description="or a list of arrays"/>
+				<parameter name="with" code="with" type="real"/>
+				<result type="array of real" description="or a list of arrays"/>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">
+set x to divlist 1 with ({-2, -1, 0, 1, 2} as array of real)
+set xx to replacemissingvalue x with "999"
+display xx
+-- "-0.50000000	-1.0000000	999.00000	1.0000000	0.50000000"
+</div>
+</div>
+</html>
+</documentation>
+			</command>
+			<command name="removemissingvalue" code="SATIRmMv" description="delete missing values (or NaN's)from a list or an array of real">
+				<direct-parameter description="">
+				<type type="list"/>
+				<type type="array of real"/>
+				</direct-parameter>
+				<result description="">
+					<type type="list"/>
+				</result>
+			</command>
+			<command name="extractarray" code="SATIExLF" description="extract values from an array of real">
+				<direct-parameter type="array of real"/>
+				<parameter name="at" code="at  " type="integer" optional="yes" description="the first item to read or a list of indexes (in which case, the &quot;for&quot;, &quot;step&quot; and &quot;blocksize&quot; parameters are not taken into account). 1-based. Default 1"/>
+				<parameter name="for" code="for " type="integer" optional="yes" description="the number of blocks to read. If &lt;0 then read as many blocks as possible. Default 1. Pass -1 in order to extract all available values"/>
+				<parameter name="blocksize" code="bloc" type="integer" optional="yes" description="size of the block to read at each step. blocksize must be smaller than step"/>
+				<parameter name="step" code="step" type="integer" optional="yes" description="the interval between the beginnings of successive blocks to read. Must be larger than blocksize. Default: blocksize"/>
+				<parameter name="as" code="rtyp" type="type" optional="yes" description="default is array of real, you can provide small real or real for 1 item"/>
+				<result type="array of real"/>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">
+set a to createarray 50
+a as list of real
+-- {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, ...}
+set b to extractarray a for 3 at 1 step 10 blocksize 2
+b as list of real
+-- {0.0, 1.0, 10.0, 11.0, 20.0, 21.0}
+</div>
+</div>
+</html>
+</documentation>
+			</command>
+			<command name="changearray" code="SATISeLF" description="change items in an array of real">
+				<direct-parameter type="array of real" description="the array to modify"/>
+				<parameter name="at" code="at  " type="integer" optional="yes" description="the index of the first item to change (1 based) or a list of indexes (in which case, the &quot;step&quot; and &quot;blocksize&quot; parameters are not taken into account). default: 1"/>
+				<parameter name="into" code="into" type="array of real" description="the new values"/>
+				<parameter name="blocksize" code="bloc" type="integer" optional="yes" description="size of the blocks to copy at each step. The &quot;into&quot; parameter must have a size multiple of blocksize. Default: 1"/>
+				<parameter name="step" code="step" type="integer" optional="yes" description="the interval between the beginnings of successive blocks to write. Must be larger than blocksize. Default: blocksize"/>
+				<result type="array of real"/>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">
+set a to createarray 50
+set b to changearray a at 1 step 10 blocksize 2 into (createarray 6 range {-99, -99})
+b as list of real
+-- {-99.0, -99.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, -99.0, -99.0, 12.0, 13.0, 14.0, ...}
+
+</div>
+</div>
+</html>
+</documentation>
+			</command>
+			<command name="insertarray" code="SATIInLF" description="insert items into an array of real">
+				<direct-parameter type="array of real" description="the values to insert"/>
+				<parameter name="into" code="into" type="array of real" description="the array to modify"/>
+				<parameter name="at" code="at  " type="integer" optional="yes" description="the index of the first item to insert (0: at the beginning) or a list of indexes of the same size as the direct parameter (in which case, the &quot;for&quot;, &quot;step&quot; and &quot;blocksize&quot; parameters are not taken into account). default -1 (insert values at the end)"/>
+				<parameter name="for" code="for " type="integer" optional="yes" description="number of blocks to insert. default 1"/>
+				<parameter name="step" code="step" type="integer" optional="yes" description="the number of values between each insertion. default 0"/>
+				<parameter name="blocksize" code="bloc" type="integer" optional="yes" description="size of the blocks to insert after each step. The direct parameter must have a size multiple of blocksize. Default: 1 if &quot;for&quot; is defined, else the size of the direct parameter."/>
+				<result type="array of real"/>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">
+set a to createarray 30
+set b to createarray 10 range {-10, -1}
+set c to insertarray b blocksize 2 into a step 5 at 1 for 3
+c as list of real
+-- {0.0, -10.0, -9.0, 1.0, 2.0, 3.0, 4.0, 5.0, -8.0, -7.0, 6.0, 7.0, 8.0, 9.0, 10.0, -6.0, -5.0, 11.0, 12.0, ...}
+</div>
+</div>
+</html>
+</documentation>
+			</command>
+			<command name="resamplematrix" code="SATIReMa" description="resample a matrix. The incoming matrix is divided into rectangular blocks. Each block may be replaced by its mean value or by another statistical value.">
+				<direct-parameter type="matrix" description="the matrix to resample"/>
+				<parameter name="blocksize" code="bloc" type="list of integer" description="{i,j}, defines the horizontal and vertical sizes of the blocks used for resampling. i and j may be integers (identical blocks) or lists of integers (irregular grid, the items of the lists define the successive sizes of the blocks)."/>
+				<parameter name="wanted" code="WANT" type="string" optional="yes" description="the following strings or a list of such: &quot;mean&quot;, &quot;minimum&quot;, &quot;maximum&quot;, &quot;stdev&quot;, &quot;missing value&quot;, &quot;sum&quot;, &quot;median&quot;, &quot;dispersion&quot;. Specify the statistical function computed on each block. Default: &quot;mean&quot;."/>
+				<result type="matrix" description="the resampled matrix, or a list of matrices if 'wanted' is a list. The dimensions of the resampled matrix correspond to the numbers of blocks defined with 'blocksize'."/>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">
+set m to ArrayToMatrix(randomarray 10 * 9, 10, 9) -- a 10x9 random matrix
+set {m1, m2} to resamplematrix m blocksize {5, 3} wanted {"mean", "stdev"}
+-- result is a list of two 2x3 matrices
+</div>
+</div>
+</html>
+</documentation>
+			</command>
+			<command name="reversearray" code="SATILiRe" description="returns reverse of the direct parameter.">
+				<direct-parameter type="list of real" description="... or an array of real"/>
+				<result type="array of real"/>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">
+(reversearray {1, 2, 3}) as list of real
+-- {3.0, 2.0, 1.0}
+</div>
+</div>
+</html>
+</documentation>
+			</command>
+			<command name="multlist" code="SATILST*" description="performs the product of the parameters. Each parameter may be a list, an array of real, a matrix or a number. multlist {x1,x2...} with {y1,y2...} returns {x1.y1, x2.y2, ...}; multlist x with {y1,y2...} returns {x.y1, x.y2, ...}">
+				<direct-parameter type="list of real"/>
+				<parameter name="with" code="with" type="list of real"/>
+				<result type="list of real"/>
+			</command>
+			<command name="divlist" code="SATILST/" description="same as multlist, but for quotient">
+				<direct-parameter type="list of real"/>
+				<parameter name="with" code="with" type="list of real"/>
+				<result type="list of real"/>
+			</command>
+			<command name="addlist" code="SATILST+" description="same as multlist, but for sums">
+				<direct-parameter type="list of real"/>
+				<parameter name="with" code="with" type="list of real"/>
+				<result type="list of real"/>
+			</command>
+			<command name="sublist" code="SATILST-" description="same as multlist, but for subtraction">
+				<direct-parameter type="list of real"/>
+				<parameter name="with" code="with" type="list of real"/>
+				<result type="list of real"/>
+			</command>
+			<command name="runningsum" code="SATIRSum" description="returns the running sum of an array of real">
+				<direct-parameter type="array of real"/>
+				<result type="array of real"/>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">
+(runningsum {1, 2, 3, 4}) as list of real
+-- {1.0, 3.0, 6.0, 10.0}
+</div>
+</div>
+</html>
+</documentation>
+			</command>
+			<command name="statlist" code="SATIStat" description="returns as a record the min, max, min index, max index, mean, sum, standard deviation, variance.">
+				<direct-parameter type="list of real" description="... or an array of real"/>
+				<parameter name="kurtosis" code="Krts" type="boolean" optional="yes" description="if true, statlist compute also skewness, kurtosis and median calculations."/>
+				<result type="statsrecord"/>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">
+set stl to statlist (randomarray 100) with kurtosis
+-- {maximum:0.993787646526, maximum index:60, minimum:0.001816140488, minimum index:31, sum:45.616940173553,
+ mean:0.456169401736, variance:0.071985153475, stdev:0.268300491007, missing value:0, skewness:0.100799135751,
+ kurtosis:1.791678255678, median:0.45719872578}
+mean of stl
+-- 0.456169401736
+</div>
+</div>
+</html>
+</documentation>
+			</command>
+			<command name="histogram" code="SATIHisT" description="given an array of real numbers, return a list of 2 arrays : {sampling values,frequencies}">
+				<direct-parameter type="array of real"/>
+				<parameter name="samples" code="samp" type="integer" optional="yes" description="number of intervals. If the parameter is missing  histogram builds a raw histogram {sampling values,frequencies}"/>
+				<parameter name="minimum" code="MIN " type="real" optional="yes" description="lower bound of the intervals"/>
+				<parameter name="maximum" code="MAX " type="real" optional="yes" description="upper bound of the intervals"/>
+				<result type="list of array of real" description="{sampling values,frequencies}"/>
+
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">
+set {x, y} to histogram (randomarray 100 range {1, 10}) samples 10
+set c to QuickCurve(x, y, 0)
+set properties of c to {pattern style:10, line style:0, histogram bar width:0.75}
+set limits of container of c to {0, 11, 0, 20}
+draw window of c
+</div>
+</div>
+</html>
+</documentation>
+			</command>
+			<command name="evalformula" code="SATILSOP" description="apply C-like mathematical expressions to arrays of real. Ex: evalformula &quot;a*x^2+y^2&quot; with {&quot;a&quot;,2.4,&quot;x&quot;,anarray,&quot;y&quot;,anotherarray} (or by using a record: evalformula &quot;a*x^2+y^2&quot; with {a:2.4,x:anarray,y:anotherarray})">
+				<direct-parameter type="string" description="the formula to compute"/>
+				<parameter name="with" code="with" description="the definition of the variables occurring in the formula. If a list, an alternation of reference names (strings) and data (number, list of numbers or array of real). Prefer lists because you can't use reserved words with records.">
+					<type type="list"/>
+					<type type="record"/>
+				</parameter>
+				<parameter name="as" code="rtyp" type="type" description="matrix or array of real: the requested type if parameters are matrices. Default: array of real"/>
+				<result type="array of real" description="or real"/>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">
+set a to createarray 10000 range {0, 2*pi} 
+set s2 to evalformula "2*cos(x)*sin(x)" with {"x", a}
+
+evalformula ("atan2(y,x)") with {y:sqrt (3), x:1}
+-- 1.047197551197 (that is, pi/3)
+
+evalformula ("norm(cos(x))/sqrt(count(x))") with {"x", randomarray 10000 range {0, 2 * pi}}
+-- 0.701118610115 (that is, ~1/sqrt(2))
+
+set n1 to 100
+set x1 to creatematrix "x" ncols n1 nrows n1 range {-1, 1} as matrix
+set y1 to creatematrix "y" ncols n1 nrows n1 range {-1, 1} as matrix
+set {px, py} to {1,0}
+set pot1 to evalformula "r=hypot(x,y);//comments
+(px*x+py*y)/(r*r*r)" with {&quot;px&quot;,px, &quot;py&quot;,py, &quot;x&quot;,x1, &quot;y&quot;,y1} as matrix
+set s to QuickScalarMap(0, 0, pot1, 0)
+set limits of s to {-10, 10}
+draw window of s
+</div>
+</div>
+<br/>
+<div>
+<b>Discussion</b>
+<ul><li>
+The expression of <span class="example-source">evalformula</span> may include logical operators, yet all values remain real numbers: <span class="example-source">true</span> expressions evaluate to <span class="example-source">1.0</span>, <span class="example-source">false</span> expressions evaluate to <span class="example-source">0.0</span>. Conversely when implied in a logical expression any non null number is considered as <span class="example-source">true</span> (<span class="example-source">1.0</span>). 
+</li><li>
+The direct parameter of <span class="example-source">evalformula</span> may be a sequence of elementary expressions, provided they are separated with semi-colon <span class="example-source">;</span>. You can also use <span class="example-source">return</span> as the separator, so in complex cases when the expression may require several intermediate steps you can easily use the contents of a text window as the expression. When you use such a composite construct <span class="example-source">evalformula</span> will return the result of the last (rightmost) expression.
+</li><li>
+Instead of one expression you can pass a list of expressions to <span class="example-source">evalformula</span>: <span class="example-source">evalformula</span> will return a list of <span class="example-source">arrays of real</span>.
+</li><li>
+Here is the list of the operators and functions that <span class="example-source">evalformula</span> supports.
+<dl><dt><b>operators (higher precedence first)</b></dt><dd><ul><li><span class="example-source">-</span> (unary)
+</li><li><span class="example-source">* /</span>, <span class="example-source">+ -</span>, <span class="example-source">^</span> (exponentiation)
+</li><li><span class="example-source">&gt;= &gt; &lt;= &lt;</span><span class="example-source">== !=</span> (equal - not equal), <span class="example-source">&amp;</span> (logical AND), <span class="example-source">|</span> (logical OR), <span class="example-source">!</span> (boolean not, evaluates to 1 if the operand is 0 and to 0 otherwise).
+</li></ul></dd><dt><b>algebra</b></dt><dd><ul><li><span class="example-source">cbrt</span>, <span class="example-source">sqr</span>, <span class="example-source">sqrt</span>, <span class="example-source">hypot</span>, <span class="example-source">pow</span>, <span class="example-source">sign</span></li><li><span class="example-source">abs</span>, <span class="example-source">ceil</span>, <span class="example-source">floor</span>, <span class="example-source">trunc</span>, <span class="example-source">max</span>, <span class="example-source">min</span></li><li><span class="example-source">mod</span> (modulo), <span class="example-source">remainder</span>
+</li><li><span class="example-source">isnan</span> (test whether the quantity is a ``NAN''. NAN = Not A Number.)
+</li><li><span class="example-source">replacenan</span> replacenan(x,y) return the array x where all nan's have been replaced by y.
+</li></ul></dd><dt><b>transcendental</b></dt><dd><ul><li><span class="example-source">ln</span> or <span class="example-source">log</span> (neperian), <span class="example-source">log10</span>, <span class="example-source">log1p</span>, <span class="example-source">exp</span>, <span class="example-source">expm1</span>
+</li><li><span class="example-source">cos</span>, <span class="example-source">sin</span>, <span class="example-source">tan</span>, <span class="example-source">acos</span>, <span class="example-source">asin</span>, <span class="example-source">atan</span>, <span class="example-source">atan2</span> (atan2(y,x))</li><li><span class="example-source">cosh</span>, <span class="example-source">sinh</span>, <span class="example-source">tanh</span>, <span class="example-source">acosh</span>, <span class="example-source">asinh</span>, <span class="example-source">atanh</span></li><li><span class="example-source">erf</span>, <span class="example-source">erfc</span>, <span class="example-source">gamma</span>, <span class="example-source">lgamma</span></li>
+<li><span class="example-source">j0</span>, <span class="example-source">j1</span>, <span class="example-source">jn</span>, <span class="example-source">y0</span>, <span class="example-source">y1</span>, <span class="example-source">yn</span></li>
+<li><span class="example-source">EllipticE</span>, <span class="example-source">EllipticK</span>, <span class="example-source">IncEllipticE</span>, <span class="example-source">IncEllipticF</span>, <span class="example-source">EllipticP</span>, <span class="example-source">IncEllipticP</span> (<a href="https://www.gnu.org/software/gsl/manual/html_node/Definition-of-Legendre-Forms.html#Definition-of-Legendre-Forms" target="_blank" >GSL</a>)</li>
+<li><span class="example-source">lambertW0</span>, <span class="example-source">lambertWm1</span> (<a  target="_blank" href="https://www.gnu.org/software/gsl/manual/html_node/Lambert-W-Functions.html">GSL</a>)</li>
+</ul></dd><dt><b>
+functions on arrays
+</b></dt><dd><ul><li><span class="example-source">norm</span> and <span class="example-source">norm2</span>, respectively the euclidian norm and its square (numbers),
+</li><li><span class="example-source">sum</span> and <span class="example-source">runsum</span>, respectively the sum (a number) and the running sum (an array),
+</li><li><span class="example-source">diff</span>, diff(x) array of length (length of x) -1. diff(x)[n]=x[n+1]-x[n].
+</li><li><span class="example-source">int</span>, int(f,x) return the integral ∫fdx
+</li>
+<li><span class="example-source">count</span>, the number of elements (a number).
+</li>
+<li><span class="example-source">rest</span>, rest of a list (as in AppleScript), <span class="example-source">butlast</span>
+</li>
+<li><span class="example-source">concat</span>, concat(x,y) array of length (length of x +length y) .
+</li>
+</ul></dd></dl>
+</li></ul>
+</div>
+</html>
+</documentation>
+			</command>
+			<command name="maskarray" code="SATIMASK" description="suppress items (or rows) out of an array of real (or a matrix) with respect to a mask of 0's and 1's.">
+				<direct-parameter type="array of real" description="the array(s) or matrix to be filtered. For a matrix, the rows are deleted."/>
+				<parameter name="with" code="with" type="array of real" description="the filter: an array of real, 0's mean that the corresponding items are to be deleted in the direct object(s)."/>
+				<result type="array of real" description="the resulting array(s) or matrix"/>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">
+set x to randomarray 10 range {1, 2}
+set m to evalformula "(x&lt;1.2)|(x&gt;1.5)" with {x:x}
+set y to maskarray x with m
+count y
+-- 6
+</div>
+</div>
+</html>
+</documentation>
+			</command>
+			<command name="filter" code="SATIBLUR">
+				<direct-parameter type="matrix"/>
+				<parameter name="using" code="with" type="array of real" description="a list of 9 real numbers representing the 3x3 convolution matrix"/>
+				<parameter name="reduced" code="redu" type="boolean" optional="yes" description="the resulting matrix is smaller (the 2 extremal columns and rows are removed. Default true.)"/>
+				<result type="matrix"/>
+			</command>
+			<command name="evalpolynomial" code="SATIEvPo" description="">
+				<direct-parameter type="list of real" description="the polynomial, given as the list of its coefficients, 0th degree (constant term) first. Or an array of real coerced with &quot;as polynomial&quot;"/>
+				<parameter name="at" code="at  " type="real" description="or array of real"/>
+				<result type="real" description=""/>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">
+set x to runningsum (randomarray 10)
+set y to runningsum x
+set p to fitpolynomial {x, y} degree 3
+evalpolynomial (fit result of p) at 1
+-- 2.364091741891
+
+</div>
+</div>
+</html>
+</documentation>
+			</command>
+			<command name="roots of" code="SATIRoot">
+				<direct-parameter type="list of real" description="the polynomial, given as the list of its coefficients, 0th degree (constant term) first"/>
+				<parameter name="complex" code="Comp" type="boolean" optional="yes" description="default : false. Also compute the complex roots"/>
+				<result type="list of real" description="roots of the polynomial. Complex roots are returned as a list of 2 real numbers"/>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">
+set x to runningsum (randomarray 10)
+set y to runningsum x
+set p to fit result of (fitpolynomial {x, y} degree 3)
+set {xx} to roots of p
+evalpolynomial p at xx
+-- -5.6843418860808E-14
+
+</div>
+</div>
+</html>
+</documentation>
+			</command>
+			<command name="composepolynomial" code="SATICoPo" description="you can provide arrays of real instead of polynomials">
+				<direct-parameter type="polynomial" description="or an array of real: the polynomial P(X), given as the list of its coefficients, 0th degree (constant term) first."/>
+				<parameter name="with" code="with" type="polynomial" description="Q(X)"/>
+				<result type="polynomial" description="P(Q(X))"/>
+			</command>
+			<command name="pade approximant" code="SATIPade" description="given a polynomial P(X), compute the Padé approximant as the rational function NUM(X)/DEN(X). NUM and DEN are polynomials and the constant term of DEN is 1.">
+				<synonym name="pade"/>
+				<direct-parameter type="polynomial" description="or an array of real: the polynomial P(X), given as the list of its coefficients, 0th degree (constant term) first."/>
+				<parameter name="numerator" code="nume" type="integer" description="the requested degree for NUM(X)"/>
+				<parameter name="denominator" code="deno" type="integer" description="the requested degree for DEN(X)"/>
+				<result description="{NUM(X), DEN(X)}">
+				<type type="polynomial" list="yes"/>
+				</result>
+			</command>
+			<command name="fitpolynomial" code="SATIFiPo" description="given two arrays of real {x,y} returns the best polynomial fit y=P(x)">
+				<direct-parameter type="list of array of real" description="a list of two arrays of real {x,y}"/>
+				<parameter name="degree" code="degr" type="integer" description="the degree of the resulting polynomial"/>
+				<parameter name="number formatting" code="Form" type="string" optional="yes" description="the format string for the formula output. If you don't specify this parameter, no fit string will be provided in the result record."/>
+				<parameter name="constraints" code="cons" optional="yes" description="a list of constraints. Each constraint is a list of  degree+2 real numbers (a0,a1..,b) ensuring an affine relation between the coefficient of the polynomial: a0*c0+..=b, where (c0,..) are the coefficients of the polynomial">
+				<type type="list" list="yes"/>
+				</parameter>
+				<result type="fitrecord"/>
+<documentation>
+<html>
+<div style="display:none" class="example">
+<div class="example-source">
+set x to runningsum (randomarray 10)
+set y to runningsum x
+fitpolynomial {x, y} degree 3 number formatting "%.3g"
+-- {fit error:0.66209535022, fit result:{2.229178877341, -2.581992766564, 2.069751651722, -0.112828845472}, fit string:"2.23-2.58*x+2.07*x^2-0.113*x^3"}
+</div>
+</div>
+</html>
+</documentation>
+			</command>
+			<command name="fitrational" code="SATIRatF" description="given two arrays of real {x,y} returns the best rational fit y=NUM(x)/DEN(x). NUM and DEN are polynomials and the constant term of DEN is 1.">
+				<direct-parameter type="list of array of real" description="a list of two arrays of real {x,y}"/>
+				<parameter name="numerator" code="nume" type="integer" description="the requested degree for NUM(X)"/>
+				<parameter name="denominator" code="deno" type="integer" description="the requested degree for DEN(X)"/>
+				<parameter name="number formatting" code="Form" type="string" optional="yes" description="the format string for the formula output. If you don't specify this parameter, no fit string will be provided in the result record."/>
+				<result type="fitrecord" description="where fit result if a list of 2 polynomials."/>
+			</command>
+			<command name="read binary" code="SATIRdBF" description="read a file of real or small real">
+				<direct-parameter type="file specification" description="the file"/>
+				<parameter name="as" code="rtyp" type="type" description="the format of the data file: real (8 bytes), small real (4 bytes), integer (4 bytes), small integer (2 bytes), or byte (1 byte)"/>
+				<parameter name="skip" code="skip" type="integer" optional="yes" description="the number of leading bytes to skip"/>
+				<parameter name="step" code="jump" type="integer" optional="yes" description="the offset between two consecutive readings"/>
+				<parameter name="blocksize" code="bloc" type="integer" optional="yes" description="the size of the blocks in the &quot;as&quot; unit. Default 1"/>
+				<parameter name="length" code="for " type="integer" optional="yes" description="the number of blocks to read"/>
+				<parameter name="big endian" code="Endi" type="boolean" optional="yes" description="is the file encoded as big endian or little endian? Default: system endianess (false on mac intel)."/>
+				<parameter name="signed" code="Sign" type="boolean" optional="yes" description="Only for integer types. Are they signed or unsigned? Default: true."/>
+				<result type="array of real"/>
+			</command>
+			<command name="write binary" code="SATIWrBF" description="write the data into a binary file (encoded as big endian)">
+				<direct-parameter type="file specification" description="the file"/>
+				<parameter name="with data" code="data" type="array of real"/>
+				<parameter name="starting at" code="strt" type="integer" optional="yes" description="offset in bytes, default: append data at the end of the file"/>
+				<parameter name="as" code="rtyp" type="type" optional="yes" description="the format of the data to be saved: real (8 bytes), small real (4 bytes), integer (4 bytes), small integer (2 bytes), or byte (1 byte). Default: real."/>
+				<parameter name="big endian" code="Endi" type="boolean" optional="yes" description="is the file encoded as big endian or little endian? Default: system endianess (false on mac intel)."/>
+			</command>
+</suite>
 
 	<suite name="XML DOM" code="XML " description="An AppleScript implementation of the DOM. Uses the Libxml2 open source project.">
     <class name="anything" code="****" description="any class or reference" hidden="yes"/>

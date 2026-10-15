@@ -2,13 +2,14 @@ import AppleEventCore
 import Foundation
 import Numerics
 
-/// From Satimage's "Arrays" suite, the commands that make an `array of real`: `createarray` and `randomarray`.
-/// Behavior recorded from SatimageOSAX in `Fixtures/Arrays`. The rest of the suite isn't implemented yet.
+/// Satimage's "Arrays" suite, but for its hidden commands and the obsolete `extractitem` (see PLAN-Arrays.md).
+/// Behavior recorded from SatimageOSAX in `Fixtures/Arrays`; where Satimage was broken, MTC_OSAX follows the
+/// dictionary (`Fixtures/ArraysFixes`).
 public enum Arrays {
 	@MainActor
 	public static func commands() -> [CommandDefinition] {
 		let random = RandomSource()
-		return [
+		return placeholders + [
 			CommandDefinition("createarray", code: "SATICRAR") { request in
 				let count = try size(request)
 				let (low, high) = try range(request) ?? (0, Double(count - 1))
@@ -36,6 +37,19 @@ public enum Arrays {
 			},
 		]
 	}
+
+	/// Commands not written yet: error -1708 (the event isn't handled), as before they were in the dictionary.
+	@MainActor
+	static let placeholders: [CommandDefinition] = [
+		("creatematrix", "SATICRMT"), ("replacemissingvalue", "SATIFILL"), ("removemissingvalue", "SATIRmMv"),
+		("extractarray", "SATIExLF"), ("changearray", "SATISeLF"), ("insertarray", "SATIInLF"),
+		("resamplematrix", "SATIReMa"), ("reversearray", "SATILiRe"), ("multlist", "SATILST*"), ("divlist", "SATILST/"),
+		("addlist", "SATILST+"), ("sublist", "SATILST-"), ("runningsum", "SATIRSum"), ("statlist", "SATIStat"),
+		("histogram", "SATIHisT"), ("evalformula", "SATILSOP"), ("maskarray", "SATIMASK"), ("filter", "SATIBLUR"),
+		("evalpolynomial", "SATIEvPo"), ("roots of", "SATIRoot"), ("composepolynomial", "SATICoPo"),
+		("pade approximant", "SATIPade"), ("fitpolynomial", "SATIFiPo"), ("fitrational", "SATIRatF"),
+		("read binary", "SATIRdBF"), ("write binary", "SATIWrBF"),
+	].map { name, code in CommandDefinition(name, code: code) { _ in throw OSAXError.eventNotHandled } }
 
 	/// The point `fraction` of the way from `low` to `high`, for a range wider than a real can hold (where
 	/// `high - low` is infinite).
