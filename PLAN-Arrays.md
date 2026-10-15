@@ -83,3 +83,54 @@ What the recordings showed, and how MTC_OSAX matches it:
 | `read binary`/`write binary` with a path as text | Error 1 | A path, as for the file commands |
 | `write binary … as text` | Accepted | -50 |
 | `read binary` of integers | 4-byte reals (16,777,217 became 16,777,216) | 8-byte reals |
+
+## Audit (2026-10-15)
+
+An audit of the suite for code quality, security and speed, with each case reproduced through the dispatcher, found
+inputs that crashed or hung MTC_OSAX (its commands run on the main thread, one at a time, so a hang stops them all):
+
+- [x] `histogram` with `minimum`/`maximum` too far apart for a real (or so close the interval width is 0) crashed
+  converting NaN to an integer.
+- [x] `evalformula` with a few thousand nested parentheses (or a sum of 100,000 terms, or 100,000 `!`) ran out of
+  stack. Formulas may nest at most 512 levels (-50); operators of one precedence are kept in one node, so a long sum
+  no longer nests.
+- [x] `roots of` a polynomial with an infinite coefficient looped forever balancing the matrix: -50 for a coefficient
+  that isn't finite, -1 if the matrix can't be built.
+- [x] `read binary` of a file over 4 GB with overlapping blocks overflowed and crashed; it had no limit on its result
+  (a 20 KB file gave 600 MB).
+- [x] `write binary` to a named pipe waited forever for a reader.
+- [x] Limits, as for `createarray`: `read binary` returns at most 100,000,000 numbers; `creatematrix "d"` with a
+  list of diagonal numbers at most 10,000 of them (a 100,000 list tried 80 GB); `creatematrix`'s axes are checked
+  before they're made. The slow algorithms get limits that keep them to seconds: `roots of` degree 1,000,
+  `pade approximant` 1,000 and 1,000, `fitpolynomial` degree 100, `fitrational` 100 and 100, `composepolynomial`'s
+  result degree 100,000, and multiplying polynomials 10,000,000,000 products of coefficients; and the fits'
+  points × coefficients at most 100,000,000.
+- [x] Lists nested more than 512 levels are -50 in `addlist` and the others, `replacemissingvalue` and
+  `evalformula`'s variables, as they already were elsewhere.
+- [x] `read binary` and `write binary` take only regular files: -50 for a device, pipe or socket (Foundation's
+  refusal said "Permission denied").
+
+Speed (measured on the commands through the dispatcher):
+
+- [x] `runningsum` of 10,000,000: 456 ms (a closure capturing its sum) to about 15.
+- [x] The median (`statlist … with kurtosis`, `resamplematrix`) by selection instead of sorting: 938 ms to about 160.
+- [x] Lists read with one look at the list (`RawList.forEachItem`) and made with `AEPutPtr` instead of a descriptor
+  per number: `extractarray … as list of real` of 1,000,000 282 ms to 100, `addlist` of a list and a number 456 to
+  197 (of two lists 604 to 288), `replacemissingvalue` of a list 353 to 188, `evalformula` with a list 378 to 143,
+  `statlist` of a list 132 to 98. (One `AEGetNthPtr` of any type for each item would be quicker still, but for an
+  item that is itself a list it copies the whole list.)
+- [x] `write binary` straight into its buffer: 120 ms to about 50.
+- [x] `read binary` reads only the bytes its blocks cover, instead of mapping the file: a few milliseconds slower for
+  10,000,000 reals (19 to 25), but a mapped file cut short while it's read can crash the process (SIGBUS).
+
+Everything else measured the same before and after (a benchmark of every command through the dispatcher, at
+1,000,000 to 10,000,000 numbers). Still slow, and left as they are: `resamplematrix` with blocks of one (an array
+for each block, about 100 ns a number), `histogram` without `samples` of many distinct numbers (a dictionary,
+165 ns), and `fitpolynomial` at high degrees (2 s for degree 60 of 10,000 points; LAPACK would be faster but give
+other last digits than the fixtures).
+
+Code quality: one polynomial multiply and add (they were in `Arithmetic` and `Polynomials`), one reading of
+`extractarray`'s and `changearray`'s blocks, the size limit's message made in one place, one test for `missing value`,
+the same fast list reading in `Values` and `Arithmetic`, no needless `indirect`, a matrix read once (`runningsum`,
+`evalformula`'s variables), a list's item types checked without a descriptor for each (`maskarray`), a number format
+checked once per fit.
