@@ -1,0 +1,53 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RmMv",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "code" : "msng",
+                  "type" : "type"
+                },
+                {
+                  "integer" : 2,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "integer" : 1,
+              "type" : "long"
+            },
+            {
+              "integer" : 2,
+              "type" : "long"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "removemissingvalue-list",
+  "recordedAt" : "2026-10-15T14:22:01Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "removemissingvalue {1, missing value, 2}",
+  "timeZone" : "America/New_York"
+}

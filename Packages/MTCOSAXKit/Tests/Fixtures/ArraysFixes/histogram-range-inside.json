@@ -1,0 +1,183 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CRAR",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 10,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 2,
+              "type" : "doub"
+            },
+            {
+              "real" : 3,
+              "type" : "doub"
+            },
+            {
+              "real" : 4,
+              "type" : "doub"
+            },
+            {
+              "real" : 5,
+              "type" : "doub"
+            },
+            {
+              "real" : 6,
+              "type" : "doub"
+            },
+            {
+              "real" : 7,
+              "type" : "doub"
+            },
+            {
+              "real" : 8,
+              "type" : "doub"
+            },
+            {
+              "real" : 9,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "HisT",
+        "fields" : [
+          {
+            "key" : "samp",
+            "value" : {
+              "integer" : 2,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "MIN ",
+            "value" : {
+              "integer" : 3,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "MAX ",
+            "value" : {
+              "integer" : 6,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 1,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 2,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 3,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 4,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 5,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 6,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 7,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 8,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 9,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "Lido"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "items" : [
+                {
+                  "real" : 3.75,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 5.25,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "Lido"
+            },
+            {
+              "items" : [
+                {
+                  "real" : 2,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 2,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "Lido"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "histogram-range-inside",
+  "recordedAt" : "2026-10-15T14:22:01Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "histogram (createarray 10) samples 2 minimum 3 maximum 6",
+  "timeZone" : "America/New_York"
+}

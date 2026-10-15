@@ -16,6 +16,8 @@
 	<suite name="Types" code="MTCt" description="Types used by the other suites." hidden="yes">
 		<class name="alias" code="alis" hidden="yes" plural="aliases"/>
 		<class name="anything" code="****" description="any class or reference" hidden="yes"/>
+		<!-- For read binary and write binary's "as byte" (Satimage's hidden Applescript types suite has it). -->
+		<class name="byte" code="byte" hidden="yes"/>
 	</suite>
 
 	<!-- Copied verbatim from "SatImageOSAX SDEF/dictionary.sdef". -->
