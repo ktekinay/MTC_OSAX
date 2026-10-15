@@ -49,3 +49,37 @@ Arrays stay numbers throughout: no descriptor for each number (a hundred million
 
 1. Hidden and obsolete commands are left out and listed in the README (2026-10-15); see above.
 2. This is part of 1.1, with the faster `sortlist`; its changes go in the README's 1.1 release notes (2026-10-15).
+
+## Results
+
+- [x] All 26 commands, and the `matrix`, `polynomial`, `statsrecord` and `fitrecord` types, in the dictionary; the SDEF consistency tests pass. `byte` is in MTC_OSAX's Types suite for `as byte`: Satimage defined it in its hidden Applescript types suite, and without it `as byte` didn't compile (found recording a fix from a script; the fixtures had sent the type code).
+- [x] 629 fixtures recorded from SatimageOSAX in `Fixtures/Arrays` (with `Files` for the binary files; 667 with `createarray`'s and `randomarray`'s): every command and parameter, edges and errors, and 110 cases probed for `evalformula`'s language. All replay; reals within 16 units in the last place or 16 units of 1 (math libraries differ), fits within 1e-12.
+- [x] 23 cases where MTC_OSAX follows the dictionary, recorded from MTC_OSAX in `Fixtures/ArraysFixes` (below), in the README's Fixes.
+- [x] Unit tests for each part (`Tests/ArraysTests`), `Scripts/e2e/arrays.applescript` (the same output from both apps through `parity.sh`) and `arrays-fixes.applescript`.
+
+What the recordings showed, and how MTC_OSAX matches it:
+
+- **Precision of reading:** an `array of real` can also hold 4-byte reals (the tag `gnis`), which SatimageOSAX's `read binary` returned; `ArrayOfReal` reads both, and polynomials (`Poly`) are the same data with another type. Fixtures keep both as numbers.
+- **`evalformula`'s language**, probed: the usual precedence (the dictionary lists `^` last), `^` left to right, unary `-` `+` `!` only where an expression starts and applying to the power that follows (`-2^2` is -4, `1+-2` a syntax error), strtod's numbers, `pi`, names without regard to case, a list of one number as a number, and Satimage's own error numbers.
+- **Its special functions** are GSL's (Carlson's elliptic integrals with the angle's periods, Lambert's W returning -1 outside its domain), written as GSL computes them.
+- **`roots of`** is Numerical Recipes' zrhqr without its sort: EISPACK's balanc and hqr on the companion matrix with the coefficients across the first row, in hqr's order, with each pair's + imaginary part first. GSL's solver (tried first) found the same roots in another order.
+- **`fitrational`** is Numerical Recipes' ratlsq on the points: five rounds of least squares toward the smallest largest error, weighting each point by its last error; the fit error is the largest error. This reproduces Satimage's coefficients to ten places.
+- **Statistics:** the variance divides by n, the kurtosis isn't less 3, the median is the upper one (over every item, sorted with NaN last), a matrix's running sum goes column by column.
+
+| Area | Satimage | MTC_OSAX |
+|---|---|---|
+| `removemissingvalue` | -1708 | Removes what `replacemissingvalue` replaces |
+| `extractarray … as list of integer` beyond 32 bits | Wrapped (1.0E+10 became 1410065408) | -1700 |
+| `divlist` of a polynomial by a number | -50 | Scales it |
+| `histogram … minimum` | Also counted numbers up to an interval below the minimum | Only from the minimum |
+| `filter … reduced false` | Border values in the wrong places | As if the matrix had zeros around it |
+| `filter` of a matrix too small to reduce | -108 | -50 |
+| `resamplematrix … blocksize` of 0 | No result | -50 |
+| `composepolynomial` of the empty polynomial | No result | The empty polynomial |
+| `evalformula "sqr(x)"` | Error 5 | Works |
+| `evalformula` comment with a space, or after an expression | Error 16 | Works |
+| `evalformula "int(f,x)"` | ∫x df | ∫f dx, as the dictionary says |
+| `fitpolynomial` error of an exact fit | 3.8e-8 | About 1e-15 |
+| `read binary`/`write binary` with a path as text | Error 1 | A path, as for the file commands |
+| `write binary … as text` | Accepted | -50 |
+| `read binary` of integers | 4-byte reals (16,777,217 became 16,777,216) | 8-byte reals |

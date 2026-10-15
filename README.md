@@ -20,7 +20,6 @@ This section is kept up to date as sections are added. Each implemented section'
 
 These suites aren't implemented and aren't in MTC_OSAX's dictionary, so a script that uses them doesn't compile (an already compiled one gets error -1708):
 
-- Arrays, except the `array of real` type, `createarray` and `randomarray`
 - Linear algebra, FFT and convolution
 - Image files, 3D array handling, FITS, XNF Additions
 - Resource Suite
@@ -88,6 +87,15 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 - `special concat` of text with a record is error -1700 instead of garbage; empty text gives empty cells.
 - `createarray` and `randomarray` make at most 100,000,000 items (-50 for more), instead of trying to allocate tens of gigabytes.
 - `randomarray … seed` beyond 32 bits uses the seed's low 32 bits instead of ignoring it.
+- `removemissingvalue` works (SatimageOSAX gave -1708): it removes what `replacemissingvalue` replaces, and an array stays an array.
+- `extractarray … as list of integer` of a number beyond 32 bits is error -1700, as AppleScript's `as integer` is (SatimageOSAX wrapped it: 1.0E+10 became 1410065408).
+- `divlist` divides a polynomial by a number (SatimageOSAX gave -50); by a polynomial is still -50.
+- `histogram … minimum` counts only numbers from the minimum up (SatimageOSAX also counted those up to an interval below it in the first interval).
+- `filter … reduced false` computes the border as if the matrix had zeros around it (SatimageOSAX put some border values in the wrong places, so even the identity filter changed the matrix); a matrix too small to reduce is -50 (SatimageOSAX: -108, out of memory).
+- `resamplematrix … blocksize` with a size of 0 is -50 (SatimageOSAX returned nothing); `composepolynomial` of the empty polynomial is the empty polynomial (SatimageOSAX returned nothing).
+- `evalformula` knows `sqr`, which its dictionary lists (SatimageOSAX: error 5), takes a `//` comment anywhere on a line (SatimageOSAX gave error 16 for one with a space in it, or after an expression), and computes `int(f,x)` as ∫f dx, as its dictionary says (SatimageOSAX computed ∫x df: scripts that swapped the arguments to make up for it need them back in order).
+- `fitpolynomial`'s fit error for an exact fit is about 0 (SatimageOSAX's came out as 3.8e-8 for a line).
+- `read binary` and `write binary` take a path as text, as the file commands do (SatimageOSAX: error 1), and `as` another type than the five is -50 (SatimageOSAX took `as text` without saying what it wrote). `read binary` returns 8-byte reals for every type (SatimageOSAX's 4-byte reals for all but `real` lost the last digits of integers above 16,777,216).
 
 **Property lists**
 
@@ -138,7 +146,8 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 - With `from`, `~` is your home folder only as `~/…`. A name that just starts with `~` is a name in the folder (`~`, `~backup`, Office's `~$Budget.xlsx`), for the file commands and for `glob`'s patterns: `fileremove {"~"} from f` deletes the item named `~` in `f`, not your home folder. Without `from`, `~` and `~name` are home folders as before.
 - `chmod` of a symbolic link reads and changes the permissions of the item it points to, as the shell's `chmod` does.
 - In XPath, EXSLT's math, sets, strings and dates functions can also be called with the prefixes `mtc-exslt-math`, `mtc-exslt-sets`, `mtc-exslt-strings` and `mtc-exslt-dates`, which MTC_OSAX declares on every context to register them.
-- Math results can differ from SatimageOSAX's Intel math library in the last digits (up to 15 units in the last place for `lgamma` near its roots).
+- Math results can differ from SatimageOSAX's Intel math library in the last digits (up to 15 units in the last place for `lgamma` near its roots), and so can `evalformula`'s functions; `fitpolynomial`'s and `fitrational`'s coefficients can differ in about the last three digits, as their least squares are computed another way.
+- `as small integer` and `as small real` (`read binary`, `write binary`, `extractarray`) need Standard Additions' terms: in a script with `use` statements, add `use scripting additions` (with SatimageOSAX, whose dictionary has them too, that made them ambiguous).
 - An `array of real` can't be converted with AppleScript's `as`, as the dictionary shows (`anArray as list of real`, `{1, 2, 3} as array of real`): a coercion runs in the script's own process, which only Satimage's old scripting addition could reach, so it fails in SatimageOSAX too. Use `extractarray anArray for -1 as list of real` for a list (or `as list of integer`, which rounds halves to even), and `extractarray aList for -1` for an array. Commands that take an `array of real` also take a list of numbers.
 
 ## Layout
@@ -382,6 +391,7 @@ Fixtures store the values used, and replays substitute the checkout's `Input` fo
 - `comparison 1` ignores case by full Unicode case folding, as SatimageOSAX did: "ß" equals "ss", "ς" equals "σ", and "ﬀ" equals "ff".
 - `sortlist` compares text the same however its accents are typed ("é" as one character or as "e" and a combining accent).
 - `comparison 4` puts uppercase first by the letters' case, not their character codes ("Ÿ" before "ÿ").
+- The rest of the Arrays suite (but its hidden commands and the obsolete `extractitem`), with SatimageOSAX's bugs fixed.
 
 ### 1.0.1
 
