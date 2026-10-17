@@ -35,8 +35,15 @@ random numbers, besides `NumberTextTests`' comparison with the coercion.
 
 ## Code quality
 
-- [ ] One type for "an `array of real`'s numbers or a list" (`Sorting.Together` and `ListUtilities.Items`), one
-  `isList`, a list item's number decoded in `RawList.Item` for both suites, an array in a list of lists decoded once.
+- [x] One type for "an `array of real`'s numbers or a list" (`Sorting.Together` and `ListUtilities.Items`, which
+  made a descriptor for each item of `exclude items`' lists of lists), one `isList` for `sortlist` (its own decoded
+  each array to check it, and then again to sort it), a list item's number and `missing value` in `RawList.Item`
+  for both suites, and `missing value`'s code and test in AppleEventCore (`NSAppleEventDescriptor.missingValueCode`,
+  `isMissingValue`) for Arrays and List Utilities.
+- [x] `classify` reads each item's type, size and number in one pass (`RawList.forEachItem`), instead of its type
+  and size and then its number: sorting numbers' keys and order 97 ms to 83 for a million reals. Run one after the
+  other, the commit before and this one: a million texts 385 ms and 380, sorted together 1,169 and 1,042 (number and
+  text) and 1,030 and 923 (two numbers), reals with duplicates 361 and 327.
 
 ## Testing
 

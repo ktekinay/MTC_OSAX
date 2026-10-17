@@ -6,8 +6,6 @@ import Numerics
 /// (nested lists are flattened, `missing value` is NaN), an `array of real`, a polynomial or a matrix (its numbers,
 /// row by row). Lists are read from their data (`RawList`), not as a descriptor for each item.
 enum Values {
-	static let missingValue = FourCharCode(fourCharString: "msng")
-
 	/// Error -50 for anything else (text that isn't a number, a record, a boolean).
 	static func numbers(_ descriptor: NSAppleEventDescriptor) throws -> [Double] {
 		var result: [Double] = []
@@ -45,22 +43,12 @@ enum Values {
 
 	/// A list item's number, if it's a number (`missing value` is NaN); nil for anything else.
 	static func number(_ item: RawList.Item) -> Double? {
-		item.number ?? (isMissingValue(item) ? .nan : nil)
-	}
-
-	/// Whether a list item is `missing value`.
-	static func isMissingValue(_ item: RawList.Item) -> Bool {
-		item.type == typeType && UInt32(truncatingIfNeeded: item.bits) == missingValue
-	}
-
-	/// Whether a descriptor is `missing value`.
-	static func isMissingValue(_ descriptor: NSAppleEventDescriptor) -> Bool {
-		descriptor.descriptorType == typeType && descriptor.typeCodeValue == missingValue
+		item.number ?? (item.isMissingValue ? .nan : nil)
 	}
 
 	/// One number: `missing value` is NaN; error -50 for anything that isn't a number or text that reads as one.
 	static func number(_ descriptor: NSAppleEventDescriptor) throws -> Double {
-		if isMissingValue(descriptor) {
+		if descriptor.isMissingValue {
 			return .nan
 		}
 		do {
@@ -129,7 +117,7 @@ final class ListBuilder {
 	}
 
 	func appendMissingValue() throws {
-		var code = Values.missingValue
+		var code = NSAppleEventDescriptor.missingValueCode
 		try Self.check(AEPutPtr(&list, 0, typeType, &code, 4))
 	}
 

@@ -34,21 +34,36 @@ package enum Sorting {
 		}
 		// A single value is a list of one (SatimageOSAX returned an empty list).
 		let list = RawList(descriptor) ?? RawList(single: descriptor)
-		let isListOfLists = list.count > 0 && (0 ..< list.count).allSatisfy { isList(list, $0) }
-		if isListOfLists, let respect = request.descriptor(for: "from") {
+		guard let sublists = sublists(list) else {
+			return try sortedList(list, ascending: ascending, options: options)
+		}
+		if let respect = request.descriptor(for: "from") {
 			let criteria = try criteria(respect)
-			return try sortTogether((0 ..< list.count).map(list.descriptor), by: criteria, ascending: directions(request, count: criteria.count), options: options)
+			return try sortTogether(sublists, by: criteria, ascending: directions(request, count: criteria.count), options: options)
 		}
-		if isListOfLists {
-			return try (0 ..< list.count).map { index in
-				let sublist = list.descriptor(index)
-				if let values = ArrayOfReal.values(of: sublist) {
-					return try ArrayOfReal(sortedNumbers(values, ascending: ascending, options: options)).descriptor()
-				}
-				return try sortedList(RawList(sublist)!, ascending: ascending, options: options)
-			}.appleEventDescriptor
+		return try sublists.map { sublist in
+			switch sublist {
+			case let .reals(values): try ArrayOfReal(sortedNumbers(values, ascending: ascending, options: options)).descriptor()
+			case let .list(list): try sortedList(list, ascending: ascending, options: options)
+			}
+		}.appleEventDescriptor
+	}
+
+	/// A list of lists' (or `array of real`s') lists, each read once; nil if there are none, or an item isn't one.
+	private static func sublists(_ list: RawList) -> [ListUtilities.Items]? {
+		guard list.count > 0 else {
+			return nil
 		}
-		return try sortedList(list, ascending: ascending, options: options)
+		var sublists: [ListUtilities.Items] = []
+		for index in 0 ..< list.count {
+			// The type first, so other items aren't read.
+			let type = list.info(index).type
+			guard type == typeAEList || type == ArrayOfReal.descriptorType, let sublist = ListUtilities.Items(list.descriptor(index)) else {
+				return nil
+			}
+			sublists.append(sublist)
+		}
+		return sublists
 	}
 
 	/// `ascending`'s first `count` booleans, all that are used (an array of 10,000,000 made a descriptor for each of
@@ -88,15 +103,6 @@ package enum Sorting {
 		}
 	}
 
-	/// Whether an item is a list or an `array of real` (checked by its type first, so other items aren't read).
-	private static func isList(_ list: RawList, _ index: Int) -> Bool {
-		switch list.info(index).type {
-		case typeAEList: true
-		case ArrayOfReal.descriptorType: ArrayOfReal.values(of: list.descriptor(index)) != nil
-		default: false
-		}
-	}
-
 	package struct Options {
 		package var flags: Int
 		package var removeDuplicates: Bool
@@ -117,42 +123,9 @@ package enum Sorting {
 		return try list.list(of: rows, replacing: column.replacement)
 	}
 
-	/// A list to sort with others: an `array of real`'s numbers (a descriptor for each number made huge arrays take
-	/// gigabytes), or a list.
-	enum Together {
-		case reals([Double])
-		case list(RawList)
-
-		init(_ descriptor: NSAppleEventDescriptor) {
-			if let values = ArrayOfReal.values(of: descriptor) {
-				self = .reals(values)
-			} else {
-				self = .list(RawList(descriptor) ?? RawList(.list())!)
-			}
-		}
-
-		var count: Int {
-			switch self {
-			case let .reals(values): values.count
-			case let .list(list): list.count
-			}
-		}
-
-		/// The items at `rows`, in that order: an `array of real` for numbers, a list otherwise.
-		func selecting(_ rows: [Int]) throws -> NSAppleEventDescriptor {
-			switch self {
-			case let .reals(values): try ArrayOfReal.descriptor(count: rows.count) { buffer in
-					for (index, row) in rows.enumerated() { buffer[index] = values[row] }
-				}
-			case let .list(list): try list.list(of: rows)
-			}
-		}
-	}
-
 	/// Sorts the lists together, by the lists at `criteria` in priority order. Every list must have the same length
 	/// and the criteria must name lists (error -1 otherwise, as in SatimageOSAX).
-	static func sortTogether(_ lists: [NSAppleEventDescriptor], by criteria: [Int], ascending: [Bool], options: Options) throws -> NSAppleEventDescriptor {
-		let columns = lists.map(Together.init)
+	static func sortTogether(_ columns: [ListUtilities.Items], by criteria: [Int], ascending: [Bool], options: Options) throws -> NSAppleEventDescriptor {
 		let count = columns.first?.count ?? 0
 		guard columns.allSatisfy({ $0.count == count }), !criteria.isEmpty,
 		      criteria.allSatisfy({ columns.indices.contains($0 - 1) })
@@ -184,23 +157,19 @@ package enum Sorting {
 	/// booleans become text in a list with text, and integers reals in a list with reals.
 	package static func classify(_ list: RawList, flags: Int) throws -> Classified {
 		enum Kind { case number, real, text, date, missing }
-		let missing = FourCharCode(fourCharString: "msng")
+		// Each item's type, size and (for a number) data, read in one pass.
 		var kinds: [Kind] = []
-		var types: [DescType] = []
-		var sizes: [Int] = []
+		var items: [RawList.Item] = []
 		kinds.reserveCapacity(list.count)
-		types.reserveCapacity(list.count)
-		sizes.reserveCapacity(list.count)
-		for index in 0 ..< list.count {
-			let (type, size) = list.info(index)
-			types.append(type)
-			sizes.append(size)
-			switch type {
+		items.reserveCapacity(list.count)
+		try list.forEachItem { item in
+			items.append(item)
+			switch item.type {
 			case typeSInt16, typeSInt32, typeSInt64: kinds.append(.number)
 			case typeIEEE32BitFloatingPoint, typeIEEE64BitFloatingPoint: kinds.append(.real)
-			case _ where NSAppleEventDescriptor.textTypes.contains(type), typeTrue, typeFalse, typeBoolean: kinds.append(.text)
+			case _ where NSAppleEventDescriptor.textTypes.contains(item.type), typeTrue, typeFalse, typeBoolean: kinds.append(.text)
 			case typeLongDateTime: kinds.append(.date)
-			case typeType where size == 4 && list.value(index, type: typeType, as: FourCharCode.self) == missing: kinds.append(.missing)
+			case typeType where item.size == 4 && item.isMissingValue: kinds.append(.missing)
 			default: throw OSAXError.coercionFailed
 			}
 		}
@@ -218,8 +187,8 @@ package enum Sorting {
 					keys.appendMissing()
 					continue
 				}
-				if types[index] == typeUnicodeText {
-					let count = list.utf16(index, size: sizes[index], into: &buffer)
+				if items[index].type == typeUnicodeText {
+					let count = list.utf16(index, size: items[index].size, into: &buffer)
 					// A byte-order mark is left to the descriptor's text, as it was.
 					if count == 0 || (buffer[0] != 0xFEFF && buffer[0] != 0xFFFE) {
 						buffer.withUnsafeBufferPointer { keys.append(utf16: UnsafeBufferPointer(rebasing: $0[..<count])) }
@@ -227,7 +196,7 @@ package enum Sorting {
 					}
 				}
 				// Text that can't be read sorts as missing value, and stays as it is.
-				if let text = Self.text(list, index, type: types[index]) {
+				if let text = Self.text(list, items[index]) {
 					keys.append(text)
 					texts[index] = text
 				} else {
@@ -241,45 +210,34 @@ package enum Sorting {
 			// absolute time did (365 ms for a million, with a descriptor for each; 56 this way), but for local times
 			// that don't exist (the hour skipped when clocks go forward), which only a script can make.
 			let seconds = (0 ..< list.count).map { index in
-				kinds[index] == .missing || sizes[index] != 8 ? .nan : Double(list.value(index, type: typeLongDateTime, as: Int64.self))
+				kinds[index] == .missing || items[index].size != 8 ? .nan : Double(list.value(index, type: typeLongDateTime, as: Int64.self))
 			}
 			return Classified(keys: .numbers(seconds)) { _ in nil }
 		}
 		// NaN (not a number: from `ln -1`, say, in an array) sorts as missing value, as it does alone: as a number it
 		// compared equal to every number, so rows weren't sorted, and `remove duplicates` dropped real ones.
 		let values = (0 ..< list.count).map { index in
-			kinds[index] == .missing ? .nan : number(list, index, type: types[index])
+			kinds[index] == .missing ? .nan : items[index].number!
 		}
 		guard present.contains(.real) else {
 			return Classified(keys: .numbers(values)) { _ in nil }
 		}
 		// With a real, every number is a real.
 		return Classified(keys: .numbers(values)) { row in
-			kinds[row] != .missing && types[row] != typeIEEE64BitFloatingPoint ? .real(values[row]) : nil
-		}
-	}
-
-	/// A number item's value, from its data.
-	private static func number(_ list: RawList, _ index: Int, type: DescType) -> Double {
-		switch type {
-		case typeSInt16: Double(list.value(index, type: type, as: Int16.self))
-		case typeSInt32: Double(list.value(index, type: type, as: Int32.self))
-		case typeSInt64: Double(list.value(index, type: type, as: Int64.self))
-		case typeIEEE32BitFloatingPoint: Double(list.value(index, type: type, as: Float32.self))
-		default: list.value(index, type: type, as: Double.self)
+			kinds[row] != .missing && items[row].type != typeIEEE64BitFloatingPoint ? .real(values[row]) : nil
 		}
 	}
 
 	/// An item that isn't `utxt` as text (see `ListUtilities.text`): numbers and booleans from their data.
-	private static func text(_ list: RawList, _ index: Int, type: DescType) -> String? {
-		switch type {
-		case typeSInt16: NumberText.text(Int64(list.value(index, type: type, as: Int16.self)))
-		case typeSInt32: NumberText.text(Int64(list.value(index, type: type, as: Int32.self)))
-		case typeSInt64: NumberText.text(list.value(index, type: type, as: Int64.self))
-		case typeIEEE64BitFloatingPoint: NumberText.text(list.value(index, type: type, as: Double.self))
+	private static func text(_ list: RawList, _ item: RawList.Item) -> String? {
+		switch item.type {
+		case typeSInt16: NumberText.text(Int64(Int16(truncatingIfNeeded: item.bits)))
+		case typeSInt32: NumberText.text(Int64(Int32(truncatingIfNeeded: item.bits)))
+		case typeSInt64: NumberText.text(Int64(bitPattern: item.bits))
+		case typeIEEE64BitFloatingPoint: NumberText.text(Double(bitPattern: item.bits))
 		case typeTrue: "true"
 		case typeFalse: "false"
-		default: ListUtilities.text(list.descriptor(index))
+		default: ListUtilities.text(list.descriptor(item.index))
 		}
 	}
 

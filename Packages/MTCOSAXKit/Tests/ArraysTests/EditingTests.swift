@@ -99,7 +99,7 @@ struct EditingTests {
 	@Test func listsFromArrays() throws {
 		let reals = try #require(list(send("SATIExLF", ["----": ArrayOfReal([1.5, .nan, -2]), "for ": -1, "rtyp": NSAppleEventDescriptor(typeCode: FourCharCode(fourCharString: "LiDo"))])))
 		#expect(reals.map(\.descriptorType) == [typeIEEE64BitFloatingPoint, typeType, typeIEEE64BitFloatingPoint])
-		#expect(reals[0].doubleValue == 1.5 && reals[1].typeCodeValue == Values.missingValue && reals[2].doubleValue == -2)
+		#expect(reals[0].doubleValue == 1.5 && reals[1].isMissingValue && reals[2].doubleValue == -2)
 		let integers = try #require(list(send("SATIExLF", ["----": ArrayOfReal([1.5, .nan, -2]), "for ": -1, "rtyp": NSAppleEventDescriptor(typeCode: FourCharCode(fourCharString: "LiIn"))])))
 		#expect(integers.map(\.descriptorType) == [typeSInt32, typeType, typeSInt32])
 		#expect(integers[0].int32Value == 2 && integers[2].int32Value == -2)

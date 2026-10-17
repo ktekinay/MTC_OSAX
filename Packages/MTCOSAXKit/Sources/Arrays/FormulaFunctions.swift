@@ -188,7 +188,7 @@ extension Formula {
 		if Values.isSeveral(descriptor) {
 			return several(try lenientNumbers(descriptor, depth: 0))
 		}
-		if Values.isMissingValue(descriptor) {
+		if descriptor.isMissingValue {
 			return .number(.nan)
 		}
 		if descriptor.isText {

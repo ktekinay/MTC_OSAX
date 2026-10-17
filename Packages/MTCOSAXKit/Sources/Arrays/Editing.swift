@@ -408,7 +408,7 @@ enum Editing {
 			return try Matrix(columns: matrix.columns, rows: matrix.rows, values: matrix.values.map { $0.isNaN ? value : $0 }).descriptor()
 		}
 		guard let list = RawList(descriptor) else {
-			if Values.isMissingValue(descriptor) || (descriptor.descriptorType == typeIEEE64BitFloatingPoint && descriptor.doubleValue.isNaN) {
+			if descriptor.isMissingValue || (descriptor.descriptorType == typeIEEE64BitFloatingPoint && descriptor.doubleValue.isNaN) {
 				return value.map(NSAppleEventDescriptor.init(double:)) ?? NSAppleEventDescriptor.list()
 			}
 			return descriptor
@@ -418,7 +418,7 @@ enum Editing {
 		try list.forEachItem { item in
 			if item.type == typeIEEE64BitFloatingPoint, !Double(bitPattern: item.bits).isNaN {
 				try result.append(Double(bitPattern: item.bits))
-			} else if Values.isMissingValue(item) || item.type == typeIEEE64BitFloatingPoint {
+			} else if item.isMissingValue || item.type == typeIEEE64BitFloatingPoint {
 				if let value {
 					try result.append(value)
 				}

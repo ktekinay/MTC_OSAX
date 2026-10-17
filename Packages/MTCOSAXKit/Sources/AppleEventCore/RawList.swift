@@ -73,6 +73,11 @@ package struct RawList {
 		/// for other items, whose data isn't read (a list's would be copied whole).
 		package var bits: UInt64
 
+		/// Whether the item is `missing value`.
+		package var isMissingValue: Bool {
+			type == typeType && UInt32(truncatingIfNeeded: bits) == NSAppleEventDescriptor.missingValueCode
+		}
+
 		/// The item's number, if it's an integer or a real; nil for anything else.
 		package var number: Double? {
 			switch type {
