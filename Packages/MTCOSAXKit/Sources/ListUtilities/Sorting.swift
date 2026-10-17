@@ -27,35 +27,65 @@ package enum Sorting {
 			flags: try request.parameter("Cfla", default: 0),
 			removeDuplicates: try request.parameter("Uniq", default: false)
 		)
-		let ascending = request.descriptor(for: "Asce").map { ListUtilities.items($0) ?? [$0] }?.map(\.booleanValue) ?? []
+		let ascending = directions(request, count: 1).first ?? true
 
 		if let values = ArrayOfReal.values(of: descriptor) {
-			return try ArrayOfReal(sortedNumbers(values, ascending: ascending.first ?? true, options: options)).descriptor()
+			return try ArrayOfReal(sortedNumbers(values, ascending: ascending, options: options)).descriptor()
 		}
 		// A single value is a list of one (SatimageOSAX returned an empty list).
 		let list = RawList(descriptor) ?? RawList(single: descriptor)
 		let isListOfLists = list.count > 0 && (0 ..< list.count).allSatisfy { isList(list, $0) }
 		if isListOfLists, let respect = request.descriptor(for: "from") {
-			// Whole numbers only (1.5 used to become 1, and 1.0E+19 trapped); SatimageOSAX gave -1700 for 1.0E+19.
-			let criteria = try (ListUtilities.items(respect) ?? [respect]).map { item in
-				let value = try Numbers.number(item)
-				guard value.rounded() == value, abs(value) <= Double(Int32.max) else {
-					throw OSAXError.coercionFailed
-				}
-				return Int(value)
-			}
-			return try sortTogether((0 ..< list.count).map(list.descriptor), by: criteria, ascending: ascending, options: options)
+			let criteria = try criteria(respect)
+			return try sortTogether((0 ..< list.count).map(list.descriptor), by: criteria, ascending: directions(request, count: criteria.count), options: options)
 		}
 		if isListOfLists {
 			return try (0 ..< list.count).map { index in
 				let sublist = list.descriptor(index)
 				if let values = ArrayOfReal.values(of: sublist) {
-					return try ArrayOfReal(sortedNumbers(values, ascending: ascending.first ?? true, options: options)).descriptor()
+					return try ArrayOfReal(sortedNumbers(values, ascending: ascending, options: options)).descriptor()
 				}
-				return try sortedList(RawList(sublist)!, ascending: ascending.first ?? true, options: options)
+				return try sortedList(RawList(sublist)!, ascending: ascending, options: options)
 			}.appleEventDescriptor
 		}
-		return try sortedList(list, ascending: ascending.first ?? true, options: options)
+		return try sortedList(list, ascending: ascending, options: options)
+	}
+
+	/// `ascending`'s first `count` booleans, all that are used (an array of 10,000,000 made a descriptor for each of
+	/// its numbers: 12 s and 1.6 GB).
+	private static func directions(_ request: AppleEventRequest, count: Int) -> [Bool] {
+		guard let descriptor = request.descriptor(for: "Asce") else {
+			return []
+		}
+		if let values = ArrayOfReal.values(of: descriptor) {
+			return values.prefix(count).map { NSAppleEventDescriptor(double: $0).booleanValue }
+		}
+		guard let list = RawList(descriptor) else {
+			return [descriptor.booleanValue]
+		}
+		return (0 ..< min(count, list.count)).map { list.descriptor($0).booleanValue }
+	}
+
+	/// `with respect to`'s list numbers, read without a descriptor for each. Whole numbers only (1.5 used to become 1,
+	/// and 1.0E+19 trapped); SatimageOSAX gave -1700 for 1.0E+19.
+	private static func criteria(_ descriptor: NSAppleEventDescriptor) throws -> [Int] {
+		var numbers: [Double] = []
+		if let values = ArrayOfReal.values(of: descriptor) {
+			numbers = values
+		} else if let list = RawList(descriptor) {
+			numbers.reserveCapacity(list.count)
+			try list.forEachItem { item in
+				numbers.append(try item.number ?? Numbers.number(list.descriptor(item.index)))
+			}
+		} else {
+			numbers = [try Numbers.number(descriptor)]
+		}
+		return try numbers.map { value in
+			guard value.rounded() == value, abs(value) <= Double(Int32.max) else {
+				throw OSAXError.coercionFailed
+			}
+			return Int(value)
+		}
 	}
 
 	/// Whether an item is a list or an `array of real` (checked by its type first, so other items aren't read).
@@ -129,14 +159,18 @@ package enum Sorting {
 		else {
 			throw OSAXError(-1)
 		}
-		let keys = try criteria.map { criterion -> Column in
-			switch columns[criterion - 1] {
+		let directions = criteria.indices.map { ascending.indices.contains($0) ? ascending[$0] : (ascending.first ?? true) }
+		// A criterion that repeats an earlier one can't change the order: rows equal by every criterion before it are
+		// equal by it too, whatever its direction (1,000 of them on 100,000 rows took 10 s and 1.7 GB).
+		var seen = Set<Int>()
+		let unique = criteria.indices.filter { seen.insert(criteria[$0]).inserted }
+		let keys = try unique.map { index -> Column in
+			switch columns[criteria[index] - 1] {
 			case let .reals(values): Column.numbers(values)
 			case let .list(list): try classify(list, flags: options.flags).keys
 			}
 		}
-		let directions = criteria.indices.map { ascending.indices.contains($0) ? ascending[$0] : (ascending.first ?? true) }
-		let rows = order(rows: 0 ..< count, keys: keys, ascending: directions, options: options)
+		let rows = order(rows: 0 ..< count, keys: keys, ascending: unique.map { directions[$0] }, options: options)
 		return try columns.map { try $0.selecting(rows) }.appleEventDescriptor
 	}
 
@@ -257,50 +291,69 @@ package enum Sorting {
 	}
 
 	private static func order<Row: FixedWidthInteger & UnsignedInteger>(_: Row.Type, count: Int, columns: [Prepared], options: Options) -> [Int] {
-		// With several keys, each text key becomes its texts' ranks, so that the radix sort orders by all of them (rows
-		// were compared by every key when the first ones were equal: 242 ms for a million by a number and a text).
-		let columns = columns.count > 1 && count >= radixThreshold ? columns.map { column in
-			guard case .texts = column else {
-				return column
+		if columns.count > 1 {
+			// With several keys, each text key becomes its texts' ranks, so that every key is a number: the radix sort
+			// orders by all of them (rows were compared by every key when the first ones were equal: 242 ms for a
+			// million by a number and a text), and one order compares them (an order for each column, made by
+			// recursing, ran out of stack for 20,000 lists sorted together).
+			let keys = columns.map { column -> [UInt64] in
+				switch column {
+				case let .numbers(keys): keys
+				case .texts: ranks(Row.self, count: count, of: column, options: options)
+				}
 			}
-			return .numbers(ranks(Row.self, count: count, of: column, options: options))
-		} : columns
-		return withOrders(columns[...], numeric: options.flags & 2 != 0) { orders in
+			var rows = (0 ..< Row(count)).map { $0 }
+			let order = KeysOrder(columns: keys)
+			if count >= radixThreshold {
+				radixSort(&rows, by: keys)
+			} else {
+				RowSort.mergeSort(&rows, by: order)
+			}
+			return finished(rows, by: order, options: options)
+		}
+		let numeric = options.flags & 2 != 0
+		return withOrder(columns[0], numeric: numeric) { order in
 			// Each order is a different type, so the sort is built for each.
 			func sorted(by order: some RowOrder) -> [Int] {
 				var rows = (0 ..< Row(count)).map { $0 }
-				if count >= radixThreshold, let numbers = Prepared.numberKeys(columns) {
-					radixSort(&rows, by: numbers)
-				} else if count >= radixThreshold, var keys = columns[0].radixKeys(numeric: options.flags & 2 != 0) {
-					// By the first column's keys, and then rows whose keys are equal by comparing.
+				if count >= radixThreshold, var keys = columns[0].radixKeys(numeric: numeric) {
+					// By the keys, and then rows whose keys are equal by comparing (numbers' keys are never equal
+					// but for equal numbers, which a stable sort leaves in order).
 					RowSort.radixSort(keys: &keys, rows: &rows)
-					var start = 0
-					while start < count {
-						var end = start + 1
-						while end < count, keys[end] == keys[start] { end += 1 }
-						if end - start > 1 {
-							RowSort.mergeSort(&rows, in: start ..< end, by: order)
+					if case .texts = columns[0] {
+						var start = 0
+						while start < count {
+							var end = start + 1
+							while end < count, keys[end] == keys[start] { end += 1 }
+							if end - start > 1 {
+								RowSort.mergeSort(&rows, in: start ..< end, by: order)
+							}
+							start = end
 						}
-						start = end
 					}
 				} else {
 					RowSort.mergeSort(&rows, by: order)
 				}
-				if options.removeDuplicates {
-					var previous: Row?
-					rows.removeAll { row in
-						defer { previous = row }
-						return previous.map { order.compare(Int($0), Int(row)) == 0 } ?? false
-					}
-				}
-				return rows.map { Int($0) }
+				return finished(rows, by: order, options: options)
 			}
-			switch orders.count == 1 ? orders[0] : nil {
+			switch order {
 			case let .numbers(order): return sorted(by: order)
 			case let .texts(order): return sorted(by: order)
-			case nil: return sorted(by: ColumnsOrder(columns: orders))
 			}
 		}
+	}
+
+	/// The sorted rows as `Int`s, without duplicates (rows equal in every key) if asked.
+	private static func finished<Row: FixedWidthInteger>(_ rows: [Row], by order: some RowOrder, options: Options) -> [Int] {
+		var rows = rows
+		if options.removeDuplicates {
+			var previous: Row?
+			rows.removeAll { row in
+				defer { previous = row }
+				return previous.map { order.compare(Int($0), Int(row)) == 0 } ?? false
+			}
+		}
+		return rows.map { Int($0) }
 	}
 
 	/// Each row's rank in one column sorted on its own (in its direction, `missing value` last): 0 for the first text,
@@ -308,10 +361,10 @@ package enum Sorting {
 	private static func ranks<Row: FixedWidthInteger & UnsignedInteger>(_: Row.Type, count: Int, of column: Prepared, options: Options) -> [UInt64] {
 		let sorted = order(Row.self, count: count, columns: [column], options: Options(flags: options.flags, removeDuplicates: false))
 		var ranks = [UInt64](repeating: 0, count: count)
-		withOrders([column][...], numeric: options.flags & 2 != 0) { orders in
+		withOrder(column, numeric: options.flags & 2 != 0) { order in
 			var rank: UInt64 = 0
 			for (index, row) in sorted.enumerated() {
-				if index > 0, orders[0].compare(sorted[index - 1], row) != 0 {
+				if index > 0, order.compare(sorted[index - 1], row) != 0 {
 					rank += 1
 				}
 				ranks[row] = rank
@@ -320,19 +373,13 @@ package enum Sorting {
 		return ranks
 	}
 
-	/// Calls `body` with an order for each column, which is valid only there.
-	private static func withOrders<Result>(_ columns: ArraySlice<Prepared>, numeric: Bool, orders: [ColumnOrder] = [], _ body: ([ColumnOrder]) -> Result) -> Result {
-		switch columns.first {
-		case nil:
-			return body(orders)
+	/// Calls `body` with an order for the column, which is valid only there.
+	private static func withOrder<Result>(_ column: Prepared, numeric: Bool, _ body: (ColumnOrder) -> Result) -> Result {
+		switch column {
 		case let .numbers(keys):
-			return keys.withUnsafeBufferPointer { keys in
-				withOrders(columns.dropFirst(), numeric: numeric, orders: orders + [.numbers(NumberOrder(keys: keys))], body)
-			}
+			keys.withUnsafeBufferPointer { body(.numbers(NumberOrder(keys: $0))) }
 		case let .texts(keys, ascending):
-			return keys.withOrder(ascending: ascending, numeric: numeric) { order in
-				withOrders(columns.dropFirst(), numeric: numeric, orders: orders + [.texts(order)], body)
-			}
+			keys.withOrder(ascending: ascending, numeric: numeric) { body(.texts($0)) }
 		}
 	}
 
@@ -358,18 +405,6 @@ package enum Sorting {
 			case let .numbers(keys): keys
 			case let .texts(keys, ascending): numeric ? nil : keys.prefixKeys(ascending: ascending)
 			}
-		}
-
-		/// The keys of every column, if they're all numbers.
-		static func numberKeys(_ columns: [Prepared]) -> [[UInt64]]? {
-			var result: [[UInt64]] = []
-			for column in columns {
-				guard case let .numbers(keys) = column else {
-					return nil
-				}
-				result.append(keys)
-			}
-			return result
 		}
 	}
 

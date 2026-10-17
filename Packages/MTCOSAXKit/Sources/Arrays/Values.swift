@@ -45,15 +45,7 @@ enum Values {
 
 	/// A list item's number, if it's a number (`missing value` is NaN); nil for anything else.
 	static func number(_ item: RawList.Item) -> Double? {
-		switch item.type {
-		case typeSInt16: Double(Int16(truncatingIfNeeded: item.bits))
-		case typeSInt32: Double(Int32(truncatingIfNeeded: item.bits))
-		case typeSInt64: Double(Int64(bitPattern: item.bits))
-		case typeIEEE32BitFloatingPoint: Double(Float32(bitPattern: UInt32(truncatingIfNeeded: item.bits)))
-		case typeIEEE64BitFloatingPoint: Double(bitPattern: item.bits)
-		case typeType where isMissingValue(item): .nan
-		default: nil
-		}
+		item.number ?? (isMissingValue(item) ? .nan : nil)
 	}
 
 	/// Whether a list item is `missing value`.

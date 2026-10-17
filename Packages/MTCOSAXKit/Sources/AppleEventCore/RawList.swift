@@ -72,6 +72,18 @@ package struct RawList {
 		/// The data of a `shor`, `long`, `comp`, `sing`, `doub` or `type` item, little-endian from the low byte; 0
 		/// for other items, whose data isn't read (a list's would be copied whole).
 		package var bits: UInt64
+
+		/// The item's number, if it's an integer or a real; nil for anything else.
+		package var number: Double? {
+			switch type {
+			case typeSInt16: Double(Int16(truncatingIfNeeded: bits))
+			case typeSInt32: Double(Int32(truncatingIfNeeded: bits))
+			case typeSInt64: Double(Int64(bitPattern: bits))
+			case typeIEEE32BitFloatingPoint: Double(Float32(bitPattern: UInt32(truncatingIfNeeded: bits)))
+			case typeIEEE64BitFloatingPoint: Double(bitPattern: bits)
+			default: nil
+			}
+		}
 	}
 
 	private static let scalarTypes: Set<DescType> = [typeSInt16, typeSInt32, typeSInt64, typeIEEE32BitFloatingPoint, typeIEEE64BitFloatingPoint, typeType]

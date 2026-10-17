@@ -392,6 +392,7 @@ Fixtures store the values used, and replays substitute the checkout's `Input` fo
 - `comparison 1` ignores case by full Unicode case folding, as SatimageOSAX did: "ß" equals "ss", "ς" equals "σ", and "ﬀ" equals "ff".
 - `sortlist` compares text the same however its accents are typed ("é" as one character or as "e" and a combining accent).
 - `comparison 4` puts uppercase first by the letters' case, not their character codes ("Ÿ" before "ÿ").
+- `sortlist … with respect to` takes any number of criteria quickly (one that repeats an earlier one changes nothing, and is skipped), and reads `ascending` only as far as it's used.
 - The rest of the Arrays suite (but its hidden commands and the obsolete `extractitem`), with SatimageOSAX's bugs fixed.
 
 ### 1.0.1

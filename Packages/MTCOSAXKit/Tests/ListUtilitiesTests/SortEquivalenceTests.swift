@@ -69,10 +69,9 @@ struct SortEquivalenceTests {
 	}
 
 	/// Lists sorted together by a text and a number, in both orders (with missing values in both), each in its own
-	/// direction: the text becomes ranks, sorted with the number by the radix sort.
-	@Test func textAndNumberKeysMatchReference() {
+	/// direction: the text becomes ranks, sorted with the number by the radix sort (or by the merge sort, below 64).
+	@Test(arguments: [40, 1_500]) func textAndNumberKeysMatchReference(count: Int) {
 		var generator = SeededGenerator(seed: 5)
-		let count = 1_500
 		let texts: [String?] = (0 ..< count).map { _ in Int.random(in: 0 ..< 30, using: &generator) == 0 ? nil : String(Self.randomText(&generator).prefix(2)) }
 		let numbers: [Double?] = (0 ..< count).map { _ in Int.random(in: 0 ..< 30, using: &generator) == 0 ? nil : Double(Int.random(in: 0 ..< 5, using: &generator)) }
 		let lists = AppleEventList([
