@@ -308,6 +308,22 @@ struct SortedResultTests {
 		}
 	}
 
+	/// Dates sort by the local seconds since 1904 their data holds (in both directions, `missing value` last), read
+	/// without a descriptor for each.
+	@Test func datesByTheirData() {
+		let seconds: [Int64] = [3_000_000_000, -5, 0, 3_000_000_000, 86_400, 2]
+		let dates = seconds.map { value in withUnsafeBytes(of: value) { NSAppleEventDescriptor(descriptorType: typeLongDateTime, bytes: $0.baseAddress, length: 8)! } }
+		let list = AppleEventList(dates + [.missingValue])
+		func sorted(_ parameters: [String: any AppleEventEncodable]) -> [Int64?] {
+			items(send("SATISort", parameters.merging(["----": list]) { $1 })).map { item in
+				item.descriptorType == typeType ? nil : item.data.withUnsafeBytes { $0.loadUnaligned(as: Int64.self) }
+			}
+		}
+		#expect(sorted([:]) == [-5, 0, 2, 86_400, 3_000_000_000, 3_000_000_000, nil])
+		#expect(sorted(["Asce": false]) == [3_000_000_000, 3_000_000_000, 86_400, 2, 0, -5, nil])
+		#expect(sorted(["Uniq": true]) == [-5, 0, 2, 86_400, 3_000_000_000, nil])
+	}
+
 	/// Texts with characters of every kind the comparison treats specially, and missing values, under every flag
 	/// (5,000 of them: the reference comparison is slow in a debug build). Mostly sorted is by character code. Each
 	/// distinct text is ranked once for each flag by the reference comparison (equal texts have equal ranks), and the

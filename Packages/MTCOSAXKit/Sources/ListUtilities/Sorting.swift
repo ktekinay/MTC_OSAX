@@ -237,8 +237,11 @@ package enum Sorting {
 			return Classified(keys: .texts(keys)) { row in texts[row].map(RawList.Replacement.text) }
 		}
 		if present.contains(.date) {
+			// A date's data is its seconds since 1904 in local time, which order dates as converting each to an
+			// absolute time did (365 ms for a million, with a descriptor for each; 56 this way), but for local times
+			// that don't exist (the hour skipped when clocks go forward), which only a script can make.
 			let seconds = (0 ..< list.count).map { index in
-				kinds[index] == .missing ? .nan : list.descriptor(index).dateValue?.timeIntervalSinceReferenceDate ?? .nan
+				kinds[index] == .missing || sizes[index] != 8 ? .nan : Double(list.value(index, type: typeLongDateTime, as: Int64.self))
 			}
 			return Classified(keys: .numbers(seconds)) { _ in nil }
 		}

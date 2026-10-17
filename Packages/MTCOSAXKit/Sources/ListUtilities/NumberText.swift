@@ -22,42 +22,70 @@ enum NumberText {
 		if value.rounded(.towardZero) == value, value.magnitude < 1e16 {
 			return String(Int64(value))
 		}
-		// "-d.ddddddddddddddde-xxx": 16 significant digits, rounded.
-		var buffer = (Int64(0), Int64(0), Int64(0), Int64(0))
-		let formatted = withUnsafeMutableBytes(of: &buffer) { bytes in
-			let characters = bytes.baseAddress!.assumingMemoryBound(to: CChar.self)
-			_ = withVaList([value]) { vsnprintf(characters, bytes.count, "%.15e", $0) }
-			return Array(UnsafeBufferPointer(start: characters, count: strlen(characters)).map { UInt8(bitPattern: $0) })
-		}
-		let negative = formatted[0] == UInt8(ascii: "-")
-		let mantissa = formatted[(negative ? 1 : 0)...].prefix { $0 != UInt8(ascii: "e") }
-		var digits = mantissa.filter { $0 != UInt8(ascii: ".") }
-		while digits.count > 1, digits.last == UInt8(ascii: "0") {
-			digits.removeLast()
-		}
-		let exponent = Int(String(decoding: formatted[(formatted.firstIndex(of: UInt8(ascii: "e"))! + 1)...], as: UTF8.self))!
-		var result: [UInt8] = []
-		if (-6 ... 15).contains(exponent) {
-			if negative {
-				result.append(UInt8(ascii: "-"))
-			}
-			if exponent < 0 {
-				result += Array("0.".utf8) + Array(repeating: UInt8(ascii: "0"), count: -exponent - 1) + digits
-			} else {
-				let whole = exponent + 1
-				result += digits.prefix(whole) + Array(repeating: UInt8(ascii: "0"), count: max(0, whole - digits.count))
-				if digits.count > whole {
-					result += [UInt8(ascii: ".")] + digits.dropFirst(whole)
+		// "-d.ddddddddddddddde-xxx": 16 significant digits, rounded, read and rewritten in one buffer (an array for each
+		// step took 757 ms for a million reals; this takes about 400, most of it `vsnprintf`'s).
+		return withUnsafeTemporaryAllocation(of: UInt8.self, capacity: 96) { buffer in
+			let formatted = buffer.baseAddress!, digits = formatted + 32, text = formatted + 48
+			let length = withVaList([value]) { vsnprintf(UnsafeMutableRawPointer(formatted).assumingMemoryBound(to: CChar.self), 32, "%.15e", $0) }
+			let negative = formatted[0] == UInt8(ascii: "-")
+			var position = negative ? 1 : 0
+			var count = 0
+			while formatted[position] != UInt8(ascii: "e") {
+				if formatted[position] != UInt8(ascii: ".") {
+					digits[count] = formatted[position]
+					count += 1
 				}
+				position += 1
 			}
-		} else {
-			result.append(negative ? UInt8(ascii: "-") : UInt8(ascii: " "))
-			result.append(digits[0])
-			if digits.count > 1 {
-				result += [UInt8(ascii: ".")] + digits.dropFirst()
+			while count > 1, digits[count - 1] == UInt8(ascii: "0") {
+				count -= 1
 			}
-			result += Array("e\(exponent < 0 ? "-" : "+")\(exponent.magnitude)".utf8)
+			let exponentIsNegative = formatted[position + 1] == UInt8(ascii: "-")
+			var exponent = 0
+			for index in position + 2 ..< Int(length) {
+				exponent = exponent * 10 + Int(formatted[index] - UInt8(ascii: "0"))
+			}
+			if exponentIsNegative {
+				exponent = -exponent
+			}
+			var written = 0
+			func write(_ byte: UInt8) {
+				text[written] = byte
+				written += 1
+			}
+			func write(digitsIn range: Range<Int>) {
+				for index in range { write(digits[index]) }
+			}
+			if (-6 ... 15).contains(exponent) {
+				if negative {
+					write(UInt8(ascii: "-"))
+				}
+				if exponent < 0 {
+					write(UInt8(ascii: "0"))
+					write(UInt8(ascii: "."))
+					for _ in 0 ..< -exponent - 1 { write(UInt8(ascii: "0")) }
+					write(digitsIn: 0 ..< count)
+				} else {
+					let whole = exponent + 1
+					write(digitsIn: 0 ..< min(whole, count))
+					for _ in count ..< max(count, whole) { write(UInt8(ascii: "0")) }
+					if count > whole {
+						write(UInt8(ascii: "."))
+						write(digitsIn: whole ..< count)
+					}
+				}
+			} else {
+				write(negative ? UInt8(ascii: "-") : UInt8(ascii: " "))
+				write(digits[0])
+				if count > 1 {
+					write(UInt8(ascii: "."))
+					write(digitsIn: 1 ..< count)
+				}
+				write(UInt8(ascii: "e"))
+				write(exponent < 0 ? UInt8(ascii: "-") : UInt8(ascii: "+"))
+				for byte in String(exponent.magnitude).utf8 { write(byte) }
+			}
+			return String(decoding: UnsafeBufferPointer(start: text, count: written), as: UTF8.self)
 		}
-		return String(decoding: result, as: UTF8.self)
 	}
 }

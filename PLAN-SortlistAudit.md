@@ -23,11 +23,15 @@ criteria on 100,000 rows 61 ms, an `ascending` array of 10,000,000 11 ms. Sortin
 
 ## Speed
 
-- [ ] Dates' keys from their 8 bytes (seconds since 1904, local time) instead of a descriptor and its `dateValue`:
+- [x] Dates' keys from their 8 bytes (seconds since 1904, local time) instead of a descriptor and its `dateValue`:
   365 ms to 56 for a million. The order is the same, but for local times that don't exist (the hour skipped when
   clocks go forward), which a script can only make itself (decided 2026-10-17: that's on the script).
-- [ ] `NumberText` writes reals in one buffer, without arrays: 757 ms to 398 for a million, the same text for
+- [x] `NumberText` writes reals in one buffer, without arrays: 757 ms to 398 for a million, the same text for
   5,000,000 random numbers.
+
+Afterwards (`Scripts/sort-benchmark.sh`, the whole command): a million dates 610 ms to 280, a million numbers and
+texts 816 to 660 (100,000: 51 to 17.5, and 70 to 52). `NumberText` also gave the same text as before for 5,000,012
+random numbers, besides `NumberTextTests`' comparison with the coercion.
 
 ## Code quality
 
