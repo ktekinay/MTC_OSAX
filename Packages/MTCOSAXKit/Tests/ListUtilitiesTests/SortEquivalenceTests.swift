@@ -69,10 +69,9 @@ struct SortEquivalenceTests {
 	}
 
 	/// Lists sorted together by a text and a number, in both orders (with missing values in both), each in its own
-	/// direction: the text becomes ranks, sorted with the number by the radix sort.
-	@Test func textAndNumberKeysMatchReference() {
+	/// direction: the text becomes ranks, sorted with the number by the radix sort (or by the merge sort, below 64).
+	@Test(arguments: [40, 1_500]) func textAndNumberKeysMatchReference(count: Int) {
 		var generator = SeededGenerator(seed: 5)
-		let count = 1_500
 		let texts: [String?] = (0 ..< count).map { _ in Int.random(in: 0 ..< 30, using: &generator) == 0 ? nil : String(Self.randomText(&generator).prefix(2)) }
 		let numbers: [Double?] = (0 ..< count).map { _ in Int.random(in: 0 ..< 30, using: &generator) == 0 ? nil : Double(Int.random(in: 0 ..< 5, using: &generator)) }
 		let lists = AppleEventList([
@@ -307,6 +306,22 @@ struct SortedResultTests {
 				}
 			}
 		}
+	}
+
+	/// Dates sort by the local seconds since 1904 their data holds (in both directions, `missing value` last), read
+	/// without a descriptor for each.
+	@Test func datesByTheirData() {
+		let seconds: [Int64] = [3_000_000_000, -5, 0, 3_000_000_000, 86_400, 2]
+		let dates = seconds.map { value in withUnsafeBytes(of: value) { NSAppleEventDescriptor(descriptorType: typeLongDateTime, bytes: $0.baseAddress, length: 8)! } }
+		let list = AppleEventList(dates + [.missingValue])
+		func sorted(_ parameters: [String: any AppleEventEncodable]) -> [Int64?] {
+			items(send("SATISort", parameters.merging(["----": list]) { $1 })).map { item in
+				item.descriptorType == typeType ? nil : item.data.withUnsafeBytes { $0.loadUnaligned(as: Int64.self) }
+			}
+		}
+		#expect(sorted([:]) == [-5, 0, 2, 86_400, 3_000_000_000, 3_000_000_000, nil])
+		#expect(sorted(["Asce": false]) == [3_000_000_000, 3_000_000_000, 86_400, 2, 0, -5, nil])
+		#expect(sorted(["Uniq": true]) == [-5, 0, 2, 86_400, 3_000_000_000, nil])
 	}
 
 	/// Texts with characters of every kind the comparison treats specially, and missing values, under every flag

@@ -22,6 +22,7 @@ Command counts include hidden commands. Suites sharing a priority are done toget
 | 6 ✓ | XML XPath, XSLT | 15 | `XMLXPath`, contexts, `XMLXPointer`, `XMLTransform` (XSLT), indexes/lookup |
 | 6 ✓ | XML Documents | 18 | `XMLSave`, encoding, catalogs, XInclude, canonicalization, doc IDs |
 | 6 ✓ | XML Validation | 11 | DTD / XML Schema / RelaxNG validation, ID lookup, name validity |
+| 7 ✓ | Arrays ([done](Implemented/PLAN-Arrays.md)) | 33 | Matrices, reading and changing arrays, arithmetic on lists, arrays, matrices and polynomials, `statlist`, `histogram`, `evalformula`, polynomials and fitting, binary files (`createarray`, `randomarray` and `array of real` came with priority 4; the 4 hidden commands and the obsolete `extractitem` are left out) |
 
 ### Why this order
 
@@ -39,6 +40,7 @@ Additions that Satimage never had, planned separately:
 - ✓ **YAML and TOML for property lists** ([done](Implemented/PLAN-YAMLTOML.md)): `PlistToYAML`, `PlistFromYAML`, `PlistToTOML` and `PlistFromTOML`, and files for these and Satimage's JSON pair.
 - ✓ **Settings from AppleScript** ([done](Implemented/PLAN-Settings.md)): `mtc_get`, `mtc_set` and `mtc_reset` in their own visible "MTC_OSAX Settings" suite, for `idle_timeout`, `dollar_references` and `regex_syntax`.
 - ✓ **A faster `sortlist`** ([done](Implemented/PLAN-FastSort.md)): radix and merge sorts of our own and lists read without a descriptor for each item (2.5 to 16 times as fast), with text compared by full case folding however its accents are typed.
+- ✓ **A `sortlist` audit** ([done](Implemented/PLAN-SortlistAudit.md)): crashes from many `with respect to` criteria, `ascending` read only as far as it's used, faster dates and numbers as text.
 
 ## May Do Later
 
@@ -46,7 +48,6 @@ Additions that Satimage never had, planned separately:
 |---|---|---|
 | Applescript types (hidden, legacy text) | 6 | `find text obsolete` (`SATIFIND`) and `replace obsolete` (`SATIRPLC`), which are superseded by `find text` (`SATIFINd`) and `change` (`SATIRPLl`); `extract string` (same as `text i thru j of s`); undocumented `findxmlstag`; `gziptext`/`gunziptext` (no public equivalent). `convert to Mac` is commented out in the SDEF. |
 | Resource Suite | 3 | Read classic resource forks (`load resource`, `list resources`, `get resource name`) |
-| Arrays | 33 | `array of real` / `matrix` types: create, extract/change/insert, arithmetic on lists, `statlist`, `histogram`, `evalformula`, polynomials and fitting, binary read/write. (The `array of real` type, `createarray` and `randomarray` come with priority 4.) |
 | Linear algebra | 9 | `transpose`, `multmatrix`, `invertmatrix`, `solve linear system`, eigenvalues, LU decomposition, determinant |
 | FFT and convolution | 6 | `fft1d`, `fft2d`, `filterarray`, `convolve`, `correlate`, `interpolate` |
 | Image files | 4 | Image bounds, image → gray-level matrix, matrix → gray image, particle detection |

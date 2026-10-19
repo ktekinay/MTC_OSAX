@@ -336,15 +336,15 @@ enum ColumnOrder: RowOrder {
 	}
 }
 
-/// Rows by several columns, the first that differs deciding.
-struct ColumnsOrder: RowOrder {
-	let columns: [ColumnOrder]
+/// Rows by several columns of number keys (see `RowSort.numberKey`; text as ranks), the first that differs deciding.
+struct KeysOrder: RowOrder {
+	let columns: [[UInt64]]
 
 	func compare(_ a: Int, _ b: Int) -> Int {
-		for column in columns {
-			let result = column.compare(a, b)
-			if result != 0 {
-				return result
+		for keys in columns {
+			let x = keys[a], y = keys[b]
+			if x != y {
+				return x < y ? -1 : 1
 			}
 		}
 		return 0

@@ -57,8 +57,9 @@ public struct DescriptorSnapshot: Codable, Hashable {
 			fields = Self.fields(of: descriptor, hexLimit: hexLimit)
 		case "list":
 			items = (0 ..< descriptor.numberOfItems).map { DescriptorSnapshot(descriptor.atIndex($0 + 1)!, hexLimit: hexLimit) }
-		case "Lido" where ArrayOfReal.values(of: descriptor) != nil:
-			items = ArrayOfReal.values(of: descriptor)!.map { DescriptorSnapshot(NSAppleEventDescriptor(double: $0)) }
+		case "Lido" where ArrayOfReal.values(of: descriptor) != nil, "Poly" where ArrayOfReal.values(of: descriptor, type: ArrayOfReal.polynomialType) != nil:
+			// The numbers, whether 8 or 4 bytes each.
+			items = ArrayOfReal.values(of: descriptor, type: descriptor.descriptorType)!.map { DescriptorSnapshot(NSAppleEventDescriptor(double: $0)) }
 		case "utxt", "ut16", "utf8", "TEXT":
 			text = descriptor.stringValue
 		case "furl":
@@ -136,8 +137,9 @@ public struct DescriptorSnapshot: Codable, Hashable {
 				list.insert(item.descriptor, at: index + 1)
 			}
 			return list
-		case "Lido" where items != nil:
-			return ArrayOfReal(items!.map(\.realValue)).appleEventDescriptor
+		case "Lido" where items != nil, "Poly" where items != nil:
+			let values = items!.map(\.realValue)
+			return (try? ArrayOfReal.descriptor(count: values.count, type: typeCode) { _ = $0.initialize(from: values) }) ?? .missingValue
 		case "utxt":
 			return NSAppleEventDescriptor(string: text ?? "")
 		case "ut16":
@@ -301,14 +303,15 @@ public struct DescriptorSnapshot: Codable, Hashable {
 	/// Whether `actual` equals this expected value, where `{{random:N}}` in expected text stands for any N letters
 	/// or digits (used for `mkstemp` and `mkdtemp` names), and an expected value of type `any` matches any value
 	/// (used for dates and applications that depend on the machine). Reals may differ by `realTolerance` units in the
-	/// last place. Compare normalized snapshots.
-	public func matches(_ actual: DescriptorSnapshot, realTolerance: Int = 0) -> Bool {
+	/// last place, or by `absoluteTolerance` (for results near 0, where a few units of a tiny number are many units
+	/// in the last place). Compare normalized snapshots.
+	public func matches(_ actual: DescriptorSnapshot, realTolerance: Int = 0, absoluteTolerance: Double = 0) -> Bool {
 		// References (CFRefs, XMLRefs) are opaque, and SatimageOSAX gave equal small numbers the same CFRef.
 		if type == "any" || (Self.referenceTypes.contains(type) && actual.type == type) {
 			return true
 		}
-		if realTolerance > 0, type == "doub", actual.type == "doub", let expected = real, let other = actual.real {
-			return Self.unitsInTheLastPlace(between: expected, and: other) <= realTolerance
+		if realTolerance > 0 || absoluteTolerance > 0, type == "doub", actual.type == "doub", let expected = real, let other = actual.real {
+			return Self.unitsInTheLastPlace(between: expected, and: other) <= realTolerance || abs(expected - other) <= absoluteTolerance
 		}
 		guard let text, text.contains("{{random:"), let actualText = actual.text, type == actual.type else {
 			guard type == actual.type, (items ?? []).count == (actual.items ?? []).count,
@@ -320,8 +323,10 @@ public struct DescriptorSnapshot: Codable, Hashable {
 			copy.items = actual.items
 			copy.fields = actual.fields
 			return copy == actual
-				&& zip(items ?? [], actual.items ?? []).allSatisfy { $0.matches($1, realTolerance: realTolerance) }
-				&& zip(fields ?? [], actual.fields ?? []).allSatisfy { $0.key == $1.key && $0.value.matches($1.value, realTolerance: realTolerance) }
+				&& zip(items ?? [], actual.items ?? []).allSatisfy { $0.matches($1, realTolerance: realTolerance, absoluteTolerance: absoluteTolerance) }
+				&& zip(fields ?? [], actual.fields ?? []).allSatisfy {
+					$0.key == $1.key && $0.value.matches($1.value, realTolerance: realTolerance, absoluteTolerance: absoluteTolerance)
+				}
 		}
 		var pattern = "^"
 		var rest = Substring(text)

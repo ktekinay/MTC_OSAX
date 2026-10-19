@@ -356,3 +356,29 @@ struct ArrayOfRealTests {
 		#expect(bytes == Data("Not a recordbuod".utf8) + Data([0, 0, 0, 0, 0, 0, 0xf8, 0x3f, 0, 0, 0, 0, 0, 0, 0, 0x80]))
 	}
 }
+
+/// 4-byte reals (SatimageOSAX's `read binary` made them, recorded in `Fixtures/Arrays/Files`), and polynomials.
+struct ArrayLayoutTests {
+	@Test func fourByteRealsAreRead() throws {
+		// Recorded from SatimageOSAX: `read binary … as small integer` of {1, -2, 3}.
+		let data = Data("Not a recordgnis".utf8) + Data([0x00, 0x00, 0x80, 0x3f, 0x00, 0x00, 0x00, 0xc0, 0x00, 0x00, 0x40, 0x40])
+		let descriptor = try #require(NSAppleEventDescriptor(descriptorType: ArrayOfReal.descriptorType, data: data))
+		#expect(ArrayOfReal.values(of: descriptor) == [1, -2, 3])
+		#expect(DescriptorSnapshot(descriptor).items?.map(\.real) == [1, -2, 3])
+		// Not a whole number of reals: not an array.
+		let ragged = try #require(NSAppleEventDescriptor(descriptorType: ArrayOfReal.descriptorType, data: data.dropLast()))
+		#expect(ArrayOfReal.values(of: ragged) == nil)
+	}
+
+	@Test func polynomialsAreArraysOfAnotherType() throws {
+		let polynomial = try ArrayOfReal.descriptor(count: 2, type: ArrayOfReal.polynomialType) { _ = $0.initialize(from: [1, 2]) }
+		#expect(polynomial.descriptorType == ArrayOfReal.polynomialType)
+		#expect(polynomial.data == ArrayOfReal([1, 2]).appleEventDescriptor.data)
+		#expect(ArrayOfReal.values(of: polynomial, type: ArrayOfReal.polynomialType) == [1, 2])
+		#expect(ArrayOfReal.values(of: polynomial) == nil)
+		let snapshot = DescriptorSnapshot(polynomial)
+		#expect(snapshot.items?.map(\.real) == [1, 2])
+		#expect(snapshot.descriptor.descriptorType == ArrayOfReal.polynomialType)
+		#expect(snapshot.descriptor.data == polynomial.data)
+	}
+}

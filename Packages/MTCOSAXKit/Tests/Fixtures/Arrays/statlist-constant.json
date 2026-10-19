@@ -1,0 +1,135 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Stat",
+        "fields" : [
+          {
+            "key" : "Krts",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 2,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 2,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 2,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "MAX ",
+              "value" : {
+                "real" : 2,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "MAXi",
+              "value" : {
+                "integer" : 1,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "MIN ",
+              "value" : {
+                "real" : 2,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "MINi",
+              "value" : {
+                "integer" : 1,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "SUM ",
+              "value" : {
+                "real" : 6,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "MEAN",
+              "value" : {
+                "real" : 2,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "Sigm",
+              "value" : {
+                "real" : 0,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "StDe",
+              "value" : {
+                "real" : 0,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "msng",
+              "value" : {
+                "integer" : 0,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "Skew",
+              "value" : {
+                "text" : "nan",
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "Krts",
+              "value" : {
+                "text" : "nan",
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "MEDI",
+              "value" : {
+                "real" : 2,
+                "type" : "doub"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    }
+  ],
+  "name" : "statlist-constant",
+  "recordedAt" : "2026-10-15T13:37:32Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "statlist {2, 2, 2} with kurtosis",
+  "timeZone" : "America/New_York"
+}

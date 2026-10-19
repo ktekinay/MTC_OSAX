@@ -1,0 +1,142 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Stat",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "ncol",
+                  "value" : {
+                    "integer" : 2,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "nrow",
+                  "value" : {
+                    "integer" : 3,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "Lido",
+                  "value" : {
+                    "items" : [
+                      {
+                        "integer" : 1,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 2,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 3,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 4,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 5,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 6,
+                        "type" : "long"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "Matr"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "MAX ",
+              "value" : {
+                "real" : 6,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "MAXi",
+              "value" : {
+                "integer" : 6,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "MIN ",
+              "value" : {
+                "real" : 1,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "MINi",
+              "value" : {
+                "integer" : 1,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "SUM ",
+              "value" : {
+                "real" : 21,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "MEAN",
+              "value" : {
+                "real" : 3.5,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "Sigm",
+              "value" : {
+                "real" : 2.9166666666666665,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "StDe",
+              "value" : {
+                "real" : 1.707825127659933,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "msng",
+              "value" : {
+                "integer" : 0,
+                "type" : "long"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    }
+  ],
+  "name" : "statlist-matrix",
+  "recordedAt" : "2026-10-15T13:37:32Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "statlist {class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}}",
+  "timeZone" : "America/New_York"
+}

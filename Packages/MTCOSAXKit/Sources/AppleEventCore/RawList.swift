@@ -1,4 +1,3 @@
-import AppleEventCore
 import CoreServices
 import Foundation
 
@@ -32,7 +31,7 @@ package struct RawList {
 	}
 
 	/// An item's descriptor type and the size of its data.
-	func info(_ index: Int) -> (type: DescType, size: Int) {
+	package func info(_ index: Int) -> (type: DescType, size: Int) {
 		withList { list in
 			var type: DescType = 0, size = 0
 			AESizeOfNthItem(list, index + 1, &type, &size)
@@ -41,7 +40,7 @@ package struct RawList {
 	}
 
 	/// An item's data as a value of its own type, which is `type` and `MemoryLayout<Value>.size` long (check `info`).
-	func value<Value: BitwiseCopyable>(_ index: Int, type: DescType, as _: Value.Type) -> Value {
+	package func value<Value: BitwiseCopyable>(_ index: Int, type: DescType, as _: Value.Type) -> Value {
 		withList { list in
 			withUnsafeTemporaryAllocation(of: Value.self, capacity: 1) { buffer in
 				var keyword: AEKeyword = 0, actualType: DescType = 0, size = 0
@@ -52,7 +51,7 @@ package struct RawList {
 	}
 
 	/// A `utxt` item's UTF-16 (`size` bytes, from `info`), into `buffer` (which grows if it must).
-	func utf16(_ index: Int, size: Int, into buffer: inout [UInt16]) -> Int {
+	package func utf16(_ index: Int, size: Int, into buffer: inout [UInt16]) -> Int {
 		if buffer.count < size / 2 {
 			buffer = [UInt16](repeating: 0, count: size / 2)
 		}
@@ -65,19 +64,65 @@ package struct RawList {
 		}
 	}
 
+	/// An item seen by `forEachItem`: its type and size, and for a number or a type (eight bytes or fewer) its data.
+	package struct Item {
+		package var index: Int
+		package var type: DescType
+		package var size: Int
+		/// The data of a `shor`, `long`, `comp`, `sing`, `doub` or `type` item, little-endian from the low byte; 0
+		/// for other items, whose data isn't read (a list's would be copied whole).
+		package var bits: UInt64
+
+		/// Whether the item is `missing value`.
+		package var isMissingValue: Bool {
+			type == typeType && UInt32(truncatingIfNeeded: bits) == NSAppleEventDescriptor.missingValueCode
+		}
+
+		/// The item's number, if it's an integer or a real; nil for anything else.
+		package var number: Double? {
+			switch type {
+			case typeSInt16: Double(Int16(truncatingIfNeeded: bits))
+			case typeSInt32: Double(Int32(truncatingIfNeeded: bits))
+			case typeSInt64: Double(Int64(bitPattern: bits))
+			case typeIEEE32BitFloatingPoint: Double(Float32(bitPattern: UInt32(truncatingIfNeeded: bits)))
+			case typeIEEE64BitFloatingPoint: Double(bitPattern: bits)
+			default: nil
+			}
+		}
+	}
+
+	private static let scalarTypes: Set<DescType> = [typeSInt16, typeSInt32, typeSInt64, typeIEEE32BitFloatingPoint, typeIEEE64BitFloatingPoint, typeType]
+
+	/// Each item in order, with one look at the list: reading 1,000,000 reals through `info` and `value` took 127 ms,
+	/// and this takes about 93. (One `AEGetNthPtr` of any type for each item would be quicker, but for an item that
+	/// is a list it copies the whole list: 50 ms for one of 100,000.)
+	package func forEachItem(_ body: (Item) throws -> Void) rethrows {
+		try withList { list in
+			var keyword: AEKeyword = 0, actualType: DescType = 0, actualSize = 0
+			for index in 0 ..< count {
+				var item = Item(index: index, type: 0, size: 0, bits: 0)
+				AESizeOfNthItem(list, index + 1, &item.type, &item.size)
+				if item.size <= 8, Self.scalarTypes.contains(item.type) {
+					AEGetNthPtr(list, index + 1, item.type, &keyword, &actualType, &item.bits, 8, &actualSize)
+				}
+				try body(item)
+			}
+		}
+	}
+
 	/// An item as a descriptor, for the kinds read no other way.
-	func descriptor(_ index: Int) -> NSAppleEventDescriptor {
+	package func descriptor(_ index: Int) -> NSAppleEventDescriptor {
 		list.atIndex(index + 1)!
 	}
 
 	/// What goes in a made list instead of the item.
-	enum Replacement {
+	package enum Replacement {
 		case real(Double)
 		case text(String)
 	}
 
 	/// A list of the items at `rows`, in that order, or their replacements.
-	func list(of rows: [Int], replacing replacement: (Int) -> Replacement? = { _ in nil }) throws -> NSAppleEventDescriptor {
+	package func list(of rows: [Int], replacing replacement: (Int) -> Replacement? = { _ in nil }) throws -> NSAppleEventDescriptor {
 		var result = AEDescList()
 		try check(AECreateList(nil, 0, false, &result))
 		do {

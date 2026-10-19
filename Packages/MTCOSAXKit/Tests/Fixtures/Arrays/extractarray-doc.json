@@ -1,0 +1,508 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CRAR",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 50,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 2,
+              "type" : "doub"
+            },
+            {
+              "real" : 3,
+              "type" : "doub"
+            },
+            {
+              "real" : 4,
+              "type" : "doub"
+            },
+            {
+              "real" : 5,
+              "type" : "doub"
+            },
+            {
+              "real" : 6,
+              "type" : "doub"
+            },
+            {
+              "real" : 7,
+              "type" : "doub"
+            },
+            {
+              "real" : 8,
+              "type" : "doub"
+            },
+            {
+              "real" : 9,
+              "type" : "doub"
+            },
+            {
+              "real" : 10,
+              "type" : "doub"
+            },
+            {
+              "real" : 11,
+              "type" : "doub"
+            },
+            {
+              "real" : 12,
+              "type" : "doub"
+            },
+            {
+              "real" : 13,
+              "type" : "doub"
+            },
+            {
+              "real" : 14,
+              "type" : "doub"
+            },
+            {
+              "real" : 15,
+              "type" : "doub"
+            },
+            {
+              "real" : 16,
+              "type" : "doub"
+            },
+            {
+              "real" : 17,
+              "type" : "doub"
+            },
+            {
+              "real" : 18,
+              "type" : "doub"
+            },
+            {
+              "real" : 19,
+              "type" : "doub"
+            },
+            {
+              "real" : 20,
+              "type" : "doub"
+            },
+            {
+              "real" : 21,
+              "type" : "doub"
+            },
+            {
+              "real" : 22,
+              "type" : "doub"
+            },
+            {
+              "real" : 23,
+              "type" : "doub"
+            },
+            {
+              "real" : 24,
+              "type" : "doub"
+            },
+            {
+              "real" : 25,
+              "type" : "doub"
+            },
+            {
+              "real" : 26,
+              "type" : "doub"
+            },
+            {
+              "real" : 27,
+              "type" : "doub"
+            },
+            {
+              "real" : 28,
+              "type" : "doub"
+            },
+            {
+              "real" : 29,
+              "type" : "doub"
+            },
+            {
+              "real" : 30,
+              "type" : "doub"
+            },
+            {
+              "real" : 31,
+              "type" : "doub"
+            },
+            {
+              "real" : 32,
+              "type" : "doub"
+            },
+            {
+              "real" : 33,
+              "type" : "doub"
+            },
+            {
+              "real" : 34,
+              "type" : "doub"
+            },
+            {
+              "real" : 35,
+              "type" : "doub"
+            },
+            {
+              "real" : 36,
+              "type" : "doub"
+            },
+            {
+              "real" : 37,
+              "type" : "doub"
+            },
+            {
+              "real" : 38,
+              "type" : "doub"
+            },
+            {
+              "real" : 39,
+              "type" : "doub"
+            },
+            {
+              "real" : 40,
+              "type" : "doub"
+            },
+            {
+              "real" : 41,
+              "type" : "doub"
+            },
+            {
+              "real" : 42,
+              "type" : "doub"
+            },
+            {
+              "real" : 43,
+              "type" : "doub"
+            },
+            {
+              "real" : 44,
+              "type" : "doub"
+            },
+            {
+              "real" : 45,
+              "type" : "doub"
+            },
+            {
+              "real" : 46,
+              "type" : "doub"
+            },
+            {
+              "real" : 47,
+              "type" : "doub"
+            },
+            {
+              "real" : 48,
+              "type" : "doub"
+            },
+            {
+              "real" : 49,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "ExLF",
+        "fields" : [
+          {
+            "key" : "for ",
+            "value" : {
+              "integer" : 3,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "at  ",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "step",
+            "value" : {
+              "integer" : 10,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "bloc",
+            "value" : {
+              "integer" : 2,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 1,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 2,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 3,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 4,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 5,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 6,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 7,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 8,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 9,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 10,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 11,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 12,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 13,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 14,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 15,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 16,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 17,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 18,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 19,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 20,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 21,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 22,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 23,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 24,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 25,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 26,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 27,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 28,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 29,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 30,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 31,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 32,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 33,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 34,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 35,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 36,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 37,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 38,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 39,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 40,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 41,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 42,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 43,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 44,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 45,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 46,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 47,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 48,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 49,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "Lido"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 10,
+              "type" : "doub"
+            },
+            {
+              "real" : 11,
+              "type" : "doub"
+            },
+            {
+              "real" : 20,
+              "type" : "doub"
+            },
+            {
+              "real" : 21,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    }
+  ],
+  "name" : "extractarray-doc",
+  "recordedAt" : "2026-10-15T13:37:28Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "extractarray (createarray 50) for 3 at 1 step 10 blocksize 2",
+  "timeZone" : "America/New_York"
+}

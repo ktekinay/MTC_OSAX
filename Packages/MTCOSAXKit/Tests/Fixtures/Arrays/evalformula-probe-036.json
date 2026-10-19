@@ -1,0 +1,73 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "LSOP",
+        "fields" : [
+          {
+            "key" : "with",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "x",
+                        "type" : "utxt"
+                      },
+                      {
+                        "items" : [
+                          {
+                            "real" : 0.5,
+                            "type" : "doub"
+                          }
+                        ],
+                        "type" : "list"
+                      },
+                      {
+                        "text" : "k",
+                        "type" : "utxt"
+                      },
+                      {
+                        "items" : [
+                          {
+                            "real" : 0.5,
+                            "type" : "doub"
+                          }
+                        ],
+                        "type" : "list"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "IncEllipticF(x,k)",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 0.5050887275786482,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "evalformula-probe-036",
+  "recordedAt" : "2026-10-15T13:53:08Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "evalformula \"IncEllipticF(x,k)\" with {x:{0.5}, k:{0.5}}",
+  "timeZone" : "America/New_York"
+}

@@ -32,17 +32,19 @@ public enum ListUtilities {
 		return (0 ..< descriptor.numberOfItems).map { descriptor.atIndex($0 + 1)! }
 	}
 
-	/// A list's items, with an `array of real`'s kept as numbers: a descriptor for each of an array's numbers (about
-	/// 145 bytes, and a conversion to text to compare) made a hundred million of them take 15 GB and minutes.
+	/// One of the lists in a list of lists (`sortlist`, `exclude items`, `keep items`): an `array of real`'s numbers (a
+	/// descriptor for each of them, about 145 bytes and a conversion to text to compare, made a hundred million take
+	/// 15 GB and minutes), or a list read where it is, without a descriptor for each item.
 	enum Items {
 		case reals([Double])
-		case descriptors([NSAppleEventDescriptor])
+		case list(RawList)
 
+		/// Nil if it's neither.
 		init?(_ descriptor: NSAppleEventDescriptor) {
 			if let values = ArrayOfReal.values(of: descriptor) {
 				self = .reals(values)
-			} else if descriptor.descriptorType == typeAEList {
-				self = .descriptors((0 ..< descriptor.numberOfItems).map { descriptor.atIndex($0 + 1)! })
+			} else if let list = RawList(descriptor) {
+				self = .list(list)
 			} else {
 				return nil
 			}
@@ -51,7 +53,7 @@ public enum ListUtilities {
 		var count: Int {
 			switch self {
 			case let .reals(values): values.count
-			case let .descriptors(items): items.count
+			case let .list(list): list.count
 			}
 		}
 
@@ -61,7 +63,7 @@ public enum ListUtilities {
 			case let .reals(values): try ArrayOfReal.descriptor(count: rows.count) { buffer in
 					for (index, row) in rows.enumerated() { buffer[index] = values[row] }
 				}
-			case let .descriptors(items): rows.map { items[$0] }.appleEventDescriptor
+			case let .list(list): try list.list(of: rows)
 			}
 		}
 	}
@@ -224,7 +226,7 @@ public enum ListUtilities {
 		}
 		let kept: [Int] = switch columns[reference - 1] {
 		case let .reals(values): values.indices.filter { filter.matches(values[$0]) == keeping }
-		case let .descriptors(items): items.indices.filter { filter.matches(items[$0]) == keeping }
+		case let .list(list): (0 ..< list.count).filter { filter.matches(list.descriptor($0)) == keeping }
 		}
 		return try columns.map { column in try column.selecting(kept.filter { $0 < column.count }) }.appleEventDescriptor
 	}
