@@ -50,6 +50,63 @@ struct EditingTests {
 		#expect(send("SATIExLF", ["----": deep, "for ": -1]).error?.number == -50)
 	}
 
+	/// Matrices count toward the nesting limit (each started again from 0: 3,000 levels ran out of stack). Audit C2.
+	@Test func matricesCountTowardNesting() throws {
+		// Through lists, each level is two (the matrix, and the list holding the next).
+		for throughLists in [true, false] {
+			let allowed = throughLists ? 250 : 500
+			#expect(values(send("SATIExLF", ["----": try nestedMatrices(allowed, throughLists: throughLists), "for ": -1])) == [1])
+			for levels in [allowed + 20, 3_000] {
+				let deep = try nestedMatrices(levels, throughLists: throughLists)
+				#expect(send("SATIExLF", ["----": deep, "for ": -1]).error?.number == -50, "\(levels)")
+				#expect(send("SATIFILL", ["----": AppleEventList([deep]), "with": 0]).error?.number == -50, "\(levels)")
+			}
+		}
+	}
+
+	/// Each of a matrix's dimensions at most 100,000,000: 0 columns let 2,147,483,647 rows through, and
+	/// reversearray went through them one by one (Audit C3). A matrix with a dimension of 0 is still a matrix.
+	@Test func matrixDimensions() throws {
+		let tall = try Matrix(columns: 0, rows: 2_147_483_647, values: []).descriptor()
+		#expect(send("SATILiRe", ["----": tall]).error?.number == -50)
+		let wide = try Matrix(columns: 100_000_001, rows: 0, values: []).descriptor()
+		#expect(send("SATILiRe", ["----": wide]).error?.number == -50)
+		let empty = try #require(send("SATILiRe", ["----": try Matrix(columns: 0, rows: 3, values: []).descriptor()]).result)
+		#expect(try Matrix(empty) == Matrix(columns: 0, rows: 3, values: []))
+	}
+
+	/// Blocks of 0 numbers insert nothing, at once (2,147,483,647 of them were gone through one by one). Audit S3.
+	@Test func emptyBlocks() {
+		let start = Date()
+		#expect(values(send("SATIInLF", ["----": AppleEventList([1]), "into": AppleEventList([2]), "for ": 2_147_483_647, "bloc": 0])) == [2])
+		#expect(Date().timeIntervalSince(start) < 1)
+	}
+
+	/// A range wider than a real can hold, as for createarray (it made {NaN, inf, inf}). Audit R4.
+	@Test func wideMatrixRanges() {
+		#expect(values(send("SATICRMT", ["----": "x", "ncol": 3, "nrow": 1, "rang": [-1e308, 1e308]])) == [-1e308, 0, 1e308])
+		#expect(values(send("SATICRMT", ["----": "y", "ncol": 1, "nrow": 3, "rang": [1e308, -1e308]])) == [1e308, 0, -1e308])
+		#expect(values(send("SATICRMT", ["----": "x", "ncol": 3, "nrow": 1, "rang": [0, 1]])) == [0, 0.5, 1])
+	}
+
+	/// Items that aren't missing keep their types: integers of each size, reals, types, text (integers were copied
+	/// through a descriptor each; now from their data). Audit P3.
+	@Test func replaceMissingKeepsItems() throws {
+		var wide: Int64 = 1 << 40, short: Int16 = -7
+		let items: [NSAppleEventDescriptor] = [
+			NSAppleEventDescriptor(int32: 5), NSAppleEventDescriptor.missingValue,
+			NSAppleEventDescriptor(descriptorType: typeSInt64, bytes: &wide, length: 8)!,
+			NSAppleEventDescriptor(descriptorType: typeSInt16, bytes: &short, length: 2)!,
+			NSAppleEventDescriptor(double: 2.5), NSAppleEventDescriptor(typeCode: FourCharCode(fourCharString: "abcd")),
+			NSAppleEventDescriptor(string: "text"),
+		]
+		let replaced = try #require(list(send("SATIFILL", ["----": AppleEventList(items), "with": 9])))
+		#expect(replaced.map(\.descriptorType) == [typeSInt32, typeIEEE64BitFloatingPoint, typeSInt64, typeSInt16, typeIEEE64BitFloatingPoint, typeType, typeUnicodeText])
+		#expect(replaced[0].int32Value == 5 && replaced[1].doubleValue == 9 && replaced[2].data == Data(bytes: &wide, count: 8))
+		#expect(replaced[3].data == Data(bytes: &short, count: 2) && replaced[4].doubleValue == 2.5)
+		#expect(replaced[5].typeCodeValue == FourCharCode(fourCharString: "abcd") && replaced[6].stringValue == "text")
+	}
+
 	/// A million numbers each way, in well under a second (a descriptor for each would take seconds).
 	@Test func largeArrays() {
 		let count = 1_000_000

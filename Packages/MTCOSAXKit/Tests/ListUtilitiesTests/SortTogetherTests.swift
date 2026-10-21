@@ -49,6 +49,32 @@ struct SortTogetherTests {
 		#expect(Date().timeIntervalSince(start) < 5)
 	}
 
+	/// Repeated criteria with an `ascending` as long: only the criteria left are read (a descriptor was made for each
+	/// of `ascending`'s numbers as far as the criteria went). Audit P1.
+	@Test func longDirectionsWithRepeatedCriteria() {
+		let start = Date()
+		let ones = ArrayOfReal(Array(repeating: 1, count: 2_000_000))
+		let falses = ArrayOfReal(Array(repeating: 0, count: 2_000_000))
+		#expect(sort(lists, ["from": ones, "Asce": falses]) == sort(lists, ["from": 1, "Asce": false]))
+		let list = AppleEventList(Array(repeating: false, count: 1_000_000))
+		#expect(sort(lists, ["from": AppleEventList(Array(repeating: 1, count: 1_000_000)), "Asce": list]) == sort(lists, ["from": 1, "Asce": false]))
+		// A criterion's direction is its own, or ascending's first past its end.
+		#expect(sort(lists, ["from": [1, 1, 2], "Asce": [false, true, false]]) == sort(lists, ["from": [1, 2], "Asce": [false, false]]))
+		#expect(sort(lists, ["from": [1, 2], "Asce": [false]]) == sort(lists, ["from": [1, 2], "Asce": [false, false]]))
+		#expect(Date().timeIntervalSince(start) < 5)
+	}
+
+	/// The lists sorted by come back as they would sorted alone (recorded: numbers in a list with text as text,
+	/// integers in a list with reals as reals); the other lists as they were. Audit R5.
+	@Test func keyListsAreReplacedAsAlone() {
+		let mixed = AppleEventList(["b", 10, "a", 9] as [any AppleEventEncodable])
+		let reals = AppleEventList([3, 1.5, 2] as [any AppleEventEncodable])
+		#expect(sort(AppleEventList([mixed, [1, 2, 3, 4]]), ["from": 1]) == [["10", "9", "a", "b"], [2, 4, 3, 1]])
+		#expect(sort(AppleEventList([[1, 2, 3, 4], mixed]), ["from": 2]) == [[2, 4, 3, 1], ["10", "9", "a", "b"]])
+		#expect(sort(AppleEventList([reals, [1, 2, 3]]), ["from": 1]) == [[1.5, 2.0, 3.0], [2, 3, 1]])
+		#expect(sort(AppleEventList([mixed]), ["from": 1]) == sort(AppleEventList([mixed]), [:]))
+	}
+
 	/// Criteria of every kind of number, and as text.
 	@Test func criteriaOfEveryKind() {
 		let expected = sort(lists, ["from": [2, 3]])

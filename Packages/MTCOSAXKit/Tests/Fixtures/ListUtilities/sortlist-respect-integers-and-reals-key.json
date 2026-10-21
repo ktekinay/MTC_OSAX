@@ -1,0 +1,108 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Sort",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "items" : [
+                    {
+                      "integer" : 3,
+                      "type" : "long"
+                    },
+                    {
+                      "real" : 1.5,
+                      "type" : "doub"
+                    },
+                    {
+                      "integer" : 2,
+                      "type" : "long"
+                    }
+                  ],
+                  "type" : "list"
+                },
+                {
+                  "items" : [
+                    {
+                      "integer" : 1,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 2,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 3,
+                      "type" : "long"
+                    }
+                  ],
+                  "type" : "list"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "items" : [
+                {
+                  "real" : 1.5,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 2,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 3,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "list"
+            },
+            {
+              "items" : [
+                {
+                  "integer" : 2,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 3,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "sortlist-respect-integers-and-reals-key",
+  "recordedAt" : "2026-10-21T00:39:29Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "sortlist {{3, 1.5, 2}, {1, 2, 3}} with respect to 1",
+  "timeZone" : "America/New_York"
+}

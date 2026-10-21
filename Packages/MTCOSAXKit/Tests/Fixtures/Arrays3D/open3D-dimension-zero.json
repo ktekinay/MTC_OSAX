@@ -1,0 +1,87 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CRAR",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 0,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "VI3D",
+        "eventID" : "odoc",
+        "fields" : [
+          {
+            "key" : "dims",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 3,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 3,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "scfl",
+            "value" : {
+              "items" : [
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "Lido"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "bad",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : 10
+      }
+    }
+  ],
+  "name" : "open3D-dimension-zero",
+  "recordedAt" : "2026-10-19T23:37:56Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "open3D \"bad\" dimensions {0, 3, 3} field (createarray 1)",
+  "timeZone" : "America/New_York"
+}

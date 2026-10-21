@@ -72,7 +72,7 @@ enum Editing {
 	/// needed (so that two axes too large together are refused before either is made).
 	private enum Axis {
 		case values([Double])
-		case spread(count: Int, low: Double, step: Double)
+		case spread(count: Int, low: Double, high: Double)
 
 		var count: Int {
 			switch self {
@@ -83,8 +83,13 @@ enum Editing {
 
 		var values: [Double] {
 			switch self {
-			case let .values(values): values
-			case let .spread(count, low, step): (0 ..< count).map { low + Double($0) * step }
+			case let .values(values):
+				return values
+			case let .spread(count, low, high):
+				// As createarray does: a range wider than a real can hold (-1.0E+308 to 1.0E+308) made NaN and
+				// infinities.
+				let step = count > 1 ? (high - low) / Double(count - 1) : 0
+				return (0 ..< count).map { step.isFinite ? low + Double($0) * step : Arrays.interpolate(low, high, Double($0) / Double(count - 1)) }
 			}
 		}
 	}
@@ -106,7 +111,7 @@ enum Editing {
 			throw Arrays.tooLarge
 		}
 		let (low, high) = try Arrays.range(request) ?? (0, Double(count - 1))
-		return .spread(count: count, low: low, step: count > 1 ? (high - low) / Double(count - 1) : 0)
+		return .spread(count: count, low: low, high: high)
 	}
 
 	/// "d": the `diagonal` numbers (a list or array makes the size), or one number (default 1) on the diagonal of
@@ -333,7 +338,8 @@ enum Editing {
 			else {
 				throw invalidIndex
 			}
-			for block in 0 ..< blocks {
+			// Blocks of 0 numbers insert nothing (2,147,483,647 of them were gone through one by one).
+			for block in 0 ..< (blocksize == 0 ? 0 : blocks) {
 				for offset in 0 ..< blocksize {
 					places.append((first + block * step, inserted[block * blocksize + offset]))
 				}
@@ -404,7 +410,7 @@ enum Editing {
 			let result = value.map { value in values.map { $0.isNaN ? value : $0 } } ?? values.filter { !$0.isNaN }
 			return try Values.array(result)
 		}
-		if let matrix = try Matrix(descriptor), let value {
+		if let matrix = try Matrix(descriptor, depth: depth), let value {
 			return try Matrix(columns: matrix.columns, rows: matrix.rows, values: matrix.values.map { $0.isNaN ? value : $0 }).descriptor()
 		}
 		guard let list = RawList(descriptor) else {
@@ -424,6 +430,9 @@ enum Editing {
 				}
 			} else if Values.severalTypes.contains(item.type) {
 				try result.append(replacingMissing(list.descriptor(item.index), with: value, depth: depth + 1))
+			} else if item.hasBits {
+				// Integers (and the other numbers and types) from their data: a descriptor for each took most of the time.
+				try result.append(item)
 			} else {
 				try result.append(list.descriptor(item.index))
 			}

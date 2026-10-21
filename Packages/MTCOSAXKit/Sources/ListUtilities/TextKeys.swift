@@ -42,18 +42,6 @@ package struct TextKeys {
 		}
 	}
 
-	/// `nil` texts are `missing value`.
-	init(_ texts: [String?], flags: Int) {
-		self.init(capacity: texts.count, flags: flags)
-		for text in texts {
-			if let text {
-				append(text)
-			} else {
-				appendMissing()
-			}
-		}
-	}
-
 	mutating func appendMissing() {
 		spans.append(.missing)
 		cases?.append(.missing)

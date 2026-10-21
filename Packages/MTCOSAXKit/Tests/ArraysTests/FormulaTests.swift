@@ -122,4 +122,41 @@ struct FormulaTests {
 		#expect(evaluate("sum(x)", ["x", AppleEventList([2, nested(NSAppleEventDescriptor.maximumNesting + 1)])]).error?.number == -50)
 		#expect(number("sum(x)", ["x", AppleEventList([2, nested(10)])]) == 3)
 	}
+
+	/// concat's result at most an array's size: statements could double it without end (Audit C4).
+	@Test func concatIsLimited() throws {
+		let concat = try #require(Formula.Function.named["concat"])
+		#expect(try concat.evaluate([.array([1, 2]), .number(3)]).values == [1, 2, 3])
+		// Never read, so left uninitialized: only the counts are checked.
+		let half = [Double](unsafeUninitializedCapacity: Arrays.maximumSize / 2 + 1) { _, count in count = Arrays.maximumSize / 2 + 1 }
+		#expect(throws: Arrays.tooLarge) { try concat.evaluate([.array(half), .array(half)]) }
+		#expect(number("x=1;x=concat(x,x);x=concat(x,x);sum(x)") == 4)
+	}
+
+	/// jn and yn: orders cut toward zero, NaN for NaN, -50 past 100,000 either way (2,147,483,647 took 10 s, and orders
+	/// past 64 bits were 0: jn(1e19, 1) was j0(1)). Audit S2.
+	@Test func besselOrders() throws {
+		#expect(number("jn(2.9,1)") == jn(2, 1))
+		#expect(number("yn(-3.5,2)") == yn(-3, 2))
+		for formula in ["jn(1e19,1)", "jn(100001,1)", "yn(-100001,1)", "jn(1e10,x)"] {
+			#expect(evaluate(formula, ["x", ArrayOfReal([1, 2])]).error?.number == -50, "\(formula)")
+		}
+		let result = try #require(evaluate("jn(n,1)", ["n", ArrayOfReal([.nan, 2])]).result.flatMap(ArrayOfReal.values(of:)))
+		#expect(result[0].isNaN && result[1] == jn(2, 1))
+		let start = Date()
+		#expect(number("jn(100000,0.5)") == 0)
+		#expect(number("yn(100000,0.5)") == -.infinity)
+		#expect(number("yn(-100000,0.5)") == -.infinity)
+		#expect(Date().timeIntervalSince(start) < 0.5)
+	}
+
+	/// jn's shortcut to 0 where it's known to round to 0 gives what libm does.
+	@Test func besselJShortcut() {
+		for n: Int32 in [1001, 5000, 20_000, 100_000, -100_000, -5001] {
+			for x in [0, 0.5, -0.5, 10, 300, -300, 1000, 1800, 4000, 30_000, 99_999, .infinity, .nan] {
+				let (mine, libm) = (Formula.Function.besselJ(n, x), jn(n, x))
+				#expect(mine == libm || (mine.isNaN && libm.isNaN), "jn(\(n), \(x)): \(mine), libm \(libm)")
+			}
+		}
+	}
 }

@@ -14,12 +14,13 @@ enum Fixtures {
 	static let excludedFolders: Set = ["Examples", "XMLNetwork"]
 
 	/// Folders whose reals may differ from SatimageOSAX's by a few units in the last place: Intel's and Apple
-	/// silicon's math libraries differ slightly (up to 15 units for `lgamma` near its roots).
-	static let realTolerances = ["MathFunctions": 16, "MathFunctionsFixes": 16, "Arrays": 16, "ArraysFixes": 16]
+	/// silicon's math libraries differ slightly (up to 15 units for `lgamma` near its roots). SatimageOSAX kept 3D
+	/// arrays as 4-byte reals, where MTC_OSAX keeps 8 bytes: they agree to about a 4-byte real's precision (2^30 units).
+	static let realTolerances = ["MathFunctions": 16, "MathFunctionsFixes": 16, "Arrays": 16, "ArraysFixes": 16, "Arrays3D": 1 << 30]
 
 	/// Folders whose reals may also differ by that much in absolute terms: `evalformula`'s functions near a root
-	/// (`lgamma` near 2 is a few units of 1 away, hundreds of units of the tiny result).
-	static let absoluteTolerances = ["Arrays": 16 * Double.ulpOfOne, "ArraysFixes": 16 * Double.ulpOfOne]
+	/// (`lgamma` near 2 is a few units of 1 away, hundreds of units of the tiny result), and 3D arrays' numbers near 0.
+	static let absoluteTolerances = ["Arrays": 16 * Double.ulpOfOne, "ArraysFixes": 16 * Double.ulpOfOne, "Arrays3D": 1e-6]
 
 	/// Least-squares fits, whose last digits depend on the method (SatimageOSAX's coefficients for an exact
 	/// interpolation came out 1e-14 from 1): within 1e-12 of the recorded ones.

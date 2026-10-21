@@ -2,6 +2,7 @@
 import Diagnostics
 @_exported import FileAdditions
 import Arrays
+import Arrays3D
 import ListUtilities
 import MathFunctions
 import XML
@@ -17,7 +18,7 @@ public enum CommandCatalog {
 	///   - timeZone: the zone for date commands; tests pass the zone a fixture was recorded in. Nil (the app's) is the
 	///     system's zone, as it is at each command.
 	///   - dialogs: the app's dialogs for the `navchoose` commands; without them, those commands aren't handled.
-	///   - documents: the open property lists and XML documents; the app keeps it to know when any are open.
+	///   - documents: the open property lists, XML documents and 3D arrays; the app keeps it to know when any are open.
 	///   - settings: where MTC_OSAX's settings are kept; tests pass their own, so they don't read or change the app's.
 	@MainActor
 	public static func makeDispatcher(
@@ -38,6 +39,7 @@ public enum CommandCatalog {
 		dispatcher.register(MathFunctions.commands())
 		dispatcher.register(ListUtilities.commands())
 		dispatcher.register(Arrays.commands())
+		dispatcher.register(Arrays3D.commands(store: documents))
 		dispatcher.register(PropertyLists.commands(store: documents))
 		dispatcher.register(XML.commands(store: documents))
 		return dispatcher

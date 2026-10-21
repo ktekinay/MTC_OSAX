@@ -5,7 +5,10 @@ import Testing
 
 /// `NumberText` against the Apple Event Manager's coercion of numbers to text, which it replaces (and which every
 /// Mac has): every decimal exponent, numbers next to powers of ten and the thresholds of its forms, random bits, and
-/// integers. (Compared once on 3.2 million numbers when it was written.)
+/// integers. (Compared once on 3.2 million numbers when it was written.) On the main actor, as the app makes every
+/// Apple Event Manager call: coercing on other threads while the main-actor tests start is the likeliest cause of a
+/// crash seen once as this target started (see the README's Tests section and TestCrashBacktrace.m).
+@MainActor
 struct NumberTextTests {
 	private func coerced(_ descriptor: NSAppleEventDescriptor) -> String? {
 		descriptor.coerce(toDescriptorType: typeUnicodeText)?.stringValue

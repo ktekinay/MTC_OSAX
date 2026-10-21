@@ -1,0 +1,309 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CRAR",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 8,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 2,
+              "type" : "doub"
+            },
+            {
+              "real" : 3,
+              "type" : "doub"
+            },
+            {
+              "real" : 4,
+              "type" : "doub"
+            },
+            {
+              "real" : 5,
+              "type" : "doub"
+            },
+            {
+              "real" : 6,
+              "type" : "doub"
+            },
+            {
+              "real" : 7,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "VI3D",
+        "eventID" : "odoc",
+        "fields" : [
+          {
+            "key" : "dims",
+            "value" : {
+              "items" : [
+                {
+                  "real" : 2.5,
+                  "type" : "doub"
+                },
+                {
+                  "integer" : 2,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 2,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "scfl",
+            "value" : {
+              "items" : [
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 1,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 2,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 3,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 4,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 5,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 6,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 7,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "Lido"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "real",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "05000000",
+          "type" : "VI3D"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "VI3D",
+        "eventID" : "info",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "05000000",
+              "type" : "VI3D"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "pnam",
+              "value" : {
+                "text" : "real",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "dims",
+              "value" : {
+                "items" : [
+                  {
+                    "integer" : 2,
+                    "type" : "long"
+                  },
+                  {
+                    "integer" : 2,
+                    "type" : "long"
+                  },
+                  {
+                    "integer" : 2,
+                    "type" : "long"
+                  }
+                ],
+                "type" : "list"
+              }
+            },
+            {
+              "key" : "Tsca",
+              "value" : {
+                "items" : [
+                  {
+                    "items" : [
+                      {
+                        "real" : 0,
+                        "type" : "doub"
+                      },
+                      {
+                        "real" : 1,
+                        "type" : "doub"
+                      }
+                    ],
+                    "type" : "Lido"
+                  },
+                  {
+                    "items" : [
+                      {
+                        "real" : 0,
+                        "type" : "doub"
+                      },
+                      {
+                        "real" : 1,
+                        "type" : "doub"
+                      }
+                    ],
+                    "type" : "Lido"
+                  },
+                  {
+                    "items" : [
+                      {
+                        "real" : 0,
+                        "type" : "doub"
+                      },
+                      {
+                        "real" : 1,
+                        "type" : "doub"
+                      }
+                    ],
+                    "type" : "Lido"
+                  }
+                ],
+                "type" : "list"
+              }
+            },
+            {
+              "key" : "NFie",
+              "value" : {
+                "integer" : 1,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "MIN ",
+              "value" : {
+                "items" : [
+                  {
+                    "real" : 0,
+                    "type" : "sing"
+                  },
+                  {
+                    "code" : "msng",
+                    "type" : "type"
+                  },
+                  {
+                    "code" : "msng",
+                    "type" : "type"
+                  }
+                ],
+                "type" : "list"
+              }
+            },
+            {
+              "key" : "MAX ",
+              "value" : {
+                "items" : [
+                  {
+                    "real" : 7,
+                    "type" : "sing"
+                  },
+                  {
+                    "code" : "msng",
+                    "type" : "type"
+                  },
+                  {
+                    "code" : "msng",
+                    "type" : "type"
+                  }
+                ],
+                "type" : "list"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "VI3D",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "05000000",
+              "type" : "VI3D"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "open3D-real-dimension",
+  "recordedAt" : "2026-10-19T23:37:56Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set r to open3D \"real\" dimensions {2.5, 2, 2} field (createarray 8)\ntry\n\tinfo3D r\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r",
+  "timeZone" : "America/New_York"
+}

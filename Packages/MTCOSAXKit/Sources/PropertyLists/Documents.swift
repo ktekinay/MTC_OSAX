@@ -153,12 +153,21 @@ struct WeakNode {
 	}
 }
 
-/// An open document of any kind (a property list, an XML document), as the store and pools see it.
+/// An open document of any kind (a property list, an XML document, a 3D array), as the store and pools see it.
 public protocol StoredDocument: AnyObject {
 	var number: Int { get }
 	var pool: String { get }
+	/// Whether it's in its pool: 3D arrays are kept in the store (so the app doesn't quit while one is open), but the
+	/// pool commands don't see them, as in SatimageOSAX.
+	var isPooled: Bool { get }
 	/// Called when the document is closed (by its own command or `DeletePool`), to release what it holds.
 	func didClose()
+}
+
+public extension StoredDocument {
+	var isPooled: Bool {
+		true
+	}
 }
 
 /// An open property list: its tree, where it came from, and its pool.

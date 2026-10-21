@@ -7,6 +7,10 @@ import Testing
 /// do what they say, and where Satimage was wrong.
 @MainActor
 struct PolynomialTests {
+	private func coefficients(_ reply: AppleEventReply) -> [Double]? {
+		reply.result.flatMap { ArrayOfReal.values(of: $0, type: ArrayOfReal.polynomialType) }
+	}
+
 	private func close(_ a: Double, _ b: Double, _ tolerance: Double = 1e-9) -> Bool {
 		abs(a - b) <= tolerance * max(1, abs(b))
 	}
@@ -112,5 +116,79 @@ struct PolynomialTests {
 		#expect(send("SATIFiPo", ["----": AppleEventList([many, many]), "degr": 100]).error?.number == -50)
 		#expect(send("SATICoPo", ["----": ArrayOfReal(Array(repeating: 1, count: 401)), "with": ArrayOfReal(Array(repeating: 1, count: 301))]).error?.number == -50)
 		#expect(send("SATICoPo", ["----": ArrayOfReal([1, 1]), "with": ArrayOfReal([0, 2])]).error == nil)
+	}
+
+	/// evalpolynomial's coefficients times points at most 10,000,000,000, as for multiplying; composepolynomial with a
+	/// Q of degree 0 (or none) is the number P(Q), at once, whatever P's length (the degree limit let any through).
+	/// Audit S4.
+	@Test func evaluateAndComposeLimits() throws {
+		let long = ArrayOfReal(Array(repeating: 1, count: 100_001))
+		#expect(send("SATIEvPo", ["----": long, "at  ": ArrayOfReal(Array(repeating: 0.5, count: 100_000))]).error?.number == -50)
+		#expect(values(send("SATIEvPo", ["----": ArrayOfReal([1, 2, 3]), "at  ": ArrayOfReal([0, 1, 2])])) == [1, 6, 17])
+		#expect(coefficients(send("SATICoPo", ["----": ArrayOfReal([1, 2, 3]), "with": ArrayOfReal([2])])) == [17])
+		#expect(coefficients(send("SATICoPo", ["----": ArrayOfReal([1, 2, 3]), "with": AppleEventList([])])) == [1])
+		#expect(Polynomials.compose([1, 2, 3], [2]) == [Polynomials.value([1, 2, 3], at: 2)])
+		let start = Date()
+		#expect(coefficients(send("SATICoPo", ["----": ArrayOfReal(Array(repeating: 0, count: 5_000_000)), "with": ArrayOfReal([2])])) == [0])
+		#expect(Date().timeIntervalSince(start) < 5)
+	}
+
+	/// Points (and constraints) times the square of the coefficients, for each round, at most 4,000,000,000: the
+	/// limit on points times coefficients alone let `fitrational 100/100` run for hours (Audit S1).
+	@Test func fitWork() throws {
+		#expect(throws: Never.self) { try Polynomials.checkFitSize(392_000, coefficients: 101, degree: 100, rounds: 1, "points") }
+		#expect(throws: OSAXError.self) { try Polynomials.checkFitSize(393_000, coefficients: 101, degree: 100, rounds: 1, "points") }
+		#expect(throws: Never.self) { try Polynomials.checkFitSize(19_800, coefficients: 201, degree: 100, rounds: 5, "points") }
+		#expect(throws: OSAXError.self) { try Polynomials.checkFitSize(19_900, coefficients: 201, degree: 100, rounds: 5, "points") }
+		// Through the commands: fitrational's five rounds, and fitpolynomial's constraints counted with its points.
+		let x = ArrayOfReal((0 ..< 20_000).map { Double($0) / 20_000 })
+		#expect(send("SATIRatF", ["----": AppleEventList([x, x]), "nume": 100, "deno": 100]).error?.number == -50)
+		// 392,000 points are allowed alone (392,118 would be); with 200 constraints, not.
+		let constraint = AppleEventList(Array(repeating: 0, count: 102))
+		let many = ArrayOfReal((0 ..< 392_000).map { Double($0) / 392_000 })
+		#expect(send("SATIFiPo", ["----": AppleEventList([many, many]), "degr": 100, "cons": AppleEventList(Array(repeating: constraint, count: 200))]).error?.number == -50)
+	}
+}
+
+/// Least squares by a QR decomposition first, for more rows than columns (Audit S1): the same answers as without it.
+struct LeastSquaresTests {
+	/// R is upper triangular with Rᵀ R = Aᵀ A, and Qᵀ y keeps y's length along A's columns.
+	@Test func triangular() {
+		let rows = (0 ..< 50).map { i in (0 ..< 4).map { j in pow(Double(i) / 10 - 2, Double(j)) } }
+		let y = (0 ..< 50).map { sin(Double($0)) }
+		let (r, qty) = LinearAlgebra.triangular(rows, y)
+		#expect(r.count == 4 && r.allSatisfy { $0.count == 4 } && qty.count == 4)
+		for i in 0 ..< 4 {
+			for j in 0 ..< 4 {
+				if i > j {
+					#expect(r[i][j] == 0)
+				}
+				let ata = rows.reduce(0.0) { $0 + $1[i] * $1[j] }
+				let rtr = (0 ..< 4).reduce(0.0) { $0 + r[$1][i] * r[$1][j] }
+				#expect(abs(ata - rtr) <= 1e-9 * max(1, abs(ata)), "\(i) \(j)")
+			}
+			// Aᵀ y = Rᵀ (Qᵀ y).
+			let aty = zip(rows, y).reduce(0.0) { $0 + $1.0[i] * $1.1 }
+			let rtq = (0 ..< 4).reduce(0.0) { $0 + r[$1][i] * qty[$1] }
+			#expect(abs(aty - rtq) <= 1e-9 * max(1, abs(aty)))
+		}
+	}
+
+	/// An exact polynomial from many points; the smallest solution for a rank-deficient matrix; a zero column; more
+	/// constraints than unknowns.
+	@Test func solutions() throws {
+		let xs = (0 ..< 5_000).map { Double($0) / 1_000 - 2.5 }
+		let rows = xs.map { x in (0 ... 5).map { pow(x, Double($0)) } }
+		let exact = [1.5, -2, 0.25, 3, -0.5, 0.125]
+		let fit = try #require(LinearAlgebra.pseudoSolve(rows, rows.map { row in zip(row, exact).reduce(0.0) { $0 + $1.0 * $1.1 } }))
+		#expect(zip(fit, exact).allSatisfy { abs($0 - $1) <= 1e-9 })
+		// Two equal columns: of the x with x₀ + x₁ = 2, the smallest.
+		let same = try #require(LinearAlgebra.pseudoSolve(Array(repeating: [1, 1], count: 10), Array(repeating: 2, count: 10)))
+		#expect(abs(same[0] - 1) <= 1e-12 && abs(same[1] - 1) <= 1e-12)
+		let zero = try #require(LinearAlgebra.pseudoSolve((0 ..< 10).map { [Double($0), 0] }, (0 ..< 10).map { 3 * Double($0) }))
+		#expect(abs(zero[0] - 3) <= 1e-12 && zero[1] == 0)
+		// x₀ = 1, x₁ = 2 and x₀ + x₁ = 3, whatever the points say.
+		let constrained = try #require(LinearAlgebra.leastSquares([[1, 0], [0, 1]], [5, 5], constraints: [[1, 0, 1], [0, 1, 2], [1, 1, 3]]))
+		#expect(abs(constrained[0] - 1) <= 1e-12 && abs(constrained[1] - 2) <= 1e-12)
 	}
 }

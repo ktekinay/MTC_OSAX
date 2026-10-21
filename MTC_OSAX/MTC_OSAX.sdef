@@ -18,6 +18,10 @@
 		<class name="anything" code="****" description="any class or reference" hidden="yes"/>
 		<!-- For read binary and write binary's "as byte" (Satimage's hidden Applescript types suite has it). -->
 		<class name="byte" code="byte" hidden="yes"/>
+		<!-- For info3D's record (Satimage's Linear algebra suite has them). -->
+		<class name="dimensions" code="dims" hidden="yes"/>
+		<class name="scale" code="Tsca" hidden="yes"/>
+		<class name="number of field" code="NFie" hidden="yes"/>
 	</suite>
 
 	<!-- Copied verbatim from "SatImageOSAX SDEF/dictionary.sdef". -->
@@ -1663,6 +1667,56 @@ fitpolynomial {x, y} degree 3 number formatting "%.3g"
 				<parameter name="big endian" code="Endi" type="boolean" optional="yes" description="is the file encoded as big endian or little endian? Default: system endianess (false on mac intel)."/>
 			</command>
 </suite>
+
+	<!-- Copied verbatim from "SatImageOSAX SDEF/dictionary.sdef". -->
+	<suite name="3D array handling" code="VI3D" description="commands to handle 3D arrays. &quot;open3D&quot; loads a 3D array in memory and returns an ID number. You refer to a 3D array either with its ID or its name">
+			<value-type name="Array3DRef" code="VI3D" description="a reference to an opened 3D array"/>
+			<command name="open3D" code="VI3Dodoc" description="Loads a 3D array and returns an ID for it. The memory must be released with &quot;close3D&quot;">
+				<direct-parameter type="string" description="the name of the 3D array" optional="yes"/>
+				<parameter name="dimensions" code="dims" type="list of integer" description="the 3 dimensions {nx, ny, nz} of the array. nx, ny and, nz are either an integer or an array of real altogether defining the size and the scale. If a dimension is an integer the scale is assumed to be {0, 1, 2, ...}"/>
+				<parameter name="field" code="scfl" type="array of real" description="an array of real (or a list of 3 arrays of real defining a vector field) with nz as leading dimension. The value for {ix, iy, iz} must be at offset ix+nx*iy+nx*ny*iz"/>
+				<result type="Array3DRef" description="ID to the 3D array"/>
+			</command>
+			<command name="close3D" code="VI3Dclos" description="release the memory associated to a opened 3D array">
+				<direct-parameter type="Array3DRef" description="a reference to an opened 3D array (or its name)"/>
+			</command>
+			<command name="info3D" code="VI3Dinfo" description="">
+				<direct-parameter type="Array3DRef" description="a reference to an opened 3D array (or its name)"/>
+				<result type="record" description="the dimensions and scales"/>
+			</command>
+			<command name="contents3D" code="VI3Dgetd" description="">
+				<direct-parameter type="Array3DRef" description="a reference to an opened 3D array (or its name)"/>
+				<result type="array of real" description="the data"/>
+			</command>
+			<command name="list3D" code="VI3Dlstn" description="">
+				<parameter name="as" code="as  " type="anything" optional="yes" description="list3D as string returns the names of the opened 3D arrays instead of their references"/>
+				<result type="list of Array3DRef" description="the references of the opened 3D arrays"/>
+			</command>
+			<command name="rename3D" code="VI3Drena" description="rename an opened 3D array.">
+				<direct-parameter type="Array3DRef" description="a reference to an opened 3D array (or its name)"/>
+				<parameter name="into" code="into" type="string" description="the new name"/>
+			</command>
+			<command name="extract3D" code="VI3Dextr" description="Extract a subset from a 3D array">
+				<direct-parameter type="Array3DRef" description="a reference to an opened 3D array (or its name)"/>
+				<parameter name="start" code="star" type="list of integer" description="the 3 1-based offsets"/>
+				<parameter name="length" code="leng" type="list of integer" description="the 3 lengths"/>
+				<parameter name="field index" code="INDX" type="integer" optional="yes" description="if the 3D array is a vector field, a number between 1 and 3. Default 1"/>
+				<result type="array of real" description=""/>
+			</command>
+			<command name="isosurface" code="VI3Dsurf" description="computes an isosurface for a 3D field">
+				<direct-parameter type="Array3DRef" description="a reference to an opened 3D array (or its name)"/>
+				<parameter name="at" code="isov" type="real" description="the isosurface value"/>
+				<parameter name="field index" code="INDX" type="integer" optional="yes" description="if the 3D array is a vector field, a number between 1 and 3. Default 1"/>
+				<result type="array of real" description="the triangle list as an array of real that defines the isosurface"/>
+			</command>
+			<command name="streamline" code="VI3Dinte" description="Computes a streamline for an opened vector field">
+				<direct-parameter type="Array3DRef" description="a reference to an opened 3D array (or its name)"/>
+				<parameter name="starting at" code="Strt" type="list of real" description="a point {x, y, z}"/>
+				<parameter name="resolution" code="Step" optional="yes" type="real" description="Default 1. Smaller value increases the number of points in the streamline"/>
+				<parameter name="direction" code="Idir" optional="yes" type="integer" description="Default 1. Set to -1 to compute the streamline along opposite direction"/>
+				<result type="array of real" description="the coordinates of the streamline's points {x1,y1,z1,...,xn,yn,zn}"/>
+			</command>
+	</suite>
 
 	<suite name="XML DOM" code="XML " description="An AppleScript implementation of the DOM. Uses the Libxml2 open source project.">
     <class name="anything" code="****" description="any class or reference" hidden="yes"/>

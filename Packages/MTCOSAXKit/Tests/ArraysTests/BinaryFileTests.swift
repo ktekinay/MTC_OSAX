@@ -76,6 +76,40 @@ struct BinaryFileTests {
 		try? FileManager.default.removeItem(at: folder)
 	}
 
+	/// A file larger than what's read at once (16 MB): blocks close together read several at a time, far apart each by
+	/// itself, overlapping ones too; the numbers the same as reading it all (all of it was read at once: Audit C5).
+	@Test func readInWindows() throws {
+		let url = file("windows.bin")
+		let count = 3_000_000 // 24 MB of reals
+		let numbers = (0 ..< count).map(Double.init)
+		try numbers.withUnsafeBytes { try Data($0).write(to: url) }
+		func expected(skip: Int = 0, blocksize: Int, step: Int, blocks: Int? = nil) -> [Double] {
+			let available = count - skip
+			let fitting = available >= blocksize ? (available - blocksize) / step + 1 : 0
+			return (0 ..< min(blocks ?? fitting, fitting)).flatMap { block in (0 ..< blocksize).map { Double(skip + block * step + $0) } }
+		}
+		#expect(values(send("SATIRdBF", ["----": url, "rtyp": type("doub"), "bloc": 3, "jump": 5])) == expected(blocksize: 3, step: 5))
+		#expect(values(send("SATIRdBF", ["----": url, "rtyp": type("doub"), "skip": 16, "bloc": 3, "jump": 5])) == expected(skip: 2, blocksize: 3, step: 5))
+		#expect(values(send("SATIRdBF", ["----": url, "rtyp": type("doub"), "bloc": 2, "jump": 10_000])) == expected(blocksize: 2, step: 10_000))
+		#expect(values(send("SATIRdBF", ["----": url, "rtyp": type("doub"), "bloc": 4, "jump": 1, "for ": 2_500_000])) == expected(blocksize: 4, step: 1, blocks: 2_500_000))
+		#expect(values(send("SATIRdBF", ["----": url, "rtyp": type("doub"), "bloc": 2_500_000, "jump": 100_000])) == expected(blocksize: 2_500_000, step: 100_000))
+		#expect(values(send("SATIRdBF", ["----": url, "rtyp": type("doub")])) == numbers)
+		try? FileManager.default.removeItem(at: folder)
+	}
+
+	/// Offsets past 32 bits: written at byte 2,147,483,656 (the file is sparse, so it takes no room) and read back from
+	/// there; past 2⁵³ is -50. They stopped at 2,147,483,647. Audit R6.
+	@Test func offsetsPast32Bits() {
+		let url = file("far.bin")
+		let far = 2_147_483_656.0
+		#expect(send("SATIWrBF", ["----": url, "data": ArrayOfReal([42]), "strt": far]).error == nil)
+		#expect(values(send("SATIRdBF", ["----": url, "rtyp": type("doub"), "skip": far])) == [42])
+		#expect(values(send("SATIRdBF", ["----": url, "rtyp": type("doub"), "skip": 4e15])) == [])
+		#expect(send("SATIRdBF", ["----": url, "rtyp": type("doub"), "skip": 1e16]).error?.number == -50)
+		#expect(send("SATIWrBF", ["----": url, "data": ArrayOfReal([1]), "strt": Double.infinity]).error?.number == -50)
+		try? FileManager.default.removeItem(at: folder)
+	}
+
 	/// Only regular files: a named pipe is -50 both ways (writing waited forever for something to read it), and a
 	/// folder is error 21.
 	@Test func onlyRegularFiles() {

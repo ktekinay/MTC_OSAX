@@ -56,7 +56,7 @@ enum Arithmetic {
 		if let coefficients = ArrayOfReal.values(of: descriptor, type: ArrayOfReal.polynomialType) {
 			return .polynomial(coefficients)
 		}
-		if let matrix = try Matrix(descriptor) {
+		if let matrix = try Matrix(descriptor, depth: depth) {
 			return .matrix(matrix)
 		}
 		if let list = RawList(descriptor) {

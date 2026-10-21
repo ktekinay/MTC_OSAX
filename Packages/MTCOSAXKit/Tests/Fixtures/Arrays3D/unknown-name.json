@@ -1,0 +1,28 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "VI3D",
+        "eventID" : "info",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "nothing",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1728
+      }
+    }
+  ],
+  "name" : "unknown-name",
+  "recordedAt" : "2026-10-19T23:37:57Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "info3D \"nothing\"",
+  "timeZone" : "America/New_York"
+}

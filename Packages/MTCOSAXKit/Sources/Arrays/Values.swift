@@ -7,16 +7,21 @@ import Numerics
 /// row by row). Lists are read from their data (`RawList`), not as a descriptor for each item.
 enum Values {
 	/// Error -50 for anything else (text that isn't a number, a record, a boolean).
-	static func numbers(_ descriptor: NSAppleEventDescriptor) throws -> [Double] {
+	/// `depth`: how deeply the descriptor is nested in what the script gave (for a matrix's numbers).
+	static func numbers(_ descriptor: NSAppleEventDescriptor, depth: Int = 0) throws -> [Double] {
+		// An array given whole is its numbers, not appended to an empty array (another copy of all of them).
+		if let values = ArrayOfReal.values(of: descriptor) ?? ArrayOfReal.values(of: descriptor, type: ArrayOfReal.polynomialType) {
+			return values
+		}
 		var result: [Double] = []
-		try append(descriptor, to: &result, depth: 0)
+		try append(descriptor, to: &result, depth: depth)
 		return result
 	}
 
 	private static func append(_ descriptor: NSAppleEventDescriptor, to result: inout [Double], depth: Int) throws {
 		if let values = ArrayOfReal.values(of: descriptor) ?? ArrayOfReal.values(of: descriptor, type: ArrayOfReal.polynomialType) {
 			result += values
-		} else if let matrix = try Matrix(descriptor) {
+		} else if let matrix = try Matrix(descriptor, depth: depth) {
 			result += matrix.values
 		} else if let list = RawList(descriptor) {
 			// A loop over the items, recursing only into lists (nested more deeply than scripts make, it stops).
@@ -77,7 +82,7 @@ enum Values {
 
 	/// An `array of real` of these numbers.
 	static func array(_ values: [Double]) throws -> NSAppleEventDescriptor {
-		try ArrayOfReal.descriptor(count: values.count) { _ = $0.initialize(from: values) }
+		try ArrayOfReal(values).descriptor()
 	}
 
 	/// A list of reals, `missing value` for NaN.
@@ -97,7 +102,7 @@ final class ListBuilder {
 	private var isMade = false
 
 	init() throws {
-		try Self.check(AECreateList(nil, 0, false, &list))
+		try OSAXError.check(AECreateList(nil, 0, false, &list))
 	}
 
 	deinit {
@@ -108,22 +113,28 @@ final class ListBuilder {
 
 	func append(_ value: Double) throws {
 		var value = value
-		try Self.check(AEPutPtr(&list, 0, typeIEEE64BitFloatingPoint, &value, 8))
+		try OSAXError.check(AEPutPtr(&list, 0, typeIEEE64BitFloatingPoint, &value, 8))
 	}
 
 	func append(_ value: Int32) throws {
 		var value = value
-		try Self.check(AEPutPtr(&list, 0, typeSInt32, &value, 4))
+		try OSAXError.check(AEPutPtr(&list, 0, typeSInt32, &value, 4))
+	}
+
+	/// An item of a list as `forEachItem` read it, from its data (`hasBits`): no descriptor for it.
+	func append(_ item: RawList.Item) throws {
+		var bits = item.bits
+		try OSAXError.check(AEPutPtr(&list, 0, item.type, &bits, item.size))
 	}
 
 	func appendMissingValue() throws {
 		var code = NSAppleEventDescriptor.missingValueCode
-		try Self.check(AEPutPtr(&list, 0, typeType, &code, 4))
+		try OSAXError.check(AEPutPtr(&list, 0, typeType, &code, 4))
 	}
 
 	func append(_ item: NSAppleEventDescriptor) throws {
 		try withExtendedLifetime(item) {
-			try Self.check(AEPutDesc(&list, 0, item.aeDesc!))
+			try OSAXError.check(AEPutDesc(&list, 0, item.aeDesc!))
 		}
 	}
 
@@ -131,12 +142,6 @@ final class ListBuilder {
 	func descriptor() -> NSAppleEventDescriptor {
 		isMade = true
 		return NSAppleEventDescriptor(aeDescNoCopy: &list)
-	}
-
-	private static func check(_ status: OSErr) throws {
-		if status != noErr {
-			throw OSAXError(Int(status))
-		}
 	}
 }
 
@@ -155,19 +160,27 @@ struct Matrix: Equatable {
 		self.values = values
 	}
 
-	/// Nil unless the descriptor is a matrix record; error -50 if its numbers aren't `ncols` × `nrows` of them.
-	init?(_ descriptor: NSAppleEventDescriptor) throws {
+	/// Nil unless the descriptor is a matrix record; error -50 if its numbers aren't `ncols` × `nrows` of them. `depth`:
+	/// how deeply the matrix is nested, its numbers one level deeper (lists of matrices of lists of … got past the
+	/// nesting limit, each matrix starting again from 0, and ran out of stack).
+	init?(_ descriptor: NSAppleEventDescriptor, depth: Int = 0) throws {
 		guard descriptor.descriptorType == Self.descriptorType, let fields = RecordFields(descriptor),
 		      let columns = fields[.code("ncol")], let rows = fields[.code("nrow")], let data = fields[.code("Lido")]
 		else {
 			return nil
 		}
+		// Matrices of matrices too: only lists checked their depth.
+		try Values.checkNesting(depth)
 		self.columns = try Values.integer(columns)
 		self.rows = try Values.integer(rows)
-		values = try Values.numbers(data)
+		values = try Values.numbers(data, depth: depth + 1)
 		guard self.columns >= 0, self.rows >= 0, values.count == self.columns * self.rows else {
 			throw OSAXError.parameterError
 		}
+		// Each dimension as large as an array can be: with no numbers, 0 columns passed for 2,147,483,647 rows, which
+		// the commands then went through one by one.
+		try Arrays.check((self.columns, false), atMost: Arrays.maximumSize, "A matrix's number of columns")
+		try Arrays.check((self.rows, false), atMost: Arrays.maximumSize, "A matrix's number of rows")
 	}
 
 	func row(_ row: Int) -> ArraySlice<Double> {

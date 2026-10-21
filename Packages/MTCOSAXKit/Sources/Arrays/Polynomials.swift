@@ -31,6 +31,10 @@ enum Polynomials {
 	static let maximumRootsDegree = 1000
 	static let maximumPadeDegree = 1000
 	static let maximumFitDegree = 100
+	/// A fit's points (and constraints) times the square of its coefficients, for each of its rounds of least squares:
+	/// at most 2.5 s for `fitpolynomial`, 5.4 for `fitrational` 100/100 (the limit on points times coefficients alone
+	/// let a fit run for hours).
+	static let maximumFitWork = 4_000_000_000
 	static let maximumComposedDegree = 100_000
 	static let maximumProducts = 10_000_000_000
 
@@ -56,13 +60,21 @@ enum Polynomials {
 			throw OSAXError.missingParameter
 		}
 		if Values.isSeveral(at) {
-			return try Values.array(Values.numbers(at).map { value(p, at: $0) })
+			let points = try Values.numbers(at)
+			// As for multiplying polynomials: 100,000 coefficients at 1,000,000 points took about 100 s.
+			try Arrays.check(p.count.multipliedReportingOverflow(by: points.count), atMost: maximumProducts, "The number of coefficients times the number of points")
+			return try Values.array(points.map { value(p, at: $0) })
 		}
 		return NSAppleEventDescriptor(double: value(p, at: try Values.number(at)))
 	}
 
 	/// P(Q(x)), by Horner's rule on polynomials. The empty P is the empty polynomial (SatimageOSAX returned nothing).
+	/// A Q of degree 0 (or none) makes the number P(Q), at once: the limit on the result's degree let any P through
+	/// (100,000,000 coefficients took about 10 s).
 	static func compose(_ p: [Double], _ q: [Double]) -> [Double] {
+		guard q.count > 1 else {
+			return p.isEmpty ? [] : [value(p, at: q.first ?? 0)]
+		}
 		var result: [Double] = []
 		for coefficient in p.reversed() {
 			result = add(multiply(result, q), [coefficient])
@@ -191,7 +203,8 @@ enum Polynomials {
 		guard degree >= 0 else {
 			throw OSAXError(-1)
 		}
-		try checkFitSize(points.x.count, coefficients: degree + 1, degree: degree)
+		// The degree first, so that it's still the error with constraints of its length.
+		try Arrays.check((degree, false), atMost: maximumFitDegree, "The degree")
 		let constraints = try request.descriptor(for: "cons").map { descriptor -> [[Double]] in
 			guard let list = RawList(descriptor) else { throw OSAXError(-1) }
 			return try (0 ..< list.count).map { index in
@@ -200,6 +213,7 @@ enum Polynomials {
 				return constraint
 			}
 		} ?? []
+		try checkFitSize(points.x.count + constraints.count, coefficients: degree + 1, degree: degree, rounds: 1, "points and constraints")
 		let rows = points.x.map { x in (0 ... degree).map { pow(x, Double($0)) } }
 		guard let c = LinearAlgebra.leastSquares(rows, points.y, constraints: constraints) else {
 			throw OSAXError(-1)
@@ -229,7 +243,7 @@ enum Polynomials {
 		guard m >= 0, n >= 0, !points.x.isEmpty else {
 			throw OSAXError(-1)
 		}
-		try checkFitSize(points.x.count, coefficients: m + n + 1, degree: max(m, n))
+		try checkFitSize(points.x.count, coefficients: m + n + 1, degree: max(m, n), rounds: 5, "points")
 		let (x, y) = points
 		var weights = [Double](repeating: 1, count: x.count)
 		var errors = [Double](repeating: 1, count: x.count)
@@ -288,11 +302,14 @@ enum Polynomials {
 		return RecordFields(fields).appleEventDescriptor
 	}
 
-	/// A fit's degree at most `maximumFitDegree` (-50), and its matrix of points by coefficients at most
-	/// `Arrays.maximumSize` numbers.
-	private static func checkFitSize(_ points: Int, coefficients: Int, degree: Int) throws {
+	/// A fit's degree at most `maximumFitDegree` (-50), its matrix of `rows` (points, and constraints) by coefficients
+	/// at most `Arrays.maximumSize` numbers, and the rows times the square of the coefficients, for each round, at most
+	/// `maximumFitWork`.
+	static func checkFitSize(_ rows: Int, coefficients: Int, degree: Int, rounds: Int, _ what: String) throws {
 		try Arrays.check((degree, false), atMost: maximumFitDegree, "The degree")
-		try Arrays.check(points.multipliedReportingOverflow(by: coefficients), atMost: Arrays.maximumSize, "The number of points times the number of coefficients")
+		try Arrays.check(rows.multipliedReportingOverflow(by: coefficients), atMost: Arrays.maximumSize, "The number of \(what) times the number of coefficients")
+		// Rows times coefficients is at most 100,000,000 by now, and coefficients at most 201: no overflow.
+		try Arrays.check((rows * coefficients * coefficients, false), atMost: maximumFitWork / rounds, "The number of \(what) times the square of the number of coefficients")
 	}
 
 	/// The `number formatting`: nil without one (or with an empty one), as SatimageOSAX then gave no fit string.

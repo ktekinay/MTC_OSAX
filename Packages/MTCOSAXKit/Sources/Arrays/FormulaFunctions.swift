@@ -17,6 +17,35 @@ extension Formula {
 			Function(arity: 2 ... 2) { try Formula.combine($0[0], $0[1], function) }
 		}
 
+		/// The orders `jn` and `yn` take, either way: libm's time grows with the order (2,147,483,647 took 10 s).
+		static let maximumBesselOrder = 100_000
+
+		/// `jn` or `yn`: the order cut toward zero, NaN for NaN, -50 beyond `maximumBesselOrder` (orders past 64 bits
+		/// were 0, and the others past 32 bits 2,147,483,647).
+		static func bessel(_ function: @escaping @Sendable (Int32, Double) -> Double) -> Function {
+			Function(arity: 2 ... 2) { arguments in
+				guard arguments[0].values.allSatisfy({ $0.isNaN || abs($0.rounded(.towardZero)) <= Double(maximumBesselOrder) }) else {
+					throw OSAXError(-50, "jn and yn take orders of at most \(Arrays.grouped(maximumBesselOrder)) either way.")
+				}
+				return try Formula.combine(arguments[0], arguments[1]) { n, x in
+					n.isNaN ? .nan : function(Int32(n.rounded(.towardZero)), x)
+				}
+			}
+		}
+
+		/// Jₙ(x), and 0 at once where it's known to round to 0, rather than after libm's recurrence as long as the order
+		/// (0.5 ms at 100,000): |Jₙ(x)| ≤ (|x|/2)ⁿ/n! ≤ (e|x|/2n)ⁿ/√(2πn), below 2⁻¹⁰⁷⁵ when its logarithm is below -750.
+		static func besselJ(_ n: Int32, _ x: Double) -> Double {
+			let order = Double(n.magnitude)
+			if order > 1000, abs(x) < order {
+				let bound = order * log(M_E * abs(x) / (2 * order)) - 0.5 * log(2 * .pi * order)
+				if bound < -750 {
+					return 0
+				}
+			}
+			return jn(n, x)
+		}
+
 		/// Names in lowercase, as formulas are read.
 		static let named: [String: Function] = {
 			var functions: [String: Function] = [
@@ -32,8 +61,7 @@ extension Formula {
 				"tanh": each(tanh), "acosh": each(acosh), "asinh": each(asinh), "atanh": each(atanh), "erf": each(erf),
 				"erfc": each(erfc), "gamma": each(tgamma), "lgamma": each(lgamma),
 				"j0": each(j0), "j1": each(j1), "y0": each(y0), "y1": each(y1),
-				"jn": each { n, x in jn(Int32(clamping: Int(exactly: n.rounded(.towardZero)) ?? 0), x) },
-				"yn": each { n, x in yn(Int32(clamping: Int(exactly: n.rounded(.towardZero)) ?? 0), x) },
+				"jn": bessel(besselJ), "yn": bessel(yn),
 				// GSL's elliptic integrals, of the modulus k, and Lambert's W
 				"elliptick": each(SpecialFunctions.completeK), "elliptice": each(SpecialFunctions.completeE),
 				"incelliptice": each(SpecialFunctions.incompleteE), "incellipticf": each(SpecialFunctions.incompleteF),
@@ -70,7 +98,14 @@ extension Formula {
 			}
 			functions["rest"] = Function(arity: 1 ... 1) { .array(Array($0[0].values.dropFirst())) }
 			functions["butlast"] = Function(arity: 1 ... 1) { .array(Array($0[0].values.dropLast())) }
-			functions["concat"] = Function(arity: 2 ... 2) { .array($0[0].values + $0[1].values) }
+			// At most an array's size: statements can feed a result back in, doubling it each time.
+			functions["concat"] = Function(arity: 2 ... 2) { arguments in
+				let (first, second) = (arguments[0].values, arguments[1].values)
+				guard first.count + second.count <= Arrays.maximumSize else {
+					throw Arrays.tooLarge
+				}
+				return .array(first + second)
+			}
 			// ∫f dx by trapezoids, as the dictionary says: SatimageOSAX computed ∫x df (its arguments the other way
 			// around). Arrays only (error 21), of the same size (18).
 			functions["int"] = Function(arity: 2 ... 2) { arguments in

@@ -1,0 +1,451 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "ExLF",
+        "fields" : [
+          {
+            "key" : "for ",
+            "value" : {
+              "integer" : -1,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "VI3D",
+        "eventID" : "odoc",
+        "fields" : [
+          {
+            "key" : "dims",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 3,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 3,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 3,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "scfl",
+            "value" : {
+              "items" : [
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 1,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "Lido"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "cube",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "15000000",
+          "type" : "VI3D"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "VI3D",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "cube",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "VI3D",
+        "eventID" : "lstn",
+        "fields" : [
+
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "close3D-by-name",
+  "recordedAt" : "2026-10-19T23:37:57Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set r to open3D \"cube\" dimensions {3, 3, 3} field (extractarray {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} for -1)\nclose3D \"cube\"\nlist3D",
+  "timeZone" : "America/New_York"
+}

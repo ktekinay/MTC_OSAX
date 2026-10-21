@@ -1,0 +1,782 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "ExLF",
+        "fields" : [
+          {
+            "key" : "for ",
+            "value" : {
+              "integer" : -1,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 0,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "VI3D",
+        "eventID" : "odoc",
+        "fields" : [
+          {
+            "key" : "dims",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 3,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 3,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 3,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "scfl",
+            "value" : {
+              "items" : [
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 1,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "Lido"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "cube",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "05000000",
+          "type" : "VI3D"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "VI3D",
+        "eventID" : "surf",
+        "fields" : [
+          {
+            "key" : "isov",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "05000000",
+              "type" : "VI3D"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "VI3D",
+        "eventID" : "surf",
+        "fields" : [
+          {
+            "key" : "isov",
+            "value" : {
+              "integer" : 0,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "05000000",
+              "type" : "VI3D"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+
+          ],
+          "type" : "Lido"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "VI3D",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "05000000",
+              "type" : "VI3D"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "isosurface-at-the-ends",
+  "recordedAt" : "2026-10-19T23:50:40Z",
+  "recordedFrom" : "/Users/ktekinay/Documents/Xcode Projects/MTC_OSAX/MTC_OSAX Git/build/DerivedData/Build/Products/Debug/MTC_OSAX.app",
+  "script" : "set r to open3D \"cube\" dimensions {3, 3, 3} field (extractarray {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} for -1)\ntry\n\tisosurface r at 1\n\tisosurface r at 0\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r",
+  "timeZone" : "America/New_York"
+}

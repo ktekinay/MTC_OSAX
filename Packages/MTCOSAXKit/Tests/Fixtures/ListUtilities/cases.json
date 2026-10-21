@@ -646,5 +646,21 @@
  {
   "name": "sortlist-accents-and-case-insensitive",
   "script": "sortlist {\"É\", \"é\", \"E\", \"e\", \"F\", \"f\"} comparison 1"
+ },
+ {
+  "name": "sortlist-respect-mixed-key",
+  "script": "sortlist {{\"b\", 10, \"a\", 9}, {1, 2, 3, 4}} with respect to 1"
+ },
+ {
+  "name": "sortlist-respect-integers-and-reals-key",
+  "script": "sortlist {{3, 1.5, 2}, {1, 2, 3}} with respect to 1"
+ },
+ {
+  "name": "sortlist-respect-second-key-mixed",
+  "script": "sortlist {{1, 2, 3, 4}, {\"b\", 10, \"a\", 9}} with respect to 2"
+ },
+ {
+  "name": "sortlist-respect-both-keys-mixed",
+  "script": "sortlist {{2, 1.5, 2, 1}, {\"b\", 10, \"a\", 9}} with respect to {1, 2}"
  }
 ]

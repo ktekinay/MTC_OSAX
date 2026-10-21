@@ -247,7 +247,7 @@ public struct DescriptorSnapshot: Codable, Hashable {
 	}
 
 	/// Opaque references to documents and their parts: the PropertyList suite's CFRefs and the XML suites' XMLRefs.
-	static let referenceTypes: Set = ["CFob", "XMLR"]
+	static let referenceTypes: Set = ["CFob", "XMLR", "VI3D"]
 
 	/// Replaces the recorded references (CFRefs, XMLRefs) in `self` with the ones the app returned in their place,
 	/// as `references` maps them (by their recorded bytes).

@@ -357,7 +357,9 @@ struct ArrayOfRealTests {
 	}
 }
 
-/// 4-byte reals (SatimageOSAX's `read binary` made them, recorded in `Fixtures/Arrays/Files`), and polynomials.
+/// 4-byte reals (SatimageOSAX's `read binary` made them, recorded in `Fixtures/Arrays/Files`), and polynomials. On
+/// the main actor, as every Apple Event Manager call in the app is (see NumberTextTests).
+@MainActor
 struct ArrayLayoutTests {
 	@Test func fourByteRealsAreRead() throws {
 		// Recorded from SatimageOSAX: `read binary … as small integer` of {1, -2, 3}.

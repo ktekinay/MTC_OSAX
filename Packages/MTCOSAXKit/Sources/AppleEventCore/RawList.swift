@@ -73,6 +73,11 @@ package struct RawList {
 		/// for other items, whose data isn't read (a list's would be copied whole).
 		package var bits: UInt64
 
+		/// Whether `bits` holds the item's data: a number or a type, eight bytes or fewer.
+		package var hasBits: Bool {
+			size <= 8 && RawList.scalarTypes.contains(type)
+		}
+
 		/// Whether the item is `missing value`.
 		package var isMissingValue: Bool {
 			type == typeType && UInt32(truncatingIfNeeded: bits) == NSAppleEventDescriptor.missingValueCode
@@ -124,22 +129,22 @@ package struct RawList {
 	/// A list of the items at `rows`, in that order, or their replacements.
 	package func list(of rows: [Int], replacing replacement: (Int) -> Replacement? = { _ in nil }) throws -> NSAppleEventDescriptor {
 		var result = AEDescList()
-		try check(AECreateList(nil, 0, false, &result))
+		try OSAXError.check(AECreateList(nil, 0, false, &result))
 		do {
 			try withList { list in
 				for row in rows {
 					switch replacement(row) {
 					case nil:
 						var item = AEDesc(), keyword: AEKeyword = 0
-						try check(AEGetNthDesc(list, row + 1, typeWildCard, &keyword, &item))
+						try OSAXError.check(AEGetNthDesc(list, row + 1, typeWildCard, &keyword, &item))
 						defer { AEDisposeDesc(&item) }
-						try check(AEPutDesc(&result, 0, &item))
+						try OSAXError.check(AEPutDesc(&result, 0, &item))
 					case var .real(value)?:
-						try check(AEPutPtr(&result, 0, typeIEEE64BitFloatingPoint, &value, 8))
+						try OSAXError.check(AEPutPtr(&result, 0, typeIEEE64BitFloatingPoint, &value, 8))
 					case let .text(text)?:
 						// A pointer even for no text (an empty array's may be nil).
 						let units = Array(text.utf16) + [0]
-						try units.withUnsafeBytes { try check(AEPutPtr(&result, 0, typeUnicodeText, $0.baseAddress!, $0.count - 2)) }
+						try units.withUnsafeBytes { try OSAXError.check(AEPutPtr(&result, 0, typeUnicodeText, $0.baseAddress!, $0.count - 2)) }
 					}
 				}
 			}
@@ -148,11 +153,5 @@ package struct RawList {
 			throw error
 		}
 		return NSAppleEventDescriptor(aeDescNoCopy: &result)
-	}
-
-	private func check(_ status: OSErr) throws {
-		if status != noErr {
-			throw OSAXError(Int(status))
-		}
 	}
 }

@@ -57,13 +57,14 @@ public enum ListUtilities {
 			}
 		}
 
-		/// The items at `rows`, in that order: an `array of real` for numbers, a list otherwise.
-		func selecting(_ rows: [Int]) throws -> NSAppleEventDescriptor {
+		/// The items at `rows`, in that order: an `array of real` for numbers, a list otherwise (its items replaced by
+		/// `replacement`'s).
+		func selecting(_ rows: [Int], replacing replacement: (Int) -> RawList.Replacement? = { _ in nil }) throws -> NSAppleEventDescriptor {
 			switch self {
 			case let .reals(values): try ArrayOfReal.descriptor(count: rows.count) { buffer in
 					for (index, row) in rows.enumerated() { buffer[index] = values[row] }
 				}
-			case let .list(list): try list.list(of: rows)
+			case let .list(list): try list.list(of: rows, replacing: replacement)
 			}
 		}
 	}

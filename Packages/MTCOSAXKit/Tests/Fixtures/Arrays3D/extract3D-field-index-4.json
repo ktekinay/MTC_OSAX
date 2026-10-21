@@ -1,0 +1,252 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CRAR",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 0,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CRAR",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 0,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CRAR",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 0,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "VI3D",
+        "eventID" : "odoc",
+        "fields" : [
+          {
+            "key" : "dims",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "scfl",
+            "value" : {
+              "items" : [
+                {
+                  "items" : [
+                    {
+                      "real" : 0,
+                      "type" : "doub"
+                    }
+                  ],
+                  "type" : "Lido"
+                },
+                {
+                  "items" : [
+                    {
+                      "real" : 0,
+                      "type" : "doub"
+                    }
+                  ],
+                  "type" : "Lido"
+                },
+                {
+                  "items" : [
+                    {
+                      "real" : 0,
+                      "type" : "doub"
+                    }
+                  ],
+                  "type" : "Lido"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "flow",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "22000000",
+          "type" : "VI3D"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "VI3D",
+        "eventID" : "extr",
+        "fields" : [
+          {
+            "key" : "star",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "leng",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "INDX",
+            "value" : {
+              "integer" : 4,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "22000000",
+              "type" : "VI3D"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "VI3D",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "22000000",
+              "type" : "VI3D"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "extract3D-field-index-4",
+  "recordedAt" : "2026-10-19T23:37:57Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set r to open3D \"flow\" dimensions {1, 1, 1} field {(createarray 1), (createarray 1), (createarray 1)}\ntry\n\textract3D r start {1, 1, 1} length {1, 1, 1} field index 4\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r",
+  "timeZone" : "America/New_York"
+}

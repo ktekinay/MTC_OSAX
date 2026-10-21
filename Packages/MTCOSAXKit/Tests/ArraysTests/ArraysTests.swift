@@ -29,6 +29,21 @@ func nested(_ levels: Int) -> NSAppleEventDescriptor {
 	return deep
 }
 
+/// 1×1 matrices nested `levels` deep, each one's numbers a list holding the next (or the next itself).
+func nestedMatrices(_ levels: Int, throughLists: Bool = true) throws -> NSAppleEventDescriptor {
+	var deep = try Matrix(columns: 1, rows: 1, values: [1]).descriptor()
+	for _ in 0 ..< levels {
+		var data = deep
+		if throughLists {
+			data = NSAppleEventDescriptor.list()
+			data.insert(deep, at: 1)
+		}
+		let record = RecordFields([(.code("ncol"), NSAppleEventDescriptor(int32: 1)), (.code("nrow"), NSAppleEventDescriptor(int32: 1)), (.code("Lido"), data)]).appleEventDescriptor
+		deep = record.coerce(toDescriptorType: Matrix.descriptorType) ?? record
+	}
+	return deep
+}
+
 @MainActor
 struct CreateArrayTests {
 	/// The size from a list's first item was found recursively; now it's found however deep.

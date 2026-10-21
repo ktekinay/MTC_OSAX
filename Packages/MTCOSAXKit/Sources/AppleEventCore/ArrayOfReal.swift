@@ -35,6 +35,26 @@ public struct ArrayOfReal: Equatable, AppleEventConvertible {
 		guard descriptor.descriptorType == type else {
 			return nil
 		}
+		// 8-byte reals straight into the array, the header in its first two numbers and then moved down over it: no
+		// copy through Data (a hundred million numbers were 800 MB in each).
+		if let values = withExtendedLifetime(descriptor, { () -> [Double]? in
+			guard let desc = descriptor.aeDesc else { return nil }
+			let size = AEGetDescDataSize(desc)
+			guard size >= header.count, (size - header.count) % 8 == 0 else { return nil }
+			let count = (size - header.count) / 8
+			var values = [Double](unsafeUninitializedCapacity: count + 2) { buffer, initialized in
+				AEGetDescData(desc, buffer.baseAddress!, size)
+				initialized = count + 2
+			}
+			guard values.withUnsafeBytes({ $0.starts(with: header) }) else { return nil }
+			values.withUnsafeMutableBytes { bytes in
+				_ = memmove(bytes.baseAddress!, bytes.baseAddress! + header.count, count * 8)
+			}
+			values.removeLast(2)
+			return values
+		}) {
+			return values
+		}
 		let data = descriptor.data
 		if data.starts(with: singleHeader), (data.count - singleHeader.count) % 4 == 0 {
 			return data.dropFirst(singleHeader.count).withUnsafeBytes { bytes in
@@ -58,11 +78,11 @@ public struct ArrayOfReal: Equatable, AppleEventConvertible {
 	/// An `array of real` of `count` numbers, which `fill` writes. The numbers go straight into a buffer with room
 	/// for the header (16 bytes, two numbers' worth) and the descriptor is made from it, one copy of the numbers
 	/// fewer than going through `values` and Data (a hundred million numbers were 800 MB each). -108 if there isn't
-	/// memory for the descriptor (it trapped).
-	public static func descriptor(count: Int, type: DescType = descriptorType, _ fill: (UnsafeMutableBufferPointer<Double>) -> Void) throws -> NSAppleEventDescriptor {
-		let buffer = [Double](unsafeUninitializedCapacity: count + 2) { buffer, initialized in
+	/// memory for the descriptor (it trapped); the buffer itself still traps without it, as any array does.
+	public static func descriptor(count: Int, type: DescType = descriptorType, _ fill: (UnsafeMutableBufferPointer<Double>) throws -> Void) throws -> NSAppleEventDescriptor {
+		let buffer = try [Double](unsafeUninitializedCapacity: count + 2) { buffer, initialized in
 			header.withUnsafeBytes { UnsafeMutableRawBufferPointer(buffer).copyMemory(from: $0) }
-			fill(UnsafeMutableBufferPointer(rebasing: buffer[2...]))
+			try fill(UnsafeMutableBufferPointer(rebasing: buffer[2...]))
 			initialized = count + 2
 		}
 		let descriptor = buffer.withUnsafeBytes {

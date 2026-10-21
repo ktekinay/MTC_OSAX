@@ -60,6 +60,13 @@ struct ArithmeticTests {
 		#expect(send("SATILST+", ["----": nested(NSAppleEventDescriptor.maximumNesting), "with": 1]).error == nil)
 	}
 
+	/// Matrices count toward the limit too (Audit C2).
+	@Test func deeplyNestedMatrices() throws {
+		#expect(send("SATILST+", ["----": AppleEventList([try nestedMatrices(300)]), "with": 1]).error?.number == -50)
+		#expect(send("SATILST+", ["----": try nestedMatrices(3_000, throughLists: false), "with": 1]).error?.number == -50)
+		#expect(send("SATILST+", ["----": AppleEventList([try nestedMatrices(200)]), "with": 1]).error == nil)
+	}
+
 	/// Multiplying polynomials takes the product of their lengths: more than 10,000,000,000 is -50.
 	@Test func longPolynomials() throws {
 		let long = try polynomial(Array(repeating: 1, count: 100_001))

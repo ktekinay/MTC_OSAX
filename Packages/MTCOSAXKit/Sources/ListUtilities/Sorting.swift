@@ -27,10 +27,11 @@ package enum Sorting {
 			flags: try request.parameter("Cfla", default: 0),
 			removeDuplicates: try request.parameter("Uniq", default: false)
 		)
-		let ascending = directions(request, count: 1).first ?? true
+		let directions = directions(request)
+		let ascending = directions[0]
 
 		if let values = ArrayOfReal.values(of: descriptor) {
-			return try ArrayOfReal(sortedNumbers(values, ascending: ascending, options: options)).descriptor()
+			return try sortedNumbers(values, ascending: ascending, options: options)
 		}
 		// A single value is a list of one (SatimageOSAX returned an empty list).
 		let list = RawList(descriptor) ?? RawList(single: descriptor)
@@ -39,11 +40,11 @@ package enum Sorting {
 		}
 		if let respect = request.descriptor(for: "from") {
 			let criteria = try criteria(respect)
-			return try sortTogether(sublists, by: criteria, ascending: directions(request, count: criteria.count), options: options)
+			return try sortTogether(sublists, by: criteria, ascending: directions, options: options)
 		}
 		return try sublists.map { sublist in
 			switch sublist {
-			case let .reals(values): try ArrayOfReal(sortedNumbers(values, ascending: ascending, options: options)).descriptor()
+			case let .reals(values): try sortedNumbers(values, ascending: ascending, options: options)
 			case let .list(list): try sortedList(list, ascending: ascending, options: options)
 			}
 		}.appleEventDescriptor
@@ -66,19 +67,30 @@ package enum Sorting {
 		return sublists
 	}
 
-	/// `ascending`'s first `count` booleans, all that are used (an array of 10,000,000 made a descriptor for each of
-	/// its numbers: 12 s and 1.6 GB).
-	private static func directions(_ request: AppleEventRequest, count: Int) -> [Bool] {
+	/// `ascending`: a boolean for each criterion, the first for those past its end (and true without one).
+	struct Directions {
+		let count: Int
+		let at: (Int) -> Bool
+
+		subscript(criterion: Int) -> Bool {
+			criterion < count ? at(criterion) : count > 0 ? at(0) : true
+		}
+	}
+
+	/// Each boolean read only when it's used: one for each criterion left once repeats are dropped (an array of
+	/// 10,000,000 made a descriptor for each of its numbers, 12 s and 1.6 GB, and still did with as many criteria).
+	private static func directions(_ request: AppleEventRequest) -> Directions {
 		guard let descriptor = request.descriptor(for: "Asce") else {
-			return []
+			return Directions(count: 0) { _ in true }
 		}
 		if let values = ArrayOfReal.values(of: descriptor) {
-			return values.prefix(count).map { NSAppleEventDescriptor(double: $0).booleanValue }
+			return Directions(count: values.count) { NSAppleEventDescriptor(double: values[$0]).booleanValue }
 		}
 		guard let list = RawList(descriptor) else {
-			return [descriptor.booleanValue]
+			let value = descriptor.booleanValue
+			return Directions(count: 1) { _ in value }
 		}
-		return (0 ..< min(count, list.count)).map { list.descriptor($0).booleanValue }
+		return Directions(count: list.count) { list.descriptor($0).booleanValue }
 	}
 
 	/// `with respect to`'s list numbers, read without a descriptor for each. Whole numbers only (1.5 used to become 1,
@@ -113,38 +125,51 @@ package enum Sorting {
 		}
 	}
 
-	static func sortedNumbers(_ values: [Double], ascending: Bool, options: Options) -> [Double] {
-		order(rows: values.indices, keys: [.numbers(values)], ascending: [ascending], options: options).map { values[$0] }
+	/// An `array of real`, the numbers written straight into it (through an array of them, and another for the
+	/// descriptor, a hundred million were 1.6 GB more).
+	static func sortedNumbers(_ values: [Double], ascending: Bool, options: Options) throws -> NSAppleEventDescriptor {
+		let rows = order(count: values.count, keys: [.numbers(values)], ascending: [ascending], options: options)
+		return try ArrayOfReal.descriptor(count: rows.count) { buffer in
+			for (index, row) in rows.enumerated() {
+				buffer[index] = values[row]
+			}
+		}
 	}
 
 	static func sortedList(_ list: RawList, ascending: Bool, options: Options) throws -> NSAppleEventDescriptor {
 		let column = try classify(list, flags: options.flags)
-		let rows = order(rows: 0 ..< list.count, keys: [column.keys], ascending: [ascending], options: options)
+		let rows = order(count: list.count, keys: [column.keys], ascending: [ascending], options: options)
 		return try list.list(of: rows, replacing: column.replacement)
 	}
 
 	/// Sorts the lists together, by the lists at `criteria` in priority order. Every list must have the same length
 	/// and the criteria must name lists (error -1 otherwise, as in SatimageOSAX).
-	static func sortTogether(_ columns: [ListUtilities.Items], by criteria: [Int], ascending: [Bool], options: Options) throws -> NSAppleEventDescriptor {
+	static func sortTogether(_ columns: [ListUtilities.Items], by criteria: [Int], ascending: Directions, options: Options) throws -> NSAppleEventDescriptor {
 		let count = columns.first?.count ?? 0
 		guard columns.allSatisfy({ $0.count == count }), !criteria.isEmpty,
 		      criteria.allSatisfy({ columns.indices.contains($0 - 1) })
 		else {
 			throw OSAXError(-1)
 		}
-		let directions = criteria.indices.map { ascending.indices.contains($0) ? ascending[$0] : (ascending.first ?? true) }
 		// A criterion that repeats an earlier one can't change the order: rows equal by every criterion before it are
 		// equal by it too, whatever its direction (1,000 of them on 100,000 rows took 10 s and 1.7 GB).
 		var seen = Set<Int>()
 		let unique = criteria.indices.filter { seen.insert(criteria[$0]).inserted }
+		// The lists sorted by have their items replaced, as a list sorted alone does (recorded: numbers in a list with
+		// text come back as text, integers in a list with reals as reals); they came back as they were.
+		var replacements: [Int: (Int) -> RawList.Replacement?] = [:]
 		let keys = try unique.map { index -> Column in
 			switch columns[criteria[index] - 1] {
-			case let .reals(values): Column.numbers(values)
-			case let .list(list): try classify(list, flags: options.flags).keys
+			case let .reals(values):
+				return Column.numbers(values)
+			case let .list(list):
+				let classified = try classify(list, flags: options.flags)
+				replacements[criteria[index] - 1] = classified.replacement
+				return classified.keys
 			}
 		}
-		let rows = order(rows: 0 ..< count, keys: keys, ascending: unique.map { directions[$0] }, options: options)
-		return try columns.map { try $0.selecting(rows) }.appleEventDescriptor
+		let rows = order(count: count, keys: keys, ascending: unique.map { ascending[$0] }, options: options)
+		return try columns.indices.map { try columns[$0].selecting(rows, replacing: replacements[$0] ?? { _ in nil }) }.appleEventDescriptor
 	}
 
 	/// A list's sort keys, and what replaces its items in the sorted list.
@@ -242,13 +267,13 @@ package enum Sorting {
 	}
 
 	/// The rows in sorted order: stable, `missing value` last, duplicates (equal in every key) removed if asked.
-	package static func order(rows: Range<Int>, keys: [Column], ascending: [Bool], options: Options) -> [Int] {
+	package static func order(count: Int, keys: [Column], ascending: [Bool], options: Options) -> [Int] {
 		let columns = zip(keys, ascending).map { Prepared($0, ascending: $1) }
 		// Row numbers are 32 bits, unless there are too many rows.
-		if rows.count <= Int(UInt32.max) {
-			return order(UInt32.self, count: rows.count, columns: columns, options: options)
+		if count <= Int(UInt32.max) {
+			return order(UInt32.self, count: count, columns: columns, options: options)
 		}
-		return order(UInt64.self, count: rows.count, columns: columns, options: options)
+		return order(UInt64.self, count: count, columns: columns, options: options)
 	}
 
 	private static func order<Row: FixedWidthInteger & UnsignedInteger>(_: Row.Type, count: Int, columns: [Prepared], options: Options) -> [Int] {

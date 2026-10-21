@@ -14,7 +14,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 		// specifier such as `POSIX file (someVariable)`), and then installs its own handlers for every command,
 		// replacing ours. Loading it now means ours are installed after it and stay.
 		_ = NSScriptSuiteRegistry.shared()
-		// Open property lists would be lost, so the app doesn't quit for being idle while any are open.
+		// Open property lists, XML documents and 3D arrays would be lost, so the app doesn't quit for being idle while
+		// any are open.
 		let documents = DocumentStore()
 		// The idle timeout setting (`mtc_set idle_timeout`) is read each time the countdown starts, so a change
 		// applies after the next command.

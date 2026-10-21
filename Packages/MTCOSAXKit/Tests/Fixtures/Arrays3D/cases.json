@@ -1,0 +1,182 @@
+[
+ {
+  "name": "open3D-info",
+  "script": "set r to open3D \"cube\" dimensions {3, 3, 3} field (extractarray {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} for -1)\ntry\n\tinfo3D r\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r"
+ },
+ {
+  "name": "open3D-info-by-name",
+  "script": "set r to open3D \"cube\" dimensions {3, 3, 3} field (extractarray {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} for -1)\ntry\n\tinfo3D \"cube\"\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r"
+ },
+ {
+  "name": "open3D-scales",
+  "script": "set r to open3D \"scaled\" dimensions {createarray 3 range {10, 20}, 3, {0, 1, 4}} field (extractarray {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} for -1)\ntry\n\tinfo3D r\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r"
+ },
+ {
+  "name": "open3D-scales-uneven",
+  "script": "set r to open3D \"uneven\" dimensions {{0, 0.5, 2}, {-1, 1}, 1} field (createarray 6)\ntry\n\tinfo3D r\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r"
+ },
+ {
+  "name": "open3D-real-dimension",
+  "script": "set r to open3D \"real\" dimensions {2.5, 2, 2} field (createarray 8)\ntry\n\tinfo3D r\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r"
+ },
+ {
+  "name": "open3D-vector-field",
+  "script": "set r to open3D \"flow\" dimensions {3, 3, 3} field {(createarray 27 range {1, 1}), (randomarray 27 range {-1, 1} seed 3), (createarray 27)}\ntry\n\tinfo3D r\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r"
+ },
+ {
+  "name": "open3D-one-cell",
+  "script": "set r to open3D \"one\" dimensions {1, 1, 1} field (createarray 1 range {5, 5})\ntry\n\tinfo3D r\n\tcontents3D r\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r"
+ },
+ {
+  "name": "open3D-precision",
+  "script": "set r to open3D \"tenths\" dimensions {3, 1, 1} field (extractarray {0.1, 0.2, 0.3333333333333333} for -1)\ntry\n\tcontents3D r\n\tinfo3D r\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r"
+ },
+ {
+  "name": "open3D-wrong-size",
+  "script": "open3D \"bad\" dimensions {2, 2, 2} field (createarray 27)"
+ },
+ {
+  "name": "open3D-two-dimensions",
+  "script": "open3D \"bad\" dimensions {3, 9} field (createarray 27)"
+ },
+ {
+  "name": "open3D-four-dimensions",
+  "script": "open3D \"bad\" dimensions {3, 3, 3, 1} field (createarray 27)"
+ },
+ {
+  "name": "open3D-two-fields",
+  "script": "open3D \"bad\" dimensions {3, 3, 3} field {(createarray 27), (createarray 27)}"
+ },
+ {
+  "name": "open3D-no-field",
+  "script": "open3D \"bad\" dimensions {3, 3, 3}"
+ },
+ {
+  "name": "open3D-no-dimensions",
+  "script": "open3D \"bad\" field (createarray 27)"
+ },
+ {
+  "name": "open3D-dimension-zero",
+  "script": "open3D \"bad\" dimensions {0, 3, 3} field (createarray 1)"
+ },
+ {
+  "name": "open3D-scale-wrong-size",
+  "script": "open3D \"bad\" dimensions {createarray 2, 3, 3} field (createarray 27)"
+ },
+ {
+  "name": "contents3D-scalar",
+  "script": "set r to open3D \"cube\" dimensions {3, 3, 3} field (extractarray {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} for -1)\ntry\n\tcontents3D r\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r"
+ },
+ {
+  "name": "contents3D-vector",
+  "script": "set r to open3D \"flow\" dimensions {2, 2, 2} field {(createarray 8), (createarray 8 range {10, 17}), (createarray 8 range {20, 27})}\ntry\n\tcontents3D r\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r"
+ },
+ {
+  "name": "list3D-references",
+  "script": "set r to open3D \"cube\" dimensions {3, 3, 3} field (extractarray {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} for -1)\nset s to open3D \"second\" dimensions {1, 1, 1} field (createarray 1)\ntry\n\tlist3D\nend try\nclose3D s\nclose3D r"
+ },
+ {
+  "name": "list3D-names",
+  "script": "set r to open3D \"cube\" dimensions {3, 3, 3} field (extractarray {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} for -1)\nset s to open3D \"second\" dimensions {1, 1, 1} field (createarray 1)\nset t to open3D \"third\" dimensions {1, 1, 1} field (createarray 1)\ntry\n\tlist3D as string\n\tlist3D as text\nend try\nclose3D t\nclose3D s\nclose3D r\nlist3D as string"
+ },
+ {
+  "name": "list3D-empty",
+  "script": "list3D\nlist3D as string"
+ },
+ {
+  "name": "rename3D",
+  "script": "set r to open3D \"cube\" dimensions {3, 3, 3} field (extractarray {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} for -1)\ntry\n\trename3D r into \"box\"\n\tlist3D as string\n\tinfo3D \"box\"\n\trename3D \"box\" into \"cube\"\n\tinfo3D \"cube\"\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r"
+ },
+ {
+  "name": "rename3D-missing-into",
+  "script": "set r to open3D \"cube\" dimensions {3, 3, 3} field (extractarray {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} for -1)\ntry\n\trename3D r\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r"
+ },
+ {
+  "name": "names-repeated",
+  "script": "set r to open3D \"cube\" dimensions {3, 3, 3} field (extractarray {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} for -1)\nset s to open3D \"cube\" dimensions {1, 1, 1} field (createarray 1)\ntry\n\tinfo3D \"cube\"\n\tlist3D as string\nend try\nclose3D s\ninfo3D \"cube\"\nclose3D r"
+ },
+ {
+  "name": "close3D-by-name",
+  "script": "set r to open3D \"cube\" dimensions {3, 3, 3} field (extractarray {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} for -1)\nclose3D \"cube\"\nlist3D"
+ },
+ {
+  "name": "closed-reference",
+  "script": "set r to open3D \"cube\" dimensions {3, 3, 3} field (extractarray {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} for -1)\nclose3D r\ninfo3D r"
+ },
+ {
+  "name": "close3D-twice",
+  "script": "set r to open3D \"cube\" dimensions {3, 3, 3} field (extractarray {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} for -1)\nclose3D r\nclose3D r"
+ },
+ {
+  "name": "unknown-name",
+  "script": "info3D \"nothing\""
+ },
+ {
+  "name": "close3D-unknown-name",
+  "script": "close3D \"nothing\""
+ },
+ {
+  "name": "info3D-not-a-reference",
+  "script": "info3D {1, 2}"
+ },
+ {
+  "name": "extract3D-blocks",
+  "script": "set r to open3D \"box\" dimensions {3, 4, 5} field (createarray 60)\ntry\n\textract3D r start {1, 1, 1} length {3, 4, 5}\n\textract3D r start {2, 3, 4} length {1, 1, 1}\n\textract3D r start {1, 2, 3} length {2, 2, 2}\n\textract3D r start {3, 1, 1} length {1, 4, 1}\n\textract3D r start {1, 1, 2} length {3, 1, 4}\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r"
+ },
+ {
+  "name": "extract3D-vector-field",
+  "script": "set r to open3D \"flow\" dimensions {2, 2, 2} field {(createarray 8), (createarray 8 range {10, 17}), (createarray 8 range {20, 27})}\ntry\n\textract3D r start {1, 1, 1} length {2, 1, 2}\n\textract3D r start {1, 1, 1} length {2, 1, 2} field index 2\n\textract3D r start {1, 1, 1} length {2, 1, 2} field index 3\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r"
+ },
+ {
+  "name": "extract3D-past-the-end",
+  "script": "set r to open3D \"box\" dimensions {3, 4, 5} field (createarray 60)\ntry\n\textract3D r start {3, 4, 5} length {2, 1, 1}\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r"
+ },
+ {
+  "name": "extract3D-start-zero",
+  "script": "set r to open3D \"box\" dimensions {3, 4, 5} field (createarray 60)\ntry\n\textract3D r start {0, 1, 1} length {1, 1, 1}\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r"
+ },
+ {
+  "name": "extract3D-length-zero",
+  "script": "set r to open3D \"box\" dimensions {3, 4, 5} field (createarray 60)\ntry\n\textract3D r start {1, 1, 1} length {0, 1, 1}\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r"
+ },
+ {
+  "name": "extract3D-negative-start",
+  "script": "set r to open3D \"box\" dimensions {3, 4, 5} field (createarray 60)\ntry\n\textract3D r start {-1, 1, 1} length {1, 1, 1}\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r"
+ },
+ {
+  "name": "extract3D-two-starts",
+  "script": "set r to open3D \"box\" dimensions {3, 4, 5} field (createarray 60)\ntry\n\textract3D r start {1, 1} length {1, 1, 1}\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r"
+ },
+ {
+  "name": "extract3D-no-length",
+  "script": "set r to open3D \"box\" dimensions {3, 4, 5} field (createarray 60)\ntry\n\textract3D r start {1, 1, 1}\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r"
+ },
+ {
+  "name": "extract3D-field-index-2-of-1",
+  "script": "set r to open3D \"box\" dimensions {3, 4, 5} field (createarray 60)\ntry\n\textract3D r start {1, 1, 1} length {1, 1, 1} field index 2\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r"
+ },
+ {
+  "name": "extract3D-field-index-zero",
+  "script": "set r to open3D \"box\" dimensions {3, 4, 5} field (createarray 60)\ntry\n\textract3D r start {1, 1, 1} length {1, 1, 1} field index 0\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r"
+ },
+ {
+  "name": "extract3D-field-index-4",
+  "script": "set r to open3D \"flow\" dimensions {1, 1, 1} field {(createarray 1), (createarray 1), (createarray 1)}\ntry\n\textract3D r start {1, 1, 1} length {1, 1, 1} field index 4\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r"
+ },
+ {
+  "name": "isosurface-above",
+  "script": "set r to open3D \"cube\" dimensions {3, 3, 3} field (extractarray {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} for -1)\ntry\n\tisosurface r at 2\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r"
+ },
+ {
+  "name": "isosurface-below",
+  "script": "set r to open3D \"cube\" dimensions {3, 3, 3} field (extractarray {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} for -1)\ntry\n\tisosurface r at -1\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r"
+ },
+ {
+  "name": "isosurface-vector-field-none",
+  "script": "set r to open3D \"flow\" dimensions {3, 3, 3} field {(createarray 27 range {1, 1}), (extractarray {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} for -1), (createarray 27 range {0, 0})}\ntry\n\tisosurface r at 0.5\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r"
+ },
+ {
+  "name": "streamline-scalar-field",
+  "script": "set r to open3D \"cube\" dimensions {3, 3, 3} field (extractarray {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} for -1)\ntry\n\tstreamline r starting at {1, 1, 1}\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r"
+ }
+]

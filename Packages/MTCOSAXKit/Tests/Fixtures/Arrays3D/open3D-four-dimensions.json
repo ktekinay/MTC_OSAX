@@ -1,0 +1,299 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CRAR",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 27,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 2,
+              "type" : "doub"
+            },
+            {
+              "real" : 3,
+              "type" : "doub"
+            },
+            {
+              "real" : 4,
+              "type" : "doub"
+            },
+            {
+              "real" : 5,
+              "type" : "doub"
+            },
+            {
+              "real" : 6,
+              "type" : "doub"
+            },
+            {
+              "real" : 7,
+              "type" : "doub"
+            },
+            {
+              "real" : 8,
+              "type" : "doub"
+            },
+            {
+              "real" : 9,
+              "type" : "doub"
+            },
+            {
+              "real" : 10,
+              "type" : "doub"
+            },
+            {
+              "real" : 11,
+              "type" : "doub"
+            },
+            {
+              "real" : 12,
+              "type" : "doub"
+            },
+            {
+              "real" : 13,
+              "type" : "doub"
+            },
+            {
+              "real" : 14,
+              "type" : "doub"
+            },
+            {
+              "real" : 15,
+              "type" : "doub"
+            },
+            {
+              "real" : 16,
+              "type" : "doub"
+            },
+            {
+              "real" : 17,
+              "type" : "doub"
+            },
+            {
+              "real" : 18,
+              "type" : "doub"
+            },
+            {
+              "real" : 19,
+              "type" : "doub"
+            },
+            {
+              "real" : 20,
+              "type" : "doub"
+            },
+            {
+              "real" : 21,
+              "type" : "doub"
+            },
+            {
+              "real" : 22,
+              "type" : "doub"
+            },
+            {
+              "real" : 23,
+              "type" : "doub"
+            },
+            {
+              "real" : 24,
+              "type" : "doub"
+            },
+            {
+              "real" : 25,
+              "type" : "doub"
+            },
+            {
+              "real" : 26,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "VI3D",
+        "eventID" : "odoc",
+        "fields" : [
+          {
+            "key" : "dims",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 3,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 3,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 3,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "scfl",
+            "value" : {
+              "items" : [
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 1,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 2,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 3,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 4,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 5,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 6,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 7,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 8,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 9,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 10,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 11,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 12,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 13,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 14,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 15,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 16,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 17,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 18,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 19,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 20,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 21,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 22,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 23,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 24,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 25,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 26,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "Lido"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "bad",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : 3
+      }
+    }
+  ],
+  "name" : "open3D-four-dimensions",
+  "recordedAt" : "2026-10-19T23:37:56Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "open3D \"bad\" dimensions {3, 3, 3, 1} field (createarray 27)",
+  "timeZone" : "America/New_York"
+}

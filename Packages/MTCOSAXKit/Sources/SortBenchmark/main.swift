@@ -33,7 +33,7 @@ struct Case {
 	var keys: () throws -> [Sorting.Column]
 
 	func order(_ keys: [Sorting.Column]) -> Int {
-		Sorting.order(rows: 0 ..< count(keys[0]), keys: keys, ascending: keys.map { _ in true }, options: Sorting.Options(flags: flags, removeDuplicates: unique)).count
+		Sorting.order(count: count(keys[0]), keys: keys, ascending: keys.map { _ in true }, options: Sorting.Options(flags: flags, removeDuplicates: unique)).count
 	}
 
 	private func count(_ column: Sorting.Column) -> Int {

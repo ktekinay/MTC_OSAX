@@ -59,7 +59,7 @@ enum BinaryFiles {
 		let values = try Values.numbers(dataDescriptor)
 		let format = try Format(request, default: .real)
 		let bigEndian = try request.parameter("Endi", default: false)
-		let start = try request.descriptor(for: "strt").map(Values.integer)
+		let start = try request.descriptor(for: "strt").map(offset)
 		if let start, start < 0 {
 			throw OSAXError.parameterError
 		}
@@ -83,13 +83,23 @@ enum BinaryFiles {
 			while written < buffer.count {
 				let count = pwrite(descriptor, buffer.baseAddress! + written, buffer.count - written, off_t(offset))
 				guard count > 0 else {
-					throw posixError(what)
+					throw count == 0 ? OSAXError.file(POSIXError(.EIO), what) : posixError(what)
 				}
 				written += count
 				offset += Int64(count)
 			}
 		}
 		return nil
+	}
+
+	/// A byte offset (`starting at`, `skip`): a whole number, half to even, up to 2⁵³ (exact as a real); -50 for one
+	/// that isn't finite or is beyond. 32 bits stopped at byte 2,147,483,647, short of the end of a larger file.
+	private static func offset(_ descriptor: NSAppleEventDescriptor) throws -> Int {
+		let value = try Values.number(descriptor).rounded(.toNearestOrEven)
+		guard value.isFinite, value.magnitude <= 9_007_199_254_740_992 else {
+			throw OSAXError.parameterError
+		}
+		return Int(value)
 	}
 
 	private static func posixError(_ what: String) -> OSAXError {
@@ -150,7 +160,7 @@ enum BinaryFiles {
 		let format = try Format(request, default: nil)
 		let bigEndian = try request.parameter("Endi", default: false)
 		let signed = try request.parameter("Sign", default: true)
-		let skip = try request.descriptor(for: "skip").map(Values.integer) ?? 0
+		let skip = try request.descriptor(for: "skip").map(offset) ?? 0
 		let blocksize = try request.descriptor(for: "bloc").map(Values.integer) ?? 1
 		let step = try request.descriptor(for: "jump").map(Values.integer) ?? blocksize
 		let length = try request.descriptor(for: "for ").map(Values.integer)
@@ -177,30 +187,44 @@ enum BinaryFiles {
 		guard !overflow, count <= Arrays.maximumSize else {
 			throw Arrays.tooLarge
 		}
-		// Only the bytes the blocks cover, read rather than mapped (a mapped file cut short while it's read can crash
-		// the process).
-		let byteCount = blocks == 0 ? 0 : ((blocks - 1) * step + blocksize) * format.size
-		let bytes = try [UInt8](unsafeUninitializedCapacity: byteCount) { buffer, initialized in
-			while initialized < byteCount {
-				let count = pread(descriptor, buffer.baseAddress! + initialized, byteCount - initialized, off_t(skip + initialized))
-				guard count > 0 else {
-					throw count == 0 ? OSAXError.file(POSIXError(.EIO), what) : posixError(what)
-				}
-				initialized += count
-			}
-		}
+		// Read rather than mapped (a mapped file cut short while it's read can crash the process), a few blocks at a
+		// time: several together while the bytes between them are few, each by itself otherwise, so that what's in
+		// memory at once is at most `readChunk` bytes or one block (all the bytes the blocks spanned were read at once:
+		// `jump 1000` over a 50 GB file read 50 GB for a result of 50 MB).
+		let (blockBytes, stride) = (blocksize * format.size, step * format.size)
+		let together = stride - blockBytes <= maximumGap ? max(1, (readChunk - blockBytes) / stride + 1) : 1
+		let windowBytes = blocks == 0 ? 0 : (min(together, blocks) - 1) * stride + blockBytes
+		var window = [UInt8](repeating: 0, count: windowBytes)
 		return try ArrayOfReal.descriptor(count: count) { buffer in
-			bytes.withUnsafeBytes { bytes in
-				var index = 0
-				for block in 0 ..< blocks {
-					for item in 0 ..< blocksize {
-						buffer[index] = number(bytes, at: (block * step + item) * format.size, as: format, bigEndian: bigEndian, signed: signed)
-						index += 1
+			try window.withUnsafeMutableBytes { window in
+				var (block, index) = (0, 0)
+				while block < blocks {
+					let n = min(together, blocks - block)
+					let byteCount = (n - 1) * stride + blockBytes
+					var read = 0
+					while read < byteCount {
+						let count = pread(descriptor, window.baseAddress! + read, byteCount - read, off_t(skip + block * stride + read))
+						guard count > 0 else {
+							throw count == 0 ? OSAXError.file(POSIXError(.EIO), what) : posixError(what)
+						}
+						read += count
 					}
+					for inWindow in 0 ..< n {
+						for item in 0 ..< blocksize {
+							buffer[index] = number(UnsafeRawBufferPointer(window), at: inWindow * stride + item * format.size, as: format, bigEndian: bigEndian, signed: signed)
+							index += 1
+						}
+					}
+					block += n
 				}
 			}
 		}
 	}
+
+	/// The most bytes `read binary` reads at once (but for a block larger than this), and the most it reads between
+	/// two blocks rather than reading them separately.
+	static let readChunk = 16 << 20
+	static let maximumGap = 64 << 10
 
 	private static func number(_ bytes: UnsafeRawBufferPointer, at offset: Int, as format: Format, bigEndian: Bool, signed: Bool) -> Double {
 		func get<Value: FixedWidthInteger>(_: Value.Type) -> Value {
