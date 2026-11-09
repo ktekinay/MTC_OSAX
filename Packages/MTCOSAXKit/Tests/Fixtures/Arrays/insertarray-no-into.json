@@ -1,0 +1,33 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "InLF",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 7,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1701
+      }
+    }
+  ],
+  "name" : "insertarray-no-into",
+  "recordedAt" : "2026-10-15T13:37:29Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "insertarray {7}",
+  "timeZone" : "America/New_York"
+}

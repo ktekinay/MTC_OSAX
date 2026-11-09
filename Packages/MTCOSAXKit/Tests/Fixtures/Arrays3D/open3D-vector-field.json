@@ -1,0 +1,1005 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CRAR",
+        "fields" : [
+          {
+            "key" : "rang",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 27,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CRRA",
+        "fields" : [
+          {
+            "key" : "rang",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : -1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "seed",
+            "value" : {
+              "integer" : 3,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 27,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 0.10159580875188112,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.858550239354372,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.4162956443615258,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.6798980846069753,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.41819051280617714,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.757342841476202,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.02165520191192627,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.13862265134230256,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.7858939156867564,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.125876119825989,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.792586182244122,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.9625039794482291,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.7488293680362403,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.9187385248951614,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.5855142427608371,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.5042233965359628,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.8970655840821564,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.81289700884372,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.11838032305240631,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.389647314324975,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.9402475748211145,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.7092597051523626,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.08633355470374227,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.09365540090948343,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.29828810319304466,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.5688459752127528,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.443025432061404,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CRAR",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 27,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 2,
+              "type" : "doub"
+            },
+            {
+              "real" : 3,
+              "type" : "doub"
+            },
+            {
+              "real" : 4,
+              "type" : "doub"
+            },
+            {
+              "real" : 5,
+              "type" : "doub"
+            },
+            {
+              "real" : 6,
+              "type" : "doub"
+            },
+            {
+              "real" : 7,
+              "type" : "doub"
+            },
+            {
+              "real" : 8,
+              "type" : "doub"
+            },
+            {
+              "real" : 9,
+              "type" : "doub"
+            },
+            {
+              "real" : 10,
+              "type" : "doub"
+            },
+            {
+              "real" : 11,
+              "type" : "doub"
+            },
+            {
+              "real" : 12,
+              "type" : "doub"
+            },
+            {
+              "real" : 13,
+              "type" : "doub"
+            },
+            {
+              "real" : 14,
+              "type" : "doub"
+            },
+            {
+              "real" : 15,
+              "type" : "doub"
+            },
+            {
+              "real" : 16,
+              "type" : "doub"
+            },
+            {
+              "real" : 17,
+              "type" : "doub"
+            },
+            {
+              "real" : 18,
+              "type" : "doub"
+            },
+            {
+              "real" : 19,
+              "type" : "doub"
+            },
+            {
+              "real" : 20,
+              "type" : "doub"
+            },
+            {
+              "real" : 21,
+              "type" : "doub"
+            },
+            {
+              "real" : 22,
+              "type" : "doub"
+            },
+            {
+              "real" : 23,
+              "type" : "doub"
+            },
+            {
+              "real" : 24,
+              "type" : "doub"
+            },
+            {
+              "real" : 25,
+              "type" : "doub"
+            },
+            {
+              "real" : 26,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "VI3D",
+        "eventID" : "odoc",
+        "fields" : [
+          {
+            "key" : "dims",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 3,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 3,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 3,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "scfl",
+            "value" : {
+              "items" : [
+                {
+                  "items" : [
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    }
+                  ],
+                  "type" : "Lido"
+                },
+                {
+                  "items" : [
+                    {
+                      "real" : 0.10159580875188112,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.858550239354372,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.4162956443615258,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.6798980846069753,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.41819051280617714,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.757342841476202,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.02165520191192627,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.13862265134230256,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.7858939156867564,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.125876119825989,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.792586182244122,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.9625039794482291,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.7488293680362403,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.9187385248951614,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.5855142427608371,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.5042233965359628,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.8970655840821564,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.81289700884372,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.11838032305240631,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.389647314324975,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.9402475748211145,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.7092597051523626,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.08633355470374227,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.09365540090948343,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.29828810319304466,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.5688459752127528,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.443025432061404,
+                      "type" : "doub"
+                    }
+                  ],
+                  "type" : "Lido"
+                },
+                {
+                  "items" : [
+                    {
+                      "real" : 0,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 2,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 3,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 4,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 5,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 6,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 7,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 8,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 9,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 10,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 11,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 12,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 13,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 14,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 15,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 16,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 17,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 18,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 19,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 20,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 21,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 22,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 23,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 24,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 25,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 26,
+                      "type" : "doub"
+                    }
+                  ],
+                  "type" : "Lido"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "flow",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "06000000",
+          "type" : "VI3D"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "VI3D",
+        "eventID" : "info",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "06000000",
+              "type" : "VI3D"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "pnam",
+              "value" : {
+                "text" : "flow",
+                "type" : "ut16"
+              }
+            },
+            {
+              "key" : "dims",
+              "value" : {
+                "items" : [
+                  {
+                    "integer" : 3,
+                    "type" : "long"
+                  },
+                  {
+                    "integer" : 3,
+                    "type" : "long"
+                  },
+                  {
+                    "integer" : 3,
+                    "type" : "long"
+                  }
+                ],
+                "type" : "list"
+              }
+            },
+            {
+              "key" : "Tsca",
+              "value" : {
+                "items" : [
+                  {
+                    "items" : [
+                      {
+                        "real" : 0,
+                        "type" : "doub"
+                      },
+                      {
+                        "real" : 1,
+                        "type" : "doub"
+                      },
+                      {
+                        "real" : 2,
+                        "type" : "doub"
+                      }
+                    ],
+                    "type" : "Lido"
+                  },
+                  {
+                    "items" : [
+                      {
+                        "real" : 0,
+                        "type" : "doub"
+                      },
+                      {
+                        "real" : 1,
+                        "type" : "doub"
+                      },
+                      {
+                        "real" : 2,
+                        "type" : "doub"
+                      }
+                    ],
+                    "type" : "Lido"
+                  },
+                  {
+                    "items" : [
+                      {
+                        "real" : 0,
+                        "type" : "doub"
+                      },
+                      {
+                        "real" : 1,
+                        "type" : "doub"
+                      },
+                      {
+                        "real" : 2,
+                        "type" : "doub"
+                      }
+                    ],
+                    "type" : "Lido"
+                  }
+                ],
+                "type" : "list"
+              }
+            },
+            {
+              "key" : "NFie",
+              "value" : {
+                "integer" : 3,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "MIN ",
+              "value" : {
+                "items" : [
+                  {
+                    "real" : 1,
+                    "type" : "sing"
+                  },
+                  {
+                    "real" : -0.962503969669342,
+                    "type" : "sing"
+                  },
+                  {
+                    "real" : 0,
+                    "type" : "sing"
+                  }
+                ],
+                "type" : "list"
+              }
+            },
+            {
+              "key" : "MAX ",
+              "value" : {
+                "items" : [
+                  {
+                    "real" : 1,
+                    "type" : "sing"
+                  },
+                  {
+                    "real" : 0.7925862073898315,
+                    "type" : "sing"
+                  },
+                  {
+                    "real" : 26,
+                    "type" : "sing"
+                  }
+                ],
+                "type" : "list"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "VI3D",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "06000000",
+              "type" : "VI3D"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "open3D-vector-field",
+  "recordedAt" : "2026-10-19T23:37:56Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set r to open3D \"flow\" dimensions {3, 3, 3} field {(createarray 27 range {1, 1}), (randomarray 27 range {-1, 1} seed 3), (createarray 27)}\ntry\n\tinfo3D r\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r",
+  "timeZone" : "America/New_York"
+}

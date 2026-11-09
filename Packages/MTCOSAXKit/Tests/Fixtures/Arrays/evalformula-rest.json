@@ -1,0 +1,123 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "LSOP",
+        "fields" : [
+          {
+            "key" : "with",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "x",
+                        "type" : "utxt"
+                      },
+                      {
+                        "items" : [
+                          {
+                            "integer" : 1,
+                            "type" : "long"
+                          },
+                          {
+                            "integer" : 2,
+                            "type" : "long"
+                          },
+                          {
+                            "integer" : 4,
+                            "type" : "long"
+                          },
+                          {
+                            "integer" : 8,
+                            "type" : "long"
+                          }
+                        ],
+                        "type" : "list"
+                      },
+                      {
+                        "text" : "y",
+                        "type" : "utxt"
+                      },
+                      {
+                        "items" : [
+                          {
+                            "integer" : 0,
+                            "type" : "long"
+                          },
+                          {
+                            "integer" : 1,
+                            "type" : "long"
+                          },
+                          {
+                            "integer" : 3,
+                            "type" : "long"
+                          },
+                          {
+                            "integer" : 6,
+                            "type" : "long"
+                          }
+                        ],
+                        "type" : "list"
+                      },
+                      {
+                        "text" : "z",
+                        "type" : "utxt"
+                      },
+                      {
+                        "items" : [
+                          {
+                            "integer" : 5,
+                            "type" : "long"
+                          }
+                        ],
+                        "type" : "list"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "rest(x)",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 2,
+              "type" : "doub"
+            },
+            {
+              "real" : 4,
+              "type" : "doub"
+            },
+            {
+              "real" : 8,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    }
+  ],
+  "name" : "evalformula-rest",
+  "recordedAt" : "2026-10-15T13:37:36Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "evalformula \"rest(x)\" with {x:{1, 2, 4, 8}, y:{0, 1, 3, 6}, z:{5}}",
+  "timeZone" : "America/New_York"
+}

@@ -1,0 +1,27 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "ExLF",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "type" : "null"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1701
+      }
+    }
+  ],
+  "name" : "extractarray-no-parameter",
+  "recordedAt" : "2026-10-15T13:37:28Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "extractarray",
+  "timeZone" : "America/New_York"
+}

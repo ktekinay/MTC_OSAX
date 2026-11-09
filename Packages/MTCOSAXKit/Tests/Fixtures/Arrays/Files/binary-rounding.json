@@ -1,0 +1,108 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "WrBF",
+        "fields" : [
+          {
+            "key" : "data",
+            "value" : {
+              "items" : [
+                {
+                  "real" : 1.5,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 2.5,
+                  "type" : "doub"
+                },
+                {
+                  "real" : -1.5,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 1.4,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "rtyp",
+            "value" : {
+              "code" : "long",
+              "type" : "type"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/round.bin",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RdBF",
+        "fields" : [
+          {
+            "key" : "rtyp",
+            "value" : {
+              "code" : "long",
+              "type" : "type"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/round.bin",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 2,
+              "type" : "doub"
+            },
+            {
+              "real" : 3,
+              "type" : "doub"
+            },
+            {
+              "real" : -2,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    }
+  ],
+  "name" : "binary-rounding",
+  "recordedAt" : "2026-10-15T13:37:40Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "write binary POSIX file \"$TMP/round.bin\" with data {1.5, 2.5, -1.5, 1.4} as integer\nread binary POSIX file \"$TMP/round.bin\" as integer",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

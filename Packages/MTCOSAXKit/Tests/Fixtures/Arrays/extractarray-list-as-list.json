@@ -1,0 +1,74 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "ExLF",
+        "fields" : [
+          {
+            "key" : "at  ",
+            "value" : {
+              "integer" : 2,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "for ",
+            "value" : {
+              "integer" : -1,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "rtyp",
+            "value" : {
+              "code" : "LiDo",
+              "type" : "type"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "real" : 2.5,
+                  "type" : "doub"
+                },
+                {
+                  "integer" : 3,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 2.5,
+              "type" : "doub"
+            },
+            {
+              "real" : 3,
+              "type" : "doub"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "extractarray-list-as-list",
+  "recordedAt" : "2026-10-15T13:37:28Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "extractarray {1, 2.5, 3} at 2 for -1 as list of real",
+  "timeZone" : "America/New_York"
+}

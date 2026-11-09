@@ -1,0 +1,100 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "LSOP",
+        "fields" : [
+          {
+            "key" : "with",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "x",
+                        "type" : "utxt"
+                      },
+                      {
+                        "items" : [
+                          {
+                            "integer" : 1,
+                            "type" : "long"
+                          },
+                          {
+                            "integer" : 2,
+                            "type" : "long"
+                          }
+                        ],
+                        "type" : "list"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "x+1",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "x*2",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "items" : [
+                {
+                  "real" : 2,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 3,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "Lido"
+            },
+            {
+              "items" : [
+                {
+                  "real" : 2,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 4,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "Lido"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "evalformula-formulas",
+  "recordedAt" : "2026-10-15T13:37:35Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "evalformula {\"x+1\", \"x*2\"} with {x:{1, 2}}",
+  "timeZone" : "America/New_York"
+}

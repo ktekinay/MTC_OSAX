@@ -1,0 +1,47 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "EvPo",
+        "fields" : [
+          {
+            "key" : "at  ",
+            "value" : {
+              "text" : "3",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "1",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "2",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 7,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "evalpolynomial-text",
+  "recordedAt" : "2026-10-15T13:37:37Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "evalpolynomial {\"1\", \"2\"} at \"3\"",
+  "timeZone" : "America/New_York"
+}

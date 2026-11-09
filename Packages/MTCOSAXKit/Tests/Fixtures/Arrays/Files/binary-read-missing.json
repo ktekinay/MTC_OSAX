@@ -1,0 +1,38 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RdBF",
+        "fields" : [
+          {
+            "key" : "rtyp",
+            "value" : {
+              "code" : "doub",
+              "type" : "type"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/no-such.bin",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -43
+      }
+    }
+  ],
+  "name" : "binary-read-missing",
+  "recordedAt" : "2026-10-15T13:37:40Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "read binary POSIX file \"$TMP/no-such.bin\" as real",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

@@ -32,17 +32,19 @@ public enum ListUtilities {
 		return (0 ..< descriptor.numberOfItems).map { descriptor.atIndex($0 + 1)! }
 	}
 
-	/// A list's items, with an `array of real`'s kept as numbers: a descriptor for each of an array's numbers (about
-	/// 145 bytes, and a conversion to text to compare) made a hundred million of them take 15 GB and minutes.
+	/// One of the lists in a list of lists (`sortlist`, `exclude items`, `keep items`): an `array of real`'s numbers (a
+	/// descriptor for each of them, about 145 bytes and a conversion to text to compare, made a hundred million take
+	/// 15 GB and minutes), or a list read where it is, without a descriptor for each item.
 	enum Items {
 		case reals([Double])
-		case descriptors([NSAppleEventDescriptor])
+		case list(RawList)
 
+		/// Nil if it's neither.
 		init?(_ descriptor: NSAppleEventDescriptor) {
 			if let values = ArrayOfReal.values(of: descriptor) {
 				self = .reals(values)
-			} else if descriptor.descriptorType == typeAEList {
-				self = .descriptors((0 ..< descriptor.numberOfItems).map { descriptor.atIndex($0 + 1)! })
+			} else if let list = RawList(descriptor) {
+				self = .list(list)
 			} else {
 				return nil
 			}
@@ -51,17 +53,18 @@ public enum ListUtilities {
 		var count: Int {
 			switch self {
 			case let .reals(values): values.count
-			case let .descriptors(items): items.count
+			case let .list(list): list.count
 			}
 		}
 
-		/// The items at `rows`, in that order: an `array of real` for numbers, a list otherwise.
-		func selecting(_ rows: [Int]) throws -> NSAppleEventDescriptor {
+		/// The items at `rows`, in that order: an `array of real` for numbers, a list otherwise (its items replaced by
+		/// `replacement`'s).
+		func selecting(_ rows: [Int], replacing replacement: (Int) -> RawList.Replacement? = { _ in nil }) throws -> NSAppleEventDescriptor {
 			switch self {
 			case let .reals(values): try ArrayOfReal.descriptor(count: rows.count) { buffer in
 					for (index, row) in rows.enumerated() { buffer[index] = values[row] }
 				}
-			case let .descriptors(items): rows.map { items[$0] }.appleEventDescriptor
+			case let .list(list): try list.list(of: rows, replacing: replacement)
 			}
 		}
 	}
@@ -72,15 +75,26 @@ public enum ListUtilities {
 
 	/// An item as text for comparing: text, or a number or boolean as the Apple Event Manager writes it, which is
 	/// what SatimageOSAX compared and returned (recorded: `sortlist {"b", 1.0, 1.0E+20}` is `{" 1e+20", "1", "b"}`).
-	/// That isn't AppleScript's own form: a real has up to 15 digits and no `.0` (1.0 is "1", 0.1 + 0.2 is "0.3"),
-	/// and one with an exponent has a leading space (" 1e+20", " 1e-7"). Nil for anything else.
+	/// That isn't AppleScript's own form: a real has up to 16 digits and no `.0` (1.0 is "1", 0.1 + 0.2 is "0.3"),
+	/// and one with an exponent has a leading space (" 1e+20", " 1e-7"); see `NumberText`, which writes it without the
+	/// coercion (32-bit reals still use it). Nil for anything else.
 	static func text(_ descriptor: NSAppleEventDescriptor) -> String? {
 		switch descriptor.descriptorType {
 		case _ where descriptor.isText:
 			return descriptor.stringValue
 		case typeTrue, typeFalse, typeBoolean:
 			return descriptor.booleanValue ? "true" : "false"
-		case typeSInt16, typeSInt32, typeSInt64, typeIEEE32BitFloatingPoint, typeIEEE64BitFloatingPoint:
+		case typeSInt16, typeSInt32, typeSInt64:
+			let data = descriptor.data
+			switch data.count {
+			case 2: return NumberText.text(Int64(data.withUnsafeBytes { $0.loadUnaligned(as: Int16.self) }))
+			case 4: return NumberText.text(Int64(data.withUnsafeBytes { $0.loadUnaligned(as: Int32.self) }))
+			case 8: return NumberText.text(data.withUnsafeBytes { $0.loadUnaligned(as: Int64.self) })
+			default: return descriptor.coerce(toDescriptorType: typeUnicodeText)?.stringValue
+			}
+		case typeIEEE64BitFloatingPoint:
+			return NumberText.text(descriptor.doubleValue)
+		case typeIEEE32BitFloatingPoint:
 			return descriptor.coerce(toDescriptorType: typeUnicodeText)?.stringValue
 		default:
 			return nil
@@ -213,7 +227,7 @@ public enum ListUtilities {
 		}
 		let kept: [Int] = switch columns[reference - 1] {
 		case let .reals(values): values.indices.filter { filter.matches(values[$0]) == keeping }
-		case let .descriptors(items): items.indices.filter { filter.matches(items[$0]) == keeping }
+		case let .list(list): (0 ..< list.count).filter { filter.matches(list.descriptor($0)) == keeping }
 		}
 		return try columns.map { column in try column.selecting(kept.filter { $0 < column.count }) }.appleEventDescriptor
 	}

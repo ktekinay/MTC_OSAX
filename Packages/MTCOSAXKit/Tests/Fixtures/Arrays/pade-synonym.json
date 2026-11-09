@@ -1,0 +1,85 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Pade",
+        "fields" : [
+          {
+            "key" : "nume",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "deno",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "real" : 0.5,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "items" : [
+                {
+                  "real" : 1,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0.5,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "Poly"
+            },
+            {
+              "items" : [
+                {
+                  "real" : 1,
+                  "type" : "doub"
+                },
+                {
+                  "real" : -0.5,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "Poly"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "pade-synonym",
+  "recordedAt" : "2026-10-15T13:37:38Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "pade {1, 1, 0.5} numerator 1 denominator 1",
+  "timeZone" : "America/New_York"
+}

@@ -1,0 +1,138 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "WrBF",
+        "fields" : [
+          {
+            "key" : "data",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 2,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 3,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 4,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 5,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 6,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 7,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 8,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "rtyp",
+            "value" : {
+              "code" : "byte",
+              "type" : "type"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/blocks.bin",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RdBF",
+        "fields" : [
+          {
+            "key" : "rtyp",
+            "value" : {
+              "code" : "byte",
+              "type" : "type"
+            }
+          },
+          {
+            "key" : "jump",
+            "value" : {
+              "integer" : 4,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "bloc",
+            "value" : {
+              "integer" : 2,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "file:///private/tmp/mtc-fixtures/tmp/blocks.bin",
+              "type" : "furl"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 2,
+              "type" : "doub"
+            },
+            {
+              "real" : 5,
+              "type" : "doub"
+            },
+            {
+              "real" : 6,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    }
+  ],
+  "name" : "binary-blocks",
+  "recordedAt" : "2026-10-15T13:37:40Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "write binary POSIX file \"$TMP/blocks.bin\" with data {1, 2, 3, 4, 5, 6, 7, 8} as byte\nread binary POSIX file \"$TMP/blocks.bin\" as byte step 4 blocksize 2",
+  "timeZone" : "America/New_York",
+  "variables" : {
+    "TMP" : "/private/tmp/mtc-fixtures/tmp"
+  }
+}

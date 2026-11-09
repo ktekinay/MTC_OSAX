@@ -4,7 +4,7 @@ import Testing
 @testable import Arrays
 
 @MainActor
-private func send(_ code: String, _ parameters: [String: any AppleEventEncodable]) -> AppleEventReply {
+func send(_ code: String, _ parameters: [String: any AppleEventEncodable]) -> AppleEventReply {
 	let dispatcher = CommandDispatcher()
 	dispatcher.register(Arrays.commands())
 	let event = NSAppleEventDescriptor.untargetedEvent(EventKey(code: code))
@@ -14,8 +14,34 @@ private func send(_ code: String, _ parameters: [String: any AppleEventEncodable
 	return dispatcher.dispatch(event)
 }
 
-private func values(_ reply: AppleEventReply) -> [Double]? {
+func values(_ reply: AppleEventReply) -> [Double]? {
 	reply.result.flatMap(ArrayOfReal.values(of:))
+}
+
+/// The number 1 in `levels` lists, each the only item of the one around it.
+func nested(_ levels: Int) -> NSAppleEventDescriptor {
+	var deep = NSAppleEventDescriptor(int32: 1)
+	for _ in 0 ..< levels {
+		let list = NSAppleEventDescriptor.list()
+		list.insert(deep, at: 1)
+		deep = list
+	}
+	return deep
+}
+
+/// 1×1 matrices nested `levels` deep, each one's numbers a list holding the next (or the next itself).
+func nestedMatrices(_ levels: Int, throughLists: Bool = true) throws -> NSAppleEventDescriptor {
+	var deep = try Matrix(columns: 1, rows: 1, values: [1]).descriptor()
+	for _ in 0 ..< levels {
+		var data = deep
+		if throughLists {
+			data = NSAppleEventDescriptor.list()
+			data.insert(deep, at: 1)
+		}
+		let record = RecordFields([(.code("ncol"), NSAppleEventDescriptor(int32: 1)), (.code("nrow"), NSAppleEventDescriptor(int32: 1)), (.code("Lido"), data)]).appleEventDescriptor
+		deep = record.coerce(toDescriptorType: Matrix.descriptorType) ?? record
+	}
+	return deep
 }
 
 @MainActor

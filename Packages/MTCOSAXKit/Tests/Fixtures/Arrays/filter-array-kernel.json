@@ -1,0 +1,220 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CRAR",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 9,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 2,
+              "type" : "doub"
+            },
+            {
+              "real" : 3,
+              "type" : "doub"
+            },
+            {
+              "real" : 4,
+              "type" : "doub"
+            },
+            {
+              "real" : 5,
+              "type" : "doub"
+            },
+            {
+              "real" : 6,
+              "type" : "doub"
+            },
+            {
+              "real" : 7,
+              "type" : "doub"
+            },
+            {
+              "real" : 8,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "BLUR",
+        "fields" : [
+          {
+            "key" : "with",
+            "value" : {
+              "items" : [
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 1,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 2,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 3,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 4,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 5,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 6,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 7,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 8,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "Lido"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "ncol",
+                  "value" : {
+                    "integer" : 3,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "nrow",
+                  "value" : {
+                    "integer" : 3,
+                    "type" : "long"
+                  }
+                },
+                {
+                  "key" : "Lido",
+                  "value" : {
+                    "items" : [
+                      {
+                        "integer" : 1,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 2,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 3,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 4,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 5,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 6,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 7,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 8,
+                        "type" : "long"
+                      },
+                      {
+                        "integer" : 9,
+                        "type" : "long"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "Matr"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "ncol",
+              "value" : {
+                "integer" : 1,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "nrow",
+              "value" : {
+                "integer" : 1,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "Lido",
+              "value" : {
+                "items" : [
+                  {
+                    "real" : 240,
+                    "type" : "doub"
+                  }
+                ],
+                "type" : "Lido"
+              }
+            }
+          ],
+          "type" : "Matr"
+        }
+      }
+    }
+  ],
+  "name" : "filter-array-kernel",
+  "recordedAt" : "2026-10-15T13:37:34Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "filter {class:matrix, ncols:3, nrows:3, array of real:{1, 2, 3, 4, 5, 6, 7, 8, 9}} using (createarray 9)",
+  "timeZone" : "America/New_York"
+}

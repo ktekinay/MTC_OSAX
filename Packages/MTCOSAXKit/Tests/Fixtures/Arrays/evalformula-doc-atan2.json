@@ -1,0 +1,63 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "LSOP",
+        "fields" : [
+          {
+            "key" : "with",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "y",
+                        "type" : "utxt"
+                      },
+                      {
+                        "real" : 1.7320508075688772,
+                        "type" : "doub"
+                      },
+                      {
+                        "text" : "x",
+                        "type" : "utxt"
+                      },
+                      {
+                        "integer" : 1,
+                        "type" : "long"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "atan2(y,x)",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 1.0471975511965976,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "evalformula-doc-atan2",
+  "recordedAt" : "2026-10-15T13:37:34Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "evalformula \"atan2(y,x)\" with {y:1.7320508075688772, x:1}",
+  "timeZone" : "America/New_York"
+}

@@ -8,6 +8,7 @@ let package = Package(
 	products: [
 		.library(name: "MTCOSAX", targets: ["MTCOSAX"]),
 		.executable(name: "fixture-recorder", targets: ["FixtureRecorder"]),
+		.executable(name: "sort-benchmark", targets: ["SortBenchmark"]),
 	],
 	targets: [
 		// Apple event plumbing shared by every suite: dispatch, parameters, conversion, errors.
@@ -74,6 +75,8 @@ let package = Package(
 		.target(name: "MathFunctions", dependencies: ["AppleEventCore", "Numerics"]),
 		.target(name: "ListUtilities", dependencies: ["AppleEventCore", "Numerics"]),
 		.target(name: "Arrays", dependencies: ["AppleEventCore", "Numerics"]),
+		// 3D arrays live in the app's document store, with the property lists and XML documents.
+		.target(name: "Arrays3D", dependencies: ["AppleEventCore", "Numerics", "PropertyLists"]),
 		.target(name: "PropertyLists", dependencies: ["AppleEventCore", "CYAML", "CTOML"]),
 		.target(name: "XML", dependencies: ["AppleEventCore", "CLibXML", "PropertyLists"]),
 
@@ -87,9 +90,12 @@ let package = Package(
 		.target(name: "Numerics", dependencies: ["AppleEventCore"]),
 
 		// Registers every suite with a dispatcher; the app links only this.
-		.target(name: "MTCOSAX", dependencies: ["AppleEventCore", "Diagnostics", "TextAdditions", "FilesAndFolders", "FileAdditions", "MathFunctions", "ListUtilities", "Arrays", "PropertyLists", "XML", "Settings"]),
+		.target(name: "MTCOSAX", dependencies: ["AppleEventCore", "Diagnostics", "TextAdditions", "FilesAndFolders", "FileAdditions", "MathFunctions", "ListUtilities", "Arrays", "Arrays3D", "PropertyLists", "XML", "Settings"]),
 
 		.executableTarget(name: "FixtureRecorder", dependencies: ["AppleEventCore"]),
+
+		// Times sortlist (Scripts/sort-benchmark.sh).
+		.executableTarget(name: "SortBenchmark", dependencies: ["AppleEventCore", "ListUtilities"]),
 
 		// For tests: defaults kept in memory, and a local HTTP server.
 		.target(name: "TestSupport"),
@@ -107,6 +113,7 @@ let package = Package(
 		.testTarget(name: "MathFunctionsTests", dependencies: ["MathFunctions", "AppleScriptPreload"]),
 		.testTarget(name: "ListUtilitiesTests", dependencies: ["ListUtilities", "AppleScriptPreload"]),
 		.testTarget(name: "ArraysTests", dependencies: ["Arrays", "AppleScriptPreload"]),
+		.testTarget(name: "Arrays3DTests", dependencies: ["Arrays3D", "PropertyLists", "AppleScriptPreload"]),
 		.testTarget(name: "PropertyListsTests", dependencies: ["PropertyLists", "AppleScriptPreload"]),
 		.testTarget(name: "XMLTests", dependencies: ["XML", "TestSupport", "AppleScriptPreload"]),
 		.testTarget(name: "SettingsTests", dependencies: ["Settings", "TextAdditions", "TestSupport", "AppleScriptPreload"]),

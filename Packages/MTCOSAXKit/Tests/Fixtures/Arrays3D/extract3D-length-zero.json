@@ -1,0 +1,640 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CRAR",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 60,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 0,
+              "type" : "doub"
+            },
+            {
+              "real" : 1,
+              "type" : "doub"
+            },
+            {
+              "real" : 2,
+              "type" : "doub"
+            },
+            {
+              "real" : 3,
+              "type" : "doub"
+            },
+            {
+              "real" : 4,
+              "type" : "doub"
+            },
+            {
+              "real" : 5,
+              "type" : "doub"
+            },
+            {
+              "real" : 6,
+              "type" : "doub"
+            },
+            {
+              "real" : 7,
+              "type" : "doub"
+            },
+            {
+              "real" : 8,
+              "type" : "doub"
+            },
+            {
+              "real" : 9,
+              "type" : "doub"
+            },
+            {
+              "real" : 10,
+              "type" : "doub"
+            },
+            {
+              "real" : 11,
+              "type" : "doub"
+            },
+            {
+              "real" : 12,
+              "type" : "doub"
+            },
+            {
+              "real" : 13,
+              "type" : "doub"
+            },
+            {
+              "real" : 14,
+              "type" : "doub"
+            },
+            {
+              "real" : 15,
+              "type" : "doub"
+            },
+            {
+              "real" : 16,
+              "type" : "doub"
+            },
+            {
+              "real" : 17,
+              "type" : "doub"
+            },
+            {
+              "real" : 18,
+              "type" : "doub"
+            },
+            {
+              "real" : 19,
+              "type" : "doub"
+            },
+            {
+              "real" : 20,
+              "type" : "doub"
+            },
+            {
+              "real" : 21,
+              "type" : "doub"
+            },
+            {
+              "real" : 22,
+              "type" : "doub"
+            },
+            {
+              "real" : 23,
+              "type" : "doub"
+            },
+            {
+              "real" : 24,
+              "type" : "doub"
+            },
+            {
+              "real" : 25,
+              "type" : "doub"
+            },
+            {
+              "real" : 26,
+              "type" : "doub"
+            },
+            {
+              "real" : 27,
+              "type" : "doub"
+            },
+            {
+              "real" : 28,
+              "type" : "doub"
+            },
+            {
+              "real" : 29,
+              "type" : "doub"
+            },
+            {
+              "real" : 30,
+              "type" : "doub"
+            },
+            {
+              "real" : 31,
+              "type" : "doub"
+            },
+            {
+              "real" : 32,
+              "type" : "doub"
+            },
+            {
+              "real" : 33,
+              "type" : "doub"
+            },
+            {
+              "real" : 34,
+              "type" : "doub"
+            },
+            {
+              "real" : 35,
+              "type" : "doub"
+            },
+            {
+              "real" : 36,
+              "type" : "doub"
+            },
+            {
+              "real" : 37,
+              "type" : "doub"
+            },
+            {
+              "real" : 38,
+              "type" : "doub"
+            },
+            {
+              "real" : 39,
+              "type" : "doub"
+            },
+            {
+              "real" : 40,
+              "type" : "doub"
+            },
+            {
+              "real" : 41,
+              "type" : "doub"
+            },
+            {
+              "real" : 42,
+              "type" : "doub"
+            },
+            {
+              "real" : 43,
+              "type" : "doub"
+            },
+            {
+              "real" : 44,
+              "type" : "doub"
+            },
+            {
+              "real" : 45,
+              "type" : "doub"
+            },
+            {
+              "real" : 46,
+              "type" : "doub"
+            },
+            {
+              "real" : 47,
+              "type" : "doub"
+            },
+            {
+              "real" : 48,
+              "type" : "doub"
+            },
+            {
+              "real" : 49,
+              "type" : "doub"
+            },
+            {
+              "real" : 50,
+              "type" : "doub"
+            },
+            {
+              "real" : 51,
+              "type" : "doub"
+            },
+            {
+              "real" : 52,
+              "type" : "doub"
+            },
+            {
+              "real" : 53,
+              "type" : "doub"
+            },
+            {
+              "real" : 54,
+              "type" : "doub"
+            },
+            {
+              "real" : 55,
+              "type" : "doub"
+            },
+            {
+              "real" : 56,
+              "type" : "doub"
+            },
+            {
+              "real" : 57,
+              "type" : "doub"
+            },
+            {
+              "real" : 58,
+              "type" : "doub"
+            },
+            {
+              "real" : 59,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "VI3D",
+        "eventID" : "odoc",
+        "fields" : [
+          {
+            "key" : "dims",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 3,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 4,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 5,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "scfl",
+            "value" : {
+              "items" : [
+                {
+                  "real" : 0,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 1,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 2,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 3,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 4,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 5,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 6,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 7,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 8,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 9,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 10,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 11,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 12,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 13,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 14,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 15,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 16,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 17,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 18,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 19,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 20,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 21,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 22,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 23,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 24,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 25,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 26,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 27,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 28,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 29,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 30,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 31,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 32,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 33,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 34,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 35,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 36,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 37,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 38,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 39,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 40,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 41,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 42,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 43,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 44,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 45,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 46,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 47,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 48,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 49,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 50,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 51,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 52,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 53,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 54,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 55,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 56,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 57,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 58,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 59,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "Lido"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "box",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "hex" : "1c000000",
+          "type" : "VI3D"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "VI3D",
+        "eventID" : "extr",
+        "fields" : [
+          {
+            "key" : "star",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "leng",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "1c000000",
+              "type" : "VI3D"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : -1719
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "VI3D",
+        "eventID" : "clos",
+        "fields" : [
+          {
+            "key" : "----",
+            "value" : {
+              "hex" : "1c000000",
+              "type" : "VI3D"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+
+      }
+    }
+  ],
+  "name" : "extract3D-length-zero",
+  "recordedAt" : "2026-10-19T23:37:57Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "set r to open3D \"box\" dimensions {3, 4, 5} field (createarray 60)\ntry\n\textract3D r start {1, 1, 1} length {0, 1, 1}\non error errorText number n\n\tclose3D r\n\terror errorText number n\nend try\nclose3D r",
+  "timeZone" : "America/New_York"
+}

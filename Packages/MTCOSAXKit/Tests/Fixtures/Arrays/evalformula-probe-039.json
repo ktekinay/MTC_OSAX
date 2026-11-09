@@ -1,0 +1,73 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "LSOP",
+        "fields" : [
+          {
+            "key" : "with",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "x",
+                        "type" : "utxt"
+                      },
+                      {
+                        "items" : [
+                          {
+                            "real" : -0.3,
+                            "type" : "doub"
+                          },
+                          {
+                            "real" : -0.1,
+                            "type" : "doub"
+                          }
+                        ],
+                        "type" : "list"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "lambertWm1(x)",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : -1.7813370234216275,
+              "type" : "doub"
+            },
+            {
+              "real" : -3.577152063957297,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    }
+  ],
+  "name" : "evalformula-probe-039",
+  "recordedAt" : "2026-10-15T13:53:09Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "evalformula \"lambertWm1(x)\" with {x:{-0.3, -0.1}}",
+  "timeZone" : "America/New_York"
+}

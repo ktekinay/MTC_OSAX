@@ -1,0 +1,101 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Root",
+        "fields" : [
+          {
+            "key" : "Comp",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : -3,
+                  "type" : "long"
+                },
+                {
+                  "real" : 0.5,
+                  "type" : "doub"
+                },
+                {
+                  "integer" : 2,
+                  "type" : "long"
+                },
+                {
+                  "integer" : -1,
+                  "type" : "long"
+                },
+                {
+                  "real" : 0.25,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "items" : [
+                {
+                  "real" : 1.7978253594269242,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 2.1471419619888548,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "list"
+            },
+            {
+              "items" : [
+                {
+                  "real" : 1.7978253594269242,
+                  "type" : "doub"
+                },
+                {
+                  "real" : -2.1471419619888548,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "list"
+            },
+            {
+              "real" : -1.1345158687692993,
+              "type" : "doub"
+            },
+            {
+              "real" : 1.1468619939012552,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.392003156014199,
+              "type" : "doub"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "roots-degree-five",
+  "recordedAt" : "2026-10-15T13:37:37Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "roots of {1, -3, 0.5, 2, -1, 0.25} with complex",
+  "timeZone" : "America/New_York"
+}

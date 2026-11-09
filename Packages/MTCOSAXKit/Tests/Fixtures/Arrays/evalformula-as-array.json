@@ -1,0 +1,134 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "LSOP",
+        "fields" : [
+          {
+            "key" : "with",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "x",
+                        "type" : "utxt"
+                      },
+                      {
+                        "fields" : [
+                          {
+                            "key" : "ncol",
+                            "value" : {
+                              "integer" : 2,
+                              "type" : "long"
+                            }
+                          },
+                          {
+                            "key" : "nrow",
+                            "value" : {
+                              "integer" : 3,
+                              "type" : "long"
+                            }
+                          },
+                          {
+                            "key" : "Lido",
+                            "value" : {
+                              "items" : [
+                                {
+                                  "integer" : 1,
+                                  "type" : "long"
+                                },
+                                {
+                                  "integer" : 2,
+                                  "type" : "long"
+                                },
+                                {
+                                  "integer" : 3,
+                                  "type" : "long"
+                                },
+                                {
+                                  "integer" : 4,
+                                  "type" : "long"
+                                },
+                                {
+                                  "integer" : 5,
+                                  "type" : "long"
+                                },
+                                {
+                                  "integer" : 6,
+                                  "type" : "long"
+                                }
+                              ],
+                              "type" : "list"
+                            }
+                          }
+                        ],
+                        "type" : "Matr"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          },
+          {
+            "key" : "rtyp",
+            "value" : {
+              "code" : "Lido",
+              "type" : "type"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "x+1",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 2,
+              "type" : "doub"
+            },
+            {
+              "real" : 3,
+              "type" : "doub"
+            },
+            {
+              "real" : 4,
+              "type" : "doub"
+            },
+            {
+              "real" : 5,
+              "type" : "doub"
+            },
+            {
+              "real" : 6,
+              "type" : "doub"
+            },
+            {
+              "real" : 7,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    }
+  ],
+  "name" : "evalformula-as-array",
+  "recordedAt" : "2026-10-15T13:37:35Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "evalformula \"x+1\" with {x:{class:matrix, ncols:2, nrows:3, array of real:{1, 2, 3, 4, 5, 6}}} as array of real",
+  "timeZone" : "America/New_York"
+}

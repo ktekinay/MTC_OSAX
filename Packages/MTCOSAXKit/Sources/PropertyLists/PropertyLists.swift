@@ -99,7 +99,7 @@ public enum PropertyLists {
 			// close, as in SatimageOSAX (MTC_OSAX closed it regardless).
 			CommandDefinition("DeletePool", code: "POOLdpoo") { request in
 				let pool = try request.directParameter(as: String.self) ?? commands.store.currentPool
-				for document in commands.store.allDocuments where document.pool == pool {
+				for document in commands.store.allDocuments where document.isPooled && document.pool == pool {
 					if let plist = document as? Document {
 						plist.retainCount -= 1
 						guard plist.retainCount <= 0 else { continue }

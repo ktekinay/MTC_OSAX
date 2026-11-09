@@ -20,10 +20,11 @@ This section is kept up to date as sections are added. Each implemented section'
 
 These suites aren't implemented and aren't in MTC_OSAX's dictionary, so a script that uses them doesn't compile (an already compiled one gets error -1708):
 
-- Arrays, except the `array of real` type, `createarray` and `randomarray`
 - Linear algebra, FFT and convolution
-- Image files, 3D array handling, FITS, XNF Additions
+- Image files, FITS, XNF Additions
 - Resource Suite
+- The hidden Arrays commands `listvariables`, `smootharray`, `find peaks` and `arrays auto filling` (so lists of unequal length are always an error, as they are by default in SatimageOSAX)
+- The obsolete Arrays command `extractitem` (use `extractarray`)
 - The hidden legacy text commands (`find text obsolete`, `replace obsolete`, `extract string`, `findxmlstag`, `gziptext`, `gunziptext`)
 - The unnamed hidden suite of obsolete commands (old XML variants, `XMLCookie`, `PlistCopy`, `XMLGetArray`/`XMLSetArray`, …)
 
@@ -80,11 +81,24 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 **Math and list utilities**
 
 - `sortlist` of a single value gives a list of it; NaN in a column it sorts by sorts last, as it does alone and as `missing value` does (it left the rows unsorted); `with respect to 1.5` is error -1700, as 1.0E+19 is (SatimageOSAX left the lists unsorted); without a parameter it's error -1701; `missing value` sorts last and stays `missing value` (SatimageOSAX turned every number into a real).
+- `sortlist` compares texts however their accents are typed: "é" and "e" followed by a combining accent are the same text under every `comparison` (SatimageOSAX kept both, even `with remove duplicates`). With `comparison 4`, texts that differ only in case are ordered uppercase first by the letters' case, not their character codes: "Ÿ" before "ÿ" (SatimageOSAX put "ÿ" first).
 - `suppress item` with a single index works (including the dictionary's example).
 - `exclude items` and `keep items` `without case sensitive` ignore case; `keep items {}` gives `{}`; from an `array of real` they filter its numbers as they would a list of the same reals, and return a list (SatimageOSAX returned nothing).
 - `special concat` of text with a record is error -1700 instead of garbage; empty text gives empty cells.
 - `createarray` and `randomarray` make at most 100,000,000 items (-50 for more), instead of trying to allocate tens of gigabytes.
 - `randomarray … seed` beyond 32 bits uses the seed's low 32 bits instead of ignoring it.
+- `removemissingvalue` works (SatimageOSAX gave -1708): it removes what `replacemissingvalue` replaces, and an array stays an array.
+- `extractarray … as list of integer` of a number beyond 32 bits is error -1700, as AppleScript's `as integer` is (SatimageOSAX wrapped it: 1.0E+10 became 1410065408).
+- `divlist` divides a polynomial by a number (SatimageOSAX gave -50); by a polynomial is still -50.
+- `histogram … minimum` counts only numbers from the minimum up (SatimageOSAX also counted those up to an interval below it in the first interval).
+- `filter … reduced false` computes the border as if the matrix had zeros around it (SatimageOSAX put some border values in the wrong places, so even the identity filter changed the matrix); a matrix too small to reduce is -50 (SatimageOSAX: -108, out of memory).
+- `resamplematrix … blocksize` with a size of 0 is -50 (SatimageOSAX returned nothing); `composepolynomial` of the empty polynomial is the empty polynomial (SatimageOSAX returned nothing).
+- `evalformula` knows `sqr`, which its dictionary lists (SatimageOSAX: error 5), takes a `//` comment anywhere on a line (SatimageOSAX gave error 16 for one with a space in it, or after an expression), and computes `int(f,x)` as ∫f dx, as its dictionary says (SatimageOSAX computed ∫x df: scripts that swapped the arguments to make up for it need them back in order).
+- `fitpolynomial`'s fit error for an exact fit is about 0 (SatimageOSAX's came out as 3.8e-8 for a line).
+- `read binary` and `write binary` take a path as text, as the file commands do (SatimageOSAX: error 1), and `as` another type than the five is -50 (SatimageOSAX took `as text` without saying what it wrote). `read binary` returns 8-byte reals for every type (SatimageOSAX's 4-byte reals for all but `real` lost the last digits of integers above 16,777,216).
+- `isosurface` gives the whole surface (SatimageOSAX left most of it out: in a single cell, only one corner pattern of 256 made a triangle). It's marching cubes: closed, each vertex interpolated along its cell's edge, the triangles facing toward larger values. Error 7 for a value outside the field's numbers, as in SatimageOSAX. Cells with an infinite value are left out, as those with a missing one are, and a scale that isn't finite is -50.
+- `streamline` follows the field (SatimageOSAX returned its starting point 30,001 times, whatever the field): the field interpolated between the grid's points, in steps of `resolution` times the grid's smallest spacing, against the field with `direction -1`, until the edge of the box (the last point on it), where the field is 0 or missing, or 30,000 steps. A start outside the box is error 2000 (SatimageOSAX gave that or an empty array). A `resolution` that isn't more than 0 (or so large that a step overflows), a `direction` other than 1 or -1, or a scale that isn't in order (rising or falling, without repeats) or isn't finite from its first number to its last, is -50.
+- `info3D`'s minimum and maximum leave out missing values even when the first number is one (SatimageOSAX's were garbage then), and `open3D` takes a list as `field`, as the Arrays commands take lists (SatimageOSAX: -1).
 
 **Property lists**
 
@@ -116,7 +130,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 - **YAML and TOML for property lists:** `PlistToYAML`, `PlistFromYAML`, `PlistToTOML` and `PlistFromTOML`, like Satimage's `PlistToJSON` and `PlistFromJSON`, in their own "Property List Formats" suite. All three formats, JSON included, can go straight to and from a file: `PlistToJSON p in (POSIX file "…")` (or a POSIX path) writes the file in UTF-8 and returns nothing, and `PlistFromJSON (POSIX file "…")` reads one; text is always the document itself, never a path. For Satimage's two JSON commands, `in` is a new parameter and a file a newly accepted direct parameter (SatimageOSAX gave an error). YAML follows YAML 1.2's rules (`yes` and `no` stay text); unquoted timestamps are dates, `null` is `missing value`, and data is `!!binary`. TOML needs a dictionary at the top, and a table or array can have at most 16,383 entries (more is -50: MTC_OSAX's TOML reader refuses them); a `missing value` in a dictionary is written as the comment `# key = NULL` (so it's absent when read back) and in a list is error -50; data is base64 text. Dates are written in UTC (`2026-09-28T14:30:00Z`), and dates without a zone are read in the Mac's time zone; a TOML time without a date is read as text.
 - **Dollar references** in replacement templates (`$1`, `${12}`, `${name}`, `$$`), opt-in: `with dollar references` on `change`, `find text` and `filter text`, the `"DOLLAR REFERENCES"` regexp flag, or as the default with `mtc_set dollar_references to true`.
 - **Settings commands:** `mtc_get`, `mtc_set` and `mtc_reset`, in their own "Settings" suite, read and change MTC_OSAX's settings from a script. Settings are global and permanent: a change affects every script that uses MTC_OSAX until it's changed again or reset (see [Settings](#settings)).
-- **Idle quit** is a setting (`idle_timeout`), and the app doesn't quit while property list or XML documents are open.
+- **Idle quit** is a setting (`idle_timeout`), and the app doesn't quit while property lists, XML documents or 3D arrays are open.
 - **Diagnostic commands** (`mtc_ping` and others; see [Diagnostic commands](#diagnostic-commands)).
 
 ### Other differences
@@ -135,7 +149,11 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 - With `from`, `~` is your home folder only as `~/…`. A name that just starts with `~` is a name in the folder (`~`, `~backup`, Office's `~$Budget.xlsx`), for the file commands and for `glob`'s patterns: `fileremove {"~"} from f` deletes the item named `~` in `f`, not your home folder. Without `from`, `~` and `~name` are home folders as before.
 - `chmod` of a symbolic link reads and changes the permissions of the item it points to, as the shell's `chmod` does.
 - In XPath, EXSLT's math, sets, strings and dates functions can also be called with the prefixes `mtc-exslt-math`, `mtc-exslt-sets`, `mtc-exslt-strings` and `mtc-exslt-dates`, which MTC_OSAX declares on every context to register them.
-- Math results can differ from SatimageOSAX's Intel math library in the last digits (up to 15 units in the last place for `lgamma` near its roots).
+- Math results can differ from SatimageOSAX's Intel math library in the last digits (up to 15 units in the last place for `lgamma` near its roots), and so can `evalformula`'s functions; `fitpolynomial`'s and `fitrational`'s coefficients can differ in about the last three digits, as their least squares are computed another way.
+- The Arrays commands have limits, so that no script can make MTC_OSAX run out of memory or stop answering (its commands run one at a time). Beyond them is error -50. `read binary`, `open3D` and `isosurface` take or return at most 100,000,000 numbers, as `createarray` does, and `creatematrix "d"` takes at most 10,000 diagonal numbers. `roots of` takes a degree of at most 1,000; `pade approximant`, numerator and denominator degrees of at most 1,000; `fitpolynomial`, a degree of at most 100; `fitrational`, numerator and denominator degrees of at most 100. A fit can have at most 100,000,000 points times coefficients, and at most 4,000,000,000 points (with `fitpolynomial`'s constraints) times the square of its coefficients, a fifth of that for `fitrational` (which fits five times): degree 100 takes up to 392,000 points, and `fitrational` 100/100 up to 19,800. `composepolynomial`'s result can have a degree of at most 100,000, and multiplying polynomials can take at most 10,000,000,000 products of coefficients. `evalformula` nests parentheses, unary operators and calls at most 512 levels deep, its `concat` makes at most 100,000,000 numbers, and its `jn` and `yn` take orders of at most 100,000 either way (a NaN order gives NaN). Lists and matrices nested more than 512 levels are -50 in every Arrays command, and a matrix can have at most 100,000,000 rows and as many columns. `roots of` a polynomial with a coefficient that isn't finite is -50. `read binary` and `write binary` take only regular files (-50 for a device, a pipe or a socket), and byte offsets (`skip`, `starting at`) up to 9,007,199,254,740,992 (2⁵³), past the 32 bits of the dictionary's `integer`. `evalpolynomial` can take at most 10,000,000,000 coefficients times points.
+- 3D arrays keep their numbers as 8-byte reals, as the rest of MTC_OSAX does: SatimageOSAX kept 4-byte ones, so its `contents3D`, `extract3D` and `info3D` lost digits (0.1 came back as 0.10000000149) and turned numbers beyond 3.4E+38 into infinity.
+- `as small integer` and `as small real` (`read binary`, `write binary`, `extractarray`) need Standard Additions' terms: in a script with `use` statements, add `use scripting additions` (with SatimageOSAX, whose dictionary has them too, that made them ambiguous).
+- An `array of real` can't be converted with AppleScript's `as`, as the dictionary shows (`anArray as list of real`, `{1, 2, 3} as array of real`): a coercion runs in the script's own process, which only Satimage's old scripting addition could reach, so it fails in SatimageOSAX too. Use `extractarray anArray for -1 as list of real` for a list (or `as list of integer`, which rounds halves to even), and `extractarray aList for -1` for an array. Commands that take an `array of real` also take a list of numbers.
 
 ## Layout
 
@@ -149,7 +167,7 @@ Where SatimageOSAX failed or misbehaved, MTC_OSAX does what the dictionary descr
 | `Packages/MTCOSAXKit/Sources/FixtureRecorder` | `fixture-recorder` command-line tool |
 | `Packages/MTCOSAXKit/Tests/Fixtures` | Recorded Apple events and replies, one folder per section |
 | `Config/` | How the app is signed (`Signing.xcconfig`), and where your own signing settings go |
-| `Scripts/` | End-to-end AppleScript checks and helper scripts (`test.sh`, `release.sh`, the iTerm runner) |
+| `Scripts/` | End-to-end AppleScript checks and helper scripts (`test.sh`, `release.sh`, `sort-benchmark.sh`, the iTerm runner) |
 
 ## Building
 
@@ -213,7 +231,7 @@ MTC_OSAX has three settings. Scripts read and change them with the commands of t
 
 | Setting | Default | What it does |
 |---|---|---|
-| `idle_timeout` | 3605 | Seconds without commands before the app quits; 0 means never. It doesn't quit while property lists or XML documents are open either way. The default is five seconds past the hour so that an hourly job's command doesn't arrive just as the app quits (a command sent in that instant fails with -609); if you set it yourself, avoid the exact period of anything that runs on a schedule. |
+| `idle_timeout` | 3605 | Seconds without commands before the app quits; 0 means never. It doesn't quit while property lists, XML documents or 3D arrays are open either way. The default is five seconds past the hour so that an hourly job's command doesn't arrive just as the app quits (a command sent in that instant fails with -609); if you set it yourself, avoid the exact period of anything that runs on a schedule. |
 | `dollar_references` | false | Whether replacement templates also accept `$1`-style references when a command doesn't say. |
 | `regex_syntax` | `"RUBY"` | The regex syntax when a command doesn't give one, e.g. `"PCRE"`. |
 
@@ -262,7 +280,7 @@ A hidden suite for checking that the app works. It doesn't appear in the diction
 | Command | Result |
 |---|---|
 | `mtc_ping` | `"pong"` |
-| `mtc_version` | e.g. `"MTC_OSAX 1.0.1 (1)"` |
+| `mtc_version` | e.g. `"MTC_OSAX 1.1 (2)"` |
 | `mtc_echo <anything>` | the value, unchanged |
 | `mtc_describe <anything>` | the Apple event descriptor received, e.g. `list [long 1, doub 2.5]` |
 | `mtc_raise_error "message" number n` | raises that error (-50 for 0, which is no error) |
@@ -292,7 +310,9 @@ Scripts/test.sh --sanitize=address
 
 Each test process also has a time limit of three minutes (a process's tests take seconds), after which it's stopped with a message, so a test that runs away can't go on doing damage: Swift Testing's own time limits don't stop code that doesn't check for cancellation. `MTC_TEST_TIME_LIMIT=<seconds>` changes it (0 for none), and there's none while a debugger is attached.
 
-Every test target links `AppleScriptPreload` (which also holds the sandbox check and the time limit). It loads AppleScript when the test bundle is loaded, before any test runs. Loading it while many tests ran at once sometimes made the Apple Event Manager recurse until the stack ran out (about one `AppleEventCoreTests` run in ten). The app loads it at launch, on its main thread, with nothing else running, and isn't affected; the target is for tests only.
+Every test target links `AppleScriptPreload` (which also holds the sandbox check, the time limit and a crash handler). It loads AppleScript when the test bundle is loaded, before any test runs. Loading it while many tests ran at once sometimes made the Apple Event Manager recurse until the stack ran out (about one `AppleEventCoreTests` run in ten). The app loads it at launch, on its main thread, with nothing else running, and isn't affected; the target is for tests only. For the same reason, tests that use the Apple Event Manager run on the main actor, as the app's commands do.
+
+The sandbox keeps macOS from writing a crash report for a test process, so the crash handler writes the crashed thread's backtrace to standard error ("Test process crashed: signal …"), then lets the signal end the process as before. A stack overflow on a thread other than the main one ends it without one.
 
 Commands run on the main thread, one at a time, as the Apple Event Manager calls them, and the code says so: handlers, the dispatcher and the state commands share (open documents, settings, the regex cache) are `@MainActor`, so the compiler rejects any use from another thread. Tests that send commands are `@MainActor` too; they run on the main thread, with the app's 8 MB stack.
 
@@ -319,6 +339,8 @@ Scripts/iterm-run.sh Scripts/run-e2e.sh diagnostics
 ```
 
 Dialogs need a person: `Scripts/manual/dialogs.sh [MTC_OSAX|SatimageOSAX]` opens each `navchoose` dialog and the `navask save` alert in turn (each prompt says what to do) and prints the results, to check them by hand. (SatimageOSAX's dialogs never worked; they all reply -1708.) Run it in iTerm or Terminal.
+
+`Scripts/sort-benchmark.sh` builds `sort-benchmark` in release and times `sortlist` in process (no Apple events, so it runs anywhere) for each kind of list (including lists 95% sorted and 95% duplicates) at 1,000, 100,000 and 1,000,000 items: the whole command, making the keys and ordering, and ordering alone. `--sizes 1000,100000` and `--only text` narrow it. [PLAN-FastSort.md](Implemented/PLAN-FastSort.md) has its times.
 
 ### Recording fixtures
 
@@ -367,3 +389,21 @@ Fixtures store the values used, and replays substitute the checkout's `Input` fo
 - **PCRE2 10.49** (`Packages/MTCOSAXKit/Sources/CPCRE2`), the engine for `syntax "PCRE"`, by Philip Hazel and the PCRE2 project. BSD 3-clause license (with the PCRE2 exemption); see [LICENCE.md](Packages/MTCOSAXKit/Sources/CPCRE2/LICENCE.md). Only the 16-bit library's sources are included, without JIT. `config.h` is PCRE2's `config.h.generic` with the changes marked `MTC_OSAX` (16-bit and Unicode support, macOS's headers, any line ending by default), `pcre2.h` is `pcre2.h.generic`, `pcre2_chartables.c` is `pcre2_chartables.c.dist`, and `include/CPCRE2Shim.h` is ours. `pcre2_match.c` has one change, marked `MTC_OSAX patch`: it checks a deadline for searches (our `mtc_deadline.c`) every 65,536 steps, since its own limit starts again at each starting position.
 
 - **Onigmo 6.2.0** (`Packages/MTCOSAXKit/Sources/COnigmo`), the regular expression engine Satimage used, by K.Kosako and K.Takata. BSD 2-clause license; see [COPYING](Packages/MTCOSAXKit/Sources/COnigmo/COPYING). Only the engine and the encodings it needs are included. Changes to match Satimage's build: `regparse.c` has two small patches (marked `MTC_SATIMAGE_COMPATIBILITY`) so negated classes also exclude `\r` and `(?x)` comments also end at `\r` and the escapes `\n`/`\r`; our own `mtc_encoding.c` defines Satimage's line terminators, and treats a lone surrogate as one character. (Patterns are compiled with Onigmo's `ONIG_OPTION_NEWLINE_CRLF`, so CR LF is one line end, which it wasn't in Satimage's build.) `regexec.c` has three fixes for reading past a buffer (marked `MTC_OSAX patch`, and always on): in case-insensitive matching of a character that folds to more than is left of the pattern, and in two places where it peeks at the next character at the end of the text, and it checks a deadline for searches (our `mtc_deadline.c`) every 65,536 backtracks, also marked `MTC_OSAX patch`. `include/COnigmoShim.h` is also ours.
+
+## Release Notes
+
+### 1.1
+
+- `sortlist` is much faster on long lists: 2.5 to 7 times for lists, and about 15 times for an `array of real`. `exclude items` and `keep items` also compare numbers as text faster.
+- `comparison 1` ignores case by full Unicode case folding, as SatimageOSAX did: "ß" equals "ss", "ς" equals "σ", and "ﬀ" equals "ff".
+- `sortlist` compares text the same however its accents are typed ("é" as one character or as "e" and a combining accent).
+- `comparison 4` puts uppercase first by the letters' case, not their character codes ("Ÿ" before "ÿ").
+- `sortlist` of dates is twice as fast, and of numbers mixed with text a fifth faster.
+- `sortlist … with respect to` takes any number of criteria quickly (one that repeats an earlier one changes nothing, and is skipped), and reads `ascending` only as far as it's used.
+- The rest of the Arrays suite (but its hidden commands and the obsolete `extractitem`), with SatimageOSAX's bugs fixed.
+- The 3D array handling suite, with `isosurface` and `streamline` working as its dictionary describes.
+- `sortlist … with respect to` returns the lists it sorts by as each would come back sorted alone, as SatimageOSAX did: numbers in a list with text as text, integers in a list with reals as reals.
+
+### 1.0.1
+
+Initial public release.

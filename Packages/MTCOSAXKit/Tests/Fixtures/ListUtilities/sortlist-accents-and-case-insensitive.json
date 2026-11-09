@@ -1,0 +1,88 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Sort",
+        "fields" : [
+          {
+            "key" : "Cfla",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "text" : "É",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "é",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "E",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "e",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "F",
+                  "type" : "utxt"
+                },
+                {
+                  "text" : "f",
+                  "type" : "utxt"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "text" : "E",
+              "type" : "ut16"
+            },
+            {
+              "text" : "e",
+              "type" : "ut16"
+            },
+            {
+              "text" : "F",
+              "type" : "ut16"
+            },
+            {
+              "text" : "f",
+              "type" : "ut16"
+            },
+            {
+              "text" : "É",
+              "type" : "ut16"
+            },
+            {
+              "text" : "é",
+              "type" : "ut16"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "sortlist-accents-and-case-insensitive",
+  "recordedAt" : "2026-10-14T18:39:34Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "sortlist {\"É\", \"é\", \"E\", \"e\", \"F\", \"f\"} comparison 1",
+  "timeZone" : "America/New_York"
+}

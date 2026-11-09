@@ -1,0 +1,124 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Sort",
+        "fields" : [
+          {
+            "key" : "from",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "items" : [
+                    {
+                      "text" : "b",
+                      "type" : "utxt"
+                    },
+                    {
+                      "integer" : 10,
+                      "type" : "long"
+                    },
+                    {
+                      "text" : "a",
+                      "type" : "utxt"
+                    },
+                    {
+                      "integer" : 9,
+                      "type" : "long"
+                    }
+                  ],
+                  "type" : "list"
+                },
+                {
+                  "items" : [
+                    {
+                      "integer" : 1,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 2,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 3,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 4,
+                      "type" : "long"
+                    }
+                  ],
+                  "type" : "list"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "items" : [
+                {
+                  "text" : "10",
+                  "type" : "ut16"
+                },
+                {
+                  "text" : "9",
+                  "type" : "ut16"
+                },
+                {
+                  "text" : "a",
+                  "type" : "ut16"
+                },
+                {
+                  "text" : "b",
+                  "type" : "ut16"
+                }
+              ],
+              "type" : "list"
+            },
+            {
+              "items" : [
+                {
+                  "integer" : 2,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 4,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 3,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          ],
+          "type" : "list"
+        }
+      }
+    }
+  ],
+  "name" : "sortlist-respect-mixed-key",
+  "recordedAt" : "2026-10-21T00:39:29Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "sortlist {{\"b\", 10, \"a\", 9}, {1, 2, 3, 4}} with respect to 1",
+  "timeZone" : "America/New_York"
+}

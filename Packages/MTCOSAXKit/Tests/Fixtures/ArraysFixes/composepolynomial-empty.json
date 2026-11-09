@@ -1,0 +1,47 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CoPo",
+        "fields" : [
+          {
+            "key" : "with",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+
+          ],
+          "type" : "Poly"
+        }
+      }
+    }
+  ],
+  "name" : "composepolynomial-empty",
+  "recordedAt" : "2026-10-15T14:22:01Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "composepolynomial {} with {1}",
+  "timeZone" : "America/New_York"
+}

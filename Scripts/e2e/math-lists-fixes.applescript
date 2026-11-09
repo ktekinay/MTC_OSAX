@@ -34,6 +34,28 @@ end try
 check("sortlist missing values", (sortlist {3, missing value, 1, 2} without ascending), {3, 2, 1, missing value})
 check("sortlist single value", (sortlist 5), {5})
 
+-- sortlist treated an accent typed as a character of its own as a different text, and comparison 4 put "ÿ" before
+-- "Ÿ" (by character code). Checked by character ids, since AppleScript's comparisons ignore case. 100 items take the
+-- radix sort; 3 don't.
+set sorted to sortlist {"é", "e" & (character id 769)} with remove duplicates
+check("sortlist decomposed accent", {count sorted, id of item 1 of sorted}, {1, 233})
+set sorted to sortlist {"ÿ", "Ÿ", "z"} comparison 4
+check("sortlist uppercase first", {id of item 1 of sorted, id of item 2 of sorted, id of item 3 of sorted}, {122, 376, 255})
+set many to {}
+repeat 50 times
+	set end of many to "ÿ"
+	set end of many to "Ÿ"
+end repeat
+set sorted to sortlist many comparison 4
+check("sortlist uppercase first, 100 items", {id of item 50 of sorted, id of item 51 of sorted}, {376, 255})
+set many to {}
+repeat 50 times
+	set end of many to "e" & (character id 769)
+	set end of many to "É"
+end repeat
+set sorted to sortlist many comparison 1 with remove duplicates
+check("sortlist decomposed accent ignoring case, 100 items", {count sorted, id of item 1 of sorted}, {1, {101, 769}})
+
 -- suppress item: a single index was error -1719.
 check("suppress item", (suppress item 2 from {"abc", {a:1}, "b", 3}), {"abc", "b", 3})
 check("suppress last item", (suppress item -1 from {1, 2, 3}), {1, 2})

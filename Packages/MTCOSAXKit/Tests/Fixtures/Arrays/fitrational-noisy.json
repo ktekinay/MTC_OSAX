@@ -1,0 +1,684 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CRRA",
+        "fields" : [
+          {
+            "key" : "rang",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 0,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 5,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "seed",
+            "value" : {
+              "integer" : 5,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 30,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 1.1099658568855375,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.2759006037376821,
+              "type" : "doub"
+            },
+            {
+              "real" : 4.3536615173798054,
+              "type" : "doub"
+            },
+            {
+              "real" : 4.1566391999367625,
+              "type" : "doub"
+            },
+            {
+              "real" : 1.0335957701317966,
+              "type" : "doub"
+            },
+            {
+              "real" : 1.8186844768933952,
+              "type" : "doub"
+            },
+            {
+              "real" : 4.59305452182889,
+              "type" : "doub"
+            },
+            {
+              "real" : 4.897224988089874,
+              "type" : "doub"
+            },
+            {
+              "real" : 2.4420559499412775,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.44910517055541277,
+              "type" : "doub"
+            },
+            {
+              "real" : 3.0587193078827113,
+              "type" : "doub"
+            },
+            {
+              "real" : 1.9836830324493349,
+              "type" : "doub"
+            },
+            {
+              "real" : 3.829539300641045,
+              "type" : "doub"
+            },
+            {
+              "real" : 1.7706902138888836,
+              "type" : "doub"
+            },
+            {
+              "real" : 2.5920899561606348,
+              "type" : "doub"
+            },
+            {
+              "real" : 2.433189991861582,
+              "type" : "doub"
+            },
+            {
+              "real" : 1.4840024791192263,
+              "type" : "doub"
+            },
+            {
+              "real" : 4.954104661010206,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.9386061306577176,
+              "type" : "doub"
+            },
+            {
+              "real" : 4.041408431949094,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.4037063440773636,
+              "type" : "doub"
+            },
+            {
+              "real" : 3.247294396860525,
+              "type" : "doub"
+            },
+            {
+              "real" : 3.692201469093561,
+              "type" : "doub"
+            },
+            {
+              "real" : 4.097363980254158,
+              "type" : "doub"
+            },
+            {
+              "real" : 2.20654611941427,
+              "type" : "doub"
+            },
+            {
+              "real" : 1.2127020361367613,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.791549322893843,
+              "type" : "doub"
+            },
+            {
+              "real" : 3.8218630116898566,
+              "type" : "doub"
+            },
+            {
+              "real" : 4.399685169337317,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.5545038334093988,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CRRA",
+        "fields" : [
+          {
+            "key" : "rang",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : -1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "seed",
+            "value" : {
+              "integer" : 6,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 30,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 0.7857202934101224,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.894952152390033,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.33604039112105966,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.5811872687190771,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.6424582498148084,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.8714907853864133,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.9166067470796406,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.2597811920568347,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.7846866473555565,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.9700576355680823,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.190104138571769,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.801056622993201,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.05963472044095397,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.21694723377004266,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.16238513914868236,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.06079293508082628,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.3291843016631901,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.03433458460494876,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.2450388576835394,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.6504185711964965,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.1237171571701765,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.5100259338505566,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.4717642106115818,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.22004884388297796,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.03607282601296902,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.520372411236167,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.15771721070632339,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.688769802916795,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.2907101819291711,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.4486574553884566,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "RatF",
+        "fields" : [
+          {
+            "key" : "nume",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "deno",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "Form",
+            "value" : {
+              "text" : "%.4g",
+              "type" : "utxt"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "items" : [
+                    {
+                      "real" : 1.1099658568855375,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.2759006037376821,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 4.3536615173798054,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 4.1566391999367625,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1.0335957701317966,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1.8186844768933952,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 4.59305452182889,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 4.897224988089874,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 2.4420559499412775,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.44910517055541277,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 3.0587193078827113,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1.9836830324493349,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 3.829539300641045,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1.7706902138888836,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 2.5920899561606348,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 2.433189991861582,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1.4840024791192263,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 4.954104661010206,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.9386061306577176,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 4.041408431949094,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.4037063440773636,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 3.247294396860525,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 3.692201469093561,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 4.097363980254158,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 2.20654611941427,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 1.2127020361367613,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.791549322893843,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 3.8218630116898566,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 4.399685169337317,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.5545038334093988,
+                      "type" : "doub"
+                    }
+                  ],
+                  "type" : "Lido"
+                },
+                {
+                  "items" : [
+                    {
+                      "real" : 0.7857202934101224,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.894952152390033,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.33604039112105966,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.5811872687190771,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.6424582498148084,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.8714907853864133,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.9166067470796406,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.2597811920568347,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.7846866473555565,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.9700576355680823,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.190104138571769,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.801056622993201,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.05963472044095397,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.21694723377004266,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.16238513914868236,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.06079293508082628,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.3291843016631901,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.03433458460494876,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.2450388576835394,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.6504185711964965,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.1237171571701765,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.5100259338505566,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.4717642106115818,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.22004884388297796,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.03607282601296902,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.520372411236167,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.15771721070632339,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : -0.688769802916795,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.2907101819291711,
+                      "type" : "doub"
+                    },
+                    {
+                      "real" : 0.4486574553884566,
+                      "type" : "doub"
+                    }
+                  ],
+                  "type" : "Lido"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "Ferr",
+              "value" : {
+                "real" : 0.9951166697398599,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "FRes",
+              "value" : {
+                "items" : [
+                  {
+                    "items" : [
+                      {
+                        "real" : 0.10210939544244037,
+                        "type" : "doub"
+                      },
+                      {
+                        "real" : -0.02918027878357008,
+                        "type" : "doub"
+                      }
+                    ],
+                    "type" : "Poly"
+                  },
+                  {
+                    "items" : [
+                      {
+                        "real" : 1,
+                        "type" : "doub"
+                      },
+                      {
+                        "real" : -0.3062313639326087,
+                        "type" : "doub"
+                      }
+                    ],
+                    "type" : "Poly"
+                  }
+                ],
+                "type" : "list"
+              }
+            },
+            {
+              "key" : "FStr",
+              "value" : {
+                "text" : "(0.1021-0.02918*x)/(1-0.3062*x)",
+                "type" : "ut16"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    }
+  ],
+  "name" : "fitrational-noisy",
+  "recordedAt" : "2026-10-15T13:37:39Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "fitrational {(randomarray 30 range {0, 5} seed 5), (randomarray 30 range {-1, 1} seed 6)} numerator 1 denominator 1 number formatting \"%.4g\"",
+  "timeZone" : "America/New_York"
+}

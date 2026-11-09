@@ -1,0 +1,343 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CRRA",
+        "fields" : [
+          {
+            "key" : "rang",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : -2,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 2,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "seed",
+            "value" : {
+              "integer" : 4,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "integer" : 20,
+              "type" : "long"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : 1.868119353428483,
+              "type" : "doub"
+            },
+            {
+              "real" : 1.6024858187884092,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.18892901297658682,
+              "type" : "doub"
+            },
+            {
+              "real" : -1.309218700043857,
+              "type" : "doub"
+            },
+            {
+              "real" : 1.890737415291369,
+              "type" : "doub"
+            },
+            {
+              "real" : 1.422483779489994,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.8592639779672027,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.4361423924565315,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.790915297344327,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.3902248227968812,
+              "type" : "doub"
+            },
+            {
+              "real" : -1.135641997680068,
+              "type" : "doub"
+            },
+            {
+              "real" : -1.4341433085501194,
+              "type" : "doub"
+            },
+            {
+              "real" : 1.9050978189334273,
+              "type" : "doub"
+            },
+            {
+              "real" : -1.1019762931391597,
+              "type" : "doub"
+            },
+            {
+              "real" : -1.975078972056508,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.793680957518518,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.9880705559626222,
+              "type" : "doub"
+            },
+            {
+              "real" : 1.6127141052857041,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.26083388179540634,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.5318523980677128,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    },
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "EvPo",
+        "fields" : [
+          {
+            "key" : "at  ",
+            "value" : {
+              "items" : [
+                {
+                  "real" : 1.868119353428483,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 1.6024858187884092,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0.18892901297658682,
+                  "type" : "doub"
+                },
+                {
+                  "real" : -1.309218700043857,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 1.890737415291369,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 1.422483779489994,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0.8592639779672027,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0.4361423924565315,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0.790915297344327,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0.3902248227968812,
+                  "type" : "doub"
+                },
+                {
+                  "real" : -1.135641997680068,
+                  "type" : "doub"
+                },
+                {
+                  "real" : -1.4341433085501194,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 1.9050978189334273,
+                  "type" : "doub"
+                },
+                {
+                  "real" : -1.1019762931391597,
+                  "type" : "doub"
+                },
+                {
+                  "real" : -1.975078972056508,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0.793680957518518,
+                  "type" : "doub"
+                },
+                {
+                  "real" : -0.9880705559626222,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 1.6127141052857041,
+                  "type" : "doub"
+                },
+                {
+                  "real" : -0.26083388179540634,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0.5318523980677128,
+                  "type" : "doub"
+                }
+              ],
+              "type" : "Lido"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "real" : 0.5,
+                  "type" : "doub"
+                },
+                {
+                  "real" : 0.25,
+                  "type" : "doub"
+                },
+                {
+                  "integer" : -1,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "items" : [
+            {
+              "real" : -3.712966379607768,
+              "type" : "doub"
+            },
+            {
+              "real" : -1.6718876550231307,
+              "type" : "doub"
+            },
+            {
+              "real" : 1.0966443847999157,
+              "type" : "doub"
+            },
+            {
+              "real" : 3.0179750830614767,
+              "type" : "doub"
+            },
+            {
+              "real" : -3.920083746086573,
+              "type" : "doub"
+            },
+            {
+              "real" : -0.6612322593646387,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.979791323367345,
+              "type" : "doub"
+            },
+            {
+              "real" : 1.1826631556200549,
+              "type" : "doub"
+            },
+            {
+              "real" : 1.0570897030678168,
+              "type" : "doub"
+            },
+            {
+              "real" : 1.173759618688585,
+              "type" : "doub"
+            },
+            {
+              "real" : 2.2192175789407607,
+              "type" : "doub"
+            },
+            {
+              "real" : 3.7468187756349614,
+              "type" : "doub"
+            },
+            {
+              "real" : -4.0544593073568675,
+              "type" : "doub"
+            },
+            {
+              "real" : 2.0907866318287143,
+              "type" : "doub"
+            },
+            {
+              "real" : 8.692353283522708,
+              "type" : "doub"
+            },
+            {
+              "real" : 1.0543598255119124,
+              "type" : "doub"
+            },
+            {
+              "real" : 1.7146724830030635,
+              "type" : "doub"
+            },
+            {
+              "real" : -1.7378535474916323,
+              "type" : "doub"
+            },
+            {
+              "real" : 0.9043372917632693,
+              "type" : "doub"
+            },
+            {
+              "real" : 1.1861994642665339,
+              "type" : "doub"
+            }
+          ],
+          "type" : "Lido"
+        }
+      }
+    }
+  ],
+  "name" : "evalpolynomial-doc",
+  "recordedAt" : "2026-10-15T13:37:37Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "evalpolynomial {1, 0.5, 0.25, -1} at (randomarray 20 range {-2, 2} seed 4)",
+  "timeZone" : "America/New_York"
+}

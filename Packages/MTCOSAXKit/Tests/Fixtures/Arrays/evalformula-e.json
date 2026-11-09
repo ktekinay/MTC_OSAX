@@ -1,0 +1,37 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "LSOP",
+        "fields" : [
+          {
+            "key" : "with",
+            "value" : {
+              "items" : [
+
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "e",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : 7
+      }
+    }
+  ],
+  "name" : "evalformula-e",
+  "recordedAt" : "2026-10-15T13:37:35Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "evalformula \"e\" with {}",
+  "timeZone" : "America/New_York"
+}

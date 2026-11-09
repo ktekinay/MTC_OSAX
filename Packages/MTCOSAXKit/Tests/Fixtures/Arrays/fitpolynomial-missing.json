@@ -1,0 +1,105 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "FiPo",
+        "fields" : [
+          {
+            "key" : "degr",
+            "value" : {
+              "integer" : 1,
+              "type" : "long"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "items" : [
+                    {
+                      "integer" : 0,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 1,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 2,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 3,
+                      "type" : "long"
+                    }
+                  ],
+                  "type" : "list"
+                },
+                {
+                  "items" : [
+                    {
+                      "integer" : 1,
+                      "type" : "long"
+                    },
+                    {
+                      "code" : "msng",
+                      "type" : "type"
+                    },
+                    {
+                      "integer" : 7,
+                      "type" : "long"
+                    },
+                    {
+                      "integer" : 13,
+                      "type" : "long"
+                    }
+                  ],
+                  "type" : "list"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "Ferr",
+              "value" : {
+                "real" : 0.9258200997725485,
+                "type" : "doub"
+              }
+            },
+            {
+              "key" : "FRes",
+              "value" : {
+                "items" : [
+                  {
+                    "real" : 0.5714285714285703,
+                    "type" : "doub"
+                  },
+                  {
+                    "real" : 3.8571428571428577,
+                    "type" : "doub"
+                  }
+                ],
+                "type" : "list"
+              }
+            }
+          ],
+          "type" : "reco"
+        }
+      }
+    }
+  ],
+  "name" : "fitpolynomial-missing",
+  "recordedAt" : "2026-10-15T13:37:39Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "fitpolynomial {{0, 1, 2, 3}, {1, missing value, 7, 13}} degree 1",
+  "timeZone" : "America/New_York"
+}

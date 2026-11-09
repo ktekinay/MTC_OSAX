@@ -29,6 +29,13 @@ public struct OSAXError: Error, Equatable, CustomStringConvertible {
 	/// -50: a parameter has an invalid value.
 	public static let parameterError = OSAXError(-50)
 
+	/// The Apple Event Manager's error, unless `status` is `noErr`.
+	public static func check(_ status: OSErr) throws {
+		if status != noErr {
+			throw OSAXError(Int(status))
+		}
+	}
+
 	/// -2700: a general failure with a message.
 	public static func general(_ message: String) -> OSAXError {
 		OSAXError(-2700, message)

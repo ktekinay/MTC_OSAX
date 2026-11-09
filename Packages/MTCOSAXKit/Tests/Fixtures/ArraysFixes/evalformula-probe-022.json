@@ -1,0 +1,89 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "LSOP",
+        "fields" : [
+          {
+            "key" : "with",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "f",
+                        "type" : "utxt"
+                      },
+                      {
+                        "items" : [
+                          {
+                            "integer" : 0,
+                            "type" : "long"
+                          },
+                          {
+                            "integer" : 1,
+                            "type" : "long"
+                          },
+                          {
+                            "integer" : 2,
+                            "type" : "long"
+                          }
+                        ],
+                        "type" : "list"
+                      },
+                      {
+                        "text" : "x",
+                        "type" : "utxt"
+                      },
+                      {
+                        "items" : [
+                          {
+                            "integer" : 1,
+                            "type" : "long"
+                          },
+                          {
+                            "integer" : 1,
+                            "type" : "long"
+                          },
+                          {
+                            "integer" : 1,
+                            "type" : "long"
+                          }
+                        ],
+                        "type" : "list"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "int(f,x)",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 0,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "evalformula-probe-022",
+  "recordedAt" : "2026-10-15T14:22:01Z",
+  "recordedFrom" : "MTC_OSAX",
+  "script" : "evalformula \"int(f,x)\" with {f:{0, 1, 2}, x:{1, 1, 1}}",
+  "timeZone" : "America/New_York"
+}

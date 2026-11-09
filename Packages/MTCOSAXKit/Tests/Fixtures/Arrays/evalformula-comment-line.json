@@ -1,0 +1,55 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "LSOP",
+        "fields" : [
+          {
+            "key" : "with",
+            "value" : {
+              "fields" : [
+                {
+                  "key" : "usrf",
+                  "value" : {
+                    "items" : [
+                      {
+                        "text" : "x",
+                        "type" : "utxt"
+                      },
+                      {
+                        "integer" : 2,
+                        "type" : "long"
+                      }
+                    ],
+                    "type" : "list"
+                  }
+                }
+              ],
+              "type" : "reco"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "//first\nx*3",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "real" : 6,
+          "type" : "doub"
+        }
+      }
+    }
+  ],
+  "name" : "evalformula-comment-line",
+  "recordedAt" : "2026-10-15T13:37:34Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "evalformula \"//first\\nx*3\" with {x:2}",
+  "timeZone" : "America/New_York"
+}

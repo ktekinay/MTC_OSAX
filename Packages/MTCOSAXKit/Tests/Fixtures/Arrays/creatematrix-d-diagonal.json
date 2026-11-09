@@ -1,0 +1,117 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "CRMT",
+        "fields" : [
+          {
+            "key" : "Diag",
+            "value" : {
+              "items" : [
+                {
+                  "integer" : 1,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 2,
+                  "type" : "long"
+                },
+                {
+                  "integer" : 3,
+                  "type" : "long"
+                }
+              ],
+              "type" : "list"
+            }
+          },
+          {
+            "key" : "rtyp",
+            "value" : {
+              "code" : "Matr",
+              "type" : "type"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "text" : "d",
+              "type" : "utxt"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "result" : {
+          "fields" : [
+            {
+              "key" : "ncol",
+              "value" : {
+                "integer" : 3,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "nrow",
+              "value" : {
+                "integer" : 3,
+                "type" : "long"
+              }
+            },
+            {
+              "key" : "Lido",
+              "value" : {
+                "items" : [
+                  {
+                    "real" : 1,
+                    "type" : "doub"
+                  },
+                  {
+                    "real" : 0,
+                    "type" : "doub"
+                  },
+                  {
+                    "real" : 0,
+                    "type" : "doub"
+                  },
+                  {
+                    "real" : 0,
+                    "type" : "doub"
+                  },
+                  {
+                    "real" : 2,
+                    "type" : "doub"
+                  },
+                  {
+                    "real" : 0,
+                    "type" : "doub"
+                  },
+                  {
+                    "real" : 0,
+                    "type" : "doub"
+                  },
+                  {
+                    "real" : 0,
+                    "type" : "doub"
+                  },
+                  {
+                    "real" : 3,
+                    "type" : "doub"
+                  }
+                ],
+                "type" : "Lido"
+              }
+            }
+          ],
+          "type" : "Matr"
+        }
+      }
+    }
+  ],
+  "name" : "creatematrix-d-diagonal",
+  "recordedAt" : "2026-10-15T13:37:27Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "creatematrix \"d\" diagonal {1, 2, 3} as matrix",
+  "timeZone" : "America/New_York"
+}

@@ -2,13 +2,14 @@ import AppleEventCore
 import Foundation
 import Numerics
 
-/// From Satimage's "Arrays" suite, the commands that make an `array of real`: `createarray` and `randomarray`.
-/// Behavior recorded from SatimageOSAX in `Fixtures/Arrays`. The rest of the suite isn't implemented yet.
+/// Satimage's "Arrays" suite, but for its hidden commands and the obsolete `extractitem` (see
+/// Implemented/PLAN-Arrays.md). Behavior recorded from SatimageOSAX in `Fixtures/Arrays`; where Satimage was broken,
+/// MTC_OSAX follows the dictionary (`Fixtures/ArraysFixes`).
 public enum Arrays {
 	@MainActor
 	public static func commands() -> [CommandDefinition] {
 		let random = RandomSource()
-		return [
+		return Editing.commands() + Arithmetic.commands() + Statistics.commands() + [Formula.command()] + Polynomials.commands() + BinaryFiles.commands() + [
 			CommandDefinition("createarray", code: "SATICRAR") { request in
 				let count = try size(request)
 				let (low, high) = try range(request) ?? (0, Double(count - 1))
@@ -52,13 +53,36 @@ public enum Arrays {
 			throw OSAXError.parameterError
 		}
 		guard rounded <= Double(maximumSize) else {
-			throw OSAXError(-50, "An array can have at most 100,000,000 items.")
+			throw tooLarge
 		}
 		return Int(rounded)
 	}
 
 	/// 800 MB of reals, and as much again for the reply (two billion made 32 GB).
 	static let maximumSize = 100_000_000
+
+	/// A square matrix's most rows (and columns) within `maximumSize`.
+	static let maximumSide = 10_000
+
+	/// -50 for a result of more than `maximumSize` numbers.
+	static let tooLarge = OSAXError(-50, "An array can have at most \(grouped(maximumSize)) items.")
+
+	/// A whole number with commas between its thousands, for messages.
+	static func grouped(_ number: Int) -> String {
+		var digits = String(number), result = ""
+		while digits.count > 3 {
+			result = "," + digits.suffix(3) + result
+			digits.removeLast(3)
+		}
+		return digits + result
+	}
+
+	/// -50 for a count beyond `limit` (or one that overflowed), with what it counts in the message.
+	static func check(_ count: (partialValue: Int, overflow: Bool), atMost limit: Int, _ what: String) throws {
+		guard !count.overflow, count.partialValue <= limit else {
+			throw OSAXError(-50, "\(what) can be at most \(grouped(limit)).")
+		}
+	}
 
 	/// The seed rounded half to even, reduced to its low 32 bits however large it is (a double beyond 2^53 is a
 	/// whole number, and `fmod` is exact); error -50 for infinity or NaN.

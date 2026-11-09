@@ -1,0 +1,39 @@
+{
+  "exchanges" : [
+    {
+      "event" : {
+        "eventClass" : "SATI",
+        "eventID" : "Stat",
+        "fields" : [
+          {
+            "key" : "Krts",
+            "value" : {
+              "type" : "true"
+            }
+          },
+          {
+            "key" : "----",
+            "value" : {
+              "items" : [
+                {
+                  "code" : "msng",
+                  "type" : "type"
+                }
+              ],
+              "type" : "list"
+            }
+          }
+        ],
+        "type" : "aevt"
+      },
+      "reply" : {
+        "errorNumber" : 2
+      }
+    }
+  ],
+  "name" : "statlist-all-missing",
+  "recordedAt" : "2026-10-15T13:37:32Z",
+  "recordedFrom" : "SatimageOSAX",
+  "script" : "statlist {missing value} with kurtosis",
+  "timeZone" : "America/New_York"
+}

@@ -19,7 +19,15 @@ extension NSAppleEventDescriptor: AppleEventEncodable {
 
 	/// AppleScript's `missing value`.
 	public static var missingValue: NSAppleEventDescriptor {
-		NSAppleEventDescriptor(typeCode: FourCharCode(fourCharString: "msng"))
+		NSAppleEventDescriptor(typeCode: missingValueCode)
+	}
+
+	/// `missing value`'s type code.
+	public static let missingValueCode = FourCharCode(fourCharString: "msng")
+
+	/// Whether this is `missing value`.
+	public var isMissingValue: Bool {
+		descriptorType == typeType && typeCodeValue == Self.missingValueCode
 	}
 
 	/// The descriptor types that hold text: AppleScript sends `utxt`; other senders may send the rest.

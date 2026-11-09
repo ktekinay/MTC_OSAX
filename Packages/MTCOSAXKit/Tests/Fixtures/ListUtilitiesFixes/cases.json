@@ -158,5 +158,17 @@
  {
   "name": "topological-sort-repeated-vertex",
   "script": "topological sort {1, 1, 2} edges {{2, 1}}"
+ },
+ {
+  "name": "sortlist-decomposed-accents",
+  "script": "sortlist {\"é\", \"e\" & (character id 769)} comparison 0 with remove duplicates"
+ },
+ {
+  "name": "sortlist-decomposed-accents-case-insensitive",
+  "script": "sortlist {\"é\", \"e\" & (character id 769), \"É\"} comparison 1 with remove duplicates"
+ },
+ {
+  "name": "sortlist-y-diaeresis-uppercase-first",
+  "script": "sortlist {\"ÿ\", \"Ÿ\", \"z\"} comparison 4"
  }
 ]

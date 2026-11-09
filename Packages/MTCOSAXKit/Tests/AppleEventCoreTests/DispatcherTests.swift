@@ -184,3 +184,16 @@ struct DispatcherTests {
 		dispatcher().handle(event: makeEvent("TESTdoub", ["----": NSAppleEventDescriptor(int32: 1)]), reply: .null())
 	}
 }
+
+struct OSAXErrorTests {
+	/// The Apple Event Manager's status as the error, nothing for noErr.
+	@Test func check() throws {
+		try OSAXError.check(OSErr(noErr))
+		#expect(throws: OSAXError(-1708)) {
+			try OSAXError.check(OSErr(errAEEventNotHandled))
+		}
+		#expect(throws: OSAXError(-108)) {
+			try OSAXError.check(OSErr(memFullErr))
+		}
+	}
+}
