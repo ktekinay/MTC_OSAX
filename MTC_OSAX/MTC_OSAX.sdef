@@ -3271,7 +3271,7 @@ PlistClose p
 			<result type="text" description="&quot;pong&quot;"/>
 		</command>
 		<command name="mtc_version" code="MTCdvers" description="Returns the name and version of the running MTC_OSAX." hidden="yes">
-			<result type="text" description="e.g. &quot;MTC_OSAX 1.0.1 (1)&quot;"/>
+			<result type="text" description="e.g. &quot;MTC_OSAX 1.1 (2)&quot;"/>
 		</command>
 		<command name="mtc_echo" code="MTCdecho" description="Returns the direct parameter unchanged." hidden="yes">
 			<direct-parameter type="any" description="any value"/>
